@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>ActivateGatewayInput$ActivationKey</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayName</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayRegion</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayTimezone</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$TapeDriveType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$MediumChangerType</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActivateGatewayInput {
     /// <p>Your gateway activation key. You can obtain the activation key by sending an HTTP GET request with redirects enabled to the gateway IP address (port 80). The redirect URL returned in the response provides you the activation key for your gateway in the query string parameter <code>activationKey</code>. It may also include other activation-related parameters, however, these are merely defaults -- the arguments you pass to the <code>ActivateGateway</code> API call determine the actual configuration of your gateway. </p> <p>For more information, see https://docs.aws.amazon.com/storagegateway/latest/userguide/get-activation-key.html in the Storage Gateway User Guide.</p>
     #[serde(rename = "ActivationKey")]
@@ -66,6 +67,7 @@ pub struct ActivateGatewayOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddCacheInput {
     /// <p>An array of strings that identify disks that are to be configured as working storage. Each string have a minimum length of 1 and maximum length of 300. You can get the disk IDs from the <a>ListLocalDisks</a> API.</p>
     #[serde(rename = "DiskIds")]
@@ -84,6 +86,7 @@ pub struct AddCacheOutput {
 
 /// <p>AddTagsToResourceInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource you want to add tags to.</p>
     #[serde(rename = "ResourceARN")]
@@ -104,6 +107,7 @@ pub struct AddTagsToResourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddUploadBufferInput {
     /// <p>An array of strings that identify disks that are to be configured as working storage. Each string have a minimum length of 1 and maximum length of 300. You can get the disk IDs from the <a>ListLocalDisks</a> API.</p>
     #[serde(rename = "DiskIds")]
@@ -122,6 +126,7 @@ pub struct AddUploadBufferOutput {
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>AddWorkingStorageInput$DiskIds</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddWorkingStorageInput {
     /// <p>An array of strings that identify disks that are to be configured as working storage. Each string have a minimum length of 1 and maximum length of 300. You can get the disk IDs from the <a>ListLocalDisks</a> API.</p>
     #[serde(rename = "DiskIds")]
@@ -140,6 +145,7 @@ pub struct AddWorkingStorageOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssignTapePoolInput {
     /// <p>The ID of the pool that you want to add your tape to for archiving. The tape in this pool is archived in the S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the storage class (Glacier or Deep Archive) that corresponds to the pool.</p> <p>Valid values: "GLACIER", "DEEP_ARCHIVE"</p>
     #[serde(rename = "PoolId")]
@@ -160,6 +166,7 @@ pub struct AssignTapePoolOutput {
 
 /// <p>AttachVolumeInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachVolumeInput {
     /// <p>The unique device ID or other distinguishing data that identifies the local disk used to create the volume. This value is only required when you are attaching a stored volume.</p>
     #[serde(rename = "DiskId")]
@@ -253,6 +260,7 @@ pub struct CachediSCSIVolume {
 
 /// <p>CancelArchivalInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelArchivalInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -273,6 +281,7 @@ pub struct CancelArchivalOutput {
 
 /// <p>CancelRetrievalInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelRetrievalInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -314,6 +323,7 @@ pub struct ChapInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCachediSCSIVolumeInput {
     /// <p>A unique identifier that you use to retry a request. If you retry a request, use the same <code>ClientToken</code> you specified in the initial request.</p>
     #[serde(rename = "ClientToken")]
@@ -366,6 +376,7 @@ pub struct CreateCachediSCSIVolumeOutput {
 
 /// <p>CreateNFSFileShareInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNFSFileShareInput {
     /// <p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks. </p>
     #[serde(rename = "ClientList")]
@@ -437,6 +448,7 @@ pub struct CreateNFSFileShareOutput {
 
 /// <p>CreateSMBFileShareInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSMBFileShareInput {
     /// <p><p>A list of users in the Active Directory that will be granted administrator privileges on the file share. These users can do all file operations as the super-user. </p> <important> <p>Use this option very carefully, because any user in this list can do anything they like on the file share, regardless of file permissions.</p> </important></p>
     #[serde(rename = "AdminUserList")]
@@ -515,6 +527,7 @@ pub struct CreateSMBFileShareOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSnapshotFromVolumeRecoveryPointInput {
     /// <p>Textual description of the snapshot that appears in the Amazon EC2 console, Elastic Block Store snapshots panel in the <b>Description</b> field, and in the AWS Storage Gateway snapshot <b>Details</b> pane, <b>Description</b> field</p>
     #[serde(rename = "SnapshotDescription")]
@@ -547,6 +560,7 @@ pub struct CreateSnapshotFromVolumeRecoveryPointOutput {
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>CreateSnapshotInput$SnapshotDescription</a> </p> </li> <li> <p> <a>CreateSnapshotInput$VolumeARN</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSnapshotInput {
     /// <p>Textual description of the snapshot that appears in the Amazon EC2 console, Elastic Block Store snapshots panel in the <b>Description</b> field, and in the AWS Storage Gateway snapshot <b>Details</b> pane, <b>Description</b> field</p>
     #[serde(rename = "SnapshotDescription")]
@@ -576,6 +590,7 @@ pub struct CreateSnapshotOutput {
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>CreateStorediSCSIVolumeInput$DiskId</a> </p> </li> <li> <p> <a>CreateStorediSCSIVolumeInput$NetworkInterfaceId</a> </p> </li> <li> <p> <a>CreateStorediSCSIVolumeInput$PreserveExistingData</a> </p> </li> <li> <p> <a>CreateStorediSCSIVolumeInput$SnapshotId</a> </p> </li> <li> <p> <a>CreateStorediSCSIVolumeInput$TargetName</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStorediSCSIVolumeInput {
     /// <p>The unique identifier for the gateway local disk that is configured as a stored volume. Use <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/API_ListLocalDisks.html">ListLocalDisks</a> to list disk IDs for a gateway.</p>
     #[serde(rename = "DiskId")]
@@ -629,6 +644,7 @@ pub struct CreateStorediSCSIVolumeOutput {
 
 /// <p>CreateTapeWithBarcodeInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTapeWithBarcodeInput {
     /// <p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tape with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
     #[serde(rename = "GatewayARN")]
@@ -669,6 +685,7 @@ pub struct CreateTapeWithBarcodeOutput {
 
 /// <p>CreateTapesInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTapesInput {
     /// <p><p>A unique identifier that you use to retry a request. If you retry a request, use the same <code>ClientToken</code> you specified in the initial request.</p> <note> <p>Using the same <code>ClientToken</code> prevents creating the tape multiple times.</p> </note></p>
     #[serde(rename = "ClientToken")]
@@ -715,6 +732,7 @@ pub struct CreateTapesOutput {
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>DeleteBandwidthRateLimitInput$BandwidthType</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBandwidthRateLimitInput {
     /// <p>One of the BandwidthType values that indicates the gateway bandwidth rate limit to delete.</p> <p>Valid Values: <code>Upload</code>, <code>Download</code>, <code>All</code>.</p>
     #[serde(rename = "BandwidthType")]
@@ -734,6 +752,7 @@ pub struct DeleteBandwidthRateLimitOutput {
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>DeleteChapCredentialsInput$InitiatorName</a> </p> </li> <li> <p> <a>DeleteChapCredentialsInput$TargetARN</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChapCredentialsInput {
     /// <p>The iSCSI initiator that connects to the target.</p>
     #[serde(rename = "InitiatorName")]
@@ -759,6 +778,7 @@ pub struct DeleteChapCredentialsOutput {
 
 /// <p>DeleteFileShareInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileShareInput {
     /// <p>The Amazon Resource Name (ARN) of the file share to be deleted. </p>
     #[serde(rename = "FileShareARN")]
@@ -781,6 +801,7 @@ pub struct DeleteFileShareOutput {
 
 /// <p>A JSON object containing the ID of the gateway to delete.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGatewayInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -796,6 +817,7 @@ pub struct DeleteGatewayOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSnapshotScheduleInput {
     /// <p>The volume which snapshot schedule to delete.</p>
     #[serde(rename = "VolumeARN")]
@@ -813,6 +835,7 @@ pub struct DeleteSnapshotScheduleOutput {
 
 /// <p>DeleteTapeArchiveInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTapeArchiveInput {
     /// <p>The Amazon Resource Name (ARN) of the virtual tape to delete from the virtual tape shelf (VTS).</p>
     #[serde(rename = "TapeARN")]
@@ -831,6 +854,7 @@ pub struct DeleteTapeArchiveOutput {
 
 /// <p>DeleteTapeInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTapeInput {
     /// <p>The unique Amazon Resource Name (ARN) of the gateway that the virtual tape to delete is associated with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
     #[serde(rename = "GatewayARN")]
@@ -852,6 +876,7 @@ pub struct DeleteTapeOutput {
 
 /// <p>A JSON object containing the <a>DeleteVolumeInput$VolumeARN</a> to delete.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVolumeInput {
     /// <p>The Amazon Resource Name (ARN) of the volume. Use the <a>ListVolumes</a> operation to return a list of gateway volumes.</p>
     #[serde(rename = "VolumeARN")]
@@ -869,6 +894,7 @@ pub struct DeleteVolumeOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAvailabilityMonitorTestInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -892,6 +918,7 @@ pub struct DescribeAvailabilityMonitorTestOutput {
 
 /// <p>A JSON object containing the of the gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBandwidthRateLimitInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -915,6 +942,7 @@ pub struct DescribeBandwidthRateLimitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCacheInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -953,6 +981,7 @@ pub struct DescribeCacheOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCachediSCSIVolumesInput {
     /// <p>An array of strings where each string represents the Amazon Resource Name (ARN) of a cached volume. All of the specified cached volumes must from the same gateway. Use <a>ListVolumes</a> to get volume ARNs for a gateway.</p>
     #[serde(rename = "VolumeARNs")]
@@ -971,6 +1000,7 @@ pub struct DescribeCachediSCSIVolumesOutput {
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the iSCSI volume target.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChapCredentialsInput {
     /// <p>The Amazon Resource Name (ARN) of the iSCSI volume target. Use the <a>DescribeStorediSCSIVolumes</a> operation to return to retrieve the TargetARN for specified VolumeARN.</p>
     #[serde(rename = "TargetARN")]
@@ -989,6 +1019,7 @@ pub struct DescribeChapCredentialsOutput {
 
 /// <p>A JSON object containing the ID of the gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGatewayInformationInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1061,6 +1092,7 @@ pub struct DescribeGatewayInformationOutput {
 
 /// <p>A JSON object containing the of the gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceStartTimeInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1097,6 +1129,7 @@ pub struct DescribeMaintenanceStartTimeOutput {
 
 /// <p>DescribeNFSFileSharesInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNFSFileSharesInput {
     /// <p>An array containing the Amazon Resource Name (ARN) of each file share to be described. </p>
     #[serde(rename = "FileShareARNList")]
@@ -1115,6 +1148,7 @@ pub struct DescribeNFSFileSharesOutput {
 
 /// <p>DescribeSMBFileSharesInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSMBFileSharesInput {
     /// <p>An array containing the Amazon Resource Name (ARN) of each file share to be described. </p>
     #[serde(rename = "FileShareARNList")]
@@ -1132,6 +1166,7 @@ pub struct DescribeSMBFileSharesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSMBSettingsInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1163,6 +1198,7 @@ pub struct DescribeSMBSettingsOutput {
 
 /// <p>A JSON object containing the <a>DescribeSnapshotScheduleInput$VolumeARN</a> of the volume.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSnapshotScheduleInput {
     /// <p>The Amazon Resource Name (ARN) of the volume. Use the <a>ListVolumes</a> operation to return a list of gateway volumes.</p>
     #[serde(rename = "VolumeARN")]
@@ -1200,6 +1236,7 @@ pub struct DescribeSnapshotScheduleOutput {
 
 /// <p>A JSON object containing a list of <a>DescribeStorediSCSIVolumesInput$VolumeARNs</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStorediSCSIVolumesInput {
     /// <p>An array of strings where each string represents the Amazon Resource Name (ARN) of a stored volume. All of the specified stored volumes must from the same gateway. Use <a>ListVolumes</a> to get volume ARNs for a gateway.</p>
     #[serde(rename = "VolumeARNs")]
@@ -1217,6 +1254,7 @@ pub struct DescribeStorediSCSIVolumesOutput {
 
 /// <p>DescribeTapeArchivesInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTapeArchivesInput {
     /// <p>Specifies that the number of virtual tapes descried be limited to the specified number.</p>
     #[serde(rename = "Limit")]
@@ -1248,6 +1286,7 @@ pub struct DescribeTapeArchivesOutput {
 
 /// <p>DescribeTapeRecoveryPointsInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTapeRecoveryPointsInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1280,6 +1319,7 @@ pub struct DescribeTapeRecoveryPointsOutput {
 
 /// <p>DescribeTapesInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTapesInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1312,6 +1352,7 @@ pub struct DescribeTapesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUploadBufferInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1339,6 +1380,7 @@ pub struct DescribeUploadBufferOutput {
 
 /// <p>DescribeVTLDevicesInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVTLDevicesInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1375,6 +1417,7 @@ pub struct DescribeVTLDevicesOutput {
 
 /// <p>A JSON object containing the of the gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkingStorageInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1403,6 +1446,7 @@ pub struct DescribeWorkingStorageOutput {
 
 /// <p>AttachVolumeInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachVolumeInput {
     /// <p>Set to <code>true</code> to forcibly remove the iSCSI connection of the target volume and detach the volume. The default is <code>false</code>. If this value is set to <code>false</code>, you must manually disconnect the iSCSI connection from the target volume.</p>
     #[serde(rename = "ForceDetach")]
@@ -1447,6 +1491,7 @@ pub struct DeviceiSCSIAttributes {
 
 /// <p>DisableGatewayInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableGatewayInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1555,6 +1600,7 @@ pub struct GatewayInfo {
 
 /// <p>JoinDomainInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JoinDomainInput {
     /// <p>List of IPv4 addresses, NetBIOS names, or host names of your domain server. If you need to specify the port number include it after the colon (“:”). For example, <code>mydc.mydomain.com:389</code>.</p>
     #[serde(rename = "DomainControllers")]
@@ -1598,6 +1644,7 @@ pub struct JoinDomainOutput {
 
 /// <p>ListFileShareInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFileSharesInput {
     /// <p>The Amazon resource Name (ARN) of the gateway whose file shares you want to list. If this field is not present, all file shares under your account are listed.</p>
     #[serde(rename = "GatewayARN")]
@@ -1633,6 +1680,7 @@ pub struct ListFileSharesOutput {
 
 /// <p><p>A JSON object containing zero or more of the following fields:</p> <ul> <li> <p> <a>ListGatewaysInput$Limit</a> </p> </li> <li> <p> <a>ListGatewaysInput$Marker</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGatewaysInput {
     /// <p>Specifies that the list of gateways returned be limited to the specified number of items.</p>
     #[serde(rename = "Limit")]
@@ -1659,6 +1707,7 @@ pub struct ListGatewaysOutput {
 
 /// <p>A JSON object containing the of the gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLocalDisksInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1678,6 +1727,7 @@ pub struct ListLocalDisksOutput {
 
 /// <p>ListTagsForResourceInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>Specifies that the list of tags returned be limited to the specified number of items.</p>
     #[serde(rename = "Limit")]
@@ -1712,6 +1762,7 @@ pub struct ListTagsForResourceOutput {
 
 /// <p><p>A JSON object that contains one or more of the following fields:</p> <ul> <li> <p> <a>ListTapesInput$Limit</a> </p> </li> <li> <p> <a>ListTapesInput$Marker</a> </p> </li> <li> <p> <a>ListTapesInput$TapeARNs</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTapesInput {
     /// <p>An optional number limit for the tapes in the list returned by this call.</p>
     #[serde(rename = "Limit")]
@@ -1741,6 +1792,7 @@ pub struct ListTapesOutput {
 
 /// <p>ListVolumeInitiatorsInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVolumeInitiatorsInput {
     /// <p>The Amazon Resource Name (ARN) of the volume. Use the <a>ListVolumes</a> operation to return a list of gateway volumes for the gateway.</p>
     #[serde(rename = "VolumeARN")]
@@ -1758,6 +1810,7 @@ pub struct ListVolumeInitiatorsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVolumeRecoveryPointsInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1777,6 +1830,7 @@ pub struct ListVolumeRecoveryPointsOutput {
 
 /// <p><p>A JSON object that contains one or more of the following fields:</p> <ul> <li> <p> <a>ListVolumesInput$Limit</a> </p> </li> <li> <p> <a>ListVolumesInput$Marker</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVolumesInput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1914,6 +1968,7 @@ pub struct NetworkInterface {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyWhenUploadedInput {
     #[serde(rename = "FileShareARN")]
     pub file_share_arn: String,
@@ -1932,6 +1987,7 @@ pub struct NotifyWhenUploadedOutput {
 
 /// <p>RefreshCacheInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RefreshCacheInput {
     /// <p>The Amazon Resource Name (ARN) of the file share you want to refresh.</p>
     #[serde(rename = "FileShareARN")]
@@ -1960,6 +2016,7 @@ pub struct RefreshCacheOutput {
 
 /// <p>RemoveTagsFromResourceInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource you want to remove the tags from.</p>
     #[serde(rename = "ResourceARN")]
@@ -1980,6 +2037,7 @@ pub struct RemoveTagsFromResourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetCacheInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1995,6 +2053,7 @@ pub struct ResetCacheOutput {
 
 /// <p>RetrieveTapeArchiveInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetrieveTapeArchiveInput {
     /// <p>The Amazon Resource Name (ARN) of the gateway you want to retrieve the virtual tape to. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p> <p>You retrieve archived virtual tapes to only one gateway and the gateway must be a tape gateway.</p>
     #[serde(rename = "GatewayARN")]
@@ -2016,6 +2075,7 @@ pub struct RetrieveTapeArchiveOutput {
 
 /// <p>RetrieveTapeRecoveryPointInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetrieveTapeRecoveryPointInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -2113,6 +2173,7 @@ pub struct SMBFileShareInfo {
 
 /// <p>SetLocalConsolePasswordInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLocalConsolePasswordInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -2131,6 +2192,7 @@ pub struct SetLocalConsolePasswordOutput {
 
 /// <p>SetSMBGuestPasswordInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSMBGuestPasswordInput {
     /// <p>The Amazon Resource Name (ARN) of the file gateway the SMB file share is associated with.</p>
     #[serde(rename = "GatewayARN")]
@@ -2150,6 +2212,7 @@ pub struct SetSMBGuestPasswordOutput {
 
 /// <p>A JSON object containing the of the gateway to shut down.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ShutdownGatewayInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -2165,6 +2228,7 @@ pub struct ShutdownGatewayOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAvailabilityMonitorTestInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -2180,6 +2244,7 @@ pub struct StartAvailabilityMonitorTestOutput {
 
 /// <p>A JSON object containing the of the gateway to start.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartGatewayInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -2423,6 +2488,7 @@ pub struct TapeRecoveryPointInfo {
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>UpdateBandwidthRateLimitInput$AverageDownloadRateLimitInBitsPerSec</a> </p> </li> <li> <p> <a>UpdateBandwidthRateLimitInput$AverageUploadRateLimitInBitsPerSec</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBandwidthRateLimitInput {
     /// <p>The average download bandwidth rate limit in bits per second.</p>
     #[serde(rename = "AverageDownloadRateLimitInBitsPerSec")]
@@ -2447,6 +2513,7 @@ pub struct UpdateBandwidthRateLimitOutput {
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>UpdateChapCredentialsInput$InitiatorName</a> </p> </li> <li> <p> <a>UpdateChapCredentialsInput$SecretToAuthenticateInitiator</a> </p> </li> <li> <p> <a>UpdateChapCredentialsInput$SecretToAuthenticateTarget</a> </p> </li> <li> <p> <a>UpdateChapCredentialsInput$TargetARN</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChapCredentialsInput {
     /// <p>The iSCSI initiator that connects to the target.</p>
     #[serde(rename = "InitiatorName")]
@@ -2478,6 +2545,7 @@ pub struct UpdateChapCredentialsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayInformationInput {
     /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that you want to use to monitor and log events in the gateway. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html">What Is Amazon CloudWatch Logs?</a>.</p>
     #[serde(rename = "CloudWatchLogGroupARN")]
@@ -2509,6 +2577,7 @@ pub struct UpdateGatewayInformationOutput {
 
 /// <p>A JSON object containing the of the gateway to update.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewaySoftwareNowInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -2525,6 +2594,7 @@ pub struct UpdateGatewaySoftwareNowOutput {
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>UpdateMaintenanceStartTimeInput$DayOfMonth</a> </p> </li> <li> <p> <a>UpdateMaintenanceStartTimeInput$DayOfWeek</a> </p> </li> <li> <p> <a>UpdateMaintenanceStartTimeInput$HourOfDay</a> </p> </li> <li> <p> <a>UpdateMaintenanceStartTimeInput$MinuteOfHour</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMaintenanceStartTimeInput {
     /// <p><p>The day of the month component of the maintenance start time represented as an ordinal number from 1 to 28, where 1 represents the first day of the month and 28 represents the last day of the month.</p> <note> <p>This value is only available for tape and volume gateways.</p> </note></p>
     #[serde(rename = "DayOfMonth")]
@@ -2555,6 +2625,7 @@ pub struct UpdateMaintenanceStartTimeOutput {
 
 /// <p>UpdateNFSFileShareInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNFSFileShareInput {
     /// <p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks.</p>
     #[serde(rename = "ClientList")]
@@ -2613,6 +2684,7 @@ pub struct UpdateNFSFileShareOutput {
 
 /// <p>UpdateSMBFileShareInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSMBFileShareInput {
     /// <p>A list of users in the Active Directory that have administrator rights to the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
     #[serde(rename = "AdminUserList")]
@@ -2674,6 +2746,7 @@ pub struct UpdateSMBFileShareOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSMBSecurityStrategyInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -2692,6 +2765,7 @@ pub struct UpdateSMBSecurityStrategyOutput {
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>UpdateSnapshotScheduleInput$Description</a> </p> </li> <li> <p> <a>UpdateSnapshotScheduleInput$RecurrenceInHours</a> </p> </li> <li> <p> <a>UpdateSnapshotScheduleInput$StartAt</a> </p> </li> <li> <p> <a>UpdateSnapshotScheduleInput$VolumeARN</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSnapshotScheduleInput {
     /// <p>Optional description of the snapshot that overwrites the existing description.</p>
     #[serde(rename = "Description")]
@@ -2723,6 +2797,7 @@ pub struct UpdateSnapshotScheduleOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVTLDeviceTypeInput {
     /// <p>The type of medium changer you want to select.</p> <p> Valid Values: "STK-L700", "AWS-Gateway-VTL"</p>
     #[serde(rename = "DeviceType")]
@@ -2879,17 +2954,13 @@ impl ActivateGatewayError {
 }
 impl fmt::Display for ActivateGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ActivateGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            ActivateGatewayError::InternalServerError(ref cause) => cause,
-            ActivateGatewayError::InvalidGatewayRequest(ref cause) => cause,
+            ActivateGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ActivateGatewayError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ActivateGatewayError {}
 /// Errors returned by AddCache
 #[derive(Debug, PartialEq)]
 pub enum AddCacheError {
@@ -2918,17 +2989,13 @@ impl AddCacheError {
 }
 impl fmt::Display for AddCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddCacheError {
-    fn description(&self) -> &str {
         match *self {
-            AddCacheError::InternalServerError(ref cause) => cause,
-            AddCacheError::InvalidGatewayRequest(ref cause) => cause,
+            AddCacheError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AddCacheError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddCacheError {}
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {
@@ -2961,17 +3028,13 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToResourceError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToResourceError::InternalServerError(ref cause) => cause,
-            AddTagsToResourceError::InvalidGatewayRequest(ref cause) => cause,
+            AddTagsToResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsToResourceError {}
 /// Errors returned by AddUploadBuffer
 #[derive(Debug, PartialEq)]
 pub enum AddUploadBufferError {
@@ -3002,17 +3065,13 @@ impl AddUploadBufferError {
 }
 impl fmt::Display for AddUploadBufferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddUploadBufferError {
-    fn description(&self) -> &str {
         match *self {
-            AddUploadBufferError::InternalServerError(ref cause) => cause,
-            AddUploadBufferError::InvalidGatewayRequest(ref cause) => cause,
+            AddUploadBufferError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AddUploadBufferError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddUploadBufferError {}
 /// Errors returned by AddWorkingStorage
 #[derive(Debug, PartialEq)]
 pub enum AddWorkingStorageError {
@@ -3045,17 +3104,13 @@ impl AddWorkingStorageError {
 }
 impl fmt::Display for AddWorkingStorageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddWorkingStorageError {
-    fn description(&self) -> &str {
         match *self {
-            AddWorkingStorageError::InternalServerError(ref cause) => cause,
-            AddWorkingStorageError::InvalidGatewayRequest(ref cause) => cause,
+            AddWorkingStorageError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AddWorkingStorageError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddWorkingStorageError {}
 /// Errors returned by AssignTapePool
 #[derive(Debug, PartialEq)]
 pub enum AssignTapePoolError {
@@ -3086,17 +3141,13 @@ impl AssignTapePoolError {
 }
 impl fmt::Display for AssignTapePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssignTapePoolError {
-    fn description(&self) -> &str {
         match *self {
-            AssignTapePoolError::InternalServerError(ref cause) => cause,
-            AssignTapePoolError::InvalidGatewayRequest(ref cause) => cause,
+            AssignTapePoolError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AssignTapePoolError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssignTapePoolError {}
 /// Errors returned by AttachVolume
 #[derive(Debug, PartialEq)]
 pub enum AttachVolumeError {
@@ -3125,17 +3176,13 @@ impl AttachVolumeError {
 }
 impl fmt::Display for AttachVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            AttachVolumeError::InternalServerError(ref cause) => cause,
-            AttachVolumeError::InvalidGatewayRequest(ref cause) => cause,
+            AttachVolumeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AttachVolumeError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachVolumeError {}
 /// Errors returned by CancelArchival
 #[derive(Debug, PartialEq)]
 pub enum CancelArchivalError {
@@ -3166,17 +3213,13 @@ impl CancelArchivalError {
 }
 impl fmt::Display for CancelArchivalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelArchivalError {
-    fn description(&self) -> &str {
         match *self {
-            CancelArchivalError::InternalServerError(ref cause) => cause,
-            CancelArchivalError::InvalidGatewayRequest(ref cause) => cause,
+            CancelArchivalError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CancelArchivalError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelArchivalError {}
 /// Errors returned by CancelRetrieval
 #[derive(Debug, PartialEq)]
 pub enum CancelRetrievalError {
@@ -3207,17 +3250,13 @@ impl CancelRetrievalError {
 }
 impl fmt::Display for CancelRetrievalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelRetrievalError {
-    fn description(&self) -> &str {
         match *self {
-            CancelRetrievalError::InternalServerError(ref cause) => cause,
-            CancelRetrievalError::InvalidGatewayRequest(ref cause) => cause,
+            CancelRetrievalError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CancelRetrievalError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelRetrievalError {}
 /// Errors returned by CreateCachediSCSIVolume
 #[derive(Debug, PartialEq)]
 pub enum CreateCachediSCSIVolumeError {
@@ -3250,17 +3289,15 @@ impl CreateCachediSCSIVolumeError {
 }
 impl fmt::Display for CreateCachediSCSIVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCachediSCSIVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCachediSCSIVolumeError::InternalServerError(ref cause) => cause,
-            CreateCachediSCSIVolumeError::InvalidGatewayRequest(ref cause) => cause,
+            CreateCachediSCSIVolumeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateCachediSCSIVolumeError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateCachediSCSIVolumeError {}
 /// Errors returned by CreateNFSFileShare
 #[derive(Debug, PartialEq)]
 pub enum CreateNFSFileShareError {
@@ -3293,17 +3330,13 @@ impl CreateNFSFileShareError {
 }
 impl fmt::Display for CreateNFSFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateNFSFileShareError {
-    fn description(&self) -> &str {
         match *self {
-            CreateNFSFileShareError::InternalServerError(ref cause) => cause,
-            CreateNFSFileShareError::InvalidGatewayRequest(ref cause) => cause,
+            CreateNFSFileShareError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateNFSFileShareError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateNFSFileShareError {}
 /// Errors returned by CreateSMBFileShare
 #[derive(Debug, PartialEq)]
 pub enum CreateSMBFileShareError {
@@ -3336,17 +3369,13 @@ impl CreateSMBFileShareError {
 }
 impl fmt::Display for CreateSMBFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSMBFileShareError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSMBFileShareError::InternalServerError(ref cause) => cause,
-            CreateSMBFileShareError::InvalidGatewayRequest(ref cause) => cause,
+            CreateSMBFileShareError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateSMBFileShareError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSMBFileShareError {}
 /// Errors returned by CreateSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateSnapshotError {
@@ -3384,18 +3413,14 @@ impl CreateSnapshotError {
 }
 impl fmt::Display for CreateSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSnapshotError::InternalServerError(ref cause) => cause,
-            CreateSnapshotError::InvalidGatewayRequest(ref cause) => cause,
-            CreateSnapshotError::ServiceUnavailableError(ref cause) => cause,
+            CreateSnapshotError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotError::ServiceUnavailableError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSnapshotError {}
 /// Errors returned by CreateSnapshotFromVolumeRecoveryPoint
 #[derive(Debug, PartialEq)]
 pub enum CreateSnapshotFromVolumeRecoveryPointError {
@@ -3439,18 +3464,20 @@ impl CreateSnapshotFromVolumeRecoveryPointError {
 }
 impl fmt::Display for CreateSnapshotFromVolumeRecoveryPointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSnapshotFromVolumeRecoveryPointError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(ref cause) => cause,
-            CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(ref cause) => cause,
-            CreateSnapshotFromVolumeRecoveryPointError::ServiceUnavailableError(ref cause) => cause,
+            CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSnapshotFromVolumeRecoveryPointError::ServiceUnavailableError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateSnapshotFromVolumeRecoveryPointError {}
 /// Errors returned by CreateStorediSCSIVolume
 #[derive(Debug, PartialEq)]
 pub enum CreateStorediSCSIVolumeError {
@@ -3483,17 +3510,15 @@ impl CreateStorediSCSIVolumeError {
 }
 impl fmt::Display for CreateStorediSCSIVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStorediSCSIVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStorediSCSIVolumeError::InternalServerError(ref cause) => cause,
-            CreateStorediSCSIVolumeError::InvalidGatewayRequest(ref cause) => cause,
+            CreateStorediSCSIVolumeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateStorediSCSIVolumeError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateStorediSCSIVolumeError {}
 /// Errors returned by CreateTapeWithBarcode
 #[derive(Debug, PartialEq)]
 pub enum CreateTapeWithBarcodeError {
@@ -3526,17 +3551,13 @@ impl CreateTapeWithBarcodeError {
 }
 impl fmt::Display for CreateTapeWithBarcodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTapeWithBarcodeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTapeWithBarcodeError::InternalServerError(ref cause) => cause,
-            CreateTapeWithBarcodeError::InvalidGatewayRequest(ref cause) => cause,
+            CreateTapeWithBarcodeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateTapeWithBarcodeError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTapeWithBarcodeError {}
 /// Errors returned by CreateTapes
 #[derive(Debug, PartialEq)]
 pub enum CreateTapesError {
@@ -3565,17 +3586,13 @@ impl CreateTapesError {
 }
 impl fmt::Display for CreateTapesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTapesError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTapesError::InternalServerError(ref cause) => cause,
-            CreateTapesError::InvalidGatewayRequest(ref cause) => cause,
+            CreateTapesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateTapesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTapesError {}
 /// Errors returned by DeleteBandwidthRateLimit
 #[derive(Debug, PartialEq)]
 pub enum DeleteBandwidthRateLimitError {
@@ -3608,17 +3625,15 @@ impl DeleteBandwidthRateLimitError {
 }
 impl fmt::Display for DeleteBandwidthRateLimitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBandwidthRateLimitError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBandwidthRateLimitError::InternalServerError(ref cause) => cause,
-            DeleteBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteBandwidthRateLimitError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteBandwidthRateLimitError {}
 /// Errors returned by DeleteChapCredentials
 #[derive(Debug, PartialEq)]
 pub enum DeleteChapCredentialsError {
@@ -3651,17 +3666,13 @@ impl DeleteChapCredentialsError {
 }
 impl fmt::Display for DeleteChapCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteChapCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteChapCredentialsError::InternalServerError(ref cause) => cause,
-            DeleteChapCredentialsError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteChapCredentialsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteChapCredentialsError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteChapCredentialsError {}
 /// Errors returned by DeleteFileShare
 #[derive(Debug, PartialEq)]
 pub enum DeleteFileShareError {
@@ -3692,17 +3703,13 @@ impl DeleteFileShareError {
 }
 impl fmt::Display for DeleteFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFileShareError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFileShareError::InternalServerError(ref cause) => cause,
-            DeleteFileShareError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteFileShareError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteFileShareError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFileShareError {}
 /// Errors returned by DeleteGateway
 #[derive(Debug, PartialEq)]
 pub enum DeleteGatewayError {
@@ -3731,17 +3738,13 @@ impl DeleteGatewayError {
 }
 impl fmt::Display for DeleteGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGatewayError::InternalServerError(ref cause) => cause,
-            DeleteGatewayError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteGatewayError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGatewayError {}
 /// Errors returned by DeleteSnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum DeleteSnapshotScheduleError {
@@ -3774,17 +3777,13 @@ impl DeleteSnapshotScheduleError {
 }
 impl fmt::Display for DeleteSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSnapshotScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSnapshotScheduleError::InternalServerError(ref cause) => cause,
-            DeleteSnapshotScheduleError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteSnapshotScheduleError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteSnapshotScheduleError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSnapshotScheduleError {}
 /// Errors returned by DeleteTape
 #[derive(Debug, PartialEq)]
 pub enum DeleteTapeError {
@@ -3813,17 +3812,13 @@ impl DeleteTapeError {
 }
 impl fmt::Display for DeleteTapeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTapeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTapeError::InternalServerError(ref cause) => cause,
-            DeleteTapeError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteTapeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteTapeError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTapeError {}
 /// Errors returned by DeleteTapeArchive
 #[derive(Debug, PartialEq)]
 pub enum DeleteTapeArchiveError {
@@ -3856,17 +3851,13 @@ impl DeleteTapeArchiveError {
 }
 impl fmt::Display for DeleteTapeArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTapeArchiveError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTapeArchiveError::InternalServerError(ref cause) => cause,
-            DeleteTapeArchiveError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteTapeArchiveError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteTapeArchiveError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTapeArchiveError {}
 /// Errors returned by DeleteVolume
 #[derive(Debug, PartialEq)]
 pub enum DeleteVolumeError {
@@ -3895,17 +3886,13 @@ impl DeleteVolumeError {
 }
 impl fmt::Display for DeleteVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVolumeError::InternalServerError(ref cause) => cause,
-            DeleteVolumeError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteVolumeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteVolumeError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVolumeError {}
 /// Errors returned by DescribeAvailabilityMonitorTest
 #[derive(Debug, PartialEq)]
 pub enum DescribeAvailabilityMonitorTestError {
@@ -3940,17 +3927,17 @@ impl DescribeAvailabilityMonitorTestError {
 }
 impl fmt::Display for DescribeAvailabilityMonitorTestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAvailabilityMonitorTestError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAvailabilityMonitorTestError::InternalServerError(ref cause) => cause,
-            DescribeAvailabilityMonitorTestError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeAvailabilityMonitorTestError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAvailabilityMonitorTestError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAvailabilityMonitorTestError {}
 /// Errors returned by DescribeBandwidthRateLimit
 #[derive(Debug, PartialEq)]
 pub enum DescribeBandwidthRateLimitError {
@@ -3985,17 +3972,17 @@ impl DescribeBandwidthRateLimitError {
 }
 impl fmt::Display for DescribeBandwidthRateLimitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBandwidthRateLimitError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBandwidthRateLimitError::InternalServerError(ref cause) => cause,
-            DescribeBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeBandwidthRateLimitError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeBandwidthRateLimitError {}
 /// Errors returned by DescribeCache
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheError {
@@ -4024,17 +4011,13 @@ impl DescribeCacheError {
 }
 impl fmt::Display for DescribeCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCacheError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCacheError::InternalServerError(ref cause) => cause,
-            DescribeCacheError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeCacheError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeCacheError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCacheError {}
 /// Errors returned by DescribeCachediSCSIVolumes
 #[derive(Debug, PartialEq)]
 pub enum DescribeCachediSCSIVolumesError {
@@ -4069,17 +4052,17 @@ impl DescribeCachediSCSIVolumesError {
 }
 impl fmt::Display for DescribeCachediSCSIVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCachediSCSIVolumesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCachediSCSIVolumesError::InternalServerError(ref cause) => cause,
-            DescribeCachediSCSIVolumesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeCachediSCSIVolumesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCachediSCSIVolumesError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCachediSCSIVolumesError {}
 /// Errors returned by DescribeChapCredentials
 #[derive(Debug, PartialEq)]
 pub enum DescribeChapCredentialsError {
@@ -4112,17 +4095,15 @@ impl DescribeChapCredentialsError {
 }
 impl fmt::Display for DescribeChapCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeChapCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeChapCredentialsError::InternalServerError(ref cause) => cause,
-            DescribeChapCredentialsError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeChapCredentialsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeChapCredentialsError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeChapCredentialsError {}
 /// Errors returned by DescribeGatewayInformation
 #[derive(Debug, PartialEq)]
 pub enum DescribeGatewayInformationError {
@@ -4157,17 +4138,17 @@ impl DescribeGatewayInformationError {
 }
 impl fmt::Display for DescribeGatewayInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeGatewayInformationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeGatewayInformationError::InternalServerError(ref cause) => cause,
-            DescribeGatewayInformationError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeGatewayInformationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeGatewayInformationError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeGatewayInformationError {}
 /// Errors returned by DescribeMaintenanceStartTime
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceStartTimeError {
@@ -4202,17 +4183,17 @@ impl DescribeMaintenanceStartTimeError {
 }
 impl fmt::Display for DescribeMaintenanceStartTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMaintenanceStartTimeError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMaintenanceStartTimeError::InternalServerError(ref cause) => cause,
-            DescribeMaintenanceStartTimeError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeMaintenanceStartTimeError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMaintenanceStartTimeError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMaintenanceStartTimeError {}
 /// Errors returned by DescribeNFSFileShares
 #[derive(Debug, PartialEq)]
 pub enum DescribeNFSFileSharesError {
@@ -4245,17 +4226,13 @@ impl DescribeNFSFileSharesError {
 }
 impl fmt::Display for DescribeNFSFileSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeNFSFileSharesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeNFSFileSharesError::InternalServerError(ref cause) => cause,
-            DescribeNFSFileSharesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeNFSFileSharesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeNFSFileSharesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeNFSFileSharesError {}
 /// Errors returned by DescribeSMBFileShares
 #[derive(Debug, PartialEq)]
 pub enum DescribeSMBFileSharesError {
@@ -4288,17 +4265,13 @@ impl DescribeSMBFileSharesError {
 }
 impl fmt::Display for DescribeSMBFileSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSMBFileSharesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSMBFileSharesError::InternalServerError(ref cause) => cause,
-            DescribeSMBFileSharesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeSMBFileSharesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeSMBFileSharesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSMBFileSharesError {}
 /// Errors returned by DescribeSMBSettings
 #[derive(Debug, PartialEq)]
 pub enum DescribeSMBSettingsError {
@@ -4331,17 +4304,13 @@ impl DescribeSMBSettingsError {
 }
 impl fmt::Display for DescribeSMBSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSMBSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSMBSettingsError::InternalServerError(ref cause) => cause,
-            DescribeSMBSettingsError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeSMBSettingsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeSMBSettingsError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSMBSettingsError {}
 /// Errors returned by DescribeSnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum DescribeSnapshotScheduleError {
@@ -4374,17 +4343,15 @@ impl DescribeSnapshotScheduleError {
 }
 impl fmt::Display for DescribeSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSnapshotScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSnapshotScheduleError::InternalServerError(ref cause) => cause,
-            DescribeSnapshotScheduleError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeSnapshotScheduleError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeSnapshotScheduleError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeSnapshotScheduleError {}
 /// Errors returned by DescribeStorediSCSIVolumes
 #[derive(Debug, PartialEq)]
 pub enum DescribeStorediSCSIVolumesError {
@@ -4419,17 +4386,17 @@ impl DescribeStorediSCSIVolumesError {
 }
 impl fmt::Display for DescribeStorediSCSIVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStorediSCSIVolumesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStorediSCSIVolumesError::InternalServerError(ref cause) => cause,
-            DescribeStorediSCSIVolumesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeStorediSCSIVolumesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeStorediSCSIVolumesError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeStorediSCSIVolumesError {}
 /// Errors returned by DescribeTapeArchives
 #[derive(Debug, PartialEq)]
 pub enum DescribeTapeArchivesError {
@@ -4462,17 +4429,13 @@ impl DescribeTapeArchivesError {
 }
 impl fmt::Display for DescribeTapeArchivesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTapeArchivesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTapeArchivesError::InternalServerError(ref cause) => cause,
-            DescribeTapeArchivesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeTapeArchivesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeTapeArchivesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTapeArchivesError {}
 /// Errors returned by DescribeTapeRecoveryPoints
 #[derive(Debug, PartialEq)]
 pub enum DescribeTapeRecoveryPointsError {
@@ -4507,17 +4470,17 @@ impl DescribeTapeRecoveryPointsError {
 }
 impl fmt::Display for DescribeTapeRecoveryPointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTapeRecoveryPointsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTapeRecoveryPointsError::InternalServerError(ref cause) => cause,
-            DescribeTapeRecoveryPointsError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeTapeRecoveryPointsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeTapeRecoveryPointsError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTapeRecoveryPointsError {}
 /// Errors returned by DescribeTapes
 #[derive(Debug, PartialEq)]
 pub enum DescribeTapesError {
@@ -4546,17 +4509,13 @@ impl DescribeTapesError {
 }
 impl fmt::Display for DescribeTapesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTapesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTapesError::InternalServerError(ref cause) => cause,
-            DescribeTapesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeTapesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeTapesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTapesError {}
 /// Errors returned by DescribeUploadBuffer
 #[derive(Debug, PartialEq)]
 pub enum DescribeUploadBufferError {
@@ -4589,17 +4548,13 @@ impl DescribeUploadBufferError {
 }
 impl fmt::Display for DescribeUploadBufferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUploadBufferError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUploadBufferError::InternalServerError(ref cause) => cause,
-            DescribeUploadBufferError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeUploadBufferError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeUploadBufferError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUploadBufferError {}
 /// Errors returned by DescribeVTLDevices
 #[derive(Debug, PartialEq)]
 pub enum DescribeVTLDevicesError {
@@ -4632,17 +4587,13 @@ impl DescribeVTLDevicesError {
 }
 impl fmt::Display for DescribeVTLDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeVTLDevicesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeVTLDevicesError::InternalServerError(ref cause) => cause,
-            DescribeVTLDevicesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeVTLDevicesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeVTLDevicesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeVTLDevicesError {}
 /// Errors returned by DescribeWorkingStorage
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkingStorageError {
@@ -4675,17 +4626,13 @@ impl DescribeWorkingStorageError {
 }
 impl fmt::Display for DescribeWorkingStorageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWorkingStorageError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeWorkingStorageError::InternalServerError(ref cause) => cause,
-            DescribeWorkingStorageError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeWorkingStorageError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeWorkingStorageError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeWorkingStorageError {}
 /// Errors returned by DetachVolume
 #[derive(Debug, PartialEq)]
 pub enum DetachVolumeError {
@@ -4714,17 +4661,13 @@ impl DetachVolumeError {
 }
 impl fmt::Display for DetachVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            DetachVolumeError::InternalServerError(ref cause) => cause,
-            DetachVolumeError::InvalidGatewayRequest(ref cause) => cause,
+            DetachVolumeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DetachVolumeError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachVolumeError {}
 /// Errors returned by DisableGateway
 #[derive(Debug, PartialEq)]
 pub enum DisableGatewayError {
@@ -4755,17 +4698,13 @@ impl DisableGatewayError {
 }
 impl fmt::Display for DisableGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            DisableGatewayError::InternalServerError(ref cause) => cause,
-            DisableGatewayError::InvalidGatewayRequest(ref cause) => cause,
+            DisableGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DisableGatewayError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableGatewayError {}
 /// Errors returned by JoinDomain
 #[derive(Debug, PartialEq)]
 pub enum JoinDomainError {
@@ -4794,17 +4733,13 @@ impl JoinDomainError {
 }
 impl fmt::Display for JoinDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for JoinDomainError {
-    fn description(&self) -> &str {
         match *self {
-            JoinDomainError::InternalServerError(ref cause) => cause,
-            JoinDomainError::InvalidGatewayRequest(ref cause) => cause,
+            JoinDomainError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            JoinDomainError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for JoinDomainError {}
 /// Errors returned by ListFileShares
 #[derive(Debug, PartialEq)]
 pub enum ListFileSharesError {
@@ -4835,17 +4770,13 @@ impl ListFileSharesError {
 }
 impl fmt::Display for ListFileSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFileSharesError {
-    fn description(&self) -> &str {
         match *self {
-            ListFileSharesError::InternalServerError(ref cause) => cause,
-            ListFileSharesError::InvalidGatewayRequest(ref cause) => cause,
+            ListFileSharesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListFileSharesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFileSharesError {}
 /// Errors returned by ListGateways
 #[derive(Debug, PartialEq)]
 pub enum ListGatewaysError {
@@ -4874,17 +4805,13 @@ impl ListGatewaysError {
 }
 impl fmt::Display for ListGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGatewaysError {
-    fn description(&self) -> &str {
         match *self {
-            ListGatewaysError::InternalServerError(ref cause) => cause,
-            ListGatewaysError::InvalidGatewayRequest(ref cause) => cause,
+            ListGatewaysError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListGatewaysError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGatewaysError {}
 /// Errors returned by ListLocalDisks
 #[derive(Debug, PartialEq)]
 pub enum ListLocalDisksError {
@@ -4915,17 +4842,13 @@ impl ListLocalDisksError {
 }
 impl fmt::Display for ListLocalDisksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLocalDisksError {
-    fn description(&self) -> &str {
         match *self {
-            ListLocalDisksError::InternalServerError(ref cause) => cause,
-            ListLocalDisksError::InvalidGatewayRequest(ref cause) => cause,
+            ListLocalDisksError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListLocalDisksError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListLocalDisksError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -4958,17 +4881,13 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalServerError(ref cause) => cause,
-            ListTagsForResourceError::InvalidGatewayRequest(ref cause) => cause,
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTapes
 #[derive(Debug, PartialEq)]
 pub enum ListTapesError {
@@ -4997,17 +4916,13 @@ impl ListTapesError {
 }
 impl fmt::Display for ListTapesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTapesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTapesError::InternalServerError(ref cause) => cause,
-            ListTapesError::InvalidGatewayRequest(ref cause) => cause,
+            ListTapesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTapesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTapesError {}
 /// Errors returned by ListVolumeInitiators
 #[derive(Debug, PartialEq)]
 pub enum ListVolumeInitiatorsError {
@@ -5040,17 +4955,13 @@ impl ListVolumeInitiatorsError {
 }
 impl fmt::Display for ListVolumeInitiatorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVolumeInitiatorsError {
-    fn description(&self) -> &str {
         match *self {
-            ListVolumeInitiatorsError::InternalServerError(ref cause) => cause,
-            ListVolumeInitiatorsError::InvalidGatewayRequest(ref cause) => cause,
+            ListVolumeInitiatorsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListVolumeInitiatorsError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVolumeInitiatorsError {}
 /// Errors returned by ListVolumeRecoveryPoints
 #[derive(Debug, PartialEq)]
 pub enum ListVolumeRecoveryPointsError {
@@ -5083,17 +4994,15 @@ impl ListVolumeRecoveryPointsError {
 }
 impl fmt::Display for ListVolumeRecoveryPointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVolumeRecoveryPointsError {
-    fn description(&self) -> &str {
         match *self {
-            ListVolumeRecoveryPointsError::InternalServerError(ref cause) => cause,
-            ListVolumeRecoveryPointsError::InvalidGatewayRequest(ref cause) => cause,
+            ListVolumeRecoveryPointsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListVolumeRecoveryPointsError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListVolumeRecoveryPointsError {}
 /// Errors returned by ListVolumes
 #[derive(Debug, PartialEq)]
 pub enum ListVolumesError {
@@ -5122,17 +5031,13 @@ impl ListVolumesError {
 }
 impl fmt::Display for ListVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVolumesError {
-    fn description(&self) -> &str {
         match *self {
-            ListVolumesError::InternalServerError(ref cause) => cause,
-            ListVolumesError::InvalidGatewayRequest(ref cause) => cause,
+            ListVolumesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListVolumesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVolumesError {}
 /// Errors returned by NotifyWhenUploaded
 #[derive(Debug, PartialEq)]
 pub enum NotifyWhenUploadedError {
@@ -5165,17 +5070,13 @@ impl NotifyWhenUploadedError {
 }
 impl fmt::Display for NotifyWhenUploadedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for NotifyWhenUploadedError {
-    fn description(&self) -> &str {
         match *self {
-            NotifyWhenUploadedError::InternalServerError(ref cause) => cause,
-            NotifyWhenUploadedError::InvalidGatewayRequest(ref cause) => cause,
+            NotifyWhenUploadedError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            NotifyWhenUploadedError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for NotifyWhenUploadedError {}
 /// Errors returned by RefreshCache
 #[derive(Debug, PartialEq)]
 pub enum RefreshCacheError {
@@ -5204,17 +5105,13 @@ impl RefreshCacheError {
 }
 impl fmt::Display for RefreshCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RefreshCacheError {
-    fn description(&self) -> &str {
         match *self {
-            RefreshCacheError::InternalServerError(ref cause) => cause,
-            RefreshCacheError::InvalidGatewayRequest(ref cause) => cause,
+            RefreshCacheError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RefreshCacheError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RefreshCacheError {}
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
@@ -5247,17 +5144,13 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromResourceError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromResourceError::InternalServerError(ref cause) => cause,
-            RemoveTagsFromResourceError::InvalidGatewayRequest(ref cause) => cause,
+            RemoveTagsFromResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromResourceError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsFromResourceError {}
 /// Errors returned by ResetCache
 #[derive(Debug, PartialEq)]
 pub enum ResetCacheError {
@@ -5286,17 +5179,13 @@ impl ResetCacheError {
 }
 impl fmt::Display for ResetCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetCacheError {
-    fn description(&self) -> &str {
         match *self {
-            ResetCacheError::InternalServerError(ref cause) => cause,
-            ResetCacheError::InvalidGatewayRequest(ref cause) => cause,
+            ResetCacheError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ResetCacheError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResetCacheError {}
 /// Errors returned by RetrieveTapeArchive
 #[derive(Debug, PartialEq)]
 pub enum RetrieveTapeArchiveError {
@@ -5329,17 +5218,13 @@ impl RetrieveTapeArchiveError {
 }
 impl fmt::Display for RetrieveTapeArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RetrieveTapeArchiveError {
-    fn description(&self) -> &str {
         match *self {
-            RetrieveTapeArchiveError::InternalServerError(ref cause) => cause,
-            RetrieveTapeArchiveError::InvalidGatewayRequest(ref cause) => cause,
+            RetrieveTapeArchiveError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RetrieveTapeArchiveError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RetrieveTapeArchiveError {}
 /// Errors returned by RetrieveTapeRecoveryPoint
 #[derive(Debug, PartialEq)]
 pub enum RetrieveTapeRecoveryPointError {
@@ -5372,17 +5257,17 @@ impl RetrieveTapeRecoveryPointError {
 }
 impl fmt::Display for RetrieveTapeRecoveryPointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RetrieveTapeRecoveryPointError {
-    fn description(&self) -> &str {
         match *self {
-            RetrieveTapeRecoveryPointError::InternalServerError(ref cause) => cause,
-            RetrieveTapeRecoveryPointError::InvalidGatewayRequest(ref cause) => cause,
+            RetrieveTapeRecoveryPointError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RetrieveTapeRecoveryPointError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RetrieveTapeRecoveryPointError {}
 /// Errors returned by SetLocalConsolePassword
 #[derive(Debug, PartialEq)]
 pub enum SetLocalConsolePasswordError {
@@ -5415,17 +5300,15 @@ impl SetLocalConsolePasswordError {
 }
 impl fmt::Display for SetLocalConsolePasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetLocalConsolePasswordError {
-    fn description(&self) -> &str {
         match *self {
-            SetLocalConsolePasswordError::InternalServerError(ref cause) => cause,
-            SetLocalConsolePasswordError::InvalidGatewayRequest(ref cause) => cause,
+            SetLocalConsolePasswordError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            SetLocalConsolePasswordError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetLocalConsolePasswordError {}
 /// Errors returned by SetSMBGuestPassword
 #[derive(Debug, PartialEq)]
 pub enum SetSMBGuestPasswordError {
@@ -5458,17 +5341,13 @@ impl SetSMBGuestPasswordError {
 }
 impl fmt::Display for SetSMBGuestPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSMBGuestPasswordError {
-    fn description(&self) -> &str {
         match *self {
-            SetSMBGuestPasswordError::InternalServerError(ref cause) => cause,
-            SetSMBGuestPasswordError::InvalidGatewayRequest(ref cause) => cause,
+            SetSMBGuestPasswordError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            SetSMBGuestPasswordError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetSMBGuestPasswordError {}
 /// Errors returned by ShutdownGateway
 #[derive(Debug, PartialEq)]
 pub enum ShutdownGatewayError {
@@ -5499,17 +5378,13 @@ impl ShutdownGatewayError {
 }
 impl fmt::Display for ShutdownGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ShutdownGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            ShutdownGatewayError::InternalServerError(ref cause) => cause,
-            ShutdownGatewayError::InvalidGatewayRequest(ref cause) => cause,
+            ShutdownGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ShutdownGatewayError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ShutdownGatewayError {}
 /// Errors returned by StartAvailabilityMonitorTest
 #[derive(Debug, PartialEq)]
 pub enum StartAvailabilityMonitorTestError {
@@ -5544,17 +5419,17 @@ impl StartAvailabilityMonitorTestError {
 }
 impl fmt::Display for StartAvailabilityMonitorTestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartAvailabilityMonitorTestError {
-    fn description(&self) -> &str {
         match *self {
-            StartAvailabilityMonitorTestError::InternalServerError(ref cause) => cause,
-            StartAvailabilityMonitorTestError::InvalidGatewayRequest(ref cause) => cause,
+            StartAvailabilityMonitorTestError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAvailabilityMonitorTestError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartAvailabilityMonitorTestError {}
 /// Errors returned by StartGateway
 #[derive(Debug, PartialEq)]
 pub enum StartGatewayError {
@@ -5583,17 +5458,13 @@ impl StartGatewayError {
 }
 impl fmt::Display for StartGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            StartGatewayError::InternalServerError(ref cause) => cause,
-            StartGatewayError::InvalidGatewayRequest(ref cause) => cause,
+            StartGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartGatewayError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartGatewayError {}
 /// Errors returned by UpdateBandwidthRateLimit
 #[derive(Debug, PartialEq)]
 pub enum UpdateBandwidthRateLimitError {
@@ -5626,17 +5497,15 @@ impl UpdateBandwidthRateLimitError {
 }
 impl fmt::Display for UpdateBandwidthRateLimitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBandwidthRateLimitError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBandwidthRateLimitError::InternalServerError(ref cause) => cause,
-            UpdateBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateBandwidthRateLimitError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateBandwidthRateLimitError {}
 /// Errors returned by UpdateChapCredentials
 #[derive(Debug, PartialEq)]
 pub enum UpdateChapCredentialsError {
@@ -5669,17 +5538,13 @@ impl UpdateChapCredentialsError {
 }
 impl fmt::Display for UpdateChapCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateChapCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateChapCredentialsError::InternalServerError(ref cause) => cause,
-            UpdateChapCredentialsError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateChapCredentialsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateChapCredentialsError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateChapCredentialsError {}
 /// Errors returned by UpdateGatewayInformation
 #[derive(Debug, PartialEq)]
 pub enum UpdateGatewayInformationError {
@@ -5712,17 +5577,15 @@ impl UpdateGatewayInformationError {
 }
 impl fmt::Display for UpdateGatewayInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGatewayInformationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGatewayInformationError::InternalServerError(ref cause) => cause,
-            UpdateGatewayInformationError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateGatewayInformationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayInformationError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateGatewayInformationError {}
 /// Errors returned by UpdateGatewaySoftwareNow
 #[derive(Debug, PartialEq)]
 pub enum UpdateGatewaySoftwareNowError {
@@ -5755,17 +5618,15 @@ impl UpdateGatewaySoftwareNowError {
 }
 impl fmt::Display for UpdateGatewaySoftwareNowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGatewaySoftwareNowError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGatewaySoftwareNowError::InternalServerError(ref cause) => cause,
-            UpdateGatewaySoftwareNowError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateGatewaySoftwareNowError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateGatewaySoftwareNowError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateGatewaySoftwareNowError {}
 /// Errors returned by UpdateMaintenanceStartTime
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceStartTimeError {
@@ -5800,17 +5661,17 @@ impl UpdateMaintenanceStartTimeError {
 }
 impl fmt::Display for UpdateMaintenanceStartTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMaintenanceStartTimeError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMaintenanceStartTimeError::InternalServerError(ref cause) => cause,
-            UpdateMaintenanceStartTimeError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateMaintenanceStartTimeError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateMaintenanceStartTimeError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateMaintenanceStartTimeError {}
 /// Errors returned by UpdateNFSFileShare
 #[derive(Debug, PartialEq)]
 pub enum UpdateNFSFileShareError {
@@ -5843,17 +5704,13 @@ impl UpdateNFSFileShareError {
 }
 impl fmt::Display for UpdateNFSFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNFSFileShareError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNFSFileShareError::InternalServerError(ref cause) => cause,
-            UpdateNFSFileShareError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateNFSFileShareError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateNFSFileShareError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateNFSFileShareError {}
 /// Errors returned by UpdateSMBFileShare
 #[derive(Debug, PartialEq)]
 pub enum UpdateSMBFileShareError {
@@ -5886,17 +5743,13 @@ impl UpdateSMBFileShareError {
 }
 impl fmt::Display for UpdateSMBFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSMBFileShareError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSMBFileShareError::InternalServerError(ref cause) => cause,
-            UpdateSMBFileShareError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateSMBFileShareError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateSMBFileShareError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSMBFileShareError {}
 /// Errors returned by UpdateSMBSecurityStrategy
 #[derive(Debug, PartialEq)]
 pub enum UpdateSMBSecurityStrategyError {
@@ -5929,17 +5782,17 @@ impl UpdateSMBSecurityStrategyError {
 }
 impl fmt::Display for UpdateSMBSecurityStrategyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSMBSecurityStrategyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSMBSecurityStrategyError::InternalServerError(ref cause) => cause,
-            UpdateSMBSecurityStrategyError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateSMBSecurityStrategyError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateSMBSecurityStrategyError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateSMBSecurityStrategyError {}
 /// Errors returned by UpdateSnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum UpdateSnapshotScheduleError {
@@ -5972,17 +5825,13 @@ impl UpdateSnapshotScheduleError {
 }
 impl fmt::Display for UpdateSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSnapshotScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSnapshotScheduleError::InternalServerError(ref cause) => cause,
-            UpdateSnapshotScheduleError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateSnapshotScheduleError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateSnapshotScheduleError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSnapshotScheduleError {}
 /// Errors returned by UpdateVTLDeviceType
 #[derive(Debug, PartialEq)]
 pub enum UpdateVTLDeviceTypeError {
@@ -6015,17 +5864,13 @@ impl UpdateVTLDeviceTypeError {
 }
 impl fmt::Display for UpdateVTLDeviceTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVTLDeviceTypeError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVTLDeviceTypeError::InternalServerError(ref cause) => cause,
-            UpdateVTLDeviceTypeError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateVTLDeviceTypeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateVTLDeviceTypeError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateVTLDeviceTypeError {}
 /// Trait representing the capabilities of the AWS Storage Gateway API. AWS Storage Gateway clients implement this trait.
 pub trait StorageGateway {
     /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the AWS Region that you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>

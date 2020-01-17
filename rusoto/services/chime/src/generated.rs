@@ -69,6 +69,7 @@ pub struct AccountSettings {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePhoneNumberWithUserRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -86,6 +87,7 @@ pub struct AssociatePhoneNumberWithUserRequest {
 pub struct AssociatePhoneNumberWithUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePhoneNumbersWithVoiceConnectorGroupRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
@@ -110,6 +112,7 @@ pub struct AssociatePhoneNumbersWithVoiceConnectorGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePhoneNumbersWithVoiceConnectorRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
@@ -152,6 +155,7 @@ pub struct Attendee {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreateAttendeeRequest {
     /// <p>The request containing the attendees to create.</p>
     #[serde(rename = "Attendees")]
@@ -175,6 +179,7 @@ pub struct BatchCreateAttendeeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreateRoomMembershipRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -197,6 +202,7 @@ pub struct BatchCreateRoomMembershipResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeletePhoneNumberRequest {
     /// <p>List of phone number IDs.</p>
     #[serde(rename = "PhoneNumberIds")]
@@ -213,6 +219,7 @@ pub struct BatchDeletePhoneNumberResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchSuspendUserRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -232,6 +239,7 @@ pub struct BatchSuspendUserResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUnsuspendUserRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -251,6 +259,7 @@ pub struct BatchUnsuspendUserResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdatePhoneNumberRequest {
     /// <p>The request containing the phone number IDs and product types or calling names to update.</p>
     #[serde(rename = "UpdatePhoneNumberRequestItems")]
@@ -267,6 +276,7 @@ pub struct BatchUpdatePhoneNumberResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdateUserRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -337,6 +347,7 @@ pub struct BusinessCallingSettings {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccountRequest {
     /// <p>The name of the Amazon Chime account.</p>
     #[serde(rename = "Name")]
@@ -371,6 +382,7 @@ pub struct ChimeCreateAttendeeError {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAttendeeRequest {
     /// <p>The Amazon Chime SDK external user ID. Links the attendee to an identity managed by a builder application.</p>
     #[serde(rename = "ExternalUserId")]
@@ -382,6 +394,7 @@ pub struct CreateAttendeeRequest {
 
 /// <p>The Amazon Chime SDK attendee fields to create, used with the BatchCreateAttendee action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAttendeeRequestItem {
     /// <p>The Amazon Chime SDK external user ID. Links the attendee to an identity managed by a builder application.</p>
     #[serde(rename = "ExternalUserId")]
@@ -398,6 +411,7 @@ pub struct CreateAttendeeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBotRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -421,6 +435,7 @@ pub struct CreateBotResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeetingRequest {
     /// <p>The unique identifier for the client request. Use a different token for different meetings.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -449,6 +464,7 @@ pub struct CreateMeetingResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePhoneNumberOrderRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
@@ -468,6 +484,7 @@ pub struct CreatePhoneNumberOrderResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoomMembershipRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -494,6 +511,7 @@ pub struct CreateRoomMembershipResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoomRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -517,6 +535,7 @@ pub struct CreateRoomResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVoiceConnectorGroupRequest {
     /// <p>The name of the Amazon Chime Voice Connector group.</p>
     #[serde(rename = "Name")]
@@ -537,6 +556,7 @@ pub struct CreateVoiceConnectorGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVoiceConnectorRequest {
     /// <p>The AWS Region in which the Amazon Chime Voice Connector is created. Default value: <code>us-east-1</code>.</p>
     #[serde(rename = "AwsRegion")]
@@ -561,6 +581,7 @@ pub struct CreateVoiceConnectorResponse {
 
 /// <p>The SIP credentials used to authenticate requests to your Amazon Chime Voice Connector.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Credential {
     /// <p>The RFC2617 compliant password associated with the SIP credentials, in US-ASCII format.</p>
     #[serde(rename = "Password")]
@@ -573,6 +594,7 @@ pub struct Credential {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccountRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -584,6 +606,7 @@ pub struct DeleteAccountRequest {
 pub struct DeleteAccountResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAttendeeRequest {
     /// <p>The Amazon Chime SDK attendee ID.</p>
     #[serde(rename = "AttendeeId")]
@@ -594,6 +617,7 @@ pub struct DeleteAttendeeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventsConfigurationRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -604,6 +628,7 @@ pub struct DeleteEventsConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMeetingRequest {
     /// <p>The Amazon Chime SDK meeting ID.</p>
     #[serde(rename = "MeetingId")]
@@ -611,6 +636,7 @@ pub struct DeleteMeetingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePhoneNumberRequest {
     /// <p>The phone number ID.</p>
     #[serde(rename = "PhoneNumberId")]
@@ -618,6 +644,7 @@ pub struct DeletePhoneNumberRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomMembershipRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -631,6 +658,7 @@ pub struct DeleteRoomMembershipRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -641,6 +669,7 @@ pub struct DeleteRoomRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorGroupRequest {
     /// <p>The Amazon Chime Voice Connector group ID.</p>
     #[serde(rename = "VoiceConnectorGroupId")]
@@ -648,6 +677,7 @@ pub struct DeleteVoiceConnectorGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorOriginationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
@@ -655,6 +685,7 @@ pub struct DeleteVoiceConnectorOriginationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
@@ -662,6 +693,7 @@ pub struct DeleteVoiceConnectorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorStreamingConfigurationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
@@ -669,6 +701,7 @@ pub struct DeleteVoiceConnectorStreamingConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorTerminationCredentialsRequest {
     /// <p>The RFC2617 compliant username associated with the SIP credentials, in US-ASCII format.</p>
     #[serde(rename = "Usernames")]
@@ -680,6 +713,7 @@ pub struct DeleteVoiceConnectorTerminationCredentialsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorTerminationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
@@ -687,6 +721,7 @@ pub struct DeleteVoiceConnectorTerminationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociatePhoneNumberFromUserRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -701,6 +736,7 @@ pub struct DisassociatePhoneNumberFromUserRequest {
 pub struct DisassociatePhoneNumberFromUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociatePhoneNumbersFromVoiceConnectorGroupRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
@@ -721,6 +757,7 @@ pub struct DisassociatePhoneNumbersFromVoiceConnectorGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociatePhoneNumbersFromVoiceConnectorRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
@@ -759,6 +796,7 @@ pub struct EventsConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -775,6 +813,7 @@ pub struct GetAccountResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountSettingsRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -791,6 +830,7 @@ pub struct GetAccountSettingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAttendeeRequest {
     /// <p>The Amazon Chime SDK attendee ID.</p>
     #[serde(rename = "AttendeeId")]
@@ -810,6 +850,7 @@ pub struct GetAttendeeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -829,6 +870,7 @@ pub struct GetBotResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEventsConfigurationRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -861,6 +903,7 @@ pub struct GetGlobalSettingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMeetingRequest {
     /// <p>The Amazon Chime SDK meeting ID.</p>
     #[serde(rename = "MeetingId")]
@@ -877,6 +920,7 @@ pub struct GetMeetingResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPhoneNumberOrderRequest {
     /// <p>The ID for the phone number order.</p>
     #[serde(rename = "PhoneNumberOrderId")]
@@ -893,6 +937,7 @@ pub struct GetPhoneNumberOrderResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPhoneNumberRequest {
     /// <p>The phone number ID.</p>
     #[serde(rename = "PhoneNumberId")]
@@ -922,6 +967,7 @@ pub struct GetPhoneNumberSettingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoomRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -941,6 +987,7 @@ pub struct GetRoomResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -960,6 +1007,7 @@ pub struct GetUserResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserSettingsRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -979,6 +1027,7 @@ pub struct GetUserSettingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorGroupRequest {
     /// <p>The Amazon Chime Voice Connector group ID.</p>
     #[serde(rename = "VoiceConnectorGroupId")]
@@ -995,6 +1044,7 @@ pub struct GetVoiceConnectorGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorLoggingConfigurationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
@@ -1011,6 +1061,7 @@ pub struct GetVoiceConnectorLoggingConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorOriginationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
@@ -1027,6 +1078,7 @@ pub struct GetVoiceConnectorOriginationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
@@ -1043,6 +1095,7 @@ pub struct GetVoiceConnectorResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorStreamingConfigurationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
@@ -1059,6 +1112,7 @@ pub struct GetVoiceConnectorStreamingConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorTerminationHealthRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
@@ -1075,6 +1129,7 @@ pub struct GetVoiceConnectorTerminationHealthResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorTerminationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
@@ -1113,6 +1168,7 @@ pub struct Invite {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InviteUsersRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1132,6 +1188,7 @@ pub struct InviteUsersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountsRequest {
     /// <p>The maximum number of results to return in a single call. Defaults to 100.</p>
     #[serde(rename = "MaxResults")]
@@ -1165,6 +1222,7 @@ pub struct ListAccountsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttendeesRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -1193,6 +1251,7 @@ pub struct ListAttendeesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBotsRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1221,6 +1280,7 @@ pub struct ListBotsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMeetingsRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -1246,6 +1306,7 @@ pub struct ListMeetingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumberOrdersRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -1271,6 +1332,7 @@ pub struct ListPhoneNumberOrdersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumbersRequest {
     /// <p>The filter to use to limit the number of results.</p>
     #[serde(rename = "FilterName")]
@@ -1312,6 +1374,7 @@ pub struct ListPhoneNumbersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoomMembershipsRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1343,6 +1406,7 @@ pub struct ListRoomMembershipsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoomsRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1375,6 +1439,7 @@ pub struct ListRoomsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1407,6 +1472,7 @@ pub struct ListUsersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVoiceConnectorGroupsRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -1432,6 +1498,7 @@ pub struct ListVoiceConnectorGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVoiceConnectorTerminationCredentialsRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
@@ -1448,6 +1515,7 @@ pub struct ListVoiceConnectorTerminationCredentialsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVoiceConnectorsRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -1482,6 +1550,7 @@ pub struct LoggingConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LogoutUserRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1545,6 +1614,7 @@ pub struct Meeting {
 
 /// <p>The configuration for resource targets to receive notifications when Amazon Chime SDK meeting and attendee events occur.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MeetingNotificationConfiguration {
     /// <p>The SNS topic ARN.</p>
     #[serde(rename = "SnsTopicArn")]
@@ -1602,6 +1672,7 @@ pub struct MemberError {
 
 /// <p>Membership details, such as member ID and member role.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MembershipItem {
     /// <p>The member ID.</p>
     #[serde(rename = "MemberId")]
@@ -1816,6 +1887,7 @@ pub struct PhoneNumberOrder {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventsConfigurationRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1842,6 +1914,7 @@ pub struct PutEventsConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorLoggingConfigurationRequest {
     /// <p>The logging configuration details to add.</p>
     #[serde(rename = "LoggingConfiguration")]
@@ -1861,6 +1934,7 @@ pub struct PutVoiceConnectorLoggingConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorOriginationRequest {
     /// <p>The origination setting details to add.</p>
     #[serde(rename = "Origination")]
@@ -1880,6 +1954,7 @@ pub struct PutVoiceConnectorOriginationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorStreamingConfigurationRequest {
     /// <p>The streaming configuration details to add.</p>
     #[serde(rename = "StreamingConfiguration")]
@@ -1899,6 +1974,7 @@ pub struct PutVoiceConnectorStreamingConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorTerminationCredentialsRequest {
     /// <p>The termination SIP credentials.</p>
     #[serde(rename = "Credentials")]
@@ -1910,6 +1986,7 @@ pub struct PutVoiceConnectorTerminationCredentialsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorTerminationRequest {
     /// <p>The termination setting details to add.</p>
     #[serde(rename = "Termination")]
@@ -1929,6 +2006,7 @@ pub struct PutVoiceConnectorTerminationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegenerateSecurityTokenRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1947,6 +2025,7 @@ pub struct RegenerateSecurityTokenResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetPersonalPINRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1966,6 +2045,7 @@ pub struct ResetPersonalPINResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestorePhoneNumberRequest {
     /// <p>The phone number.</p>
     #[serde(rename = "PhoneNumberId")]
@@ -2037,6 +2117,7 @@ pub struct RoomMembership {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchAvailablePhoneNumbersRequest {
     /// <p>The area code used to filter results.</p>
     #[serde(rename = "AreaCode")]
@@ -2143,6 +2224,7 @@ pub struct TerminationHealth {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -2163,6 +2245,7 @@ pub struct UpdateAccountResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountSettingsRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -2177,6 +2260,7 @@ pub struct UpdateAccountSettingsRequest {
 pub struct UpdateAccountSettingsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBotRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -2200,6 +2284,7 @@ pub struct UpdateBotResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGlobalSettingsRequest {
     /// <p>The Amazon Chime Business Calling settings.</p>
     #[serde(rename = "BusinessCalling")]
@@ -2210,6 +2295,7 @@ pub struct UpdateGlobalSettingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePhoneNumberRequest {
     /// <p>The outbound calling name associated with the phone number.</p>
     #[serde(rename = "CallingName")]
@@ -2226,6 +2312,7 @@ pub struct UpdatePhoneNumberRequest {
 
 /// <p>The phone number ID, product type, or calling name fields to update, used with the <a>BatchUpdatePhoneNumber</a> and <a>UpdatePhoneNumber</a> actions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePhoneNumberRequestItem {
     /// <p>The outbound calling name to update.</p>
     #[serde(rename = "CallingName")]
@@ -2250,6 +2337,7 @@ pub struct UpdatePhoneNumberResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePhoneNumberSettingsRequest {
     /// <p>The default outbound calling name for the account.</p>
     #[serde(rename = "CallingName")]
@@ -2257,6 +2345,7 @@ pub struct UpdatePhoneNumberSettingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoomMembershipRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -2283,6 +2372,7 @@ pub struct UpdateRoomMembershipResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoomRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -2306,6 +2396,7 @@ pub struct UpdateRoomResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -2321,6 +2412,7 @@ pub struct UpdateUserRequest {
 
 /// <p>The user ID and user fields to update, used with the <a>BatchUpdateUser</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequestItem {
     /// <p>The user license type.</p>
     #[serde(rename = "LicenseType")]
@@ -2341,6 +2433,7 @@ pub struct UpdateUserResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserSettingsRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -2354,6 +2447,7 @@ pub struct UpdateUserSettingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVoiceConnectorGroupRequest {
     /// <p>The name of the Amazon Chime Voice Connector group.</p>
     #[serde(rename = "Name")]
@@ -2376,6 +2470,7 @@ pub struct UpdateVoiceConnectorGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVoiceConnectorRequest {
     /// <p>The name of the Amazon Chime Voice Connector.</p>
     #[serde(rename = "Name")]
@@ -2628,23 +2723,23 @@ impl AssociatePhoneNumberWithUserError {
 }
 impl fmt::Display for AssociatePhoneNumberWithUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociatePhoneNumberWithUserError {
-    fn description(&self) -> &str {
         match *self {
-            AssociatePhoneNumberWithUserError::AccessDenied(ref cause) => cause,
-            AssociatePhoneNumberWithUserError::BadRequest(ref cause) => cause,
-            AssociatePhoneNumberWithUserError::Forbidden(ref cause) => cause,
-            AssociatePhoneNumberWithUserError::NotFound(ref cause) => cause,
-            AssociatePhoneNumberWithUserError::ServiceFailure(ref cause) => cause,
-            AssociatePhoneNumberWithUserError::ServiceUnavailable(ref cause) => cause,
-            AssociatePhoneNumberWithUserError::ThrottledClient(ref cause) => cause,
-            AssociatePhoneNumberWithUserError::UnauthorizedClient(ref cause) => cause,
+            AssociatePhoneNumberWithUserError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AssociatePhoneNumberWithUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            AssociatePhoneNumberWithUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            AssociatePhoneNumberWithUserError::NotFound(ref cause) => write!(f, "{}", cause),
+            AssociatePhoneNumberWithUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            AssociatePhoneNumberWithUserError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumberWithUserError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            AssociatePhoneNumberWithUserError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociatePhoneNumberWithUserError {}
 /// Errors returned by AssociatePhoneNumbersWithVoiceConnector
 #[derive(Debug, PartialEq)]
 pub enum AssociatePhoneNumbersWithVoiceConnectorError {
@@ -2721,23 +2816,35 @@ impl AssociatePhoneNumbersWithVoiceConnectorError {
 }
 impl fmt::Display for AssociatePhoneNumbersWithVoiceConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociatePhoneNumbersWithVoiceConnectorError {
-    fn description(&self) -> &str {
         match *self {
-            AssociatePhoneNumbersWithVoiceConnectorError::AccessDenied(ref cause) => cause,
-            AssociatePhoneNumbersWithVoiceConnectorError::BadRequest(ref cause) => cause,
-            AssociatePhoneNumbersWithVoiceConnectorError::Forbidden(ref cause) => cause,
-            AssociatePhoneNumbersWithVoiceConnectorError::NotFound(ref cause) => cause,
-            AssociatePhoneNumbersWithVoiceConnectorError::ServiceFailure(ref cause) => cause,
-            AssociatePhoneNumbersWithVoiceConnectorError::ServiceUnavailable(ref cause) => cause,
-            AssociatePhoneNumbersWithVoiceConnectorError::ThrottledClient(ref cause) => cause,
-            AssociatePhoneNumbersWithVoiceConnectorError::UnauthorizedClient(ref cause) => cause,
+            AssociatePhoneNumbersWithVoiceConnectorError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumbersWithVoiceConnectorError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumbersWithVoiceConnectorError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumbersWithVoiceConnectorError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumbersWithVoiceConnectorError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumbersWithVoiceConnectorError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumbersWithVoiceConnectorError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumbersWithVoiceConnectorError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociatePhoneNumbersWithVoiceConnectorError {}
 /// Errors returned by AssociatePhoneNumbersWithVoiceConnectorGroup
 #[derive(Debug, PartialEq)]
 pub enum AssociatePhoneNumbersWithVoiceConnectorGroupError {
@@ -2818,27 +2925,35 @@ impl AssociatePhoneNumbersWithVoiceConnectorGroupError {
 }
 impl fmt::Display for AssociatePhoneNumbersWithVoiceConnectorGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociatePhoneNumbersWithVoiceConnectorGroupError {
-    fn description(&self) -> &str {
         match *self {
-            AssociatePhoneNumbersWithVoiceConnectorGroupError::AccessDenied(ref cause) => cause,
-            AssociatePhoneNumbersWithVoiceConnectorGroupError::BadRequest(ref cause) => cause,
-            AssociatePhoneNumbersWithVoiceConnectorGroupError::Forbidden(ref cause) => cause,
-            AssociatePhoneNumbersWithVoiceConnectorGroupError::NotFound(ref cause) => cause,
-            AssociatePhoneNumbersWithVoiceConnectorGroupError::ServiceFailure(ref cause) => cause,
-            AssociatePhoneNumbersWithVoiceConnectorGroupError::ServiceUnavailable(ref cause) => {
-                cause
+            AssociatePhoneNumbersWithVoiceConnectorGroupError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
             }
-            AssociatePhoneNumbersWithVoiceConnectorGroupError::ThrottledClient(ref cause) => cause,
+            AssociatePhoneNumbersWithVoiceConnectorGroupError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumbersWithVoiceConnectorGroupError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumbersWithVoiceConnectorGroupError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumbersWithVoiceConnectorGroupError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumbersWithVoiceConnectorGroupError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociatePhoneNumbersWithVoiceConnectorGroupError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
             AssociatePhoneNumbersWithVoiceConnectorGroupError::UnauthorizedClient(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for AssociatePhoneNumbersWithVoiceConnectorGroupError {}
 /// Errors returned by BatchCreateAttendee
 #[derive(Debug, PartialEq)]
 pub enum BatchCreateAttendeeError {
@@ -2903,23 +3018,19 @@ impl BatchCreateAttendeeError {
 }
 impl fmt::Display for BatchCreateAttendeeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchCreateAttendeeError {
-    fn description(&self) -> &str {
         match *self {
-            BatchCreateAttendeeError::BadRequest(ref cause) => cause,
-            BatchCreateAttendeeError::Forbidden(ref cause) => cause,
-            BatchCreateAttendeeError::NotFound(ref cause) => cause,
-            BatchCreateAttendeeError::ResourceLimitExceeded(ref cause) => cause,
-            BatchCreateAttendeeError::ServiceFailure(ref cause) => cause,
-            BatchCreateAttendeeError::ServiceUnavailable(ref cause) => cause,
-            BatchCreateAttendeeError::ThrottledClient(ref cause) => cause,
-            BatchCreateAttendeeError::UnauthorizedClient(ref cause) => cause,
+            BatchCreateAttendeeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchCreateAttendeeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchCreateAttendeeError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchCreateAttendeeError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchCreateAttendeeError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            BatchCreateAttendeeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            BatchCreateAttendeeError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            BatchCreateAttendeeError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchCreateAttendeeError {}
 /// Errors returned by BatchCreateRoomMembership
 #[derive(Debug, PartialEq)]
 pub enum BatchCreateRoomMembershipError {
@@ -2976,21 +3087,17 @@ impl BatchCreateRoomMembershipError {
 }
 impl fmt::Display for BatchCreateRoomMembershipError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchCreateRoomMembershipError {
-    fn description(&self) -> &str {
         match *self {
-            BatchCreateRoomMembershipError::BadRequest(ref cause) => cause,
-            BatchCreateRoomMembershipError::Forbidden(ref cause) => cause,
-            BatchCreateRoomMembershipError::NotFound(ref cause) => cause,
-            BatchCreateRoomMembershipError::ServiceFailure(ref cause) => cause,
-            BatchCreateRoomMembershipError::ServiceUnavailable(ref cause) => cause,
-            BatchCreateRoomMembershipError::UnauthorizedClient(ref cause) => cause,
+            BatchCreateRoomMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchCreateRoomMembershipError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchCreateRoomMembershipError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchCreateRoomMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            BatchCreateRoomMembershipError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            BatchCreateRoomMembershipError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchCreateRoomMembershipError {}
 /// Errors returned by BatchDeletePhoneNumber
 #[derive(Debug, PartialEq)]
 pub enum BatchDeletePhoneNumberError {
@@ -3052,22 +3159,18 @@ impl BatchDeletePhoneNumberError {
 }
 impl fmt::Display for BatchDeletePhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeletePhoneNumberError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDeletePhoneNumberError::BadRequest(ref cause) => cause,
-            BatchDeletePhoneNumberError::Forbidden(ref cause) => cause,
-            BatchDeletePhoneNumberError::NotFound(ref cause) => cause,
-            BatchDeletePhoneNumberError::ServiceFailure(ref cause) => cause,
-            BatchDeletePhoneNumberError::ServiceUnavailable(ref cause) => cause,
-            BatchDeletePhoneNumberError::ThrottledClient(ref cause) => cause,
-            BatchDeletePhoneNumberError::UnauthorizedClient(ref cause) => cause,
+            BatchDeletePhoneNumberError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchDeletePhoneNumberError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchDeletePhoneNumberError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchDeletePhoneNumberError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            BatchDeletePhoneNumberError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            BatchDeletePhoneNumberError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            BatchDeletePhoneNumberError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDeletePhoneNumberError {}
 /// Errors returned by BatchSuspendUser
 #[derive(Debug, PartialEq)]
 pub enum BatchSuspendUserError {
@@ -3121,22 +3224,18 @@ impl BatchSuspendUserError {
 }
 impl fmt::Display for BatchSuspendUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchSuspendUserError {
-    fn description(&self) -> &str {
         match *self {
-            BatchSuspendUserError::BadRequest(ref cause) => cause,
-            BatchSuspendUserError::Forbidden(ref cause) => cause,
-            BatchSuspendUserError::NotFound(ref cause) => cause,
-            BatchSuspendUserError::ServiceFailure(ref cause) => cause,
-            BatchSuspendUserError::ServiceUnavailable(ref cause) => cause,
-            BatchSuspendUserError::ThrottledClient(ref cause) => cause,
-            BatchSuspendUserError::UnauthorizedClient(ref cause) => cause,
+            BatchSuspendUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchSuspendUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchSuspendUserError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchSuspendUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            BatchSuspendUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            BatchSuspendUserError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            BatchSuspendUserError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchSuspendUserError {}
 /// Errors returned by BatchUnsuspendUser
 #[derive(Debug, PartialEq)]
 pub enum BatchUnsuspendUserError {
@@ -3194,22 +3293,18 @@ impl BatchUnsuspendUserError {
 }
 impl fmt::Display for BatchUnsuspendUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchUnsuspendUserError {
-    fn description(&self) -> &str {
         match *self {
-            BatchUnsuspendUserError::BadRequest(ref cause) => cause,
-            BatchUnsuspendUserError::Forbidden(ref cause) => cause,
-            BatchUnsuspendUserError::NotFound(ref cause) => cause,
-            BatchUnsuspendUserError::ServiceFailure(ref cause) => cause,
-            BatchUnsuspendUserError::ServiceUnavailable(ref cause) => cause,
-            BatchUnsuspendUserError::ThrottledClient(ref cause) => cause,
-            BatchUnsuspendUserError::UnauthorizedClient(ref cause) => cause,
+            BatchUnsuspendUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchUnsuspendUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchUnsuspendUserError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchUnsuspendUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            BatchUnsuspendUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            BatchUnsuspendUserError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            BatchUnsuspendUserError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchUnsuspendUserError {}
 /// Errors returned by BatchUpdatePhoneNumber
 #[derive(Debug, PartialEq)]
 pub enum BatchUpdatePhoneNumberError {
@@ -3271,22 +3366,18 @@ impl BatchUpdatePhoneNumberError {
 }
 impl fmt::Display for BatchUpdatePhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchUpdatePhoneNumberError {
-    fn description(&self) -> &str {
         match *self {
-            BatchUpdatePhoneNumberError::BadRequest(ref cause) => cause,
-            BatchUpdatePhoneNumberError::Forbidden(ref cause) => cause,
-            BatchUpdatePhoneNumberError::NotFound(ref cause) => cause,
-            BatchUpdatePhoneNumberError::ServiceFailure(ref cause) => cause,
-            BatchUpdatePhoneNumberError::ServiceUnavailable(ref cause) => cause,
-            BatchUpdatePhoneNumberError::ThrottledClient(ref cause) => cause,
-            BatchUpdatePhoneNumberError::UnauthorizedClient(ref cause) => cause,
+            BatchUpdatePhoneNumberError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePhoneNumberError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePhoneNumberError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePhoneNumberError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePhoneNumberError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePhoneNumberError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePhoneNumberError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchUpdatePhoneNumberError {}
 /// Errors returned by BatchUpdateUser
 #[derive(Debug, PartialEq)]
 pub enum BatchUpdateUserError {
@@ -3340,22 +3431,18 @@ impl BatchUpdateUserError {
 }
 impl fmt::Display for BatchUpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchUpdateUserError {
-    fn description(&self) -> &str {
         match *self {
-            BatchUpdateUserError::BadRequest(ref cause) => cause,
-            BatchUpdateUserError::Forbidden(ref cause) => cause,
-            BatchUpdateUserError::NotFound(ref cause) => cause,
-            BatchUpdateUserError::ServiceFailure(ref cause) => cause,
-            BatchUpdateUserError::ServiceUnavailable(ref cause) => cause,
-            BatchUpdateUserError::ThrottledClient(ref cause) => cause,
-            BatchUpdateUserError::UnauthorizedClient(ref cause) => cause,
+            BatchUpdateUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchUpdateUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchUpdateUserError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchUpdateUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            BatchUpdateUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            BatchUpdateUserError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            BatchUpdateUserError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchUpdateUserError {}
 /// Errors returned by CreateAccount
 #[derive(Debug, PartialEq)]
 pub enum CreateAccountError {
@@ -3409,22 +3496,18 @@ impl CreateAccountError {
 }
 impl fmt::Display for CreateAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAccountError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAccountError::BadRequest(ref cause) => cause,
-            CreateAccountError::Forbidden(ref cause) => cause,
-            CreateAccountError::NotFound(ref cause) => cause,
-            CreateAccountError::ServiceFailure(ref cause) => cause,
-            CreateAccountError::ServiceUnavailable(ref cause) => cause,
-            CreateAccountError::ThrottledClient(ref cause) => cause,
-            CreateAccountError::UnauthorizedClient(ref cause) => cause,
+            CreateAccountError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAccountError {}
 /// Errors returned by CreateAttendee
 #[derive(Debug, PartialEq)]
 pub enum CreateAttendeeError {
@@ -3485,23 +3568,19 @@ impl CreateAttendeeError {
 }
 impl fmt::Display for CreateAttendeeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAttendeeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAttendeeError::BadRequest(ref cause) => cause,
-            CreateAttendeeError::Forbidden(ref cause) => cause,
-            CreateAttendeeError::NotFound(ref cause) => cause,
-            CreateAttendeeError::ResourceLimitExceeded(ref cause) => cause,
-            CreateAttendeeError::ServiceFailure(ref cause) => cause,
-            CreateAttendeeError::ServiceUnavailable(ref cause) => cause,
-            CreateAttendeeError::ThrottledClient(ref cause) => cause,
-            CreateAttendeeError::UnauthorizedClient(ref cause) => cause,
+            CreateAttendeeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateAttendeeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateAttendeeError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateAttendeeError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAttendeeError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateAttendeeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateAttendeeError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateAttendeeError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAttendeeError {}
 /// Errors returned by CreateBot
 #[derive(Debug, PartialEq)]
 pub enum CreateBotError {
@@ -3555,22 +3634,18 @@ impl CreateBotError {
 }
 impl fmt::Display for CreateBotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBotError::BadRequest(ref cause) => cause,
-            CreateBotError::Forbidden(ref cause) => cause,
-            CreateBotError::NotFound(ref cause) => cause,
-            CreateBotError::ResourceLimitExceeded(ref cause) => cause,
-            CreateBotError::ServiceFailure(ref cause) => cause,
-            CreateBotError::ServiceUnavailable(ref cause) => cause,
-            CreateBotError::UnauthorizedClient(ref cause) => cause,
+            CreateBotError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateBotError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateBotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateBotError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateBotError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateBotError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateBotError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBotError {}
 /// Errors returned by CreateMeeting
 #[derive(Debug, PartialEq)]
 pub enum CreateMeetingError {
@@ -3624,22 +3699,18 @@ impl CreateMeetingError {
 }
 impl fmt::Display for CreateMeetingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMeetingError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMeetingError::BadRequest(ref cause) => cause,
-            CreateMeetingError::Forbidden(ref cause) => cause,
-            CreateMeetingError::ResourceLimitExceeded(ref cause) => cause,
-            CreateMeetingError::ServiceFailure(ref cause) => cause,
-            CreateMeetingError::ServiceUnavailable(ref cause) => cause,
-            CreateMeetingError::ThrottledClient(ref cause) => cause,
-            CreateMeetingError::UnauthorizedClient(ref cause) => cause,
+            CreateMeetingError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateMeetingError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateMeetingError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateMeetingError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateMeetingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateMeetingError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateMeetingError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateMeetingError {}
 /// Errors returned by CreatePhoneNumberOrder
 #[derive(Debug, PartialEq)]
 pub enum CreatePhoneNumberOrderError {
@@ -3708,23 +3779,19 @@ impl CreatePhoneNumberOrderError {
 }
 impl fmt::Display for CreatePhoneNumberOrderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePhoneNumberOrderError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePhoneNumberOrderError::AccessDenied(ref cause) => cause,
-            CreatePhoneNumberOrderError::BadRequest(ref cause) => cause,
-            CreatePhoneNumberOrderError::Forbidden(ref cause) => cause,
-            CreatePhoneNumberOrderError::ResourceLimitExceeded(ref cause) => cause,
-            CreatePhoneNumberOrderError::ServiceFailure(ref cause) => cause,
-            CreatePhoneNumberOrderError::ServiceUnavailable(ref cause) => cause,
-            CreatePhoneNumberOrderError::ThrottledClient(ref cause) => cause,
-            CreatePhoneNumberOrderError::UnauthorizedClient(ref cause) => cause,
+            CreatePhoneNumberOrderError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreatePhoneNumberOrderError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreatePhoneNumberOrderError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreatePhoneNumberOrderError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreatePhoneNumberOrderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreatePhoneNumberOrderError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreatePhoneNumberOrderError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreatePhoneNumberOrderError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePhoneNumberOrderError {}
 /// Errors returned by CreateRoom
 #[derive(Debug, PartialEq)]
 pub enum CreateRoomError {
@@ -3778,22 +3845,18 @@ impl CreateRoomError {
 }
 impl fmt::Display for CreateRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRoomError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRoomError::BadRequest(ref cause) => cause,
-            CreateRoomError::Forbidden(ref cause) => cause,
-            CreateRoomError::NotFound(ref cause) => cause,
-            CreateRoomError::ResourceLimitExceeded(ref cause) => cause,
-            CreateRoomError::ServiceFailure(ref cause) => cause,
-            CreateRoomError::ServiceUnavailable(ref cause) => cause,
-            CreateRoomError::UnauthorizedClient(ref cause) => cause,
+            CreateRoomError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateRoomError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateRoomError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateRoomError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRoomError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateRoomError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateRoomError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRoomError {}
 /// Errors returned by CreateRoomMembership
 #[derive(Debug, PartialEq)]
 pub enum CreateRoomMembershipError {
@@ -3858,23 +3921,19 @@ impl CreateRoomMembershipError {
 }
 impl fmt::Display for CreateRoomMembershipError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRoomMembershipError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRoomMembershipError::BadRequest(ref cause) => cause,
-            CreateRoomMembershipError::Conflict(ref cause) => cause,
-            CreateRoomMembershipError::Forbidden(ref cause) => cause,
-            CreateRoomMembershipError::NotFound(ref cause) => cause,
-            CreateRoomMembershipError::ResourceLimitExceeded(ref cause) => cause,
-            CreateRoomMembershipError::ServiceFailure(ref cause) => cause,
-            CreateRoomMembershipError::ServiceUnavailable(ref cause) => cause,
-            CreateRoomMembershipError::UnauthorizedClient(ref cause) => cause,
+            CreateRoomMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateRoomMembershipError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateRoomMembershipError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateRoomMembershipError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateRoomMembershipError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRoomMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateRoomMembershipError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateRoomMembershipError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRoomMembershipError {}
 /// Errors returned by CreateVoiceConnector
 #[derive(Debug, PartialEq)]
 pub enum CreateVoiceConnectorError {
@@ -3941,23 +4000,19 @@ impl CreateVoiceConnectorError {
 }
 impl fmt::Display for CreateVoiceConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVoiceConnectorError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVoiceConnectorError::AccessDenied(ref cause) => cause,
-            CreateVoiceConnectorError::BadRequest(ref cause) => cause,
-            CreateVoiceConnectorError::Forbidden(ref cause) => cause,
-            CreateVoiceConnectorError::ResourceLimitExceeded(ref cause) => cause,
-            CreateVoiceConnectorError::ServiceFailure(ref cause) => cause,
-            CreateVoiceConnectorError::ServiceUnavailable(ref cause) => cause,
-            CreateVoiceConnectorError::ThrottledClient(ref cause) => cause,
-            CreateVoiceConnectorError::UnauthorizedClient(ref cause) => cause,
+            CreateVoiceConnectorError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVoiceConnectorError {}
 /// Errors returned by CreateVoiceConnectorGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateVoiceConnectorGroupError {
@@ -4030,23 +4085,21 @@ impl CreateVoiceConnectorGroupError {
 }
 impl fmt::Display for CreateVoiceConnectorGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVoiceConnectorGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVoiceConnectorGroupError::AccessDenied(ref cause) => cause,
-            CreateVoiceConnectorGroupError::BadRequest(ref cause) => cause,
-            CreateVoiceConnectorGroupError::Forbidden(ref cause) => cause,
-            CreateVoiceConnectorGroupError::ResourceLimitExceeded(ref cause) => cause,
-            CreateVoiceConnectorGroupError::ServiceFailure(ref cause) => cause,
-            CreateVoiceConnectorGroupError::ServiceUnavailable(ref cause) => cause,
-            CreateVoiceConnectorGroupError::ThrottledClient(ref cause) => cause,
-            CreateVoiceConnectorGroupError::UnauthorizedClient(ref cause) => cause,
+            CreateVoiceConnectorGroupError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorGroupError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorGroupError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateVoiceConnectorGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorGroupError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorGroupError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateVoiceConnectorGroupError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVoiceConnectorGroupError {}
 /// Errors returned by DeleteAccount
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccountError {
@@ -4105,23 +4158,19 @@ impl DeleteAccountError {
 }
 impl fmt::Display for DeleteAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAccountError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAccountError::BadRequest(ref cause) => cause,
-            DeleteAccountError::Forbidden(ref cause) => cause,
-            DeleteAccountError::NotFound(ref cause) => cause,
-            DeleteAccountError::ServiceFailure(ref cause) => cause,
-            DeleteAccountError::ServiceUnavailable(ref cause) => cause,
-            DeleteAccountError::ThrottledClient(ref cause) => cause,
-            DeleteAccountError::UnauthorizedClient(ref cause) => cause,
-            DeleteAccountError::UnprocessableEntity(ref cause) => cause,
+            DeleteAccountError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAccountError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteAccountError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAccountError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAccountError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteAccountError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteAccountError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+            DeleteAccountError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAccountError {}
 /// Errors returned by DeleteAttendee
 #[derive(Debug, PartialEq)]
 pub enum DeleteAttendeeError {
@@ -4175,22 +4224,18 @@ impl DeleteAttendeeError {
 }
 impl fmt::Display for DeleteAttendeeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAttendeeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAttendeeError::BadRequest(ref cause) => cause,
-            DeleteAttendeeError::Forbidden(ref cause) => cause,
-            DeleteAttendeeError::NotFound(ref cause) => cause,
-            DeleteAttendeeError::ServiceFailure(ref cause) => cause,
-            DeleteAttendeeError::ServiceUnavailable(ref cause) => cause,
-            DeleteAttendeeError::ThrottledClient(ref cause) => cause,
-            DeleteAttendeeError::UnauthorizedClient(ref cause) => cause,
+            DeleteAttendeeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAttendeeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteAttendeeError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAttendeeError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAttendeeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteAttendeeError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteAttendeeError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAttendeeError {}
 /// Errors returned by DeleteEventsConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventsConfigurationError {
@@ -4249,21 +4294,19 @@ impl DeleteEventsConfigurationError {
 }
 impl fmt::Display for DeleteEventsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEventsConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEventsConfigurationError::BadRequest(ref cause) => cause,
-            DeleteEventsConfigurationError::Forbidden(ref cause) => cause,
-            DeleteEventsConfigurationError::ResourceLimitExceeded(ref cause) => cause,
-            DeleteEventsConfigurationError::ServiceFailure(ref cause) => cause,
-            DeleteEventsConfigurationError::ServiceUnavailable(ref cause) => cause,
-            DeleteEventsConfigurationError::UnauthorizedClient(ref cause) => cause,
+            DeleteEventsConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteEventsConfigurationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteEventsConfigurationError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteEventsConfigurationError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteEventsConfigurationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteEventsConfigurationError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEventsConfigurationError {}
 /// Errors returned by DeleteMeeting
 #[derive(Debug, PartialEq)]
 pub enum DeleteMeetingError {
@@ -4317,22 +4360,18 @@ impl DeleteMeetingError {
 }
 impl fmt::Display for DeleteMeetingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMeetingError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMeetingError::BadRequest(ref cause) => cause,
-            DeleteMeetingError::Forbidden(ref cause) => cause,
-            DeleteMeetingError::NotFound(ref cause) => cause,
-            DeleteMeetingError::ServiceFailure(ref cause) => cause,
-            DeleteMeetingError::ServiceUnavailable(ref cause) => cause,
-            DeleteMeetingError::ThrottledClient(ref cause) => cause,
-            DeleteMeetingError::UnauthorizedClient(ref cause) => cause,
+            DeleteMeetingError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteMeetingError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteMeetingError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteMeetingError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteMeetingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteMeetingError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteMeetingError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMeetingError {}
 /// Errors returned by DeletePhoneNumber
 #[derive(Debug, PartialEq)]
 pub enum DeletePhoneNumberError {
@@ -4390,22 +4429,18 @@ impl DeletePhoneNumberError {
 }
 impl fmt::Display for DeletePhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePhoneNumberError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePhoneNumberError::BadRequest(ref cause) => cause,
-            DeletePhoneNumberError::Forbidden(ref cause) => cause,
-            DeletePhoneNumberError::NotFound(ref cause) => cause,
-            DeletePhoneNumberError::ServiceFailure(ref cause) => cause,
-            DeletePhoneNumberError::ServiceUnavailable(ref cause) => cause,
-            DeletePhoneNumberError::ThrottledClient(ref cause) => cause,
-            DeletePhoneNumberError::UnauthorizedClient(ref cause) => cause,
+            DeletePhoneNumberError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeletePhoneNumberError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeletePhoneNumberError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeletePhoneNumberError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeletePhoneNumberError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeletePhoneNumberError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeletePhoneNumberError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePhoneNumberError {}
 /// Errors returned by DeleteRoom
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoomError {
@@ -4454,21 +4489,17 @@ impl DeleteRoomError {
 }
 impl fmt::Display for DeleteRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRoomError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRoomError::BadRequest(ref cause) => cause,
-            DeleteRoomError::Forbidden(ref cause) => cause,
-            DeleteRoomError::NotFound(ref cause) => cause,
-            DeleteRoomError::ServiceFailure(ref cause) => cause,
-            DeleteRoomError::ServiceUnavailable(ref cause) => cause,
-            DeleteRoomError::UnauthorizedClient(ref cause) => cause,
+            DeleteRoomError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteRoomError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteRoomError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRoomError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteRoomError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteRoomError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRoomError {}
 /// Errors returned by DeleteRoomMembership
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoomMembershipError {
@@ -4521,21 +4552,17 @@ impl DeleteRoomMembershipError {
 }
 impl fmt::Display for DeleteRoomMembershipError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRoomMembershipError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRoomMembershipError::BadRequest(ref cause) => cause,
-            DeleteRoomMembershipError::Forbidden(ref cause) => cause,
-            DeleteRoomMembershipError::NotFound(ref cause) => cause,
-            DeleteRoomMembershipError::ServiceFailure(ref cause) => cause,
-            DeleteRoomMembershipError::ServiceUnavailable(ref cause) => cause,
-            DeleteRoomMembershipError::UnauthorizedClient(ref cause) => cause,
+            DeleteRoomMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteRoomMembershipError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteRoomMembershipError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRoomMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteRoomMembershipError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteRoomMembershipError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRoomMembershipError {}
 /// Errors returned by DeleteVoiceConnector
 #[derive(Debug, PartialEq)]
 pub enum DeleteVoiceConnectorError {
@@ -4600,23 +4627,19 @@ impl DeleteVoiceConnectorError {
 }
 impl fmt::Display for DeleteVoiceConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVoiceConnectorError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVoiceConnectorError::BadRequest(ref cause) => cause,
-            DeleteVoiceConnectorError::Conflict(ref cause) => cause,
-            DeleteVoiceConnectorError::Forbidden(ref cause) => cause,
-            DeleteVoiceConnectorError::NotFound(ref cause) => cause,
-            DeleteVoiceConnectorError::ServiceFailure(ref cause) => cause,
-            DeleteVoiceConnectorError::ServiceUnavailable(ref cause) => cause,
-            DeleteVoiceConnectorError::ThrottledClient(ref cause) => cause,
-            DeleteVoiceConnectorError::UnauthorizedClient(ref cause) => cause,
+            DeleteVoiceConnectorError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVoiceConnectorError {}
 /// Errors returned by DeleteVoiceConnectorGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteVoiceConnectorGroupError {
@@ -4685,23 +4708,19 @@ impl DeleteVoiceConnectorGroupError {
 }
 impl fmt::Display for DeleteVoiceConnectorGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVoiceConnectorGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVoiceConnectorGroupError::BadRequest(ref cause) => cause,
-            DeleteVoiceConnectorGroupError::Conflict(ref cause) => cause,
-            DeleteVoiceConnectorGroupError::Forbidden(ref cause) => cause,
-            DeleteVoiceConnectorGroupError::NotFound(ref cause) => cause,
-            DeleteVoiceConnectorGroupError::ServiceFailure(ref cause) => cause,
-            DeleteVoiceConnectorGroupError::ServiceUnavailable(ref cause) => cause,
-            DeleteVoiceConnectorGroupError::ThrottledClient(ref cause) => cause,
-            DeleteVoiceConnectorGroupError::UnauthorizedClient(ref cause) => cause,
+            DeleteVoiceConnectorGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorGroupError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorGroupError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorGroupError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorGroupError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorGroupError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorGroupError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVoiceConnectorGroupError {}
 /// Errors returned by DeleteVoiceConnectorOrigination
 #[derive(Debug, PartialEq)]
 pub enum DeleteVoiceConnectorOriginationError {
@@ -4771,22 +4790,26 @@ impl DeleteVoiceConnectorOriginationError {
 }
 impl fmt::Display for DeleteVoiceConnectorOriginationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVoiceConnectorOriginationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVoiceConnectorOriginationError::BadRequest(ref cause) => cause,
-            DeleteVoiceConnectorOriginationError::Forbidden(ref cause) => cause,
-            DeleteVoiceConnectorOriginationError::NotFound(ref cause) => cause,
-            DeleteVoiceConnectorOriginationError::ServiceFailure(ref cause) => cause,
-            DeleteVoiceConnectorOriginationError::ServiceUnavailable(ref cause) => cause,
-            DeleteVoiceConnectorOriginationError::ThrottledClient(ref cause) => cause,
-            DeleteVoiceConnectorOriginationError::UnauthorizedClient(ref cause) => cause,
+            DeleteVoiceConnectorOriginationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorOriginationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorOriginationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorOriginationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorOriginationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorOriginationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorOriginationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteVoiceConnectorOriginationError {}
 /// Errors returned by DeleteVoiceConnectorStreamingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteVoiceConnectorStreamingConfigurationError {
@@ -4860,22 +4883,32 @@ impl DeleteVoiceConnectorStreamingConfigurationError {
 }
 impl fmt::Display for DeleteVoiceConnectorStreamingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVoiceConnectorStreamingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVoiceConnectorStreamingConfigurationError::BadRequest(ref cause) => cause,
-            DeleteVoiceConnectorStreamingConfigurationError::Forbidden(ref cause) => cause,
-            DeleteVoiceConnectorStreamingConfigurationError::NotFound(ref cause) => cause,
-            DeleteVoiceConnectorStreamingConfigurationError::ServiceFailure(ref cause) => cause,
-            DeleteVoiceConnectorStreamingConfigurationError::ServiceUnavailable(ref cause) => cause,
-            DeleteVoiceConnectorStreamingConfigurationError::ThrottledClient(ref cause) => cause,
-            DeleteVoiceConnectorStreamingConfigurationError::UnauthorizedClient(ref cause) => cause,
+            DeleteVoiceConnectorStreamingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorStreamingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorStreamingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorStreamingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorStreamingConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorStreamingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorStreamingConfigurationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteVoiceConnectorStreamingConfigurationError {}
 /// Errors returned by DeleteVoiceConnectorTermination
 #[derive(Debug, PartialEq)]
 pub enum DeleteVoiceConnectorTerminationError {
@@ -4945,22 +4978,26 @@ impl DeleteVoiceConnectorTerminationError {
 }
 impl fmt::Display for DeleteVoiceConnectorTerminationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVoiceConnectorTerminationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVoiceConnectorTerminationError::BadRequest(ref cause) => cause,
-            DeleteVoiceConnectorTerminationError::Forbidden(ref cause) => cause,
-            DeleteVoiceConnectorTerminationError::NotFound(ref cause) => cause,
-            DeleteVoiceConnectorTerminationError::ServiceFailure(ref cause) => cause,
-            DeleteVoiceConnectorTerminationError::ServiceUnavailable(ref cause) => cause,
-            DeleteVoiceConnectorTerminationError::ThrottledClient(ref cause) => cause,
-            DeleteVoiceConnectorTerminationError::UnauthorizedClient(ref cause) => cause,
+            DeleteVoiceConnectorTerminationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorTerminationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorTerminationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorTerminationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorTerminationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorTerminationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorTerminationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteVoiceConnectorTerminationError {}
 /// Errors returned by DeleteVoiceConnectorTerminationCredentials
 #[derive(Debug, PartialEq)]
 pub enum DeleteVoiceConnectorTerminationCredentialsError {
@@ -5034,22 +5071,32 @@ impl DeleteVoiceConnectorTerminationCredentialsError {
 }
 impl fmt::Display for DeleteVoiceConnectorTerminationCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVoiceConnectorTerminationCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVoiceConnectorTerminationCredentialsError::BadRequest(ref cause) => cause,
-            DeleteVoiceConnectorTerminationCredentialsError::Forbidden(ref cause) => cause,
-            DeleteVoiceConnectorTerminationCredentialsError::NotFound(ref cause) => cause,
-            DeleteVoiceConnectorTerminationCredentialsError::ServiceFailure(ref cause) => cause,
-            DeleteVoiceConnectorTerminationCredentialsError::ServiceUnavailable(ref cause) => cause,
-            DeleteVoiceConnectorTerminationCredentialsError::ThrottledClient(ref cause) => cause,
-            DeleteVoiceConnectorTerminationCredentialsError::UnauthorizedClient(ref cause) => cause,
+            DeleteVoiceConnectorTerminationCredentialsError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorTerminationCredentialsError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorTerminationCredentialsError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorTerminationCredentialsError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorTerminationCredentialsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorTerminationCredentialsError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorTerminationCredentialsError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteVoiceConnectorTerminationCredentialsError {}
 /// Errors returned by DisassociatePhoneNumberFromUser
 #[derive(Debug, PartialEq)]
 pub enum DisassociatePhoneNumberFromUserError {
@@ -5119,22 +5166,26 @@ impl DisassociatePhoneNumberFromUserError {
 }
 impl fmt::Display for DisassociatePhoneNumberFromUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociatePhoneNumberFromUserError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociatePhoneNumberFromUserError::BadRequest(ref cause) => cause,
-            DisassociatePhoneNumberFromUserError::Forbidden(ref cause) => cause,
-            DisassociatePhoneNumberFromUserError::NotFound(ref cause) => cause,
-            DisassociatePhoneNumberFromUserError::ServiceFailure(ref cause) => cause,
-            DisassociatePhoneNumberFromUserError::ServiceUnavailable(ref cause) => cause,
-            DisassociatePhoneNumberFromUserError::ThrottledClient(ref cause) => cause,
-            DisassociatePhoneNumberFromUserError::UnauthorizedClient(ref cause) => cause,
+            DisassociatePhoneNumberFromUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DisassociatePhoneNumberFromUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DisassociatePhoneNumberFromUserError::NotFound(ref cause) => write!(f, "{}", cause),
+            DisassociatePhoneNumberFromUserError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociatePhoneNumberFromUserError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociatePhoneNumberFromUserError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociatePhoneNumberFromUserError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociatePhoneNumberFromUserError {}
 /// Errors returned by DisassociatePhoneNumbersFromVoiceConnector
 #[derive(Debug, PartialEq)]
 pub enum DisassociatePhoneNumbersFromVoiceConnectorError {
@@ -5208,22 +5259,32 @@ impl DisassociatePhoneNumbersFromVoiceConnectorError {
 }
 impl fmt::Display for DisassociatePhoneNumbersFromVoiceConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociatePhoneNumbersFromVoiceConnectorError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociatePhoneNumbersFromVoiceConnectorError::BadRequest(ref cause) => cause,
-            DisassociatePhoneNumbersFromVoiceConnectorError::Forbidden(ref cause) => cause,
-            DisassociatePhoneNumbersFromVoiceConnectorError::NotFound(ref cause) => cause,
-            DisassociatePhoneNumbersFromVoiceConnectorError::ServiceFailure(ref cause) => cause,
-            DisassociatePhoneNumbersFromVoiceConnectorError::ServiceUnavailable(ref cause) => cause,
-            DisassociatePhoneNumbersFromVoiceConnectorError::ThrottledClient(ref cause) => cause,
-            DisassociatePhoneNumbersFromVoiceConnectorError::UnauthorizedClient(ref cause) => cause,
+            DisassociatePhoneNumbersFromVoiceConnectorError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociatePhoneNumbersFromVoiceConnectorError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociatePhoneNumbersFromVoiceConnectorError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociatePhoneNumbersFromVoiceConnectorError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociatePhoneNumbersFromVoiceConnectorError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociatePhoneNumbersFromVoiceConnectorError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociatePhoneNumbersFromVoiceConnectorError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociatePhoneNumbersFromVoiceConnectorError {}
 /// Errors returned by DisassociatePhoneNumbersFromVoiceConnectorGroup
 #[derive(Debug, PartialEq)]
 pub enum DisassociatePhoneNumbersFromVoiceConnectorGroupError {
@@ -5301,30 +5362,32 @@ impl DisassociatePhoneNumbersFromVoiceConnectorGroupError {
 }
 impl fmt::Display for DisassociatePhoneNumbersFromVoiceConnectorGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociatePhoneNumbersFromVoiceConnectorGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociatePhoneNumbersFromVoiceConnectorGroupError::BadRequest(ref cause) => cause,
-            DisassociatePhoneNumbersFromVoiceConnectorGroupError::Forbidden(ref cause) => cause,
-            DisassociatePhoneNumbersFromVoiceConnectorGroupError::NotFound(ref cause) => cause,
+            DisassociatePhoneNumbersFromVoiceConnectorGroupError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociatePhoneNumbersFromVoiceConnectorGroupError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociatePhoneNumbersFromVoiceConnectorGroupError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DisassociatePhoneNumbersFromVoiceConnectorGroupError::ServiceFailure(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DisassociatePhoneNumbersFromVoiceConnectorGroupError::ServiceUnavailable(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DisassociatePhoneNumbersFromVoiceConnectorGroupError::ThrottledClient(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DisassociatePhoneNumbersFromVoiceConnectorGroupError::UnauthorizedClient(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DisassociatePhoneNumbersFromVoiceConnectorGroupError {}
 /// Errors returned by GetAccount
 #[derive(Debug, PartialEq)]
 pub enum GetAccountError {
@@ -5378,22 +5441,18 @@ impl GetAccountError {
 }
 impl fmt::Display for GetAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountError::BadRequest(ref cause) => cause,
-            GetAccountError::Forbidden(ref cause) => cause,
-            GetAccountError::NotFound(ref cause) => cause,
-            GetAccountError::ServiceFailure(ref cause) => cause,
-            GetAccountError::ServiceUnavailable(ref cause) => cause,
-            GetAccountError::ThrottledClient(ref cause) => cause,
-            GetAccountError::UnauthorizedClient(ref cause) => cause,
+            GetAccountError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetAccountError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetAccountError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAccountError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetAccountError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetAccountError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetAccountError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAccountError {}
 /// Errors returned by GetAccountSettings
 #[derive(Debug, PartialEq)]
 pub enum GetAccountSettingsError {
@@ -5451,22 +5510,18 @@ impl GetAccountSettingsError {
 }
 impl fmt::Display for GetAccountSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountSettingsError::BadRequest(ref cause) => cause,
-            GetAccountSettingsError::Forbidden(ref cause) => cause,
-            GetAccountSettingsError::NotFound(ref cause) => cause,
-            GetAccountSettingsError::ServiceFailure(ref cause) => cause,
-            GetAccountSettingsError::ServiceUnavailable(ref cause) => cause,
-            GetAccountSettingsError::ThrottledClient(ref cause) => cause,
-            GetAccountSettingsError::UnauthorizedClient(ref cause) => cause,
+            GetAccountSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetAccountSettingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetAccountSettingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAccountSettingsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetAccountSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetAccountSettingsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetAccountSettingsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAccountSettingsError {}
 /// Errors returned by GetAttendee
 #[derive(Debug, PartialEq)]
 pub enum GetAttendeeError {
@@ -5520,22 +5575,18 @@ impl GetAttendeeError {
 }
 impl fmt::Display for GetAttendeeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAttendeeError {
-    fn description(&self) -> &str {
         match *self {
-            GetAttendeeError::BadRequest(ref cause) => cause,
-            GetAttendeeError::Forbidden(ref cause) => cause,
-            GetAttendeeError::NotFound(ref cause) => cause,
-            GetAttendeeError::ServiceFailure(ref cause) => cause,
-            GetAttendeeError::ServiceUnavailable(ref cause) => cause,
-            GetAttendeeError::ThrottledClient(ref cause) => cause,
-            GetAttendeeError::UnauthorizedClient(ref cause) => cause,
+            GetAttendeeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetAttendeeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetAttendeeError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAttendeeError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetAttendeeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetAttendeeError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetAttendeeError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAttendeeError {}
 /// Errors returned by GetBot
 #[derive(Debug, PartialEq)]
 pub enum GetBotError {
@@ -5582,21 +5633,17 @@ impl GetBotError {
 }
 impl fmt::Display for GetBotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBotError {
-    fn description(&self) -> &str {
         match *self {
-            GetBotError::BadRequest(ref cause) => cause,
-            GetBotError::Forbidden(ref cause) => cause,
-            GetBotError::NotFound(ref cause) => cause,
-            GetBotError::ServiceFailure(ref cause) => cause,
-            GetBotError::ServiceUnavailable(ref cause) => cause,
-            GetBotError::UnauthorizedClient(ref cause) => cause,
+            GetBotError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetBotError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetBotError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetBotError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetBotError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetBotError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBotError {}
 /// Errors returned by GetEventsConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetEventsConfigurationError {
@@ -5658,22 +5705,18 @@ impl GetEventsConfigurationError {
 }
 impl fmt::Display for GetEventsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetEventsConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetEventsConfigurationError::BadRequest(ref cause) => cause,
-            GetEventsConfigurationError::Forbidden(ref cause) => cause,
-            GetEventsConfigurationError::NotFound(ref cause) => cause,
-            GetEventsConfigurationError::ResourceLimitExceeded(ref cause) => cause,
-            GetEventsConfigurationError::ServiceFailure(ref cause) => cause,
-            GetEventsConfigurationError::ServiceUnavailable(ref cause) => cause,
-            GetEventsConfigurationError::UnauthorizedClient(ref cause) => cause,
+            GetEventsConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetEventsConfigurationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetEventsConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetEventsConfigurationError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetEventsConfigurationError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetEventsConfigurationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetEventsConfigurationError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetEventsConfigurationError {}
 /// Errors returned by GetGlobalSettings
 #[derive(Debug, PartialEq)]
 pub enum GetGlobalSettingsError {
@@ -5726,21 +5769,17 @@ impl GetGlobalSettingsError {
 }
 impl fmt::Display for GetGlobalSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGlobalSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            GetGlobalSettingsError::BadRequest(ref cause) => cause,
-            GetGlobalSettingsError::Forbidden(ref cause) => cause,
-            GetGlobalSettingsError::ServiceFailure(ref cause) => cause,
-            GetGlobalSettingsError::ServiceUnavailable(ref cause) => cause,
-            GetGlobalSettingsError::ThrottledClient(ref cause) => cause,
-            GetGlobalSettingsError::UnauthorizedClient(ref cause) => cause,
+            GetGlobalSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetGlobalSettingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetGlobalSettingsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetGlobalSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetGlobalSettingsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetGlobalSettingsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGlobalSettingsError {}
 /// Errors returned by GetMeeting
 #[derive(Debug, PartialEq)]
 pub enum GetMeetingError {
@@ -5794,22 +5833,18 @@ impl GetMeetingError {
 }
 impl fmt::Display for GetMeetingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMeetingError {
-    fn description(&self) -> &str {
         match *self {
-            GetMeetingError::BadRequest(ref cause) => cause,
-            GetMeetingError::Forbidden(ref cause) => cause,
-            GetMeetingError::NotFound(ref cause) => cause,
-            GetMeetingError::ServiceFailure(ref cause) => cause,
-            GetMeetingError::ServiceUnavailable(ref cause) => cause,
-            GetMeetingError::ThrottledClient(ref cause) => cause,
-            GetMeetingError::UnauthorizedClient(ref cause) => cause,
+            GetMeetingError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetMeetingError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetMeetingError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetMeetingError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetMeetingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetMeetingError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetMeetingError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMeetingError {}
 /// Errors returned by GetPhoneNumber
 #[derive(Debug, PartialEq)]
 pub enum GetPhoneNumberError {
@@ -5863,22 +5898,18 @@ impl GetPhoneNumberError {
 }
 impl fmt::Display for GetPhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPhoneNumberError {
-    fn description(&self) -> &str {
         match *self {
-            GetPhoneNumberError::BadRequest(ref cause) => cause,
-            GetPhoneNumberError::Forbidden(ref cause) => cause,
-            GetPhoneNumberError::NotFound(ref cause) => cause,
-            GetPhoneNumberError::ServiceFailure(ref cause) => cause,
-            GetPhoneNumberError::ServiceUnavailable(ref cause) => cause,
-            GetPhoneNumberError::ThrottledClient(ref cause) => cause,
-            GetPhoneNumberError::UnauthorizedClient(ref cause) => cause,
+            GetPhoneNumberError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPhoneNumberError {}
 /// Errors returned by GetPhoneNumberOrder
 #[derive(Debug, PartialEq)]
 pub enum GetPhoneNumberOrderError {
@@ -5936,22 +5967,18 @@ impl GetPhoneNumberOrderError {
 }
 impl fmt::Display for GetPhoneNumberOrderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPhoneNumberOrderError {
-    fn description(&self) -> &str {
         match *self {
-            GetPhoneNumberOrderError::BadRequest(ref cause) => cause,
-            GetPhoneNumberOrderError::Forbidden(ref cause) => cause,
-            GetPhoneNumberOrderError::NotFound(ref cause) => cause,
-            GetPhoneNumberOrderError::ServiceFailure(ref cause) => cause,
-            GetPhoneNumberOrderError::ServiceUnavailable(ref cause) => cause,
-            GetPhoneNumberOrderError::ThrottledClient(ref cause) => cause,
-            GetPhoneNumberOrderError::UnauthorizedClient(ref cause) => cause,
+            GetPhoneNumberOrderError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberOrderError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberOrderError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberOrderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberOrderError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberOrderError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberOrderError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPhoneNumberOrderError {}
 /// Errors returned by GetPhoneNumberSettings
 #[derive(Debug, PartialEq)]
 pub enum GetPhoneNumberSettingsError {
@@ -6008,21 +6035,17 @@ impl GetPhoneNumberSettingsError {
 }
 impl fmt::Display for GetPhoneNumberSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPhoneNumberSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            GetPhoneNumberSettingsError::BadRequest(ref cause) => cause,
-            GetPhoneNumberSettingsError::Forbidden(ref cause) => cause,
-            GetPhoneNumberSettingsError::ServiceFailure(ref cause) => cause,
-            GetPhoneNumberSettingsError::ServiceUnavailable(ref cause) => cause,
-            GetPhoneNumberSettingsError::ThrottledClient(ref cause) => cause,
-            GetPhoneNumberSettingsError::UnauthorizedClient(ref cause) => cause,
+            GetPhoneNumberSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberSettingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberSettingsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberSettingsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetPhoneNumberSettingsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPhoneNumberSettingsError {}
 /// Errors returned by GetRoom
 #[derive(Debug, PartialEq)]
 pub enum GetRoomError {
@@ -6071,21 +6094,17 @@ impl GetRoomError {
 }
 impl fmt::Display for GetRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRoomError {
-    fn description(&self) -> &str {
         match *self {
-            GetRoomError::BadRequest(ref cause) => cause,
-            GetRoomError::Forbidden(ref cause) => cause,
-            GetRoomError::NotFound(ref cause) => cause,
-            GetRoomError::ServiceFailure(ref cause) => cause,
-            GetRoomError::ServiceUnavailable(ref cause) => cause,
-            GetRoomError::UnauthorizedClient(ref cause) => cause,
+            GetRoomError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetRoomError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetRoomError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRoomError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetRoomError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetRoomError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRoomError {}
 /// Errors returned by GetUser
 #[derive(Debug, PartialEq)]
 pub enum GetUserError {
@@ -6139,22 +6158,18 @@ impl GetUserError {
 }
 impl fmt::Display for GetUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUserError {
-    fn description(&self) -> &str {
         match *self {
-            GetUserError::BadRequest(ref cause) => cause,
-            GetUserError::Forbidden(ref cause) => cause,
-            GetUserError::NotFound(ref cause) => cause,
-            GetUserError::ServiceFailure(ref cause) => cause,
-            GetUserError::ServiceUnavailable(ref cause) => cause,
-            GetUserError::ThrottledClient(ref cause) => cause,
-            GetUserError::UnauthorizedClient(ref cause) => cause,
+            GetUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetUserError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetUserError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetUserError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUserError {}
 /// Errors returned by GetUserSettings
 #[derive(Debug, PartialEq)]
 pub enum GetUserSettingsError {
@@ -6208,22 +6223,18 @@ impl GetUserSettingsError {
 }
 impl fmt::Display for GetUserSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUserSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            GetUserSettingsError::BadRequest(ref cause) => cause,
-            GetUserSettingsError::Forbidden(ref cause) => cause,
-            GetUserSettingsError::NotFound(ref cause) => cause,
-            GetUserSettingsError::ServiceFailure(ref cause) => cause,
-            GetUserSettingsError::ServiceUnavailable(ref cause) => cause,
-            GetUserSettingsError::ThrottledClient(ref cause) => cause,
-            GetUserSettingsError::UnauthorizedClient(ref cause) => cause,
+            GetUserSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetUserSettingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetUserSettingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetUserSettingsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetUserSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetUserSettingsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetUserSettingsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUserSettingsError {}
 /// Errors returned by GetVoiceConnector
 #[derive(Debug, PartialEq)]
 pub enum GetVoiceConnectorError {
@@ -6281,22 +6292,18 @@ impl GetVoiceConnectorError {
 }
 impl fmt::Display for GetVoiceConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVoiceConnectorError {
-    fn description(&self) -> &str {
         match *self {
-            GetVoiceConnectorError::BadRequest(ref cause) => cause,
-            GetVoiceConnectorError::Forbidden(ref cause) => cause,
-            GetVoiceConnectorError::NotFound(ref cause) => cause,
-            GetVoiceConnectorError::ServiceFailure(ref cause) => cause,
-            GetVoiceConnectorError::ServiceUnavailable(ref cause) => cause,
-            GetVoiceConnectorError::ThrottledClient(ref cause) => cause,
-            GetVoiceConnectorError::UnauthorizedClient(ref cause) => cause,
+            GetVoiceConnectorError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetVoiceConnectorError {}
 /// Errors returned by GetVoiceConnectorGroup
 #[derive(Debug, PartialEq)]
 pub enum GetVoiceConnectorGroupError {
@@ -6358,22 +6365,18 @@ impl GetVoiceConnectorGroupError {
 }
 impl fmt::Display for GetVoiceConnectorGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVoiceConnectorGroupError {
-    fn description(&self) -> &str {
         match *self {
-            GetVoiceConnectorGroupError::BadRequest(ref cause) => cause,
-            GetVoiceConnectorGroupError::Forbidden(ref cause) => cause,
-            GetVoiceConnectorGroupError::NotFound(ref cause) => cause,
-            GetVoiceConnectorGroupError::ServiceFailure(ref cause) => cause,
-            GetVoiceConnectorGroupError::ServiceUnavailable(ref cause) => cause,
-            GetVoiceConnectorGroupError::ThrottledClient(ref cause) => cause,
-            GetVoiceConnectorGroupError::UnauthorizedClient(ref cause) => cause,
+            GetVoiceConnectorGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorGroupError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorGroupError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorGroupError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorGroupError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorGroupError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetVoiceConnectorGroupError {}
 /// Errors returned by GetVoiceConnectorLoggingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetVoiceConnectorLoggingConfigurationError {
@@ -6443,22 +6446,32 @@ impl GetVoiceConnectorLoggingConfigurationError {
 }
 impl fmt::Display for GetVoiceConnectorLoggingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVoiceConnectorLoggingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetVoiceConnectorLoggingConfigurationError::BadRequest(ref cause) => cause,
-            GetVoiceConnectorLoggingConfigurationError::Forbidden(ref cause) => cause,
-            GetVoiceConnectorLoggingConfigurationError::NotFound(ref cause) => cause,
-            GetVoiceConnectorLoggingConfigurationError::ServiceFailure(ref cause) => cause,
-            GetVoiceConnectorLoggingConfigurationError::ServiceUnavailable(ref cause) => cause,
-            GetVoiceConnectorLoggingConfigurationError::ThrottledClient(ref cause) => cause,
-            GetVoiceConnectorLoggingConfigurationError::UnauthorizedClient(ref cause) => cause,
+            GetVoiceConnectorLoggingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorLoggingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorLoggingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorLoggingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorLoggingConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorLoggingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorLoggingConfigurationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetVoiceConnectorLoggingConfigurationError {}
 /// Errors returned by GetVoiceConnectorOrigination
 #[derive(Debug, PartialEq)]
 pub enum GetVoiceConnectorOriginationError {
@@ -6528,22 +6541,22 @@ impl GetVoiceConnectorOriginationError {
 }
 impl fmt::Display for GetVoiceConnectorOriginationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVoiceConnectorOriginationError {
-    fn description(&self) -> &str {
         match *self {
-            GetVoiceConnectorOriginationError::BadRequest(ref cause) => cause,
-            GetVoiceConnectorOriginationError::Forbidden(ref cause) => cause,
-            GetVoiceConnectorOriginationError::NotFound(ref cause) => cause,
-            GetVoiceConnectorOriginationError::ServiceFailure(ref cause) => cause,
-            GetVoiceConnectorOriginationError::ServiceUnavailable(ref cause) => cause,
-            GetVoiceConnectorOriginationError::ThrottledClient(ref cause) => cause,
-            GetVoiceConnectorOriginationError::UnauthorizedClient(ref cause) => cause,
+            GetVoiceConnectorOriginationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorOriginationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorOriginationError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorOriginationError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorOriginationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorOriginationError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorOriginationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetVoiceConnectorOriginationError {}
 /// Errors returned by GetVoiceConnectorStreamingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetVoiceConnectorStreamingConfigurationError {
@@ -6613,22 +6626,32 @@ impl GetVoiceConnectorStreamingConfigurationError {
 }
 impl fmt::Display for GetVoiceConnectorStreamingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVoiceConnectorStreamingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetVoiceConnectorStreamingConfigurationError::BadRequest(ref cause) => cause,
-            GetVoiceConnectorStreamingConfigurationError::Forbidden(ref cause) => cause,
-            GetVoiceConnectorStreamingConfigurationError::NotFound(ref cause) => cause,
-            GetVoiceConnectorStreamingConfigurationError::ServiceFailure(ref cause) => cause,
-            GetVoiceConnectorStreamingConfigurationError::ServiceUnavailable(ref cause) => cause,
-            GetVoiceConnectorStreamingConfigurationError::ThrottledClient(ref cause) => cause,
-            GetVoiceConnectorStreamingConfigurationError::UnauthorizedClient(ref cause) => cause,
+            GetVoiceConnectorStreamingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorStreamingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorStreamingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorStreamingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorStreamingConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorStreamingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorStreamingConfigurationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetVoiceConnectorStreamingConfigurationError {}
 /// Errors returned by GetVoiceConnectorTermination
 #[derive(Debug, PartialEq)]
 pub enum GetVoiceConnectorTerminationError {
@@ -6698,22 +6721,22 @@ impl GetVoiceConnectorTerminationError {
 }
 impl fmt::Display for GetVoiceConnectorTerminationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVoiceConnectorTerminationError {
-    fn description(&self) -> &str {
         match *self {
-            GetVoiceConnectorTerminationError::BadRequest(ref cause) => cause,
-            GetVoiceConnectorTerminationError::Forbidden(ref cause) => cause,
-            GetVoiceConnectorTerminationError::NotFound(ref cause) => cause,
-            GetVoiceConnectorTerminationError::ServiceFailure(ref cause) => cause,
-            GetVoiceConnectorTerminationError::ServiceUnavailable(ref cause) => cause,
-            GetVoiceConnectorTerminationError::ThrottledClient(ref cause) => cause,
-            GetVoiceConnectorTerminationError::UnauthorizedClient(ref cause) => cause,
+            GetVoiceConnectorTerminationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorTerminationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorTerminationError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorTerminationError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorTerminationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorTerminationError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorTerminationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetVoiceConnectorTerminationError {}
 /// Errors returned by GetVoiceConnectorTerminationHealth
 #[derive(Debug, PartialEq)]
 pub enum GetVoiceConnectorTerminationHealthError {
@@ -6783,22 +6806,28 @@ impl GetVoiceConnectorTerminationHealthError {
 }
 impl fmt::Display for GetVoiceConnectorTerminationHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVoiceConnectorTerminationHealthError {
-    fn description(&self) -> &str {
         match *self {
-            GetVoiceConnectorTerminationHealthError::BadRequest(ref cause) => cause,
-            GetVoiceConnectorTerminationHealthError::Forbidden(ref cause) => cause,
-            GetVoiceConnectorTerminationHealthError::NotFound(ref cause) => cause,
-            GetVoiceConnectorTerminationHealthError::ServiceFailure(ref cause) => cause,
-            GetVoiceConnectorTerminationHealthError::ServiceUnavailable(ref cause) => cause,
-            GetVoiceConnectorTerminationHealthError::ThrottledClient(ref cause) => cause,
-            GetVoiceConnectorTerminationHealthError::UnauthorizedClient(ref cause) => cause,
+            GetVoiceConnectorTerminationHealthError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorTerminationHealthError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorTerminationHealthError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorTerminationHealthError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorTerminationHealthError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorTerminationHealthError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorTerminationHealthError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetVoiceConnectorTerminationHealthError {}
 /// Errors returned by InviteUsers
 #[derive(Debug, PartialEq)]
 pub enum InviteUsersError {
@@ -6852,22 +6881,18 @@ impl InviteUsersError {
 }
 impl fmt::Display for InviteUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InviteUsersError {
-    fn description(&self) -> &str {
         match *self {
-            InviteUsersError::BadRequest(ref cause) => cause,
-            InviteUsersError::Forbidden(ref cause) => cause,
-            InviteUsersError::NotFound(ref cause) => cause,
-            InviteUsersError::ServiceFailure(ref cause) => cause,
-            InviteUsersError::ServiceUnavailable(ref cause) => cause,
-            InviteUsersError::ThrottledClient(ref cause) => cause,
-            InviteUsersError::UnauthorizedClient(ref cause) => cause,
+            InviteUsersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            InviteUsersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            InviteUsersError::NotFound(ref cause) => write!(f, "{}", cause),
+            InviteUsersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            InviteUsersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            InviteUsersError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            InviteUsersError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InviteUsersError {}
 /// Errors returned by ListAccounts
 #[derive(Debug, PartialEq)]
 pub enum ListAccountsError {
@@ -6921,22 +6946,18 @@ impl ListAccountsError {
 }
 impl fmt::Display for ListAccountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAccountsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAccountsError::BadRequest(ref cause) => cause,
-            ListAccountsError::Forbidden(ref cause) => cause,
-            ListAccountsError::NotFound(ref cause) => cause,
-            ListAccountsError::ServiceFailure(ref cause) => cause,
-            ListAccountsError::ServiceUnavailable(ref cause) => cause,
-            ListAccountsError::ThrottledClient(ref cause) => cause,
-            ListAccountsError::UnauthorizedClient(ref cause) => cause,
+            ListAccountsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListAccountsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListAccountsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListAccountsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListAccountsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListAccountsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListAccountsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAccountsError {}
 /// Errors returned by ListAttendees
 #[derive(Debug, PartialEq)]
 pub enum ListAttendeesError {
@@ -6990,22 +7011,18 @@ impl ListAttendeesError {
 }
 impl fmt::Display for ListAttendeesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAttendeesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAttendeesError::BadRequest(ref cause) => cause,
-            ListAttendeesError::Forbidden(ref cause) => cause,
-            ListAttendeesError::NotFound(ref cause) => cause,
-            ListAttendeesError::ServiceFailure(ref cause) => cause,
-            ListAttendeesError::ServiceUnavailable(ref cause) => cause,
-            ListAttendeesError::ThrottledClient(ref cause) => cause,
-            ListAttendeesError::UnauthorizedClient(ref cause) => cause,
+            ListAttendeesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListAttendeesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListAttendeesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListAttendeesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListAttendeesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListAttendeesError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListAttendeesError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAttendeesError {}
 /// Errors returned by ListBots
 #[derive(Debug, PartialEq)]
 pub enum ListBotsError {
@@ -7054,21 +7071,17 @@ impl ListBotsError {
 }
 impl fmt::Display for ListBotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBotsError {
-    fn description(&self) -> &str {
         match *self {
-            ListBotsError::BadRequest(ref cause) => cause,
-            ListBotsError::Forbidden(ref cause) => cause,
-            ListBotsError::NotFound(ref cause) => cause,
-            ListBotsError::ServiceFailure(ref cause) => cause,
-            ListBotsError::ServiceUnavailable(ref cause) => cause,
-            ListBotsError::UnauthorizedClient(ref cause) => cause,
+            ListBotsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListBotsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListBotsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListBotsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListBotsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListBotsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBotsError {}
 /// Errors returned by ListMeetings
 #[derive(Debug, PartialEq)]
 pub enum ListMeetingsError {
@@ -7117,21 +7130,17 @@ impl ListMeetingsError {
 }
 impl fmt::Display for ListMeetingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMeetingsError {
-    fn description(&self) -> &str {
         match *self {
-            ListMeetingsError::BadRequest(ref cause) => cause,
-            ListMeetingsError::Forbidden(ref cause) => cause,
-            ListMeetingsError::ServiceFailure(ref cause) => cause,
-            ListMeetingsError::ServiceUnavailable(ref cause) => cause,
-            ListMeetingsError::ThrottledClient(ref cause) => cause,
-            ListMeetingsError::UnauthorizedClient(ref cause) => cause,
+            ListMeetingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListMeetingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListMeetingsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListMeetingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListMeetingsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListMeetingsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMeetingsError {}
 /// Errors returned by ListPhoneNumberOrders
 #[derive(Debug, PartialEq)]
 pub enum ListPhoneNumberOrdersError {
@@ -7188,21 +7197,17 @@ impl ListPhoneNumberOrdersError {
 }
 impl fmt::Display for ListPhoneNumberOrdersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPhoneNumberOrdersError {
-    fn description(&self) -> &str {
         match *self {
-            ListPhoneNumberOrdersError::BadRequest(ref cause) => cause,
-            ListPhoneNumberOrdersError::Forbidden(ref cause) => cause,
-            ListPhoneNumberOrdersError::ServiceFailure(ref cause) => cause,
-            ListPhoneNumberOrdersError::ServiceUnavailable(ref cause) => cause,
-            ListPhoneNumberOrdersError::ThrottledClient(ref cause) => cause,
-            ListPhoneNumberOrdersError::UnauthorizedClient(ref cause) => cause,
+            ListPhoneNumberOrdersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumberOrdersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumberOrdersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumberOrdersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumberOrdersError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumberOrdersError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPhoneNumberOrdersError {}
 /// Errors returned by ListPhoneNumbers
 #[derive(Debug, PartialEq)]
 pub enum ListPhoneNumbersError {
@@ -7251,21 +7256,17 @@ impl ListPhoneNumbersError {
 }
 impl fmt::Display for ListPhoneNumbersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPhoneNumbersError {
-    fn description(&self) -> &str {
         match *self {
-            ListPhoneNumbersError::BadRequest(ref cause) => cause,
-            ListPhoneNumbersError::Forbidden(ref cause) => cause,
-            ListPhoneNumbersError::ServiceFailure(ref cause) => cause,
-            ListPhoneNumbersError::ServiceUnavailable(ref cause) => cause,
-            ListPhoneNumbersError::ThrottledClient(ref cause) => cause,
-            ListPhoneNumbersError::UnauthorizedClient(ref cause) => cause,
+            ListPhoneNumbersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPhoneNumbersError {}
 /// Errors returned by ListRoomMemberships
 #[derive(Debug, PartialEq)]
 pub enum ListRoomMembershipsError {
@@ -7318,21 +7319,17 @@ impl ListRoomMembershipsError {
 }
 impl fmt::Display for ListRoomMembershipsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRoomMembershipsError {
-    fn description(&self) -> &str {
         match *self {
-            ListRoomMembershipsError::BadRequest(ref cause) => cause,
-            ListRoomMembershipsError::Forbidden(ref cause) => cause,
-            ListRoomMembershipsError::NotFound(ref cause) => cause,
-            ListRoomMembershipsError::ServiceFailure(ref cause) => cause,
-            ListRoomMembershipsError::ServiceUnavailable(ref cause) => cause,
-            ListRoomMembershipsError::UnauthorizedClient(ref cause) => cause,
+            ListRoomMembershipsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListRoomMembershipsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListRoomMembershipsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListRoomMembershipsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListRoomMembershipsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListRoomMembershipsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRoomMembershipsError {}
 /// Errors returned by ListRooms
 #[derive(Debug, PartialEq)]
 pub enum ListRoomsError {
@@ -7381,21 +7378,17 @@ impl ListRoomsError {
 }
 impl fmt::Display for ListRoomsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRoomsError {
-    fn description(&self) -> &str {
         match *self {
-            ListRoomsError::BadRequest(ref cause) => cause,
-            ListRoomsError::Forbidden(ref cause) => cause,
-            ListRoomsError::NotFound(ref cause) => cause,
-            ListRoomsError::ServiceFailure(ref cause) => cause,
-            ListRoomsError::ServiceUnavailable(ref cause) => cause,
-            ListRoomsError::UnauthorizedClient(ref cause) => cause,
+            ListRoomsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListRoomsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListRoomsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListRoomsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListRoomsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListRoomsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRoomsError {}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
@@ -7449,22 +7442,18 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUsersError {
-    fn description(&self) -> &str {
         match *self {
-            ListUsersError::BadRequest(ref cause) => cause,
-            ListUsersError::Forbidden(ref cause) => cause,
-            ListUsersError::NotFound(ref cause) => cause,
-            ListUsersError::ServiceFailure(ref cause) => cause,
-            ListUsersError::ServiceUnavailable(ref cause) => cause,
-            ListUsersError::ThrottledClient(ref cause) => cause,
-            ListUsersError::UnauthorizedClient(ref cause) => cause,
+            ListUsersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListUsersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListUsersError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListUsersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListUsersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListUsersError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListUsersError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUsersError {}
 /// Errors returned by ListVoiceConnectorGroups
 #[derive(Debug, PartialEq)]
 pub enum ListVoiceConnectorGroupsError {
@@ -7521,21 +7510,17 @@ impl ListVoiceConnectorGroupsError {
 }
 impl fmt::Display for ListVoiceConnectorGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVoiceConnectorGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListVoiceConnectorGroupsError::BadRequest(ref cause) => cause,
-            ListVoiceConnectorGroupsError::Forbidden(ref cause) => cause,
-            ListVoiceConnectorGroupsError::ServiceFailure(ref cause) => cause,
-            ListVoiceConnectorGroupsError::ServiceUnavailable(ref cause) => cause,
-            ListVoiceConnectorGroupsError::ThrottledClient(ref cause) => cause,
-            ListVoiceConnectorGroupsError::UnauthorizedClient(ref cause) => cause,
+            ListVoiceConnectorGroupsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListVoiceConnectorGroupsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListVoiceConnectorGroupsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListVoiceConnectorGroupsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListVoiceConnectorGroupsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListVoiceConnectorGroupsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVoiceConnectorGroupsError {}
 /// Errors returned by ListVoiceConnectorTerminationCredentials
 #[derive(Debug, PartialEq)]
 pub enum ListVoiceConnectorTerminationCredentialsError {
@@ -7605,22 +7590,32 @@ impl ListVoiceConnectorTerminationCredentialsError {
 }
 impl fmt::Display for ListVoiceConnectorTerminationCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVoiceConnectorTerminationCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            ListVoiceConnectorTerminationCredentialsError::BadRequest(ref cause) => cause,
-            ListVoiceConnectorTerminationCredentialsError::Forbidden(ref cause) => cause,
-            ListVoiceConnectorTerminationCredentialsError::NotFound(ref cause) => cause,
-            ListVoiceConnectorTerminationCredentialsError::ServiceFailure(ref cause) => cause,
-            ListVoiceConnectorTerminationCredentialsError::ServiceUnavailable(ref cause) => cause,
-            ListVoiceConnectorTerminationCredentialsError::ThrottledClient(ref cause) => cause,
-            ListVoiceConnectorTerminationCredentialsError::UnauthorizedClient(ref cause) => cause,
+            ListVoiceConnectorTerminationCredentialsError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListVoiceConnectorTerminationCredentialsError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListVoiceConnectorTerminationCredentialsError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListVoiceConnectorTerminationCredentialsError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListVoiceConnectorTerminationCredentialsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListVoiceConnectorTerminationCredentialsError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListVoiceConnectorTerminationCredentialsError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListVoiceConnectorTerminationCredentialsError {}
 /// Errors returned by ListVoiceConnectors
 #[derive(Debug, PartialEq)]
 pub enum ListVoiceConnectorsError {
@@ -7673,21 +7668,17 @@ impl ListVoiceConnectorsError {
 }
 impl fmt::Display for ListVoiceConnectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVoiceConnectorsError {
-    fn description(&self) -> &str {
         match *self {
-            ListVoiceConnectorsError::BadRequest(ref cause) => cause,
-            ListVoiceConnectorsError::Forbidden(ref cause) => cause,
-            ListVoiceConnectorsError::ServiceFailure(ref cause) => cause,
-            ListVoiceConnectorsError::ServiceUnavailable(ref cause) => cause,
-            ListVoiceConnectorsError::ThrottledClient(ref cause) => cause,
-            ListVoiceConnectorsError::UnauthorizedClient(ref cause) => cause,
+            ListVoiceConnectorsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListVoiceConnectorsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListVoiceConnectorsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListVoiceConnectorsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListVoiceConnectorsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListVoiceConnectorsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVoiceConnectorsError {}
 /// Errors returned by LogoutUser
 #[derive(Debug, PartialEq)]
 pub enum LogoutUserError {
@@ -7741,22 +7732,18 @@ impl LogoutUserError {
 }
 impl fmt::Display for LogoutUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for LogoutUserError {
-    fn description(&self) -> &str {
         match *self {
-            LogoutUserError::BadRequest(ref cause) => cause,
-            LogoutUserError::Forbidden(ref cause) => cause,
-            LogoutUserError::NotFound(ref cause) => cause,
-            LogoutUserError::ServiceFailure(ref cause) => cause,
-            LogoutUserError::ServiceUnavailable(ref cause) => cause,
-            LogoutUserError::ThrottledClient(ref cause) => cause,
-            LogoutUserError::UnauthorizedClient(ref cause) => cause,
+            LogoutUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            LogoutUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            LogoutUserError::NotFound(ref cause) => write!(f, "{}", cause),
+            LogoutUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            LogoutUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            LogoutUserError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            LogoutUserError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for LogoutUserError {}
 /// Errors returned by PutEventsConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutEventsConfigurationError {
@@ -7818,22 +7805,18 @@ impl PutEventsConfigurationError {
 }
 impl fmt::Display for PutEventsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutEventsConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutEventsConfigurationError::BadRequest(ref cause) => cause,
-            PutEventsConfigurationError::Forbidden(ref cause) => cause,
-            PutEventsConfigurationError::NotFound(ref cause) => cause,
-            PutEventsConfigurationError::ResourceLimitExceeded(ref cause) => cause,
-            PutEventsConfigurationError::ServiceFailure(ref cause) => cause,
-            PutEventsConfigurationError::ServiceUnavailable(ref cause) => cause,
-            PutEventsConfigurationError::UnauthorizedClient(ref cause) => cause,
+            PutEventsConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutEventsConfigurationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PutEventsConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutEventsConfigurationError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutEventsConfigurationError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            PutEventsConfigurationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            PutEventsConfigurationError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutEventsConfigurationError {}
 /// Errors returned by PutVoiceConnectorLoggingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutVoiceConnectorLoggingConfigurationError {
@@ -7903,22 +7886,32 @@ impl PutVoiceConnectorLoggingConfigurationError {
 }
 impl fmt::Display for PutVoiceConnectorLoggingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutVoiceConnectorLoggingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutVoiceConnectorLoggingConfigurationError::BadRequest(ref cause) => cause,
-            PutVoiceConnectorLoggingConfigurationError::Forbidden(ref cause) => cause,
-            PutVoiceConnectorLoggingConfigurationError::NotFound(ref cause) => cause,
-            PutVoiceConnectorLoggingConfigurationError::ServiceFailure(ref cause) => cause,
-            PutVoiceConnectorLoggingConfigurationError::ServiceUnavailable(ref cause) => cause,
-            PutVoiceConnectorLoggingConfigurationError::ThrottledClient(ref cause) => cause,
-            PutVoiceConnectorLoggingConfigurationError::UnauthorizedClient(ref cause) => cause,
+            PutVoiceConnectorLoggingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorLoggingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorLoggingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorLoggingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorLoggingConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorLoggingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorLoggingConfigurationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutVoiceConnectorLoggingConfigurationError {}
 /// Errors returned by PutVoiceConnectorOrigination
 #[derive(Debug, PartialEq)]
 pub enum PutVoiceConnectorOriginationError {
@@ -7988,22 +7981,22 @@ impl PutVoiceConnectorOriginationError {
 }
 impl fmt::Display for PutVoiceConnectorOriginationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutVoiceConnectorOriginationError {
-    fn description(&self) -> &str {
         match *self {
-            PutVoiceConnectorOriginationError::BadRequest(ref cause) => cause,
-            PutVoiceConnectorOriginationError::Forbidden(ref cause) => cause,
-            PutVoiceConnectorOriginationError::NotFound(ref cause) => cause,
-            PutVoiceConnectorOriginationError::ServiceFailure(ref cause) => cause,
-            PutVoiceConnectorOriginationError::ServiceUnavailable(ref cause) => cause,
-            PutVoiceConnectorOriginationError::ThrottledClient(ref cause) => cause,
-            PutVoiceConnectorOriginationError::UnauthorizedClient(ref cause) => cause,
+            PutVoiceConnectorOriginationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorOriginationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorOriginationError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorOriginationError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorOriginationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorOriginationError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorOriginationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutVoiceConnectorOriginationError {}
 /// Errors returned by PutVoiceConnectorStreamingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutVoiceConnectorStreamingConfigurationError {
@@ -8073,22 +8066,32 @@ impl PutVoiceConnectorStreamingConfigurationError {
 }
 impl fmt::Display for PutVoiceConnectorStreamingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutVoiceConnectorStreamingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutVoiceConnectorStreamingConfigurationError::BadRequest(ref cause) => cause,
-            PutVoiceConnectorStreamingConfigurationError::Forbidden(ref cause) => cause,
-            PutVoiceConnectorStreamingConfigurationError::NotFound(ref cause) => cause,
-            PutVoiceConnectorStreamingConfigurationError::ServiceFailure(ref cause) => cause,
-            PutVoiceConnectorStreamingConfigurationError::ServiceUnavailable(ref cause) => cause,
-            PutVoiceConnectorStreamingConfigurationError::ThrottledClient(ref cause) => cause,
-            PutVoiceConnectorStreamingConfigurationError::UnauthorizedClient(ref cause) => cause,
+            PutVoiceConnectorStreamingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorStreamingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorStreamingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorStreamingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorStreamingConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorStreamingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorStreamingConfigurationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutVoiceConnectorStreamingConfigurationError {}
 /// Errors returned by PutVoiceConnectorTermination
 #[derive(Debug, PartialEq)]
 pub enum PutVoiceConnectorTerminationError {
@@ -8165,23 +8168,23 @@ impl PutVoiceConnectorTerminationError {
 }
 impl fmt::Display for PutVoiceConnectorTerminationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutVoiceConnectorTerminationError {
-    fn description(&self) -> &str {
         match *self {
-            PutVoiceConnectorTerminationError::AccessDenied(ref cause) => cause,
-            PutVoiceConnectorTerminationError::BadRequest(ref cause) => cause,
-            PutVoiceConnectorTerminationError::Forbidden(ref cause) => cause,
-            PutVoiceConnectorTerminationError::NotFound(ref cause) => cause,
-            PutVoiceConnectorTerminationError::ServiceFailure(ref cause) => cause,
-            PutVoiceConnectorTerminationError::ServiceUnavailable(ref cause) => cause,
-            PutVoiceConnectorTerminationError::ThrottledClient(ref cause) => cause,
-            PutVoiceConnectorTerminationError::UnauthorizedClient(ref cause) => cause,
+            PutVoiceConnectorTerminationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorTerminationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorTerminationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorTerminationError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorTerminationError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorTerminationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorTerminationError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorTerminationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutVoiceConnectorTerminationError {}
 /// Errors returned by PutVoiceConnectorTerminationCredentials
 #[derive(Debug, PartialEq)]
 pub enum PutVoiceConnectorTerminationCredentialsError {
@@ -8251,22 +8254,32 @@ impl PutVoiceConnectorTerminationCredentialsError {
 }
 impl fmt::Display for PutVoiceConnectorTerminationCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutVoiceConnectorTerminationCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            PutVoiceConnectorTerminationCredentialsError::BadRequest(ref cause) => cause,
-            PutVoiceConnectorTerminationCredentialsError::Forbidden(ref cause) => cause,
-            PutVoiceConnectorTerminationCredentialsError::NotFound(ref cause) => cause,
-            PutVoiceConnectorTerminationCredentialsError::ServiceFailure(ref cause) => cause,
-            PutVoiceConnectorTerminationCredentialsError::ServiceUnavailable(ref cause) => cause,
-            PutVoiceConnectorTerminationCredentialsError::ThrottledClient(ref cause) => cause,
-            PutVoiceConnectorTerminationCredentialsError::UnauthorizedClient(ref cause) => cause,
+            PutVoiceConnectorTerminationCredentialsError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorTerminationCredentialsError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorTerminationCredentialsError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorTerminationCredentialsError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorTerminationCredentialsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorTerminationCredentialsError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorTerminationCredentialsError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutVoiceConnectorTerminationCredentialsError {}
 /// Errors returned by RegenerateSecurityToken
 #[derive(Debug, PartialEq)]
 pub enum RegenerateSecurityTokenError {
@@ -8321,21 +8334,17 @@ impl RegenerateSecurityTokenError {
 }
 impl fmt::Display for RegenerateSecurityTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegenerateSecurityTokenError {
-    fn description(&self) -> &str {
         match *self {
-            RegenerateSecurityTokenError::BadRequest(ref cause) => cause,
-            RegenerateSecurityTokenError::Forbidden(ref cause) => cause,
-            RegenerateSecurityTokenError::NotFound(ref cause) => cause,
-            RegenerateSecurityTokenError::ServiceFailure(ref cause) => cause,
-            RegenerateSecurityTokenError::ServiceUnavailable(ref cause) => cause,
-            RegenerateSecurityTokenError::UnauthorizedClient(ref cause) => cause,
+            RegenerateSecurityTokenError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RegenerateSecurityTokenError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RegenerateSecurityTokenError::NotFound(ref cause) => write!(f, "{}", cause),
+            RegenerateSecurityTokenError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            RegenerateSecurityTokenError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RegenerateSecurityTokenError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegenerateSecurityTokenError {}
 /// Errors returned by ResetPersonalPIN
 #[derive(Debug, PartialEq)]
 pub enum ResetPersonalPINError {
@@ -8389,22 +8398,18 @@ impl ResetPersonalPINError {
 }
 impl fmt::Display for ResetPersonalPINError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetPersonalPINError {
-    fn description(&self) -> &str {
         match *self {
-            ResetPersonalPINError::BadRequest(ref cause) => cause,
-            ResetPersonalPINError::Forbidden(ref cause) => cause,
-            ResetPersonalPINError::NotFound(ref cause) => cause,
-            ResetPersonalPINError::ServiceFailure(ref cause) => cause,
-            ResetPersonalPINError::ServiceUnavailable(ref cause) => cause,
-            ResetPersonalPINError::ThrottledClient(ref cause) => cause,
-            ResetPersonalPINError::UnauthorizedClient(ref cause) => cause,
+            ResetPersonalPINError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ResetPersonalPINError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ResetPersonalPINError::NotFound(ref cause) => write!(f, "{}", cause),
+            ResetPersonalPINError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ResetPersonalPINError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ResetPersonalPINError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ResetPersonalPINError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResetPersonalPINError {}
 /// Errors returned by RestorePhoneNumber
 #[derive(Debug, PartialEq)]
 pub enum RestorePhoneNumberError {
@@ -8469,23 +8474,19 @@ impl RestorePhoneNumberError {
 }
 impl fmt::Display for RestorePhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestorePhoneNumberError {
-    fn description(&self) -> &str {
         match *self {
-            RestorePhoneNumberError::BadRequest(ref cause) => cause,
-            RestorePhoneNumberError::Forbidden(ref cause) => cause,
-            RestorePhoneNumberError::NotFound(ref cause) => cause,
-            RestorePhoneNumberError::ResourceLimitExceeded(ref cause) => cause,
-            RestorePhoneNumberError::ServiceFailure(ref cause) => cause,
-            RestorePhoneNumberError::ServiceUnavailable(ref cause) => cause,
-            RestorePhoneNumberError::ThrottledClient(ref cause) => cause,
-            RestorePhoneNumberError::UnauthorizedClient(ref cause) => cause,
+            RestorePhoneNumberError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RestorePhoneNumberError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RestorePhoneNumberError::NotFound(ref cause) => write!(f, "{}", cause),
+            RestorePhoneNumberError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            RestorePhoneNumberError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            RestorePhoneNumberError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RestorePhoneNumberError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            RestorePhoneNumberError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RestorePhoneNumberError {}
 /// Errors returned by SearchAvailablePhoneNumbers
 #[derive(Debug, PartialEq)]
 pub enum SearchAvailablePhoneNumbersError {
@@ -8555,22 +8556,22 @@ impl SearchAvailablePhoneNumbersError {
 }
 impl fmt::Display for SearchAvailablePhoneNumbersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchAvailablePhoneNumbersError {
-    fn description(&self) -> &str {
         match *self {
-            SearchAvailablePhoneNumbersError::AccessDenied(ref cause) => cause,
-            SearchAvailablePhoneNumbersError::BadRequest(ref cause) => cause,
-            SearchAvailablePhoneNumbersError::Forbidden(ref cause) => cause,
-            SearchAvailablePhoneNumbersError::ServiceFailure(ref cause) => cause,
-            SearchAvailablePhoneNumbersError::ServiceUnavailable(ref cause) => cause,
-            SearchAvailablePhoneNumbersError::ThrottledClient(ref cause) => cause,
-            SearchAvailablePhoneNumbersError::UnauthorizedClient(ref cause) => cause,
+            SearchAvailablePhoneNumbersError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            SearchAvailablePhoneNumbersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            SearchAvailablePhoneNumbersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            SearchAvailablePhoneNumbersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            SearchAvailablePhoneNumbersError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SearchAvailablePhoneNumbersError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            SearchAvailablePhoneNumbersError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SearchAvailablePhoneNumbersError {}
 /// Errors returned by UpdateAccount
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountError {
@@ -8624,22 +8625,18 @@ impl UpdateAccountError {
 }
 impl fmt::Display for UpdateAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAccountError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAccountError::BadRequest(ref cause) => cause,
-            UpdateAccountError::Forbidden(ref cause) => cause,
-            UpdateAccountError::NotFound(ref cause) => cause,
-            UpdateAccountError::ServiceFailure(ref cause) => cause,
-            UpdateAccountError::ServiceUnavailable(ref cause) => cause,
-            UpdateAccountError::ThrottledClient(ref cause) => cause,
-            UpdateAccountError::UnauthorizedClient(ref cause) => cause,
+            UpdateAccountError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAccountError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateAccountError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAccountError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAccountError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateAccountError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateAccountError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAccountError {}
 /// Errors returned by UpdateAccountSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountSettingsError {
@@ -8706,23 +8703,19 @@ impl UpdateAccountSettingsError {
 }
 impl fmt::Display for UpdateAccountSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAccountSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAccountSettingsError::BadRequest(ref cause) => cause,
-            UpdateAccountSettingsError::Conflict(ref cause) => cause,
-            UpdateAccountSettingsError::Forbidden(ref cause) => cause,
-            UpdateAccountSettingsError::NotFound(ref cause) => cause,
-            UpdateAccountSettingsError::ServiceFailure(ref cause) => cause,
-            UpdateAccountSettingsError::ServiceUnavailable(ref cause) => cause,
-            UpdateAccountSettingsError::ThrottledClient(ref cause) => cause,
-            UpdateAccountSettingsError::UnauthorizedClient(ref cause) => cause,
+            UpdateAccountSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAccountSettingsError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateAccountSettingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateAccountSettingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAccountSettingsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAccountSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateAccountSettingsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateAccountSettingsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAccountSettingsError {}
 /// Errors returned by UpdateBot
 #[derive(Debug, PartialEq)]
 pub enum UpdateBotError {
@@ -8771,21 +8764,17 @@ impl UpdateBotError {
 }
 impl fmt::Display for UpdateBotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBotError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBotError::BadRequest(ref cause) => cause,
-            UpdateBotError::Forbidden(ref cause) => cause,
-            UpdateBotError::NotFound(ref cause) => cause,
-            UpdateBotError::ServiceFailure(ref cause) => cause,
-            UpdateBotError::ServiceUnavailable(ref cause) => cause,
-            UpdateBotError::UnauthorizedClient(ref cause) => cause,
+            UpdateBotError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateBotError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateBotError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateBotError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateBotError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateBotError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBotError {}
 /// Errors returned by UpdateGlobalSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateGlobalSettingsError {
@@ -8840,21 +8829,17 @@ impl UpdateGlobalSettingsError {
 }
 impl fmt::Display for UpdateGlobalSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGlobalSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGlobalSettingsError::BadRequest(ref cause) => cause,
-            UpdateGlobalSettingsError::Forbidden(ref cause) => cause,
-            UpdateGlobalSettingsError::ServiceFailure(ref cause) => cause,
-            UpdateGlobalSettingsError::ServiceUnavailable(ref cause) => cause,
-            UpdateGlobalSettingsError::ThrottledClient(ref cause) => cause,
-            UpdateGlobalSettingsError::UnauthorizedClient(ref cause) => cause,
+            UpdateGlobalSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalSettingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalSettingsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalSettingsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalSettingsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGlobalSettingsError {}
 /// Errors returned by UpdatePhoneNumber
 #[derive(Debug, PartialEq)]
 pub enum UpdatePhoneNumberError {
@@ -8912,22 +8897,18 @@ impl UpdatePhoneNumberError {
 }
 impl fmt::Display for UpdatePhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePhoneNumberError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePhoneNumberError::BadRequest(ref cause) => cause,
-            UpdatePhoneNumberError::Forbidden(ref cause) => cause,
-            UpdatePhoneNumberError::NotFound(ref cause) => cause,
-            UpdatePhoneNumberError::ServiceFailure(ref cause) => cause,
-            UpdatePhoneNumberError::ServiceUnavailable(ref cause) => cause,
-            UpdatePhoneNumberError::ThrottledClient(ref cause) => cause,
-            UpdatePhoneNumberError::UnauthorizedClient(ref cause) => cause,
+            UpdatePhoneNumberError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdatePhoneNumberError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdatePhoneNumberError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdatePhoneNumberError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdatePhoneNumberError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdatePhoneNumberError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdatePhoneNumberError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePhoneNumberError {}
 /// Errors returned by UpdatePhoneNumberSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdatePhoneNumberSettingsError {
@@ -8986,21 +8967,17 @@ impl UpdatePhoneNumberSettingsError {
 }
 impl fmt::Display for UpdatePhoneNumberSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePhoneNumberSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePhoneNumberSettingsError::BadRequest(ref cause) => cause,
-            UpdatePhoneNumberSettingsError::Forbidden(ref cause) => cause,
-            UpdatePhoneNumberSettingsError::ServiceFailure(ref cause) => cause,
-            UpdatePhoneNumberSettingsError::ServiceUnavailable(ref cause) => cause,
-            UpdatePhoneNumberSettingsError::ThrottledClient(ref cause) => cause,
-            UpdatePhoneNumberSettingsError::UnauthorizedClient(ref cause) => cause,
+            UpdatePhoneNumberSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdatePhoneNumberSettingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdatePhoneNumberSettingsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdatePhoneNumberSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdatePhoneNumberSettingsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdatePhoneNumberSettingsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePhoneNumberSettingsError {}
 /// Errors returned by UpdateRoom
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoomError {
@@ -9049,21 +9026,17 @@ impl UpdateRoomError {
 }
 impl fmt::Display for UpdateRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRoomError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRoomError::BadRequest(ref cause) => cause,
-            UpdateRoomError::Forbidden(ref cause) => cause,
-            UpdateRoomError::NotFound(ref cause) => cause,
-            UpdateRoomError::ServiceFailure(ref cause) => cause,
-            UpdateRoomError::ServiceUnavailable(ref cause) => cause,
-            UpdateRoomError::UnauthorizedClient(ref cause) => cause,
+            UpdateRoomError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateRoomError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateRoomError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRoomError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateRoomError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateRoomError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRoomError {}
 /// Errors returned by UpdateRoomMembership
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoomMembershipError {
@@ -9116,21 +9089,17 @@ impl UpdateRoomMembershipError {
 }
 impl fmt::Display for UpdateRoomMembershipError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRoomMembershipError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRoomMembershipError::BadRequest(ref cause) => cause,
-            UpdateRoomMembershipError::Forbidden(ref cause) => cause,
-            UpdateRoomMembershipError::NotFound(ref cause) => cause,
-            UpdateRoomMembershipError::ServiceFailure(ref cause) => cause,
-            UpdateRoomMembershipError::ServiceUnavailable(ref cause) => cause,
-            UpdateRoomMembershipError::UnauthorizedClient(ref cause) => cause,
+            UpdateRoomMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateRoomMembershipError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateRoomMembershipError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRoomMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateRoomMembershipError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateRoomMembershipError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRoomMembershipError {}
 /// Errors returned by UpdateUser
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserError {
@@ -9184,22 +9153,18 @@ impl UpdateUserError {
 }
 impl fmt::Display for UpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserError::BadRequest(ref cause) => cause,
-            UpdateUserError::Forbidden(ref cause) => cause,
-            UpdateUserError::NotFound(ref cause) => cause,
-            UpdateUserError::ServiceFailure(ref cause) => cause,
-            UpdateUserError::ServiceUnavailable(ref cause) => cause,
-            UpdateUserError::ThrottledClient(ref cause) => cause,
-            UpdateUserError::UnauthorizedClient(ref cause) => cause,
+            UpdateUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserError {}
 /// Errors returned by UpdateUserSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserSettingsError {
@@ -9257,22 +9222,18 @@ impl UpdateUserSettingsError {
 }
 impl fmt::Display for UpdateUserSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserSettingsError::BadRequest(ref cause) => cause,
-            UpdateUserSettingsError::Forbidden(ref cause) => cause,
-            UpdateUserSettingsError::NotFound(ref cause) => cause,
-            UpdateUserSettingsError::ServiceFailure(ref cause) => cause,
-            UpdateUserSettingsError::ServiceUnavailable(ref cause) => cause,
-            UpdateUserSettingsError::ThrottledClient(ref cause) => cause,
-            UpdateUserSettingsError::UnauthorizedClient(ref cause) => cause,
+            UpdateUserSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateUserSettingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateUserSettingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserSettingsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateUserSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateUserSettingsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateUserSettingsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserSettingsError {}
 /// Errors returned by UpdateVoiceConnector
 #[derive(Debug, PartialEq)]
 pub enum UpdateVoiceConnectorError {
@@ -9332,22 +9293,18 @@ impl UpdateVoiceConnectorError {
 }
 impl fmt::Display for UpdateVoiceConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVoiceConnectorError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVoiceConnectorError::BadRequest(ref cause) => cause,
-            UpdateVoiceConnectorError::Forbidden(ref cause) => cause,
-            UpdateVoiceConnectorError::NotFound(ref cause) => cause,
-            UpdateVoiceConnectorError::ServiceFailure(ref cause) => cause,
-            UpdateVoiceConnectorError::ServiceUnavailable(ref cause) => cause,
-            UpdateVoiceConnectorError::ThrottledClient(ref cause) => cause,
-            UpdateVoiceConnectorError::UnauthorizedClient(ref cause) => cause,
+            UpdateVoiceConnectorError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateVoiceConnectorError {}
 /// Errors returned by UpdateVoiceConnectorGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateVoiceConnectorGroupError {
@@ -9416,23 +9373,19 @@ impl UpdateVoiceConnectorGroupError {
 }
 impl fmt::Display for UpdateVoiceConnectorGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVoiceConnectorGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVoiceConnectorGroupError::BadRequest(ref cause) => cause,
-            UpdateVoiceConnectorGroupError::Conflict(ref cause) => cause,
-            UpdateVoiceConnectorGroupError::Forbidden(ref cause) => cause,
-            UpdateVoiceConnectorGroupError::NotFound(ref cause) => cause,
-            UpdateVoiceConnectorGroupError::ServiceFailure(ref cause) => cause,
-            UpdateVoiceConnectorGroupError::ServiceUnavailable(ref cause) => cause,
-            UpdateVoiceConnectorGroupError::ThrottledClient(ref cause) => cause,
-            UpdateVoiceConnectorGroupError::UnauthorizedClient(ref cause) => cause,
+            UpdateVoiceConnectorGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorGroupError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorGroupError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorGroupError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorGroupError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorGroupError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateVoiceConnectorGroupError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateVoiceConnectorGroupError {}
 /// Trait representing the capabilities of the Amazon Chime API. Amazon Chime clients implement this trait.
 pub trait Chime {
     /// <p>Associates a phone number with the specified Amazon Chime user.</p>

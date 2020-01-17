@@ -35,6 +35,7 @@ use xml::EventReader;
 
 /// <p>An object that contains details about when a principal in the reported AWS Organizations entity last attempted to access an AWS service. A principal can be an IAM user, an IAM role, or the AWS account root user within the reported Organizations entity.</p> <p>This data type is a response element in the <a>GetOrganizationsAccessReport</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccessDetail {
     /// <p>The path of the Organizations entity (root, organizational unit, or account) from which an authenticated principal last attempted to access the service. AWS does not report unauthenticated requests.</p> <p>This field is null if no principals (IAM users, IAM roles, or root users) in the reported Organizations entity attempted to access the service within the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#service-last-accessed-reporting-period">reporting period</a>.</p>
     pub entity_path: Option<String>,
@@ -113,6 +114,7 @@ impl AccessDetailsDeserializer {
 }
 /// <p><p>Contains information about an AWS access key.</p> <p> This data type is used as a response element in the <a>CreateAccessKey</a> and <a>ListAccessKeys</a> operations. </p> <note> <p>The <code>SecretAccessKey</code> value is returned only in response to <a>CreateAccessKey</a>. You can get a secret access key only when you first create an access key; you cannot recover the secret access key later. If you lose a secret access key, you must create a new access key.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccessKey {
     /// <p>The ID for this access key.</p>
     pub access_key_id: String,
@@ -171,6 +173,7 @@ impl AccessKeyIdTypeDeserializer {
 }
 /// <p>Contains information about the last time an AWS access key was used since IAM began tracking this information on April 22, 2015.</p> <p>This data type is used as a response element in the <a>GetAccessKeyLastUsed</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccessKeyLastUsed {
     /// <p><p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the access key was most recently used. This field is null in the following situations:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has not been used since IAM began tracking this information.</p> </li> <li> <p>There is no sign-in data associated with the user.</p> </li> </ul></p>
     pub last_used_date: String,
@@ -206,6 +209,7 @@ impl AccessKeyLastUsedDeserializer {
 }
 /// <p>Contains information about an AWS access key, without its secret key.</p> <p>This data type is used as a response element in the <a>ListAccessKeys</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccessKeyMetadata {
     /// <p>The ID for this access key.</p>
     pub access_key_id: Option<String>,
@@ -327,6 +331,7 @@ impl ActionNameTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddClientIDToOpenIDConnectProviderRequest {
     /// <p>The client ID (also known as audience) to add to the IAM OpenID Connect provider resource.</p>
     pub client_id: String,
@@ -352,6 +357,7 @@ impl AddClientIDToOpenIDConnectProviderRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddRoleToInstanceProfileRequest {
     /// <p>The name of the instance profile to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
@@ -377,6 +383,7 @@ impl AddRoleToInstanceProfileRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddUserToGroupRequest {
     /// <p>The name of the group to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -427,6 +434,7 @@ impl ArnTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachGroupPolicyRequest {
     /// <p>The name (friendly name, not ARN) of the group to attach the policy to.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -449,6 +457,7 @@ impl AttachGroupPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachRolePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -471,6 +480,7 @@ impl AttachRolePolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachUserPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -494,6 +504,7 @@ impl AttachUserPolicyRequestSerializer {
 
 /// <p>Contains information about an attached permissions boundary.</p> <p>An attached permissions boundary is a managed policy that has been attached to a user or role to set the permissions boundary.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AttachedPermissionsBoundary {
     /// <p> The ARN of the policy used to set the permissions boundary for the user or role.</p>
     pub permissions_boundary_arn: Option<String>,
@@ -552,6 +563,7 @@ impl AttachedPoliciesListTypeDeserializer {
 }
 /// <p>Contains information about an attached policy.</p> <p>An attached policy is a managed policy that has been attached to a user, group, or role. This data type is used as a response element in the <a>ListAttachedGroupPolicies</a>, <a>ListAttachedRolePolicies</a>, <a>ListAttachedUserPolicies</a>, and <a>GetAccountAuthorizationDetails</a> operations. </p> <p>For more information about managed policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AttachedPolicy {
     pub policy_arn: Option<String>,
     /// <p>The friendly name of the attached policy.</p>
@@ -682,6 +694,7 @@ impl CertificateListTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChangePasswordRequest {
     /// <p>The new password. The new password must conform to the AWS account's password policy, if one exists.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of characters. That string can include almost any printable ASCII character from the space (\u0020) through the end of the ASCII character range (\u00FF). You can also include the tab (\u0009), line feed (\u000A), and carriage return (\u000D) characters. Any of these characters are valid in a password. However, many tools, such as the AWS Management Console, might restrict the ability to type certain characters because they have special meaning within that tool.</p>
     pub new_password: String,
@@ -756,6 +769,7 @@ impl ColumnNumberDeserializer {
 }
 /// <p>Contains information about a condition context key. It includes the name of the key and specifies the value (or values, if the context key supports multiple values) to use in the simulation. This information is used when evaluating the <code>Condition</code> elements of the input policies.</p> <p>This data type is used as an input parameter to <code> <a>SimulateCustomPolicy</a> </code> and <code> <a>SimulatePrincipalPolicy</a> </code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContextEntry {
     /// <p>The full name of a condition context key, including the service prefix. For example, <code>aws:SourceIp</code> or <code>s3:VersionId</code>.</p>
     pub context_key_name: Option<String>,
@@ -844,6 +858,7 @@ impl ContextKeyValueListTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccessKeyRequest {
     /// <p>The name of the IAM user that the new key will belong to.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
@@ -866,6 +881,7 @@ impl CreateAccessKeyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>CreateAccessKey</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateAccessKeyResponse {
     /// <p>A structure with details about the access key.</p>
     pub access_key: AccessKey,
@@ -894,6 +910,7 @@ impl CreateAccessKeyResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccountAliasRequest {
     /// <p>The account alias to create.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>
     pub account_alias: String,
@@ -913,6 +930,7 @@ impl CreateAccountAliasRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
     /// <p>The name of the group to create. Do not include the path in this value.</p> <p>IAM user, group, role, and policy names must be unique within the account. Names are not distinguished by case. For example, you cannot create resources named both "MyResource" and "myresource".</p>
     pub group_name: String,
@@ -938,6 +956,7 @@ impl CreateGroupRequestSerializer {
 
 /// <p>Contains the response to a successful <a>CreateGroup</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateGroupResponse {
     /// <p>A structure containing details about the new group.</p>
     pub group: Group,
@@ -962,6 +981,7 @@ impl CreateGroupResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceProfileRequest {
     /// <p>The name of the instance profile to create.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
@@ -990,6 +1010,7 @@ impl CreateInstanceProfileRequestSerializer {
 
 /// <p>Contains the response to a successful <a>CreateInstanceProfile</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateInstanceProfileResponse {
     /// <p>A structure containing details about the new instance profile.</p>
     pub instance_profile: InstanceProfile,
@@ -1019,6 +1040,7 @@ impl CreateInstanceProfileResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoginProfileRequest {
     /// <p>The new password for the user.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of characters. That string can include almost any printable ASCII character from the space (\u0020) through the end of the ASCII character range (\u00FF). You can also include the tab (\u0009), line feed (\u000A), and carriage return (\u000D) characters. Any of these characters are valid in a password. However, many tools, such as the AWS Management Console, might restrict the ability to type certain characters because they have special meaning within that tool.</p>
     pub password: String,
@@ -1050,6 +1072,7 @@ impl CreateLoginProfileRequestSerializer {
 
 /// <p>Contains the response to a successful <a>CreateLoginProfile</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateLoginProfileResponse {
     /// <p>A structure containing the user name and password create date.</p>
     pub login_profile: LoginProfile,
@@ -1079,6 +1102,7 @@ impl CreateLoginProfileResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOpenIDConnectProviderRequest {
     /// <p>A list of client IDs (also known as audiences). When a mobile or web app registers with an OpenID Connect provider, they establish a value that identifies the application. (This is the value that's sent as the <code>client_id</code> parameter on OAuth requests.)</p> <p>You can register multiple client IDs with the same provider. For example, you might have multiple applications that use the same OIDC provider. You cannot register more than 100 client IDs with a single IAM OIDC provider.</p> <p>There is no defined format for a client ID. The <code>CreateOpenIDConnectProviderRequest</code> operation accepts client IDs up to 255 characters long.</p>
     pub client_id_list: Option<Vec<String>>,
@@ -1115,6 +1139,7 @@ impl CreateOpenIDConnectProviderRequestSerializer {
 
 /// <p>Contains the response to a successful <a>CreateOpenIDConnectProvider</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateOpenIDConnectProviderResponse {
     /// <p>The Amazon Resource Name (ARN) of the new IAM OpenID Connect provider that is created. For more information, see <a>OpenIDConnectProviderListEntry</a>. </p>
     pub open_id_connect_provider_arn: Option<String>,
@@ -1146,6 +1171,7 @@ impl CreateOpenIDConnectProviderResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePolicyRequest {
     /// <p>A friendly description of the policy.</p> <p>Typically used to store information about the permissions defined in the policy. For example, "Grants access to production DynamoDB tables."</p> <p>The policy description is immutable. After a value is assigned, it cannot be changed.</p>
     pub description: Option<String>,
@@ -1182,6 +1208,7 @@ impl CreatePolicyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>CreatePolicy</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePolicyResponse {
     /// <p>A structure containing details about the new policy.</p>
     pub policy: Option<Policy>,
@@ -1206,6 +1233,7 @@ impl CreatePolicyResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePolicyVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy to which you want to add a new version.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -1237,6 +1265,7 @@ impl CreatePolicyVersionRequestSerializer {
 
 /// <p>Contains the response to a successful <a>CreatePolicyVersion</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePolicyVersionResponse {
     /// <p>A structure containing details about the new policy version.</p>
     pub policy_version: Option<PolicyVersion>,
@@ -1268,6 +1297,7 @@ impl CreatePolicyVersionResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoleRequest {
     /// <p>The trust relationship policy document that grants an entity permission to assume the role.</p> <p>In IAM, you must provide a JSON policy that has been converted to a string. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul> <p> Upon success, the response includes the same trust policy in JSON format.</p>
     pub assume_role_policy_document: String,
@@ -1322,6 +1352,7 @@ impl CreateRoleRequestSerializer {
 
 /// <p>Contains the response to a successful <a>CreateRole</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateRoleResponse {
     /// <p>A structure containing details about the new role.</p>
     pub role: Role,
@@ -1346,6 +1377,7 @@ impl CreateRoleResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSAMLProviderRequest {
     /// <p>The name of the provider to create.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub name: String,
@@ -1372,6 +1404,7 @@ impl CreateSAMLProviderRequestSerializer {
 
 /// <p>Contains the response to a successful <a>CreateSAMLProvider</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateSAMLProviderResponse {
     /// <p>The Amazon Resource Name (ARN) of the new SAML provider resource in IAM.</p>
     pub saml_provider_arn: Option<String>,
@@ -1401,6 +1434,7 @@ impl CreateSAMLProviderResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServiceLinkedRoleRequest {
     /// <p>The service principal for the AWS service to which this role is attached. You use a string similar to a URL but without the http:// in front. For example: <code>elasticbeanstalk.amazonaws.com</code>. </p> <p>Service principals are unique and case-sensitive. To find the exact service principal for your service-linked role, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html">AWS Services That Work with IAM</a> in the <i>IAM User Guide</i>. Look for the services that have <b>Yes </b>in the <b>Service-Linked Role</b> column. Choose the <b>Yes</b> link to view the service-linked role documentation for that service.</p>
     pub aws_service_name: String,
@@ -1433,6 +1467,7 @@ impl CreateServiceLinkedRoleRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateServiceLinkedRoleResponse {
     /// <p>A <a>Role</a> object that contains details about the newly created role.</p>
     pub role: Option<Role>,
@@ -1461,6 +1496,7 @@ impl CreateServiceLinkedRoleResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServiceSpecificCredentialRequest {
     /// <p>The name of the AWS service that is to be associated with the credentials. The service you specify here is the only service that can be accessed using these credentials.</p>
     pub service_name: String,
@@ -1483,6 +1519,7 @@ impl CreateServiceSpecificCredentialRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateServiceSpecificCredentialResponse {
     /// <p><p>A structure that contains information about the newly created service-specific credential.</p> <important> <p>This is the only time that the password for this credential set is available. It cannot be recovered later. Instead, you must reset the password with <a>ResetServiceSpecificCredential</a>.</p> </important></p>
     pub service_specific_credential: Option<ServiceSpecificCredential>,
@@ -1515,6 +1552,7 @@ impl CreateServiceSpecificCredentialResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p> The path for the user name. For more information about paths, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path: Option<String>,
@@ -1553,6 +1591,7 @@ impl CreateUserRequestSerializer {
 
 /// <p>Contains the response to a successful <a>CreateUser</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateUserResponse {
     /// <p>A structure with details about the new IAM user.</p>
     pub user: Option<User>,
@@ -1577,6 +1616,7 @@ impl CreateUserResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualMFADeviceRequest {
     /// <p> The path for the virtual MFA device. For more information about paths, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path: Option<String>,
@@ -1605,6 +1645,7 @@ impl CreateVirtualMFADeviceRequestSerializer {
 
 /// <p>Contains the response to a successful <a>CreateVirtualMFADevice</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateVirtualMFADeviceResponse {
     /// <p>A structure containing details about the new virtual MFA device.</p>
     pub virtual_mfa_device: VirtualMFADevice,
@@ -1645,6 +1686,7 @@ impl DateTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeactivateMFADeviceRequest {
     /// <p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>
     pub serial_number: String,
@@ -1667,6 +1709,7 @@ impl DeactivateMFADeviceRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccessKeyRequest {
     /// <p>The access key ID for the access key ID and secret access key you want to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub access_key_id: String,
@@ -1691,6 +1734,7 @@ impl DeleteAccessKeyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccountAliasRequest {
     /// <p>The name of the account alias to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>
     pub account_alias: String,
@@ -1710,6 +1754,7 @@ impl DeleteAccountAliasRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupPolicyRequest {
     /// <p>The name (friendly name, not ARN) identifying the group that the policy is embedded in.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -1732,6 +1777,7 @@ impl DeleteGroupPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
     /// <p>The name of the IAM group to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -1751,6 +1797,7 @@ impl DeleteGroupRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceProfileRequest {
     /// <p>The name of the instance profile to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
@@ -1773,6 +1820,7 @@ impl DeleteInstanceProfileRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoginProfileRequest {
     /// <p>The name of the user whose password you want to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
@@ -1792,6 +1840,7 @@ impl DeleteLoginProfileRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOpenIDConnectProviderRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM OpenID Connect provider resource object to delete. You can get a list of OpenID Connect provider resource ARNs by using the <a>ListOpenIDConnectProviders</a> operation.</p>
     pub open_id_connect_provider_arn: String,
@@ -1814,6 +1863,7 @@ impl DeleteOpenIDConnectProviderRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to delete.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -1833,6 +1883,7 @@ impl DeletePolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy from which you want to delete a version.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -1855,6 +1906,7 @@ impl DeletePolicyVersionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRolePermissionsBoundaryRequest {
     /// <p>The name (friendly name, not ARN) of the IAM role from which you want to remove the permissions boundary.</p>
     pub role_name: String,
@@ -1874,6 +1926,7 @@ impl DeleteRolePermissionsBoundaryRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRolePolicyRequest {
     /// <p>The name of the inline policy to delete from the specified IAM role.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
@@ -1896,6 +1949,7 @@ impl DeleteRolePolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoleRequest {
     /// <p>The name of the role to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
@@ -1915,6 +1969,7 @@ impl DeleteRoleRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSAMLProviderRequest {
     /// <p>The Amazon Resource Name (ARN) of the SAML provider to delete.</p>
     pub saml_provider_arn: String,
@@ -1937,6 +1992,7 @@ impl DeleteSAMLProviderRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSSHPublicKeyRequest {
     /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub ssh_public_key_id: String,
@@ -1962,6 +2018,7 @@ impl DeleteSSHPublicKeyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServerCertificateRequest {
     /// <p>The name of the server certificate you want to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub server_certificate_name: String,
@@ -1984,6 +2041,7 @@ impl DeleteServerCertificateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceLinkedRoleRequest {
     /// <p>The name of the service-linked role to be deleted.</p>
     pub role_name: String,
@@ -2003,6 +2061,7 @@ impl DeleteServiceLinkedRoleRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteServiceLinkedRoleResponse {
     /// <p>The deletion task identifier that you can use to check the status of the deletion. This identifier is returned in the format <code>task/aws-service-role/&lt;service-principal-name&gt;/&lt;role-name&gt;/&lt;task-uuid&gt;</code>.</p>
     pub deletion_task_id: String,
@@ -2032,6 +2091,7 @@ impl DeleteServiceLinkedRoleResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceSpecificCredentialRequest {
     /// <p>The unique identifier of the service-specific credential. You can get this value by calling <a>ListServiceSpecificCredentials</a>.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub service_specific_credential_id: String,
@@ -2059,6 +2119,7 @@ impl DeleteServiceSpecificCredentialRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSigningCertificateRequest {
     /// <p>The ID of the signing certificate to delete.</p> <p>The format of this parameter, as described by its <a href="http://wikipedia.org/wiki/regex">regex</a> pattern, is a string of characters that can be upper- or lower-cased letters or digits.</p>
     pub certificate_id: String,
@@ -2086,6 +2147,7 @@ impl DeleteSigningCertificateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserPermissionsBoundaryRequest {
     /// <p>The name (friendly name, not ARN) of the IAM user from which you want to remove the permissions boundary.</p>
     pub user_name: String,
@@ -2105,6 +2167,7 @@ impl DeleteUserPermissionsBoundaryRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserPolicyRequest {
     /// <p>The name identifying the policy document to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
@@ -2127,6 +2190,7 @@ impl DeleteUserPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>The name of the user to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
@@ -2146,6 +2210,7 @@ impl DeleteUserRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualMFADeviceRequest {
     /// <p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the same as the ARN.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>
     pub serial_number: String,
@@ -2166,6 +2231,7 @@ impl DeleteVirtualMFADeviceRequestSerializer {
 
 /// <p>The reason that the service-linked role deletion failed.</p> <p>This data type is used as a response element in the <a>GetServiceLinkedRoleDeletionStatus</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeletionTaskFailureReasonType {
     /// <p>A short description of the reason that the service-linked role deletion failed.</p>
     pub reason: Option<String>,
@@ -2223,6 +2289,7 @@ impl DeletionTaskStatusTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachGroupPolicyRequest {
     /// <p>The name (friendly name, not ARN) of the IAM group to detach the policy from.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -2245,6 +2312,7 @@ impl DetachGroupPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachRolePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -2267,6 +2335,7 @@ impl DetachRolePolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachUserPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -2289,6 +2358,7 @@ impl DetachUserPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableMFADeviceRequest {
     /// <p><p>An authentication code emitted by the device. </p> <p>The format for this parameter is a string of six digits.</p> <important> <p>Submit your request immediately after generating the authentication codes. If you generate the codes and then wait too long to submit the request, the MFA device successfully associates with the user but the MFA device becomes out of sync. This happens because time-based one-time passwords (TOTP) expire after a short period of time. If this happens, you can <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_sync.html">resync the device</a>.</p> </important></p>
     pub authentication_code_1: String,
@@ -2324,6 +2394,7 @@ impl EnableMFADeviceRequestSerializer {
 
 /// <p>An object that contains details about when the IAM entities (users or roles) were last used in an attempt to access the specified AWS service.</p> <p>This data type is a response element in the <a>GetServiceLastAccessedDetailsWithEntities</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EntityDetails {
     /// <p>The <code>EntityInfo</code> object that contains details about the entity (user or role).</p>
     pub entity_info: EntityInfo,
@@ -2374,6 +2445,7 @@ impl EntityDetailsListTypeDeserializer {
 }
 /// <p>Contains details about the specified entity (user or role).</p> <p>This data type is an element of the <a>EntityDetails</a> object.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EntityInfo {
     pub arn: String,
     /// <p>The identifier of the entity (user or role).</p>
@@ -2441,6 +2513,7 @@ impl EntityNameTypeDeserializer {
 }
 /// <p>Contains information about the reason that the operation failed.</p> <p>This data type is used as a response element in the <a>GetOrganizationsAccessReport</a>, <a>GetServiceLastAccessedDetails</a>, and <a>GetServiceLastAccessedDetailsWithEntities</a> operations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ErrorDetails {
     /// <p>The error code associated with the operation failure.</p>
     pub code: String,
@@ -2505,6 +2578,7 @@ impl EvalDecisionSourceTypeDeserializer {
 }
 /// <p>Contains the results of a simulation.</p> <p>This data type is used by the return parameter of <code> <a>SimulateCustomPolicy</a> </code> and <code> <a>SimulatePrincipalPolicy</a> </code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EvaluationResult {
     /// <p>The name of the API operation tested on the indicated resource.</p>
     pub eval_action_name: String,
@@ -2620,6 +2694,7 @@ impl ExistingUserNameTypeDeserializer {
 }
 /// <p>Contains the response to a successful <a>GenerateCredentialReport</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GenerateCredentialReportResponse {
     /// <p>Information about the credential report.</p>
     pub description: Option<String>,
@@ -2657,6 +2732,7 @@ impl GenerateCredentialReportResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateOrganizationsAccessReportRequest {
     /// <p>The path of the AWS Organizations entity (root, OU, or account). You can build an entity path using the known structure of your organization. For example, assume that your account ID is <code>123456789012</code> and its parent OU ID is <code>ou-rge0-awsabcde</code>. The organization root ID is <code>r-f6g7h8i9j0example</code> and your organization ID is <code>o-a1b2c3d4e5</code>. Your entity path is <code>o-a1b2c3d4e5/r-f6g7h8i9j0example/ou-rge0-awsabcde/123456789012</code>.</p>
     pub entity_path: String,
@@ -2684,6 +2760,7 @@ impl GenerateOrganizationsAccessReportRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GenerateOrganizationsAccessReportResponse {
     /// <p>The job identifier that you can use in the <a>GetOrganizationsAccessReport</a> operation.</p>
     pub job_id: Option<String>,
@@ -2712,6 +2789,7 @@ impl GenerateOrganizationsAccessReportResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateServiceLastAccessedDetailsRequest {
     /// <p>The ARN of the IAM resource (user, group, role, or managed policy) used to generate information about when the resource was last used in an attempt to access an AWS service.</p>
     pub arn: String,
@@ -2731,6 +2809,7 @@ impl GenerateServiceLastAccessedDetailsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GenerateServiceLastAccessedDetailsResponse {
     /// <p>The job ID that you can use in the <a>GetServiceLastAccessedDetails</a> or <a>GetServiceLastAccessedDetailsWithEntities</a> operations.</p>
     pub job_id: Option<String>,
@@ -2759,6 +2838,7 @@ impl GenerateServiceLastAccessedDetailsResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccessKeyLastUsedRequest {
     /// <p>The identifier of an access key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub access_key_id: String,
@@ -2779,6 +2859,7 @@ impl GetAccessKeyLastUsedRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetAccessKeyLastUsed</a> request. It is also returned as a member of the <a>AccessKeyMetaData</a> structure returned by the <a>ListAccessKeys</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAccessKeyLastUsedResponse {
     /// <p>Contains information about the last time the access key was used.</p>
     pub access_key_last_used: Option<AccessKeyLastUsed>,
@@ -2816,6 +2897,7 @@ impl GetAccessKeyLastUsedResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountAuthorizationDetailsRequest {
     /// <p>A list of entity types used to filter the results. Only the entities that match the types you specify are included in the output. Use the value <code>LocalManagedPolicy</code> to include customer managed policies.</p> <p>The format for this parameter is a comma-separated (if more than one) list of strings. Each string value in the list must be one of the valid values listed below.</p>
     pub filter: Option<Vec<String>>,
@@ -2852,6 +2934,7 @@ impl GetAccountAuthorizationDetailsRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetAccountAuthorizationDetails</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAccountAuthorizationDetailsResponse {
     /// <p>A list containing information about IAM groups.</p>
     pub group_detail_list: Option<Vec<GroupDetail>>,
@@ -2919,6 +3002,7 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
 }
 /// <p>Contains the response to a successful <a>GetAccountPasswordPolicy</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAccountPasswordPolicyResponse {
     /// <p>A structure that contains details about the account's password policy.</p>
     pub password_policy: PasswordPolicy,
@@ -2949,6 +3033,7 @@ impl GetAccountPasswordPolicyResponseDeserializer {
 }
 /// <p>Contains the response to a successful <a>GetAccountSummary</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAccountSummaryResponse {
     /// <p>A set of key–value pairs containing information about IAM entity usage and IAM quotas.</p>
     pub summary_map: Option<::std::collections::HashMap<String, i64>>,
@@ -2980,6 +3065,7 @@ impl GetAccountSummaryResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContextKeysForCustomPolicyRequest {
     /// <p><p>A list of policies for which you want the list of context keys referenced in those policies. Each document is specified as a string containing the complete, valid JSON text of an IAM policy.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_input_list: Vec<String>,
@@ -3004,6 +3090,7 @@ impl GetContextKeysForCustomPolicyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetContextKeysForPrincipalPolicy</a> or <a>GetContextKeysForCustomPolicy</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetContextKeysForPolicyResponse {
     /// <p>The list of context keys that are referenced in the input policies.</p>
     pub context_key_names: Option<Vec<String>>,
@@ -3037,6 +3124,7 @@ impl GetContextKeysForPolicyResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContextKeysForPrincipalPolicyRequest {
     /// <p><p>An optional list of additional policies for which you want the list of context keys that are referenced.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_input_list: Option<Vec<String>>,
@@ -3069,6 +3157,7 @@ impl GetContextKeysForPrincipalPolicyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetCredentialReport</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCredentialReportResponse {
     /// <p>Contains the credential report. The report is Base64-encoded.</p>
     pub content: Option<bytes::Bytes>,
@@ -3113,6 +3202,7 @@ impl GetCredentialReportResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupPolicyRequest {
     /// <p>The name of the group the policy is associated with.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -3136,6 +3226,7 @@ impl GetGroupPolicyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetGroupPolicy</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetGroupPolicyResponse {
     /// <p>The group the policy is associated with.</p>
     pub group_name: String,
@@ -3171,6 +3262,7 @@ impl GetGroupPolicyResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupRequest {
     /// <p>The name of the group.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -3201,6 +3293,7 @@ impl GetGroupRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetGroup</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetGroupResponse {
     /// <p>A structure that contains details about the group.</p>
     pub group: Group,
@@ -3244,6 +3337,7 @@ impl GetGroupResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceProfileRequest {
     /// <p>The name of the instance profile to get information about.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
@@ -3267,6 +3361,7 @@ impl GetInstanceProfileRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetInstanceProfile</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetInstanceProfileResponse {
     /// <p>A structure containing details about the instance profile.</p>
     pub instance_profile: InstanceProfile,
@@ -3296,6 +3391,7 @@ impl GetInstanceProfileResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoginProfileRequest {
     /// <p>The name of the user whose login profile you want to retrieve.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
@@ -3316,6 +3412,7 @@ impl GetLoginProfileRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetLoginProfile</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetLoginProfileResponse {
     /// <p>A structure containing the user name and password create date for the user.</p>
     pub login_profile: LoginProfile,
@@ -3345,6 +3442,7 @@ impl GetLoginProfileResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpenIDConnectProviderRequest {
     /// <p>The Amazon Resource Name (ARN) of the OIDC provider resource object in IAM to get information for. You can get a list of OIDC provider resource ARNs by using the <a>ListOpenIDConnectProviders</a> operation.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub open_id_connect_provider_arn: String,
@@ -3368,6 +3466,7 @@ impl GetOpenIDConnectProviderRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetOpenIDConnectProvider</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetOpenIDConnectProviderResponse {
     /// <p>A list of client IDs (also known as audiences) that are associated with the specified IAM OIDC provider resource object. For more information, see <a>CreateOpenIDConnectProvider</a>.</p>
     pub client_id_list: Option<Vec<String>>,
@@ -3418,6 +3517,7 @@ impl GetOpenIDConnectProviderResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOrganizationsAccessReportRequest {
     /// <p>The identifier of the request generated by the <a>GenerateOrganizationsAccessReport</a> operation.</p>
     pub job_id: String,
@@ -3452,6 +3552,7 @@ impl GetOrganizationsAccessReportRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetOrganizationsAccessReportResponse {
     /// <p>An object that contains details about the most recent attempt to access the service.</p>
     pub access_details: Option<Vec<AccessDetail>>,
@@ -3538,6 +3639,7 @@ impl GetOrganizationsAccessReportResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the managed policy that you want information about.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -3558,6 +3660,7 @@ impl GetPolicyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetPolicy</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPolicyResponse {
     /// <p>A structure containing details about the policy.</p>
     pub policy: Option<Policy>,
@@ -3582,6 +3685,7 @@ impl GetPolicyResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the managed policy that you want information about.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -3605,6 +3709,7 @@ impl GetPolicyVersionRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetPolicyVersion</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPolicyVersionResponse {
     /// <p>A structure containing details about the policy version.</p>
     pub policy_version: Option<PolicyVersion>,
@@ -3636,6 +3741,7 @@ impl GetPolicyVersionResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRolePolicyRequest {
     /// <p>The name of the policy document to get.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
@@ -3659,6 +3765,7 @@ impl GetRolePolicyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetRolePolicy</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetRolePolicyResponse {
     /// <p>The policy document.</p> <p>IAM stores policies in JSON format. However, resources that were created using AWS CloudFormation templates can be formatted in YAML. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.</p>
     pub policy_document: String,
@@ -3694,6 +3801,7 @@ impl GetRolePolicyResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoleRequest {
     /// <p>The name of the IAM role to get information about.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
@@ -3714,6 +3822,7 @@ impl GetRoleRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetRole</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetRoleResponse {
     /// <p>A structure containing details about the IAM role.</p>
     pub role: Role,
@@ -3738,6 +3847,7 @@ impl GetRoleResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSAMLProviderRequest {
     /// <p>The Amazon Resource Name (ARN) of the SAML provider resource object in IAM to get information about.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub saml_provider_arn: String,
@@ -3761,6 +3871,7 @@ impl GetSAMLProviderRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetSAMLProvider</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetSAMLProviderResponse {
     /// <p>The date and time when the SAML provider was created.</p>
     pub create_date: Option<String>,
@@ -3805,6 +3916,7 @@ impl GetSAMLProviderResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSSHPublicKeyRequest {
     /// <p>Specifies the public key encoding format to use in the response. To retrieve the public key in ssh-rsa format, use <code>SSH</code>. To retrieve the public key in PEM format, use <code>PEM</code>.</p>
     pub encoding: String,
@@ -3834,6 +3946,7 @@ impl GetSSHPublicKeyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetSSHPublicKey</a> request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetSSHPublicKeyResponse {
     /// <p>A structure containing details about the SSH public key.</p>
     pub ssh_public_key: Option<SSHPublicKey>,
@@ -3865,6 +3978,7 @@ impl GetSSHPublicKeyResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServerCertificateRequest {
     /// <p>The name of the server certificate you want to retrieve information about.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub server_certificate_name: String,
@@ -3888,6 +4002,7 @@ impl GetServerCertificateRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetServerCertificate</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetServerCertificateResponse {
     /// <p>A structure containing details about the server certificate.</p>
     pub server_certificate: ServerCertificate,
@@ -3917,6 +4032,7 @@ impl GetServerCertificateResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceLastAccessedDetailsRequest {
     /// <p>The ID of the request generated by the <a>GenerateServiceLastAccessedDetails</a> operation.</p>
     pub job_id: String,
@@ -3946,6 +4062,7 @@ impl GetServiceLastAccessedDetailsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetServiceLastAccessedDetailsResponse {
     /// <p>An object that contains details about the reason the operation failed.</p>
     pub error: Option<ErrorDetails>,
@@ -4015,6 +4132,7 @@ impl GetServiceLastAccessedDetailsResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceLastAccessedDetailsWithEntitiesRequest {
     /// <p>The ID of the request generated by the <code>GenerateServiceLastAccessedDetails</code> operation.</p>
     pub job_id: String,
@@ -4054,6 +4172,7 @@ impl GetServiceLastAccessedDetailsWithEntitiesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetServiceLastAccessedDetailsWithEntitiesResponse {
     /// <p>An <code>EntityDetailsList</code> object that contains details about when an IAM entity (user or role) used group or policy permissions in an attempt to access the specified AWS service.</p>
     pub entity_details_list: Vec<EntityDetails>,
@@ -4123,6 +4242,7 @@ impl GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceLinkedRoleDeletionStatusRequest {
     /// <p>The deletion task identifier. This identifier is returned by the <a>DeleteServiceLinkedRole</a> operation in the format <code>task/aws-service-role/&lt;service-principal-name&gt;/&lt;role-name&gt;/&lt;task-uuid&gt;</code>.</p>
     pub deletion_task_id: String,
@@ -4145,6 +4265,7 @@ impl GetServiceLinkedRoleDeletionStatusRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetServiceLinkedRoleDeletionStatusResponse {
     /// <p>An object that contains details about the reason the deletion failed.</p>
     pub reason: Option<DeletionTaskFailureReasonType>,
@@ -4181,6 +4302,7 @@ impl GetServiceLinkedRoleDeletionStatusResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserPolicyRequest {
     /// <p>The name of the policy document to get.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
@@ -4204,6 +4326,7 @@ impl GetUserPolicyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetUserPolicy</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetUserPolicyResponse {
     /// <p>The policy document.</p> <p>IAM stores policies in JSON format. However, resources that were created using AWS CloudFormation templates can be formatted in YAML. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.</p>
     pub policy_document: String,
@@ -4240,6 +4363,7 @@ impl GetUserPolicyResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserRequest {
     /// <p>The name of the user to get information about.</p> <p>This parameter is optional. If it is not included, it defaults to the user making the request. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
@@ -4262,6 +4386,7 @@ impl GetUserRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetUser</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetUserResponse {
     /// <p><p>A structure containing details about the IAM user.</p> <important> <p>Due to a service issue, password last used data does not include password use from May 3, 2018 22:50 PDT to May 23, 2018 14:08 PDT. This affects <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_finding-unused.html">last sign-in</a> dates shown in the IAM console and password last used dates in the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html">IAM credential report</a>, and returned by this GetUser API. If users signed in during the affected time, the password last used date that is returned is the date the user last signed in before May 3, 2018. For users that signed in after May 23, 2018 14:08 PDT, the returned password last used date is accurate.</p> <p>You can use password last used information to identify unused credentials for deletion. For example, you might delete users who did not sign in to AWS in the last 90 days. In cases like this, we recommend that you adjust your evaluation window to include dates after May 23, 2018. Alternatively, if your users use access keys to access AWS programmatically you can refer to access key last used information because it is accurate for all dates. </p> </important></p>
     pub user: User,
@@ -4287,6 +4412,7 @@ impl GetUserResponseDeserializer {
 }
 /// <p><p>Contains information about an IAM group entity.</p> <p>This data type is used as a response element in the following operations:</p> <ul> <li> <p> <a>CreateGroup</a> </p> </li> <li> <p> <a>GetGroup</a> </p> </li> <li> <p> <a>ListGroups</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Group {
     /// <p> The Amazon Resource Name (ARN) specifying the group. For more information about ARNs and how to use them in policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>. </p>
     pub arn: String,
@@ -4329,6 +4455,7 @@ impl GroupDeserializer {
 }
 /// <p>Contains information about an IAM group, including all of the group's policies.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GroupDetail {
     pub arn: Option<String>,
     /// <p>A list of the managed policies attached to the group.</p>
@@ -4464,6 +4591,7 @@ impl IdTypeDeserializer {
 }
 /// <p><p>Contains information about an instance profile.</p> <p>This data type is used as a response element in the following operations:</p> <ul> <li> <p> <a>CreateInstanceProfile</a> </p> </li> <li> <p> <a>GetInstanceProfile</a> </p> </li> <li> <p> <a>ListInstanceProfiles</a> </p> </li> <li> <p> <a>ListInstanceProfilesForRole</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceProfile {
     /// <p> The Amazon Resource Name (ARN) specifying the instance profile. For more information about ARNs and how to use them in policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>. </p>
     pub arn: String,
@@ -4590,6 +4718,7 @@ impl LineNumberDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccessKeysRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -4622,6 +4751,7 @@ impl ListAccessKeysRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListAccessKeys</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListAccessKeysResponse {
     /// <p>A list of objects containing metadata about the access keys.</p>
     pub access_key_metadata: Vec<AccessKeyMetadata>,
@@ -4664,6 +4794,7 @@ impl ListAccessKeysResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountAliasesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -4691,6 +4822,7 @@ impl ListAccountAliasesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListAccountAliases</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListAccountAliasesResponse {
     /// <p>A list of aliases associated with the account. AWS supports only one alias per account.</p>
     pub account_aliases: Vec<String>,
@@ -4736,6 +4868,7 @@ impl ListAccountAliasesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttachedGroupPoliciesRequest {
     /// <p>The name (friendly name, not ARN) of the group to list attached policies for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -4771,6 +4904,7 @@ impl ListAttachedGroupPoliciesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListAttachedGroupPolicies</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListAttachedGroupPoliciesResponse {
     /// <p>A list of the attached policies.</p>
     pub attached_policies: Option<Vec<AttachedPolicy>>,
@@ -4817,6 +4951,7 @@ impl ListAttachedGroupPoliciesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttachedRolePoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -4852,6 +4987,7 @@ impl ListAttachedRolePoliciesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListAttachedRolePolicies</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListAttachedRolePoliciesResponse {
     /// <p>A list of the attached policies.</p>
     pub attached_policies: Option<Vec<AttachedPolicy>>,
@@ -4898,6 +5034,7 @@ impl ListAttachedRolePoliciesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttachedUserPoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -4933,6 +5070,7 @@ impl ListAttachedUserPoliciesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListAttachedUserPolicies</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListAttachedUserPoliciesResponse {
     /// <p>A list of the attached policies.</p>
     pub attached_policies: Option<Vec<AttachedPolicy>>,
@@ -4979,6 +5117,7 @@ impl ListAttachedUserPoliciesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesForPolicyRequest {
     /// <p>The entity type to use for filtering the results.</p> <p>For example, when <code>EntityFilter</code> is <code>Role</code>, only the roles that are attached to the specified policy are returned. This parameter is optional. If it is not included, all attached entities (users, groups, and roles) are returned. The argument for this parameter must be one of the valid values listed below.</p>
     pub entity_filter: Option<String>,
@@ -5024,6 +5163,7 @@ impl ListEntitiesForPolicyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListEntitiesForPolicy</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListEntitiesForPolicyResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -5081,6 +5221,7 @@ impl ListEntitiesForPolicyResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupPoliciesRequest {
     /// <p>The name of the group to list policies for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -5111,6 +5252,7 @@ impl ListGroupPoliciesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListGroupPolicies</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListGroupPoliciesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -5156,6 +5298,7 @@ impl ListGroupPoliciesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsForUserRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5186,6 +5329,7 @@ impl ListGroupsForUserRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListGroupsForUser</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListGroupsForUserResponse {
     /// <p>A list of groups.</p>
     pub groups: Vec<Group>,
@@ -5228,6 +5372,7 @@ impl ListGroupsForUserResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5260,6 +5405,7 @@ impl ListGroupsRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListGroups</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListGroupsResponse {
     /// <p>A list of groups.</p>
     pub groups: Vec<Group>,
@@ -5298,6 +5444,7 @@ impl ListGroupsResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceProfilesForRoleRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5328,6 +5475,7 @@ impl ListInstanceProfilesForRoleRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListInstanceProfilesForRole</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListInstanceProfilesForRoleResponse {
     /// <p>A list of instance profiles.</p>
     pub instance_profiles: Vec<InstanceProfile>,
@@ -5374,6 +5522,7 @@ impl ListInstanceProfilesForRoleResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceProfilesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5406,6 +5555,7 @@ impl ListInstanceProfilesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListInstanceProfiles</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListInstanceProfilesResponse {
     /// <p>A list of instance profiles.</p>
     pub instance_profiles: Vec<InstanceProfile>,
@@ -5452,6 +5602,7 @@ impl ListInstanceProfilesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMFADevicesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5484,6 +5635,7 @@ impl ListMFADevicesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListMFADevices</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListMFADevicesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -5525,6 +5677,7 @@ impl ListMFADevicesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOpenIDConnectProvidersRequest {}
 
 /// Serialize `ListOpenIDConnectProvidersRequest` contents to a `SignedRequest`.
@@ -5540,6 +5693,7 @@ impl ListOpenIDConnectProvidersRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListOpenIDConnectProviders</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListOpenIDConnectProvidersResponse {
     /// <p>The list of IAM OIDC provider resource objects defined in the AWS account.</p>
     pub open_id_connect_provider_list: Option<Vec<OpenIDConnectProviderListEntry>>,
@@ -5574,6 +5728,7 @@ impl ListOpenIDConnectProvidersResponseDeserializer {
 }
 /// <p>Contains details about the permissions policies that are attached to the specified identity (user, group, or role).</p> <p>This data type is used as a response element in the <a>ListPoliciesGrantingServiceAccess</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPoliciesGrantingServiceAccessEntry {
     /// <p>The <code>PoliciesGrantingServiceAccess</code> object that contains details about the policy.</p>
     pub policies: Option<Vec<PolicyGrantingServiceAccess>>,
@@ -5615,6 +5770,7 @@ impl ListPoliciesGrantingServiceAccessEntryDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPoliciesGrantingServiceAccessRequest {
     /// <p>The ARN of the IAM identity (user, group, or role) whose policies you want to list.</p>
     pub arn: String,
@@ -5646,6 +5802,7 @@ impl ListPoliciesGrantingServiceAccessRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPoliciesGrantingServiceAccessResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -5687,6 +5844,7 @@ impl ListPoliciesGrantingServiceAccessResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5734,6 +5892,7 @@ impl ListPoliciesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListPolicies</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPoliciesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -5794,6 +5953,7 @@ impl ListPolicyGrantingServiceAccessResponseListTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPolicyVersionsRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5824,6 +5984,7 @@ impl ListPolicyVersionsRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListPolicyVersions</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPolicyVersionsResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -5869,6 +6030,7 @@ impl ListPolicyVersionsResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRolePoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5899,6 +6061,7 @@ impl ListRolePoliciesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListRolePolicies</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListRolePoliciesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -5944,6 +6107,7 @@ impl ListRolePoliciesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoleTagsRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5973,6 +6137,7 @@ impl ListRoleTagsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListRoleTagsResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can use the <code>Marker</code> request parameter to make a subsequent pagination request that retrieves more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when more results are available. Check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -6011,6 +6176,7 @@ impl ListRoleTagsResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRolesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6043,6 +6209,7 @@ impl ListRolesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListRoles</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListRolesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -6081,6 +6248,7 @@ impl ListRolesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSAMLProvidersRequest {}
 
 /// Serialize `ListSAMLProvidersRequest` contents to a `SignedRequest`.
@@ -6096,6 +6264,7 @@ impl ListSAMLProvidersRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListSAMLProviders</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListSAMLProvidersResponse {
     /// <p>The list of SAML provider resource objects defined in IAM for this AWS account.</p>
     pub saml_provider_list: Option<Vec<SAMLProviderListEntry>>,
@@ -6129,6 +6298,7 @@ impl ListSAMLProvidersResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSSHPublicKeysRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6161,6 +6331,7 @@ impl ListSSHPublicKeysRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListSSHPublicKeys</a> request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListSSHPublicKeysResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -6204,6 +6375,7 @@ impl ListSSHPublicKeysResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServerCertificatesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6236,6 +6408,7 @@ impl ListServerCertificatesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListServerCertificates</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListServerCertificatesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -6282,6 +6455,7 @@ impl ListServerCertificatesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServiceSpecificCredentialsRequest {
     /// <p>Filters the returned results to only those for the specified AWS service. If not specified, then AWS returns service-specific credentials for all services.</p>
     pub service_name: Option<String>,
@@ -6308,6 +6482,7 @@ impl ListServiceSpecificCredentialsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListServiceSpecificCredentialsResponse {
     /// <p>A list of structures that each contain details about a service-specific credential.</p>
     pub service_specific_credentials: Option<Vec<ServiceSpecificCredentialMetadata>>,
@@ -6341,6 +6516,7 @@ impl ListServiceSpecificCredentialsResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSigningCertificatesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6373,6 +6549,7 @@ impl ListSigningCertificatesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListSigningCertificates</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListSigningCertificatesResponse {
     /// <p>A list of the user's signing certificate information.</p>
     pub certificates: Vec<SigningCertificate>,
@@ -6418,6 +6595,7 @@ impl ListSigningCertificatesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserPoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6448,6 +6626,7 @@ impl ListUserPoliciesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListUserPolicies</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListUserPoliciesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -6493,6 +6672,7 @@ impl ListUserPoliciesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserTagsRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6522,6 +6702,7 @@ impl ListUserTagsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListUserTagsResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can use the <code>Marker</code> request parameter to make a subsequent pagination request that retrieves more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when more results are available. Check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -6560,6 +6741,7 @@ impl ListUserTagsResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6592,6 +6774,7 @@ impl ListUsersRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListUsers</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListUsersResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -6630,6 +6813,7 @@ impl ListUsersResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualMFADevicesRequest {
     /// <p> The status (<code>Unassigned</code> or <code>Assigned</code>) of the devices to list. If you do not specify an <code>AssignmentStatus</code>, the operation defaults to <code>Any</code>, which lists both assigned and unassigned virtual MFA devices.,</p>
     pub assignment_status: Option<String>,
@@ -6662,6 +6846,7 @@ impl ListVirtualMFADevicesRequestSerializer {
 
 /// <p>Contains the response to a successful <a>ListVirtualMFADevices</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListVirtualMFADevicesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
@@ -6709,6 +6894,7 @@ impl ListVirtualMFADevicesResponseDeserializer {
 }
 /// <p>Contains the user name and password create date for a user.</p> <p> This data type is used as a response element in the <a>CreateLoginProfile</a> and <a>GetLoginProfile</a> operations. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoginProfile {
     /// <p>The date when the password for the user was created.</p>
     pub create_date: String,
@@ -6747,6 +6933,7 @@ impl LoginProfileDeserializer {
 }
 /// <p>Contains information about an MFA device.</p> <p>This data type is used as a response element in the <a>ListMFADevices</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct MFADevice {
     /// <p>The date when the MFA device was enabled for the user.</p>
     pub enable_date: String,
@@ -6783,6 +6970,7 @@ impl MFADeviceDeserializer {
 }
 /// <p>Contains information about a managed policy, including the policy's ARN, versions, and the number of principal entities (users, groups, and roles) that the policy is attached to.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p> <p>For more information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ManagedPolicyDetail {
     pub arn: Option<String>,
     /// <p>The number of principal entities (users, groups, and roles) that the policy is attached to.</p>
@@ -6953,6 +7141,7 @@ impl MinimumPasswordLengthTypeDeserializer {
 }
 /// <p>Contains the Amazon Resource Name (ARN) for an IAM OpenID Connect provider.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OpenIDConnectProviderListEntry {
     pub arn: Option<String>,
 }
@@ -7011,6 +7200,7 @@ impl OpenIDConnectProviderUrlTypeDeserializer {
 }
 /// <p>Contains information about the effect that Organizations has on a policy simulation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OrganizationsDecisionDetail {
     /// <p>Specifies whether the simulated operation is allowed by the Organizations service control policies that impact the simulated user's account.</p>
     pub allowed_by_organizations: Option<bool>,
@@ -7054,6 +7244,7 @@ impl OrganizationsEntityPathTypeDeserializer {
 }
 /// <p>Contains information about the account password policy.</p> <p> This data type is used as a response element in the <a>GetAccountPasswordPolicy</a> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PasswordPolicy {
     /// <p>Specifies whether IAM users are allowed to change their own password.</p>
     pub allow_users_to_change_password: Option<bool>,
@@ -7188,6 +7379,7 @@ impl PermissionsBoundaryAttachmentTypeDeserializer {
 }
 /// <p>Contains information about a managed policy.</p> <p>This data type is used as a response element in the <a>CreatePolicy</a>, <a>GetPolicy</a>, and <a>ListPolicies</a> operations. </p> <p>For more information about managed policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Policy {
     pub arn: Option<String>,
     /// <p>The number of entities (users, groups, and roles) that the policy is attached to.</p>
@@ -7287,6 +7479,7 @@ impl PolicyDescriptionTypeDeserializer {
 }
 /// <p>Contains information about an IAM policy, including the policy document.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyDetail {
     /// <p>The policy document.</p>
     pub policy_document: Option<String>,
@@ -7379,6 +7572,7 @@ impl PolicyEvaluationDecisionTypeDeserializer {
 }
 /// <p>Contains details about the permissions policies that are attached to the specified identity (user, group, or role).</p> <p>This data type is an element of the <a>ListPoliciesGrantingServiceAccessEntry</a> object.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyGrantingServiceAccess {
     /// <p>The name of the entity (user or role) to which the inline policy is attached.</p> <p>This field is null for managed policies. For more information about these policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     pub entity_name: Option<String>,
@@ -7454,6 +7648,7 @@ impl PolicyGrantingServiceAccessListTypeDeserializer {
 }
 /// <p>Contains information about a group that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> operation. </p> <p>For more information about managed policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyGroup {
     /// <p>The stable and unique string identifying the group. For more information about IDs, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p>
     pub group_id: Option<String>,
@@ -7580,6 +7775,7 @@ impl PolicyPathTypeDeserializer {
 }
 /// <p>Contains information about a role that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> operation. </p> <p>For more information about managed policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyRole {
     /// <p>The stable and unique string identifying the role. For more information about IDs, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p>
     pub role_id: Option<String>,
@@ -7649,6 +7845,7 @@ impl PolicyTypeDeserializer {
 }
 /// <p>Contains information about a user that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> operation. </p> <p>For more information about managed policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyUser {
     /// <p>The stable and unique string identifying the user. For more information about IDs, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p>
     pub user_id: Option<String>,
@@ -7696,6 +7893,7 @@ impl PolicyUserListTypeDeserializer {
 }
 /// <p>Contains information about a version of a managed policy.</p> <p>This data type is used as a response element in the <a>CreatePolicyVersion</a>, <a>GetPolicyVersion</a>, <a>ListPolicyVersions</a>, and <a>GetAccountAuthorizationDetails</a> operations. </p> <p>For more information about managed policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyVersion {
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the policy version was created.</p>
     pub create_date: Option<String>,
@@ -7755,6 +7953,7 @@ impl PolicyVersionIdTypeDeserializer {
 }
 /// <p>Contains the row and column of a location of a <code>Statement</code> element in a policy document.</p> <p>This data type is used as a member of the <code> <a>Statement</a> </code> type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Position {
     /// <p>The column in the line containing the specified position in the document.</p>
     pub column: Option<i64>,
@@ -7817,6 +8016,7 @@ impl PublicKeyMaterialTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutGroupPolicyRequest {
     /// <p>The name of the group to associate the policy with.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-.</p>
     pub group_name: String,
@@ -7845,6 +8045,7 @@ impl PutGroupPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRolePermissionsBoundaryRequest {
     /// <p>The ARN of the policy that is used to set the permissions boundary for the role.</p>
     pub permissions_boundary: String,
@@ -7870,6 +8071,7 @@ impl PutRolePermissionsBoundaryRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRolePolicyRequest {
     /// <p><p>The policy document.</p> <p>You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
@@ -7898,6 +8100,7 @@ impl PutRolePolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutUserPermissionsBoundaryRequest {
     /// <p>The ARN of the policy that is used to set the permissions boundary for the user.</p>
     pub permissions_boundary: String,
@@ -7923,6 +8126,7 @@ impl PutUserPermissionsBoundaryRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutUserPolicyRequest {
     /// <p><p>The policy document.</p> <p>You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
@@ -7973,6 +8177,7 @@ impl RegionNameTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveClientIDFromOpenIDConnectProviderRequest {
     /// <p>The client ID (also known as audience) to remove from the IAM OIDC provider resource. For more information about client IDs, see <a>CreateOpenIDConnectProvider</a>.</p>
     pub client_id: String,
@@ -8002,6 +8207,7 @@ impl RemoveClientIDFromOpenIDConnectProviderRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveRoleFromInstanceProfileRequest {
     /// <p>The name of the instance profile to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
@@ -8027,6 +8233,7 @@ impl RemoveRoleFromInstanceProfileRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveUserFromGroupRequest {
     /// <p>The name of the group to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -8096,6 +8303,7 @@ impl ReportStateTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetServiceSpecificCredentialRequest {
     /// <p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub service_specific_credential_id: String,
@@ -8123,6 +8331,7 @@ impl ResetServiceSpecificCredentialRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResetServiceSpecificCredentialResponse {
     /// <p><p>A structure with details about the updated service-specific credential, including the new password.</p> <important> <p>This is the <b>only</b> time that you can access the password. You cannot recover the password later, but you can reset it again.</p> </important></p>
     pub service_specific_credential: Option<ServiceSpecificCredential>,
@@ -8179,6 +8388,7 @@ impl ResourceNameTypeDeserializer {
 }
 /// <p>Contains the result of the simulation of a single API operation call on a single resource.</p> <p>This data type is used by a member of the <a>EvaluationResult</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceSpecificResult {
     /// <p>Additional details about the results of the evaluation decision. When there are both IAM policies and resource policies, this parameter explains how each set of policies contributes to the final evaluation decision. When simulating cross-account access to a resource, both the resource-based policy and the caller's IAM policy must grant access.</p>
     pub eval_decision_details: Option<::std::collections::HashMap<String, String>>,
@@ -8269,6 +8479,7 @@ impl ResponseMarkerTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResyncMFADeviceRequest {
     /// <p>An authentication code emitted by the device.</p> <p>The format for this parameter is a sequence of six digits.</p>
     pub authentication_code_1: String,
@@ -8304,6 +8515,7 @@ impl ResyncMFADeviceRequestSerializer {
 
 /// <p>Contains information about an IAM role. This structure is returned as a response element in several API operations that interact with roles.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Role {
     /// <p> The Amazon Resource Name (ARN) specifying the role. For more information about ARNs and how to use them in policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i> guide. </p>
     pub arn: String,
@@ -8407,6 +8619,7 @@ impl RoleDescriptionTypeDeserializer {
 }
 /// <p>Contains information about an IAM role, including all of the role's policies.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RoleDetail {
     pub arn: Option<String>,
     /// <p>The trust policy that grants permission to assume the role.</p>
@@ -8528,6 +8741,7 @@ impl RoleDetailListTypeDeserializer {
 }
 /// <p>Contains information about the last time that an IAM role was used. This includes the date and time and the Region in which the role was last used. Activity is only reported for the trailing 400 days. This period can be shorter if your Region began supporting these features within the last year. The role might have been used more than 400 days ago. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period">Regions Where Data Is Tracked</a> in the <i>IAM User Guide</i>.</p> <p>This data type is returned as a response element in the <a>GetRole</a> and <a>GetAccountAuthorizationDetails</a> operations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RoleLastUsed {
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a> that the role was last used.</p> <p>This field is null if the role has not been used within the IAM tracking period. For more information about the tracking period, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period">Regions Where Data Is Tracked</a> in the <i>IAM User Guide</i>. </p>
     pub last_used_date: Option<String>,
@@ -8615,6 +8829,7 @@ impl RoleUsageListTypeDeserializer {
 }
 /// <p>An object that contains details about how a service-linked role is used, if that information is returned by the service.</p> <p>This data type is used as a response element in the <a>GetServiceLinkedRoleDeletionStatus</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RoleUsageType {
     /// <p>The name of the Region where the service-linked role is being used.</p>
     pub region: Option<String>,
@@ -8658,6 +8873,7 @@ impl SAMLMetadataDocumentTypeDeserializer {
 }
 /// <p>Contains the list of SAML providers for this account.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SAMLProviderListEntry {
     /// <p>The Amazon Resource Name (ARN) of the SAML provider.</p>
     pub arn: Option<String>,
@@ -8712,6 +8928,7 @@ impl SAMLProviderListTypeDeserializer {
 }
 /// <p>Contains information about an SSH public key.</p> <p>This data type is used as a response element in the <a>GetSSHPublicKey</a> and <a>UploadSSHPublicKey</a> operations. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SSHPublicKey {
     /// <p>The MD5 message digest of the SSH public key.</p>
     pub fingerprint: String,
@@ -8784,6 +9001,7 @@ impl SSHPublicKeyListTypeDeserializer {
 }
 /// <p>Contains information about an SSH public key, without the key's body or fingerprint.</p> <p>This data type is used as a response element in the <a>ListSSHPublicKeys</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SSHPublicKeyMetadata {
     /// <p>The unique identifier for the SSH public key.</p>
     pub ssh_public_key_id: String,
@@ -8836,6 +9054,7 @@ impl SerialNumberTypeDeserializer {
 }
 /// <p>Contains information about a server certificate.</p> <p> This data type is used as a response element in the <a>GetServerCertificate</a> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ServerCertificate {
     /// <p>The contents of the public key certificate.</p>
     pub certificate_body: String,
@@ -8879,6 +9098,7 @@ impl ServerCertificateDeserializer {
 }
 /// <p>Contains information about a server certificate without its certificate body, certificate chain, and private key.</p> <p> This data type is used as a response element in the <a>UploadServerCertificate</a> and <a>ListServerCertificates</a> operations. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ServerCertificateMetadata {
     /// <p> The Amazon Resource Name (ARN) specifying the server certificate. For more information about ARNs and how to use them in policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>. </p>
     pub arn: String,
@@ -8970,6 +9190,7 @@ impl ServerCertificateNameTypeDeserializer {
 }
 /// <p>Contains details about the most recent attempt to access the service.</p> <p>This data type is used as a response element in the <a>GetServiceLastAccessedDetails</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ServiceLastAccessed {
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when an authenticated entity most recently attempted to access the service. AWS does not report unauthenticated requests.</p> <p>This field is null if no IAM entities attempted to access the service within the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#service-last-accessed-reporting-period">reporting period</a>.</p>
     pub last_authenticated: Option<String>,
@@ -9082,6 +9303,7 @@ impl ServicePasswordDeserializer {
 }
 /// <p>Contains the details of a service-specific credential.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ServiceSpecificCredential {
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the service-specific credential were created.</p>
     pub create_date: String,
@@ -9159,6 +9381,7 @@ impl ServiceSpecificCredentialIdDeserializer {
 }
 /// <p>Contains additional details about a service-specific credential.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ServiceSpecificCredentialMetadata {
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the service-specific credential were created.</p>
     pub create_date: String,
@@ -9267,6 +9490,7 @@ impl ServicesLastAccessedDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetDefaultPolicyVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy whose default version you want to set.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -9289,6 +9513,7 @@ impl SetDefaultPolicyVersionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSecurityTokenServicePreferencesRequest {
     /// <p>The version of the global endpoint token. Version 1 tokens are valid only in AWS Regions that are available by default. These tokens do not work in manually enabled Regions, such as Asia Pacific (Hong Kong). Version 2 tokens are valid in all Regions. However, version 2 tokens are longer and might affect systems where you temporarily store tokens.</p> <p>For information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
     pub global_endpoint_token_version: String,
@@ -9312,6 +9537,7 @@ impl SetSecurityTokenServicePreferencesRequestSerializer {
 
 /// <p>Contains information about an X.509 signing certificate.</p> <p>This data type is used as a response element in the <a>UploadSigningCertificate</a> and <a>ListSigningCertificates</a> operations. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SigningCertificate {
     /// <p>The contents of the signing certificate.</p>
     pub certificate_body: String,
@@ -9358,6 +9584,7 @@ impl SigningCertificateDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SimulateCustomPolicyRequest {
     /// <p>A list of names of API operations to evaluate in the simulation. Each operation is evaluated against each resource. Each operation must include the service identifier, such as <code>iam:CreateUser</code>. This operation does not support using wildcards (*) in an action name.</p>
     pub action_names: Vec<String>,
@@ -9440,6 +9667,7 @@ impl SimulateCustomPolicyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>SimulatePrincipalPolicy</a> or <a>SimulateCustomPolicy</a> request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SimulatePolicyResponse {
     /// <p>The results of the simulation.</p>
     pub evaluation_results: Option<Vec<EvaluationResult>>,
@@ -9482,6 +9710,7 @@ impl SimulatePolicyResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SimulatePrincipalPolicyRequest {
     /// <p>A list of names of API operations to evaluate in the simulation. Each operation is evaluated for each resource. Each operation must include the service identifier, such as <code>iam:CreateUser</code>.</p>
     pub action_names: Vec<String>,
@@ -9583,6 +9812,7 @@ impl SimulationPolicyListTypeSerializer {
 
 /// <p>Contains a reference to a <code>Statement</code> element in a policy document that determines the result of the simulation.</p> <p>This data type is used by the <code>MatchedStatements</code> member of the <code> <a>EvaluationResult</a> </code> type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Statement {
     /// <p>The row and column of the end of a <code>Statement</code> in an IAM policy.</p>
     pub end_position: Option<Position>,
@@ -9715,6 +9945,8 @@ impl SummaryValueTypeDeserializer {
 }
 /// <p>A structure that represents user-provided metadata that can be associated with a resource such as an IAM user or role. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>The key name that can be used to look up or retrieve the associated value. For example, <code>Department</code> or <code>Cost Center</code> are common choices.</p>
     pub key: String,
@@ -9807,6 +10039,7 @@ impl TagListTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagRoleRequest {
     /// <p>The name of the role that you want to add tags to.</p> <p>This parameter accepts (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that consist of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
@@ -9829,6 +10062,7 @@ impl TagRoleRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagUserRequest {
     /// <p>The list of tags that you want to attach to the user. Each tag consists of a key name and an associated value.</p>
     pub tags: Vec<Tag>,
@@ -9902,6 +10136,7 @@ impl ThumbprintTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagRoleRequest {
     /// <p>The name of the IAM role from which you want to remove tags.</p> <p>This parameter accepts (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that consist of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
@@ -9928,6 +10163,7 @@ impl UntagRoleRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagUserRequest {
     /// <p>A list of key names as a simple array of strings. The tags with matching keys are removed from the specified user.</p>
     pub tag_keys: Vec<String>,
@@ -9954,6 +10190,7 @@ impl UntagUserRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccessKeyRequest {
     /// <p>The access key ID of the secret access key you want to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub access_key_id: String,
@@ -9981,6 +10218,7 @@ impl UpdateAccessKeyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountPasswordPolicyRequest {
     /// <p> Allows all IAM users in your account to use the AWS Management Console to change their own passwords. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/HowToPwdIAMUser.html">Letting IAM Users Change Their Own Passwords</a> in the <i>IAM User Guide</i>.</p> <p>If you do not specify a value for this parameter, then the operation uses the default value of <code>false</code>. The result is that IAM users in the account do not automatically have permissions to change their own password.</p>
     pub allow_users_to_change_password: Option<bool>,
@@ -10057,6 +10295,7 @@ impl UpdateAccountPasswordPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssumeRolePolicyRequest {
     /// <p><p>The policy that grants an entity permission to assume the role.</p> <p>You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
@@ -10082,6 +10321,7 @@ impl UpdateAssumeRolePolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
     /// <p>Name of the IAM group to update. If you're changing the name of the group, this is the original name.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -10111,6 +10351,7 @@ impl UpdateGroupRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLoginProfileRequest {
     /// <p>The new password for the specified IAM user.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul> <p>However, the format can be further restricted by the account administrator by setting a password policy on the AWS account. For more information, see <a>UpdateAccountPasswordPolicy</a>.</p>
     pub password: Option<String>,
@@ -10143,6 +10384,7 @@ impl UpdateLoginProfileRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOpenIDConnectProviderThumbprintRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM OIDC provider resource object for which you want to update the thumbprint. You can get a list of OIDC provider ARNs by using the <a>ListOpenIDConnectProviders</a> operation.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub open_id_connect_provider_arn: String,
@@ -10176,6 +10418,7 @@ impl UpdateOpenIDConnectProviderThumbprintRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoleDescriptionRequest {
     /// <p>The new description that you want to apply to the specified role.</p>
     pub description: String,
@@ -10198,6 +10441,7 @@ impl UpdateRoleDescriptionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateRoleDescriptionResponse {
     /// <p>A structure that contains details about the modified role.</p>
     pub role: Option<Role>,
@@ -10226,6 +10470,7 @@ impl UpdateRoleDescriptionResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoleRequest {
     /// <p>The new description that you want to apply to the specified role.</p>
     pub description: Option<String>,
@@ -10255,6 +10500,7 @@ impl UpdateRoleRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateRoleResponse {}
 
 struct UpdateRoleResponseDeserializer;
@@ -10274,6 +10520,7 @@ impl UpdateRoleResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSAMLProviderRequest {
     /// <p>An XML document generated by an identity provider (IdP) that supports SAML 2.0. The document includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that are received from the IdP. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p>
     pub saml_metadata_document: String,
@@ -10303,6 +10550,7 @@ impl UpdateSAMLProviderRequestSerializer {
 
 /// <p>Contains the response to a successful <a>UpdateSAMLProvider</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateSAMLProviderResponse {
     /// <p>The Amazon Resource Name (ARN) of the SAML provider that was updated.</p>
     pub saml_provider_arn: Option<String>,
@@ -10332,6 +10580,7 @@ impl UpdateSAMLProviderResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSSHPublicKeyRequest {
     /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub ssh_public_key_id: String,
@@ -10360,6 +10609,7 @@ impl UpdateSSHPublicKeyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServerCertificateRequest {
     /// <p>The new path for the server certificate. Include this only if you are updating the server certificate's path.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub new_path: Option<String>,
@@ -10395,6 +10645,7 @@ impl UpdateServerCertificateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceSpecificCredentialRequest {
     /// <p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub service_specific_credential_id: String,
@@ -10425,6 +10676,7 @@ impl UpdateServiceSpecificCredentialRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSigningCertificateRequest {
     /// <p>The ID of the signing certificate you want to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub certificate_id: String,
@@ -10455,6 +10707,7 @@ impl UpdateSigningCertificateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
     /// <p>New path for the IAM user. Include this parameter only if you're changing the user's path.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub new_path: Option<String>,
@@ -10484,6 +10737,7 @@ impl UpdateUserRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadSSHPublicKeyRequest {
     /// <p><p>The SSH public key. The public key must be encoded in ssh-rsa format or PEM format. The minimum bit-length of the public key is 2048 bits. For example, you can generate a 2048-bit key, and the resulting PEM file is 1679 bytes long.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub ssh_public_key_body: String,
@@ -10510,6 +10764,7 @@ impl UploadSSHPublicKeyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>UploadSSHPublicKey</a> request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UploadSSHPublicKeyResponse {
     /// <p>Contains information about the SSH public key.</p>
     pub ssh_public_key: Option<SSHPublicKey>,
@@ -10541,6 +10796,7 @@ impl UploadSSHPublicKeyResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadServerCertificateRequest {
     /// <p><p>The contents of the public key certificate in PEM-encoded format.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub certificate_body: String,
@@ -10583,6 +10839,7 @@ impl UploadServerCertificateRequestSerializer {
 
 /// <p>Contains the response to a successful <a>UploadServerCertificate</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UploadServerCertificateResponse {
     /// <p>The meta information of the uploaded server certificate without its certificate body, certificate chain, and private key.</p>
     pub server_certificate_metadata: Option<ServerCertificateMetadata>,
@@ -10615,6 +10872,7 @@ impl UploadServerCertificateResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadSigningCertificateRequest {
     /// <p><p>The contents of the signing certificate.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub certificate_body: String,
@@ -10643,6 +10901,7 @@ impl UploadSigningCertificateRequestSerializer {
 
 /// <p>Contains the response to a successful <a>UploadSigningCertificate</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UploadSigningCertificateResponse {
     /// <p>Information about the certificate.</p>
     pub certificate: SigningCertificate,
@@ -10673,6 +10932,7 @@ impl UploadSigningCertificateResponseDeserializer {
 }
 /// <p><p>Contains information about an IAM user entity.</p> <p>This data type is used as a response element in the following operations:</p> <ul> <li> <p> <a>CreateUser</a> </p> </li> <li> <p> <a>GetUser</a> </p> </li> <li> <p> <a>ListUsers</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct User {
     /// <p>The Amazon Resource Name (ARN) that identifies the user. For more information about ARNs and how to use ARNs in policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>. </p>
     pub arn: String,
@@ -10739,6 +10999,7 @@ impl UserDeserializer {
 }
 /// <p>Contains information about an IAM user, including all the user's policies and all the IAM groups the user is in.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UserDetail {
     pub arn: Option<String>,
     /// <p>A list of the managed policies attached to the user.</p>
@@ -10868,6 +11129,7 @@ impl UserNameTypeDeserializer {
 }
 /// <p>Contains information about a virtual MFA device.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VirtualMFADevice {
     /// <p> The base32 seed defined as specified in <a href="https://tools.ietf.org/html/rfc3548.txt">RFC3548</a>. The <code>Base32StringSeed</code> is base64-encoded. </p>
     pub base_32_string_seed: Option<bytes::Bytes>,
@@ -11001,19 +11263,23 @@ impl AddClientIDToOpenIDConnectProviderError {
 }
 impl fmt::Display for AddClientIDToOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddClientIDToOpenIDConnectProviderError {
-    fn description(&self) -> &str {
         match *self {
-            AddClientIDToOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
-            AddClientIDToOpenIDConnectProviderError::LimitExceeded(ref cause) => cause,
-            AddClientIDToOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
-            AddClientIDToOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+            AddClientIDToOpenIDConnectProviderError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddClientIDToOpenIDConnectProviderError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddClientIDToOpenIDConnectProviderError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddClientIDToOpenIDConnectProviderError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AddClientIDToOpenIDConnectProviderError {}
 /// Errors returned by AddRoleToInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum AddRoleToInstanceProfileError {
@@ -11081,20 +11347,16 @@ impl AddRoleToInstanceProfileError {
 }
 impl fmt::Display for AddRoleToInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddRoleToInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            AddRoleToInstanceProfileError::EntityAlreadyExists(ref cause) => cause,
-            AddRoleToInstanceProfileError::LimitExceeded(ref cause) => cause,
-            AddRoleToInstanceProfileError::NoSuchEntity(ref cause) => cause,
-            AddRoleToInstanceProfileError::ServiceFailure(ref cause) => cause,
-            AddRoleToInstanceProfileError::UnmodifiableEntity(ref cause) => cause,
+            AddRoleToInstanceProfileError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            AddRoleToInstanceProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AddRoleToInstanceProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            AddRoleToInstanceProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            AddRoleToInstanceProfileError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddRoleToInstanceProfileError {}
 /// Errors returned by AddUserToGroup
 #[derive(Debug, PartialEq)]
 pub enum AddUserToGroupError {
@@ -11146,18 +11408,14 @@ impl AddUserToGroupError {
 }
 impl fmt::Display for AddUserToGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddUserToGroupError {
-    fn description(&self) -> &str {
         match *self {
-            AddUserToGroupError::LimitExceeded(ref cause) => cause,
-            AddUserToGroupError::NoSuchEntity(ref cause) => cause,
-            AddUserToGroupError::ServiceFailure(ref cause) => cause,
+            AddUserToGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AddUserToGroupError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            AddUserToGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddUserToGroupError {}
 /// Errors returned by AttachGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachGroupPolicyError {
@@ -11223,20 +11481,16 @@ impl AttachGroupPolicyError {
 }
 impl fmt::Display for AttachGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachGroupPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            AttachGroupPolicyError::InvalidInput(ref cause) => cause,
-            AttachGroupPolicyError::LimitExceeded(ref cause) => cause,
-            AttachGroupPolicyError::NoSuchEntity(ref cause) => cause,
-            AttachGroupPolicyError::PolicyNotAttachable(ref cause) => cause,
-            AttachGroupPolicyError::ServiceFailure(ref cause) => cause,
+            AttachGroupPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachGroupPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachGroupPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            AttachGroupPolicyError::PolicyNotAttachable(ref cause) => write!(f, "{}", cause),
+            AttachGroupPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachGroupPolicyError {}
 /// Errors returned by AttachRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachRolePolicyError {
@@ -11309,21 +11563,17 @@ impl AttachRolePolicyError {
 }
 impl fmt::Display for AttachRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachRolePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            AttachRolePolicyError::InvalidInput(ref cause) => cause,
-            AttachRolePolicyError::LimitExceeded(ref cause) => cause,
-            AttachRolePolicyError::NoSuchEntity(ref cause) => cause,
-            AttachRolePolicyError::PolicyNotAttachable(ref cause) => cause,
-            AttachRolePolicyError::ServiceFailure(ref cause) => cause,
-            AttachRolePolicyError::UnmodifiableEntity(ref cause) => cause,
+            AttachRolePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachRolePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachRolePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            AttachRolePolicyError::PolicyNotAttachable(ref cause) => write!(f, "{}", cause),
+            AttachRolePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            AttachRolePolicyError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachRolePolicyError {}
 /// Errors returned by AttachUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachUserPolicyError {
@@ -11389,20 +11639,16 @@ impl AttachUserPolicyError {
 }
 impl fmt::Display for AttachUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachUserPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            AttachUserPolicyError::InvalidInput(ref cause) => cause,
-            AttachUserPolicyError::LimitExceeded(ref cause) => cause,
-            AttachUserPolicyError::NoSuchEntity(ref cause) => cause,
-            AttachUserPolicyError::PolicyNotAttachable(ref cause) => cause,
-            AttachUserPolicyError::ServiceFailure(ref cause) => cause,
+            AttachUserPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachUserPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachUserPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            AttachUserPolicyError::PolicyNotAttachable(ref cause) => write!(f, "{}", cause),
+            AttachUserPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachUserPolicyError {}
 /// Errors returned by ChangePassword
 #[derive(Debug, PartialEq)]
 pub enum ChangePasswordError {
@@ -11477,21 +11723,17 @@ impl ChangePasswordError {
 }
 impl fmt::Display for ChangePasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ChangePasswordError {
-    fn description(&self) -> &str {
         match *self {
-            ChangePasswordError::EntityTemporarilyUnmodifiable(ref cause) => cause,
-            ChangePasswordError::InvalidUserType(ref cause) => cause,
-            ChangePasswordError::LimitExceeded(ref cause) => cause,
-            ChangePasswordError::NoSuchEntity(ref cause) => cause,
-            ChangePasswordError::PasswordPolicyViolation(ref cause) => cause,
-            ChangePasswordError::ServiceFailure(ref cause) => cause,
+            ChangePasswordError::EntityTemporarilyUnmodifiable(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::InvalidUserType(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::PasswordPolicyViolation(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ChangePasswordError {}
 /// Errors returned by CreateAccessKey
 #[derive(Debug, PartialEq)]
 pub enum CreateAccessKeyError {
@@ -11543,18 +11785,14 @@ impl CreateAccessKeyError {
 }
 impl fmt::Display for CreateAccessKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAccessKeyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAccessKeyError::LimitExceeded(ref cause) => cause,
-            CreateAccessKeyError::NoSuchEntity(ref cause) => cause,
-            CreateAccessKeyError::ServiceFailure(ref cause) => cause,
+            CreateAccessKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAccessKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateAccessKeyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAccessKeyError {}
 /// Errors returned by CreateAccountAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAccountAliasError {
@@ -11606,18 +11844,14 @@ impl CreateAccountAliasError {
 }
 impl fmt::Display for CreateAccountAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAccountAliasError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAccountAliasError::EntityAlreadyExists(ref cause) => cause,
-            CreateAccountAliasError::LimitExceeded(ref cause) => cause,
-            CreateAccountAliasError::ServiceFailure(ref cause) => cause,
+            CreateAccountAliasError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateAccountAliasError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAccountAliasError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAccountAliasError {}
 /// Errors returned by CreateGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupError {
@@ -11676,19 +11910,15 @@ impl CreateGroupError {
 }
 impl fmt::Display for CreateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGroupError::EntityAlreadyExists(ref cause) => cause,
-            CreateGroupError::LimitExceeded(ref cause) => cause,
-            CreateGroupError::NoSuchEntity(ref cause) => cause,
-            CreateGroupError::ServiceFailure(ref cause) => cause,
+            CreateGroupError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGroupError {}
 /// Errors returned by CreateInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateInstanceProfileError {
@@ -11740,18 +11970,14 @@ impl CreateInstanceProfileError {
 }
 impl fmt::Display for CreateInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInstanceProfileError::EntityAlreadyExists(ref cause) => cause,
-            CreateInstanceProfileError::LimitExceeded(ref cause) => cause,
-            CreateInstanceProfileError::ServiceFailure(ref cause) => cause,
+            CreateInstanceProfileError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateInstanceProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateInstanceProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInstanceProfileError {}
 /// Errors returned by CreateLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateLoginProfileError {
@@ -11817,20 +12043,16 @@ impl CreateLoginProfileError {
 }
 impl fmt::Display for CreateLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoginProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoginProfileError::EntityAlreadyExists(ref cause) => cause,
-            CreateLoginProfileError::LimitExceeded(ref cause) => cause,
-            CreateLoginProfileError::NoSuchEntity(ref cause) => cause,
-            CreateLoginProfileError::PasswordPolicyViolation(ref cause) => cause,
-            CreateLoginProfileError::ServiceFailure(ref cause) => cause,
+            CreateLoginProfileError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateLoginProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateLoginProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateLoginProfileError::PasswordPolicyViolation(ref cause) => write!(f, "{}", cause),
+            CreateLoginProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLoginProfileError {}
 /// Errors returned by CreateOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum CreateOpenIDConnectProviderError {
@@ -11893,19 +12115,17 @@ impl CreateOpenIDConnectProviderError {
 }
 impl fmt::Display for CreateOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateOpenIDConnectProviderError {
-    fn description(&self) -> &str {
         match *self {
-            CreateOpenIDConnectProviderError::EntityAlreadyExists(ref cause) => cause,
-            CreateOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
-            CreateOpenIDConnectProviderError::LimitExceeded(ref cause) => cause,
-            CreateOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+            CreateOpenIDConnectProviderError::EntityAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOpenIDConnectProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateOpenIDConnectProviderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateOpenIDConnectProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateOpenIDConnectProviderError {}
 /// Errors returned by CreatePolicy
 #[derive(Debug, PartialEq)]
 pub enum CreatePolicyError {
@@ -11971,20 +12191,16 @@ impl CreatePolicyError {
 }
 impl fmt::Display for CreatePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePolicyError::EntityAlreadyExists(ref cause) => cause,
-            CreatePolicyError::InvalidInput(ref cause) => cause,
-            CreatePolicyError::LimitExceeded(ref cause) => cause,
-            CreatePolicyError::MalformedPolicyDocument(ref cause) => cause,
-            CreatePolicyError::ServiceFailure(ref cause) => cause,
+            CreatePolicyError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePolicyError {}
 /// Errors returned by CreatePolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum CreatePolicyVersionError {
@@ -12050,20 +12266,16 @@ impl CreatePolicyVersionError {
 }
 impl fmt::Display for CreatePolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePolicyVersionError::InvalidInput(ref cause) => cause,
-            CreatePolicyVersionError::LimitExceeded(ref cause) => cause,
-            CreatePolicyVersionError::MalformedPolicyDocument(ref cause) => cause,
-            CreatePolicyVersionError::NoSuchEntity(ref cause) => cause,
-            CreatePolicyVersionError::ServiceFailure(ref cause) => cause,
+            CreatePolicyVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePolicyVersionError {}
 /// Errors returned by CreateRole
 #[derive(Debug, PartialEq)]
 pub enum CreateRoleError {
@@ -12136,21 +12348,17 @@ impl CreateRoleError {
 }
 impl fmt::Display for CreateRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRoleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRoleError::ConcurrentModification(ref cause) => cause,
-            CreateRoleError::EntityAlreadyExists(ref cause) => cause,
-            CreateRoleError::InvalidInput(ref cause) => cause,
-            CreateRoleError::LimitExceeded(ref cause) => cause,
-            CreateRoleError::MalformedPolicyDocument(ref cause) => cause,
-            CreateRoleError::ServiceFailure(ref cause) => cause,
+            CreateRoleError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateRoleError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateRoleError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateRoleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRoleError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            CreateRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRoleError {}
 /// Errors returned by CreateSAMLProvider
 #[derive(Debug, PartialEq)]
 pub enum CreateSAMLProviderError {
@@ -12209,19 +12417,15 @@ impl CreateSAMLProviderError {
 }
 impl fmt::Display for CreateSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSAMLProviderError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSAMLProviderError::EntityAlreadyExists(ref cause) => cause,
-            CreateSAMLProviderError::InvalidInput(ref cause) => cause,
-            CreateSAMLProviderError::LimitExceeded(ref cause) => cause,
-            CreateSAMLProviderError::ServiceFailure(ref cause) => cause,
+            CreateSAMLProviderError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateSAMLProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateSAMLProviderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateSAMLProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSAMLProviderError {}
 /// Errors returned by CreateServiceLinkedRole
 #[derive(Debug, PartialEq)]
 pub enum CreateServiceLinkedRoleError {
@@ -12280,19 +12484,15 @@ impl CreateServiceLinkedRoleError {
 }
 impl fmt::Display for CreateServiceLinkedRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateServiceLinkedRoleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateServiceLinkedRoleError::InvalidInput(ref cause) => cause,
-            CreateServiceLinkedRoleError::LimitExceeded(ref cause) => cause,
-            CreateServiceLinkedRoleError::NoSuchEntity(ref cause) => cause,
-            CreateServiceLinkedRoleError::ServiceFailure(ref cause) => cause,
+            CreateServiceLinkedRoleError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateServiceLinkedRoleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateServiceLinkedRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateServiceLinkedRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateServiceLinkedRoleError {}
 /// Errors returned by CreateServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum CreateServiceSpecificCredentialError {
@@ -12352,18 +12552,18 @@ impl CreateServiceSpecificCredentialError {
 }
 impl fmt::Display for CreateServiceSpecificCredentialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateServiceSpecificCredentialError {
-    fn description(&self) -> &str {
         match *self {
-            CreateServiceSpecificCredentialError::LimitExceeded(ref cause) => cause,
-            CreateServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
-            CreateServiceSpecificCredentialError::ServiceNotSupported(ref cause) => cause,
+            CreateServiceSpecificCredentialError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateServiceSpecificCredentialError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateServiceSpecificCredentialError::ServiceNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateServiceSpecificCredentialError {}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
@@ -12436,21 +12636,17 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserError::ConcurrentModification(ref cause) => cause,
-            CreateUserError::EntityAlreadyExists(ref cause) => cause,
-            CreateUserError::InvalidInput(ref cause) => cause,
-            CreateUserError::LimitExceeded(ref cause) => cause,
-            CreateUserError::NoSuchEntity(ref cause) => cause,
-            CreateUserError::ServiceFailure(ref cause) => cause,
+            CreateUserError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateUserError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateUserError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateUserError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserError {}
 /// Errors returned by CreateVirtualMFADevice
 #[derive(Debug, PartialEq)]
 pub enum CreateVirtualMFADeviceError {
@@ -12502,18 +12698,14 @@ impl CreateVirtualMFADeviceError {
 }
 impl fmt::Display for CreateVirtualMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVirtualMFADeviceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVirtualMFADeviceError::EntityAlreadyExists(ref cause) => cause,
-            CreateVirtualMFADeviceError::LimitExceeded(ref cause) => cause,
-            CreateVirtualMFADeviceError::ServiceFailure(ref cause) => cause,
+            CreateVirtualMFADeviceError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateVirtualMFADeviceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateVirtualMFADeviceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVirtualMFADeviceError {}
 /// Errors returned by DeactivateMFADevice
 #[derive(Debug, PartialEq)]
 pub enum DeactivateMFADeviceError {
@@ -12574,19 +12766,17 @@ impl DeactivateMFADeviceError {
 }
 impl fmt::Display for DeactivateMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeactivateMFADeviceError {
-    fn description(&self) -> &str {
         match *self {
-            DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(ref cause) => cause,
-            DeactivateMFADeviceError::LimitExceeded(ref cause) => cause,
-            DeactivateMFADeviceError::NoSuchEntity(ref cause) => cause,
-            DeactivateMFADeviceError::ServiceFailure(ref cause) => cause,
+            DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeactivateMFADeviceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeactivateMFADeviceError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeactivateMFADeviceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeactivateMFADeviceError {}
 /// Errors returned by DeleteAccessKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccessKeyError {
@@ -12638,18 +12828,14 @@ impl DeleteAccessKeyError {
 }
 impl fmt::Display for DeleteAccessKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAccessKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAccessKeyError::LimitExceeded(ref cause) => cause,
-            DeleteAccessKeyError::NoSuchEntity(ref cause) => cause,
-            DeleteAccessKeyError::ServiceFailure(ref cause) => cause,
+            DeleteAccessKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteAccessKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteAccessKeyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAccessKeyError {}
 /// Errors returned by DeleteAccountAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccountAliasError {
@@ -12701,18 +12887,14 @@ impl DeleteAccountAliasError {
 }
 impl fmt::Display for DeleteAccountAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAccountAliasError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAccountAliasError::LimitExceeded(ref cause) => cause,
-            DeleteAccountAliasError::NoSuchEntity(ref cause) => cause,
-            DeleteAccountAliasError::ServiceFailure(ref cause) => cause,
+            DeleteAccountAliasError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteAccountAliasError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteAccountAliasError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAccountAliasError {}
 /// Errors returned by DeleteAccountPasswordPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccountPasswordPolicyError {
@@ -12766,18 +12948,14 @@ impl DeleteAccountPasswordPolicyError {
 }
 impl fmt::Display for DeleteAccountPasswordPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAccountPasswordPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAccountPasswordPolicyError::LimitExceeded(ref cause) => cause,
-            DeleteAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,
-            DeleteAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,
+            DeleteAccountPasswordPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteAccountPasswordPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteAccountPasswordPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAccountPasswordPolicyError {}
 /// Errors returned by DeleteGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupError {
@@ -12836,19 +13014,15 @@ impl DeleteGroupError {
 }
 impl fmt::Display for DeleteGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGroupError::DeleteConflict(ref cause) => cause,
-            DeleteGroupError::LimitExceeded(ref cause) => cause,
-            DeleteGroupError::NoSuchEntity(ref cause) => cause,
-            DeleteGroupError::ServiceFailure(ref cause) => cause,
+            DeleteGroupError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGroupError {}
 /// Errors returned by DeleteGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupPolicyError {
@@ -12900,18 +13074,14 @@ impl DeleteGroupPolicyError {
 }
 impl fmt::Display for DeleteGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGroupPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGroupPolicyError::LimitExceeded(ref cause) => cause,
-            DeleteGroupPolicyError::NoSuchEntity(ref cause) => cause,
-            DeleteGroupPolicyError::ServiceFailure(ref cause) => cause,
+            DeleteGroupPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteGroupPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteGroupPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGroupPolicyError {}
 /// Errors returned by DeleteInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteInstanceProfileError {
@@ -12970,19 +13140,15 @@ impl DeleteInstanceProfileError {
 }
 impl fmt::Display for DeleteInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInstanceProfileError::DeleteConflict(ref cause) => cause,
-            DeleteInstanceProfileError::LimitExceeded(ref cause) => cause,
-            DeleteInstanceProfileError::NoSuchEntity(ref cause) => cause,
-            DeleteInstanceProfileError::ServiceFailure(ref cause) => cause,
+            DeleteInstanceProfileError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInstanceProfileError {}
 /// Errors returned by DeleteLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoginProfileError {
@@ -13043,19 +13209,17 @@ impl DeleteLoginProfileError {
 }
 impl fmt::Display for DeleteLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoginProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoginProfileError::EntityTemporarilyUnmodifiable(ref cause) => cause,
-            DeleteLoginProfileError::LimitExceeded(ref cause) => cause,
-            DeleteLoginProfileError::NoSuchEntity(ref cause) => cause,
-            DeleteLoginProfileError::ServiceFailure(ref cause) => cause,
+            DeleteLoginProfileError::EntityTemporarilyUnmodifiable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLoginProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteLoginProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteLoginProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLoginProfileError {}
 /// Errors returned by DeleteOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum DeleteOpenIDConnectProviderError {
@@ -13109,18 +13273,14 @@ impl DeleteOpenIDConnectProviderError {
 }
 impl fmt::Display for DeleteOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteOpenIDConnectProviderError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
-            DeleteOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
-            DeleteOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+            DeleteOpenIDConnectProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteOpenIDConnectProviderError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteOpenIDConnectProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteOpenIDConnectProviderError {}
 /// Errors returned by DeletePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyError {
@@ -13186,20 +13346,16 @@ impl DeletePolicyError {
 }
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePolicyError::DeleteConflict(ref cause) => cause,
-            DeletePolicyError::InvalidInput(ref cause) => cause,
-            DeletePolicyError::LimitExceeded(ref cause) => cause,
-            DeletePolicyError::NoSuchEntity(ref cause) => cause,
-            DeletePolicyError::ServiceFailure(ref cause) => cause,
+            DeletePolicyError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePolicyError {}
 /// Errors returned by DeletePolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyVersionError {
@@ -13265,20 +13421,16 @@ impl DeletePolicyVersionError {
 }
 impl fmt::Display for DeletePolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePolicyVersionError::DeleteConflict(ref cause) => cause,
-            DeletePolicyVersionError::InvalidInput(ref cause) => cause,
-            DeletePolicyVersionError::LimitExceeded(ref cause) => cause,
-            DeletePolicyVersionError::NoSuchEntity(ref cause) => cause,
-            DeletePolicyVersionError::ServiceFailure(ref cause) => cause,
+            DeletePolicyVersionError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePolicyVersionError {}
 /// Errors returned by DeleteRole
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoleError {
@@ -13351,21 +13503,17 @@ impl DeleteRoleError {
 }
 impl fmt::Display for DeleteRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRoleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRoleError::ConcurrentModification(ref cause) => cause,
-            DeleteRoleError::DeleteConflict(ref cause) => cause,
-            DeleteRoleError::LimitExceeded(ref cause) => cause,
-            DeleteRoleError::NoSuchEntity(ref cause) => cause,
-            DeleteRoleError::ServiceFailure(ref cause) => cause,
-            DeleteRoleError::UnmodifiableEntity(ref cause) => cause,
+            DeleteRoleError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteRoleError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteRoleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteRoleError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRoleError {}
 /// Errors returned by DeleteRolePermissionsBoundary
 #[derive(Debug, PartialEq)]
 pub enum DeleteRolePermissionsBoundaryError {
@@ -13423,18 +13571,16 @@ impl DeleteRolePermissionsBoundaryError {
 }
 impl fmt::Display for DeleteRolePermissionsBoundaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRolePermissionsBoundaryError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRolePermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
-            DeleteRolePermissionsBoundaryError::ServiceFailure(ref cause) => cause,
-            DeleteRolePermissionsBoundaryError::UnmodifiableEntity(ref cause) => cause,
+            DeleteRolePermissionsBoundaryError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteRolePermissionsBoundaryError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteRolePermissionsBoundaryError::UnmodifiableEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteRolePermissionsBoundaryError {}
 /// Errors returned by DeleteRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteRolePolicyError {
@@ -13493,19 +13639,15 @@ impl DeleteRolePolicyError {
 }
 impl fmt::Display for DeleteRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRolePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRolePolicyError::LimitExceeded(ref cause) => cause,
-            DeleteRolePolicyError::NoSuchEntity(ref cause) => cause,
-            DeleteRolePolicyError::ServiceFailure(ref cause) => cause,
-            DeleteRolePolicyError::UnmodifiableEntity(ref cause) => cause,
+            DeleteRolePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteRolePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteRolePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteRolePolicyError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRolePolicyError {}
 /// Errors returned by DeleteSAMLProvider
 #[derive(Debug, PartialEq)]
 pub enum DeleteSAMLProviderError {
@@ -13564,19 +13706,15 @@ impl DeleteSAMLProviderError {
 }
 impl fmt::Display for DeleteSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSAMLProviderError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSAMLProviderError::InvalidInput(ref cause) => cause,
-            DeleteSAMLProviderError::LimitExceeded(ref cause) => cause,
-            DeleteSAMLProviderError::NoSuchEntity(ref cause) => cause,
-            DeleteSAMLProviderError::ServiceFailure(ref cause) => cause,
+            DeleteSAMLProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteSAMLProviderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteSAMLProviderError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteSAMLProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSAMLProviderError {}
 /// Errors returned by DeleteSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteSSHPublicKeyError {
@@ -13614,16 +13752,12 @@ impl DeleteSSHPublicKeyError {
 }
 impl fmt::Display for DeleteSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSSHPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
+            DeleteSSHPublicKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSSHPublicKeyError {}
 /// Errors returned by DeleteServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteServerCertificateError {
@@ -13682,19 +13816,15 @@ impl DeleteServerCertificateError {
 }
 impl fmt::Display for DeleteServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServerCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServerCertificateError::DeleteConflict(ref cause) => cause,
-            DeleteServerCertificateError::LimitExceeded(ref cause) => cause,
-            DeleteServerCertificateError::NoSuchEntity(ref cause) => cause,
-            DeleteServerCertificateError::ServiceFailure(ref cause) => cause,
+            DeleteServerCertificateError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteServerCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteServerCertificateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteServerCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServerCertificateError {}
 /// Errors returned by DeleteServiceLinkedRole
 #[derive(Debug, PartialEq)]
 pub enum DeleteServiceLinkedRoleError {
@@ -13746,18 +13876,14 @@ impl DeleteServiceLinkedRoleError {
 }
 impl fmt::Display for DeleteServiceLinkedRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServiceLinkedRoleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServiceLinkedRoleError::LimitExceeded(ref cause) => cause,
-            DeleteServiceLinkedRoleError::NoSuchEntity(ref cause) => cause,
-            DeleteServiceLinkedRoleError::ServiceFailure(ref cause) => cause,
+            DeleteServiceLinkedRoleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteServiceLinkedRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteServiceLinkedRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServiceLinkedRoleError {}
 /// Errors returned by DeleteServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum DeleteServiceSpecificCredentialError {
@@ -13799,16 +13925,12 @@ impl DeleteServiceSpecificCredentialError {
 }
 impl fmt::Display for DeleteServiceSpecificCredentialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServiceSpecificCredentialError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
+            DeleteServiceSpecificCredentialError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServiceSpecificCredentialError {}
 /// Errors returned by DeleteSigningCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteSigningCertificateError {
@@ -13860,18 +13982,14 @@ impl DeleteSigningCertificateError {
 }
 impl fmt::Display for DeleteSigningCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSigningCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSigningCertificateError::LimitExceeded(ref cause) => cause,
-            DeleteSigningCertificateError::NoSuchEntity(ref cause) => cause,
-            DeleteSigningCertificateError::ServiceFailure(ref cause) => cause,
+            DeleteSigningCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteSigningCertificateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteSigningCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSigningCertificateError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -13937,20 +14055,16 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserError::ConcurrentModification(ref cause) => cause,
-            DeleteUserError::DeleteConflict(ref cause) => cause,
-            DeleteUserError::LimitExceeded(ref cause) => cause,
-            DeleteUserError::NoSuchEntity(ref cause) => cause,
-            DeleteUserError::ServiceFailure(ref cause) => cause,
+            DeleteUserError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserError {}
 /// Errors returned by DeleteUserPermissionsBoundary
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPermissionsBoundaryError {
@@ -13999,17 +14113,13 @@ impl DeleteUserPermissionsBoundaryError {
 }
 impl fmt::Display for DeleteUserPermissionsBoundaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserPermissionsBoundaryError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserPermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
-            DeleteUserPermissionsBoundaryError::ServiceFailure(ref cause) => cause,
+            DeleteUserPermissionsBoundaryError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteUserPermissionsBoundaryError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserPermissionsBoundaryError {}
 /// Errors returned by DeleteUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPolicyError {
@@ -14061,18 +14171,14 @@ impl DeleteUserPolicyError {
 }
 impl fmt::Display for DeleteUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserPolicyError::LimitExceeded(ref cause) => cause,
-            DeleteUserPolicyError::NoSuchEntity(ref cause) => cause,
-            DeleteUserPolicyError::ServiceFailure(ref cause) => cause,
+            DeleteUserPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteUserPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteUserPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserPolicyError {}
 /// Errors returned by DeleteVirtualMFADevice
 #[derive(Debug, PartialEq)]
 pub enum DeleteVirtualMFADeviceError {
@@ -14131,19 +14237,15 @@ impl DeleteVirtualMFADeviceError {
 }
 impl fmt::Display for DeleteVirtualMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVirtualMFADeviceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVirtualMFADeviceError::DeleteConflict(ref cause) => cause,
-            DeleteVirtualMFADeviceError::LimitExceeded(ref cause) => cause,
-            DeleteVirtualMFADeviceError::NoSuchEntity(ref cause) => cause,
-            DeleteVirtualMFADeviceError::ServiceFailure(ref cause) => cause,
+            DeleteVirtualMFADeviceError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualMFADeviceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualMFADeviceError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualMFADeviceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVirtualMFADeviceError {}
 /// Errors returned by DetachGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachGroupPolicyError {
@@ -14202,19 +14304,15 @@ impl DetachGroupPolicyError {
 }
 impl fmt::Display for DetachGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachGroupPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DetachGroupPolicyError::InvalidInput(ref cause) => cause,
-            DetachGroupPolicyError::LimitExceeded(ref cause) => cause,
-            DetachGroupPolicyError::NoSuchEntity(ref cause) => cause,
-            DetachGroupPolicyError::ServiceFailure(ref cause) => cause,
+            DetachGroupPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachGroupPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetachGroupPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DetachGroupPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachGroupPolicyError {}
 /// Errors returned by DetachRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachRolePolicyError {
@@ -14280,20 +14378,16 @@ impl DetachRolePolicyError {
 }
 impl fmt::Display for DetachRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachRolePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DetachRolePolicyError::InvalidInput(ref cause) => cause,
-            DetachRolePolicyError::LimitExceeded(ref cause) => cause,
-            DetachRolePolicyError::NoSuchEntity(ref cause) => cause,
-            DetachRolePolicyError::ServiceFailure(ref cause) => cause,
-            DetachRolePolicyError::UnmodifiableEntity(ref cause) => cause,
+            DetachRolePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachRolePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetachRolePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DetachRolePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DetachRolePolicyError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachRolePolicyError {}
 /// Errors returned by DetachUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachUserPolicyError {
@@ -14352,19 +14446,15 @@ impl DetachUserPolicyError {
 }
 impl fmt::Display for DetachUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachUserPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DetachUserPolicyError::InvalidInput(ref cause) => cause,
-            DetachUserPolicyError::LimitExceeded(ref cause) => cause,
-            DetachUserPolicyError::NoSuchEntity(ref cause) => cause,
-            DetachUserPolicyError::ServiceFailure(ref cause) => cause,
+            DetachUserPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachUserPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetachUserPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DetachUserPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachUserPolicyError {}
 /// Errors returned by EnableMFADevice
 #[derive(Debug, PartialEq)]
 pub enum EnableMFADeviceError {
@@ -14439,21 +14529,19 @@ impl EnableMFADeviceError {
 }
 impl fmt::Display for EnableMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableMFADeviceError {
-    fn description(&self) -> &str {
         match *self {
-            EnableMFADeviceError::EntityAlreadyExists(ref cause) => cause,
-            EnableMFADeviceError::EntityTemporarilyUnmodifiable(ref cause) => cause,
-            EnableMFADeviceError::InvalidAuthenticationCode(ref cause) => cause,
-            EnableMFADeviceError::LimitExceeded(ref cause) => cause,
-            EnableMFADeviceError::NoSuchEntity(ref cause) => cause,
-            EnableMFADeviceError::ServiceFailure(ref cause) => cause,
+            EnableMFADeviceError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            EnableMFADeviceError::EntityTemporarilyUnmodifiable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableMFADeviceError::InvalidAuthenticationCode(ref cause) => write!(f, "{}", cause),
+            EnableMFADeviceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            EnableMFADeviceError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            EnableMFADeviceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableMFADeviceError {}
 /// Errors returned by GenerateCredentialReport
 #[derive(Debug, PartialEq)]
 pub enum GenerateCredentialReportError {
@@ -14498,17 +14586,13 @@ impl GenerateCredentialReportError {
 }
 impl fmt::Display for GenerateCredentialReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateCredentialReportError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateCredentialReportError::LimitExceeded(ref cause) => cause,
-            GenerateCredentialReportError::ServiceFailure(ref cause) => cause,
+            GenerateCredentialReportError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GenerateCredentialReportError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GenerateCredentialReportError {}
 /// Errors returned by GenerateOrganizationsAccessReport
 #[derive(Debug, PartialEq)]
 pub enum GenerateOrganizationsAccessReportError {
@@ -14550,18 +14634,14 @@ impl GenerateOrganizationsAccessReportError {
 }
 impl fmt::Display for GenerateOrganizationsAccessReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateOrganizationsAccessReportError {
-    fn description(&self) -> &str {
         match *self {
             GenerateOrganizationsAccessReportError::ReportGenerationLimitExceeded(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GenerateOrganizationsAccessReportError {}
 /// Errors returned by GenerateServiceLastAccessedDetails
 #[derive(Debug, PartialEq)]
 pub enum GenerateServiceLastAccessedDetailsError {
@@ -14612,17 +14692,17 @@ impl GenerateServiceLastAccessedDetailsError {
 }
 impl fmt::Display for GenerateServiceLastAccessedDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateServiceLastAccessedDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateServiceLastAccessedDetailsError::InvalidInput(ref cause) => cause,
-            GenerateServiceLastAccessedDetailsError::NoSuchEntity(ref cause) => cause,
+            GenerateServiceLastAccessedDetailsError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateServiceLastAccessedDetailsError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GenerateServiceLastAccessedDetailsError {}
 /// Errors returned by GetAccessKeyLastUsed
 #[derive(Debug, PartialEq)]
 pub enum GetAccessKeyLastUsedError {}
@@ -14652,14 +14732,10 @@ impl GetAccessKeyLastUsedError {
 }
 impl fmt::Display for GetAccessKeyLastUsedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccessKeyLastUsedError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetAccessKeyLastUsedError {}
 /// Errors returned by GetAccountAuthorizationDetails
 #[derive(Debug, PartialEq)]
 pub enum GetAccountAuthorizationDetailsError {
@@ -14701,16 +14777,14 @@ impl GetAccountAuthorizationDetailsError {
 }
 impl fmt::Display for GetAccountAuthorizationDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountAuthorizationDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountAuthorizationDetailsError::ServiceFailure(ref cause) => cause,
+            GetAccountAuthorizationDetailsError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetAccountAuthorizationDetailsError {}
 /// Errors returned by GetAccountPasswordPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetAccountPasswordPolicyError {
@@ -14755,17 +14829,13 @@ impl GetAccountPasswordPolicyError {
 }
 impl fmt::Display for GetAccountPasswordPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountPasswordPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,
-            GetAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,
+            GetAccountPasswordPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetAccountPasswordPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAccountPasswordPolicyError {}
 /// Errors returned by GetAccountSummary
 #[derive(Debug, PartialEq)]
 pub enum GetAccountSummaryError {
@@ -14803,16 +14873,12 @@ impl GetAccountSummaryError {
 }
 impl fmt::Display for GetAccountSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountSummaryError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountSummaryError::ServiceFailure(ref cause) => cause,
+            GetAccountSummaryError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAccountSummaryError {}
 /// Errors returned by GetContextKeysForCustomPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetContextKeysForCustomPolicyError {
@@ -14852,16 +14918,12 @@ impl GetContextKeysForCustomPolicyError {
 }
 impl fmt::Display for GetContextKeysForCustomPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetContextKeysForCustomPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetContextKeysForCustomPolicyError::InvalidInput(ref cause) => cause,
+            GetContextKeysForCustomPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetContextKeysForCustomPolicyError {}
 /// Errors returned by GetContextKeysForPrincipalPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetContextKeysForPrincipalPolicyError {
@@ -14912,17 +14974,17 @@ impl GetContextKeysForPrincipalPolicyError {
 }
 impl fmt::Display for GetContextKeysForPrincipalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetContextKeysForPrincipalPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetContextKeysForPrincipalPolicyError::InvalidInput(ref cause) => cause,
-            GetContextKeysForPrincipalPolicyError::NoSuchEntity(ref cause) => cause,
+            GetContextKeysForPrincipalPolicyError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetContextKeysForPrincipalPolicyError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetContextKeysForPrincipalPolicyError {}
 /// Errors returned by GetCredentialReport
 #[derive(Debug, PartialEq)]
 pub enum GetCredentialReportError {
@@ -14985,19 +15047,17 @@ impl GetCredentialReportError {
 }
 impl fmt::Display for GetCredentialReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCredentialReportError {
-    fn description(&self) -> &str {
         match *self {
-            GetCredentialReportError::CredentialReportExpired(ref cause) => cause,
-            GetCredentialReportError::CredentialReportNotPresent(ref cause) => cause,
-            GetCredentialReportError::CredentialReportNotReady(ref cause) => cause,
-            GetCredentialReportError::ServiceFailure(ref cause) => cause,
+            GetCredentialReportError::CredentialReportExpired(ref cause) => write!(f, "{}", cause),
+            GetCredentialReportError::CredentialReportNotPresent(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCredentialReportError::CredentialReportNotReady(ref cause) => write!(f, "{}", cause),
+            GetCredentialReportError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCredentialReportError {}
 /// Errors returned by GetGroup
 #[derive(Debug, PartialEq)]
 pub enum GetGroupError {
@@ -15042,17 +15102,13 @@ impl GetGroupError {
 }
 impl fmt::Display for GetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            GetGroupError::NoSuchEntity(ref cause) => cause,
-            GetGroupError::ServiceFailure(ref cause) => cause,
+            GetGroupError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGroupError {}
 /// Errors returned by GetGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetGroupPolicyError {
@@ -15097,17 +15153,13 @@ impl GetGroupPolicyError {
 }
 impl fmt::Display for GetGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGroupPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetGroupPolicyError::NoSuchEntity(ref cause) => cause,
-            GetGroupPolicyError::ServiceFailure(ref cause) => cause,
+            GetGroupPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetGroupPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGroupPolicyError {}
 /// Errors returned by GetInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceProfileError {
@@ -15152,17 +15204,13 @@ impl GetInstanceProfileError {
 }
 impl fmt::Display for GetInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceProfileError::NoSuchEntity(ref cause) => cause,
-            GetInstanceProfileError::ServiceFailure(ref cause) => cause,
+            GetInstanceProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetInstanceProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceProfileError {}
 /// Errors returned by GetLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum GetLoginProfileError {
@@ -15207,17 +15255,13 @@ impl GetLoginProfileError {
 }
 impl fmt::Display for GetLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoginProfileError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoginProfileError::NoSuchEntity(ref cause) => cause,
-            GetLoginProfileError::ServiceFailure(ref cause) => cause,
+            GetLoginProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetLoginProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLoginProfileError {}
 /// Errors returned by GetOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum GetOpenIDConnectProviderError {
@@ -15269,18 +15313,14 @@ impl GetOpenIDConnectProviderError {
 }
 impl fmt::Display for GetOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOpenIDConnectProviderError {
-    fn description(&self) -> &str {
         match *self {
-            GetOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
-            GetOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
-            GetOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+            GetOpenIDConnectProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetOpenIDConnectProviderError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetOpenIDConnectProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOpenIDConnectProviderError {}
 /// Errors returned by GetOrganizationsAccessReport
 #[derive(Debug, PartialEq)]
 pub enum GetOrganizationsAccessReportError {
@@ -15320,16 +15360,12 @@ impl GetOrganizationsAccessReportError {
 }
 impl fmt::Display for GetOrganizationsAccessReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOrganizationsAccessReportError {
-    fn description(&self) -> &str {
         match *self {
-            GetOrganizationsAccessReportError::NoSuchEntity(ref cause) => cause,
+            GetOrganizationsAccessReportError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOrganizationsAccessReportError {}
 /// Errors returned by GetPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyError {
@@ -15381,18 +15417,14 @@ impl GetPolicyError {
 }
 impl fmt::Display for GetPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetPolicyError::InvalidInput(ref cause) => cause,
-            GetPolicyError::NoSuchEntity(ref cause) => cause,
-            GetPolicyError::ServiceFailure(ref cause) => cause,
+            GetPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPolicyError {}
 /// Errors returned by GetPolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyVersionError {
@@ -15444,18 +15476,14 @@ impl GetPolicyVersionError {
 }
 impl fmt::Display for GetPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetPolicyVersionError::InvalidInput(ref cause) => cause,
-            GetPolicyVersionError::NoSuchEntity(ref cause) => cause,
-            GetPolicyVersionError::ServiceFailure(ref cause) => cause,
+            GetPolicyVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetPolicyVersionError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetPolicyVersionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPolicyVersionError {}
 /// Errors returned by GetRole
 #[derive(Debug, PartialEq)]
 pub enum GetRoleError {
@@ -15500,17 +15528,13 @@ impl GetRoleError {
 }
 impl fmt::Display for GetRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRoleError {
-    fn description(&self) -> &str {
         match *self {
-            GetRoleError::NoSuchEntity(ref cause) => cause,
-            GetRoleError::ServiceFailure(ref cause) => cause,
+            GetRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRoleError {}
 /// Errors returned by GetRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum GetRolePolicyError {
@@ -15555,17 +15579,13 @@ impl GetRolePolicyError {
 }
 impl fmt::Display for GetRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRolePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetRolePolicyError::NoSuchEntity(ref cause) => cause,
-            GetRolePolicyError::ServiceFailure(ref cause) => cause,
+            GetRolePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetRolePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRolePolicyError {}
 /// Errors returned by GetSAMLProvider
 #[derive(Debug, PartialEq)]
 pub enum GetSAMLProviderError {
@@ -15617,18 +15637,14 @@ impl GetSAMLProviderError {
 }
 impl fmt::Display for GetSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSAMLProviderError {
-    fn description(&self) -> &str {
         match *self {
-            GetSAMLProviderError::InvalidInput(ref cause) => cause,
-            GetSAMLProviderError::NoSuchEntity(ref cause) => cause,
-            GetSAMLProviderError::ServiceFailure(ref cause) => cause,
+            GetSAMLProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetSAMLProviderError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetSAMLProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSAMLProviderError {}
 /// Errors returned by GetSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum GetSSHPublicKeyError {
@@ -15675,17 +15691,15 @@ impl GetSSHPublicKeyError {
 }
 impl fmt::Display for GetSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSSHPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            GetSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
-            GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => cause,
+            GetSSHPublicKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetSSHPublicKeyError {}
 /// Errors returned by GetServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetServerCertificateError {
@@ -15730,17 +15744,13 @@ impl GetServerCertificateError {
 }
 impl fmt::Display for GetServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServerCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            GetServerCertificateError::NoSuchEntity(ref cause) => cause,
-            GetServerCertificateError::ServiceFailure(ref cause) => cause,
+            GetServerCertificateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetServerCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetServerCertificateError {}
 /// Errors returned by GetServiceLastAccessedDetails
 #[derive(Debug, PartialEq)]
 pub enum GetServiceLastAccessedDetailsError {
@@ -15787,17 +15797,13 @@ impl GetServiceLastAccessedDetailsError {
 }
 impl fmt::Display for GetServiceLastAccessedDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServiceLastAccessedDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetServiceLastAccessedDetailsError::InvalidInput(ref cause) => cause,
-            GetServiceLastAccessedDetailsError::NoSuchEntity(ref cause) => cause,
+            GetServiceLastAccessedDetailsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetServiceLastAccessedDetailsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetServiceLastAccessedDetailsError {}
 /// Errors returned by GetServiceLastAccessedDetailsWithEntities
 #[derive(Debug, PartialEq)]
 pub enum GetServiceLastAccessedDetailsWithEntitiesError {
@@ -15848,17 +15854,17 @@ impl GetServiceLastAccessedDetailsWithEntitiesError {
 }
 impl fmt::Display for GetServiceLastAccessedDetailsWithEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServiceLastAccessedDetailsWithEntitiesError {
-    fn description(&self) -> &str {
         match *self {
-            GetServiceLastAccessedDetailsWithEntitiesError::InvalidInput(ref cause) => cause,
-            GetServiceLastAccessedDetailsWithEntitiesError::NoSuchEntity(ref cause) => cause,
+            GetServiceLastAccessedDetailsWithEntitiesError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetServiceLastAccessedDetailsWithEntitiesError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetServiceLastAccessedDetailsWithEntitiesError {}
 /// Errors returned by GetServiceLinkedRoleDeletionStatus
 #[derive(Debug, PartialEq)]
 pub enum GetServiceLinkedRoleDeletionStatusError {
@@ -15918,18 +15924,20 @@ impl GetServiceLinkedRoleDeletionStatusError {
 }
 impl fmt::Display for GetServiceLinkedRoleDeletionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServiceLinkedRoleDeletionStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetServiceLinkedRoleDeletionStatusError::InvalidInput(ref cause) => cause,
-            GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(ref cause) => cause,
-            GetServiceLinkedRoleDeletionStatusError::ServiceFailure(ref cause) => cause,
+            GetServiceLinkedRoleDeletionStatusError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetServiceLinkedRoleDeletionStatusError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetServiceLinkedRoleDeletionStatusError {}
 /// Errors returned by GetUser
 #[derive(Debug, PartialEq)]
 pub enum GetUserError {
@@ -15974,17 +15982,13 @@ impl GetUserError {
 }
 impl fmt::Display for GetUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUserError {
-    fn description(&self) -> &str {
         match *self {
-            GetUserError::NoSuchEntity(ref cause) => cause,
-            GetUserError::ServiceFailure(ref cause) => cause,
+            GetUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUserError {}
 /// Errors returned by GetUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetUserPolicyError {
@@ -16029,17 +16033,13 @@ impl GetUserPolicyError {
 }
 impl fmt::Display for GetUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUserPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetUserPolicyError::NoSuchEntity(ref cause) => cause,
-            GetUserPolicyError::ServiceFailure(ref cause) => cause,
+            GetUserPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetUserPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUserPolicyError {}
 /// Errors returned by ListAccessKeys
 #[derive(Debug, PartialEq)]
 pub enum ListAccessKeysError {
@@ -16084,17 +16084,13 @@ impl ListAccessKeysError {
 }
 impl fmt::Display for ListAccessKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAccessKeysError {
-    fn description(&self) -> &str {
         match *self {
-            ListAccessKeysError::NoSuchEntity(ref cause) => cause,
-            ListAccessKeysError::ServiceFailure(ref cause) => cause,
+            ListAccessKeysError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListAccessKeysError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAccessKeysError {}
 /// Errors returned by ListAccountAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAccountAliasesError {
@@ -16132,16 +16128,12 @@ impl ListAccountAliasesError {
 }
 impl fmt::Display for ListAccountAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAccountAliasesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAccountAliasesError::ServiceFailure(ref cause) => cause,
+            ListAccountAliasesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAccountAliasesError {}
 /// Errors returned by ListAttachedGroupPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedGroupPoliciesError {
@@ -16193,18 +16185,14 @@ impl ListAttachedGroupPoliciesError {
 }
 impl fmt::Display for ListAttachedGroupPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAttachedGroupPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAttachedGroupPoliciesError::InvalidInput(ref cause) => cause,
-            ListAttachedGroupPoliciesError::NoSuchEntity(ref cause) => cause,
-            ListAttachedGroupPoliciesError::ServiceFailure(ref cause) => cause,
+            ListAttachedGroupPoliciesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListAttachedGroupPoliciesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListAttachedGroupPoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAttachedGroupPoliciesError {}
 /// Errors returned by ListAttachedRolePolicies
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedRolePoliciesError {
@@ -16256,18 +16244,14 @@ impl ListAttachedRolePoliciesError {
 }
 impl fmt::Display for ListAttachedRolePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAttachedRolePoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAttachedRolePoliciesError::InvalidInput(ref cause) => cause,
-            ListAttachedRolePoliciesError::NoSuchEntity(ref cause) => cause,
-            ListAttachedRolePoliciesError::ServiceFailure(ref cause) => cause,
+            ListAttachedRolePoliciesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListAttachedRolePoliciesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListAttachedRolePoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAttachedRolePoliciesError {}
 /// Errors returned by ListAttachedUserPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedUserPoliciesError {
@@ -16319,18 +16303,14 @@ impl ListAttachedUserPoliciesError {
 }
 impl fmt::Display for ListAttachedUserPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAttachedUserPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAttachedUserPoliciesError::InvalidInput(ref cause) => cause,
-            ListAttachedUserPoliciesError::NoSuchEntity(ref cause) => cause,
-            ListAttachedUserPoliciesError::ServiceFailure(ref cause) => cause,
+            ListAttachedUserPoliciesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListAttachedUserPoliciesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListAttachedUserPoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAttachedUserPoliciesError {}
 /// Errors returned by ListEntitiesForPolicy
 #[derive(Debug, PartialEq)]
 pub enum ListEntitiesForPolicyError {
@@ -16382,18 +16362,14 @@ impl ListEntitiesForPolicyError {
 }
 impl fmt::Display for ListEntitiesForPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEntitiesForPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            ListEntitiesForPolicyError::InvalidInput(ref cause) => cause,
-            ListEntitiesForPolicyError::NoSuchEntity(ref cause) => cause,
-            ListEntitiesForPolicyError::ServiceFailure(ref cause) => cause,
+            ListEntitiesForPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListEntitiesForPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListEntitiesForPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEntitiesForPolicyError {}
 /// Errors returned by ListGroupPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListGroupPoliciesError {
@@ -16438,17 +16414,13 @@ impl ListGroupPoliciesError {
 }
 impl fmt::Display for ListGroupPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGroupPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListGroupPoliciesError::NoSuchEntity(ref cause) => cause,
-            ListGroupPoliciesError::ServiceFailure(ref cause) => cause,
+            ListGroupPoliciesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListGroupPoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGroupPoliciesError {}
 /// Errors returned by ListGroups
 #[derive(Debug, PartialEq)]
 pub enum ListGroupsError {
@@ -16486,16 +16458,12 @@ impl ListGroupsError {
 }
 impl fmt::Display for ListGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListGroupsError::ServiceFailure(ref cause) => cause,
+            ListGroupsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGroupsError {}
 /// Errors returned by ListGroupsForUser
 #[derive(Debug, PartialEq)]
 pub enum ListGroupsForUserError {
@@ -16540,17 +16508,13 @@ impl ListGroupsForUserError {
 }
 impl fmt::Display for ListGroupsForUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGroupsForUserError {
-    fn description(&self) -> &str {
         match *self {
-            ListGroupsForUserError::NoSuchEntity(ref cause) => cause,
-            ListGroupsForUserError::ServiceFailure(ref cause) => cause,
+            ListGroupsForUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListGroupsForUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGroupsForUserError {}
 /// Errors returned by ListInstanceProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceProfilesError {
@@ -16588,16 +16552,12 @@ impl ListInstanceProfilesError {
 }
 impl fmt::Display for ListInstanceProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstanceProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstanceProfilesError::ServiceFailure(ref cause) => cause,
+            ListInstanceProfilesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstanceProfilesError {}
 /// Errors returned by ListInstanceProfilesForRole
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceProfilesForRoleError {
@@ -16644,17 +16604,13 @@ impl ListInstanceProfilesForRoleError {
 }
 impl fmt::Display for ListInstanceProfilesForRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstanceProfilesForRoleError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstanceProfilesForRoleError::NoSuchEntity(ref cause) => cause,
-            ListInstanceProfilesForRoleError::ServiceFailure(ref cause) => cause,
+            ListInstanceProfilesForRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListInstanceProfilesForRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstanceProfilesForRoleError {}
 /// Errors returned by ListMFADevices
 #[derive(Debug, PartialEq)]
 pub enum ListMFADevicesError {
@@ -16699,17 +16655,13 @@ impl ListMFADevicesError {
 }
 impl fmt::Display for ListMFADevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMFADevicesError {
-    fn description(&self) -> &str {
         match *self {
-            ListMFADevicesError::NoSuchEntity(ref cause) => cause,
-            ListMFADevicesError::ServiceFailure(ref cause) => cause,
+            ListMFADevicesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListMFADevicesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMFADevicesError {}
 /// Errors returned by ListOpenIDConnectProviders
 #[derive(Debug, PartialEq)]
 pub enum ListOpenIDConnectProvidersError {
@@ -16749,16 +16701,12 @@ impl ListOpenIDConnectProvidersError {
 }
 impl fmt::Display for ListOpenIDConnectProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOpenIDConnectProvidersError {
-    fn description(&self) -> &str {
         match *self {
-            ListOpenIDConnectProvidersError::ServiceFailure(ref cause) => cause,
+            ListOpenIDConnectProvidersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOpenIDConnectProvidersError {}
 /// Errors returned by ListPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListPoliciesError {
@@ -16796,16 +16744,12 @@ impl ListPoliciesError {
 }
 impl fmt::Display for ListPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListPoliciesError::ServiceFailure(ref cause) => cause,
+            ListPoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPoliciesError {}
 /// Errors returned by ListPoliciesGrantingServiceAccess
 #[derive(Debug, PartialEq)]
 pub enum ListPoliciesGrantingServiceAccessError {
@@ -16856,17 +16800,17 @@ impl ListPoliciesGrantingServiceAccessError {
 }
 impl fmt::Display for ListPoliciesGrantingServiceAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPoliciesGrantingServiceAccessError {
-    fn description(&self) -> &str {
         match *self {
-            ListPoliciesGrantingServiceAccessError::InvalidInput(ref cause) => cause,
-            ListPoliciesGrantingServiceAccessError::NoSuchEntity(ref cause) => cause,
+            ListPoliciesGrantingServiceAccessError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListPoliciesGrantingServiceAccessError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListPoliciesGrantingServiceAccessError {}
 /// Errors returned by ListPolicyVersions
 #[derive(Debug, PartialEq)]
 pub enum ListPolicyVersionsError {
@@ -16918,18 +16862,14 @@ impl ListPolicyVersionsError {
 }
 impl fmt::Display for ListPolicyVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPolicyVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPolicyVersionsError::InvalidInput(ref cause) => cause,
-            ListPolicyVersionsError::NoSuchEntity(ref cause) => cause,
-            ListPolicyVersionsError::ServiceFailure(ref cause) => cause,
+            ListPolicyVersionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListPolicyVersionsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListPolicyVersionsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPolicyVersionsError {}
 /// Errors returned by ListRolePolicies
 #[derive(Debug, PartialEq)]
 pub enum ListRolePoliciesError {
@@ -16974,17 +16914,13 @@ impl ListRolePoliciesError {
 }
 impl fmt::Display for ListRolePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRolePoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListRolePoliciesError::NoSuchEntity(ref cause) => cause,
-            ListRolePoliciesError::ServiceFailure(ref cause) => cause,
+            ListRolePoliciesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListRolePoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRolePoliciesError {}
 /// Errors returned by ListRoleTags
 #[derive(Debug, PartialEq)]
 pub enum ListRoleTagsError {
@@ -17029,17 +16965,13 @@ impl ListRoleTagsError {
 }
 impl fmt::Display for ListRoleTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRoleTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListRoleTagsError::NoSuchEntity(ref cause) => cause,
-            ListRoleTagsError::ServiceFailure(ref cause) => cause,
+            ListRoleTagsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListRoleTagsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRoleTagsError {}
 /// Errors returned by ListRoles
 #[derive(Debug, PartialEq)]
 pub enum ListRolesError {
@@ -17077,16 +17009,12 @@ impl ListRolesError {
 }
 impl fmt::Display for ListRolesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRolesError {
-    fn description(&self) -> &str {
         match *self {
-            ListRolesError::ServiceFailure(ref cause) => cause,
+            ListRolesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRolesError {}
 /// Errors returned by ListSAMLProviders
 #[derive(Debug, PartialEq)]
 pub enum ListSAMLProvidersError {
@@ -17124,16 +17052,12 @@ impl ListSAMLProvidersError {
 }
 impl fmt::Display for ListSAMLProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSAMLProvidersError {
-    fn description(&self) -> &str {
         match *self {
-            ListSAMLProvidersError::ServiceFailure(ref cause) => cause,
+            ListSAMLProvidersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSAMLProvidersError {}
 /// Errors returned by ListSSHPublicKeys
 #[derive(Debug, PartialEq)]
 pub enum ListSSHPublicKeysError {
@@ -17171,16 +17095,12 @@ impl ListSSHPublicKeysError {
 }
 impl fmt::Display for ListSSHPublicKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSSHPublicKeysError {
-    fn description(&self) -> &str {
         match *self {
-            ListSSHPublicKeysError::NoSuchEntity(ref cause) => cause,
+            ListSSHPublicKeysError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSSHPublicKeysError {}
 /// Errors returned by ListServerCertificates
 #[derive(Debug, PartialEq)]
 pub enum ListServerCertificatesError {
@@ -17218,16 +17138,12 @@ impl ListServerCertificatesError {
 }
 impl fmt::Display for ListServerCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListServerCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListServerCertificatesError::ServiceFailure(ref cause) => cause,
+            ListServerCertificatesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListServerCertificatesError {}
 /// Errors returned by ListServiceSpecificCredentials
 #[derive(Debug, PartialEq)]
 pub enum ListServiceSpecificCredentialsError {
@@ -17276,17 +17192,15 @@ impl ListServiceSpecificCredentialsError {
 }
 impl fmt::Display for ListServiceSpecificCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListServiceSpecificCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            ListServiceSpecificCredentialsError::NoSuchEntity(ref cause) => cause,
-            ListServiceSpecificCredentialsError::ServiceNotSupported(ref cause) => cause,
+            ListServiceSpecificCredentialsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListServiceSpecificCredentialsError::ServiceNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListServiceSpecificCredentialsError {}
 /// Errors returned by ListSigningCertificates
 #[derive(Debug, PartialEq)]
 pub enum ListSigningCertificatesError {
@@ -17331,17 +17245,13 @@ impl ListSigningCertificatesError {
 }
 impl fmt::Display for ListSigningCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSigningCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListSigningCertificatesError::NoSuchEntity(ref cause) => cause,
-            ListSigningCertificatesError::ServiceFailure(ref cause) => cause,
+            ListSigningCertificatesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListSigningCertificatesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSigningCertificatesError {}
 /// Errors returned by ListUserPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListUserPoliciesError {
@@ -17386,17 +17296,13 @@ impl ListUserPoliciesError {
 }
 impl fmt::Display for ListUserPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUserPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListUserPoliciesError::NoSuchEntity(ref cause) => cause,
-            ListUserPoliciesError::ServiceFailure(ref cause) => cause,
+            ListUserPoliciesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListUserPoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUserPoliciesError {}
 /// Errors returned by ListUserTags
 #[derive(Debug, PartialEq)]
 pub enum ListUserTagsError {
@@ -17441,17 +17347,13 @@ impl ListUserTagsError {
 }
 impl fmt::Display for ListUserTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUserTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListUserTagsError::NoSuchEntity(ref cause) => cause,
-            ListUserTagsError::ServiceFailure(ref cause) => cause,
+            ListUserTagsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListUserTagsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUserTagsError {}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
@@ -17489,16 +17391,12 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUsersError {
-    fn description(&self) -> &str {
         match *self {
-            ListUsersError::ServiceFailure(ref cause) => cause,
+            ListUsersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUsersError {}
 /// Errors returned by ListVirtualMFADevices
 #[derive(Debug, PartialEq)]
 pub enum ListVirtualMFADevicesError {}
@@ -17528,14 +17426,10 @@ impl ListVirtualMFADevicesError {
 }
 impl fmt::Display for ListVirtualMFADevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVirtualMFADevicesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListVirtualMFADevicesError {}
 /// Errors returned by PutGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutGroupPolicyError {
@@ -17594,19 +17488,15 @@ impl PutGroupPolicyError {
 }
 impl fmt::Display for PutGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutGroupPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutGroupPolicyError::LimitExceeded(ref cause) => cause,
-            PutGroupPolicyError::MalformedPolicyDocument(ref cause) => cause,
-            PutGroupPolicyError::NoSuchEntity(ref cause) => cause,
-            PutGroupPolicyError::ServiceFailure(ref cause) => cause,
+            PutGroupPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutGroupPolicyError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            PutGroupPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            PutGroupPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutGroupPolicyError {}
 /// Errors returned by PutRolePermissionsBoundary
 #[derive(Debug, PartialEq)]
 pub enum PutRolePermissionsBoundaryError {
@@ -17678,20 +17568,20 @@ impl PutRolePermissionsBoundaryError {
 }
 impl fmt::Display for PutRolePermissionsBoundaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRolePermissionsBoundaryError {
-    fn description(&self) -> &str {
         match *self {
-            PutRolePermissionsBoundaryError::InvalidInput(ref cause) => cause,
-            PutRolePermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
-            PutRolePermissionsBoundaryError::PolicyNotAttachable(ref cause) => cause,
-            PutRolePermissionsBoundaryError::ServiceFailure(ref cause) => cause,
-            PutRolePermissionsBoundaryError::UnmodifiableEntity(ref cause) => cause,
+            PutRolePermissionsBoundaryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutRolePermissionsBoundaryError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            PutRolePermissionsBoundaryError::PolicyNotAttachable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRolePermissionsBoundaryError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            PutRolePermissionsBoundaryError::UnmodifiableEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutRolePermissionsBoundaryError {}
 /// Errors returned by PutRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum PutRolePolicyError {
@@ -17757,20 +17647,16 @@ impl PutRolePolicyError {
 }
 impl fmt::Display for PutRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRolePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutRolePolicyError::LimitExceeded(ref cause) => cause,
-            PutRolePolicyError::MalformedPolicyDocument(ref cause) => cause,
-            PutRolePolicyError::NoSuchEntity(ref cause) => cause,
-            PutRolePolicyError::ServiceFailure(ref cause) => cause,
-            PutRolePolicyError::UnmodifiableEntity(ref cause) => cause,
+            PutRolePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutRolePolicyError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            PutRolePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            PutRolePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            PutRolePolicyError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutRolePolicyError {}
 /// Errors returned by PutUserPermissionsBoundary
 #[derive(Debug, PartialEq)]
 pub enum PutUserPermissionsBoundaryError {
@@ -17833,19 +17719,17 @@ impl PutUserPermissionsBoundaryError {
 }
 impl fmt::Display for PutUserPermissionsBoundaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutUserPermissionsBoundaryError {
-    fn description(&self) -> &str {
         match *self {
-            PutUserPermissionsBoundaryError::InvalidInput(ref cause) => cause,
-            PutUserPermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
-            PutUserPermissionsBoundaryError::PolicyNotAttachable(ref cause) => cause,
-            PutUserPermissionsBoundaryError::ServiceFailure(ref cause) => cause,
+            PutUserPermissionsBoundaryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutUserPermissionsBoundaryError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            PutUserPermissionsBoundaryError::PolicyNotAttachable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutUserPermissionsBoundaryError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutUserPermissionsBoundaryError {}
 /// Errors returned by PutUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutUserPolicyError {
@@ -17904,19 +17788,15 @@ impl PutUserPolicyError {
 }
 impl fmt::Display for PutUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutUserPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutUserPolicyError::LimitExceeded(ref cause) => cause,
-            PutUserPolicyError::MalformedPolicyDocument(ref cause) => cause,
-            PutUserPolicyError::NoSuchEntity(ref cause) => cause,
-            PutUserPolicyError::ServiceFailure(ref cause) => cause,
+            PutUserPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutUserPolicyError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            PutUserPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            PutUserPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutUserPolicyError {}
 /// Errors returned by RemoveClientIDFromOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum RemoveClientIDFromOpenIDConnectProviderError {
@@ -17976,18 +17856,20 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
 }
 impl fmt::Display for RemoveClientIDFromOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveClientIDFromOpenIDConnectProviderError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
-            RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
-            RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+            RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveClientIDFromOpenIDConnectProviderError {}
 /// Errors returned by RemoveRoleFromInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum RemoveRoleFromInstanceProfileError {
@@ -18052,19 +17934,17 @@ impl RemoveRoleFromInstanceProfileError {
 }
 impl fmt::Display for RemoveRoleFromInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveRoleFromInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveRoleFromInstanceProfileError::LimitExceeded(ref cause) => cause,
-            RemoveRoleFromInstanceProfileError::NoSuchEntity(ref cause) => cause,
-            RemoveRoleFromInstanceProfileError::ServiceFailure(ref cause) => cause,
-            RemoveRoleFromInstanceProfileError::UnmodifiableEntity(ref cause) => cause,
+            RemoveRoleFromInstanceProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RemoveRoleFromInstanceProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            RemoveRoleFromInstanceProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            RemoveRoleFromInstanceProfileError::UnmodifiableEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveRoleFromInstanceProfileError {}
 /// Errors returned by RemoveUserFromGroup
 #[derive(Debug, PartialEq)]
 pub enum RemoveUserFromGroupError {
@@ -18116,18 +17996,14 @@ impl RemoveUserFromGroupError {
 }
 impl fmt::Display for RemoveUserFromGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveUserFromGroupError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveUserFromGroupError::LimitExceeded(ref cause) => cause,
-            RemoveUserFromGroupError::NoSuchEntity(ref cause) => cause,
-            RemoveUserFromGroupError::ServiceFailure(ref cause) => cause,
+            RemoveUserFromGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RemoveUserFromGroupError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            RemoveUserFromGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveUserFromGroupError {}
 /// Errors returned by ResetServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum ResetServiceSpecificCredentialError {
@@ -18167,16 +18043,12 @@ impl ResetServiceSpecificCredentialError {
 }
 impl fmt::Display for ResetServiceSpecificCredentialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetServiceSpecificCredentialError {
-    fn description(&self) -> &str {
         match *self {
-            ResetServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
+            ResetServiceSpecificCredentialError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResetServiceSpecificCredentialError {}
 /// Errors returned by ResyncMFADevice
 #[derive(Debug, PartialEq)]
 pub enum ResyncMFADeviceError {
@@ -18235,19 +18107,15 @@ impl ResyncMFADeviceError {
 }
 impl fmt::Display for ResyncMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResyncMFADeviceError {
-    fn description(&self) -> &str {
         match *self {
-            ResyncMFADeviceError::InvalidAuthenticationCode(ref cause) => cause,
-            ResyncMFADeviceError::LimitExceeded(ref cause) => cause,
-            ResyncMFADeviceError::NoSuchEntity(ref cause) => cause,
-            ResyncMFADeviceError::ServiceFailure(ref cause) => cause,
+            ResyncMFADeviceError::InvalidAuthenticationCode(ref cause) => write!(f, "{}", cause),
+            ResyncMFADeviceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ResyncMFADeviceError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ResyncMFADeviceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResyncMFADeviceError {}
 /// Errors returned by SetDefaultPolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum SetDefaultPolicyVersionError {
@@ -18306,19 +18174,15 @@ impl SetDefaultPolicyVersionError {
 }
 impl fmt::Display for SetDefaultPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetDefaultPolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            SetDefaultPolicyVersionError::InvalidInput(ref cause) => cause,
-            SetDefaultPolicyVersionError::LimitExceeded(ref cause) => cause,
-            SetDefaultPolicyVersionError::NoSuchEntity(ref cause) => cause,
-            SetDefaultPolicyVersionError::ServiceFailure(ref cause) => cause,
+            SetDefaultPolicyVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            SetDefaultPolicyVersionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            SetDefaultPolicyVersionError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            SetDefaultPolicyVersionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetDefaultPolicyVersionError {}
 /// Errors returned by SetSecurityTokenServicePreferences
 #[derive(Debug, PartialEq)]
 pub enum SetSecurityTokenServicePreferencesError {
@@ -18360,16 +18224,14 @@ impl SetSecurityTokenServicePreferencesError {
 }
 impl fmt::Display for SetSecurityTokenServicePreferencesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSecurityTokenServicePreferencesError {
-    fn description(&self) -> &str {
         match *self {
-            SetSecurityTokenServicePreferencesError::ServiceFailure(ref cause) => cause,
+            SetSecurityTokenServicePreferencesError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetSecurityTokenServicePreferencesError {}
 /// Errors returned by SimulateCustomPolicy
 #[derive(Debug, PartialEq)]
 pub enum SimulateCustomPolicyError {
@@ -18414,17 +18276,13 @@ impl SimulateCustomPolicyError {
 }
 impl fmt::Display for SimulateCustomPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SimulateCustomPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            SimulateCustomPolicyError::InvalidInput(ref cause) => cause,
-            SimulateCustomPolicyError::PolicyEvaluation(ref cause) => cause,
+            SimulateCustomPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            SimulateCustomPolicyError::PolicyEvaluation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SimulateCustomPolicyError {}
 /// Errors returned by SimulatePrincipalPolicy
 #[derive(Debug, PartialEq)]
 pub enum SimulatePrincipalPolicyError {
@@ -18476,18 +18334,14 @@ impl SimulatePrincipalPolicyError {
 }
 impl fmt::Display for SimulatePrincipalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SimulatePrincipalPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            SimulatePrincipalPolicyError::InvalidInput(ref cause) => cause,
-            SimulatePrincipalPolicyError::NoSuchEntity(ref cause) => cause,
-            SimulatePrincipalPolicyError::PolicyEvaluation(ref cause) => cause,
+            SimulatePrincipalPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            SimulatePrincipalPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            SimulatePrincipalPolicyError::PolicyEvaluation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SimulatePrincipalPolicyError {}
 /// Errors returned by TagRole
 #[derive(Debug, PartialEq)]
 pub enum TagRoleError {
@@ -18553,20 +18407,16 @@ impl TagRoleError {
 }
 impl fmt::Display for TagRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagRoleError {
-    fn description(&self) -> &str {
         match *self {
-            TagRoleError::ConcurrentModification(ref cause) => cause,
-            TagRoleError::InvalidInput(ref cause) => cause,
-            TagRoleError::LimitExceeded(ref cause) => cause,
-            TagRoleError::NoSuchEntity(ref cause) => cause,
-            TagRoleError::ServiceFailure(ref cause) => cause,
+            TagRoleError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagRoleError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TagRoleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            TagRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagRoleError {}
 /// Errors returned by TagUser
 #[derive(Debug, PartialEq)]
 pub enum TagUserError {
@@ -18632,20 +18482,16 @@ impl TagUserError {
 }
 impl fmt::Display for TagUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagUserError {
-    fn description(&self) -> &str {
         match *self {
-            TagUserError::ConcurrentModification(ref cause) => cause,
-            TagUserError::InvalidInput(ref cause) => cause,
-            TagUserError::LimitExceeded(ref cause) => cause,
-            TagUserError::NoSuchEntity(ref cause) => cause,
-            TagUserError::ServiceFailure(ref cause) => cause,
+            TagUserError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagUserError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TagUserError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            TagUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagUserError {}
 /// Errors returned by UntagRole
 #[derive(Debug, PartialEq)]
 pub enum UntagRoleError {
@@ -18697,18 +18543,14 @@ impl UntagRoleError {
 }
 impl fmt::Display for UntagRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagRoleError {
-    fn description(&self) -> &str {
         match *self {
-            UntagRoleError::ConcurrentModification(ref cause) => cause,
-            UntagRoleError::NoSuchEntity(ref cause) => cause,
-            UntagRoleError::ServiceFailure(ref cause) => cause,
+            UntagRoleError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UntagRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagRoleError {}
 /// Errors returned by UntagUser
 #[derive(Debug, PartialEq)]
 pub enum UntagUserError {
@@ -18760,18 +18602,14 @@ impl UntagUserError {
 }
 impl fmt::Display for UntagUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagUserError {
-    fn description(&self) -> &str {
         match *self {
-            UntagUserError::ConcurrentModification(ref cause) => cause,
-            UntagUserError::NoSuchEntity(ref cause) => cause,
-            UntagUserError::ServiceFailure(ref cause) => cause,
+            UntagUserError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UntagUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagUserError {}
 /// Errors returned by UpdateAccessKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccessKeyError {
@@ -18823,18 +18661,14 @@ impl UpdateAccessKeyError {
 }
 impl fmt::Display for UpdateAccessKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAccessKeyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAccessKeyError::LimitExceeded(ref cause) => cause,
-            UpdateAccessKeyError::NoSuchEntity(ref cause) => cause,
-            UpdateAccessKeyError::ServiceFailure(ref cause) => cause,
+            UpdateAccessKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateAccessKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateAccessKeyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAccessKeyError {}
 /// Errors returned by UpdateAccountPasswordPolicy
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountPasswordPolicyError {
@@ -18897,19 +18731,17 @@ impl UpdateAccountPasswordPolicyError {
 }
 impl fmt::Display for UpdateAccountPasswordPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAccountPasswordPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAccountPasswordPolicyError::LimitExceeded(ref cause) => cause,
-            UpdateAccountPasswordPolicyError::MalformedPolicyDocument(ref cause) => cause,
-            UpdateAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,
-            UpdateAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,
+            UpdateAccountPasswordPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateAccountPasswordPolicyError::MalformedPolicyDocument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAccountPasswordPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateAccountPasswordPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAccountPasswordPolicyError {}
 /// Errors returned by UpdateAssumeRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum UpdateAssumeRolePolicyError {
@@ -18977,20 +18809,18 @@ impl UpdateAssumeRolePolicyError {
 }
 impl fmt::Display for UpdateAssumeRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAssumeRolePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAssumeRolePolicyError::LimitExceeded(ref cause) => cause,
-            UpdateAssumeRolePolicyError::MalformedPolicyDocument(ref cause) => cause,
-            UpdateAssumeRolePolicyError::NoSuchEntity(ref cause) => cause,
-            UpdateAssumeRolePolicyError::ServiceFailure(ref cause) => cause,
-            UpdateAssumeRolePolicyError::UnmodifiableEntity(ref cause) => cause,
+            UpdateAssumeRolePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateAssumeRolePolicyError::MalformedPolicyDocument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAssumeRolePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateAssumeRolePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAssumeRolePolicyError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAssumeRolePolicyError {}
 /// Errors returned by UpdateGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateGroupError {
@@ -19049,19 +18879,15 @@ impl UpdateGroupError {
 }
 impl fmt::Display for UpdateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGroupError::EntityAlreadyExists(ref cause) => cause,
-            UpdateGroupError::LimitExceeded(ref cause) => cause,
-            UpdateGroupError::NoSuchEntity(ref cause) => cause,
-            UpdateGroupError::ServiceFailure(ref cause) => cause,
+            UpdateGroupError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateGroupError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGroupError {}
 /// Errors returned by UpdateLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateLoginProfileError {
@@ -19129,20 +18955,18 @@ impl UpdateLoginProfileError {
 }
 impl fmt::Display for UpdateLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateLoginProfileError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateLoginProfileError::EntityTemporarilyUnmodifiable(ref cause) => cause,
-            UpdateLoginProfileError::LimitExceeded(ref cause) => cause,
-            UpdateLoginProfileError::NoSuchEntity(ref cause) => cause,
-            UpdateLoginProfileError::PasswordPolicyViolation(ref cause) => cause,
-            UpdateLoginProfileError::ServiceFailure(ref cause) => cause,
+            UpdateLoginProfileError::EntityTemporarilyUnmodifiable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLoginProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateLoginProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateLoginProfileError::PasswordPolicyViolation(ref cause) => write!(f, "{}", cause),
+            UpdateLoginProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateLoginProfileError {}
 /// Errors returned by UpdateOpenIDConnectProviderThumbprint
 #[derive(Debug, PartialEq)]
 pub enum UpdateOpenIDConnectProviderThumbprintError {
@@ -19202,18 +19026,20 @@ impl UpdateOpenIDConnectProviderThumbprintError {
 }
 impl fmt::Display for UpdateOpenIDConnectProviderThumbprintError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateOpenIDConnectProviderThumbprintError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateOpenIDConnectProviderThumbprintError::InvalidInput(ref cause) => cause,
-            UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(ref cause) => cause,
-            UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(ref cause) => cause,
+            UpdateOpenIDConnectProviderThumbprintError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateOpenIDConnectProviderThumbprintError {}
 /// Errors returned by UpdateRole
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoleError {
@@ -19265,18 +19091,14 @@ impl UpdateRoleError {
 }
 impl fmt::Display for UpdateRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRoleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRoleError::NoSuchEntity(ref cause) => cause,
-            UpdateRoleError::ServiceFailure(ref cause) => cause,
-            UpdateRoleError::UnmodifiableEntity(ref cause) => cause,
+            UpdateRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateRoleError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRoleError {}
 /// Errors returned by UpdateRoleDescription
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoleDescriptionError {
@@ -19328,18 +19150,14 @@ impl UpdateRoleDescriptionError {
 }
 impl fmt::Display for UpdateRoleDescriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRoleDescriptionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRoleDescriptionError::NoSuchEntity(ref cause) => cause,
-            UpdateRoleDescriptionError::ServiceFailure(ref cause) => cause,
-            UpdateRoleDescriptionError::UnmodifiableEntity(ref cause) => cause,
+            UpdateRoleDescriptionError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateRoleDescriptionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateRoleDescriptionError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRoleDescriptionError {}
 /// Errors returned by UpdateSAMLProvider
 #[derive(Debug, PartialEq)]
 pub enum UpdateSAMLProviderError {
@@ -19398,19 +19216,15 @@ impl UpdateSAMLProviderError {
 }
 impl fmt::Display for UpdateSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSAMLProviderError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSAMLProviderError::InvalidInput(ref cause) => cause,
-            UpdateSAMLProviderError::LimitExceeded(ref cause) => cause,
-            UpdateSAMLProviderError::NoSuchEntity(ref cause) => cause,
-            UpdateSAMLProviderError::ServiceFailure(ref cause) => cause,
+            UpdateSAMLProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateSAMLProviderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateSAMLProviderError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateSAMLProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSAMLProviderError {}
 /// Errors returned by UpdateSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateSSHPublicKeyError {
@@ -19448,16 +19262,12 @@ impl UpdateSSHPublicKeyError {
 }
 impl fmt::Display for UpdateSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSSHPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
+            UpdateSSHPublicKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSSHPublicKeyError {}
 /// Errors returned by UpdateServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateServerCertificateError {
@@ -19516,19 +19326,15 @@ impl UpdateServerCertificateError {
 }
 impl fmt::Display for UpdateServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServerCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServerCertificateError::EntityAlreadyExists(ref cause) => cause,
-            UpdateServerCertificateError::LimitExceeded(ref cause) => cause,
-            UpdateServerCertificateError::NoSuchEntity(ref cause) => cause,
-            UpdateServerCertificateError::ServiceFailure(ref cause) => cause,
+            UpdateServerCertificateError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateServerCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateServerCertificateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateServerCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServerCertificateError {}
 /// Errors returned by UpdateServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum UpdateServiceSpecificCredentialError {
@@ -19570,16 +19376,12 @@ impl UpdateServiceSpecificCredentialError {
 }
 impl fmt::Display for UpdateServiceSpecificCredentialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServiceSpecificCredentialError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
+            UpdateServiceSpecificCredentialError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServiceSpecificCredentialError {}
 /// Errors returned by UpdateSigningCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateSigningCertificateError {
@@ -19631,18 +19433,14 @@ impl UpdateSigningCertificateError {
 }
 impl fmt::Display for UpdateSigningCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSigningCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSigningCertificateError::LimitExceeded(ref cause) => cause,
-            UpdateSigningCertificateError::NoSuchEntity(ref cause) => cause,
-            UpdateSigningCertificateError::ServiceFailure(ref cause) => cause,
+            UpdateSigningCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateSigningCertificateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateSigningCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSigningCertificateError {}
 /// Errors returned by UpdateUser
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserError {
@@ -19715,21 +19513,17 @@ impl UpdateUserError {
 }
 impl fmt::Display for UpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserError::ConcurrentModification(ref cause) => cause,
-            UpdateUserError::EntityAlreadyExists(ref cause) => cause,
-            UpdateUserError::EntityTemporarilyUnmodifiable(ref cause) => cause,
-            UpdateUserError::LimitExceeded(ref cause) => cause,
-            UpdateUserError::NoSuchEntity(ref cause) => cause,
-            UpdateUserError::ServiceFailure(ref cause) => cause,
+            UpdateUserError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::EntityTemporarilyUnmodifiable(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserError {}
 /// Errors returned by UploadSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum UploadSSHPublicKeyError {
@@ -19797,20 +19591,18 @@ impl UploadSSHPublicKeyError {
 }
 impl fmt::Display for UploadSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadSSHPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            UploadSSHPublicKeyError::DuplicateSSHPublicKey(ref cause) => cause,
-            UploadSSHPublicKeyError::InvalidPublicKey(ref cause) => cause,
-            UploadSSHPublicKeyError::LimitExceeded(ref cause) => cause,
-            UploadSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
-            UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => cause,
+            UploadSSHPublicKeyError::DuplicateSSHPublicKey(ref cause) => write!(f, "{}", cause),
+            UploadSSHPublicKeyError::InvalidPublicKey(ref cause) => write!(f, "{}", cause),
+            UploadSSHPublicKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UploadSSHPublicKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UploadSSHPublicKeyError {}
 /// Errors returned by UploadServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum UploadServerCertificateError {
@@ -19878,20 +19670,16 @@ impl UploadServerCertificateError {
 }
 impl fmt::Display for UploadServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadServerCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            UploadServerCertificateError::EntityAlreadyExists(ref cause) => cause,
-            UploadServerCertificateError::KeyPairMismatch(ref cause) => cause,
-            UploadServerCertificateError::LimitExceeded(ref cause) => cause,
-            UploadServerCertificateError::MalformedCertificate(ref cause) => cause,
-            UploadServerCertificateError::ServiceFailure(ref cause) => cause,
+            UploadServerCertificateError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UploadServerCertificateError::KeyPairMismatch(ref cause) => write!(f, "{}", cause),
+            UploadServerCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UploadServerCertificateError::MalformedCertificate(ref cause) => write!(f, "{}", cause),
+            UploadServerCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UploadServerCertificateError {}
 /// Errors returned by UploadSigningCertificate
 #[derive(Debug, PartialEq)]
 pub enum UploadSigningCertificateError {
@@ -19977,22 +19765,22 @@ impl UploadSigningCertificateError {
 }
 impl fmt::Display for UploadSigningCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadSigningCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            UploadSigningCertificateError::DuplicateCertificate(ref cause) => cause,
-            UploadSigningCertificateError::EntityAlreadyExists(ref cause) => cause,
-            UploadSigningCertificateError::InvalidCertificate(ref cause) => cause,
-            UploadSigningCertificateError::LimitExceeded(ref cause) => cause,
-            UploadSigningCertificateError::MalformedCertificate(ref cause) => cause,
-            UploadSigningCertificateError::NoSuchEntity(ref cause) => cause,
-            UploadSigningCertificateError::ServiceFailure(ref cause) => cause,
+            UploadSigningCertificateError::DuplicateCertificate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UploadSigningCertificateError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UploadSigningCertificateError::InvalidCertificate(ref cause) => write!(f, "{}", cause),
+            UploadSigningCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UploadSigningCertificateError::MalformedCertificate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UploadSigningCertificateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UploadSigningCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UploadSigningCertificateError {}
 /// Trait representing the capabilities of the IAM API. IAM clients implement this trait.
 pub trait Iam {
     /// <p>Adds a new client ID (also known as audience) to the list of client IDs already registered for the specified IAM OpenID Connect (OIDC) provider resource.</p> <p>This operation is idempotent; it does not fail or return an error if you add an existing client ID to the provider.</p>

@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDRTLogBucketRequest {
     /// <p>The Amazon S3 bucket that contains your AWS WAF logs.</p>
     #[serde(rename = "LogBucket")]
@@ -35,6 +36,7 @@ pub struct AssociateDRTLogBucketRequest {
 pub struct AssociateDRTLogBucketResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDRTRoleRequest {
     /// <p>The Amazon Resource Name (ARN) of the role the DRT will use to access your AWS account.</p> <p>Prior to making the <code>AssociateDRTRole</code> request, you must attach the <a href="https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy">AWSShieldDRTAccessPolicy</a> managed policy to this role. For more information see <a href=" https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Attaching and Detaching IAM Policies</a>.</p>
     #[serde(rename = "RoleArn")]
@@ -159,6 +161,7 @@ pub struct Contributor {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProtectionRequest {
     /// <p>Friendly name for the <code>Protection</code> you are creating.</p>
     #[serde(rename = "Name")]
@@ -178,6 +181,7 @@ pub struct CreateProtectionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriptionRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -185,6 +189,7 @@ pub struct CreateSubscriptionRequest {}
 pub struct CreateSubscriptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProtectionRequest {
     /// <p>The unique identifier (ID) for the <a>Protection</a> object to be deleted.</p>
     #[serde(rename = "ProtectionId")]
@@ -196,6 +201,7 @@ pub struct DeleteProtectionRequest {
 pub struct DeleteProtectionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriptionRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -203,6 +209,7 @@ pub struct DeleteSubscriptionRequest {}
 pub struct DeleteSubscriptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAttackRequest {
     /// <p>The unique identifier (ID) for the attack that to be described.</p>
     #[serde(rename = "AttackId")]
@@ -219,6 +226,7 @@ pub struct DescribeAttackResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDRTAccessRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -235,6 +243,7 @@ pub struct DescribeDRTAccessResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEmergencyContactSettingsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -247,6 +256,7 @@ pub struct DescribeEmergencyContactSettingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProtectionRequest {
     /// <p>The unique identifier (ID) for the <a>Protection</a> object that is described. When submitting the <code>DescribeProtection</code> request you must provide either the <code>ResourceArn</code> or the <code>ProtectionID</code>, but not both.</p>
     #[serde(rename = "ProtectionId")]
@@ -268,6 +278,7 @@ pub struct DescribeProtectionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscriptionRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -280,6 +291,7 @@ pub struct DescribeSubscriptionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDRTLogBucketRequest {
     /// <p>The Amazon S3 bucket that contains your AWS WAF logs.</p>
     #[serde(rename = "LogBucket")]
@@ -291,6 +303,7 @@ pub struct DisassociateDRTLogBucketRequest {
 pub struct DisassociateDRTLogBucketResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDRTRoleRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -306,6 +319,7 @@ pub struct EmergencyContact {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSubscriptionStateRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -331,6 +345,7 @@ pub struct Limit {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttacksRequest {
     /// <p>The end of the time period for the attacks. This is a <code>timestamp</code> type. The sample request above indicates a <code>number</code> type because the default used by WAF is Unix time in seconds. However any valid <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp format</a> is allowed. </p>
     #[serde(rename = "EndTime")]
@@ -368,6 +383,7 @@ pub struct ListAttacksResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProtectionsRequest {
     /// <p>The maximum number of <a>Protection</a> objects to be returned. If this is left blank the first 20 results will be returned.</p> <p>This is a maximum value; it is possible that AWS WAF will return the results in smaller batches. That is, the number of <a>Protection</a> objects returned could be less than <code>MaxResults</code>, even if there are still more <a>Protection</a> objects yet to return. If there are more <a>Protection</a> objects to return, AWS WAF will always also return a <code>NextToken</code>.</p>
     #[serde(rename = "MaxResults")]
@@ -513,6 +529,7 @@ pub struct SummarizedCounter {
 
 /// <p>The time range.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TimeRange {
     /// <p>The start time, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "FromInclusive")]
@@ -525,6 +542,7 @@ pub struct TimeRange {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEmergencyContactSettingsRequest {
     /// <p>A list of email addresses that the DRT can use to contact you during a suspected attack.</p>
     #[serde(rename = "EmergencyContactList")]
@@ -537,6 +555,7 @@ pub struct UpdateEmergencyContactSettingsRequest {
 pub struct UpdateEmergencyContactSettingsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubscriptionRequest {
     /// <p>When you initally create a subscription, <code>AutoRenew</code> is set to <code>ENABLED</code>. If <code>ENABLED</code>, the subscription will be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. If the <code>UpdateSubscription</code> request does not included a value for <code>AutoRenew</code>, the existing value for <code>AutoRenew</code> remains unchanged.</p>
     #[serde(rename = "AutoRenew")]
@@ -620,23 +639,21 @@ impl AssociateDRTLogBucketError {
 }
 impl fmt::Display for AssociateDRTLogBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateDRTLogBucketError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateDRTLogBucketError::AccessDeniedForDependency(ref cause) => cause,
-            AssociateDRTLogBucketError::InternalError(ref cause) => cause,
-            AssociateDRTLogBucketError::InvalidOperation(ref cause) => cause,
-            AssociateDRTLogBucketError::InvalidParameter(ref cause) => cause,
-            AssociateDRTLogBucketError::LimitsExceeded(ref cause) => cause,
-            AssociateDRTLogBucketError::NoAssociatedRole(ref cause) => cause,
-            AssociateDRTLogBucketError::OptimisticLock(ref cause) => cause,
-            AssociateDRTLogBucketError::ResourceNotFound(ref cause) => cause,
+            AssociateDRTLogBucketError::AccessDeniedForDependency(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateDRTLogBucketError::InternalError(ref cause) => write!(f, "{}", cause),
+            AssociateDRTLogBucketError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            AssociateDRTLogBucketError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AssociateDRTLogBucketError::LimitsExceeded(ref cause) => write!(f, "{}", cause),
+            AssociateDRTLogBucketError::NoAssociatedRole(ref cause) => write!(f, "{}", cause),
+            AssociateDRTLogBucketError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            AssociateDRTLogBucketError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateDRTLogBucketError {}
 /// Errors returned by AssociateDRTRole
 #[derive(Debug, PartialEq)]
 pub enum AssociateDRTRoleError {
@@ -687,21 +704,17 @@ impl AssociateDRTRoleError {
 }
 impl fmt::Display for AssociateDRTRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateDRTRoleError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateDRTRoleError::AccessDeniedForDependency(ref cause) => cause,
-            AssociateDRTRoleError::InternalError(ref cause) => cause,
-            AssociateDRTRoleError::InvalidOperation(ref cause) => cause,
-            AssociateDRTRoleError::InvalidParameter(ref cause) => cause,
-            AssociateDRTRoleError::OptimisticLock(ref cause) => cause,
-            AssociateDRTRoleError::ResourceNotFound(ref cause) => cause,
+            AssociateDRTRoleError::AccessDeniedForDependency(ref cause) => write!(f, "{}", cause),
+            AssociateDRTRoleError::InternalError(ref cause) => write!(f, "{}", cause),
+            AssociateDRTRoleError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            AssociateDRTRoleError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AssociateDRTRoleError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            AssociateDRTRoleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateDRTRoleError {}
 /// Errors returned by CreateProtection
 #[derive(Debug, PartialEq)]
 pub enum CreateProtectionError {
@@ -757,22 +770,18 @@ impl CreateProtectionError {
 }
 impl fmt::Display for CreateProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProtectionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateProtectionError::InternalError(ref cause) => cause,
-            CreateProtectionError::InvalidOperation(ref cause) => cause,
-            CreateProtectionError::InvalidResource(ref cause) => cause,
-            CreateProtectionError::LimitsExceeded(ref cause) => cause,
-            CreateProtectionError::OptimisticLock(ref cause) => cause,
-            CreateProtectionError::ResourceAlreadyExists(ref cause) => cause,
-            CreateProtectionError::ResourceNotFound(ref cause) => cause,
+            CreateProtectionError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateProtectionError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            CreateProtectionError::InvalidResource(ref cause) => write!(f, "{}", cause),
+            CreateProtectionError::LimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateProtectionError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            CreateProtectionError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateProtectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateProtectionError {}
 /// Errors returned by CreateSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateSubscriptionError {
@@ -803,17 +812,13 @@ impl CreateSubscriptionError {
 }
 impl fmt::Display for CreateSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSubscriptionError::InternalError(ref cause) => cause,
-            CreateSubscriptionError::ResourceAlreadyExists(ref cause) => cause,
+            CreateSubscriptionError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateSubscriptionError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSubscriptionError {}
 /// Errors returned by DeleteProtection
 #[derive(Debug, PartialEq)]
 pub enum DeleteProtectionError {
@@ -847,18 +852,14 @@ impl DeleteProtectionError {
 }
 impl fmt::Display for DeleteProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteProtectionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteProtectionError::InternalError(ref cause) => cause,
-            DeleteProtectionError::OptimisticLock(ref cause) => cause,
-            DeleteProtectionError::ResourceNotFound(ref cause) => cause,
+            DeleteProtectionError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteProtectionError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            DeleteProtectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteProtectionError {}
 /// Errors returned by DeleteSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubscriptionError {
@@ -894,18 +895,14 @@ impl DeleteSubscriptionError {
 }
 impl fmt::Display for DeleteSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSubscriptionError::InternalError(ref cause) => cause,
-            DeleteSubscriptionError::LockedSubscription(ref cause) => cause,
-            DeleteSubscriptionError::ResourceNotFound(ref cause) => cause,
+            DeleteSubscriptionError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteSubscriptionError::LockedSubscription(ref cause) => write!(f, "{}", cause),
+            DeleteSubscriptionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSubscriptionError {}
 /// Errors returned by DescribeAttack
 #[derive(Debug, PartialEq)]
 pub enum DescribeAttackError {
@@ -934,17 +931,13 @@ impl DescribeAttackError {
 }
 impl fmt::Display for DescribeAttackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAttackError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAttackError::AccessDenied(ref cause) => cause,
-            DescribeAttackError::InternalError(ref cause) => cause,
+            DescribeAttackError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeAttackError::InternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAttackError {}
 /// Errors returned by DescribeDRTAccess
 #[derive(Debug, PartialEq)]
 pub enum DescribeDRTAccessError {
@@ -973,17 +966,13 @@ impl DescribeDRTAccessError {
 }
 impl fmt::Display for DescribeDRTAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDRTAccessError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDRTAccessError::InternalError(ref cause) => cause,
-            DescribeDRTAccessError::ResourceNotFound(ref cause) => cause,
+            DescribeDRTAccessError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeDRTAccessError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDRTAccessError {}
 /// Errors returned by DescribeEmergencyContactSettings
 #[derive(Debug, PartialEq)]
 pub enum DescribeEmergencyContactSettingsError {
@@ -1018,17 +1007,17 @@ impl DescribeEmergencyContactSettingsError {
 }
 impl fmt::Display for DescribeEmergencyContactSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEmergencyContactSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEmergencyContactSettingsError::InternalError(ref cause) => cause,
-            DescribeEmergencyContactSettingsError::ResourceNotFound(ref cause) => cause,
+            DescribeEmergencyContactSettingsError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEmergencyContactSettingsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeEmergencyContactSettingsError {}
 /// Errors returned by DescribeProtection
 #[derive(Debug, PartialEq)]
 pub enum DescribeProtectionError {
@@ -1062,18 +1051,14 @@ impl DescribeProtectionError {
 }
 impl fmt::Display for DescribeProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeProtectionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeProtectionError::InternalError(ref cause) => cause,
-            DescribeProtectionError::InvalidParameter(ref cause) => cause,
-            DescribeProtectionError::ResourceNotFound(ref cause) => cause,
+            DescribeProtectionError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeProtectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeProtectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeProtectionError {}
 /// Errors returned by DescribeSubscription
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscriptionError {
@@ -1104,17 +1089,13 @@ impl DescribeSubscriptionError {
 }
 impl fmt::Display for DescribeSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSubscriptionError::InternalError(ref cause) => cause,
-            DescribeSubscriptionError::ResourceNotFound(ref cause) => cause,
+            DescribeSubscriptionError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeSubscriptionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSubscriptionError {}
 /// Errors returned by DisassociateDRTLogBucket
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDRTLogBucketError {
@@ -1175,21 +1156,19 @@ impl DisassociateDRTLogBucketError {
 }
 impl fmt::Display for DisassociateDRTLogBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateDRTLogBucketError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateDRTLogBucketError::AccessDeniedForDependency(ref cause) => cause,
-            DisassociateDRTLogBucketError::InternalError(ref cause) => cause,
-            DisassociateDRTLogBucketError::InvalidOperation(ref cause) => cause,
-            DisassociateDRTLogBucketError::NoAssociatedRole(ref cause) => cause,
-            DisassociateDRTLogBucketError::OptimisticLock(ref cause) => cause,
-            DisassociateDRTLogBucketError::ResourceNotFound(ref cause) => cause,
+            DisassociateDRTLogBucketError::AccessDeniedForDependency(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDRTLogBucketError::InternalError(ref cause) => write!(f, "{}", cause),
+            DisassociateDRTLogBucketError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            DisassociateDRTLogBucketError::NoAssociatedRole(ref cause) => write!(f, "{}", cause),
+            DisassociateDRTLogBucketError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            DisassociateDRTLogBucketError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateDRTLogBucketError {}
 /// Errors returned by DisassociateDRTRole
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDRTRoleError {
@@ -1232,19 +1211,15 @@ impl DisassociateDRTRoleError {
 }
 impl fmt::Display for DisassociateDRTRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateDRTRoleError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateDRTRoleError::InternalError(ref cause) => cause,
-            DisassociateDRTRoleError::InvalidOperation(ref cause) => cause,
-            DisassociateDRTRoleError::OptimisticLock(ref cause) => cause,
-            DisassociateDRTRoleError::ResourceNotFound(ref cause) => cause,
+            DisassociateDRTRoleError::InternalError(ref cause) => write!(f, "{}", cause),
+            DisassociateDRTRoleError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            DisassociateDRTRoleError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            DisassociateDRTRoleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateDRTRoleError {}
 /// Errors returned by GetSubscriptionState
 #[derive(Debug, PartialEq)]
 pub enum GetSubscriptionStateError {
@@ -1268,16 +1243,12 @@ impl GetSubscriptionStateError {
 }
 impl fmt::Display for GetSubscriptionStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSubscriptionStateError {
-    fn description(&self) -> &str {
         match *self {
-            GetSubscriptionStateError::InternalError(ref cause) => cause,
+            GetSubscriptionStateError::InternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSubscriptionStateError {}
 /// Errors returned by ListAttacks
 #[derive(Debug, PartialEq)]
 pub enum ListAttacksError {
@@ -1311,18 +1282,14 @@ impl ListAttacksError {
 }
 impl fmt::Display for ListAttacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAttacksError {
-    fn description(&self) -> &str {
         match *self {
-            ListAttacksError::InternalError(ref cause) => cause,
-            ListAttacksError::InvalidOperation(ref cause) => cause,
-            ListAttacksError::InvalidParameter(ref cause) => cause,
+            ListAttacksError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListAttacksError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            ListAttacksError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAttacksError {}
 /// Errors returned by ListProtections
 #[derive(Debug, PartialEq)]
 pub enum ListProtectionsError {
@@ -1358,18 +1325,14 @@ impl ListProtectionsError {
 }
 impl fmt::Display for ListProtectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProtectionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListProtectionsError::InternalError(ref cause) => cause,
-            ListProtectionsError::InvalidPaginationToken(ref cause) => cause,
-            ListProtectionsError::ResourceNotFound(ref cause) => cause,
+            ListProtectionsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListProtectionsError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            ListProtectionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListProtectionsError {}
 /// Errors returned by UpdateEmergencyContactSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateEmergencyContactSettingsError {
@@ -1418,19 +1381,21 @@ impl UpdateEmergencyContactSettingsError {
 }
 impl fmt::Display for UpdateEmergencyContactSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateEmergencyContactSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateEmergencyContactSettingsError::InternalError(ref cause) => cause,
-            UpdateEmergencyContactSettingsError::InvalidParameter(ref cause) => cause,
-            UpdateEmergencyContactSettingsError::OptimisticLock(ref cause) => cause,
-            UpdateEmergencyContactSettingsError::ResourceNotFound(ref cause) => cause,
+            UpdateEmergencyContactSettingsError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateEmergencyContactSettingsError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateEmergencyContactSettingsError::OptimisticLock(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateEmergencyContactSettingsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateEmergencyContactSettingsError {}
 /// Errors returned by UpdateSubscription
 #[derive(Debug, PartialEq)]
 pub enum UpdateSubscriptionError {
@@ -1476,20 +1441,16 @@ impl UpdateSubscriptionError {
 }
 impl fmt::Display for UpdateSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSubscriptionError::InternalError(ref cause) => cause,
-            UpdateSubscriptionError::InvalidParameter(ref cause) => cause,
-            UpdateSubscriptionError::LockedSubscription(ref cause) => cause,
-            UpdateSubscriptionError::OptimisticLock(ref cause) => cause,
-            UpdateSubscriptionError::ResourceNotFound(ref cause) => cause,
+            UpdateSubscriptionError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateSubscriptionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateSubscriptionError::LockedSubscription(ref cause) => write!(f, "{}", cause),
+            UpdateSubscriptionError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            UpdateSubscriptionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSubscriptionError {}
 /// Trait representing the capabilities of the AWS Shield API. AWS Shield clients implement this trait.
 pub trait Shield {
     /// <p>Authorizes the DDoS Response team (DRT) to access the specified Amazon S3 bucket containing your AWS WAF logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>

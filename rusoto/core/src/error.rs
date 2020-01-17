@@ -60,22 +60,18 @@ impl<E> From<io::Error> for RusotoError<E> {
 
 impl<E: Error + 'static> fmt::Display for RusotoError<E> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        match *self {
+            RusotoError::Service(ref err) => write!(f, "{}", err),
+            RusotoError::Validation(ref cause) => write!(f, "{}", cause),
+            RusotoError::Credentials(ref err) => write!(f, "{}", err),
+            RusotoError::HttpDispatch(ref dispatch_error) => write!(f, "{}", dispatch_error),
+            RusotoError::ParseError(ref cause) => write!(f, "{}", cause),
+            RusotoError::Unknown(ref cause) => write!(f, "{}", cause.body_as_str()),
+        }
     }
 }
 
 impl<E: Error + 'static> Error for RusotoError<E> {
-    fn description(&self) -> &str {
-        match *self {
-            RusotoError::Service(ref err) => err.description(),
-            RusotoError::Validation(ref cause) => cause,
-            RusotoError::Credentials(ref err) => err.description(),
-            RusotoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RusotoError::ParseError(ref cause) => cause,
-            RusotoError::Unknown(ref cause) => cause.body_as_str(),
-        }
-    }
-
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         match *self {
             RusotoError::Service(ref err) => Some(err),

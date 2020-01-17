@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
     /// <p>The ID of the ML object to tag. For example, <code>exampleModelId</code>.</p>
     #[serde(rename = "ResourceId")]
@@ -116,6 +117,7 @@ pub struct BatchPrediction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBatchPredictionInput {
     /// <p>The ID of the <code>DataSource</code> that points to the group of observations to predict.</p>
     #[serde(rename = "BatchPredictionDataSourceId")]
@@ -146,6 +148,7 @@ pub struct CreateBatchPredictionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceFromRDSInput {
     /// <p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training. This parameter must be set to <code>true</code> if the <code></code>DataSource<code></code> needs to be used for <code>MLModel</code> training. </p>
     #[serde(rename = "ComputeStatistics")]
@@ -177,6 +180,7 @@ pub struct CreateDataSourceFromRDSOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceFromRedshiftInput {
     /// <p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training. This parameter must be set to <code>true</code> if the <code>DataSource</code> needs to be used for <code>MLModel</code> training.</p>
     #[serde(rename = "ComputeStatistics")]
@@ -208,6 +212,7 @@ pub struct CreateDataSourceFromRedshiftOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceFromS3Input {
     /// <p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training. This parameter must be set to <code>true</code> if the <code></code>DataSource<code></code> needs to be used for <code>MLModel</code> training.</p>
     #[serde(rename = "ComputeStatistics")]
@@ -236,6 +241,7 @@ pub struct CreateDataSourceFromS3Output {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEvaluationInput {
     /// <p>The ID of the <code>DataSource</code> for the evaluation. The schema of the <code>DataSource</code> must match the schema used to create the <code>MLModel</code>.</p>
     #[serde(rename = "EvaluationDataSourceId")]
@@ -263,6 +269,7 @@ pub struct CreateEvaluationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMLModelInput {
     /// <p>A user-supplied ID that uniquely identifies the <code>MLModel</code>.</p>
     #[serde(rename = "MLModelId")]
@@ -302,6 +309,7 @@ pub struct CreateMLModelOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRealtimeEndpointInput {
     /// <p>The ID assigned to the <code>MLModel</code> during creation.</p>
     #[serde(rename = "MLModelId")]
@@ -395,6 +403,7 @@ pub struct DataSource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBatchPredictionInput {
     /// <p>A user-supplied ID that uniquely identifies the <code>BatchPrediction</code>.</p>
     #[serde(rename = "BatchPredictionId")]
@@ -412,6 +421,7 @@ pub struct DeleteBatchPredictionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataSourceInput {
     /// <p>A user-supplied ID that uniquely identifies the <code>DataSource</code>.</p>
     #[serde(rename = "DataSourceId")]
@@ -429,6 +439,7 @@ pub struct DeleteDataSourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEvaluationInput {
     /// <p>A user-supplied ID that uniquely identifies the <code>Evaluation</code> to delete.</p>
     #[serde(rename = "EvaluationId")]
@@ -446,6 +457,7 @@ pub struct DeleteEvaluationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMLModelInput {
     /// <p>A user-supplied ID that uniquely identifies the <code>MLModel</code>.</p>
     #[serde(rename = "MLModelId")]
@@ -463,6 +475,7 @@ pub struct DeleteMLModelOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRealtimeEndpointInput {
     /// <p>The ID assigned to the <code>MLModel</code> during creation.</p>
     #[serde(rename = "MLModelId")]
@@ -484,6 +497,7 @@ pub struct DeleteRealtimeEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsInput {
     /// <p>The ID of the tagged ML object. For example, <code>exampleModelId</code>.</p>
     #[serde(rename = "ResourceId")]
@@ -511,6 +525,7 @@ pub struct DeleteTagsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBatchPredictionsInput {
     /// <p>The equal to operator. The <code>BatchPrediction</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>
     #[serde(rename = "EQ")]
@@ -573,6 +588,7 @@ pub struct DescribeBatchPredictionsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSourcesInput {
     /// <p>The equal to operator. The <code>DataSource</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>
     #[serde(rename = "EQ")]
@@ -635,6 +651,7 @@ pub struct DescribeDataSourcesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEvaluationsInput {
     /// <p>The equal to operator. The <code>Evaluation</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>
     #[serde(rename = "EQ")]
@@ -697,6 +714,7 @@ pub struct DescribeEvaluationsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMLModelsInput {
     /// <p>The equal to operator. The <code>MLModel</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>
     #[serde(rename = "EQ")]
@@ -759,6 +777,7 @@ pub struct DescribeMLModelsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsInput {
     /// <p>The ID of the ML object. For example, <code>exampleModelId</code>. </p>
     #[serde(rename = "ResourceId")]
@@ -846,6 +865,7 @@ pub struct Evaluation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBatchPredictionInput {
     /// <p>An ID assigned to the <code>BatchPrediction</code> at creation.</p>
     #[serde(rename = "BatchPredictionId")]
@@ -927,6 +947,7 @@ pub struct GetBatchPredictionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataSourceInput {
     /// <p>The ID assigned to the <code>DataSource</code> at creation.</p>
     #[serde(rename = "DataSourceId")]
@@ -1021,6 +1042,7 @@ pub struct GetDataSourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEvaluationInput {
     /// <p>The ID of the <code>Evaluation</code> to retrieve. The evaluation of each <code>MLModel</code> is recorded and cataloged. The ID provides the means to access the information. </p>
     #[serde(rename = "EvaluationId")]
@@ -1094,6 +1116,7 @@ pub struct GetEvaluationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLModelInput {
     /// <p>The ID assigned to the <code>MLModel</code> at creation.</p>
     #[serde(rename = "MLModelId")]
@@ -1280,6 +1303,7 @@ pub struct PerformanceMetrics {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PredictInput {
     /// <p>A unique identifier of the <code>MLModel</code>.</p>
     #[serde(rename = "MLModelId")]
@@ -1320,6 +1344,7 @@ pub struct Prediction {
 
 /// <p>The data specification of an Amazon Relational Database Service (Amazon RDS) <code>DataSource</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RDSDataSpec {
     /// <p><p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> </ul></p>
     #[serde(rename = "DataRearrangement")]
@@ -1371,6 +1396,7 @@ pub struct RDSDatabase {
 
 /// <p>The database credentials to connect to a database on an RDS DB instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RDSDatabaseCredentials {
     #[serde(rename = "Password")]
     pub password: String,
@@ -1431,6 +1457,7 @@ pub struct RealtimeEndpointInfo {
 
 /// <p>Describes the data specification of an Amazon Redshift <code>DataSource</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedshiftDataSpec {
     /// <p><p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> </ul></p>
     #[serde(rename = "DataRearrangement")]
@@ -1469,6 +1496,7 @@ pub struct RedshiftDatabase {
 
 /// <p> Describes the database credentials for connecting to a database on an Amazon Redshift cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedshiftDatabaseCredentials {
     #[serde(rename = "Password")]
     pub password: String,
@@ -1494,6 +1522,7 @@ pub struct RedshiftMetadata {
 
 /// <p> Describes the data specification of a <code>DataSource</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3DataSpec {
     /// <p>The location of the data file(s) used by a <code>DataSource</code>. The URI specifies a data file or an Amazon Simple Storage Service (Amazon S3) directory or bucket containing data files.</p>
     #[serde(rename = "DataLocationS3")]
@@ -1526,6 +1555,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBatchPredictionInput {
     /// <p>The ID assigned to the <code>BatchPrediction</code> during creation.</p>
     #[serde(rename = "BatchPredictionId")]
@@ -1546,6 +1576,7 @@ pub struct UpdateBatchPredictionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSourceInput {
     /// <p>The ID assigned to the <code>DataSource</code> during creation.</p>
     #[serde(rename = "DataSourceId")]
@@ -1566,6 +1597,7 @@ pub struct UpdateDataSourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEvaluationInput {
     /// <p>The ID assigned to the <code>Evaluation</code> during creation.</p>
     #[serde(rename = "EvaluationId")]
@@ -1586,6 +1618,7 @@ pub struct UpdateEvaluationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMLModelInput {
     /// <p>The ID assigned to the <code>MLModel</code> during creation.</p>
     #[serde(rename = "MLModelId")]
@@ -1653,20 +1686,16 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsError::InternalServer(ref cause) => cause,
-            AddTagsError::InvalidInput(ref cause) => cause,
-            AddTagsError::InvalidTag(ref cause) => cause,
-            AddTagsError::ResourceNotFound(ref cause) => cause,
-            AddTagsError::TagLimitExceeded(ref cause) => cause,
+            AddTagsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            AddTagsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AddTagsError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            AddTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddTagsError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsError {}
 /// Errors returned by CreateBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum CreateBatchPredictionError {
@@ -1704,18 +1733,16 @@ impl CreateBatchPredictionError {
 }
 impl fmt::Display for CreateBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBatchPredictionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBatchPredictionError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateBatchPredictionError::InternalServer(ref cause) => cause,
-            CreateBatchPredictionError::InvalidInput(ref cause) => cause,
+            CreateBatchPredictionError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateBatchPredictionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateBatchPredictionError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBatchPredictionError {}
 /// Errors returned by CreateDataSourceFromRDS
 #[derive(Debug, PartialEq)]
 pub enum CreateDataSourceFromRDSError {
@@ -1755,18 +1782,16 @@ impl CreateDataSourceFromRDSError {
 }
 impl fmt::Display for CreateDataSourceFromRDSError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDataSourceFromRDSError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDataSourceFromRDSError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateDataSourceFromRDSError::InternalServer(ref cause) => cause,
-            CreateDataSourceFromRDSError::InvalidInput(ref cause) => cause,
+            CreateDataSourceFromRDSError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDataSourceFromRDSError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateDataSourceFromRDSError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDataSourceFromRDSError {}
 /// Errors returned by CreateDataSourceFromRedshift
 #[derive(Debug, PartialEq)]
 pub enum CreateDataSourceFromRedshiftError {
@@ -1808,18 +1833,16 @@ impl CreateDataSourceFromRedshiftError {
 }
 impl fmt::Display for CreateDataSourceFromRedshiftError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDataSourceFromRedshiftError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDataSourceFromRedshiftError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateDataSourceFromRedshiftError::InternalServer(ref cause) => cause,
-            CreateDataSourceFromRedshiftError::InvalidInput(ref cause) => cause,
+            CreateDataSourceFromRedshiftError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDataSourceFromRedshiftError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateDataSourceFromRedshiftError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDataSourceFromRedshiftError {}
 /// Errors returned by CreateDataSourceFromS3
 #[derive(Debug, PartialEq)]
 pub enum CreateDataSourceFromS3Error {
@@ -1857,18 +1880,16 @@ impl CreateDataSourceFromS3Error {
 }
 impl fmt::Display for CreateDataSourceFromS3Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDataSourceFromS3Error {
-    fn description(&self) -> &str {
         match *self {
-            CreateDataSourceFromS3Error::IdempotentParameterMismatch(ref cause) => cause,
-            CreateDataSourceFromS3Error::InternalServer(ref cause) => cause,
-            CreateDataSourceFromS3Error::InvalidInput(ref cause) => cause,
+            CreateDataSourceFromS3Error::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDataSourceFromS3Error::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateDataSourceFromS3Error::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDataSourceFromS3Error {}
 /// Errors returned by CreateEvaluation
 #[derive(Debug, PartialEq)]
 pub enum CreateEvaluationError {
@@ -1904,18 +1925,14 @@ impl CreateEvaluationError {
 }
 impl fmt::Display for CreateEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEvaluationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEvaluationError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateEvaluationError::InternalServer(ref cause) => cause,
-            CreateEvaluationError::InvalidInput(ref cause) => cause,
+            CreateEvaluationError::IdempotentParameterMismatch(ref cause) => write!(f, "{}", cause),
+            CreateEvaluationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateEvaluationError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEvaluationError {}
 /// Errors returned by CreateMLModel
 #[derive(Debug, PartialEq)]
 pub enum CreateMLModelError {
@@ -1951,18 +1968,14 @@ impl CreateMLModelError {
 }
 impl fmt::Display for CreateMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMLModelError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMLModelError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateMLModelError::InternalServer(ref cause) => cause,
-            CreateMLModelError::InvalidInput(ref cause) => cause,
+            CreateMLModelError::IdempotentParameterMismatch(ref cause) => write!(f, "{}", cause),
+            CreateMLModelError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateMLModelError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateMLModelError {}
 /// Errors returned by CreateRealtimeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateRealtimeEndpointError {
@@ -2000,18 +2013,14 @@ impl CreateRealtimeEndpointError {
 }
 impl fmt::Display for CreateRealtimeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRealtimeEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRealtimeEndpointError::InternalServer(ref cause) => cause,
-            CreateRealtimeEndpointError::InvalidInput(ref cause) => cause,
-            CreateRealtimeEndpointError::ResourceNotFound(ref cause) => cause,
+            CreateRealtimeEndpointError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateRealtimeEndpointError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateRealtimeEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRealtimeEndpointError {}
 /// Errors returned by DeleteBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum DeleteBatchPredictionError {
@@ -2049,18 +2058,14 @@ impl DeleteBatchPredictionError {
 }
 impl fmt::Display for DeleteBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBatchPredictionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBatchPredictionError::InternalServer(ref cause) => cause,
-            DeleteBatchPredictionError::InvalidInput(ref cause) => cause,
-            DeleteBatchPredictionError::ResourceNotFound(ref cause) => cause,
+            DeleteBatchPredictionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteBatchPredictionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteBatchPredictionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBatchPredictionError {}
 /// Errors returned by DeleteDataSource
 #[derive(Debug, PartialEq)]
 pub enum DeleteDataSourceError {
@@ -2094,18 +2099,14 @@ impl DeleteDataSourceError {
 }
 impl fmt::Display for DeleteDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDataSourceError::InternalServer(ref cause) => cause,
-            DeleteDataSourceError::InvalidInput(ref cause) => cause,
-            DeleteDataSourceError::ResourceNotFound(ref cause) => cause,
+            DeleteDataSourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteDataSourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDataSourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDataSourceError {}
 /// Errors returned by DeleteEvaluation
 #[derive(Debug, PartialEq)]
 pub enum DeleteEvaluationError {
@@ -2139,18 +2140,14 @@ impl DeleteEvaluationError {
 }
 impl fmt::Display for DeleteEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEvaluationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEvaluationError::InternalServer(ref cause) => cause,
-            DeleteEvaluationError::InvalidInput(ref cause) => cause,
-            DeleteEvaluationError::ResourceNotFound(ref cause) => cause,
+            DeleteEvaluationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteEvaluationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteEvaluationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEvaluationError {}
 /// Errors returned by DeleteMLModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteMLModelError {
@@ -2184,18 +2181,14 @@ impl DeleteMLModelError {
 }
 impl fmt::Display for DeleteMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMLModelError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMLModelError::InternalServer(ref cause) => cause,
-            DeleteMLModelError::InvalidInput(ref cause) => cause,
-            DeleteMLModelError::ResourceNotFound(ref cause) => cause,
+            DeleteMLModelError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteMLModelError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteMLModelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMLModelError {}
 /// Errors returned by DeleteRealtimeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteRealtimeEndpointError {
@@ -2233,18 +2226,14 @@ impl DeleteRealtimeEndpointError {
 }
 impl fmt::Display for DeleteRealtimeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRealtimeEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRealtimeEndpointError::InternalServer(ref cause) => cause,
-            DeleteRealtimeEndpointError::InvalidInput(ref cause) => cause,
-            DeleteRealtimeEndpointError::ResourceNotFound(ref cause) => cause,
+            DeleteRealtimeEndpointError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteRealtimeEndpointError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteRealtimeEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRealtimeEndpointError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
@@ -2283,19 +2272,15 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTagsError::InternalServer(ref cause) => cause,
-            DeleteTagsError::InvalidInput(ref cause) => cause,
-            DeleteTagsError::InvalidTag(ref cause) => cause,
-            DeleteTagsError::ResourceNotFound(ref cause) => cause,
+            DeleteTagsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTagsError {}
 /// Errors returned by DescribeBatchPredictions
 #[derive(Debug, PartialEq)]
 pub enum DescribeBatchPredictionsError {
@@ -2328,17 +2313,13 @@ impl DescribeBatchPredictionsError {
 }
 impl fmt::Display for DescribeBatchPredictionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBatchPredictionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBatchPredictionsError::InternalServer(ref cause) => cause,
-            DescribeBatchPredictionsError::InvalidInput(ref cause) => cause,
+            DescribeBatchPredictionsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeBatchPredictionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBatchPredictionsError {}
 /// Errors returned by DescribeDataSources
 #[derive(Debug, PartialEq)]
 pub enum DescribeDataSourcesError {
@@ -2367,17 +2348,13 @@ impl DescribeDataSourcesError {
 }
 impl fmt::Display for DescribeDataSourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDataSourcesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDataSourcesError::InternalServer(ref cause) => cause,
-            DescribeDataSourcesError::InvalidInput(ref cause) => cause,
+            DescribeDataSourcesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeDataSourcesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDataSourcesError {}
 /// Errors returned by DescribeEvaluations
 #[derive(Debug, PartialEq)]
 pub enum DescribeEvaluationsError {
@@ -2406,17 +2383,13 @@ impl DescribeEvaluationsError {
 }
 impl fmt::Display for DescribeEvaluationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEvaluationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEvaluationsError::InternalServer(ref cause) => cause,
-            DescribeEvaluationsError::InvalidInput(ref cause) => cause,
+            DescribeEvaluationsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeEvaluationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEvaluationsError {}
 /// Errors returned by DescribeMLModels
 #[derive(Debug, PartialEq)]
 pub enum DescribeMLModelsError {
@@ -2445,17 +2418,13 @@ impl DescribeMLModelsError {
 }
 impl fmt::Display for DescribeMLModelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMLModelsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMLModelsError::InternalServer(ref cause) => cause,
-            DescribeMLModelsError::InvalidInput(ref cause) => cause,
+            DescribeMLModelsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeMLModelsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeMLModelsError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
@@ -2489,18 +2458,14 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::InternalServer(ref cause) => cause,
-            DescribeTagsError::InvalidInput(ref cause) => cause,
-            DescribeTagsError::ResourceNotFound(ref cause) => cause,
+            DescribeTagsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by GetBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum GetBatchPredictionError {
@@ -2534,18 +2499,14 @@ impl GetBatchPredictionError {
 }
 impl fmt::Display for GetBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBatchPredictionError {
-    fn description(&self) -> &str {
         match *self {
-            GetBatchPredictionError::InternalServer(ref cause) => cause,
-            GetBatchPredictionError::InvalidInput(ref cause) => cause,
-            GetBatchPredictionError::ResourceNotFound(ref cause) => cause,
+            GetBatchPredictionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetBatchPredictionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetBatchPredictionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBatchPredictionError {}
 /// Errors returned by GetDataSource
 #[derive(Debug, PartialEq)]
 pub enum GetDataSourceError {
@@ -2579,18 +2540,14 @@ impl GetDataSourceError {
 }
 impl fmt::Display for GetDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            GetDataSourceError::InternalServer(ref cause) => cause,
-            GetDataSourceError::InvalidInput(ref cause) => cause,
-            GetDataSourceError::ResourceNotFound(ref cause) => cause,
+            GetDataSourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetDataSourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDataSourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDataSourceError {}
 /// Errors returned by GetEvaluation
 #[derive(Debug, PartialEq)]
 pub enum GetEvaluationError {
@@ -2624,18 +2581,14 @@ impl GetEvaluationError {
 }
 impl fmt::Display for GetEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetEvaluationError {
-    fn description(&self) -> &str {
         match *self {
-            GetEvaluationError::InternalServer(ref cause) => cause,
-            GetEvaluationError::InvalidInput(ref cause) => cause,
-            GetEvaluationError::ResourceNotFound(ref cause) => cause,
+            GetEvaluationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetEvaluationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetEvaluationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetEvaluationError {}
 /// Errors returned by GetMLModel
 #[derive(Debug, PartialEq)]
 pub enum GetMLModelError {
@@ -2669,18 +2622,14 @@ impl GetMLModelError {
 }
 impl fmt::Display for GetMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMLModelError {
-    fn description(&self) -> &str {
         match *self {
-            GetMLModelError::InternalServer(ref cause) => cause,
-            GetMLModelError::InvalidInput(ref cause) => cause,
-            GetMLModelError::ResourceNotFound(ref cause) => cause,
+            GetMLModelError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetMLModelError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetMLModelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMLModelError {}
 /// Errors returned by Predict
 #[derive(Debug, PartialEq)]
 pub enum PredictError {
@@ -2724,20 +2673,16 @@ impl PredictError {
 }
 impl fmt::Display for PredictError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PredictError {
-    fn description(&self) -> &str {
         match *self {
-            PredictError::InternalServer(ref cause) => cause,
-            PredictError::InvalidInput(ref cause) => cause,
-            PredictError::LimitExceeded(ref cause) => cause,
-            PredictError::PredictorNotMounted(ref cause) => cause,
-            PredictError::ResourceNotFound(ref cause) => cause,
+            PredictError::InternalServer(ref cause) => write!(f, "{}", cause),
+            PredictError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PredictError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PredictError::PredictorNotMounted(ref cause) => write!(f, "{}", cause),
+            PredictError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PredictError {}
 /// Errors returned by UpdateBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum UpdateBatchPredictionError {
@@ -2775,18 +2720,14 @@ impl UpdateBatchPredictionError {
 }
 impl fmt::Display for UpdateBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBatchPredictionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBatchPredictionError::InternalServer(ref cause) => cause,
-            UpdateBatchPredictionError::InvalidInput(ref cause) => cause,
-            UpdateBatchPredictionError::ResourceNotFound(ref cause) => cause,
+            UpdateBatchPredictionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateBatchPredictionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateBatchPredictionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBatchPredictionError {}
 /// Errors returned by UpdateDataSource
 #[derive(Debug, PartialEq)]
 pub enum UpdateDataSourceError {
@@ -2820,18 +2761,14 @@ impl UpdateDataSourceError {
 }
 impl fmt::Display for UpdateDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDataSourceError::InternalServer(ref cause) => cause,
-            UpdateDataSourceError::InvalidInput(ref cause) => cause,
-            UpdateDataSourceError::ResourceNotFound(ref cause) => cause,
+            UpdateDataSourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateDataSourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateDataSourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDataSourceError {}
 /// Errors returned by UpdateEvaluation
 #[derive(Debug, PartialEq)]
 pub enum UpdateEvaluationError {
@@ -2865,18 +2802,14 @@ impl UpdateEvaluationError {
 }
 impl fmt::Display for UpdateEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateEvaluationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateEvaluationError::InternalServer(ref cause) => cause,
-            UpdateEvaluationError::InvalidInput(ref cause) => cause,
-            UpdateEvaluationError::ResourceNotFound(ref cause) => cause,
+            UpdateEvaluationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateEvaluationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateEvaluationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateEvaluationError {}
 /// Errors returned by UpdateMLModel
 #[derive(Debug, PartialEq)]
 pub enum UpdateMLModelError {
@@ -2910,18 +2843,14 @@ impl UpdateMLModelError {
 }
 impl fmt::Display for UpdateMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMLModelError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMLModelError::InternalServer(ref cause) => cause,
-            UpdateMLModelError::InvalidInput(ref cause) => cause,
-            UpdateMLModelError::ResourceNotFound(ref cause) => cause,
+            UpdateMLModelError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateMLModelError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateMLModelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateMLModelError {}
 /// Trait representing the capabilities of the Amazon Machine Learning API. Amazon Machine Learning clients implement this trait.
 pub trait MachineLearning {
     /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>

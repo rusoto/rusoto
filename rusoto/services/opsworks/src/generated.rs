@@ -100,6 +100,7 @@ pub struct App {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssignInstanceRequest {
     /// <p>The instance ID.</p>
     #[serde(rename = "InstanceId")]
@@ -110,6 +111,7 @@ pub struct AssignInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssignVolumeRequest {
     /// <p>The instance ID.</p>
     #[serde(rename = "InstanceId")]
@@ -121,6 +123,7 @@ pub struct AssignVolumeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateElasticIpRequest {
     /// <p>The Elastic IP address.</p>
     #[serde(rename = "ElasticIp")]
@@ -132,6 +135,7 @@ pub struct AssociateElasticIpRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachElasticLoadBalancerRequest {
     /// <p>The Elastic Load Balancing instance's name.</p>
     #[serde(rename = "ElasticLoadBalancerName")]
@@ -209,6 +213,7 @@ pub struct ChefConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloneStackRequest {
     /// <p><p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p>Auto-update - Set this parameter to <code>LATEST</code>. AWS OpsWorks Stacks automatically installs new agent versions on the stack&#39;s instances as soon as they are available.</p> </li> <li> <p>Fixed version - Set this parameter to your preferred agent version. To update the agent version, you must edit the stack configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the stack&#39;s instances.</p> </li> </ul> <p>The default setting is <code>LATEST</code>. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>. AgentVersion cannot be set to Chef 12.2.</p> <note> <p>You can also specify an agent version when you create or update an instance, which overrides the stack&#39;s default setting.</p> </note></p>
     #[serde(rename = "AgentVersion")]
@@ -417,6 +422,7 @@ pub struct Command {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
     /// <p>A <code>Source</code> object that specifies the app repository.</p>
     #[serde(rename = "AppSource")]
@@ -476,6 +482,7 @@ pub struct CreateAppResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
     /// <p>The app ID. This parameter is required for app deployments, but not for other deployment commands.</p>
     #[serde(rename = "AppId")]
@@ -516,6 +523,7 @@ pub struct CreateDeploymentResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceRequest {
     /// <p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p> <code>INHERIT</code> - Use the stack's default agent version setting.</p> </li> <li> <p> <i>version_number</i> - Use the specified agent version. This value overrides the stack's default setting. To update the agent version, edit the instance configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the instance.</p> </li> </ul> <p>The default setting is <code>INHERIT</code>. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>. AgentVersion cannot be set to Chef 12.2.</p>
     #[serde(rename = "AgentVersion")]
@@ -599,6 +607,7 @@ pub struct CreateInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLayerRequest {
     /// <p>One or more user-defined key-value pairs to be added to the stack attributes.</p> <p>To create a cluster layer, set the <code>EcsClusterArn</code> attribute to the cluster's ARN.</p>
     #[serde(rename = "Attributes")]
@@ -681,6 +690,7 @@ pub struct CreateLayerResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStackRequest {
     /// <p><p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p>Auto-update - Set this parameter to <code>LATEST</code>. AWS OpsWorks Stacks automatically installs new agent versions on the stack&#39;s instances as soon as they are available.</p> </li> <li> <p>Fixed version - Set this parameter to your preferred agent version. To update the agent version, you must edit the stack configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the stack&#39;s instances.</p> </li> </ul> <p>The default setting is the most recent release of the agent. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>. AgentVersion cannot be set to Chef 12.2.</p> <note> <p>You can also specify an agent version when you create or update an instance, which overrides the stack&#39;s default setting.</p> </note></p>
     #[serde(rename = "AgentVersion")]
@@ -767,6 +777,7 @@ pub struct CreateStackResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserProfileRequest {
     /// <p>Whether users can specify their own SSH public key through the My Settings page. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/security-settingsshkey.html">Setting an IAM User's Public SSH Key</a>.</p>
     #[serde(rename = "AllowSelfManagement")]
@@ -813,6 +824,7 @@ pub struct DataSource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
     /// <p>The app ID.</p>
     #[serde(rename = "AppId")]
@@ -820,6 +832,7 @@ pub struct DeleteAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceRequest {
     /// <p>Whether to delete the instance Elastic IP address.</p>
     #[serde(rename = "DeleteElasticIp")]
@@ -835,6 +848,7 @@ pub struct DeleteInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLayerRequest {
     /// <p>The layer ID.</p>
     #[serde(rename = "LayerId")]
@@ -842,6 +856,7 @@ pub struct DeleteLayerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStackRequest {
     /// <p>The stack ID.</p>
     #[serde(rename = "StackId")]
@@ -849,6 +864,7 @@ pub struct DeleteStackRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserProfileRequest {
     /// <p>The user's IAM ARN. This can also be a federated user's ARN.</p>
     #[serde(rename = "IamUserArn")]
@@ -922,6 +938,7 @@ pub struct DeploymentCommand {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterEcsClusterRequest {
     /// <p>The cluster's Amazon Resource Number (ARN).</p>
     #[serde(rename = "EcsClusterArn")]
@@ -929,6 +946,7 @@ pub struct DeregisterEcsClusterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterElasticIpRequest {
     /// <p>The Elastic IP address.</p>
     #[serde(rename = "ElasticIp")]
@@ -936,6 +954,7 @@ pub struct DeregisterElasticIpRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterInstanceRequest {
     /// <p>The instance ID.</p>
     #[serde(rename = "InstanceId")]
@@ -943,6 +962,7 @@ pub struct DeregisterInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterRdsDbInstanceRequest {
     /// <p>The Amazon RDS instance's ARN.</p>
     #[serde(rename = "RdsDbInstanceArn")]
@@ -950,6 +970,7 @@ pub struct DeregisterRdsDbInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterVolumeRequest {
     /// <p>The AWS OpsWorks Stacks volume ID, which is the GUID that AWS OpsWorks Stacks assigned to the instance when you registered the volume with the stack, not the Amazon EC2 volume ID.</p>
     #[serde(rename = "VolumeId")]
@@ -957,6 +978,7 @@ pub struct DeregisterVolumeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAgentVersionsRequest {
     /// <p>The configuration manager.</p>
     #[serde(rename = "ConfigurationManager")]
@@ -979,6 +1001,7 @@ pub struct DescribeAgentVersionsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppsRequest {
     /// <p>An array of app IDs for the apps to be described. If you use this parameter, <code>DescribeApps</code> returns a description of the specified apps. Otherwise, it returns a description of every app.</p>
     #[serde(rename = "AppIds")]
@@ -1001,6 +1024,7 @@ pub struct DescribeAppsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCommandsRequest {
     /// <p>An array of command IDs. If you include this parameter, <code>DescribeCommands</code> returns a description of the specified commands. Otherwise, it returns a description of every command.</p>
     #[serde(rename = "CommandIds")]
@@ -1027,6 +1051,7 @@ pub struct DescribeCommandsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeploymentsRequest {
     /// <p>The app ID. If you include this parameter, the command returns a description of the commands associated with the specified app.</p>
     #[serde(rename = "AppId")]
@@ -1053,6 +1078,7 @@ pub struct DescribeDeploymentsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEcsClustersRequest {
     /// <p>A list of ARNs, one for each cluster to be described.</p>
     #[serde(rename = "EcsClusterArns")]
@@ -1087,6 +1113,7 @@ pub struct DescribeEcsClustersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticIpsRequest {
     /// <p>The instance ID. If you include this parameter, <code>DescribeElasticIps</code> returns a description of the Elastic IP addresses associated with the specified instance.</p>
     #[serde(rename = "InstanceId")]
@@ -1113,6 +1140,7 @@ pub struct DescribeElasticIpsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticLoadBalancersRequest {
     /// <p>A list of layer IDs. The action describes the Elastic Load Balancing instances for the specified layers.</p>
     #[serde(rename = "LayerIds")]
@@ -1135,6 +1163,7 @@ pub struct DescribeElasticLoadBalancersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancesRequest {
     /// <p>An array of instance IDs to be described. If you use this parameter, <code>DescribeInstances</code> returns a description of the specified instances. Otherwise, it returns a description of every instance.</p>
     #[serde(rename = "InstanceIds")]
@@ -1161,6 +1190,7 @@ pub struct DescribeInstancesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLayersRequest {
     /// <p>An array of layer IDs that specify the layers to be described. If you omit this parameter, <code>DescribeLayers</code> returns a description of every layer in the specified stack.</p>
     #[serde(rename = "LayerIds")]
@@ -1183,6 +1213,7 @@ pub struct DescribeLayersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBasedAutoScalingRequest {
     /// <p>An array of layer IDs.</p>
     #[serde(rename = "LayerIds")]
@@ -1220,6 +1251,7 @@ pub struct DescribeOperatingSystemsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePermissionsRequest {
     /// <p>The user's IAM ARN. This can also be a federated user's ARN. For more information about IAM ARNs, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">Using Identifiers</a>.</p>
     #[serde(rename = "IamUserArn")]
@@ -1242,6 +1274,7 @@ pub struct DescribePermissionsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRaidArraysRequest {
     /// <p>The instance ID. If you use this parameter, <code>DescribeRaidArrays</code> returns descriptions of the RAID arrays associated with the specified instance. </p>
     #[serde(rename = "InstanceId")]
@@ -1268,6 +1301,7 @@ pub struct DescribeRaidArraysResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRdsDbInstancesRequest {
     /// <p>An array containing the ARNs of the instances to be described.</p>
     #[serde(rename = "RdsDbInstanceArns")]
@@ -1289,6 +1323,7 @@ pub struct DescribeRdsDbInstancesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServiceErrorsRequest {
     /// <p>The instance ID. If you use this parameter, <code>DescribeServiceErrors</code> returns descriptions of the errors associated with the specified instance.</p>
     #[serde(rename = "InstanceId")]
@@ -1315,6 +1350,7 @@ pub struct DescribeServiceErrorsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackProvisioningParametersRequest {
     /// <p>The stack ID.</p>
     #[serde(rename = "StackId")]
@@ -1336,6 +1372,7 @@ pub struct DescribeStackProvisioningParametersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackSummaryRequest {
     /// <p>The stack ID.</p>
     #[serde(rename = "StackId")]
@@ -1353,6 +1390,7 @@ pub struct DescribeStackSummaryResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStacksRequest {
     /// <p>An array of stack IDs that specify the stacks to be described. If you omit this parameter, <code>DescribeStacks</code> returns a description of every stack.</p>
     #[serde(rename = "StackIds")]
@@ -1371,6 +1409,7 @@ pub struct DescribeStacksResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTimeBasedAutoScalingRequest {
     /// <p>An array of instance IDs.</p>
     #[serde(rename = "InstanceIds")]
@@ -1388,6 +1427,7 @@ pub struct DescribeTimeBasedAutoScalingResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserProfilesRequest {
     /// <p>An array of IAM or federated user ARNs that identify the users to be described.</p>
     #[serde(rename = "IamUserArns")]
@@ -1406,6 +1446,7 @@ pub struct DescribeUserProfilesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVolumesRequest {
     /// <p>The instance ID. If you use this parameter, <code>DescribeVolumes</code> returns descriptions of the volumes associated with the specified instance.</p>
     #[serde(rename = "InstanceId")]
@@ -1436,6 +1477,7 @@ pub struct DescribeVolumesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachElasticLoadBalancerRequest {
     /// <p>The Elastic Load Balancing instance's name.</p>
     #[serde(rename = "ElasticLoadBalancerName")]
@@ -1446,6 +1488,7 @@ pub struct DetachElasticLoadBalancerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateElasticIpRequest {
     /// <p>The Elastic IP address.</p>
     #[serde(rename = "ElasticIp")]
@@ -1583,6 +1626,7 @@ pub struct EnvironmentVariable {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHostnameSuggestionRequest {
     /// <p>The layer ID.</p>
     #[serde(rename = "LayerId")]
@@ -1604,6 +1648,7 @@ pub struct GetHostnameSuggestionResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GrantAccessRequest {
     /// <p>The instance's AWS OpsWorks Stacks ID.</p>
     #[serde(rename = "InstanceId")]
@@ -1796,6 +1841,7 @@ pub struct Instance {
 
 /// <p>Contains a description of an Amazon EC2 instance from the Amazon EC2 metadata service. For more information, see <a href="https://docs.aws.amazon.com/sdkfornet/latest/apidocs/Index.html">Instance Metadata and User Data</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceIdentity {
     /// <p>A JSON document that contains the metadata.</p>
     #[serde(rename = "Document")]
@@ -2001,6 +2047,7 @@ pub struct LifecycleEventConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
     /// <p>Do not use. A validation exception occurs if you add a <code>MaxResults</code> parameter to a <code>ListTagsRequest</code> call. </p>
     #[serde(rename = "MaxResults")]
@@ -2226,6 +2273,7 @@ pub struct RdsDbInstance {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootInstanceRequest {
     /// <p>The instance ID.</p>
     #[serde(rename = "InstanceId")]
@@ -2258,6 +2306,7 @@ pub struct Recipes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterEcsClusterRequest {
     /// <p>The cluster's ARN.</p>
     #[serde(rename = "EcsClusterArn")]
@@ -2278,6 +2327,7 @@ pub struct RegisterEcsClusterResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterElasticIpRequest {
     /// <p>The Elastic IP address.</p>
     #[serde(rename = "ElasticIp")]
@@ -2298,6 +2348,7 @@ pub struct RegisterElasticIpResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterInstanceRequest {
     /// <p>The instance's hostname.</p>
     #[serde(rename = "Hostname")]
@@ -2339,6 +2390,7 @@ pub struct RegisterInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterRdsDbInstanceRequest {
     /// <p>The database password.</p>
     #[serde(rename = "DbPassword")]
@@ -2355,6 +2407,7 @@ pub struct RegisterRdsDbInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterVolumeRequest {
     /// <p>The Amazon EBS volume ID.</p>
     #[serde(rename = "Ec2VolumeId")]
@@ -2446,6 +2499,7 @@ pub struct ServiceError {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLoadBasedAutoScalingRequest {
     /// <p>An <code>AutoScalingThresholds</code> object with the downscaling threshold configuration. If the load falls below these thresholds for a specified amount of time, AWS OpsWorks Stacks stops a specified number of instances.</p>
     #[serde(rename = "DownScaling")]
@@ -2465,6 +2519,7 @@ pub struct SetLoadBasedAutoScalingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetPermissionRequest {
     /// <p>The user is allowed to use SSH to communicate with the instance.</p>
     #[serde(rename = "AllowSsh")]
@@ -2487,6 +2542,7 @@ pub struct SetPermissionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTimeBasedAutoScalingRequest {
     /// <p>An <code>AutoScalingSchedule</code> with the instance schedule.</p>
     #[serde(rename = "AutoScalingSchedule")]
@@ -2692,6 +2748,7 @@ pub struct StackSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartInstanceRequest {
     /// <p>The instance ID.</p>
     #[serde(rename = "InstanceId")]
@@ -2699,6 +2756,7 @@ pub struct StartInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartStackRequest {
     /// <p>The stack ID.</p>
     #[serde(rename = "StackId")]
@@ -2706,6 +2764,7 @@ pub struct StartStackRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopInstanceRequest {
     /// <p>Specifies whether to force an instance to stop. If the instance's root device type is <code>ebs</code>, or EBS-backed, adding the <code>Force</code> parameter to the <code>StopInstances</code> API call disassociates the AWS OpsWorks Stacks instance from EC2, and forces deletion of <i>only</i> the OpsWorks Stacks instance. You must also delete the formerly-associated instance in EC2 after troubleshooting and replacing the AWS OpsWorks Stacks instance with a new one.</p>
     #[serde(rename = "Force")]
@@ -2717,6 +2776,7 @@ pub struct StopInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopStackRequest {
     /// <p>The stack ID.</p>
     #[serde(rename = "StackId")]
@@ -2724,6 +2784,7 @@ pub struct StopStackRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The stack or layer's Amazon Resource Number (ARN).</p>
     #[serde(rename = "ResourceArn")]
@@ -2770,6 +2831,7 @@ pub struct TimeBasedAutoScalingConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnassignInstanceRequest {
     /// <p>The instance ID.</p>
     #[serde(rename = "InstanceId")]
@@ -2777,6 +2839,7 @@ pub struct UnassignInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnassignVolumeRequest {
     /// <p>The volume ID.</p>
     #[serde(rename = "VolumeId")]
@@ -2784,6 +2847,7 @@ pub struct UnassignVolumeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The stack or layer's Amazon Resource Number (ARN).</p>
     #[serde(rename = "ResourceArn")]
@@ -2794,6 +2858,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppRequest {
     /// <p>The app ID.</p>
     #[serde(rename = "AppId")]
@@ -2841,6 +2906,7 @@ pub struct UpdateAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateElasticIpRequest {
     /// <p>The IP address for which you want to update the name.</p>
     #[serde(rename = "ElasticIp")]
@@ -2852,6 +2918,7 @@ pub struct UpdateElasticIpRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstanceRequest {
     /// <p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p> <code>INHERIT</code> - Use the stack's default agent version setting.</p> </li> <li> <p> <i>version_number</i> - Use the specified agent version. This value overrides the stack's default setting. To update the agent version, you must edit the instance configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the instance.</p> </li> </ul> <p>The default setting is <code>INHERIT</code>. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>.</p> <p>AgentVersion cannot be set to Chef 12.2.</p>
     #[serde(rename = "AgentVersion")]
@@ -2903,6 +2970,7 @@ pub struct UpdateInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLayerRequest {
     /// <p>One or more user-defined key/value pairs to be added to the stack attributes.</p>
     #[serde(rename = "Attributes")]
@@ -2974,6 +3042,7 @@ pub struct UpdateLayerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMyUserProfileRequest {
     /// <p>The user's SSH public key.</p>
     #[serde(rename = "SshPublicKey")]
@@ -2982,6 +3051,7 @@ pub struct UpdateMyUserProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRdsDbInstanceRequest {
     /// <p>The database password.</p>
     #[serde(rename = "DbPassword")]
@@ -2997,6 +3067,7 @@ pub struct UpdateRdsDbInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStackRequest {
     /// <p><p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p>Auto-update - Set this parameter to <code>LATEST</code>. AWS OpsWorks Stacks automatically installs new agent versions on the stack&#39;s instances as soon as they are available.</p> </li> <li> <p>Fixed version - Set this parameter to your preferred agent version. To update the agent version, you must edit the stack configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the stack&#39;s instances.</p> </li> </ul> <p>The default setting is <code>LATEST</code>. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>. AgentVersion cannot be set to Chef 12.2.</p> <note> <p>You can also specify an agent version when you create or update an instance, which overrides the stack&#39;s default setting.</p> </note></p>
     #[serde(rename = "AgentVersion")]
@@ -3072,6 +3143,7 @@ pub struct UpdateStackRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserProfileRequest {
     /// <p>Whether users can specify their own SSH public key through the My Settings page. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/security-settingsshkey.html">Managing User Permissions</a>.</p>
     #[serde(rename = "AllowSelfManagement")]
@@ -3091,6 +3163,7 @@ pub struct UpdateUserProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVolumeRequest {
     /// <p>The new mount point.</p>
     #[serde(rename = "MountPoint")]
@@ -3279,16 +3352,12 @@ impl AssignInstanceError {
 }
 impl fmt::Display for AssignInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssignInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            AssignInstanceError::ResourceNotFound(ref cause) => cause,
+            AssignInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssignInstanceError {}
 /// Errors returned by AssignVolume
 #[derive(Debug, PartialEq)]
 pub enum AssignVolumeError {
@@ -3312,16 +3381,12 @@ impl AssignVolumeError {
 }
 impl fmt::Display for AssignVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssignVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            AssignVolumeError::ResourceNotFound(ref cause) => cause,
+            AssignVolumeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssignVolumeError {}
 /// Errors returned by AssociateElasticIp
 #[derive(Debug, PartialEq)]
 pub enum AssociateElasticIpError {
@@ -3345,16 +3410,12 @@ impl AssociateElasticIpError {
 }
 impl fmt::Display for AssociateElasticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateElasticIpError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateElasticIpError::ResourceNotFound(ref cause) => cause,
+            AssociateElasticIpError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateElasticIpError {}
 /// Errors returned by AttachElasticLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum AttachElasticLoadBalancerError {
@@ -3380,16 +3441,12 @@ impl AttachElasticLoadBalancerError {
 }
 impl fmt::Display for AttachElasticLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachElasticLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            AttachElasticLoadBalancerError::ResourceNotFound(ref cause) => cause,
+            AttachElasticLoadBalancerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachElasticLoadBalancerError {}
 /// Errors returned by CloneStack
 #[derive(Debug, PartialEq)]
 pub enum CloneStackError {
@@ -3413,16 +3470,12 @@ impl CloneStackError {
 }
 impl fmt::Display for CloneStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CloneStackError {
-    fn description(&self) -> &str {
         match *self {
-            CloneStackError::ResourceNotFound(ref cause) => cause,
+            CloneStackError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CloneStackError {}
 /// Errors returned by CreateApp
 #[derive(Debug, PartialEq)]
 pub enum CreateAppError {
@@ -3446,16 +3499,12 @@ impl CreateAppError {
 }
 impl fmt::Display for CreateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAppError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAppError::ResourceNotFound(ref cause) => cause,
+            CreateAppError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAppError {}
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
@@ -3479,16 +3528,12 @@ impl CreateDeploymentError {
 }
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDeploymentError::ResourceNotFound(ref cause) => cause,
+            CreateDeploymentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDeploymentError {}
 /// Errors returned by CreateInstance
 #[derive(Debug, PartialEq)]
 pub enum CreateInstanceError {
@@ -3512,16 +3557,12 @@ impl CreateInstanceError {
 }
 impl fmt::Display for CreateInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInstanceError::ResourceNotFound(ref cause) => cause,
+            CreateInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInstanceError {}
 /// Errors returned by CreateLayer
 #[derive(Debug, PartialEq)]
 pub enum CreateLayerError {
@@ -3545,16 +3586,12 @@ impl CreateLayerError {
 }
 impl fmt::Display for CreateLayerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLayerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLayerError::ResourceNotFound(ref cause) => cause,
+            CreateLayerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLayerError {}
 /// Errors returned by CreateStack
 #[derive(Debug, PartialEq)]
 pub enum CreateStackError {}
@@ -3572,14 +3609,10 @@ impl CreateStackError {
 }
 impl fmt::Display for CreateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStackError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreateStackError {}
 /// Errors returned by CreateUserProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateUserProfileError {}
@@ -3597,14 +3630,10 @@ impl CreateUserProfileError {
 }
 impl fmt::Display for CreateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserProfileError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreateUserProfileError {}
 /// Errors returned by DeleteApp
 #[derive(Debug, PartialEq)]
 pub enum DeleteAppError {
@@ -3628,16 +3657,12 @@ impl DeleteAppError {
 }
 impl fmt::Display for DeleteAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAppError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAppError::ResourceNotFound(ref cause) => cause,
+            DeleteAppError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAppError {}
 /// Errors returned by DeleteInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteInstanceError {
@@ -3661,16 +3686,12 @@ impl DeleteInstanceError {
 }
 impl fmt::Display for DeleteInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInstanceError::ResourceNotFound(ref cause) => cause,
+            DeleteInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInstanceError {}
 /// Errors returned by DeleteLayer
 #[derive(Debug, PartialEq)]
 pub enum DeleteLayerError {
@@ -3694,16 +3715,12 @@ impl DeleteLayerError {
 }
 impl fmt::Display for DeleteLayerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLayerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLayerError::ResourceNotFound(ref cause) => cause,
+            DeleteLayerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLayerError {}
 /// Errors returned by DeleteStack
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackError {
@@ -3727,16 +3744,12 @@ impl DeleteStackError {
 }
 impl fmt::Display for DeleteStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStackError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStackError::ResourceNotFound(ref cause) => cause,
+            DeleteStackError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStackError {}
 /// Errors returned by DeleteUserProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserProfileError {
@@ -3760,16 +3773,12 @@ impl DeleteUserProfileError {
 }
 impl fmt::Display for DeleteUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserProfileError::ResourceNotFound(ref cause) => cause,
+            DeleteUserProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserProfileError {}
 /// Errors returned by DeregisterEcsCluster
 #[derive(Debug, PartialEq)]
 pub enum DeregisterEcsClusterError {
@@ -3795,16 +3804,12 @@ impl DeregisterEcsClusterError {
 }
 impl fmt::Display for DeregisterEcsClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterEcsClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterEcsClusterError::ResourceNotFound(ref cause) => cause,
+            DeregisterEcsClusterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterEcsClusterError {}
 /// Errors returned by DeregisterElasticIp
 #[derive(Debug, PartialEq)]
 pub enum DeregisterElasticIpError {
@@ -3830,16 +3835,12 @@ impl DeregisterElasticIpError {
 }
 impl fmt::Display for DeregisterElasticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterElasticIpError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterElasticIpError::ResourceNotFound(ref cause) => cause,
+            DeregisterElasticIpError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterElasticIpError {}
 /// Errors returned by DeregisterInstance
 #[derive(Debug, PartialEq)]
 pub enum DeregisterInstanceError {
@@ -3863,16 +3864,12 @@ impl DeregisterInstanceError {
 }
 impl fmt::Display for DeregisterInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterInstanceError::ResourceNotFound(ref cause) => cause,
+            DeregisterInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterInstanceError {}
 /// Errors returned by DeregisterRdsDbInstance
 #[derive(Debug, PartialEq)]
 pub enum DeregisterRdsDbInstanceError {
@@ -3898,16 +3895,12 @@ impl DeregisterRdsDbInstanceError {
 }
 impl fmt::Display for DeregisterRdsDbInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterRdsDbInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterRdsDbInstanceError::ResourceNotFound(ref cause) => cause,
+            DeregisterRdsDbInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterRdsDbInstanceError {}
 /// Errors returned by DeregisterVolume
 #[derive(Debug, PartialEq)]
 pub enum DeregisterVolumeError {
@@ -3931,16 +3924,12 @@ impl DeregisterVolumeError {
 }
 impl fmt::Display for DeregisterVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterVolumeError::ResourceNotFound(ref cause) => cause,
+            DeregisterVolumeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterVolumeError {}
 /// Errors returned by DescribeAgentVersions
 #[derive(Debug, PartialEq)]
 pub enum DescribeAgentVersionsError {
@@ -3966,16 +3955,12 @@ impl DescribeAgentVersionsError {
 }
 impl fmt::Display for DescribeAgentVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAgentVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAgentVersionsError::ResourceNotFound(ref cause) => cause,
+            DescribeAgentVersionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAgentVersionsError {}
 /// Errors returned by DescribeApps
 #[derive(Debug, PartialEq)]
 pub enum DescribeAppsError {
@@ -3999,16 +3984,12 @@ impl DescribeAppsError {
 }
 impl fmt::Display for DescribeAppsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAppsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAppsError::ResourceNotFound(ref cause) => cause,
+            DescribeAppsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAppsError {}
 /// Errors returned by DescribeCommands
 #[derive(Debug, PartialEq)]
 pub enum DescribeCommandsError {
@@ -4032,16 +4013,12 @@ impl DescribeCommandsError {
 }
 impl fmt::Display for DescribeCommandsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCommandsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCommandsError::ResourceNotFound(ref cause) => cause,
+            DescribeCommandsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCommandsError {}
 /// Errors returned by DescribeDeployments
 #[derive(Debug, PartialEq)]
 pub enum DescribeDeploymentsError {
@@ -4067,16 +4044,12 @@ impl DescribeDeploymentsError {
 }
 impl fmt::Display for DescribeDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDeploymentsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDeploymentsError::ResourceNotFound(ref cause) => cause,
+            DescribeDeploymentsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDeploymentsError {}
 /// Errors returned by DescribeEcsClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeEcsClustersError {
@@ -4102,16 +4075,12 @@ impl DescribeEcsClustersError {
 }
 impl fmt::Display for DescribeEcsClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEcsClustersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEcsClustersError::ResourceNotFound(ref cause) => cause,
+            DescribeEcsClustersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEcsClustersError {}
 /// Errors returned by DescribeElasticIps
 #[derive(Debug, PartialEq)]
 pub enum DescribeElasticIpsError {
@@ -4135,16 +4104,12 @@ impl DescribeElasticIpsError {
 }
 impl fmt::Display for DescribeElasticIpsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeElasticIpsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeElasticIpsError::ResourceNotFound(ref cause) => cause,
+            DescribeElasticIpsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeElasticIpsError {}
 /// Errors returned by DescribeElasticLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DescribeElasticLoadBalancersError {
@@ -4172,16 +4137,14 @@ impl DescribeElasticLoadBalancersError {
 }
 impl fmt::Display for DescribeElasticLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeElasticLoadBalancersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeElasticLoadBalancersError::ResourceNotFound(ref cause) => cause,
+            DescribeElasticLoadBalancersError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeElasticLoadBalancersError {}
 /// Errors returned by DescribeInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstancesError {
@@ -4205,16 +4168,12 @@ impl DescribeInstancesError {
 }
 impl fmt::Display for DescribeInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInstancesError::ResourceNotFound(ref cause) => cause,
+            DescribeInstancesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInstancesError {}
 /// Errors returned by DescribeLayers
 #[derive(Debug, PartialEq)]
 pub enum DescribeLayersError {
@@ -4238,16 +4197,12 @@ impl DescribeLayersError {
 }
 impl fmt::Display for DescribeLayersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLayersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLayersError::ResourceNotFound(ref cause) => cause,
+            DescribeLayersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLayersError {}
 /// Errors returned by DescribeLoadBasedAutoScaling
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBasedAutoScalingError {
@@ -4275,16 +4230,14 @@ impl DescribeLoadBasedAutoScalingError {
 }
 impl fmt::Display for DescribeLoadBasedAutoScalingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBasedAutoScalingError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBasedAutoScalingError::ResourceNotFound(ref cause) => cause,
+            DescribeLoadBasedAutoScalingError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLoadBasedAutoScalingError {}
 /// Errors returned by DescribeMyUserProfile
 #[derive(Debug, PartialEq)]
 pub enum DescribeMyUserProfileError {}
@@ -4302,14 +4255,10 @@ impl DescribeMyUserProfileError {
 }
 impl fmt::Display for DescribeMyUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMyUserProfileError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeMyUserProfileError {}
 /// Errors returned by DescribeOperatingSystems
 #[derive(Debug, PartialEq)]
 pub enum DescribeOperatingSystemsError {}
@@ -4327,14 +4276,10 @@ impl DescribeOperatingSystemsError {
 }
 impl fmt::Display for DescribeOperatingSystemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOperatingSystemsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeOperatingSystemsError {}
 /// Errors returned by DescribePermissions
 #[derive(Debug, PartialEq)]
 pub enum DescribePermissionsError {
@@ -4360,16 +4305,12 @@ impl DescribePermissionsError {
 }
 impl fmt::Display for DescribePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePermissionsError::ResourceNotFound(ref cause) => cause,
+            DescribePermissionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribePermissionsError {}
 /// Errors returned by DescribeRaidArrays
 #[derive(Debug, PartialEq)]
 pub enum DescribeRaidArraysError {
@@ -4393,16 +4334,12 @@ impl DescribeRaidArraysError {
 }
 impl fmt::Display for DescribeRaidArraysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRaidArraysError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRaidArraysError::ResourceNotFound(ref cause) => cause,
+            DescribeRaidArraysError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeRaidArraysError {}
 /// Errors returned by DescribeRdsDbInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeRdsDbInstancesError {
@@ -4428,16 +4365,12 @@ impl DescribeRdsDbInstancesError {
 }
 impl fmt::Display for DescribeRdsDbInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRdsDbInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRdsDbInstancesError::ResourceNotFound(ref cause) => cause,
+            DescribeRdsDbInstancesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeRdsDbInstancesError {}
 /// Errors returned by DescribeServiceErrors
 #[derive(Debug, PartialEq)]
 pub enum DescribeServiceErrorsError {
@@ -4463,16 +4396,12 @@ impl DescribeServiceErrorsError {
 }
 impl fmt::Display for DescribeServiceErrorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeServiceErrorsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeServiceErrorsError::ResourceNotFound(ref cause) => cause,
+            DescribeServiceErrorsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeServiceErrorsError {}
 /// Errors returned by DescribeStackProvisioningParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackProvisioningParametersError {
@@ -4500,16 +4429,14 @@ impl DescribeStackProvisioningParametersError {
 }
 impl fmt::Display for DescribeStackProvisioningParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackProvisioningParametersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStackProvisioningParametersError::ResourceNotFound(ref cause) => cause,
+            DescribeStackProvisioningParametersError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeStackProvisioningParametersError {}
 /// Errors returned by DescribeStackSummary
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackSummaryError {
@@ -4535,16 +4462,12 @@ impl DescribeStackSummaryError {
 }
 impl fmt::Display for DescribeStackSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackSummaryError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStackSummaryError::ResourceNotFound(ref cause) => cause,
+            DescribeStackSummaryError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStackSummaryError {}
 /// Errors returned by DescribeStacks
 #[derive(Debug, PartialEq)]
 pub enum DescribeStacksError {
@@ -4568,16 +4491,12 @@ impl DescribeStacksError {
 }
 impl fmt::Display for DescribeStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStacksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStacksError::ResourceNotFound(ref cause) => cause,
+            DescribeStacksError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStacksError {}
 /// Errors returned by DescribeTimeBasedAutoScaling
 #[derive(Debug, PartialEq)]
 pub enum DescribeTimeBasedAutoScalingError {
@@ -4605,16 +4524,14 @@ impl DescribeTimeBasedAutoScalingError {
 }
 impl fmt::Display for DescribeTimeBasedAutoScalingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTimeBasedAutoScalingError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTimeBasedAutoScalingError::ResourceNotFound(ref cause) => cause,
+            DescribeTimeBasedAutoScalingError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTimeBasedAutoScalingError {}
 /// Errors returned by DescribeUserProfiles
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserProfilesError {
@@ -4640,16 +4557,12 @@ impl DescribeUserProfilesError {
 }
 impl fmt::Display for DescribeUserProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserProfilesError::ResourceNotFound(ref cause) => cause,
+            DescribeUserProfilesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserProfilesError {}
 /// Errors returned by DescribeVolumes
 #[derive(Debug, PartialEq)]
 pub enum DescribeVolumesError {
@@ -4673,16 +4586,12 @@ impl DescribeVolumesError {
 }
 impl fmt::Display for DescribeVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeVolumesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeVolumesError::ResourceNotFound(ref cause) => cause,
+            DescribeVolumesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeVolumesError {}
 /// Errors returned by DetachElasticLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DetachElasticLoadBalancerError {
@@ -4708,16 +4617,12 @@ impl DetachElasticLoadBalancerError {
 }
 impl fmt::Display for DetachElasticLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachElasticLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            DetachElasticLoadBalancerError::ResourceNotFound(ref cause) => cause,
+            DetachElasticLoadBalancerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachElasticLoadBalancerError {}
 /// Errors returned by DisassociateElasticIp
 #[derive(Debug, PartialEq)]
 pub enum DisassociateElasticIpError {
@@ -4743,16 +4648,12 @@ impl DisassociateElasticIpError {
 }
 impl fmt::Display for DisassociateElasticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateElasticIpError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateElasticIpError::ResourceNotFound(ref cause) => cause,
+            DisassociateElasticIpError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateElasticIpError {}
 /// Errors returned by GetHostnameSuggestion
 #[derive(Debug, PartialEq)]
 pub enum GetHostnameSuggestionError {
@@ -4778,16 +4679,12 @@ impl GetHostnameSuggestionError {
 }
 impl fmt::Display for GetHostnameSuggestionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetHostnameSuggestionError {
-    fn description(&self) -> &str {
         match *self {
-            GetHostnameSuggestionError::ResourceNotFound(ref cause) => cause,
+            GetHostnameSuggestionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetHostnameSuggestionError {}
 /// Errors returned by GrantAccess
 #[derive(Debug, PartialEq)]
 pub enum GrantAccessError {
@@ -4811,16 +4708,12 @@ impl GrantAccessError {
 }
 impl fmt::Display for GrantAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GrantAccessError {
-    fn description(&self) -> &str {
         match *self {
-            GrantAccessError::ResourceNotFound(ref cause) => cause,
+            GrantAccessError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GrantAccessError {}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
@@ -4844,16 +4737,12 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsError::ResourceNotFound(ref cause) => cause,
+            ListTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsError {}
 /// Errors returned by RebootInstance
 #[derive(Debug, PartialEq)]
 pub enum RebootInstanceError {
@@ -4877,16 +4766,12 @@ impl RebootInstanceError {
 }
 impl fmt::Display for RebootInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RebootInstanceError::ResourceNotFound(ref cause) => cause,
+            RebootInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RebootInstanceError {}
 /// Errors returned by RegisterEcsCluster
 #[derive(Debug, PartialEq)]
 pub enum RegisterEcsClusterError {
@@ -4910,16 +4795,12 @@ impl RegisterEcsClusterError {
 }
 impl fmt::Display for RegisterEcsClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterEcsClusterError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterEcsClusterError::ResourceNotFound(ref cause) => cause,
+            RegisterEcsClusterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterEcsClusterError {}
 /// Errors returned by RegisterElasticIp
 #[derive(Debug, PartialEq)]
 pub enum RegisterElasticIpError {
@@ -4943,16 +4824,12 @@ impl RegisterElasticIpError {
 }
 impl fmt::Display for RegisterElasticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterElasticIpError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterElasticIpError::ResourceNotFound(ref cause) => cause,
+            RegisterElasticIpError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterElasticIpError {}
 /// Errors returned by RegisterInstance
 #[derive(Debug, PartialEq)]
 pub enum RegisterInstanceError {
@@ -4976,16 +4853,12 @@ impl RegisterInstanceError {
 }
 impl fmt::Display for RegisterInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterInstanceError::ResourceNotFound(ref cause) => cause,
+            RegisterInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterInstanceError {}
 /// Errors returned by RegisterRdsDbInstance
 #[derive(Debug, PartialEq)]
 pub enum RegisterRdsDbInstanceError {
@@ -5011,16 +4884,12 @@ impl RegisterRdsDbInstanceError {
 }
 impl fmt::Display for RegisterRdsDbInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterRdsDbInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterRdsDbInstanceError::ResourceNotFound(ref cause) => cause,
+            RegisterRdsDbInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterRdsDbInstanceError {}
 /// Errors returned by RegisterVolume
 #[derive(Debug, PartialEq)]
 pub enum RegisterVolumeError {
@@ -5044,16 +4913,12 @@ impl RegisterVolumeError {
 }
 impl fmt::Display for RegisterVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterVolumeError::ResourceNotFound(ref cause) => cause,
+            RegisterVolumeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterVolumeError {}
 /// Errors returned by SetLoadBasedAutoScaling
 #[derive(Debug, PartialEq)]
 pub enum SetLoadBasedAutoScalingError {
@@ -5079,16 +4944,12 @@ impl SetLoadBasedAutoScalingError {
 }
 impl fmt::Display for SetLoadBasedAutoScalingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetLoadBasedAutoScalingError {
-    fn description(&self) -> &str {
         match *self {
-            SetLoadBasedAutoScalingError::ResourceNotFound(ref cause) => cause,
+            SetLoadBasedAutoScalingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetLoadBasedAutoScalingError {}
 /// Errors returned by SetPermission
 #[derive(Debug, PartialEq)]
 pub enum SetPermissionError {
@@ -5112,16 +4973,12 @@ impl SetPermissionError {
 }
 impl fmt::Display for SetPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetPermissionError {
-    fn description(&self) -> &str {
         match *self {
-            SetPermissionError::ResourceNotFound(ref cause) => cause,
+            SetPermissionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetPermissionError {}
 /// Errors returned by SetTimeBasedAutoScaling
 #[derive(Debug, PartialEq)]
 pub enum SetTimeBasedAutoScalingError {
@@ -5147,16 +5004,12 @@ impl SetTimeBasedAutoScalingError {
 }
 impl fmt::Display for SetTimeBasedAutoScalingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetTimeBasedAutoScalingError {
-    fn description(&self) -> &str {
         match *self {
-            SetTimeBasedAutoScalingError::ResourceNotFound(ref cause) => cause,
+            SetTimeBasedAutoScalingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetTimeBasedAutoScalingError {}
 /// Errors returned by StartInstance
 #[derive(Debug, PartialEq)]
 pub enum StartInstanceError {
@@ -5180,16 +5033,12 @@ impl StartInstanceError {
 }
 impl fmt::Display for StartInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            StartInstanceError::ResourceNotFound(ref cause) => cause,
+            StartInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartInstanceError {}
 /// Errors returned by StartStack
 #[derive(Debug, PartialEq)]
 pub enum StartStackError {
@@ -5213,16 +5062,12 @@ impl StartStackError {
 }
 impl fmt::Display for StartStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartStackError {
-    fn description(&self) -> &str {
         match *self {
-            StartStackError::ResourceNotFound(ref cause) => cause,
+            StartStackError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartStackError {}
 /// Errors returned by StopInstance
 #[derive(Debug, PartialEq)]
 pub enum StopInstanceError {
@@ -5246,16 +5091,12 @@ impl StopInstanceError {
 }
 impl fmt::Display for StopInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            StopInstanceError::ResourceNotFound(ref cause) => cause,
+            StopInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopInstanceError {}
 /// Errors returned by StopStack
 #[derive(Debug, PartialEq)]
 pub enum StopStackError {
@@ -5279,16 +5120,12 @@ impl StopStackError {
 }
 impl fmt::Display for StopStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopStackError {
-    fn description(&self) -> &str {
         match *self {
-            StopStackError::ResourceNotFound(ref cause) => cause,
+            StopStackError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopStackError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -5312,16 +5149,12 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UnassignInstance
 #[derive(Debug, PartialEq)]
 pub enum UnassignInstanceError {
@@ -5345,16 +5178,12 @@ impl UnassignInstanceError {
 }
 impl fmt::Display for UnassignInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UnassignInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            UnassignInstanceError::ResourceNotFound(ref cause) => cause,
+            UnassignInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UnassignInstanceError {}
 /// Errors returned by UnassignVolume
 #[derive(Debug, PartialEq)]
 pub enum UnassignVolumeError {
@@ -5378,16 +5207,12 @@ impl UnassignVolumeError {
 }
 impl fmt::Display for UnassignVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UnassignVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            UnassignVolumeError::ResourceNotFound(ref cause) => cause,
+            UnassignVolumeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UnassignVolumeError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -5411,16 +5236,12 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateApp
 #[derive(Debug, PartialEq)]
 pub enum UpdateAppError {
@@ -5444,16 +5265,12 @@ impl UpdateAppError {
 }
 impl fmt::Display for UpdateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAppError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAppError::ResourceNotFound(ref cause) => cause,
+            UpdateAppError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAppError {}
 /// Errors returned by UpdateElasticIp
 #[derive(Debug, PartialEq)]
 pub enum UpdateElasticIpError {
@@ -5477,16 +5294,12 @@ impl UpdateElasticIpError {
 }
 impl fmt::Display for UpdateElasticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateElasticIpError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateElasticIpError::ResourceNotFound(ref cause) => cause,
+            UpdateElasticIpError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateElasticIpError {}
 /// Errors returned by UpdateInstance
 #[derive(Debug, PartialEq)]
 pub enum UpdateInstanceError {
@@ -5510,16 +5323,12 @@ impl UpdateInstanceError {
 }
 impl fmt::Display for UpdateInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateInstanceError::ResourceNotFound(ref cause) => cause,
+            UpdateInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateInstanceError {}
 /// Errors returned by UpdateLayer
 #[derive(Debug, PartialEq)]
 pub enum UpdateLayerError {
@@ -5543,16 +5352,12 @@ impl UpdateLayerError {
 }
 impl fmt::Display for UpdateLayerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateLayerError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateLayerError::ResourceNotFound(ref cause) => cause,
+            UpdateLayerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateLayerError {}
 /// Errors returned by UpdateMyUserProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateMyUserProfileError {}
@@ -5570,14 +5375,10 @@ impl UpdateMyUserProfileError {
 }
 impl fmt::Display for UpdateMyUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMyUserProfileError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UpdateMyUserProfileError {}
 /// Errors returned by UpdateRdsDbInstance
 #[derive(Debug, PartialEq)]
 pub enum UpdateRdsDbInstanceError {
@@ -5603,16 +5404,12 @@ impl UpdateRdsDbInstanceError {
 }
 impl fmt::Display for UpdateRdsDbInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRdsDbInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRdsDbInstanceError::ResourceNotFound(ref cause) => cause,
+            UpdateRdsDbInstanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRdsDbInstanceError {}
 /// Errors returned by UpdateStack
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackError {
@@ -5636,16 +5433,12 @@ impl UpdateStackError {
 }
 impl fmt::Display for UpdateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStackError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStackError::ResourceNotFound(ref cause) => cause,
+            UpdateStackError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStackError {}
 /// Errors returned by UpdateUserProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserProfileError {
@@ -5669,16 +5462,12 @@ impl UpdateUserProfileError {
 }
 impl fmt::Display for UpdateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserProfileError::ResourceNotFound(ref cause) => cause,
+            UpdateUserProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserProfileError {}
 /// Errors returned by UpdateVolume
 #[derive(Debug, PartialEq)]
 pub enum UpdateVolumeError {
@@ -5702,16 +5491,12 @@ impl UpdateVolumeError {
 }
 impl fmt::Display for UpdateVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVolumeError::ResourceNotFound(ref cause) => cause,
+            UpdateVolumeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateVolumeError {}
 /// Trait representing the capabilities of the AWS OpsWorks API. AWS OpsWorks clients implement this trait.
 pub trait OpsWorks {
     /// <p>Assign a registered instance to a layer.</p> <ul> <li> <p>You can assign registered on-premises instances to any layer type.</p> </li> <li> <p>You can assign registered Amazon EC2 instances only to custom layers.</p> </li> <li> <p>You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> </li> </ul> <p> <b>Required Permissions</b>: To use this action, an AWS Identity and Access Management (IAM) user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>

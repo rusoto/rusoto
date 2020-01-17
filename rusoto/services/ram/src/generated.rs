@@ -25,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptResourceShareInvitationRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -49,6 +50,7 @@ pub struct AcceptResourceShareInvitationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResourceSharePermissionRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -80,6 +82,7 @@ pub struct AssociateResourceSharePermissionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResourceShareRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -112,6 +115,7 @@ pub struct AssociateResourceShareResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceShareRequest {
     /// <p>Indicates whether principals outside your AWS organization can be associated with a resource share.</p>
     #[serde(rename = "allowExternalPrincipals")]
@@ -156,6 +160,7 @@ pub struct CreateResourceShareResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceShareRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -180,6 +185,7 @@ pub struct DeleteResourceShareResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateResourceSharePermissionRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -207,6 +213,7 @@ pub struct DisassociateResourceSharePermissionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateResourceShareRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -239,6 +246,7 @@ pub struct DisassociateResourceShareResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableSharingWithAwsOrganizationRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -251,6 +259,7 @@ pub struct EnableSharingWithAwsOrganizationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPermissionRequest {
     /// <p>The ARN of the permission.</p>
     #[serde(rename = "permissionArn")]
@@ -271,6 +280,7 @@ pub struct GetPermissionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcePoliciesRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -303,6 +313,7 @@ pub struct GetResourcePoliciesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceShareAssociationsRequest {
     /// <p>The association status.</p>
     #[serde(rename = "associationStatus")]
@@ -347,6 +358,7 @@ pub struct GetResourceShareAssociationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceShareInvitationsRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -380,6 +392,7 @@ pub struct GetResourceShareInvitationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceSharesRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -424,6 +437,7 @@ pub struct GetResourceSharesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPendingInvitationResourcesRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -452,6 +466,7 @@ pub struct ListPendingInvitationResourcesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPermissionsRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -481,6 +496,7 @@ pub struct ListPermissionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPrincipalsRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -525,6 +541,7 @@ pub struct ListPrincipalsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceSharePermissionsRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -553,6 +570,7 @@ pub struct ListResourceSharePermissionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -623,6 +641,7 @@ pub struct Principal {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PromoteResourceShareCreatedFromPolicyRequest {
     /// <p>The ARN of the resource share to promote.</p>
     #[serde(rename = "resourceShareArn")]
@@ -639,6 +658,7 @@ pub struct PromoteResourceShareCreatedFromPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectResourceShareInvitationRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -913,6 +933,7 @@ pub struct Tag {
 
 /// <p>Used to filter information based on tags.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagFilter {
     /// <p>The tag key.</p>
     #[serde(rename = "tagKey")]
@@ -925,6 +946,7 @@ pub struct TagFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource share.</p>
     #[serde(rename = "resourceShareArn")]
@@ -939,6 +961,7 @@ pub struct TagResourceRequest {
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource share.</p>
     #[serde(rename = "resourceShareArn")]
@@ -953,6 +976,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceShareRequest {
     /// <p>Indicates whether principals outside your AWS organization can be associated with a resource share.</p>
     #[serde(rename = "allowExternalPrincipals")]
@@ -1080,31 +1104,37 @@ impl AcceptResourceShareInvitationError {
 }
 impl fmt::Display for AcceptResourceShareInvitationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AcceptResourceShareInvitationError {
-    fn description(&self) -> &str {
         match *self {
-            AcceptResourceShareInvitationError::IdempotentParameterMismatch(ref cause) => cause,
-            AcceptResourceShareInvitationError::InvalidClientToken(ref cause) => cause,
-            AcceptResourceShareInvitationError::MalformedArn(ref cause) => cause,
-            AcceptResourceShareInvitationError::OperationNotPermitted(ref cause) => cause,
+            AcceptResourceShareInvitationError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptResourceShareInvitationError::InvalidClientToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptResourceShareInvitationError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            AcceptResourceShareInvitationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
             AcceptResourceShareInvitationError::ResourceShareInvitationAlreadyAccepted(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             AcceptResourceShareInvitationError::ResourceShareInvitationAlreadyRejected(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             AcceptResourceShareInvitationError::ResourceShareInvitationArnNotFound(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            AcceptResourceShareInvitationError::ResourceShareInvitationExpired(ref cause) => cause,
-            AcceptResourceShareInvitationError::ServerInternal(ref cause) => cause,
-            AcceptResourceShareInvitationError::ServiceUnavailable(ref cause) => cause,
+            AcceptResourceShareInvitationError::ResourceShareInvitationExpired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptResourceShareInvitationError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            AcceptResourceShareInvitationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AcceptResourceShareInvitationError {}
 /// Errors returned by AssociateResourceShare
 #[derive(Debug, PartialEq)]
 pub enum AssociateResourceShareError {
@@ -1191,25 +1221,27 @@ impl AssociateResourceShareError {
 }
 impl fmt::Display for AssociateResourceShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateResourceShareError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateResourceShareError::IdempotentParameterMismatch(ref cause) => cause,
-            AssociateResourceShareError::InvalidClientToken(ref cause) => cause,
-            AssociateResourceShareError::InvalidParameter(ref cause) => cause,
-            AssociateResourceShareError::InvalidStateTransition(ref cause) => cause,
-            AssociateResourceShareError::MalformedArn(ref cause) => cause,
-            AssociateResourceShareError::OperationNotPermitted(ref cause) => cause,
-            AssociateResourceShareError::ResourceShareLimitExceeded(ref cause) => cause,
-            AssociateResourceShareError::ServerInternal(ref cause) => cause,
-            AssociateResourceShareError::ServiceUnavailable(ref cause) => cause,
-            AssociateResourceShareError::UnknownResource(ref cause) => cause,
+            AssociateResourceShareError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateResourceShareError::InvalidClientToken(ref cause) => write!(f, "{}", cause),
+            AssociateResourceShareError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AssociateResourceShareError::InvalidStateTransition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateResourceShareError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            AssociateResourceShareError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            AssociateResourceShareError::ResourceShareLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateResourceShareError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            AssociateResourceShareError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AssociateResourceShareError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateResourceShareError {}
 /// Errors returned by AssociateResourceSharePermission
 #[derive(Debug, PartialEq)]
 pub enum AssociateResourceSharePermissionError {
@@ -1279,22 +1311,32 @@ impl AssociateResourceSharePermissionError {
 }
 impl fmt::Display for AssociateResourceSharePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateResourceSharePermissionError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateResourceSharePermissionError::InvalidClientToken(ref cause) => cause,
-            AssociateResourceSharePermissionError::InvalidParameter(ref cause) => cause,
-            AssociateResourceSharePermissionError::MalformedArn(ref cause) => cause,
-            AssociateResourceSharePermissionError::OperationNotPermitted(ref cause) => cause,
-            AssociateResourceSharePermissionError::ServerInternal(ref cause) => cause,
-            AssociateResourceSharePermissionError::ServiceUnavailable(ref cause) => cause,
-            AssociateResourceSharePermissionError::UnknownResource(ref cause) => cause,
+            AssociateResourceSharePermissionError::InvalidClientToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateResourceSharePermissionError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateResourceSharePermissionError::MalformedArn(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateResourceSharePermissionError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateResourceSharePermissionError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateResourceSharePermissionError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateResourceSharePermissionError::UnknownResource(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateResourceSharePermissionError {}
 /// Errors returned by CreateResourceShare
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceShareError {
@@ -1384,26 +1426,26 @@ impl CreateResourceShareError {
 }
 impl fmt::Display for CreateResourceShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateResourceShareError {
-    fn description(&self) -> &str {
         match *self {
-            CreateResourceShareError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateResourceShareError::InvalidClientToken(ref cause) => cause,
-            CreateResourceShareError::InvalidParameter(ref cause) => cause,
-            CreateResourceShareError::InvalidStateTransition(ref cause) => cause,
-            CreateResourceShareError::MalformedArn(ref cause) => cause,
-            CreateResourceShareError::OperationNotPermitted(ref cause) => cause,
-            CreateResourceShareError::ResourceShareLimitExceeded(ref cause) => cause,
-            CreateResourceShareError::ServerInternal(ref cause) => cause,
-            CreateResourceShareError::ServiceUnavailable(ref cause) => cause,
-            CreateResourceShareError::TagPolicyViolation(ref cause) => cause,
-            CreateResourceShareError::UnknownResource(ref cause) => cause,
+            CreateResourceShareError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateResourceShareError::InvalidClientToken(ref cause) => write!(f, "{}", cause),
+            CreateResourceShareError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateResourceShareError::InvalidStateTransition(ref cause) => write!(f, "{}", cause),
+            CreateResourceShareError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            CreateResourceShareError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateResourceShareError::ResourceShareLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateResourceShareError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            CreateResourceShareError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateResourceShareError::TagPolicyViolation(ref cause) => write!(f, "{}", cause),
+            CreateResourceShareError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateResourceShareError {}
 /// Errors returned by DeleteResourceShare
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceShareError {
@@ -1479,24 +1521,22 @@ impl DeleteResourceShareError {
 }
 impl fmt::Display for DeleteResourceShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteResourceShareError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteResourceShareError::IdempotentParameterMismatch(ref cause) => cause,
-            DeleteResourceShareError::InvalidClientToken(ref cause) => cause,
-            DeleteResourceShareError::InvalidParameter(ref cause) => cause,
-            DeleteResourceShareError::InvalidStateTransition(ref cause) => cause,
-            DeleteResourceShareError::MalformedArn(ref cause) => cause,
-            DeleteResourceShareError::OperationNotPermitted(ref cause) => cause,
-            DeleteResourceShareError::ServerInternal(ref cause) => cause,
-            DeleteResourceShareError::ServiceUnavailable(ref cause) => cause,
-            DeleteResourceShareError::UnknownResource(ref cause) => cause,
+            DeleteResourceShareError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteResourceShareError::InvalidClientToken(ref cause) => write!(f, "{}", cause),
+            DeleteResourceShareError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteResourceShareError::InvalidStateTransition(ref cause) => write!(f, "{}", cause),
+            DeleteResourceShareError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            DeleteResourceShareError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DeleteResourceShareError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            DeleteResourceShareError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteResourceShareError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteResourceShareError {}
 /// Errors returned by DisassociateResourceShare
 #[derive(Debug, PartialEq)]
 pub enum DisassociateResourceShareError {
@@ -1585,25 +1625,29 @@ impl DisassociateResourceShareError {
 }
 impl fmt::Display for DisassociateResourceShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateResourceShareError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateResourceShareError::IdempotentParameterMismatch(ref cause) => cause,
-            DisassociateResourceShareError::InvalidClientToken(ref cause) => cause,
-            DisassociateResourceShareError::InvalidParameter(ref cause) => cause,
-            DisassociateResourceShareError::InvalidStateTransition(ref cause) => cause,
-            DisassociateResourceShareError::MalformedArn(ref cause) => cause,
-            DisassociateResourceShareError::OperationNotPermitted(ref cause) => cause,
-            DisassociateResourceShareError::ResourceShareLimitExceeded(ref cause) => cause,
-            DisassociateResourceShareError::ServerInternal(ref cause) => cause,
-            DisassociateResourceShareError::ServiceUnavailable(ref cause) => cause,
-            DisassociateResourceShareError::UnknownResource(ref cause) => cause,
+            DisassociateResourceShareError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateResourceShareError::InvalidClientToken(ref cause) => write!(f, "{}", cause),
+            DisassociateResourceShareError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DisassociateResourceShareError::InvalidStateTransition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateResourceShareError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            DisassociateResourceShareError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateResourceShareError::ResourceShareLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateResourceShareError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            DisassociateResourceShareError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DisassociateResourceShareError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateResourceShareError {}
 /// Errors returned by DisassociateResourceSharePermission
 #[derive(Debug, PartialEq)]
 pub enum DisassociateResourceSharePermissionError {
@@ -1673,22 +1717,32 @@ impl DisassociateResourceSharePermissionError {
 }
 impl fmt::Display for DisassociateResourceSharePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateResourceSharePermissionError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateResourceSharePermissionError::InvalidClientToken(ref cause) => cause,
-            DisassociateResourceSharePermissionError::InvalidParameter(ref cause) => cause,
-            DisassociateResourceSharePermissionError::MalformedArn(ref cause) => cause,
-            DisassociateResourceSharePermissionError::OperationNotPermitted(ref cause) => cause,
-            DisassociateResourceSharePermissionError::ServerInternal(ref cause) => cause,
-            DisassociateResourceSharePermissionError::ServiceUnavailable(ref cause) => cause,
-            DisassociateResourceSharePermissionError::UnknownResource(ref cause) => cause,
+            DisassociateResourceSharePermissionError::InvalidClientToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateResourceSharePermissionError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateResourceSharePermissionError::MalformedArn(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateResourceSharePermissionError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateResourceSharePermissionError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateResourceSharePermissionError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateResourceSharePermissionError::UnknownResource(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateResourceSharePermissionError {}
 /// Errors returned by EnableSharingWithAwsOrganization
 #[derive(Debug, PartialEq)]
 pub enum EnableSharingWithAwsOrganizationError {
@@ -1730,18 +1784,20 @@ impl EnableSharingWithAwsOrganizationError {
 }
 impl fmt::Display for EnableSharingWithAwsOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableSharingWithAwsOrganizationError {
-    fn description(&self) -> &str {
         match *self {
-            EnableSharingWithAwsOrganizationError::OperationNotPermitted(ref cause) => cause,
-            EnableSharingWithAwsOrganizationError::ServerInternal(ref cause) => cause,
-            EnableSharingWithAwsOrganizationError::ServiceUnavailable(ref cause) => cause,
+            EnableSharingWithAwsOrganizationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableSharingWithAwsOrganizationError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableSharingWithAwsOrganizationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for EnableSharingWithAwsOrganizationError {}
 /// Errors returned by GetPermission
 #[derive(Debug, PartialEq)]
 pub enum GetPermissionError {
@@ -1790,21 +1846,17 @@ impl GetPermissionError {
 }
 impl fmt::Display for GetPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPermissionError {
-    fn description(&self) -> &str {
         match *self {
-            GetPermissionError::InvalidParameter(ref cause) => cause,
-            GetPermissionError::MalformedArn(ref cause) => cause,
-            GetPermissionError::OperationNotPermitted(ref cause) => cause,
-            GetPermissionError::ServerInternal(ref cause) => cause,
-            GetPermissionError::ServiceUnavailable(ref cause) => cause,
-            GetPermissionError::UnknownResource(ref cause) => cause,
+            GetPermissionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetPermissionError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            GetPermissionError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            GetPermissionError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            GetPermissionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetPermissionError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPermissionError {}
 /// Errors returned by GetResourcePolicies
 #[derive(Debug, PartialEq)]
 pub enum GetResourcePoliciesError {
@@ -1854,20 +1906,16 @@ impl GetResourcePoliciesError {
 }
 impl fmt::Display for GetResourcePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourcePoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourcePoliciesError::InvalidNextToken(ref cause) => cause,
-            GetResourcePoliciesError::InvalidParameter(ref cause) => cause,
-            GetResourcePoliciesError::MalformedArn(ref cause) => cause,
-            GetResourcePoliciesError::ServerInternal(ref cause) => cause,
-            GetResourcePoliciesError::ServiceUnavailable(ref cause) => cause,
+            GetResourcePoliciesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetResourcePoliciesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetResourcePoliciesError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            GetResourcePoliciesError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            GetResourcePoliciesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetResourcePoliciesError {}
 /// Errors returned by GetResourceShareAssociations
 #[derive(Debug, PartialEq)]
 pub enum GetResourceShareAssociationsError {
@@ -1937,22 +1985,26 @@ impl GetResourceShareAssociationsError {
 }
 impl fmt::Display for GetResourceShareAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourceShareAssociationsError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourceShareAssociationsError::InvalidNextToken(ref cause) => cause,
-            GetResourceShareAssociationsError::InvalidParameter(ref cause) => cause,
-            GetResourceShareAssociationsError::MalformedArn(ref cause) => cause,
-            GetResourceShareAssociationsError::OperationNotPermitted(ref cause) => cause,
-            GetResourceShareAssociationsError::ServerInternal(ref cause) => cause,
-            GetResourceShareAssociationsError::ServiceUnavailable(ref cause) => cause,
-            GetResourceShareAssociationsError::UnknownResource(ref cause) => cause,
+            GetResourceShareAssociationsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetResourceShareAssociationsError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetResourceShareAssociationsError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            GetResourceShareAssociationsError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetResourceShareAssociationsError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            GetResourceShareAssociationsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetResourceShareAssociationsError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetResourceShareAssociationsError {}
 /// Errors returned by GetResourceShareInvitations
 #[derive(Debug, PartialEq)]
 pub enum GetResourceShareInvitationsError {
@@ -2024,24 +2076,24 @@ impl GetResourceShareInvitationsError {
 }
 impl fmt::Display for GetResourceShareInvitationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourceShareInvitationsError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourceShareInvitationsError::InvalidMaxResults(ref cause) => cause,
-            GetResourceShareInvitationsError::InvalidNextToken(ref cause) => cause,
-            GetResourceShareInvitationsError::InvalidParameter(ref cause) => cause,
-            GetResourceShareInvitationsError::MalformedArn(ref cause) => cause,
-            GetResourceShareInvitationsError::ResourceShareInvitationArnNotFound(ref cause) => {
-                cause
+            GetResourceShareInvitationsError::InvalidMaxResults(ref cause) => {
+                write!(f, "{}", cause)
             }
-            GetResourceShareInvitationsError::ServerInternal(ref cause) => cause,
-            GetResourceShareInvitationsError::ServiceUnavailable(ref cause) => cause,
+            GetResourceShareInvitationsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetResourceShareInvitationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetResourceShareInvitationsError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            GetResourceShareInvitationsError::ResourceShareInvitationArnNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetResourceShareInvitationsError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            GetResourceShareInvitationsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetResourceShareInvitationsError {}
 /// Errors returned by GetResourceShares
 #[derive(Debug, PartialEq)]
 pub enum GetResourceSharesError {
@@ -2092,21 +2144,17 @@ impl GetResourceSharesError {
 }
 impl fmt::Display for GetResourceSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourceSharesError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourceSharesError::InvalidNextToken(ref cause) => cause,
-            GetResourceSharesError::InvalidParameter(ref cause) => cause,
-            GetResourceSharesError::MalformedArn(ref cause) => cause,
-            GetResourceSharesError::ServerInternal(ref cause) => cause,
-            GetResourceSharesError::ServiceUnavailable(ref cause) => cause,
-            GetResourceSharesError::UnknownResource(ref cause) => cause,
+            GetResourceSharesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetResourceSharesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetResourceSharesError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            GetResourceSharesError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            GetResourceSharesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetResourceSharesError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetResourceSharesError {}
 /// Errors returned by ListPendingInvitationResources
 #[derive(Debug, PartialEq)]
 pub enum ListPendingInvitationResourcesError {
@@ -2196,28 +2244,36 @@ impl ListPendingInvitationResourcesError {
 }
 impl fmt::Display for ListPendingInvitationResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPendingInvitationResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListPendingInvitationResourcesError::InvalidNextToken(ref cause) => cause,
-            ListPendingInvitationResourcesError::InvalidParameter(ref cause) => cause,
-            ListPendingInvitationResourcesError::MalformedArn(ref cause) => cause,
-            ListPendingInvitationResourcesError::MissingRequiredParameter(ref cause) => cause,
+            ListPendingInvitationResourcesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListPendingInvitationResourcesError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListPendingInvitationResourcesError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            ListPendingInvitationResourcesError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ListPendingInvitationResourcesError::ResourceShareInvitationAlreadyRejected(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             ListPendingInvitationResourcesError::ResourceShareInvitationArnNotFound(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            ListPendingInvitationResourcesError::ResourceShareInvitationExpired(ref cause) => cause,
-            ListPendingInvitationResourcesError::ServerInternal(ref cause) => cause,
-            ListPendingInvitationResourcesError::ServiceUnavailable(ref cause) => cause,
+            ListPendingInvitationResourcesError::ResourceShareInvitationExpired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListPendingInvitationResourcesError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListPendingInvitationResourcesError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListPendingInvitationResourcesError {}
 /// Errors returned by ListPermissions
 #[derive(Debug, PartialEq)]
 pub enum ListPermissionsError {
@@ -2263,20 +2319,16 @@ impl ListPermissionsError {
 }
 impl fmt::Display for ListPermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPermissionsError::InvalidNextToken(ref cause) => cause,
-            ListPermissionsError::InvalidParameter(ref cause) => cause,
-            ListPermissionsError::OperationNotPermitted(ref cause) => cause,
-            ListPermissionsError::ServerInternal(ref cause) => cause,
-            ListPermissionsError::ServiceUnavailable(ref cause) => cause,
+            ListPermissionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListPermissionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListPermissionsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            ListPermissionsError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            ListPermissionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPermissionsError {}
 /// Errors returned by ListPrincipals
 #[derive(Debug, PartialEq)]
 pub enum ListPrincipalsError {
@@ -2325,21 +2377,17 @@ impl ListPrincipalsError {
 }
 impl fmt::Display for ListPrincipalsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPrincipalsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPrincipalsError::InvalidNextToken(ref cause) => cause,
-            ListPrincipalsError::InvalidParameter(ref cause) => cause,
-            ListPrincipalsError::MalformedArn(ref cause) => cause,
-            ListPrincipalsError::ServerInternal(ref cause) => cause,
-            ListPrincipalsError::ServiceUnavailable(ref cause) => cause,
-            ListPrincipalsError::UnknownResource(ref cause) => cause,
+            ListPrincipalsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListPrincipalsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListPrincipalsError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            ListPrincipalsError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            ListPrincipalsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListPrincipalsError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPrincipalsError {}
 /// Errors returned by ListResourceSharePermissions
 #[derive(Debug, PartialEq)]
 pub enum ListResourceSharePermissionsError {
@@ -2409,22 +2457,26 @@ impl ListResourceSharePermissionsError {
 }
 impl fmt::Display for ListResourceSharePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourceSharePermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourceSharePermissionsError::InvalidNextToken(ref cause) => cause,
-            ListResourceSharePermissionsError::InvalidParameter(ref cause) => cause,
-            ListResourceSharePermissionsError::MalformedArn(ref cause) => cause,
-            ListResourceSharePermissionsError::OperationNotPermitted(ref cause) => cause,
-            ListResourceSharePermissionsError::ServerInternal(ref cause) => cause,
-            ListResourceSharePermissionsError::ServiceUnavailable(ref cause) => cause,
-            ListResourceSharePermissionsError::UnknownResource(ref cause) => cause,
+            ListResourceSharePermissionsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListResourceSharePermissionsError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListResourceSharePermissionsError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            ListResourceSharePermissionsError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListResourceSharePermissionsError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            ListResourceSharePermissionsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListResourceSharePermissionsError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResourceSharePermissionsError {}
 /// Errors returned by ListResources
 #[derive(Debug, PartialEq)]
 pub enum ListResourcesError {
@@ -2478,22 +2530,18 @@ impl ListResourcesError {
 }
 impl fmt::Display for ListResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourcesError::InvalidNextToken(ref cause) => cause,
-            ListResourcesError::InvalidParameter(ref cause) => cause,
-            ListResourcesError::InvalidResourceType(ref cause) => cause,
-            ListResourcesError::MalformedArn(ref cause) => cause,
-            ListResourcesError::ServerInternal(ref cause) => cause,
-            ListResourcesError::ServiceUnavailable(ref cause) => cause,
-            ListResourcesError::UnknownResource(ref cause) => cause,
+            ListResourcesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListResourcesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListResourcesError::InvalidResourceType(ref cause) => write!(f, "{}", cause),
+            ListResourcesError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            ListResourcesError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            ListResourcesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListResourcesError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResourcesError {}
 /// Errors returned by PromoteResourceShareCreatedFromPolicy
 #[derive(Debug, PartialEq)]
 pub enum PromoteResourceShareCreatedFromPolicyError {
@@ -2558,23 +2606,29 @@ impl PromoteResourceShareCreatedFromPolicyError {
 }
 impl fmt::Display for PromoteResourceShareCreatedFromPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PromoteResourceShareCreatedFromPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PromoteResourceShareCreatedFromPolicyError::InvalidParameter(ref cause) => cause,
-            PromoteResourceShareCreatedFromPolicyError::MalformedArn(ref cause) => cause,
-            PromoteResourceShareCreatedFromPolicyError::MissingRequiredParameter(ref cause) => {
-                cause
+            PromoteResourceShareCreatedFromPolicyError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
             }
-            PromoteResourceShareCreatedFromPolicyError::OperationNotPermitted(ref cause) => cause,
-            PromoteResourceShareCreatedFromPolicyError::ServerInternal(ref cause) => cause,
-            PromoteResourceShareCreatedFromPolicyError::ServiceUnavailable(ref cause) => cause,
+            PromoteResourceShareCreatedFromPolicyError::MalformedArn(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PromoteResourceShareCreatedFromPolicyError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PromoteResourceShareCreatedFromPolicyError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PromoteResourceShareCreatedFromPolicyError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PromoteResourceShareCreatedFromPolicyError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PromoteResourceShareCreatedFromPolicyError {}
 /// Errors returned by RejectResourceShareInvitation
 #[derive(Debug, PartialEq)]
 pub enum RejectResourceShareInvitationError {
@@ -2671,31 +2725,37 @@ impl RejectResourceShareInvitationError {
 }
 impl fmt::Display for RejectResourceShareInvitationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RejectResourceShareInvitationError {
-    fn description(&self) -> &str {
         match *self {
-            RejectResourceShareInvitationError::IdempotentParameterMismatch(ref cause) => cause,
-            RejectResourceShareInvitationError::InvalidClientToken(ref cause) => cause,
-            RejectResourceShareInvitationError::MalformedArn(ref cause) => cause,
-            RejectResourceShareInvitationError::OperationNotPermitted(ref cause) => cause,
+            RejectResourceShareInvitationError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RejectResourceShareInvitationError::InvalidClientToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RejectResourceShareInvitationError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            RejectResourceShareInvitationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RejectResourceShareInvitationError::ResourceShareInvitationAlreadyAccepted(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             RejectResourceShareInvitationError::ResourceShareInvitationAlreadyRejected(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             RejectResourceShareInvitationError::ResourceShareInvitationArnNotFound(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            RejectResourceShareInvitationError::ResourceShareInvitationExpired(ref cause) => cause,
-            RejectResourceShareInvitationError::ServerInternal(ref cause) => cause,
-            RejectResourceShareInvitationError::ServiceUnavailable(ref cause) => cause,
+            RejectResourceShareInvitationError::ResourceShareInvitationExpired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RejectResourceShareInvitationError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            RejectResourceShareInvitationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RejectResourceShareInvitationError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2749,22 +2809,18 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InvalidParameter(ref cause) => cause,
-            TagResourceError::MalformedArn(ref cause) => cause,
-            TagResourceError::ResourceArnNotFound(ref cause) => cause,
-            TagResourceError::ServerInternal(ref cause) => cause,
-            TagResourceError::ServiceUnavailable(ref cause) => cause,
-            TagResourceError::TagLimitExceeded(ref cause) => cause,
-            TagResourceError::TagPolicyViolation(ref cause) => cause,
+            TagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceArnNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagPolicyViolation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -2798,18 +2854,14 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InvalidParameter(ref cause) => cause,
-            UntagResourceError::ServerInternal(ref cause) => cause,
-            UntagResourceError::ServiceUnavailable(ref cause) => cause,
+            UntagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateResourceShare
 #[derive(Debug, PartialEq)]
 pub enum UpdateResourceShareError {
@@ -2885,24 +2937,22 @@ impl UpdateResourceShareError {
 }
 impl fmt::Display for UpdateResourceShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateResourceShareError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateResourceShareError::IdempotentParameterMismatch(ref cause) => cause,
-            UpdateResourceShareError::InvalidClientToken(ref cause) => cause,
-            UpdateResourceShareError::InvalidParameter(ref cause) => cause,
-            UpdateResourceShareError::MalformedArn(ref cause) => cause,
-            UpdateResourceShareError::MissingRequiredParameter(ref cause) => cause,
-            UpdateResourceShareError::OperationNotPermitted(ref cause) => cause,
-            UpdateResourceShareError::ServerInternal(ref cause) => cause,
-            UpdateResourceShareError::ServiceUnavailable(ref cause) => cause,
-            UpdateResourceShareError::UnknownResource(ref cause) => cause,
+            UpdateResourceShareError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateResourceShareError::InvalidClientToken(ref cause) => write!(f, "{}", cause),
+            UpdateResourceShareError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateResourceShareError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            UpdateResourceShareError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            UpdateResourceShareError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            UpdateResourceShareError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            UpdateResourceShareError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateResourceShareError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateResourceShareError {}
 /// Trait representing the capabilities of the RAM API. RAM clients implement this trait.
 pub trait Ram {
     /// <p>Accepts an invitation to a resource share from another AWS account.</p>

@@ -180,6 +180,7 @@ pub struct CoverageNormalizedUnits {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCostCategoryDefinitionRequest {
     #[serde(rename = "Name")]
     pub name: String,
@@ -261,6 +262,7 @@ pub struct DateInterval {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCostCategoryDefinitionRequest {
     /// <p> The unique identifier for your Cost Category. </p>
     #[serde(rename = "CostCategoryArn")]
@@ -281,6 +283,7 @@ pub struct DeleteCostCategoryDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCostCategoryDefinitionRequest {
     /// <p> The unique identifier for your Cost Category. </p>
     #[serde(rename = "CostCategoryArn")]
@@ -541,6 +544,7 @@ pub struct ForecastResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCostAndUsageRequest {
     /// <p>Filters AWS costs by different dimensions. For example, you can specify <code>SERVICE</code> and <code>LINKED_ACCOUNT</code> and get the costs that are associated with that account's usage of that service. You can nest <code>Expression</code> objects to define any combination of dimension filters. For more information, see <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a>. </p>
     #[serde(rename = "Filter")]
@@ -585,6 +589,7 @@ pub struct GetCostAndUsageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCostAndUsageWithResourcesRequest {
     /// <p>Filters Amazon Web Services costs by different dimensions. For example, you can specify <code>SERVICE</code> and <code>LINKED_ACCOUNT</code> and get the costs that are associated with that account's usage of that service. You can nest <code>Expression</code> objects to define any combination of dimension filters. For more information, see <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a>. </p> <p>The <code>GetCostAndUsageWithResources</code> operation requires that you either group by or filter by a <code>ResourceId</code>.</p>
     #[serde(rename = "Filter")]
@@ -629,6 +634,7 @@ pub struct GetCostAndUsageWithResourcesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCostForecastRequest {
     /// <p>The filters that you want to use to filter your forecast. Cost Explorer API supports all of the Cost Explorer filters.</p>
     #[serde(rename = "Filter")]
@@ -663,6 +669,7 @@ pub struct GetCostForecastResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDimensionValuesRequest {
     /// <p><p>The context for the call to <code>GetDimensionValues</code>. This can be <code>RESERVATIONS</code> or <code>COST<em>AND</em>USAGE</code>. The default value is <code>COST<em>AND</em>USAGE</code>. If the context is set to <code>RESERVATIONS</code>, the resulting dimension values can be used in the <code>GetReservationUtilization</code> operation. If the context is set to <code>COST<em>AND</em>USAGE</code>, the resulting dimension values can be used in the <code>GetCostAndUsage</code> operation.</p> <p>If you set the context to <code>COST<em>AND</em>USAGE</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>DATABASE<em>ENGINE - The Amazon Relational Database Service database. Examples are Aurora or MySQL.</p> </li> <li> <p>INSTANCE</em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LEGAL<em>ENTITY</em>NAME - The name of the organization that sells you AWS services, such as Amazon Web Services.</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>OPERATING</em>SYSTEM - The operating system. Examples are Windows or Linux.</p> </li> <li> <p>OPERATION - The action performed. Examples include <code>RunInstance</code> and <code>CreateBucket</code>.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>PURCHASE<em>TYPE - The reservation type of the purchase to which this usage is related. Examples include On-Demand Instances and Standard Reserved Instances.</p> </li> <li> <p>SERVICE - The AWS service such as Amazon DynamoDB.</p> </li> <li> <p>USAGE</em>TYPE - The type of usage. An example is DataTransfer-In-Bytes. The response for the <code>GetDimensionValues</code> operation includes a unit attribute. Examples include GB and Hrs.</p> </li> <li> <p>USAGE<em>TYPE</em>GROUP - The grouping of common usage types. An example is Amazon EC2: CloudWatch – Alarms. The response for this operation includes a unit attribute.</p> </li> <li> <p>RECORD<em>TYPE - The different types of charges such as RI fees, usage costs, tax refunds, and credits.</p> </li> <li> <p>RESOURCE</em>ID - The unique identifier of the resource. ResourceId is an opt-in feature only available for last 14 days for EC2-Compute Service.</p> </li> </ul> <p>If you set the context to <code>RESERVATIONS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>CACHE<em>ENGINE - The Amazon ElastiCache operating system. Examples are Windows or Linux.</p> </li> <li> <p>DEPLOYMENT</em>OPTION - The scope of Amazon Relational Database Service deployments. Valid values are <code>SingleAZ</code> and <code>MultiAZ</code>.</p> </li> <li> <p>INSTANCE<em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LINKED</em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>SCOPE (Utilization only) - The scope of a Reserved Instance (RI). Values are regional or a single Availability Zone.</p> </li> <li> <p>TAG (Coverage only) - The tags that are associated with a Reserved Instance (RI).</p> </li> <li> <p>TENANCY - The tenancy of a resource. Examples are shared or dedicated.</p> </li> </ul> <p>If you set the context to <code>SAVINGS<em>PLANS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>SAVINGS</em>PLANS<em>TYPE - Type of Savings Plans (EC2 Instance or Compute)</p> </li> <li> <p>PAYMENT</em>OPTION - Payment option for the given Savings Plans (for example, All Upfront)</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>INSTANCE<em>TYPE</em>FAMILY - The family of instances (For example, <code>m5</code>)</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>SAVINGS</em>PLAN_ARN - The unique identifier for your Savings Plan</p> </li> </ul></p>
     #[serde(rename = "Context")]
@@ -704,6 +711,7 @@ pub struct GetDimensionValuesResponse {
 
 /// <p>You can use the following request parameters to query for how much of your instance usage a reservation covered.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReservationCoverageRequest {
     /// <p>Filters utilization data by dimensions. You can filter by the following dimensions:</p> <ul> <li> <p>AZ</p> </li> <li> <p>CACHE_ENGINE</p> </li> <li> <p>DATABASE_ENGINE</p> </li> <li> <p>DEPLOYMENT_OPTION</p> </li> <li> <p>INSTANCE_TYPE</p> </li> <li> <p>LINKED_ACCOUNT</p> </li> <li> <p>OPERATING_SYSTEM</p> </li> <li> <p>PLATFORM</p> </li> <li> <p>REGION</p> </li> <li> <p>SERVICE</p> </li> <li> <p>TAG</p> </li> <li> <p>TENANCY</p> </li> </ul> <p> <code>GetReservationCoverage</code> uses the same <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object as the other operations, but only <code>AND</code> is supported among each dimension. You can nest only one level deep. If there are multiple values for a dimension, they are OR'd together.</p> <p>If you don't provide a <code>SERVICE</code> filter, Cost Explorer defaults to EC2.</p>
     #[serde(rename = "Filter")]
@@ -747,6 +755,7 @@ pub struct GetReservationCoverageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReservationPurchaseRecommendationRequest {
     /// <p>The account ID that is associated with the recommendation. </p>
     #[serde(rename = "AccountId")]
@@ -803,6 +812,7 @@ pub struct GetReservationPurchaseRecommendationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReservationUtilizationRequest {
     /// <p>Filters utilization data by dimensions. You can filter by the following dimensions:</p> <ul> <li> <p>AZ</p> </li> <li> <p>CACHE_ENGINE</p> </li> <li> <p>DATABASE_ENGINE</p> </li> <li> <p>DEPLOYMENT_OPTION</p> </li> <li> <p>INSTANCE_TYPE</p> </li> <li> <p>LINKED_ACCOUNT</p> </li> <li> <p>OPERATING_SYSTEM</p> </li> <li> <p>PLATFORM</p> </li> <li> <p>REGION</p> </li> <li> <p>SERVICE</p> </li> <li> <p>SCOPE</p> </li> <li> <p>TENANCY</p> </li> </ul> <p> <code>GetReservationUtilization</code> uses the same <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object as the other operations, but only <code>AND</code> is supported among each dimension, and nesting is supported up to only one level deep. If there are multiple values for a dimension, they are OR'd together.</p>
     #[serde(rename = "Filter")]
@@ -842,6 +852,7 @@ pub struct GetReservationUtilizationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRightsizingRecommendationRequest {
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -881,6 +892,7 @@ pub struct GetRightsizingRecommendationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSavingsPlansCoverageRequest {
     /// <p>Filters Savings Plans coverage data by dimensions. You can filter data for Savings Plans usage with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>SERVICE</code> </p> </li> <li> <p> <code>INSTANCE_FAMILY</code> </p> </li> </ul> <p> <code>GetSavingsPlansCoverage</code> uses the same <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object as the other operations, but only <code>AND</code> is supported among each dimension. If there are multiple values for a dimension, they are OR'd together.</p>
     #[serde(rename = "Filter")]
@@ -924,6 +936,7 @@ pub struct GetSavingsPlansCoverageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSavingsPlansPurchaseRecommendationRequest {
     /// <p>The lookback period used to generate the recommendation.</p>
     #[serde(rename = "LookbackPeriodInDays")]
@@ -965,6 +978,7 @@ pub struct GetSavingsPlansPurchaseRecommendationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSavingsPlansUtilizationDetailsRequest {
     /// <p>Filters Savings Plans utilization coverage data for active Savings Plans dimensions. You can filter data with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>SAVINGS_PLAN_ARN</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>PAYMENT_OPTION</code> </p> </li> <li> <p> <code>INSTANCE_TYPE_FAMILY</code> </p> </li> </ul> <p> <code>GetSavingsPlansUtilizationDetails</code> uses the same <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object as the other operations, but only <code>AND</code> is supported among each dimension.</p>
     #[serde(rename = "Filter")]
@@ -1002,6 +1016,7 @@ pub struct GetSavingsPlansUtilizationDetailsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSavingsPlansUtilizationRequest {
     /// <p>Filters Savings Plans utilization coverage data for active Savings Plans dimensions. You can filter data with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>SAVINGS_PLAN_ARN</code> </p> </li> <li> <p> <code>SAVINGS_PLANS_TYPE</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>PAYMENT_OPTION</code> </p> </li> <li> <p> <code>INSTANCE_TYPE_FAMILY</code> </p> </li> </ul> <p> <code>GetSavingsPlansUtilization</code> uses the same <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object as the other operations, but only <code>AND</code> is supported among each dimension.</p>
     #[serde(rename = "Filter")]
@@ -1029,6 +1044,7 @@ pub struct GetSavingsPlansUtilizationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsRequest {
     /// <p>The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
     #[serde(rename = "NextPageToken")]
@@ -1066,6 +1082,7 @@ pub struct GetTagsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsageForecastRequest {
     /// <p>The filters that you want to use to filter your forecast. Cost Explorer API supports all of the Cost Explorer filters.</p>
     #[serde(rename = "Filter")]
@@ -1153,6 +1170,7 @@ pub struct InstanceDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCostCategoryDefinitionsRequest {
     /// <p> The date when the Cost Category was effective. </p>
     #[serde(rename = "EffectiveOn")]
@@ -2029,6 +2047,7 @@ pub struct TerminateRecommendationDetail {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCostCategoryDefinitionRequest {
     /// <p>The unique identifier for your Cost Category.</p>
     #[serde(rename = "CostCategoryArn")]
@@ -2105,17 +2124,15 @@ impl CreateCostCategoryDefinitionError {
 }
 impl fmt::Display for CreateCostCategoryDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCostCategoryDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCostCategoryDefinitionError::LimitExceeded(ref cause) => cause,
-            CreateCostCategoryDefinitionError::ServiceQuotaExceeded(ref cause) => cause,
+            CreateCostCategoryDefinitionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateCostCategoryDefinitionError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateCostCategoryDefinitionError {}
 /// Errors returned by DeleteCostCategoryDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteCostCategoryDefinitionError {
@@ -2150,17 +2167,15 @@ impl DeleteCostCategoryDefinitionError {
 }
 impl fmt::Display for DeleteCostCategoryDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCostCategoryDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCostCategoryDefinitionError::LimitExceeded(ref cause) => cause,
-            DeleteCostCategoryDefinitionError::ResourceNotFound(ref cause) => cause,
+            DeleteCostCategoryDefinitionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteCostCategoryDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteCostCategoryDefinitionError {}
 /// Errors returned by DescribeCostCategoryDefinition
 #[derive(Debug, PartialEq)]
 pub enum DescribeCostCategoryDefinitionError {
@@ -2195,17 +2210,15 @@ impl DescribeCostCategoryDefinitionError {
 }
 impl fmt::Display for DescribeCostCategoryDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCostCategoryDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCostCategoryDefinitionError::LimitExceeded(ref cause) => cause,
-            DescribeCostCategoryDefinitionError::ResourceNotFound(ref cause) => cause,
+            DescribeCostCategoryDefinitionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeCostCategoryDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCostCategoryDefinitionError {}
 /// Errors returned by GetCostAndUsage
 #[derive(Debug, PartialEq)]
 pub enum GetCostAndUsageError {
@@ -2249,20 +2262,16 @@ impl GetCostAndUsageError {
 }
 impl fmt::Display for GetCostAndUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCostAndUsageError {
-    fn description(&self) -> &str {
         match *self {
-            GetCostAndUsageError::BillExpiration(ref cause) => cause,
-            GetCostAndUsageError::DataUnavailable(ref cause) => cause,
-            GetCostAndUsageError::InvalidNextToken(ref cause) => cause,
-            GetCostAndUsageError::LimitExceeded(ref cause) => cause,
-            GetCostAndUsageError::RequestChanged(ref cause) => cause,
+            GetCostAndUsageError::BillExpiration(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageError::RequestChanged(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCostAndUsageError {}
 /// Errors returned by GetCostAndUsageWithResources
 #[derive(Debug, PartialEq)]
 pub enum GetCostAndUsageWithResourcesError {
@@ -2318,20 +2327,18 @@ impl GetCostAndUsageWithResourcesError {
 }
 impl fmt::Display for GetCostAndUsageWithResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCostAndUsageWithResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            GetCostAndUsageWithResourcesError::BillExpiration(ref cause) => cause,
-            GetCostAndUsageWithResourcesError::DataUnavailable(ref cause) => cause,
-            GetCostAndUsageWithResourcesError::InvalidNextToken(ref cause) => cause,
-            GetCostAndUsageWithResourcesError::LimitExceeded(ref cause) => cause,
-            GetCostAndUsageWithResourcesError::RequestChanged(ref cause) => cause,
+            GetCostAndUsageWithResourcesError::BillExpiration(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageWithResourcesError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageWithResourcesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCostAndUsageWithResourcesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageWithResourcesError::RequestChanged(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCostAndUsageWithResourcesError {}
 /// Errors returned by GetCostForecast
 #[derive(Debug, PartialEq)]
 pub enum GetCostForecastError {
@@ -2360,17 +2367,13 @@ impl GetCostForecastError {
 }
 impl fmt::Display for GetCostForecastError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCostForecastError {
-    fn description(&self) -> &str {
         match *self {
-            GetCostForecastError::DataUnavailable(ref cause) => cause,
-            GetCostForecastError::LimitExceeded(ref cause) => cause,
+            GetCostForecastError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetCostForecastError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCostForecastError {}
 /// Errors returned by GetDimensionValues
 #[derive(Debug, PartialEq)]
 pub enum GetDimensionValuesError {
@@ -2414,20 +2417,16 @@ impl GetDimensionValuesError {
 }
 impl fmt::Display for GetDimensionValuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDimensionValuesError {
-    fn description(&self) -> &str {
         match *self {
-            GetDimensionValuesError::BillExpiration(ref cause) => cause,
-            GetDimensionValuesError::DataUnavailable(ref cause) => cause,
-            GetDimensionValuesError::InvalidNextToken(ref cause) => cause,
-            GetDimensionValuesError::LimitExceeded(ref cause) => cause,
-            GetDimensionValuesError::RequestChanged(ref cause) => cause,
+            GetDimensionValuesError::BillExpiration(ref cause) => write!(f, "{}", cause),
+            GetDimensionValuesError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetDimensionValuesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetDimensionValuesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetDimensionValuesError::RequestChanged(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDimensionValuesError {}
 /// Errors returned by GetReservationCoverage
 #[derive(Debug, PartialEq)]
 pub enum GetReservationCoverageError {
@@ -2467,18 +2466,14 @@ impl GetReservationCoverageError {
 }
 impl fmt::Display for GetReservationCoverageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetReservationCoverageError {
-    fn description(&self) -> &str {
         match *self {
-            GetReservationCoverageError::DataUnavailable(ref cause) => cause,
-            GetReservationCoverageError::InvalidNextToken(ref cause) => cause,
-            GetReservationCoverageError::LimitExceeded(ref cause) => cause,
+            GetReservationCoverageError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetReservationCoverageError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetReservationCoverageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetReservationCoverageError {}
 /// Errors returned by GetReservationPurchaseRecommendation
 #[derive(Debug, PartialEq)]
 pub enum GetReservationPurchaseRecommendationError {
@@ -2520,18 +2515,20 @@ impl GetReservationPurchaseRecommendationError {
 }
 impl fmt::Display for GetReservationPurchaseRecommendationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetReservationPurchaseRecommendationError {
-    fn description(&self) -> &str {
         match *self {
-            GetReservationPurchaseRecommendationError::DataUnavailable(ref cause) => cause,
-            GetReservationPurchaseRecommendationError::InvalidNextToken(ref cause) => cause,
-            GetReservationPurchaseRecommendationError::LimitExceeded(ref cause) => cause,
+            GetReservationPurchaseRecommendationError::DataUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetReservationPurchaseRecommendationError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetReservationPurchaseRecommendationError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetReservationPurchaseRecommendationError {}
 /// Errors returned by GetReservationUtilization
 #[derive(Debug, PartialEq)]
 pub enum GetReservationUtilizationError {
@@ -2571,18 +2568,14 @@ impl GetReservationUtilizationError {
 }
 impl fmt::Display for GetReservationUtilizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetReservationUtilizationError {
-    fn description(&self) -> &str {
         match *self {
-            GetReservationUtilizationError::DataUnavailable(ref cause) => cause,
-            GetReservationUtilizationError::InvalidNextToken(ref cause) => cause,
-            GetReservationUtilizationError::LimitExceeded(ref cause) => cause,
+            GetReservationUtilizationError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetReservationUtilizationError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetReservationUtilizationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetReservationUtilizationError {}
 /// Errors returned by GetRightsizingRecommendation
 #[derive(Debug, PartialEq)]
 pub enum GetRightsizingRecommendationError {
@@ -2617,17 +2610,15 @@ impl GetRightsizingRecommendationError {
 }
 impl fmt::Display for GetRightsizingRecommendationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRightsizingRecommendationError {
-    fn description(&self) -> &str {
         match *self {
-            GetRightsizingRecommendationError::InvalidNextToken(ref cause) => cause,
-            GetRightsizingRecommendationError::LimitExceeded(ref cause) => cause,
+            GetRightsizingRecommendationError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRightsizingRecommendationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRightsizingRecommendationError {}
 /// Errors returned by GetSavingsPlansCoverage
 #[derive(Debug, PartialEq)]
 pub enum GetSavingsPlansCoverageError {
@@ -2667,18 +2658,14 @@ impl GetSavingsPlansCoverageError {
 }
 impl fmt::Display for GetSavingsPlansCoverageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSavingsPlansCoverageError {
-    fn description(&self) -> &str {
         match *self {
-            GetSavingsPlansCoverageError::DataUnavailable(ref cause) => cause,
-            GetSavingsPlansCoverageError::InvalidNextToken(ref cause) => cause,
-            GetSavingsPlansCoverageError::LimitExceeded(ref cause) => cause,
+            GetSavingsPlansCoverageError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetSavingsPlansCoverageError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetSavingsPlansCoverageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSavingsPlansCoverageError {}
 /// Errors returned by GetSavingsPlansPurchaseRecommendation
 #[derive(Debug, PartialEq)]
 pub enum GetSavingsPlansPurchaseRecommendationError {
@@ -2713,17 +2700,17 @@ impl GetSavingsPlansPurchaseRecommendationError {
 }
 impl fmt::Display for GetSavingsPlansPurchaseRecommendationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSavingsPlansPurchaseRecommendationError {
-    fn description(&self) -> &str {
         match *self {
-            GetSavingsPlansPurchaseRecommendationError::InvalidNextToken(ref cause) => cause,
-            GetSavingsPlansPurchaseRecommendationError::LimitExceeded(ref cause) => cause,
+            GetSavingsPlansPurchaseRecommendationError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSavingsPlansPurchaseRecommendationError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetSavingsPlansPurchaseRecommendationError {}
 /// Errors returned by GetSavingsPlansUtilization
 #[derive(Debug, PartialEq)]
 pub enum GetSavingsPlansUtilizationError {
@@ -2758,17 +2745,13 @@ impl GetSavingsPlansUtilizationError {
 }
 impl fmt::Display for GetSavingsPlansUtilizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSavingsPlansUtilizationError {
-    fn description(&self) -> &str {
         match *self {
-            GetSavingsPlansUtilizationError::DataUnavailable(ref cause) => cause,
-            GetSavingsPlansUtilizationError::LimitExceeded(ref cause) => cause,
+            GetSavingsPlansUtilizationError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetSavingsPlansUtilizationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSavingsPlansUtilizationError {}
 /// Errors returned by GetSavingsPlansUtilizationDetails
 #[derive(Debug, PartialEq)]
 pub enum GetSavingsPlansUtilizationDetailsError {
@@ -2810,18 +2793,20 @@ impl GetSavingsPlansUtilizationDetailsError {
 }
 impl fmt::Display for GetSavingsPlansUtilizationDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSavingsPlansUtilizationDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetSavingsPlansUtilizationDetailsError::DataUnavailable(ref cause) => cause,
-            GetSavingsPlansUtilizationDetailsError::InvalidNextToken(ref cause) => cause,
-            GetSavingsPlansUtilizationDetailsError::LimitExceeded(ref cause) => cause,
+            GetSavingsPlansUtilizationDetailsError::DataUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSavingsPlansUtilizationDetailsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSavingsPlansUtilizationDetailsError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetSavingsPlansUtilizationDetailsError {}
 /// Errors returned by GetTags
 #[derive(Debug, PartialEq)]
 pub enum GetTagsError {
@@ -2865,20 +2850,16 @@ impl GetTagsError {
 }
 impl fmt::Display for GetTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTagsError {
-    fn description(&self) -> &str {
         match *self {
-            GetTagsError::BillExpiration(ref cause) => cause,
-            GetTagsError::DataUnavailable(ref cause) => cause,
-            GetTagsError::InvalidNextToken(ref cause) => cause,
-            GetTagsError::LimitExceeded(ref cause) => cause,
-            GetTagsError::RequestChanged(ref cause) => cause,
+            GetTagsError::BillExpiration(ref cause) => write!(f, "{}", cause),
+            GetTagsError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetTagsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetTagsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetTagsError::RequestChanged(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTagsError {}
 /// Errors returned by GetUsageForecast
 #[derive(Debug, PartialEq)]
 pub enum GetUsageForecastError {
@@ -2914,18 +2895,14 @@ impl GetUsageForecastError {
 }
 impl fmt::Display for GetUsageForecastError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUsageForecastError {
-    fn description(&self) -> &str {
         match *self {
-            GetUsageForecastError::DataUnavailable(ref cause) => cause,
-            GetUsageForecastError::LimitExceeded(ref cause) => cause,
-            GetUsageForecastError::UnresolvableUsageUnit(ref cause) => cause,
+            GetUsageForecastError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetUsageForecastError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetUsageForecastError::UnresolvableUsageUnit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUsageForecastError {}
 /// Errors returned by ListCostCategoryDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListCostCategoryDefinitionsError {
@@ -2953,16 +2930,12 @@ impl ListCostCategoryDefinitionsError {
 }
 impl fmt::Display for ListCostCategoryDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCostCategoryDefinitionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListCostCategoryDefinitionsError::LimitExceeded(ref cause) => cause,
+            ListCostCategoryDefinitionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCostCategoryDefinitionsError {}
 /// Errors returned by UpdateCostCategoryDefinition
 #[derive(Debug, PartialEq)]
 pub enum UpdateCostCategoryDefinitionError {
@@ -3004,18 +2977,18 @@ impl UpdateCostCategoryDefinitionError {
 }
 impl fmt::Display for UpdateCostCategoryDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCostCategoryDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCostCategoryDefinitionError::LimitExceeded(ref cause) => cause,
-            UpdateCostCategoryDefinitionError::ResourceNotFound(ref cause) => cause,
-            UpdateCostCategoryDefinitionError::ServiceQuotaExceeded(ref cause) => cause,
+            UpdateCostCategoryDefinitionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateCostCategoryDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCostCategoryDefinitionError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateCostCategoryDefinitionError {}
 /// Trait representing the capabilities of the AWS Cost Explorer API. AWS Cost Explorer clients implement this trait.
 pub trait CostExplorer {
     /// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Creates a new Cost Category with the requested name and rules.</p></p>

@@ -66,13 +66,6 @@ impl fmt::Display for ConfigError {
 }
 
 impl Error for ConfigError {
-    fn description(&self) -> &str {
-        match *self {
-            ConfigError::Io(ref e) => e.description(),
-            ConfigError::Format(ref e) => e.description(),
-        }
-    }
-
     fn cause(&self) -> Option<&dyn Error> {
         match *self {
             ConfigError::Io(ref e) => Some(e),

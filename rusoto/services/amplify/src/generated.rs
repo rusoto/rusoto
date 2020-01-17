@@ -276,6 +276,7 @@ pub struct Branch {
 
 /// <p> Request structure used to create Apps in Amplify. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
     /// <p> Personal Access token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. Token is not stored. </p>
     #[serde(rename = "accessToken")]
@@ -355,6 +356,7 @@ pub struct CreateAppResult {
 
 /// <p> Request structure for a backend environment create request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackendEnvironmentRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -383,6 +385,7 @@ pub struct CreateBackendEnvironmentResult {
 
 /// <p> Request structure for a branch create request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -463,6 +466,7 @@ pub struct CreateBranchResult {
 
 /// <p> Request structure for create a new deployment. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -494,6 +498,7 @@ pub struct CreateDeploymentResult {
 
 /// <p> Request structure for create Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainAssociationRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -521,6 +526,7 @@ pub struct CreateDomainAssociationResult {
 
 /// <p> Request structure for create webhook request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWebhookRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -564,6 +570,7 @@ pub struct CustomRule {
 
 /// <p> Request structure for an Amplify App delete request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -580,6 +587,7 @@ pub struct DeleteAppResult {
 
 /// <p> Request structure for delete backend environment request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackendEnvironmentRequest {
     /// <p> Unique Id of an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -600,6 +608,7 @@ pub struct DeleteBackendEnvironmentResult {
 
 /// <p> Request structure for delete branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -620,6 +629,7 @@ pub struct DeleteBranchResult {
 
 /// <p> Request structure for the delete Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainAssociationRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -638,6 +648,7 @@ pub struct DeleteDomainAssociationResult {
 
 /// <p> Request structure for delete job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -660,6 +671,7 @@ pub struct DeleteJobResult {
 
 /// <p> Request structure for the delete webhook request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWebhookRequest {
     /// <p> Unique Id for a webhook. </p>
     #[serde(rename = "webhookId")]
@@ -705,6 +717,7 @@ pub struct DomainAssociation {
 
 /// <p> Request structure for the generate access logs request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateAccessLogsRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -734,6 +747,7 @@ pub struct GenerateAccessLogsResult {
 
 /// <p> Request structure for get App request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -749,6 +763,7 @@ pub struct GetAppResult {
 
 /// <p> Request structure for the get artifact request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetArtifactUrlRequest {
     /// <p> Unique Id for a artifact. </p>
     #[serde(rename = "artifactId")]
@@ -769,6 +784,7 @@ pub struct GetArtifactUrlResult {
 
 /// <p> Request structure for get backend environment request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackendEnvironmentRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -789,6 +805,7 @@ pub struct GetBackendEnvironmentResult {
 
 /// <p> Request structure for get branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -807,6 +824,7 @@ pub struct GetBranchResult {
 
 /// <p> Request structure for the get Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainAssociationRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -827,6 +845,7 @@ pub struct GetDomainAssociationResult {
 
 /// <p> Request structure for get job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -848,6 +867,7 @@ pub struct GetJobResult {
 
 /// <p> Request structure for the get webhook request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWebhookRequest {
     /// <p> Unique Id for a webhook. </p>
     #[serde(rename = "webhookId")]
@@ -911,6 +931,7 @@ pub struct JobSummary {
 
 /// <p> Request structure for an Amplify App list request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppsRequest {
     /// <p> Maximum number of records to list in a single response. </p>
     #[serde(rename = "maxResults")]
@@ -937,6 +958,7 @@ pub struct ListAppsResult {
 
 /// <p> Request structure for the list artifacts request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArtifactsRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -972,6 +994,7 @@ pub struct ListArtifactsResult {
 
 /// <p> Request structure for list backend environments request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackendEnvironmentsRequest {
     /// <p> Unique Id for an amplify App. </p>
     #[serde(rename = "appId")]
@@ -1005,6 +1028,7 @@ pub struct ListBackendEnvironmentsResult {
 
 /// <p> Request structure for list branches request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBranchesRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1034,6 +1058,7 @@ pub struct ListBranchesResult {
 
 /// <p> Request structure for the list Domain Associations request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainAssociationsRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1063,6 +1088,7 @@ pub struct ListDomainAssociationsResult {
 
 /// <p> Request structure for list job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1095,6 +1121,7 @@ pub struct ListJobsResult {
 
 /// <p> Request structure used to list tags for resource. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p> Resource arn used to list tags. </p>
     #[serde(rename = "resourceArn")]
@@ -1113,6 +1140,7 @@ pub struct ListTagsForResourceResponse {
 
 /// <p> Request structure for the list webhooks request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebhooksRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1164,6 +1192,7 @@ pub struct ProductionBranch {
 
 /// <p> Request structure for start a deployment. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeploymentRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1192,6 +1221,7 @@ pub struct StartDeploymentResult {
 
 /// <p> Request structure for Start job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartJobRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1281,6 +1311,7 @@ pub struct Step {
 
 /// <p> Request structure for stop job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopJobRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1330,6 +1361,7 @@ pub struct SubDomainSetting {
 
 /// <p> Request structure used to tag resource. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p> Resource arn used to tag resource. </p>
     #[serde(rename = "resourceArn")]
@@ -1346,6 +1378,7 @@ pub struct TagResourceResponse {}
 
 /// <p> Request structure used to untag resource. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p> Resource arn used to untag resource. </p>
     #[serde(rename = "resourceArn")]
@@ -1362,6 +1395,7 @@ pub struct UntagResourceResponse {}
 
 /// <p> Request structure for update App request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppRequest {
     /// <p> Personal Access token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. Token is not stored. </p>
     #[serde(rename = "accessToken")]
@@ -1443,6 +1477,7 @@ pub struct UpdateAppResult {
 
 /// <p> Request structure for update branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1519,6 +1554,7 @@ pub struct UpdateBranchResult {
 
 /// <p> Request structure for update Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainAssociationRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1546,6 +1582,7 @@ pub struct UpdateDomainAssociationResult {
 
 /// <p> Request structure for update webhook request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWebhookRequest {
     /// <p> Name for a branch, part of an Amplify App. </p>
     #[serde(rename = "branchName")]
@@ -1639,20 +1676,16 @@ impl CreateAppError {
 }
 impl fmt::Display for CreateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAppError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAppError::BadRequest(ref cause) => cause,
-            CreateAppError::DependentServiceFailure(ref cause) => cause,
-            CreateAppError::InternalFailure(ref cause) => cause,
-            CreateAppError::LimitExceeded(ref cause) => cause,
-            CreateAppError::Unauthorized(ref cause) => cause,
+            CreateAppError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateAppError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateAppError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateAppError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAppError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAppError {}
 /// Errors returned by CreateBackendEnvironment
 #[derive(Debug, PartialEq)]
 pub enum CreateBackendEnvironmentError {
@@ -1702,20 +1735,16 @@ impl CreateBackendEnvironmentError {
 }
 impl fmt::Display for CreateBackendEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBackendEnvironmentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBackendEnvironmentError::BadRequest(ref cause) => cause,
-            CreateBackendEnvironmentError::InternalFailure(ref cause) => cause,
-            CreateBackendEnvironmentError::LimitExceeded(ref cause) => cause,
-            CreateBackendEnvironmentError::NotFound(ref cause) => cause,
-            CreateBackendEnvironmentError::Unauthorized(ref cause) => cause,
+            CreateBackendEnvironmentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateBackendEnvironmentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateBackendEnvironmentError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateBackendEnvironmentError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateBackendEnvironmentError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBackendEnvironmentError {}
 /// Errors returned by CreateBranch
 #[derive(Debug, PartialEq)]
 pub enum CreateBranchError {
@@ -1766,21 +1795,17 @@ impl CreateBranchError {
 }
 impl fmt::Display for CreateBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBranchError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBranchError::BadRequest(ref cause) => cause,
-            CreateBranchError::DependentServiceFailure(ref cause) => cause,
-            CreateBranchError::InternalFailure(ref cause) => cause,
-            CreateBranchError::LimitExceeded(ref cause) => cause,
-            CreateBranchError::NotFound(ref cause) => cause,
-            CreateBranchError::Unauthorized(ref cause) => cause,
+            CreateBranchError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBranchError {}
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
@@ -1819,19 +1844,15 @@ impl CreateDeploymentError {
 }
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDeploymentError::BadRequest(ref cause) => cause,
-            CreateDeploymentError::InternalFailure(ref cause) => cause,
-            CreateDeploymentError::LimitExceeded(ref cause) => cause,
-            CreateDeploymentError::Unauthorized(ref cause) => cause,
+            CreateDeploymentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDeploymentError {}
 /// Errors returned by CreateDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainAssociationError {
@@ -1888,21 +1909,19 @@ impl CreateDomainAssociationError {
 }
 impl fmt::Display for CreateDomainAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDomainAssociationError::BadRequest(ref cause) => cause,
-            CreateDomainAssociationError::DependentServiceFailure(ref cause) => cause,
-            CreateDomainAssociationError::InternalFailure(ref cause) => cause,
-            CreateDomainAssociationError::LimitExceeded(ref cause) => cause,
-            CreateDomainAssociationError::NotFound(ref cause) => cause,
-            CreateDomainAssociationError::Unauthorized(ref cause) => cause,
+            CreateDomainAssociationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateDomainAssociationError::DependentServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDomainAssociationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateDomainAssociationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDomainAssociationError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDomainAssociationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDomainAssociationError {}
 /// Errors returned by CreateWebhook
 #[derive(Debug, PartialEq)]
 pub enum CreateWebhookError {
@@ -1953,21 +1972,17 @@ impl CreateWebhookError {
 }
 impl fmt::Display for CreateWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            CreateWebhookError::BadRequest(ref cause) => cause,
-            CreateWebhookError::DependentServiceFailure(ref cause) => cause,
-            CreateWebhookError::InternalFailure(ref cause) => cause,
-            CreateWebhookError::LimitExceeded(ref cause) => cause,
-            CreateWebhookError::NotFound(ref cause) => cause,
-            CreateWebhookError::Unauthorized(ref cause) => cause,
+            CreateWebhookError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateWebhookError {}
 /// Errors returned by DeleteApp
 #[derive(Debug, PartialEq)]
 pub enum DeleteAppError {
@@ -2011,20 +2026,16 @@ impl DeleteAppError {
 }
 impl fmt::Display for DeleteAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAppError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAppError::BadRequest(ref cause) => cause,
-            DeleteAppError::DependentServiceFailure(ref cause) => cause,
-            DeleteAppError::InternalFailure(ref cause) => cause,
-            DeleteAppError::NotFound(ref cause) => cause,
-            DeleteAppError::Unauthorized(ref cause) => cause,
+            DeleteAppError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAppError {}
 /// Errors returned by DeleteBackendEnvironment
 #[derive(Debug, PartialEq)]
 pub enum DeleteBackendEnvironmentError {
@@ -2074,20 +2085,18 @@ impl DeleteBackendEnvironmentError {
 }
 impl fmt::Display for DeleteBackendEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBackendEnvironmentError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBackendEnvironmentError::BadRequest(ref cause) => cause,
-            DeleteBackendEnvironmentError::DependentServiceFailure(ref cause) => cause,
-            DeleteBackendEnvironmentError::InternalFailure(ref cause) => cause,
-            DeleteBackendEnvironmentError::NotFound(ref cause) => cause,
-            DeleteBackendEnvironmentError::Unauthorized(ref cause) => cause,
+            DeleteBackendEnvironmentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteBackendEnvironmentError::DependentServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteBackendEnvironmentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteBackendEnvironmentError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteBackendEnvironmentError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBackendEnvironmentError {}
 /// Errors returned by DeleteBranch
 #[derive(Debug, PartialEq)]
 pub enum DeleteBranchError {
@@ -2133,20 +2142,16 @@ impl DeleteBranchError {
 }
 impl fmt::Display for DeleteBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBranchError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBranchError::BadRequest(ref cause) => cause,
-            DeleteBranchError::DependentServiceFailure(ref cause) => cause,
-            DeleteBranchError::InternalFailure(ref cause) => cause,
-            DeleteBranchError::NotFound(ref cause) => cause,
-            DeleteBranchError::Unauthorized(ref cause) => cause,
+            DeleteBranchError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBranchError {}
 /// Errors returned by DeleteDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainAssociationError {
@@ -2196,20 +2201,18 @@ impl DeleteDomainAssociationError {
 }
 impl fmt::Display for DeleteDomainAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDomainAssociationError::BadRequest(ref cause) => cause,
-            DeleteDomainAssociationError::DependentServiceFailure(ref cause) => cause,
-            DeleteDomainAssociationError::InternalFailure(ref cause) => cause,
-            DeleteDomainAssociationError::NotFound(ref cause) => cause,
-            DeleteDomainAssociationError::Unauthorized(ref cause) => cause,
+            DeleteDomainAssociationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDomainAssociationError::DependentServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDomainAssociationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDomainAssociationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDomainAssociationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDomainAssociationError {}
 /// Errors returned by DeleteJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteJobError {
@@ -2253,20 +2256,16 @@ impl DeleteJobError {
 }
 impl fmt::Display for DeleteJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteJobError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteJobError::BadRequest(ref cause) => cause,
-            DeleteJobError::InternalFailure(ref cause) => cause,
-            DeleteJobError::LimitExceeded(ref cause) => cause,
-            DeleteJobError::NotFound(ref cause) => cause,
-            DeleteJobError::Unauthorized(ref cause) => cause,
+            DeleteJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteJobError {}
 /// Errors returned by DeleteWebhook
 #[derive(Debug, PartialEq)]
 pub enum DeleteWebhookError {
@@ -2310,20 +2309,16 @@ impl DeleteWebhookError {
 }
 impl fmt::Display for DeleteWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteWebhookError::BadRequest(ref cause) => cause,
-            DeleteWebhookError::InternalFailure(ref cause) => cause,
-            DeleteWebhookError::LimitExceeded(ref cause) => cause,
-            DeleteWebhookError::NotFound(ref cause) => cause,
-            DeleteWebhookError::Unauthorized(ref cause) => cause,
+            DeleteWebhookError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteWebhookError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteWebhookError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteWebhookError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteWebhookError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteWebhookError {}
 /// Errors returned by GenerateAccessLogs
 #[derive(Debug, PartialEq)]
 pub enum GenerateAccessLogsError {
@@ -2362,19 +2357,15 @@ impl GenerateAccessLogsError {
 }
 impl fmt::Display for GenerateAccessLogsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateAccessLogsError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateAccessLogsError::BadRequest(ref cause) => cause,
-            GenerateAccessLogsError::InternalFailure(ref cause) => cause,
-            GenerateAccessLogsError::NotFound(ref cause) => cause,
-            GenerateAccessLogsError::Unauthorized(ref cause) => cause,
+            GenerateAccessLogsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GenerateAccessLogsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GenerateAccessLogsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GenerateAccessLogsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GenerateAccessLogsError {}
 /// Errors returned by GetApp
 #[derive(Debug, PartialEq)]
 pub enum GetAppError {
@@ -2411,19 +2402,15 @@ impl GetAppError {
 }
 impl fmt::Display for GetAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAppError {
-    fn description(&self) -> &str {
         match *self {
-            GetAppError::BadRequest(ref cause) => cause,
-            GetAppError::InternalFailure(ref cause) => cause,
-            GetAppError::NotFound(ref cause) => cause,
-            GetAppError::Unauthorized(ref cause) => cause,
+            GetAppError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetAppError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetAppError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAppError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAppError {}
 /// Errors returned by GetArtifactUrl
 #[derive(Debug, PartialEq)]
 pub enum GetArtifactUrlError {
@@ -2467,20 +2454,16 @@ impl GetArtifactUrlError {
 }
 impl fmt::Display for GetArtifactUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetArtifactUrlError {
-    fn description(&self) -> &str {
         match *self {
-            GetArtifactUrlError::BadRequest(ref cause) => cause,
-            GetArtifactUrlError::InternalFailure(ref cause) => cause,
-            GetArtifactUrlError::LimitExceeded(ref cause) => cause,
-            GetArtifactUrlError::NotFound(ref cause) => cause,
-            GetArtifactUrlError::Unauthorized(ref cause) => cause,
+            GetArtifactUrlError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetArtifactUrlError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetArtifactUrlError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetArtifactUrlError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetArtifactUrlError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetArtifactUrlError {}
 /// Errors returned by GetBackendEnvironment
 #[derive(Debug, PartialEq)]
 pub enum GetBackendEnvironmentError {
@@ -2521,19 +2504,15 @@ impl GetBackendEnvironmentError {
 }
 impl fmt::Display for GetBackendEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBackendEnvironmentError {
-    fn description(&self) -> &str {
         match *self {
-            GetBackendEnvironmentError::BadRequest(ref cause) => cause,
-            GetBackendEnvironmentError::InternalFailure(ref cause) => cause,
-            GetBackendEnvironmentError::NotFound(ref cause) => cause,
-            GetBackendEnvironmentError::Unauthorized(ref cause) => cause,
+            GetBackendEnvironmentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetBackendEnvironmentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetBackendEnvironmentError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetBackendEnvironmentError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBackendEnvironmentError {}
 /// Errors returned by GetBranch
 #[derive(Debug, PartialEq)]
 pub enum GetBranchError {
@@ -2572,19 +2551,15 @@ impl GetBranchError {
 }
 impl fmt::Display for GetBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBranchError {
-    fn description(&self) -> &str {
         match *self {
-            GetBranchError::BadRequest(ref cause) => cause,
-            GetBranchError::InternalFailure(ref cause) => cause,
-            GetBranchError::NotFound(ref cause) => cause,
-            GetBranchError::Unauthorized(ref cause) => cause,
+            GetBranchError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetBranchError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetBranchError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetBranchError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBranchError {}
 /// Errors returned by GetDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum GetDomainAssociationError {
@@ -2625,19 +2600,15 @@ impl GetDomainAssociationError {
 }
 impl fmt::Display for GetDomainAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDomainAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            GetDomainAssociationError::BadRequest(ref cause) => cause,
-            GetDomainAssociationError::InternalFailure(ref cause) => cause,
-            GetDomainAssociationError::NotFound(ref cause) => cause,
-            GetDomainAssociationError::Unauthorized(ref cause) => cause,
+            GetDomainAssociationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetDomainAssociationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetDomainAssociationError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDomainAssociationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDomainAssociationError {}
 /// Errors returned by GetJob
 #[derive(Debug, PartialEq)]
 pub enum GetJobError {
@@ -2679,20 +2650,16 @@ impl GetJobError {
 }
 impl fmt::Display for GetJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobError::BadRequest(ref cause) => cause,
-            GetJobError::InternalFailure(ref cause) => cause,
-            GetJobError::LimitExceeded(ref cause) => cause,
-            GetJobError::NotFound(ref cause) => cause,
-            GetJobError::Unauthorized(ref cause) => cause,
+            GetJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetJobError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobError {}
 /// Errors returned by GetWebhook
 #[derive(Debug, PartialEq)]
 pub enum GetWebhookError {
@@ -2736,20 +2703,16 @@ impl GetWebhookError {
 }
 impl fmt::Display for GetWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            GetWebhookError::BadRequest(ref cause) => cause,
-            GetWebhookError::InternalFailure(ref cause) => cause,
-            GetWebhookError::LimitExceeded(ref cause) => cause,
-            GetWebhookError::NotFound(ref cause) => cause,
-            GetWebhookError::Unauthorized(ref cause) => cause,
+            GetWebhookError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetWebhookError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetWebhookError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetWebhookError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetWebhookError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetWebhookError {}
 /// Errors returned by ListApps
 #[derive(Debug, PartialEq)]
 pub enum ListAppsError {
@@ -2783,18 +2746,14 @@ impl ListAppsError {
 }
 impl fmt::Display for ListAppsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAppsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAppsError::BadRequest(ref cause) => cause,
-            ListAppsError::InternalFailure(ref cause) => cause,
-            ListAppsError::Unauthorized(ref cause) => cause,
+            ListAppsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListAppsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListAppsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAppsError {}
 /// Errors returned by ListArtifacts
 #[derive(Debug, PartialEq)]
 pub enum ListArtifactsError {
@@ -2833,19 +2792,15 @@ impl ListArtifactsError {
 }
 impl fmt::Display for ListArtifactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListArtifactsError {
-    fn description(&self) -> &str {
         match *self {
-            ListArtifactsError::BadRequest(ref cause) => cause,
-            ListArtifactsError::InternalFailure(ref cause) => cause,
-            ListArtifactsError::LimitExceeded(ref cause) => cause,
-            ListArtifactsError::Unauthorized(ref cause) => cause,
+            ListArtifactsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListArtifactsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListArtifactsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListArtifactsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListArtifactsError {}
 /// Errors returned by ListBackendEnvironments
 #[derive(Debug, PartialEq)]
 pub enum ListBackendEnvironmentsError {
@@ -2883,18 +2838,14 @@ impl ListBackendEnvironmentsError {
 }
 impl fmt::Display for ListBackendEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBackendEnvironmentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListBackendEnvironmentsError::BadRequest(ref cause) => cause,
-            ListBackendEnvironmentsError::InternalFailure(ref cause) => cause,
-            ListBackendEnvironmentsError::Unauthorized(ref cause) => cause,
+            ListBackendEnvironmentsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListBackendEnvironmentsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListBackendEnvironmentsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBackendEnvironmentsError {}
 /// Errors returned by ListBranches
 #[derive(Debug, PartialEq)]
 pub enum ListBranchesError {
@@ -2928,18 +2879,14 @@ impl ListBranchesError {
 }
 impl fmt::Display for ListBranchesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBranchesError {
-    fn description(&self) -> &str {
         match *self {
-            ListBranchesError::BadRequest(ref cause) => cause,
-            ListBranchesError::InternalFailure(ref cause) => cause,
-            ListBranchesError::Unauthorized(ref cause) => cause,
+            ListBranchesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListBranchesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListBranchesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBranchesError {}
 /// Errors returned by ListDomainAssociations
 #[derive(Debug, PartialEq)]
 pub enum ListDomainAssociationsError {
@@ -2975,18 +2922,14 @@ impl ListDomainAssociationsError {
 }
 impl fmt::Display for ListDomainAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDomainAssociationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDomainAssociationsError::BadRequest(ref cause) => cause,
-            ListDomainAssociationsError::InternalFailure(ref cause) => cause,
-            ListDomainAssociationsError::Unauthorized(ref cause) => cause,
+            ListDomainAssociationsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListDomainAssociationsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListDomainAssociationsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDomainAssociationsError {}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
@@ -3025,19 +2968,15 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobsError::BadRequest(ref cause) => cause,
-            ListJobsError::InternalFailure(ref cause) => cause,
-            ListJobsError::LimitExceeded(ref cause) => cause,
-            ListJobsError::Unauthorized(ref cause) => cause,
+            ListJobsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListJobsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListJobsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListJobsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -3073,18 +3012,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
-            ListTagsForResourceError::InternalFailure(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListWebhooks
 #[derive(Debug, PartialEq)]
 pub enum ListWebhooksError {
@@ -3123,19 +3058,15 @@ impl ListWebhooksError {
 }
 impl fmt::Display for ListWebhooksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWebhooksError {
-    fn description(&self) -> &str {
         match *self {
-            ListWebhooksError::BadRequest(ref cause) => cause,
-            ListWebhooksError::InternalFailure(ref cause) => cause,
-            ListWebhooksError::LimitExceeded(ref cause) => cause,
-            ListWebhooksError::Unauthorized(ref cause) => cause,
+            ListWebhooksError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListWebhooksError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListWebhooksError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListWebhooksError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListWebhooksError {}
 /// Errors returned by StartDeployment
 #[derive(Debug, PartialEq)]
 pub enum StartDeploymentError {
@@ -3179,20 +3110,16 @@ impl StartDeploymentError {
 }
 impl fmt::Display for StartDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            StartDeploymentError::BadRequest(ref cause) => cause,
-            StartDeploymentError::InternalFailure(ref cause) => cause,
-            StartDeploymentError::LimitExceeded(ref cause) => cause,
-            StartDeploymentError::NotFound(ref cause) => cause,
-            StartDeploymentError::Unauthorized(ref cause) => cause,
+            StartDeploymentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StartDeploymentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StartDeploymentError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartDeploymentError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartDeploymentError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartDeploymentError {}
 /// Errors returned by StartJob
 #[derive(Debug, PartialEq)]
 pub enum StartJobError {
@@ -3236,20 +3163,16 @@ impl StartJobError {
 }
 impl fmt::Display for StartJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartJobError::BadRequest(ref cause) => cause,
-            StartJobError::InternalFailure(ref cause) => cause,
-            StartJobError::LimitExceeded(ref cause) => cause,
-            StartJobError::NotFound(ref cause) => cause,
-            StartJobError::Unauthorized(ref cause) => cause,
+            StartJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StartJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StartJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartJobError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartJobError {}
 /// Errors returned by StopJob
 #[derive(Debug, PartialEq)]
 pub enum StopJobError {
@@ -3293,20 +3216,16 @@ impl StopJobError {
 }
 impl fmt::Display for StopJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopJobError::BadRequest(ref cause) => cause,
-            StopJobError::InternalFailure(ref cause) => cause,
-            StopJobError::LimitExceeded(ref cause) => cause,
-            StopJobError::NotFound(ref cause) => cause,
-            StopJobError::Unauthorized(ref cause) => cause,
+            StopJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StopJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StopJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StopJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopJobError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopJobError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -3340,18 +3259,14 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
-            TagResourceError::InternalFailure(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -3385,18 +3300,14 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
-            UntagResourceError::InternalFailure(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateApp
 #[derive(Debug, PartialEq)]
 pub enum UpdateAppError {
@@ -3435,19 +3346,15 @@ impl UpdateAppError {
 }
 impl fmt::Display for UpdateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAppError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAppError::BadRequest(ref cause) => cause,
-            UpdateAppError::InternalFailure(ref cause) => cause,
-            UpdateAppError::NotFound(ref cause) => cause,
-            UpdateAppError::Unauthorized(ref cause) => cause,
+            UpdateAppError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAppError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAppError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAppError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAppError {}
 /// Errors returned by UpdateBranch
 #[derive(Debug, PartialEq)]
 pub enum UpdateBranchError {
@@ -3493,20 +3400,16 @@ impl UpdateBranchError {
 }
 impl fmt::Display for UpdateBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBranchError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBranchError::BadRequest(ref cause) => cause,
-            UpdateBranchError::DependentServiceFailure(ref cause) => cause,
-            UpdateBranchError::InternalFailure(ref cause) => cause,
-            UpdateBranchError::NotFound(ref cause) => cause,
-            UpdateBranchError::Unauthorized(ref cause) => cause,
+            UpdateBranchError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateBranchError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateBranchError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateBranchError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateBranchError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBranchError {}
 /// Errors returned by UpdateDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainAssociationError {
@@ -3556,20 +3459,18 @@ impl UpdateDomainAssociationError {
 }
 impl fmt::Display for UpdateDomainAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDomainAssociationError::BadRequest(ref cause) => cause,
-            UpdateDomainAssociationError::DependentServiceFailure(ref cause) => cause,
-            UpdateDomainAssociationError::InternalFailure(ref cause) => cause,
-            UpdateDomainAssociationError::NotFound(ref cause) => cause,
-            UpdateDomainAssociationError::Unauthorized(ref cause) => cause,
+            UpdateDomainAssociationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDomainAssociationError::DependentServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDomainAssociationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateDomainAssociationError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDomainAssociationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDomainAssociationError {}
 /// Errors returned by UpdateWebhook
 #[derive(Debug, PartialEq)]
 pub enum UpdateWebhookError {
@@ -3615,20 +3516,16 @@ impl UpdateWebhookError {
 }
 impl fmt::Display for UpdateWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateWebhookError::BadRequest(ref cause) => cause,
-            UpdateWebhookError::DependentServiceFailure(ref cause) => cause,
-            UpdateWebhookError::InternalFailure(ref cause) => cause,
-            UpdateWebhookError::NotFound(ref cause) => cause,
-            UpdateWebhookError::Unauthorized(ref cause) => cause,
+            UpdateWebhookError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateWebhookError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateWebhookError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateWebhookError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateWebhookError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateWebhookError {}
 /// Trait representing the capabilities of the Amplify API. Amplify clients implement this trait.
 pub trait Amplify {
     /// <p> Creates a new Amplify App. </p>

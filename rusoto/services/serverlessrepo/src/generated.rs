@@ -87,6 +87,7 @@ pub struct ApplicationSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
     /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
@@ -210,6 +211,7 @@ pub struct CreateApplicationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -302,6 +304,7 @@ pub struct CreateApplicationVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFormationChangeSetRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -411,6 +414,7 @@ pub struct CreateCloudFormationChangeSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFormationTemplateRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -462,6 +466,7 @@ pub struct CreateCloudFormationTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -469,6 +474,7 @@ pub struct DeleteApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -485,6 +491,7 @@ pub struct GetApplicationPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -553,6 +560,7 @@ pub struct GetApplicationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFormationTemplateRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -601,6 +609,7 @@ pub struct GetCloudFormationTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationDependenciesRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -633,6 +642,7 @@ pub struct ListApplicationDependenciesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationVersionsRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -661,6 +671,7 @@ pub struct ListApplicationVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
     /// <p>The total number of items to return.</p>
     #[serde(rename = "MaxItems")]
@@ -760,6 +771,7 @@ pub struct ParameterDefinition {
 
 /// <p>Parameter value of the application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParameterValue {
     /// <p>The key associated with the parameter. If you don't specify a key and value for a particular parameter, AWS CloudFormation
     /// uses the default value that is specified in your template.</p>
@@ -771,6 +783,7 @@ pub struct ParameterValue {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutApplicationPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -792,6 +805,7 @@ pub struct PutApplicationPolicyResponse {
 /// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a>
 /// </i> Data Type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackConfiguration {
     /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a>
     /// </i> Data Type.</p>
@@ -808,6 +822,7 @@ pub struct RollbackConfiguration {
 /// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a>
 /// </i> Data Type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackTrigger {
     /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a>
     /// </i> Data Type.</p>
@@ -822,6 +837,7 @@ pub struct RollbackTrigger {
 /// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a>
 /// </i> Data Type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a>
     /// </i> Data Type.</p>
@@ -836,6 +852,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -1049,20 +1066,16 @@ impl CreateApplicationError {
 }
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateApplicationError::BadRequest(ref cause) => cause,
-            CreateApplicationError::Conflict(ref cause) => cause,
-            CreateApplicationError::Forbidden(ref cause) => cause,
-            CreateApplicationError::InternalServerError(ref cause) => cause,
-            CreateApplicationError::TooManyRequests(ref cause) => cause,
+            CreateApplicationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateApplicationError {}
 /// Errors returned by CreateApplicationVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationVersionError {
@@ -1110,20 +1123,16 @@ impl CreateApplicationVersionError {
 }
 impl fmt::Display for CreateApplicationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApplicationVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateApplicationVersionError::BadRequest(ref cause) => cause,
-            CreateApplicationVersionError::Conflict(ref cause) => cause,
-            CreateApplicationVersionError::Forbidden(ref cause) => cause,
-            CreateApplicationVersionError::InternalServerError(ref cause) => cause,
-            CreateApplicationVersionError::TooManyRequests(ref cause) => cause,
+            CreateApplicationVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateApplicationVersionError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateApplicationVersionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateApplicationVersionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateApplicationVersionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateApplicationVersionError {}
 /// Errors returned by CreateCloudFormationChangeSet
 #[derive(Debug, PartialEq)]
 pub enum CreateCloudFormationChangeSetError {
@@ -1172,19 +1181,19 @@ impl CreateCloudFormationChangeSetError {
 }
 impl fmt::Display for CreateCloudFormationChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCloudFormationChangeSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCloudFormationChangeSetError::BadRequest(ref cause) => cause,
-            CreateCloudFormationChangeSetError::Forbidden(ref cause) => cause,
-            CreateCloudFormationChangeSetError::InternalServerError(ref cause) => cause,
-            CreateCloudFormationChangeSetError::TooManyRequests(ref cause) => cause,
+            CreateCloudFormationChangeSetError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationChangeSetError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationChangeSetError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCloudFormationChangeSetError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateCloudFormationChangeSetError {}
 /// Errors returned by CreateCloudFormationTemplate
 #[derive(Debug, PartialEq)]
 pub enum CreateCloudFormationTemplateError {
@@ -1240,20 +1249,18 @@ impl CreateCloudFormationTemplateError {
 }
 impl fmt::Display for CreateCloudFormationTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCloudFormationTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCloudFormationTemplateError::BadRequest(ref cause) => cause,
-            CreateCloudFormationTemplateError::Forbidden(ref cause) => cause,
-            CreateCloudFormationTemplateError::InternalServerError(ref cause) => cause,
-            CreateCloudFormationTemplateError::NotFound(ref cause) => cause,
-            CreateCloudFormationTemplateError::TooManyRequests(ref cause) => cause,
+            CreateCloudFormationTemplateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationTemplateError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationTemplateError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCloudFormationTemplateError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationTemplateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCloudFormationTemplateError {}
 /// Errors returned by DeleteApplication
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationError {
@@ -1304,21 +1311,17 @@ impl DeleteApplicationError {
 }
 impl fmt::Display for DeleteApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApplicationError::BadRequest(ref cause) => cause,
-            DeleteApplicationError::Conflict(ref cause) => cause,
-            DeleteApplicationError::Forbidden(ref cause) => cause,
-            DeleteApplicationError::InternalServerError(ref cause) => cause,
-            DeleteApplicationError::NotFound(ref cause) => cause,
-            DeleteApplicationError::TooManyRequests(ref cause) => cause,
+            DeleteApplicationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteApplicationError {}
 /// Errors returned by GetApplication
 #[derive(Debug, PartialEq)]
 pub enum GetApplicationError {
@@ -1362,20 +1365,16 @@ impl GetApplicationError {
 }
 impl fmt::Display for GetApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            GetApplicationError::BadRequest(ref cause) => cause,
-            GetApplicationError::Forbidden(ref cause) => cause,
-            GetApplicationError::InternalServerError(ref cause) => cause,
-            GetApplicationError::NotFound(ref cause) => cause,
-            GetApplicationError::TooManyRequests(ref cause) => cause,
+            GetApplicationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetApplicationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetApplicationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetApplicationError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetApplicationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetApplicationError {}
 /// Errors returned by GetApplicationPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetApplicationPolicyError {
@@ -1423,20 +1422,16 @@ impl GetApplicationPolicyError {
 }
 impl fmt::Display for GetApplicationPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetApplicationPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetApplicationPolicyError::BadRequest(ref cause) => cause,
-            GetApplicationPolicyError::Forbidden(ref cause) => cause,
-            GetApplicationPolicyError::InternalServerError(ref cause) => cause,
-            GetApplicationPolicyError::NotFound(ref cause) => cause,
-            GetApplicationPolicyError::TooManyRequests(ref cause) => cause,
+            GetApplicationPolicyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetApplicationPolicyError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetApplicationPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetApplicationPolicyError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetApplicationPolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetApplicationPolicyError {}
 /// Errors returned by GetCloudFormationTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetCloudFormationTemplateError {
@@ -1486,20 +1481,18 @@ impl GetCloudFormationTemplateError {
 }
 impl fmt::Display for GetCloudFormationTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCloudFormationTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            GetCloudFormationTemplateError::BadRequest(ref cause) => cause,
-            GetCloudFormationTemplateError::Forbidden(ref cause) => cause,
-            GetCloudFormationTemplateError::InternalServerError(ref cause) => cause,
-            GetCloudFormationTemplateError::NotFound(ref cause) => cause,
-            GetCloudFormationTemplateError::TooManyRequests(ref cause) => cause,
+            GetCloudFormationTemplateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetCloudFormationTemplateError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetCloudFormationTemplateError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCloudFormationTemplateError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetCloudFormationTemplateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCloudFormationTemplateError {}
 /// Errors returned by ListApplicationDependencies
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationDependenciesError {
@@ -1555,20 +1548,18 @@ impl ListApplicationDependenciesError {
 }
 impl fmt::Display for ListApplicationDependenciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListApplicationDependenciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListApplicationDependenciesError::BadRequest(ref cause) => cause,
-            ListApplicationDependenciesError::Forbidden(ref cause) => cause,
-            ListApplicationDependenciesError::InternalServerError(ref cause) => cause,
-            ListApplicationDependenciesError::NotFound(ref cause) => cause,
-            ListApplicationDependenciesError::TooManyRequests(ref cause) => cause,
+            ListApplicationDependenciesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListApplicationDependenciesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListApplicationDependenciesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListApplicationDependenciesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListApplicationDependenciesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListApplicationDependenciesError {}
 /// Errors returned by ListApplicationVersions
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationVersionsError {
@@ -1616,20 +1607,16 @@ impl ListApplicationVersionsError {
 }
 impl fmt::Display for ListApplicationVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListApplicationVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListApplicationVersionsError::BadRequest(ref cause) => cause,
-            ListApplicationVersionsError::Forbidden(ref cause) => cause,
-            ListApplicationVersionsError::InternalServerError(ref cause) => cause,
-            ListApplicationVersionsError::NotFound(ref cause) => cause,
-            ListApplicationVersionsError::TooManyRequests(ref cause) => cause,
+            ListApplicationVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListApplicationVersionsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListApplicationVersionsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListApplicationVersionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListApplicationVersionsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListApplicationVersionsError {}
 /// Errors returned by ListApplications
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationsError {
@@ -1670,19 +1657,15 @@ impl ListApplicationsError {
 }
 impl fmt::Display for ListApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListApplicationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListApplicationsError::BadRequest(ref cause) => cause,
-            ListApplicationsError::Forbidden(ref cause) => cause,
-            ListApplicationsError::InternalServerError(ref cause) => cause,
-            ListApplicationsError::NotFound(ref cause) => cause,
+            ListApplicationsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListApplicationsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListApplicationsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListApplicationsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListApplicationsError {}
 /// Errors returned by PutApplicationPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutApplicationPolicyError {
@@ -1730,20 +1713,16 @@ impl PutApplicationPolicyError {
 }
 impl fmt::Display for PutApplicationPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutApplicationPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutApplicationPolicyError::BadRequest(ref cause) => cause,
-            PutApplicationPolicyError::Forbidden(ref cause) => cause,
-            PutApplicationPolicyError::InternalServerError(ref cause) => cause,
-            PutApplicationPolicyError::NotFound(ref cause) => cause,
-            PutApplicationPolicyError::TooManyRequests(ref cause) => cause,
+            PutApplicationPolicyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutApplicationPolicyError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PutApplicationPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            PutApplicationPolicyError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutApplicationPolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutApplicationPolicyError {}
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {
@@ -1794,21 +1773,17 @@ impl UpdateApplicationError {
 }
 impl fmt::Display for UpdateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateApplicationError::BadRequest(ref cause) => cause,
-            UpdateApplicationError::Conflict(ref cause) => cause,
-            UpdateApplicationError::Forbidden(ref cause) => cause,
-            UpdateApplicationError::InternalServerError(ref cause) => cause,
-            UpdateApplicationError::NotFound(ref cause) => cause,
-            UpdateApplicationError::TooManyRequests(ref cause) => cause,
+            UpdateApplicationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateApplicationError {}
 /// Trait representing the capabilities of the AWSServerlessApplicationRepository API. AWSServerlessApplicationRepository clients implement this trait.
 pub trait ServerlessRepo {
     /// <p>Creates an application, optionally including an AWS SAM file to create the first application version in the same call.</p>

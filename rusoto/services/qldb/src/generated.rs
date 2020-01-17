@@ -25,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLedgerRequest {
     /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
     #[serde(rename = "DeletionProtection")]
@@ -68,6 +69,7 @@ pub struct CreateLedgerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLedgerRequest {
     /// <p>The name of the ledger that you want to delete.</p>
     #[serde(rename = "Name")]
@@ -75,6 +77,7 @@ pub struct DeleteLedgerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJournalS3ExportRequest {
     /// <p>The unique ID of the journal export job that you want to describe.</p>
     #[serde(rename = "ExportId")]
@@ -93,6 +96,7 @@ pub struct DescribeJournalS3ExportResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLedgerRequest {
     /// <p>The name of the ledger that you want to describe.</p>
     #[serde(rename = "Name")]
@@ -125,6 +129,7 @@ pub struct DescribeLedgerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportJournalToS3Request {
     /// <p>The exclusive end date and time for the range of journal contents that you want to export.</p> <p>The <code>ExclusiveEndTime</code> must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code> </p> <p>The <code>ExclusiveEndTime</code> must be less than or equal to the current UTC date and time.</p>
     #[serde(rename = "ExclusiveEndTime")]
@@ -152,6 +157,7 @@ pub struct ExportJournalToS3Response {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlockRequest {
     /// <p>The location of the block that you want to request. An address is an Amazon Ion structure that has two fields: <code>strandId</code> and <code>sequenceNo</code>.</p> <p>For example: <code>{strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:14}</code> </p>
     #[serde(rename = "BlockAddress")]
@@ -178,6 +184,7 @@ pub struct GetBlockResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDigestRequest {
     /// <p>The name of the ledger.</p>
     #[serde(rename = "Name")]
@@ -201,6 +208,7 @@ pub struct GetDigestResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRevisionRequest {
     /// <p>The block location of the document revision to be verified. An address is an Amazon Ion structure that has two fields: <code>strandId</code> and <code>sequenceNo</code>.</p> <p>For example: <code>{strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:14}</code> </p>
     #[serde(rename = "BlockAddress")]
@@ -277,6 +285,7 @@ pub struct LedgerSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJournalS3ExportsForLedgerRequest {
     /// <p>The maximum number of results to return in a single <code>ListJournalS3ExportsForLedger</code> request. (The actual number of results returned might be fewer.)</p>
     #[serde(rename = "MaxResults")]
@@ -305,6 +314,7 @@ pub struct ListJournalS3ExportsForLedgerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJournalS3ExportsRequest {
     /// <p>The maximum number of results to return in a single <code>ListJournalS3Exports</code> request. (The actual number of results returned might be fewer.)</p>
     #[serde(rename = "MaxResults")]
@@ -330,6 +340,7 @@ pub struct ListJournalS3ExportsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLedgersRequest {
     /// <p>The maximum number of results to return in a single <code>ListLedgers</code> request. (The actual number of results returned might be fewer.)</p>
     #[serde(rename = "MaxResults")]
@@ -355,6 +366,7 @@ pub struct ListLedgersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for which you want to list the tags. For example:</p> <p> <code>arn:aws:qldb:us-east-1:123456789012:ledger/exampleLedger</code> </p>
     #[serde(rename = "ResourceArn")]
@@ -397,6 +409,7 @@ pub struct S3ExportConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) to which you want to add the tags. For example:</p> <p> <code>arn:aws:qldb:us-east-1:123456789012:ledger/exampleLedger</code> </p>
     #[serde(rename = "ResourceArn")]
@@ -411,6 +424,7 @@ pub struct TagResourceRequest {
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) from which you want to remove the tags. For example:</p> <p> <code>arn:aws:qldb:us-east-1:123456789012:ledger/exampleLedger</code> </p>
     #[serde(rename = "ResourceArn")]
@@ -425,6 +439,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLedgerRequest {
     /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
     #[serde(rename = "DeletionProtection")]
@@ -507,19 +522,15 @@ impl CreateLedgerError {
 }
 impl fmt::Display for CreateLedgerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLedgerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLedgerError::InvalidParameter(ref cause) => cause,
-            CreateLedgerError::LimitExceeded(ref cause) => cause,
-            CreateLedgerError::ResourceAlreadyExists(ref cause) => cause,
-            CreateLedgerError::ResourceInUse(ref cause) => cause,
+            CreateLedgerError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateLedgerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateLedgerError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateLedgerError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLedgerError {}
 /// Errors returned by DeleteLedger
 #[derive(Debug, PartialEq)]
 pub enum DeleteLedgerError {
@@ -560,19 +571,15 @@ impl DeleteLedgerError {
 }
 impl fmt::Display for DeleteLedgerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLedgerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLedgerError::InvalidParameter(ref cause) => cause,
-            DeleteLedgerError::ResourceInUse(ref cause) => cause,
-            DeleteLedgerError::ResourceNotFound(ref cause) => cause,
-            DeleteLedgerError::ResourcePreconditionNotMet(ref cause) => cause,
+            DeleteLedgerError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteLedgerError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteLedgerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLedgerError::ResourcePreconditionNotMet(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLedgerError {}
 /// Errors returned by DescribeJournalS3Export
 #[derive(Debug, PartialEq)]
 pub enum DescribeJournalS3ExportError {
@@ -598,16 +605,12 @@ impl DescribeJournalS3ExportError {
 }
 impl fmt::Display for DescribeJournalS3ExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeJournalS3ExportError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeJournalS3ExportError::ResourceNotFound(ref cause) => cause,
+            DescribeJournalS3ExportError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeJournalS3ExportError {}
 /// Errors returned by DescribeLedger
 #[derive(Debug, PartialEq)]
 pub enum DescribeLedgerError {
@@ -636,17 +639,13 @@ impl DescribeLedgerError {
 }
 impl fmt::Display for DescribeLedgerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLedgerError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLedgerError::InvalidParameter(ref cause) => cause,
-            DescribeLedgerError::ResourceNotFound(ref cause) => cause,
+            DescribeLedgerError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeLedgerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLedgerError {}
 /// Errors returned by ExportJournalToS3
 #[derive(Debug, PartialEq)]
 pub enum ExportJournalToS3Error {
@@ -677,17 +676,13 @@ impl ExportJournalToS3Error {
 }
 impl fmt::Display for ExportJournalToS3Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExportJournalToS3Error {
-    fn description(&self) -> &str {
         match *self {
-            ExportJournalToS3Error::ResourceNotFound(ref cause) => cause,
-            ExportJournalToS3Error::ResourcePreconditionNotMet(ref cause) => cause,
+            ExportJournalToS3Error::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ExportJournalToS3Error::ResourcePreconditionNotMet(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExportJournalToS3Error {}
 /// Errors returned by GetBlock
 #[derive(Debug, PartialEq)]
 pub enum GetBlockError {
@@ -721,18 +716,14 @@ impl GetBlockError {
 }
 impl fmt::Display for GetBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBlockError {
-    fn description(&self) -> &str {
         match *self {
-            GetBlockError::InvalidParameter(ref cause) => cause,
-            GetBlockError::ResourceNotFound(ref cause) => cause,
-            GetBlockError::ResourcePreconditionNotMet(ref cause) => cause,
+            GetBlockError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetBlockError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetBlockError::ResourcePreconditionNotMet(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBlockError {}
 /// Errors returned by GetDigest
 #[derive(Debug, PartialEq)]
 pub enum GetDigestError {
@@ -768,18 +759,14 @@ impl GetDigestError {
 }
 impl fmt::Display for GetDigestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDigestError {
-    fn description(&self) -> &str {
         match *self {
-            GetDigestError::InvalidParameter(ref cause) => cause,
-            GetDigestError::ResourceNotFound(ref cause) => cause,
-            GetDigestError::ResourcePreconditionNotMet(ref cause) => cause,
+            GetDigestError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetDigestError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetDigestError::ResourcePreconditionNotMet(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDigestError {}
 /// Errors returned by GetRevision
 #[derive(Debug, PartialEq)]
 pub enum GetRevisionError {
@@ -815,18 +802,14 @@ impl GetRevisionError {
 }
 impl fmt::Display for GetRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRevisionError {
-    fn description(&self) -> &str {
         match *self {
-            GetRevisionError::InvalidParameter(ref cause) => cause,
-            GetRevisionError::ResourceNotFound(ref cause) => cause,
-            GetRevisionError::ResourcePreconditionNotMet(ref cause) => cause,
+            GetRevisionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetRevisionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetRevisionError::ResourcePreconditionNotMet(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRevisionError {}
 /// Errors returned by ListJournalS3Exports
 #[derive(Debug, PartialEq)]
 pub enum ListJournalS3ExportsError {}
@@ -844,14 +827,10 @@ impl ListJournalS3ExportsError {
 }
 impl fmt::Display for ListJournalS3ExportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJournalS3ExportsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListJournalS3ExportsError {}
 /// Errors returned by ListJournalS3ExportsForLedger
 #[derive(Debug, PartialEq)]
 pub enum ListJournalS3ExportsForLedgerError {}
@@ -871,14 +850,10 @@ impl ListJournalS3ExportsForLedgerError {
 }
 impl fmt::Display for ListJournalS3ExportsForLedgerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJournalS3ExportsForLedgerError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListJournalS3ExportsForLedgerError {}
 /// Errors returned by ListLedgers
 #[derive(Debug, PartialEq)]
 pub enum ListLedgersError {}
@@ -896,14 +871,10 @@ impl ListLedgersError {
 }
 impl fmt::Display for ListLedgersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLedgersError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListLedgersError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -936,17 +907,13 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InvalidParameter(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -975,17 +942,13 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InvalidParameter(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1014,17 +977,13 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InvalidParameter(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateLedger
 #[derive(Debug, PartialEq)]
 pub enum UpdateLedgerError {
@@ -1053,17 +1012,13 @@ impl UpdateLedgerError {
 }
 impl fmt::Display for UpdateLedgerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateLedgerError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateLedgerError::InvalidParameter(ref cause) => cause,
-            UpdateLedgerError::ResourceNotFound(ref cause) => cause,
+            UpdateLedgerError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateLedgerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateLedgerError {}
 /// Trait representing the capabilities of the QLDB API. QLDB clients implement this trait.
 pub trait Qldb {
     /// <p>Creates a new ledger in your AWS account.</p>

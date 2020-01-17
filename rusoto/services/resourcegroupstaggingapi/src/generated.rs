@@ -42,6 +42,7 @@ pub struct ComplianceDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReportCreationInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -80,6 +81,7 @@ pub struct FailureInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComplianceSummaryInput {
     /// <p>A list of attributes to group the counts of noncompliant resources by. If supplied, the counts are sorted by those attributes.</p>
     #[serde(rename = "GroupBy")]
@@ -125,6 +127,7 @@ pub struct GetComplianceSummaryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcesInput {
     /// <p>Specifies whether to exclude resources that are compliant with the tag policy. Set this to <code>true</code> if you are interested in retrieving information on noncompliant resources only.</p> <p>You can use this parameter only if the <code>IncludeComplianceDetails</code> parameter is also set to <code>true</code>.</p>
     #[serde(rename = "ExcludeCompliantResources")]
@@ -170,6 +173,7 @@ pub struct GetResourcesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagKeysInput {
     /// <p>A string that indicates that additional data is available. Leave this value empty for your initial request. If the response includes a <code>PaginationToken</code>, use that string for this value to request an additional page of data.</p>
     #[serde(rename = "PaginationToken")]
@@ -191,6 +195,7 @@ pub struct GetTagKeysOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagValuesInput {
     /// <p>The key for which you want to list all existing values in the specified Region for the AWS account.</p>
     #[serde(rename = "Key")]
@@ -233,6 +238,7 @@ pub struct ResourceTagMapping {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartReportCreationInput {
     /// <p>The name of the Amazon S3 bucket where the report will be stored; for example:</p> <p> <code>awsexamplebucket</code> </p> <p>For more information on S3 bucket requirements, including an example bucket policy, see the example S3 bucket policy on this page.</p>
     #[serde(rename = "S3Bucket")]
@@ -287,6 +293,7 @@ pub struct Tag {
 
 /// <p>A list of tags (keys and values) that are used to specify the associated resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagFilter {
     /// <p>One part of a key-value pair that makes up a tag. A key is a general label that acts like a category for more specific tag values.</p>
     #[serde(rename = "Key")]
@@ -299,6 +306,7 @@ pub struct TagFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourcesInput {
     /// <p>A list of ARNs. An ARN (Amazon Resource Name) uniquely identifies a resource. You can specify a minimum of 1 and a maximum of 20 ARNs (resources) to tag. An ARN can be set to a maximum of 1600 characters. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     #[serde(rename = "ResourceARNList")]
@@ -318,6 +326,7 @@ pub struct TagResourcesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourcesInput {
     /// <p>A list of ARNs. An ARN (Amazon Resource Name) uniquely identifies a resource. You can specify a minimum of 1 and a maximum of 20 ARNs (resources) to untag. An ARN can be set to a maximum of 1600 characters. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     #[serde(rename = "ResourceARNList")]
@@ -380,19 +389,15 @@ impl DescribeReportCreationError {
 }
 impl fmt::Display for DescribeReportCreationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReportCreationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReportCreationError::ConstraintViolation(ref cause) => cause,
-            DescribeReportCreationError::InternalService(ref cause) => cause,
-            DescribeReportCreationError::InvalidParameter(ref cause) => cause,
-            DescribeReportCreationError::Throttled(ref cause) => cause,
+            DescribeReportCreationError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            DescribeReportCreationError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeReportCreationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeReportCreationError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeReportCreationError {}
 /// Errors returned by GetComplianceSummary
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceSummaryError {
@@ -437,19 +442,15 @@ impl GetComplianceSummaryError {
 }
 impl fmt::Display for GetComplianceSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetComplianceSummaryError {
-    fn description(&self) -> &str {
         match *self {
-            GetComplianceSummaryError::ConstraintViolation(ref cause) => cause,
-            GetComplianceSummaryError::InternalService(ref cause) => cause,
-            GetComplianceSummaryError::InvalidParameter(ref cause) => cause,
-            GetComplianceSummaryError::Throttled(ref cause) => cause,
+            GetComplianceSummaryError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            GetComplianceSummaryError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetComplianceSummaryError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetComplianceSummaryError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetComplianceSummaryError {}
 /// Errors returned by GetResources
 #[derive(Debug, PartialEq)]
 pub enum GetResourcesError {
@@ -488,19 +489,15 @@ impl GetResourcesError {
 }
 impl fmt::Display for GetResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourcesError::InternalService(ref cause) => cause,
-            GetResourcesError::InvalidParameter(ref cause) => cause,
-            GetResourcesError::PaginationTokenExpired(ref cause) => cause,
-            GetResourcesError::Throttled(ref cause) => cause,
+            GetResourcesError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetResourcesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetResourcesError::PaginationTokenExpired(ref cause) => write!(f, "{}", cause),
+            GetResourcesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetResourcesError {}
 /// Errors returned by GetTagKeys
 #[derive(Debug, PartialEq)]
 pub enum GetTagKeysError {
@@ -539,19 +536,15 @@ impl GetTagKeysError {
 }
 impl fmt::Display for GetTagKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTagKeysError {
-    fn description(&self) -> &str {
         match *self {
-            GetTagKeysError::InternalService(ref cause) => cause,
-            GetTagKeysError::InvalidParameter(ref cause) => cause,
-            GetTagKeysError::PaginationTokenExpired(ref cause) => cause,
-            GetTagKeysError::Throttled(ref cause) => cause,
+            GetTagKeysError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetTagKeysError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetTagKeysError::PaginationTokenExpired(ref cause) => write!(f, "{}", cause),
+            GetTagKeysError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTagKeysError {}
 /// Errors returned by GetTagValues
 #[derive(Debug, PartialEq)]
 pub enum GetTagValuesError {
@@ -590,19 +583,15 @@ impl GetTagValuesError {
 }
 impl fmt::Display for GetTagValuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTagValuesError {
-    fn description(&self) -> &str {
         match *self {
-            GetTagValuesError::InternalService(ref cause) => cause,
-            GetTagValuesError::InvalidParameter(ref cause) => cause,
-            GetTagValuesError::PaginationTokenExpired(ref cause) => cause,
-            GetTagValuesError::Throttled(ref cause) => cause,
+            GetTagValuesError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetTagValuesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetTagValuesError::PaginationTokenExpired(ref cause) => write!(f, "{}", cause),
+            GetTagValuesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTagValuesError {}
 /// Errors returned by StartReportCreation
 #[derive(Debug, PartialEq)]
 pub enum StartReportCreationError {
@@ -652,20 +641,16 @@ impl StartReportCreationError {
 }
 impl fmt::Display for StartReportCreationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartReportCreationError {
-    fn description(&self) -> &str {
         match *self {
-            StartReportCreationError::ConcurrentModification(ref cause) => cause,
-            StartReportCreationError::ConstraintViolation(ref cause) => cause,
-            StartReportCreationError::InternalService(ref cause) => cause,
-            StartReportCreationError::InvalidParameter(ref cause) => cause,
-            StartReportCreationError::Throttled(ref cause) => cause,
+            StartReportCreationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            StartReportCreationError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            StartReportCreationError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartReportCreationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartReportCreationError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartReportCreationError {}
 /// Errors returned by TagResources
 #[derive(Debug, PartialEq)]
 pub enum TagResourcesError {
@@ -699,18 +684,14 @@ impl TagResourcesError {
 }
 impl fmt::Display for TagResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourcesError::InternalService(ref cause) => cause,
-            TagResourcesError::InvalidParameter(ref cause) => cause,
-            TagResourcesError::Throttled(ref cause) => cause,
+            TagResourcesError::InternalService(ref cause) => write!(f, "{}", cause),
+            TagResourcesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourcesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourcesError {}
 /// Errors returned by UntagResources
 #[derive(Debug, PartialEq)]
 pub enum UntagResourcesError {
@@ -744,18 +725,14 @@ impl UntagResourcesError {
 }
 impl fmt::Display for UntagResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourcesError::InternalService(ref cause) => cause,
-            UntagResourcesError::InvalidParameter(ref cause) => cause,
-            UntagResourcesError::Throttled(ref cause) => cause,
+            UntagResourcesError::InternalService(ref cause) => write!(f, "{}", cause),
+            UntagResourcesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourcesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourcesError {}
 /// Trait representing the capabilities of the AWS Resource Groups Tagging API API. AWS Resource Groups Tagging API clients implement this trait.
 pub trait ResourceGroupsTaggingApi {
     /// <p>Describes the status of the <code>StartReportCreation</code> operation. </p> <p>You can call this operation only from the organization's master account and from the us-east-1 Region.</p>

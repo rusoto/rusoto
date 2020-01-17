@@ -46,6 +46,7 @@ impl AccountDeserializer {
 }
 /// <p>Structure that contains the results of the account gate function which AWS CloudFormation invokes, if present, before proceeding with a stack set operation in an account and region.</p> <p>For each account and region, AWS CloudFormation lets you specify a Lamdba function that encapsulates any requirements that must be met before CloudFormation can proceed with a stack set operation in that account and region. CloudFormation invokes the function each time a stack set operation is requested for that account and region; if the function returns <code>FAILED</code>, CloudFormation cancels the operation in that account and region, and sets the stack set operation result status for that account and region to <code>FAILED</code>. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-account-gating.html">Configuring a target account gate</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccountGateResult {
     /// <p><p>The status of the account gate function.</p> <ul> <li> <p> <code>SUCCEEDED</code>: The account gate function has determined that the account and region passes any requirements for a stack set operation to occur. AWS CloudFormation proceeds with the stack operation in that account and region. </p> </li> <li> <p> <code>FAILED</code>: The account gate function has determined that the account and region does not meet the requirements for a stack set operation to occur. AWS CloudFormation cancels the stack set operation in that account and region, and sets the stack set operation result status for that account and region to <code>FAILED</code>. </p> </li> <li> <p> <code>SKIPPED</code>: AWS CloudFormation has skipped calling the account gate function for this account and region, for one of the following reasons:</p> <ul> <li> <p>An account gate function has not been specified for the account and region. AWS CloudFormation proceeds with the stack set operation in this account and region.</p> </li> <li> <p>The <code>AWSCloudFormationStackSetExecutionRole</code> of the stack set adminstration account lacks permissions to invoke the function. AWS CloudFormation proceeds with the stack set operation in this account and region.</p> </li> <li> <p>Either no action is necessary, or no action is possible, on the stack. AWS CloudFormation skips the stack set operation in this account and region.</p> </li> </ul> </li> </ul></p>
     pub status: Option<String>,
@@ -101,6 +102,7 @@ impl AccountGateStatusReasonDeserializer {
 }
 /// <p>The AccountLimit data type. </p> <p>CloudFormation has the following limits per account:</p> <ul> <li> <p>Number of concurrent resources</p> </li> <li> <p>Number of stacks</p> </li> <li> <p>Number of stack outputs</p> </li> </ul> <p>For more information about these account limits, and other CloudFormation limits, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html">AWS CloudFormation Limits</a> in the <i>AWS CloudFormation User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccountLimit {
     /// <p>The name of the account limit.</p> <p>Values: <code>ConcurrentResourcesLimit</code> | <code>StackLimit</code> | <code>StackOutputsLimit</code> </p>
     pub name: Option<String>,
@@ -210,6 +212,7 @@ impl BoxedIntegerDeserializer {
 }
 /// <p>The input for the <a>CancelUpdateStack</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelUpdateStackInput {
     /// <p>A unique identifier for this <code>CancelUpdateStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to cancel an update on a stack with the same name. You might retry <code>CancelUpdateStack</code> requests to ensure that AWS CloudFormation successfully received them.</p>
     pub client_request_token: Option<String>,
@@ -297,6 +300,7 @@ impl CausingEntityDeserializer {
 }
 /// <p>The <code>Change</code> structure describes the changes AWS CloudFormation will perform if you execute the change set.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Change {
     /// <p>A <code>ResourceChange</code> structure that describes the resource and action that AWS CloudFormation will perform.</p>
     pub resource_change: Option<ResourceChange>,
@@ -399,6 +403,7 @@ impl ChangeSetSummariesDeserializer {
 }
 /// <p>The <code>ChangeSetSummary</code> structure describes a change set, its status, and the stack with which it's associated.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ChangeSetSummary {
     /// <p>The ID of the change set.</p>
     pub change_set_id: Option<String>,
@@ -528,6 +533,7 @@ impl ClientRequestTokenDeserializer {
 }
 /// <p>The input for the <a>ContinueUpdateRollback</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContinueUpdateRollbackInput {
     /// <p>A unique identifier for this <code>ContinueUpdateRollback</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to continue the rollback to a stack with the same name. You might retry <code>ContinueUpdateRollback</code> requests to ensure that AWS CloudFormation successfully received them.</p>
     pub client_request_token: Option<String>,
@@ -567,6 +573,7 @@ impl ContinueUpdateRollbackInputSerializer {
 
 /// <p>The output for a <a>ContinueUpdateRollback</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ContinueUpdateRollbackOutput {}
 
 struct ContinueUpdateRollbackOutputDeserializer;
@@ -587,6 +594,7 @@ impl ContinueUpdateRollbackOutputDeserializer {
 }
 /// <p>The input for the <a>CreateChangeSet</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChangeSetInput {
     /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to create the stack.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some template contain macros. Macros perform custom processing on templates; this can include simple actions like find-and-replace operations, all the way to extensive transformations of entire templates. Because of this, users typically create a change set from the processed template, so that they can review the changes resulting from the macros before actually creating the stack. If your stack template contains one or more macros, and you choose to create a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.</p> <note> <p>This capacity does not apply to creating change sets, and specifying it when creating change sets has no effect.</p> <p>Also, change sets do not currently support nested stacks. If you want to create a stack from a stack template that contains macros <i>and</i> nested stacks, you must create or update the stack directly from the template using the <a>CreateStack</a> or <a>UpdateStack</a> action, and specifying this capability.</p> </note> <p>For more information on macros, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> </li> </ul></p>
     pub capabilities: Option<Vec<String>>,
@@ -710,6 +718,7 @@ impl CreateChangeSetInputSerializer {
 
 /// <p>The output for the <a>CreateChangeSet</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateChangeSetOutput {
     /// <p>The Amazon Resource Name (ARN) of the change set.</p>
     pub id: Option<String>,
@@ -740,6 +749,7 @@ impl CreateChangeSetOutputDeserializer {
 }
 /// <p>The input for <a>CreateStack</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStackInput {
     /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to create the stack.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some template contain macros. Macros perform custom processing on templates; this can include simple actions like find-and-replace operations, all the way to extensive transformations of entire templates. Because of this, users typically create a change set from the processed template, so that they can review the changes resulting from the macros before actually creating the stack. If your stack template contains one or more macros, and you choose to create a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.</p> <p>Change sets do not currently support nested stacks. If you want to create a stack from a stack template that contains macros <i>and</i> nested stacks, you must create the stack directly from the template using this capability.</p> <important> <p>You should only create stacks directly from a stack template that contains macros if you know what processing the macro performs.</p> <p>Each macro relies on an underlying Lambda service function for processing stack templates. Be aware that the Lambda function owner can update the function operation without AWS CloudFormation being notified.</p> </important> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> </li> </ul></p>
     pub capabilities: Option<Vec<String>>,
@@ -862,6 +872,7 @@ impl CreateStackInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStackInstancesInput {
     /// <p>The names of one or more AWS accounts that you want to create stack instances in the specified region(s) for.</p>
     pub accounts: Vec<String>,
@@ -917,6 +928,7 @@ impl CreateStackInstancesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStackInstancesOutput {
     /// <p>The unique identifier for this stack set operation.</p>
     pub operation_id: Option<String>,
@@ -949,6 +961,7 @@ impl CreateStackInstancesOutputDeserializer {
 }
 /// <p>The output for a <a>CreateStack</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStackOutput {
     /// <p>Unique identifier of the stack.</p>
     pub stack_id: Option<String>,
@@ -973,6 +986,7 @@ impl CreateStackOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStackSetInput {
     /// <p>The Amazon Resource Number (ARN) of the IAM role to use to create this stack set. </p> <p>Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html">Prerequisites: Granting Permissions for Stack Set Operations</a> in the <i>AWS CloudFormation User Guide</i>.</p>
     pub administration_role_arn: Option<String>,
@@ -1051,6 +1065,7 @@ impl CreateStackSetInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStackSetOutput {
     /// <p>The ID of the stack set that you're creating.</p>
     pub stack_set_id: Option<String>,
@@ -1088,6 +1103,7 @@ impl CreationTimeDeserializer {
 }
 /// <p>The input for the <a>DeleteChangeSet</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChangeSetInput {
     /// <p>The name or Amazon Resource Name (ARN) of the change set that you want to delete.</p>
     pub change_set_name: String,
@@ -1116,6 +1132,7 @@ impl DeleteChangeSetInputSerializer {
 
 /// <p>The output for the <a>DeleteChangeSet</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteChangeSetOutput {}
 
 struct DeleteChangeSetOutputDeserializer;
@@ -1136,6 +1153,7 @@ impl DeleteChangeSetOutputDeserializer {
 }
 /// <p>The input for <a>DeleteStack</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStackInput {
     /// <p>A unique identifier for this <code>DeleteStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to delete a stack with the same name. You might retry <code>DeleteStack</code> requests to ensure that AWS CloudFormation successfully received them.</p> <p>All events triggered by a given stack operation are assigned the same client request token, which you can use to track operations. For example, if you execute a <code>CreateStack</code> operation with the token <code>token1</code>, then all the <code>StackEvents</code> generated by that operation will have <code>ClientRequestToken</code> set as <code>token1</code>.</p> <p>In the console, stack operations display the client request token on the Events tab. Stack operations that are initiated from the console use the token format <i>Console-StackOperation-ID</i>, which helps you easily identify the stack operation . For example, if you create a stack using the console, each stack event would be assigned the same token in the following format: <code>Console-CreateStack-7f59c3cf-00d2-40c7-b2ff-e75db0987002</code>. </p>
     pub client_request_token: Option<String>,
@@ -1174,6 +1192,7 @@ impl DeleteStackInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStackInstancesInput {
     /// <p>The names of the AWS accounts that you want to delete stack instances for.</p>
     pub accounts: Vec<String>,
@@ -1223,6 +1242,7 @@ impl DeleteStackInstancesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteStackInstancesOutput {
     /// <p>The unique identifier for this stack set operation.</p>
     pub operation_id: Option<String>,
@@ -1254,6 +1274,7 @@ impl DeleteStackInstancesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStackSetInput {
     /// <p>The name or unique ID of the stack set that you're deleting. You can obtain this value by running <a>ListStackSets</a>.</p>
     pub stack_set_name: String,
@@ -1276,6 +1297,7 @@ impl DeleteStackSetInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteStackSetOutput {}
 
 struct DeleteStackSetOutputDeserializer;
@@ -1317,6 +1339,7 @@ impl DeprecatedStatusDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTypeInput {
     /// <p>The Amazon Resource Name (ARN) of the type.</p> <p>Conditional: You must specify <code>TypeName</code> or <code>Arn</code>.</p>
     pub arn: Option<String>,
@@ -1353,6 +1376,7 @@ impl DeregisterTypeInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeregisterTypeOutput {}
 
 struct DeregisterTypeOutputDeserializer;
@@ -1373,6 +1397,7 @@ impl DeregisterTypeOutputDeserializer {
 }
 /// <p>The input for the <a>DescribeAccountLimits</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountLimitsInput {
     /// <p>A string that identifies the next page of limits that you want to retrieve.</p>
     pub next_token: Option<String>,
@@ -1395,6 +1420,7 @@ impl DescribeAccountLimitsInputSerializer {
 
 /// <p>The output for the <a>DescribeAccountLimits</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccountLimitsOutput {
     /// <p>An account limit structure that contain a list of AWS CloudFormation account limits and their values.</p>
     pub account_limits: Option<Vec<AccountLimit>>,
@@ -1432,6 +1458,7 @@ impl DescribeAccountLimitsOutputDeserializer {
 }
 /// <p>The input for the <a>DescribeChangeSet</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChangeSetInput {
     /// <p>The name or Amazon Resource Name (ARN) of the change set that you want to describe.</p>
     pub change_set_name: String,
@@ -1465,6 +1492,7 @@ impl DescribeChangeSetInputSerializer {
 
 /// <p>The output for the <a>DescribeChangeSet</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeChangeSetOutput {
     /// <p>If you execute the change set, the list of capabilities that were explicitly acknowledged when the change set was created.</p>
     pub capabilities: Option<Vec<String>>,
@@ -1599,6 +1627,7 @@ impl DescribeChangeSetOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackDriftDetectionStatusInput {
     /// <p>The ID of the drift detection results of this operation. </p> <p>AWS CloudFormation generates new results, with a new drift detection ID, each time this operation is run. However, the number of drift results AWS CloudFormation retains for any given stack, and for how long, may vary. </p>
     pub stack_drift_detection_id: String,
@@ -1621,6 +1650,7 @@ impl DescribeStackDriftDetectionStatusInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackDriftDetectionStatusOutput {
     /// <p><p>The status of the stack drift detection operation.</p> <ul> <li> <p> <code>DETECTION<em>COMPLETE</code>: The stack drift detection operation has successfully completed for all resources in the stack that support drift detection. (Resources that do not currently support stack detection remain unchecked.)</p> <p>If you specified logical resource IDs for AWS CloudFormation to use as a filter for the stack drift detection operation, only the resources with those logical IDs are checked for drift.</p> </li> <li> <p> <code>DETECTION</em>FAILED</code>: The stack drift detection operation has failed for at least one resource in the stack. Results will be available for resources on which AWS CloudFormation successfully completed drift detection.</p> </li> <li> <p> <code>DETECTION<em>IN</em>PROGRESS</code>: The stack drift detection operation is currently in progress.</p> </li> </ul></p>
     pub detection_status: String,
@@ -1698,6 +1728,7 @@ impl DescribeStackDriftDetectionStatusOutputDeserializer {
 }
 /// <p>The input for <a>DescribeStackEvents</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackEventsInput {
     /// <p>A string that identifies the next page of events that you want to retrieve.</p>
     pub next_token: Option<String>,
@@ -1725,6 +1756,7 @@ impl DescribeStackEventsInputSerializer {
 
 /// <p>The output for a <a>DescribeStackEvents</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackEventsOutput {
     /// <p>If the output exceeds 1 MB in size, a string that identifies the next page of events. If no additional page exists, this value is null.</p>
     pub next_token: Option<String>,
@@ -1761,6 +1793,7 @@ impl DescribeStackEventsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackInstanceInput {
     /// <p>The ID of an AWS account that's associated with this stack instance.</p>
     pub stack_instance_account: String,
@@ -1795,6 +1828,7 @@ impl DescribeStackInstanceInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackInstanceOutput {
     /// <p>The stack instance that matches the specified request parameters.</p>
     pub stack_instance: Option<StackInstance>,
@@ -1826,6 +1860,7 @@ impl DescribeStackInstanceOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackResourceDriftsInput {
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -1864,6 +1899,7 @@ impl DescribeStackResourceDriftsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackResourceDriftsOutput {
     /// <p>If the request doesn't return all of the remaining results, <code>NextToken</code> is set to a token. To retrieve the next set of results, call <code>DescribeStackResourceDrifts</code> again and assign that token to the request object's <code>NextToken</code> parameter. If the request returns all results, <code>NextToken</code> is set to <code>null</code>.</p>
     pub next_token: Option<String>,
@@ -1904,6 +1940,7 @@ impl DescribeStackResourceDriftsOutputDeserializer {
 }
 /// <p>The input for <a>DescribeStackResource</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackResourceInput {
     /// <p>The logical name of the resource as specified in the template.</p> <p>Default: There is no default value.</p>
     pub logical_resource_id: String,
@@ -1930,6 +1967,7 @@ impl DescribeStackResourceInputSerializer {
 
 /// <p>The output for a <a>DescribeStackResource</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackResourceOutput {
     /// <p>A <code>StackResourceDetail</code> structure containing the description of the specified resource in the specified stack.</p>
     pub stack_resource_detail: Option<StackResourceDetail>,
@@ -1963,6 +2001,7 @@ impl DescribeStackResourceOutputDeserializer {
 }
 /// <p>The input for <a>DescribeStackResources</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackResourcesInput {
     /// <p>The logical name of the resource as specified in the template.</p> <p>Default: There is no default value.</p>
     pub logical_resource_id: Option<String>,
@@ -1995,6 +2034,7 @@ impl DescribeStackResourcesInputSerializer {
 
 /// <p>The output for a <a>DescribeStackResources</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackResourcesOutput {
     /// <p>A list of <code>StackResource</code> structures.</p>
     pub stack_resources: Option<Vec<StackResource>>,
@@ -2025,6 +2065,7 @@ impl DescribeStackResourcesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackSetInput {
     /// <p>The name or unique ID of the stack set whose description you want.</p>
     pub stack_set_name: String,
@@ -2047,6 +2088,7 @@ impl DescribeStackSetInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackSetOperationInput {
     /// <p>The unique ID of the stack set operation. </p>
     pub operation_id: String,
@@ -2072,6 +2114,7 @@ impl DescribeStackSetOperationInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackSetOperationOutput {
     /// <p>The specified stack set operation.</p>
     pub stack_set_operation: Option<StackSetOperation>,
@@ -2103,6 +2146,7 @@ impl DescribeStackSetOperationOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackSetOutput {
     /// <p>The specified stack set.</p>
     pub stack_set: Option<StackSet>,
@@ -2128,6 +2172,7 @@ impl DescribeStackSetOutputDeserializer {
 }
 /// <p>The input for <a>DescribeStacks</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStacksInput {
     /// <p>A string that identifies the next page of stacks that you want to retrieve.</p>
     pub next_token: Option<String>,
@@ -2155,6 +2200,7 @@ impl DescribeStacksInputSerializer {
 
 /// <p>The output for a <a>DescribeStacks</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStacksOutput {
     /// <p>If the output exceeds 1 MB in size, a string that identifies the next page of stacks. If no additional page exists, this value is null.</p>
     pub next_token: Option<String>,
@@ -2186,6 +2232,7 @@ impl DescribeStacksOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTypeInput {
     /// <p>The Amazon Resource Name (ARN) of the type.</p> <p>Conditional: You must specify <code>TypeName</code> or <code>Arn</code>.</p>
     pub arn: Option<String>,
@@ -2222,6 +2269,7 @@ impl DescribeTypeInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTypeOutput {
     /// <p>The Amazon Resource Name (ARN) of the type.</p>
     pub arn: Option<String>,
@@ -2339,6 +2387,7 @@ impl DescribeTypeOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTypeRegistrationInput {
     /// <p>The identifier for this registration request.</p> <p>This registration token is generated by CloudFormation when you initiate a registration request using <code> <a>RegisterType</a> </code>.</p>
     pub registration_token: String,
@@ -2361,6 +2410,7 @@ impl DescribeTypeRegistrationInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTypeRegistrationOutput {
     /// <p>The description of the type registration request.</p>
     pub description: Option<String>,
@@ -2420,6 +2470,7 @@ impl DescriptionDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectStackDriftInput {
     /// <p>The logical names of any resources you want to use as filters.</p>
     pub logical_resource_ids: Option<Vec<String>>,
@@ -2448,6 +2499,7 @@ impl DetectStackDriftInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetectStackDriftOutput {
     /// <p>The ID of the drift detection results of this operation. </p> <p>AWS CloudFormation generates new results, with a new drift detection ID, each time this operation is run. However, the number of drift results AWS CloudFormation retains for any given stack, and for how long, may vary. </p>
     pub stack_drift_detection_id: String,
@@ -2475,6 +2527,7 @@ impl DetectStackDriftOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectStackResourceDriftInput {
     /// <p>The logical name of the resource for which to return drift information.</p>
     pub logical_resource_id: String,
@@ -2500,6 +2553,7 @@ impl DetectStackResourceDriftInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetectStackResourceDriftOutput {
     /// <p>Information about whether the resource's actual configuration has drifted from its expected template configuration, including actual and expected property values and any differences detected.</p>
     pub stack_resource_drift: StackResourceDrift,
@@ -2531,6 +2585,7 @@ impl DetectStackResourceDriftOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectStackSetDriftInput {
     /// <p> <i>The ID of the stack set operation.</i> </p>
     pub operation_id: Option<String>,
@@ -2566,6 +2621,7 @@ impl DetectStackSetDriftInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetectStackSetDriftOutput {
     /// <p>The ID of the drift detection stack set operation. </p> <p>you can use this operation id with <code> <a>DescribeStackSetOperation</a> </code> to monitor the progress of the drift detection operation. </p>
     pub operation_id: Option<String>,
@@ -2642,6 +2698,7 @@ impl EnableTerminationProtectionDeserializer {
 }
 /// <p>The input for an <a>EstimateTemplateCost</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EstimateTemplateCostInput {
     /// <p>A list of <code>Parameter</code> structures that specify input parameters.</p>
     pub parameters: Option<Vec<Parameter>>,
@@ -2678,6 +2735,7 @@ impl EstimateTemplateCostInputSerializer {
 
 /// <p>The output for a <a>EstimateTemplateCost</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EstimateTemplateCostOutput {
     /// <p>An AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>
     pub url: Option<String>,
@@ -2729,6 +2787,7 @@ impl EventIdDeserializer {
 }
 /// <p>The input for the <a>ExecuteChangeSet</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteChangeSetInput {
     /// <p>The name or ARN of the change set that you want use to update the specified stack.</p>
     pub change_set_name: String,
@@ -2762,6 +2821,7 @@ impl ExecuteChangeSetInputSerializer {
 
 /// <p>The output for the <a>ExecuteChangeSet</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExecuteChangeSetOutput {}
 
 struct ExecuteChangeSetOutputDeserializer;
@@ -2804,6 +2864,7 @@ impl ExecutionStatusDeserializer {
 }
 /// <p>The <code>Export</code> structure describes the exported output values for a stack.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Export {
     /// <p>The stack that contains the exported output name and value.</p>
     pub exporting_stack_id: Option<String>,
@@ -2909,6 +2970,7 @@ impl FailureTolerancePercentageDeserializer {
 }
 /// <p>The input for the <a>GetStackPolicy</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStackPolicyInput {
     /// <p>The name or unique stack ID that is associated with the stack whose policy you want to get.</p>
     pub stack_name: String,
@@ -2929,6 +2991,7 @@ impl GetStackPolicyInputSerializer {
 
 /// <p>The output for the <a>GetStackPolicy</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStackPolicyOutput {
     /// <p>Structure containing the stack policy body. (For more information, go to <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html"> Prevent Updates to Stack Resources</a> in the AWS CloudFormation User Guide.)</p>
     pub stack_policy_body: Option<String>,
@@ -2957,6 +3020,7 @@ impl GetStackPolicyOutputDeserializer {
 }
 /// <p>The input for a <a>GetTemplate</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTemplateInput {
     /// <p>The name or Amazon Resource Name (ARN) of a change set for which AWS CloudFormation returns the associated template. If you specify a name, you must also specify the <code>StackName</code>.</p>
     pub change_set_name: Option<String>,
@@ -2989,6 +3053,7 @@ impl GetTemplateInputSerializer {
 
 /// <p>The output for <a>GetTemplate</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTemplateOutput {
     /// <p>The stage of the template that you can retrieve. For stacks, the <code>Original</code> and <code>Processed</code> templates are always available. For change sets, the <code>Original</code> template is always available. After AWS CloudFormation finishes creating the change set, the <code>Processed</code> template becomes available.</p>
     pub stages_available: Option<Vec<String>>,
@@ -3024,6 +3089,7 @@ impl GetTemplateOutputDeserializer {
 }
 /// <p>The input for the <a>GetTemplateSummary</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTemplateSummaryInput {
     /// <p>The name or the stack ID that is associated with the stack, which are not always interchangeable. For running stacks, you can specify either the stack's name or its unique stack ID. For deleted stack, you must specify the unique stack ID.</p> <p>Conditional: You must specify only one of the following parameters: <code>StackName</code>, <code>StackSetName</code>, <code>TemplateBody</code>, or <code>TemplateURL</code>.</p>
     pub stack_name: Option<String>,
@@ -3061,6 +3127,7 @@ impl GetTemplateSummaryInputSerializer {
 
 /// <p>The output for the <a>GetTemplateSummary</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTemplateSummaryOutput {
     /// <p>The capabilities found within the template. If your template contains IAM resources, you must specify the CAPABILITY_IAM or CAPABILITY_NAMED_IAM value for this parameter when you use the <a>CreateStack</a> or <a>UpdateStack</a> actions with your template; otherwise, those actions return an InsufficientCapabilities error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>
     pub capabilities: Option<Vec<String>>,
@@ -3231,6 +3298,7 @@ impl LimitValueDeserializer {
 }
 /// <p>The input for the <a>ListChangeSets</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChangeSetsInput {
     /// <p>A string (provided by the <a>ListChangeSets</a> response output) that identifies the next page of change sets that you want to retrieve.</p>
     pub next_token: Option<String>,
@@ -3256,6 +3324,7 @@ impl ListChangeSetsInputSerializer {
 
 /// <p>The output for the <a>ListChangeSets</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListChangeSetsOutput {
     /// <p>If the output exceeds 1 MB, a string that identifies the next page of change sets. If there is no additional page, this value is null.</p>
     pub next_token: Option<String>,
@@ -3287,6 +3356,7 @@ impl ListChangeSetsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListExportsInput {
     /// <p>A string (provided by the <a>ListExports</a> response output) that identifies the next page of exported output values that you asked to retrieve.</p>
     pub next_token: Option<String>,
@@ -3308,6 +3378,7 @@ impl ListExportsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListExportsOutput {
     /// <p>The output for the <a>ListExports</a> action.</p>
     pub exports: Option<Vec<Export>>,
@@ -3339,6 +3410,7 @@ impl ListExportsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImportsInput {
     /// <p>The name of the exported output value. AWS CloudFormation returns the stack names that are importing this value. </p>
     pub export_name: String,
@@ -3363,6 +3435,7 @@ impl ListImportsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListImportsOutput {
     /// <p>A list of stack names that are importing the specified exported output value. </p>
     pub imports: Option<Vec<String>>,
@@ -3394,6 +3467,7 @@ impl ListImportsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackInstancesInput {
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -3442,6 +3516,7 @@ impl ListStackInstancesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStackInstancesOutput {
     /// <p>If the request doesn't return all of the remaining results, <code>NextToken</code> is set to a token. To retrieve the next set of results, call <code>ListStackInstances</code> again and assign that token to the request object's <code>NextToken</code> parameter. If the request returns all results, <code>NextToken</code> is set to <code>null</code>.</p>
     pub next_token: Option<String>,
@@ -3479,6 +3554,7 @@ impl ListStackInstancesOutputDeserializer {
 }
 /// <p>The input for the <a>ListStackResource</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackResourcesInput {
     /// <p>A string that identifies the next page of stack resources that you want to retrieve.</p>
     pub next_token: Option<String>,
@@ -3504,6 +3580,7 @@ impl ListStackResourcesInputSerializer {
 
 /// <p>The output for a <a>ListStackResources</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStackResourcesOutput {
     /// <p>If the output exceeds 1 MB, a string that identifies the next page of stack resources. If no additional page exists, this value is null.</p>
     pub next_token: Option<String>,
@@ -3543,6 +3620,7 @@ impl ListStackResourcesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackSetOperationResultsInput {
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -3578,6 +3656,7 @@ impl ListStackSetOperationResultsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStackSetOperationResultsOutput {
     /// <p>If the request doesn't return all results, <code>NextToken</code> is set to a token. To retrieve the next set of results, call <code>ListOperationResults</code> again and assign that token to the request object's <code>NextToken</code> parameter. If there are no remaining results, <code>NextToken</code> is set to <code>null</code>.</p>
     pub next_token: Option<String>,
@@ -3617,6 +3696,7 @@ impl ListStackSetOperationResultsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackSetOperationsInput {
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -3649,6 +3729,7 @@ impl ListStackSetOperationsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStackSetOperationsOutput {
     /// <p>If the request doesn't return all results, <code>NextToken</code> is set to a token. To retrieve the next set of results, call <code>ListOperationResults</code> again and assign that token to the request object's <code>NextToken</code> parameter. If there are no remaining results, <code>NextToken</code> is set to <code>null</code>.</p>
     pub next_token: Option<String>,
@@ -3688,6 +3769,7 @@ impl ListStackSetOperationsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackSetsInput {
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -3719,6 +3801,7 @@ impl ListStackSetsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStackSetsOutput {
     /// <p>If the request doesn't return all of the remaining results, <code>NextToken</code> is set to a token. To retrieve the next set of results, call <code>ListStackInstances</code> again and assign that token to the request object's <code>NextToken</code> parameter. If the request returns all results, <code>NextToken</code> is set to <code>null</code>.</p>
     pub next_token: Option<String>,
@@ -3751,6 +3834,7 @@ impl ListStackSetsOutputDeserializer {
 }
 /// <p>The input for <a>ListStacks</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStacksInput {
     /// <p>A string that identifies the next page of stacks that you want to retrieve.</p>
     pub next_token: Option<String>,
@@ -3782,6 +3866,7 @@ impl ListStacksInputSerializer {
 
 /// <p>The output for <a>ListStacks</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStacksOutput {
     /// <p>If the output exceeds 1 MB in size, a string that identifies the next page of stacks. If no additional page exists, this value is null.</p>
     pub next_token: Option<String>,
@@ -3813,6 +3898,7 @@ impl ListStacksOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypeRegistrationsInput {
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -3862,6 +3948,7 @@ impl ListTypeRegistrationsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTypeRegistrationsOutput {
     /// <p>If the request doesn't return all of the remaining results, <code>NextToken</code> is set to a token. To retrieve the next set of results, call this action again and assign that token to the request object's <code>NextToken</code> parameter. If the request returns all results, <code>NextToken</code> is set to <code>null</code>.</p>
     pub next_token: Option<String>,
@@ -3901,6 +3988,7 @@ impl ListTypeRegistrationsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypeVersionsInput {
     /// <p>The Amazon Resource Name (ARN) of the type for which you want version summary information.</p> <p>Conditional: You must specify <code>TypeName</code> or <code>Arn</code>.</p>
     pub arn: Option<String>,
@@ -3947,6 +4035,7 @@ impl ListTypeVersionsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTypeVersionsOutput {
     /// <p>If the request doesn't return all of the remaining results, <code>NextToken</code> is set to a token. To retrieve the next set of results, call this action again and assign that token to the request object's <code>NextToken</code> parameter. If the request returns all results, <code>NextToken</code> is set to <code>null</code>.</p>
     pub next_token: Option<String>,
@@ -3981,6 +4070,7 @@ impl ListTypeVersionsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypesInput {
     /// <p><p>The deprecation status of the types that you want to get summary information about.</p> <p>Valid values include:</p> <ul> <li> <p> <code>LIVE</code>: The type is registered for use in CloudFormation operations.</p> </li> <li> <p> <code>DEPRECATED</code>: The type has been deregistered and can no longer be used in CloudFormation operations. </p> </li> </ul></p>
     pub deprecated_status: Option<String>,
@@ -4022,6 +4112,7 @@ impl ListTypesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTypesOutput {
     /// <p>If the request doesn't return all of the remaining results, <code>NextToken</code> is set to a token. To retrieve the next set of results, call this action again and assign that token to the request object's <code>NextToken</code> parameter. If the request returns all results, <code>NextToken</code> is set to <code>null</code>.</p>
     pub next_token: Option<String>,
@@ -4065,6 +4156,8 @@ impl LogGroupNameDeserializer {
 }
 /// <p>Contains logging configuration information for a type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoggingConfig {
     /// <p>The Amazon CloudWatch log group to which CloudFormation sends error logging information when invoking the type's handlers.</p>
     pub log_group_name: String,
@@ -4271,6 +4364,7 @@ impl OptionalSecureUrlDeserializer {
 }
 /// <p>The Output data type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Output {
     /// <p>User defined description associated with the output.</p>
     pub description: Option<String>,
@@ -4350,6 +4444,8 @@ impl OutputsDeserializer {
 }
 /// <p>The Parameter data type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Parameter {
     /// <p>The key associated with the parameter. If you don't specify a key and value for a particular parameter, AWS CloudFormation uses the default value that is specified in your template.</p>
     pub parameter_key: Option<String>,
@@ -4427,6 +4523,7 @@ impl ParameterSerializer {
 
 /// <p>A set of criteria that AWS CloudFormation uses to validate parameter values. Although other constraints might be defined in the stack template, AWS CloudFormation returns only the <code>AllowedValues</code> property.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ParameterConstraints {
     /// <p>A list of values that are permitted for a parameter.</p>
     pub allowed_values: Option<Vec<String>>,
@@ -4454,6 +4551,7 @@ impl ParameterConstraintsDeserializer {
 }
 /// <p>The ParameterDeclaration data type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ParameterDeclaration {
     /// <p>The default value of the parameter.</p>
     pub default_value: Option<String>,
@@ -4631,6 +4729,7 @@ impl PhysicalResourceIdContextDeserializer {
 }
 /// <p>Context information that enables AWS CloudFormation to uniquely identify a resource. AWS CloudFormation uses context key-value pairs in cases where a resource's logical and physical IDs are not enough to uniquely identify that resource. Each context key-value pair specifies a resource that contains the targeted resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PhysicalResourceIdContextKeyValuePair {
     /// <p>The resource context key.</p>
     pub key: String,
@@ -4676,6 +4775,7 @@ impl PropertiesDeserializer {
 }
 /// <p>Information about a resource property whose actual value differs from its expected value, as defined in the stack template and any values specified as template parameters. These will be present only for resources whose <code>StackResourceDriftStatus</code> is <code>MODIFIED</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PropertyDifference {
     /// <p>The actual property value of the resource property.</p>
     pub actual_value: String,
@@ -4793,6 +4893,7 @@ impl ReasonDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RecordHandlerProgressInput {
     /// <p>Reserved for use by the <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/what-is-cloudformation-cli.html">CloudFormation CLI</a>.</p>
     pub bearer_token: String,
@@ -4846,6 +4947,7 @@ impl RecordHandlerProgressInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RecordHandlerProgressOutput {}
 
 struct RecordHandlerProgressOutputDeserializer;
@@ -4905,6 +5007,7 @@ impl RegionListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTypeInput {
     /// <p>A unique identifier that acts as an idempotency key for this registration request. Specifying a client request token prevents CloudFormation from generating more than one version of a type from the same registeration request, even if the request is submitted multiple times. </p>
     pub client_request_token: Option<String>,
@@ -4954,6 +5057,7 @@ impl RegisterTypeInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RegisterTypeOutput {
     /// <p>The identifier for this registration request.</p> <p>Use this registration token when calling <code> <a>DescribeTypeRegistration</a> </code>, which returns information about the status and IDs of the type registration. </p>
     pub registration_token: Option<String>,
@@ -5065,6 +5169,7 @@ impl ResourceAttributeDeserializer {
 }
 /// <p>The <code>ResourceChange</code> structure describes the resource and the action that AWS CloudFormation will perform on it if you execute this change set.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceChange {
     /// <p>The action that AWS CloudFormation takes on the resource, such as <code>Add</code> (adds a new resource), <code>Modify</code> (changes a resource), or <code>Remove</code> (deletes a resource).</p>
     pub action: Option<String>,
@@ -5134,6 +5239,7 @@ impl ResourceChangeDeserializer {
 }
 /// <p>For a resource with <code>Modify</code> as the action, the <code>ResourceChange</code> structure describes the changes AWS CloudFormation will make to that resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceChangeDetail {
     /// <p>The identity of the entity that triggered this change. This entity is a member of the group that is specified by the <code>ChangeSource</code> field. For example, if you modified the value of the <code>KeyPairName</code> parameter, the <code>CausingEntity</code> is the name of the parameter (<code>KeyPairName</code>).</p> <p>If the <code>ChangeSource</code> value is <code>DirectModification</code>, no value is given for <code>CausingEntity</code>.</p>
     pub causing_entity: Option<String>,
@@ -5251,6 +5357,7 @@ impl ResourceIdentifierSummariesDeserializer {
 }
 /// <p>Describes the target resources of a specific type in your import template (for example, all <code>AWS::S3::Bucket</code> resources) and the properties you can provide during the import to identify resources of that type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceIdentifierSummary {
     /// <p>The logical IDs of the target resources of the specified <code>ResourceType</code>, as defined in the import template.</p>
     pub logical_resource_ids: Option<Vec<String>>,
@@ -5355,6 +5462,7 @@ impl ResourceStatusReasonDeserializer {
 }
 /// <p>The field that AWS CloudFormation will change, such as the name of a resource's property, and whether the resource will be recreated.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceTargetDefinition {
     /// <p>Indicates which resource attribute is triggering this update, such as a change in the resource attribute's <code>Metadata</code>, <code>Properties</code>, or <code>Tags</code>.</p>
     pub attribute: Option<String>,
@@ -5401,6 +5509,7 @@ impl ResourceTargetDefinitionDeserializer {
 }
 /// <p>Describes the target resource of an import operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResourceToImport {
     /// <p>The logical ID of the target resource as specified in the template.</p>
     pub logical_resource_id: String,
@@ -5540,6 +5649,8 @@ impl RoleArnDeserializer {
 }
 /// <p>Structure containing the rollback triggers for AWS CloudFormation to monitor during stack creation and updating operations, and for the specified monitoring period afterwards.</p> <p>Rollback triggers enable you to have AWS CloudFormation monitor the state of your application during stack creation and updating, and to roll back that operation if the application breaches the threshold of any of the alarms you've specified. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-rollback-triggers.html">Monitor and Roll Back Stack Operations</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackConfiguration {
     /// <p>The amount of time, in minutes, during which CloudFormation should monitor all the rollback triggers after the stack creation or update operation deploys all necessary resources.</p> <p>The default is 0 minutes.</p> <p>If you specify a monitoring period but do not specify any rollback triggers, CloudFormation still waits the specified period of time before cleaning up old resources after update operations. You can use this monitoring period to perform any manual stack validation desired, and manually cancel the stack creation or update (using <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CancelUpdateStack.html">CancelUpdateStack</a>, for example) as necessary.</p> <p>If you specify 0 for this parameter, CloudFormation still monitors the specified rollback triggers during stack creation and update operations. Then, for update operations, it begins disposing of old resources immediately once the operation completes.</p>
     pub monitoring_time_in_minutes: Option<i64>,
@@ -5602,6 +5713,8 @@ impl RollbackConfigurationSerializer {
 
 /// <p>A rollback trigger AWS CloudFormation monitors during creation and updating of stacks. If any of the alarms you specify goes to ALARM state during the stack operation or within the specified monitoring period afterwards, CloudFormation rolls back the entire stack operation. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackTrigger {
     /// <p>The Amazon Resource Name (ARN) of the rollback trigger.</p> <p>If a specified trigger is missing, the entire stack operation fails and is rolled back. </p>
     pub arn: String,
@@ -5693,6 +5806,7 @@ impl ScopeDeserializer {
 }
 /// <p>The input for the <a>SetStackPolicy</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetStackPolicyInput {
     /// <p>The name or unique stack ID that you want to associate a policy with.</p>
     pub stack_name: String,
@@ -5722,6 +5836,7 @@ impl SetStackPolicyInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTypeDefaultVersionInput {
     /// <p>The Amazon Resource Name (ARN) of the type for which you want version summary information.</p> <p>Conditional: You must specify <code>TypeName</code> or <code>Arn</code>.</p>
     pub arn: Option<String>,
@@ -5758,6 +5873,7 @@ impl SetTypeDefaultVersionInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetTypeDefaultVersionOutput {}
 
 struct SetTypeDefaultVersionOutputDeserializer;
@@ -5778,6 +5894,7 @@ impl SetTypeDefaultVersionOutputDeserializer {
 }
 /// <p>The input for the <a>SignalResource</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SignalResourceInput {
     /// <p>The logical ID of the resource that you want to signal. The logical ID is the name of the resource that given in the template.</p>
     pub logical_resource_id: String,
@@ -5810,6 +5927,7 @@ impl SignalResourceInputSerializer {
 
 /// <p>The Stack data type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Stack {
     /// <p>The capabilities allowed in the stack.</p>
     pub capabilities: Option<Vec<String>>,
@@ -6009,6 +6127,7 @@ impl StackDriftDetectionStatusReasonDeserializer {
 }
 /// <p>Contains information about whether the stack's actual configuration differs, or has <i>drifted</i>, from its expected configuration, as defined in the stack template and any values specified as template parameters. A stack is considered to have drifted if one or more of its resources have drifted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackDriftInformation {
     /// <p>Most recent time when a drift detection operation was initiated on the stack, or any of its individual resources that support drift detection.</p>
     pub last_check_timestamp: Option<String>,
@@ -6043,6 +6162,7 @@ impl StackDriftInformationDeserializer {
 }
 /// <p>Contains information about whether the stack's actual configuration differs, or has <i>drifted</i>, from its expected configuration, as defined in the stack template and any values specified as template parameters. A stack is considered to have drifted if one or more of its resources have drifted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackDriftInformationSummary {
     /// <p>Most recent time when a drift detection operation was initiated on the stack, or any of its individual resources that support drift detection.</p>
     pub last_check_timestamp: Option<String>,
@@ -6092,6 +6212,7 @@ impl StackDriftStatusDeserializer {
 }
 /// <p>The StackEvent data type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackEvent {
     /// <p>The token passed to the operation that generated this event.</p> <p>All events triggered by a given stack operation are assigned the same client request token, which you can use to track operations. For example, if you execute a <code>CreateStack</code> operation with the token <code>token1</code>, then all the <code>StackEvents</code> generated by that operation will have <code>ClientRequestToken</code> set as <code>token1</code>.</p> <p>In the console, stack operations display the client request token on the Events tab. Stack operations that are initiated from the console use the token format <i>Console-StackOperation-ID</i>, which helps you easily identify the stack operation . For example, if you create a stack using the console, each stack event would be assigned the same token in the following format: <code>Console-CreateStack-7f59c3cf-00d2-40c7-b2ff-e75db0987002</code>. </p>
     pub client_request_token: Option<String>,
@@ -6217,6 +6338,7 @@ impl StackIdDeserializer {
 }
 /// <p>An AWS CloudFormation stack, in a specific account and region, that's part of a stack set operation. A stack instance is a reference to an attempted or actual stack in a given account within a given region. A stack instance can exist without a stack—for example, if the stack couldn't be created for some reason. A stack instance is associated with only one stack set. Each stack instance contains the ID of its associated stack set, as well as the ID of the actual stack and the stack status.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackInstance {
     /// <p>The name of the AWS account that the stack instance is associated with.</p>
     pub account: Option<String>,
@@ -6324,6 +6446,7 @@ impl StackInstanceSummariesDeserializer {
 }
 /// <p>The structure that contains summary information about a stack instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackInstanceSummary {
     /// <p>The name of the AWS account that the stack instance is associated with.</p>
     pub account: Option<String>,
@@ -6416,6 +6539,7 @@ impl StackPolicyBodyDeserializer {
 }
 /// <p>The StackResource data type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackResource {
     /// <p>User defined description associated with the resource.</p>
     pub description: Option<String>,
@@ -6501,6 +6625,7 @@ impl StackResourceDeserializer {
 }
 /// <p>Contains detailed information about the specified stack resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackResourceDetail {
     /// <p>User defined description associated with the resource.</p>
     pub description: Option<String>,
@@ -6592,6 +6717,7 @@ impl StackResourceDetailDeserializer {
 }
 /// <p>Contains the drift information for a resource that has been checked for drift. This includes actual and expected property values for resources in which AWS CloudFormation has detected drift. Only resource properties explicitly defined in the stack template are checked for drift. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p> <p>Resources that do not currently support drift detection cannot be checked. For a list of resources that support drift detection, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift-resource-list.html">Resources that Support Drift Detection</a>.</p> <p>Use <a>DetectStackResourceDrift</a> to detect drift on individual resources, or <a>DetectStackDrift</a> to detect drift on all resources in a given stack that support drift detection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackResourceDrift {
     /// <p>A JSON structure containing the actual property values of the stack resource.</p> <p>For resources whose <code>StackResourceDriftStatus</code> is <code>DELETED</code>, this structure will not be present. </p>
     pub actual_properties: Option<String>,
@@ -6684,6 +6810,7 @@ impl StackResourceDriftDeserializer {
 }
 /// <p>Contains information about whether the resource's actual configuration differs, or has <i>drifted</i>, from its expected configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackResourceDriftInformation {
     /// <p>When AWS CloudFormation last checked if the resource had drifted from its expected configuration.</p>
     pub last_check_timestamp: Option<String>,
@@ -6725,6 +6852,7 @@ impl StackResourceDriftInformationDeserializer {
 }
 /// <p>Summarizes information about whether the resource's actual configuration differs, or has <i>drifted</i>, from its expected configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackResourceDriftInformationSummary {
     /// <p>When AWS CloudFormation last checked if the resource had drifted from its expected configuration.</p>
     pub last_check_timestamp: Option<String>,
@@ -6827,6 +6955,7 @@ impl StackResourceSummariesDeserializer {
 }
 /// <p>Contains high-level information about the specified stack resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackResourceSummary {
     /// <p>Information about whether the resource's actual configuration differs, or has <i>drifted</i>, from its expected configuration, as defined in the stack template and any values specified as template parameters. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p>
     pub drift_information: Option<StackResourceDriftInformationSummary>,
@@ -6915,6 +7044,7 @@ impl StackResourcesDeserializer {
 }
 /// <p>A structure that contains information about a stack set. A stack set enables you to provision stacks into AWS accounts and across regions by using a single CloudFormation template. In the stack set, you specify the template to use, as well as any parameters and capabilities that the template requires. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackSet {
     /// <p>The Amazon Resource Number (ARN) of the IAM role used to create or update the stack set.</p> <p>Use customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html">Prerequisites: Granting Permissions for Stack Set Operations</a> in the <i>AWS CloudFormation User Guide</i>.</p>
     pub administration_role_arn: Option<String>,
@@ -7031,6 +7161,7 @@ impl StackSetARNDeserializer {
 }
 /// <p>Detailed information about the drift status of the stack set.</p> <p>For stack sets, contains information about the last <i>completed</i> drift operation performed on the stack set. Information about drift operations in-progress is not included. </p> <p>For stack set operations, includes information about drift operations currently being performed on the stack set.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-drift.html">Detecting Unmanaged Changes in Stack Sets</a> in the <i>AWS CloudFormation User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackSetDriftDetectionDetails {
     /// <p><p>The status of the stack set drift detection operation.</p> <ul> <li> <p> <code>COMPLETED</code>: The drift detection operation completed without failing on any stack instances.</p> </li> <li> <p> <code>FAILED</code>: The drift detection operation exceeded the specified failure tolerance. </p> </li> <li> <p> <code>PARTIAL<em>SUCCESS</code>: The drift detection operation completed without exceeding the failure tolerance for the operation.</p> </li> <li> <p> <code>IN</em>PROGRESS</code>: The drift detection operation is currently being performed.</p> </li> <li> <p> <code>STOPPED</code>: The user has cancelled the drift detection operation.</p> </li> </ul></p>
     pub drift_detection_status: Option<String>,
@@ -7169,6 +7300,7 @@ impl StackSetNameDeserializer {
 }
 /// <p>The structure that contains information about a stack set operation. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackSetOperation {
     /// <p>The type of stack set operation: <code>CREATE</code>, <code>UPDATE</code>, or <code>DELETE</code>. Create and delete operations affect only the specified stack set instances that are associated with the specified stack set. Update operations affect both the stack set itself, as well as <i>all</i> associated stack set instances.</p>
     pub action: Option<String>,
@@ -7284,6 +7416,8 @@ impl StackSetOperationActionDeserializer {
 }
 /// <p>The user-specified preferences for how AWS CloudFormation performs a stack set operation. </p> <p>For more information on maximum concurrent accounts and failure tolerance, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html#stackset-ops-options">Stack set operation options</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StackSetOperationPreferences {
     /// <p>The number of accounts, per region, for which this operation can fail before AWS CloudFormation stops the operation in that region. If the operation is stopped in a region, AWS CloudFormation doesn't attempt the operation in any subsequent regions.</p> <p>Conditional: You must specify either <code>FailureToleranceCount</code> or <code>FailureTolerancePercentage</code> (but not both).</p>
     pub failure_tolerance_count: Option<i64>,
@@ -7422,6 +7556,7 @@ impl StackSetOperationResultSummariesDeserializer {
 }
 /// <p>The structure that contains information about a specified operation's results for a given account in a given region.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackSetOperationResultSummary {
     /// <p>The name of the AWS account for this operation result.</p>
     pub account: Option<String>,
@@ -7507,6 +7642,7 @@ impl StackSetOperationSummariesDeserializer {
 }
 /// <p>The structures that contain summary information about the specified operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackSetOperationSummary {
     /// <p>The type of operation: <code>CREATE</code>, <code>UPDATE</code>, or <code>DELETE</code>. Create and delete operations affect only the specified stack instances that are associated with the specified stack set. Update operations affect both the stack set itself as well as <i>all</i> associated stack set instances.</p>
     pub action: Option<String>,
@@ -7595,6 +7731,7 @@ impl StackSetSummariesDeserializer {
 }
 /// <p>The structures that contain summary information about the specified stack set.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackSetSummary {
     /// <p>A description of the stack set that you specify when the stack set is created or updated.</p>
     pub description: Option<String>,
@@ -7707,6 +7844,7 @@ impl StackSummariesDeserializer {
 }
 /// <p>The StackSummary Data Type</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackSummary {
     /// <p>The time the stack was created.</p>
     pub creation_time: String,
@@ -7832,6 +7970,7 @@ impl StageListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopStackSetOperationInput {
     /// <p>The ID of the stack operation. </p>
     pub operation_id: String,
@@ -7857,6 +7996,7 @@ impl StopStackSetOperationInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StopStackSetOperationOutput {}
 
 struct StopStackSetOperationOutputDeserializer;
@@ -7877,6 +8017,8 @@ impl StopStackSetOperationOutputDeserializer {
 }
 /// <p>The Tag type enables you to specify a key-value pair that can be used to store information about an AWS CloudFormation stack.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p> <i>Required</i>. A string used to identify this tag. You can specify a maximum of 128 characters for a tag key. Tags owned by Amazon Web Services (AWS) have the reserved prefix: <code>aws:</code>.</p>
     pub key: String,
@@ -7992,6 +8134,7 @@ impl TemplateDescriptionDeserializer {
 }
 /// <p>The TemplateParameter data type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TemplateParameter {
     /// <p>The default value associated with the parameter.</p>
     pub default_value: Option<String>,
@@ -8189,6 +8332,7 @@ impl TypeSummariesDeserializer {
 }
 /// <p>Contains summary information about the specified CloudFormation type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TypeSummary {
     /// <p>The ID of the default version of the type. The default version is used when the type version is not specified.</p> <p>To set the default version of a type, use <code> <a>SetTypeDefaultVersion</a> </code>. </p>
     pub default_version_id: Option<String>,
@@ -8274,6 +8418,7 @@ impl TypeVersionSummariesDeserializer {
 }
 /// <p>Contains summary information about a specific version of a CloudFormation type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TypeVersionSummary {
     /// <p>The Amazon Resource Name (ARN) of the type version.</p>
     pub arn: Option<String>,
@@ -8327,6 +8472,7 @@ impl TypeVersionSummaryDeserializer {
 }
 /// <p>The input for an <a>UpdateStack</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStackInput {
     /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to update the stack.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some template contain macros. Macros perform custom processing on templates; this can include simple actions like find-and-replace operations, all the way to extensive transformations of entire templates. Because of this, users typically create a change set from the processed template, so that they can review the changes resulting from the macros before actually updating the stack. If your stack template contains one or more macros, and you choose to update a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.</p> <p>Change sets do not currently support nested stacks. If you want to update a stack from a stack template that contains macros <i>and</i> nested stacks, you must update the stack directly from the template using this capability.</p> <important> <p>You should only update stacks directly from a stack template that contains macros if you know what processing the macro performs.</p> <p>Each macro relies on an underlying Lambda service function for processing stack templates. Be aware that the Lambda function owner can update the function operation without AWS CloudFormation being notified.</p> </important> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> </li> </ul></p>
     pub capabilities: Option<Vec<String>>,
@@ -8450,6 +8596,7 @@ impl UpdateStackInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStackInstancesInput {
     /// <p>The names of one or more AWS accounts for which you want to update parameter values for stack instances. The overridden parameter values will be applied to all stack instances in the specified accounts and regions.</p>
     pub accounts: Vec<String>,
@@ -8505,6 +8652,7 @@ impl UpdateStackInstancesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateStackInstancesOutput {
     /// <p>The unique identifier for this stack set operation. </p>
     pub operation_id: Option<String>,
@@ -8537,6 +8685,7 @@ impl UpdateStackInstancesOutputDeserializer {
 }
 /// <p>The output for an <a>UpdateStack</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateStackOutput {
     /// <p>Unique identifier of the stack.</p>
     pub stack_id: Option<String>,
@@ -8561,6 +8710,7 @@ impl UpdateStackOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStackSetInput {
     /// <p>The accounts in which to update associated stack instances. If you specify accounts, you must also specify the regions in which to update stack set instances.</p> <p>To update <i>all</i> the stack instances associated with this stack set, do not specify the <code>Accounts</code> or <code>Regions</code> properties.</p> <p>If the stack set update includes changes to the template (that is, if the <code>TemplateBody</code> or <code>TemplateURL</code> properties are specified), or the <code>Parameters</code> property, AWS CloudFormation marks all stack instances with a status of <code>OUTDATED</code> prior to updating the stack instances in the specified accounts and regions. If the stack set update does not include changes to the template or parameters, AWS CloudFormation updates the stack instances in the specified accounts and regions, while leaving all other stack instances with their existing stack instance status. </p>
     pub accounts: Option<Vec<String>>,
@@ -8674,6 +8824,7 @@ impl UpdateStackSetInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateStackSetOutput {
     /// <p>The unique ID for this stack set operation.</p>
     pub operation_id: Option<String>,
@@ -8701,6 +8852,7 @@ impl UpdateStackSetOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTerminationProtectionInput {
     /// <p>Whether to enable termination protection on the specified stack.</p>
     pub enable_termination_protection: bool,
@@ -8726,6 +8878,7 @@ impl UpdateTerminationProtectionInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateTerminationProtectionOutput {
     /// <p>The unique ID of the stack.</p>
     pub stack_id: Option<String>,
@@ -8777,6 +8930,7 @@ impl UsePreviousValueDeserializer {
 }
 /// <p>The input for <a>ValidateTemplate</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateTemplateInput {
     /// <p>Structure containing the template body with a minimum length of 1 byte and a maximum length of 51,200 bytes. For more information, go to <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html">Template Anatomy</a> in the AWS CloudFormation User Guide.</p> <p>Conditional: You must pass <code>TemplateURL</code> or <code>TemplateBody</code>. If both are passed, only <code>TemplateBody</code> is used.</p>
     pub template_body: Option<String>,
@@ -8804,6 +8958,7 @@ impl ValidateTemplateInputSerializer {
 
 /// <p>The output for <a>ValidateTemplate</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ValidateTemplateOutput {
     /// <p>The capabilities found within the template. If your template contains IAM resources, you must specify the CAPABILITY_IAM or CAPABILITY_NAMED_IAM value for this parameter when you use the <a>CreateStack</a> or <a>UpdateStack</a> actions with your template; otherwise, those actions return an InsufficientCapabilities error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>
     pub capabilities: Option<Vec<String>>,
@@ -8927,16 +9082,12 @@ impl CancelUpdateStackError {
 }
 impl fmt::Display for CancelUpdateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelUpdateStackError {
-    fn description(&self) -> &str {
         match *self {
-            CancelUpdateStackError::TokenAlreadyExists(ref cause) => cause,
+            CancelUpdateStackError::TokenAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelUpdateStackError {}
 /// Errors returned by ContinueUpdateRollback
 #[derive(Debug, PartialEq)]
 pub enum ContinueUpdateRollbackError {
@@ -8974,16 +9125,12 @@ impl ContinueUpdateRollbackError {
 }
 impl fmt::Display for ContinueUpdateRollbackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ContinueUpdateRollbackError {
-    fn description(&self) -> &str {
         match *self {
-            ContinueUpdateRollbackError::TokenAlreadyExists(ref cause) => cause,
+            ContinueUpdateRollbackError::TokenAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ContinueUpdateRollbackError {}
 /// Errors returned by CreateChangeSet
 #[derive(Debug, PartialEq)]
 pub enum CreateChangeSetError {
@@ -9035,18 +9182,14 @@ impl CreateChangeSetError {
 }
 impl fmt::Display for CreateChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateChangeSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateChangeSetError::AlreadyExists(ref cause) => cause,
-            CreateChangeSetError::InsufficientCapabilities(ref cause) => cause,
-            CreateChangeSetError::LimitExceeded(ref cause) => cause,
+            CreateChangeSetError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateChangeSetError::InsufficientCapabilities(ref cause) => write!(f, "{}", cause),
+            CreateChangeSetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateChangeSetError {}
 /// Errors returned by CreateStack
 #[derive(Debug, PartialEq)]
 pub enum CreateStackError {
@@ -9105,19 +9248,15 @@ impl CreateStackError {
 }
 impl fmt::Display for CreateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStackError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStackError::AlreadyExists(ref cause) => cause,
-            CreateStackError::InsufficientCapabilities(ref cause) => cause,
-            CreateStackError::LimitExceeded(ref cause) => cause,
-            CreateStackError::TokenAlreadyExists(ref cause) => cause,
+            CreateStackError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateStackError::InsufficientCapabilities(ref cause) => write!(f, "{}", cause),
+            CreateStackError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStackError::TokenAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStackError {}
 /// Errors returned by CreateStackInstances
 #[derive(Debug, PartialEq)]
 pub enum CreateStackInstancesError {
@@ -9192,21 +9331,19 @@ impl CreateStackInstancesError {
 }
 impl fmt::Display for CreateStackInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStackInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStackInstancesError::InvalidOperation(ref cause) => cause,
-            CreateStackInstancesError::LimitExceeded(ref cause) => cause,
-            CreateStackInstancesError::OperationIdAlreadyExists(ref cause) => cause,
-            CreateStackInstancesError::OperationInProgress(ref cause) => cause,
-            CreateStackInstancesError::StackSetNotFound(ref cause) => cause,
-            CreateStackInstancesError::StaleRequest(ref cause) => cause,
+            CreateStackInstancesError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            CreateStackInstancesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStackInstancesError::OperationIdAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStackInstancesError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            CreateStackInstancesError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
+            CreateStackInstancesError::StaleRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStackInstancesError {}
 /// Errors returned by CreateStackSet
 #[derive(Debug, PartialEq)]
 pub enum CreateStackSetError {
@@ -9258,18 +9395,14 @@ impl CreateStackSetError {
 }
 impl fmt::Display for CreateStackSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStackSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStackSetError::CreatedButModified(ref cause) => cause,
-            CreateStackSetError::LimitExceeded(ref cause) => cause,
-            CreateStackSetError::NameAlreadyExists(ref cause) => cause,
+            CreateStackSetError::CreatedButModified(ref cause) => write!(f, "{}", cause),
+            CreateStackSetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStackSetError::NameAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStackSetError {}
 /// Errors returned by DeleteChangeSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteChangeSetError {
@@ -9307,16 +9440,12 @@ impl DeleteChangeSetError {
 }
 impl fmt::Display for DeleteChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteChangeSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteChangeSetError::InvalidChangeSetStatus(ref cause) => cause,
+            DeleteChangeSetError::InvalidChangeSetStatus(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteChangeSetError {}
 /// Errors returned by DeleteStack
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackError {
@@ -9354,16 +9483,12 @@ impl DeleteStackError {
 }
 impl fmt::Display for DeleteStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStackError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStackError::TokenAlreadyExists(ref cause) => cause,
+            DeleteStackError::TokenAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStackError {}
 /// Errors returned by DeleteStackInstances
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackInstancesError {
@@ -9431,20 +9556,18 @@ impl DeleteStackInstancesError {
 }
 impl fmt::Display for DeleteStackInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStackInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStackInstancesError::InvalidOperation(ref cause) => cause,
-            DeleteStackInstancesError::OperationIdAlreadyExists(ref cause) => cause,
-            DeleteStackInstancesError::OperationInProgress(ref cause) => cause,
-            DeleteStackInstancesError::StackSetNotFound(ref cause) => cause,
-            DeleteStackInstancesError::StaleRequest(ref cause) => cause,
+            DeleteStackInstancesError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            DeleteStackInstancesError::OperationIdAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteStackInstancesError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteStackInstancesError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteStackInstancesError::StaleRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStackInstancesError {}
 /// Errors returned by DeleteStackSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackSetError {
@@ -9489,17 +9612,13 @@ impl DeleteStackSetError {
 }
 impl fmt::Display for DeleteStackSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStackSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStackSetError::OperationInProgress(ref cause) => cause,
-            DeleteStackSetError::StackSetNotEmpty(ref cause) => cause,
+            DeleteStackSetError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteStackSetError::StackSetNotEmpty(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStackSetError {}
 /// Errors returned by DeregisterType
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTypeError {
@@ -9544,17 +9663,13 @@ impl DeregisterTypeError {
 }
 impl fmt::Display for DeregisterTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterTypeError::CFNRegistry(ref cause) => cause,
-            DeregisterTypeError::TypeNotFound(ref cause) => cause,
+            DeregisterTypeError::CFNRegistry(ref cause) => write!(f, "{}", cause),
+            DeregisterTypeError::TypeNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterTypeError {}
 /// Errors returned by DescribeAccountLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountLimitsError {}
@@ -9584,14 +9699,10 @@ impl DescribeAccountLimitsError {
 }
 impl fmt::Display for DescribeAccountLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountLimitsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAccountLimitsError {}
 /// Errors returned by DescribeChangeSet
 #[derive(Debug, PartialEq)]
 pub enum DescribeChangeSetError {
@@ -9629,16 +9740,12 @@ impl DescribeChangeSetError {
 }
 impl fmt::Display for DescribeChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeChangeSetError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeChangeSetError::ChangeSetNotFound(ref cause) => cause,
+            DescribeChangeSetError::ChangeSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeChangeSetError {}
 /// Errors returned by DescribeStackDriftDetectionStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackDriftDetectionStatusError {}
@@ -9670,14 +9777,10 @@ impl DescribeStackDriftDetectionStatusError {
 }
 impl fmt::Display for DescribeStackDriftDetectionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackDriftDetectionStatusError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStackDriftDetectionStatusError {}
 /// Errors returned by DescribeStackEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackEventsError {}
@@ -9707,14 +9810,10 @@ impl DescribeStackEventsError {
 }
 impl fmt::Display for DescribeStackEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackEventsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStackEventsError {}
 /// Errors returned by DescribeStackInstance
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackInstanceError {
@@ -9759,17 +9858,13 @@ impl DescribeStackInstanceError {
 }
 impl fmt::Display for DescribeStackInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStackInstanceError::StackInstanceNotFound(ref cause) => cause,
-            DescribeStackInstanceError::StackSetNotFound(ref cause) => cause,
+            DescribeStackInstanceError::StackInstanceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeStackInstanceError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStackInstanceError {}
 /// Errors returned by DescribeStackResource
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackResourceError {}
@@ -9799,14 +9894,10 @@ impl DescribeStackResourceError {
 }
 impl fmt::Display for DescribeStackResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackResourceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStackResourceError {}
 /// Errors returned by DescribeStackResourceDrifts
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackResourceDriftsError {}
@@ -9838,14 +9929,10 @@ impl DescribeStackResourceDriftsError {
 }
 impl fmt::Display for DescribeStackResourceDriftsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackResourceDriftsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStackResourceDriftsError {}
 /// Errors returned by DescribeStackResources
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackResourcesError {}
@@ -9875,14 +9962,10 @@ impl DescribeStackResourcesError {
 }
 impl fmt::Display for DescribeStackResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackResourcesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStackResourcesError {}
 /// Errors returned by DescribeStackSet
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackSetError {
@@ -9920,16 +10003,12 @@ impl DescribeStackSetError {
 }
 impl fmt::Display for DescribeStackSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackSetError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStackSetError::StackSetNotFound(ref cause) => cause,
+            DescribeStackSetError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStackSetError {}
 /// Errors returned by DescribeStackSetOperation
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackSetOperationError {
@@ -9974,17 +10053,13 @@ impl DescribeStackSetOperationError {
 }
 impl fmt::Display for DescribeStackSetOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackSetOperationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStackSetOperationError::OperationNotFound(ref cause) => cause,
-            DescribeStackSetOperationError::StackSetNotFound(ref cause) => cause,
+            DescribeStackSetOperationError::OperationNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeStackSetOperationError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStackSetOperationError {}
 /// Errors returned by DescribeStacks
 #[derive(Debug, PartialEq)]
 pub enum DescribeStacksError {}
@@ -10014,14 +10089,10 @@ impl DescribeStacksError {
 }
 impl fmt::Display for DescribeStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStacksError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStacksError {}
 /// Errors returned by DescribeType
 #[derive(Debug, PartialEq)]
 pub enum DescribeTypeError {
@@ -10066,17 +10137,13 @@ impl DescribeTypeError {
 }
 impl fmt::Display for DescribeTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTypeError::CFNRegistry(ref cause) => cause,
-            DescribeTypeError::TypeNotFound(ref cause) => cause,
+            DescribeTypeError::CFNRegistry(ref cause) => write!(f, "{}", cause),
+            DescribeTypeError::TypeNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTypeError {}
 /// Errors returned by DescribeTypeRegistration
 #[derive(Debug, PartialEq)]
 pub enum DescribeTypeRegistrationError {
@@ -10114,16 +10181,12 @@ impl DescribeTypeRegistrationError {
 }
 impl fmt::Display for DescribeTypeRegistrationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTypeRegistrationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTypeRegistrationError::CFNRegistry(ref cause) => cause,
+            DescribeTypeRegistrationError::CFNRegistry(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTypeRegistrationError {}
 /// Errors returned by DetectStackDrift
 #[derive(Debug, PartialEq)]
 pub enum DetectStackDriftError {}
@@ -10153,14 +10216,10 @@ impl DetectStackDriftError {
 }
 impl fmt::Display for DetectStackDriftError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectStackDriftError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DetectStackDriftError {}
 /// Errors returned by DetectStackResourceDrift
 #[derive(Debug, PartialEq)]
 pub enum DetectStackResourceDriftError {}
@@ -10190,14 +10249,10 @@ impl DetectStackResourceDriftError {
 }
 impl fmt::Display for DetectStackResourceDriftError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectStackResourceDriftError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DetectStackResourceDriftError {}
 /// Errors returned by DetectStackSetDrift
 #[derive(Debug, PartialEq)]
 pub enum DetectStackSetDriftError {
@@ -10249,18 +10304,14 @@ impl DetectStackSetDriftError {
 }
 impl fmt::Display for DetectStackSetDriftError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectStackSetDriftError {
-    fn description(&self) -> &str {
         match *self {
-            DetectStackSetDriftError::InvalidOperation(ref cause) => cause,
-            DetectStackSetDriftError::OperationInProgress(ref cause) => cause,
-            DetectStackSetDriftError::StackSetNotFound(ref cause) => cause,
+            DetectStackSetDriftError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            DetectStackSetDriftError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            DetectStackSetDriftError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectStackSetDriftError {}
 /// Errors returned by EstimateTemplateCost
 #[derive(Debug, PartialEq)]
 pub enum EstimateTemplateCostError {}
@@ -10290,14 +10341,10 @@ impl EstimateTemplateCostError {
 }
 impl fmt::Display for EstimateTemplateCostError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EstimateTemplateCostError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for EstimateTemplateCostError {}
 /// Errors returned by ExecuteChangeSet
 #[derive(Debug, PartialEq)]
 pub enum ExecuteChangeSetError {
@@ -10356,19 +10403,15 @@ impl ExecuteChangeSetError {
 }
 impl fmt::Display for ExecuteChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExecuteChangeSetError {
-    fn description(&self) -> &str {
         match *self {
-            ExecuteChangeSetError::ChangeSetNotFound(ref cause) => cause,
-            ExecuteChangeSetError::InsufficientCapabilities(ref cause) => cause,
-            ExecuteChangeSetError::InvalidChangeSetStatus(ref cause) => cause,
-            ExecuteChangeSetError::TokenAlreadyExists(ref cause) => cause,
+            ExecuteChangeSetError::ChangeSetNotFound(ref cause) => write!(f, "{}", cause),
+            ExecuteChangeSetError::InsufficientCapabilities(ref cause) => write!(f, "{}", cause),
+            ExecuteChangeSetError::InvalidChangeSetStatus(ref cause) => write!(f, "{}", cause),
+            ExecuteChangeSetError::TokenAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExecuteChangeSetError {}
 /// Errors returned by GetStackPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetStackPolicyError {}
@@ -10398,14 +10441,10 @@ impl GetStackPolicyError {
 }
 impl fmt::Display for GetStackPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStackPolicyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetStackPolicyError {}
 /// Errors returned by GetTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetTemplateError {
@@ -10443,16 +10482,12 @@ impl GetTemplateError {
 }
 impl fmt::Display for GetTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            GetTemplateError::ChangeSetNotFound(ref cause) => cause,
+            GetTemplateError::ChangeSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTemplateError {}
 /// Errors returned by GetTemplateSummary
 #[derive(Debug, PartialEq)]
 pub enum GetTemplateSummaryError {
@@ -10490,16 +10525,12 @@ impl GetTemplateSummaryError {
 }
 impl fmt::Display for GetTemplateSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTemplateSummaryError {
-    fn description(&self) -> &str {
         match *self {
-            GetTemplateSummaryError::StackSetNotFound(ref cause) => cause,
+            GetTemplateSummaryError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTemplateSummaryError {}
 /// Errors returned by ListChangeSets
 #[derive(Debug, PartialEq)]
 pub enum ListChangeSetsError {}
@@ -10529,14 +10560,10 @@ impl ListChangeSetsError {
 }
 impl fmt::Display for ListChangeSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListChangeSetsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListChangeSetsError {}
 /// Errors returned by ListExports
 #[derive(Debug, PartialEq)]
 pub enum ListExportsError {}
@@ -10566,14 +10593,10 @@ impl ListExportsError {
 }
 impl fmt::Display for ListExportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListExportsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListExportsError {}
 /// Errors returned by ListImports
 #[derive(Debug, PartialEq)]
 pub enum ListImportsError {}
@@ -10603,14 +10626,10 @@ impl ListImportsError {
 }
 impl fmt::Display for ListImportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListImportsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListImportsError {}
 /// Errors returned by ListStackInstances
 #[derive(Debug, PartialEq)]
 pub enum ListStackInstancesError {
@@ -10648,16 +10667,12 @@ impl ListStackInstancesError {
 }
 impl fmt::Display for ListStackInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStackInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            ListStackInstancesError::StackSetNotFound(ref cause) => cause,
+            ListStackInstancesError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStackInstancesError {}
 /// Errors returned by ListStackResources
 #[derive(Debug, PartialEq)]
 pub enum ListStackResourcesError {}
@@ -10687,14 +10702,10 @@ impl ListStackResourcesError {
 }
 impl fmt::Display for ListStackResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStackResourcesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListStackResourcesError {}
 /// Errors returned by ListStackSetOperationResults
 #[derive(Debug, PartialEq)]
 pub enum ListStackSetOperationResultsError {
@@ -10745,17 +10756,17 @@ impl ListStackSetOperationResultsError {
 }
 impl fmt::Display for ListStackSetOperationResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStackSetOperationResultsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStackSetOperationResultsError::OperationNotFound(ref cause) => cause,
-            ListStackSetOperationResultsError::StackSetNotFound(ref cause) => cause,
+            ListStackSetOperationResultsError::OperationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListStackSetOperationResultsError::StackSetNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListStackSetOperationResultsError {}
 /// Errors returned by ListStackSetOperations
 #[derive(Debug, PartialEq)]
 pub enum ListStackSetOperationsError {
@@ -10793,16 +10804,12 @@ impl ListStackSetOperationsError {
 }
 impl fmt::Display for ListStackSetOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStackSetOperationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStackSetOperationsError::StackSetNotFound(ref cause) => cause,
+            ListStackSetOperationsError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStackSetOperationsError {}
 /// Errors returned by ListStackSets
 #[derive(Debug, PartialEq)]
 pub enum ListStackSetsError {}
@@ -10832,14 +10839,10 @@ impl ListStackSetsError {
 }
 impl fmt::Display for ListStackSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStackSetsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListStackSetsError {}
 /// Errors returned by ListStacks
 #[derive(Debug, PartialEq)]
 pub enum ListStacksError {}
@@ -10869,14 +10872,10 @@ impl ListStacksError {
 }
 impl fmt::Display for ListStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStacksError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListStacksError {}
 /// Errors returned by ListTypeRegistrations
 #[derive(Debug, PartialEq)]
 pub enum ListTypeRegistrationsError {
@@ -10914,16 +10913,12 @@ impl ListTypeRegistrationsError {
 }
 impl fmt::Display for ListTypeRegistrationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTypeRegistrationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTypeRegistrationsError::CFNRegistry(ref cause) => cause,
+            ListTypeRegistrationsError::CFNRegistry(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTypeRegistrationsError {}
 /// Errors returned by ListTypeVersions
 #[derive(Debug, PartialEq)]
 pub enum ListTypeVersionsError {
@@ -10961,16 +10956,12 @@ impl ListTypeVersionsError {
 }
 impl fmt::Display for ListTypeVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTypeVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTypeVersionsError::CFNRegistry(ref cause) => cause,
+            ListTypeVersionsError::CFNRegistry(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTypeVersionsError {}
 /// Errors returned by ListTypes
 #[derive(Debug, PartialEq)]
 pub enum ListTypesError {
@@ -11008,16 +10999,12 @@ impl ListTypesError {
 }
 impl fmt::Display for ListTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTypesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTypesError::CFNRegistry(ref cause) => cause,
+            ListTypesError::CFNRegistry(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTypesError {}
 /// Errors returned by RecordHandlerProgress
 #[derive(Debug, PartialEq)]
 pub enum RecordHandlerProgressError {
@@ -11066,17 +11053,15 @@ impl RecordHandlerProgressError {
 }
 impl fmt::Display for RecordHandlerProgressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RecordHandlerProgressError {
-    fn description(&self) -> &str {
         match *self {
-            RecordHandlerProgressError::InvalidStateTransition(ref cause) => cause,
-            RecordHandlerProgressError::OperationStatusCheckFailed(ref cause) => cause,
+            RecordHandlerProgressError::InvalidStateTransition(ref cause) => write!(f, "{}", cause),
+            RecordHandlerProgressError::OperationStatusCheckFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RecordHandlerProgressError {}
 /// Errors returned by RegisterType
 #[derive(Debug, PartialEq)]
 pub enum RegisterTypeError {
@@ -11114,16 +11099,12 @@ impl RegisterTypeError {
 }
 impl fmt::Display for RegisterTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterTypeError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterTypeError::CFNRegistry(ref cause) => cause,
+            RegisterTypeError::CFNRegistry(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterTypeError {}
 /// Errors returned by SetStackPolicy
 #[derive(Debug, PartialEq)]
 pub enum SetStackPolicyError {}
@@ -11153,14 +11134,10 @@ impl SetStackPolicyError {
 }
 impl fmt::Display for SetStackPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetStackPolicyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SetStackPolicyError {}
 /// Errors returned by SetTypeDefaultVersion
 #[derive(Debug, PartialEq)]
 pub enum SetTypeDefaultVersionError {
@@ -11205,17 +11182,13 @@ impl SetTypeDefaultVersionError {
 }
 impl fmt::Display for SetTypeDefaultVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetTypeDefaultVersionError {
-    fn description(&self) -> &str {
         match *self {
-            SetTypeDefaultVersionError::CFNRegistry(ref cause) => cause,
-            SetTypeDefaultVersionError::TypeNotFound(ref cause) => cause,
+            SetTypeDefaultVersionError::CFNRegistry(ref cause) => write!(f, "{}", cause),
+            SetTypeDefaultVersionError::TypeNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetTypeDefaultVersionError {}
 /// Errors returned by SignalResource
 #[derive(Debug, PartialEq)]
 pub enum SignalResourceError {}
@@ -11245,14 +11218,10 @@ impl SignalResourceError {
 }
 impl fmt::Display for SignalResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SignalResourceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SignalResourceError {}
 /// Errors returned by StopStackSetOperation
 #[derive(Debug, PartialEq)]
 pub enum StopStackSetOperationError {
@@ -11304,18 +11273,14 @@ impl StopStackSetOperationError {
 }
 impl fmt::Display for StopStackSetOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopStackSetOperationError {
-    fn description(&self) -> &str {
         match *self {
-            StopStackSetOperationError::InvalidOperation(ref cause) => cause,
-            StopStackSetOperationError::OperationNotFound(ref cause) => cause,
-            StopStackSetOperationError::StackSetNotFound(ref cause) => cause,
+            StopStackSetOperationError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            StopStackSetOperationError::OperationNotFound(ref cause) => write!(f, "{}", cause),
+            StopStackSetOperationError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopStackSetOperationError {}
 /// Errors returned by UpdateStack
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackError {
@@ -11360,17 +11325,13 @@ impl UpdateStackError {
 }
 impl fmt::Display for UpdateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStackError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStackError::InsufficientCapabilities(ref cause) => cause,
-            UpdateStackError::TokenAlreadyExists(ref cause) => cause,
+            UpdateStackError::InsufficientCapabilities(ref cause) => write!(f, "{}", cause),
+            UpdateStackError::TokenAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStackError {}
 /// Errors returned by UpdateStackInstances
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackInstancesError {
@@ -11445,21 +11406,19 @@ impl UpdateStackInstancesError {
 }
 impl fmt::Display for UpdateStackInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStackInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStackInstancesError::InvalidOperation(ref cause) => cause,
-            UpdateStackInstancesError::OperationIdAlreadyExists(ref cause) => cause,
-            UpdateStackInstancesError::OperationInProgress(ref cause) => cause,
-            UpdateStackInstancesError::StackInstanceNotFound(ref cause) => cause,
-            UpdateStackInstancesError::StackSetNotFound(ref cause) => cause,
-            UpdateStackInstancesError::StaleRequest(ref cause) => cause,
+            UpdateStackInstancesError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateStackInstancesError::OperationIdAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStackInstancesError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            UpdateStackInstancesError::StackInstanceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStackInstancesError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStackInstancesError::StaleRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStackInstancesError {}
 /// Errors returned by UpdateStackSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackSetError {
@@ -11532,21 +11491,17 @@ impl UpdateStackSetError {
 }
 impl fmt::Display for UpdateStackSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStackSetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStackSetError::InvalidOperation(ref cause) => cause,
-            UpdateStackSetError::OperationIdAlreadyExists(ref cause) => cause,
-            UpdateStackSetError::OperationInProgress(ref cause) => cause,
-            UpdateStackSetError::StackInstanceNotFound(ref cause) => cause,
-            UpdateStackSetError::StackSetNotFound(ref cause) => cause,
-            UpdateStackSetError::StaleRequest(ref cause) => cause,
+            UpdateStackSetError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateStackSetError::OperationIdAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateStackSetError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            UpdateStackSetError::StackInstanceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStackSetError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStackSetError::StaleRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStackSetError {}
 /// Errors returned by UpdateTerminationProtection
 #[derive(Debug, PartialEq)]
 pub enum UpdateTerminationProtectionError {}
@@ -11578,14 +11533,10 @@ impl UpdateTerminationProtectionError {
 }
 impl fmt::Display for UpdateTerminationProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTerminationProtectionError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UpdateTerminationProtectionError {}
 /// Errors returned by ValidateTemplate
 #[derive(Debug, PartialEq)]
 pub enum ValidateTemplateError {}
@@ -11615,14 +11566,10 @@ impl ValidateTemplateError {
 }
 impl fmt::Display for ValidateTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ValidateTemplateError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ValidateTemplateError {}
 /// Trait representing the capabilities of the AWS CloudFormation API. AWS CloudFormation clients implement this trait.
 pub trait CloudFormation {
     /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>

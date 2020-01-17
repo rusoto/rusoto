@@ -141,6 +141,7 @@ pub struct Hits {
 
 /// <p>Container for the parameters to the <code>Search</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchRequest {
     /// <p>Retrieves a cursor value you can use to page through large result sets. Use the <code>size</code> parameter to control the number of hits to include in each response. You can specify either the <code>cursor</code> or <code>start</code> parameter in a request; they are mutually exclusive. To get the first cursor, set the cursor value to <code>initial</code>. In subsequent requests, specify the cursor value returned in the hits section of the response. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/paginating-results.html">Paginating Results</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     #[serde(rename = "cursor")]
@@ -255,6 +256,7 @@ pub struct SuggestModel {
 
 /// <p>Container for the parameters to the <code>Suggest</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SuggestRequest {
     /// <p>Specifies the string for which you want to get suggestions.</p>
     #[serde(rename = "query")]
@@ -316,6 +318,7 @@ pub struct SuggestionMatch {
 
 /// <p>Container for the parameters to the <code>UploadDocuments</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadDocumentsRequest {
     /// <p><p>The format of the batch you are uploading. Amazon CloudSearch supports two document batch formats:</p> <ul> <li>application/json</li> <li>application/xml</li> </ul></p>
     #[serde(rename = "contentType")]
@@ -373,16 +376,12 @@ impl SearchError {
 }
 impl fmt::Display for SearchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchError {
-    fn description(&self) -> &str {
         match *self {
-            SearchError::Search(ref cause) => cause,
+            SearchError::Search(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SearchError {}
 /// Errors returned by Suggest
 #[derive(Debug, PartialEq)]
 pub enum SuggestError {
@@ -404,16 +403,12 @@ impl SuggestError {
 }
 impl fmt::Display for SuggestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SuggestError {
-    fn description(&self) -> &str {
         match *self {
-            SuggestError::Search(ref cause) => cause,
+            SuggestError::Search(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SuggestError {}
 /// Errors returned by UploadDocuments
 #[derive(Debug, PartialEq)]
 pub enum UploadDocumentsError {
@@ -437,16 +432,12 @@ impl UploadDocumentsError {
 }
 impl fmt::Display for UploadDocumentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadDocumentsError {
-    fn description(&self) -> &str {
         match *self {
-            UploadDocumentsError::DocumentService(ref cause) => cause,
+            UploadDocumentsError::DocumentService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UploadDocumentsError {}
 /// Trait representing the capabilities of the Amazon CloudSearch Domain API. Amazon CloudSearch Domain clients implement this trait.
 pub trait CloudSearchDomain {
     /// <p>Retrieves a list of documents that match the specified search criteria. How you specify the search criteria depends on which query parser you use. Amazon CloudSearch supports four query parsers:</p> <ul> <li><code>simple</code>: search all <code>text</code> and <code>text-array</code> fields for the specified string. Search for phrases, individual terms, and prefixes. </li> <li><code>structured</code>: search specific fields, construct compound queries using Boolean operators, and use advanced features such as term boosting and proximity searching.</li> <li><code>lucene</code>: specify search criteria using the Apache Lucene query parser syntax.</li> <li><code>dismax</code>: specify search criteria using the simplified subset of the Apache Lucene query parser syntax defined by the DisMax query parser.</li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/searching.html">Searching Your Data</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p> <p>The endpoint for submitting <code>Search</code> requests is domain-specific. You submit search requests to a domain's search endpoint. To get the search endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p>

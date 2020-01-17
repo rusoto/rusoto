@@ -57,6 +57,7 @@ impl ActionsListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddPermissionInput {
     /// <p>The AWS account IDs of the users (principals) who will be given access to the specified actions. The users must have AWS accounts, but do not need to be signed up for this service.</p>
     pub aws_account_id: Vec<String>,
@@ -127,6 +128,7 @@ impl BooleanDeserializer {
 }
 /// <p>The input for the <code>CheckIfPhoneNumberIsOptedOut</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckIfPhoneNumberIsOptedOutInput {
     /// <p>The phone number for which you want to check the opt out status.</p>
     pub phone_number: String,
@@ -147,6 +149,7 @@ impl CheckIfPhoneNumberIsOptedOutInputSerializer {
 
 /// <p>The response from the <code>CheckIfPhoneNumberIsOptedOut</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CheckIfPhoneNumberIsOptedOutResponse {
     /// <p><p>Indicates whether the phone number is opted out:</p> <ul> <li> <p> <code>true</code> – The phone number is opted out, meaning you cannot publish SMS messages to it.</p> </li> <li> <p> <code>false</code> – The phone number is opted in, meaning you can publish SMS messages to it.</p> </li> </ul></p>
     pub is_opted_out: Option<bool>,
@@ -177,6 +180,7 @@ impl CheckIfPhoneNumberIsOptedOutResponseDeserializer {
 }
 /// <p>Input for ConfirmSubscription action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmSubscriptionInput {
     /// <p>Disallows unauthenticated unsubscribes of the subscription. If the value of this parameter is <code>true</code> and the request has an AWS signature, then only the topic owner and the subscription owner can unsubscribe the endpoint. The unsubscribe action requires AWS authentication. </p>
     pub authenticate_on_unsubscribe: Option<String>,
@@ -208,6 +212,7 @@ impl ConfirmSubscriptionInputSerializer {
 
 /// <p>Response for ConfirmSubscriptions action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfirmSubscriptionResponse {
     /// <p>The ARN of the created subscription.</p>
     pub subscription_arn: Option<String>,
@@ -240,6 +245,7 @@ impl ConfirmSubscriptionResponseDeserializer {
 }
 /// <p>Response from CreateEndpoint action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateEndpointResponse {
     /// <p>EndpointArn returned from CreateEndpoint action.</p>
     pub endpoint_arn: Option<String>,
@@ -265,6 +271,7 @@ impl CreateEndpointResponseDeserializer {
 }
 /// <p>Input for CreatePlatformApplication action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlatformApplicationInput {
     /// <p>For a list of attributes, see <a href="https://docs.aws.amazon.com/sns/latest/api/API_SetPlatformApplicationAttributes.html">SetPlatformApplicationAttributes</a> </p>
     pub attributes: ::std::collections::HashMap<String, String>,
@@ -295,6 +302,7 @@ impl CreatePlatformApplicationInputSerializer {
 
 /// <p>Response from CreatePlatformApplication action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePlatformApplicationResponse {
     /// <p>PlatformApplicationArn is returned.</p>
     pub platform_application_arn: Option<String>,
@@ -327,6 +335,7 @@ impl CreatePlatformApplicationResponseDeserializer {
 }
 /// <p>Input for CreatePlatformEndpoint action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlatformEndpointInput {
     /// <p>For a list of attributes, see <a href="https://docs.aws.amazon.com/sns/latest/api/API_SetEndpointAttributes.html">SetEndpointAttributes</a>.</p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -367,6 +376,7 @@ impl CreatePlatformEndpointInputSerializer {
 
 /// <p>Input for CreateTopic action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTopicInput {
     /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>CreateTopic</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>DisplayName</code> – The display name to use for a topic with SMS subscriptions.</p> </li> <li> <p> <code>Policy</code> – The policy that defines who can access your topic. By default, only the topic owner can publish or subscribe to the topic.</p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> - The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms">Key Terms</a>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>. </p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -401,6 +411,7 @@ impl CreateTopicInputSerializer {
 
 /// <p>Response from CreateTopic action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTopicResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the created topic.</p>
     pub topic_arn: Option<String>,
@@ -438,6 +449,7 @@ impl DelegatesListSerializer {
 
 /// <p>Input for DeleteEndpoint action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointInput {
     /// <p>EndpointArn of endpoint to delete.</p>
     pub endpoint_arn: String,
@@ -458,6 +470,7 @@ impl DeleteEndpointInputSerializer {
 
 /// <p>Input for DeletePlatformApplication action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePlatformApplicationInput {
     /// <p>PlatformApplicationArn of platform application object to delete.</p>
     pub platform_application_arn: String,
@@ -480,6 +493,7 @@ impl DeletePlatformApplicationInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTopicInput {
     /// <p>The ARN of the topic you want to delete.</p>
     pub topic_arn: String,
@@ -511,6 +525,7 @@ impl EndpointDeserializer {
 }
 /// <p>Input for GetEndpointAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEndpointAttributesInput {
     /// <p>EndpointArn for GetEndpointAttributes input.</p>
     pub endpoint_arn: String,
@@ -531,6 +546,7 @@ impl GetEndpointAttributesInputSerializer {
 
 /// <p>Response from GetEndpointAttributes of the EndpointArn.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetEndpointAttributesResponse {
     /// <p><p>Attributes include the following:</p> <ul> <li> <p> <code>CustomUserData</code> – arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> – flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> – device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> <note> <p>The device token for the iOS platform is returned in lowercase.</p> </note> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -563,6 +579,7 @@ impl GetEndpointAttributesResponseDeserializer {
 }
 /// <p>Input for GetPlatformApplicationAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPlatformApplicationAttributesInput {
     /// <p>PlatformApplicationArn for GetPlatformApplicationAttributesInput.</p>
     pub platform_application_arn: String,
@@ -586,6 +603,7 @@ impl GetPlatformApplicationAttributesInputSerializer {
 
 /// <p>Response for GetPlatformApplicationAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPlatformApplicationAttributesResponse {
     /// <p><p>Attributes include the following:</p> <ul> <li> <p> <code>EventEndpointCreated</code> – Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> – Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> – Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> – Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application&#39;s endpoints.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -618,6 +636,7 @@ impl GetPlatformApplicationAttributesResponseDeserializer {
 }
 /// <p>The input for the <code>GetSMSAttributes</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSMSAttributesInput {
     /// <p>A list of the individual attribute names, such as <code>MonthlySpendLimit</code>, for which you want values.</p> <p>For all attribute names, see <a href="https://docs.aws.amazon.com/sns/latest/api/API_SetSMSAttributes.html">SetSMSAttributes</a>.</p> <p>If you don't use this parameter, Amazon SNS returns all SMS attributes.</p>
     pub attributes: Option<Vec<String>>,
@@ -644,6 +663,7 @@ impl GetSMSAttributesInputSerializer {
 
 /// <p>The response from the <code>GetSMSAttributes</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetSMSAttributesResponse {
     /// <p>The SMS attribute names and their values.</p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -676,6 +696,7 @@ impl GetSMSAttributesResponseDeserializer {
 }
 /// <p>Input for GetSubscriptionAttributes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSubscriptionAttributesInput {
     /// <p>The ARN of the subscription whose properties you want to get.</p>
     pub subscription_arn: String,
@@ -699,6 +720,7 @@ impl GetSubscriptionAttributesInputSerializer {
 
 /// <p>Response for GetSubscriptionAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetSubscriptionAttributesResponse {
     /// <p><p>A map of the subscription&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>ConfirmationWasAuthenticated</code> – <code>true</code> if the subscription confirmation request was authenticated.</p> </li> <li> <p> <code>DeliveryPolicy</code> – The JSON serialization of the subscription&#39;s delivery policy.</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> – The JSON serialization of the effective delivery policy that takes into account the topic delivery policy and account system defaults.</p> </li> <li> <p> <code>FilterPolicy</code> – The filter policy JSON that is assigned to the subscription.</p> </li> <li> <p> <code>Owner</code> – The AWS account ID of the subscription&#39;s owner.</p> </li> <li> <p> <code>PendingConfirmation</code> – <code>true</code> if the subscription hasn&#39;t been confirmed. To confirm a pending subscription, call the <code>ConfirmSubscription</code> action with a confirmation token.</p> </li> <li> <p> <code>RawMessageDelivery</code> – <code>true</code> if raw message delivery is enabled for the subscription. Raw messages are free of JSON formatting and can be sent to HTTP/S and Amazon SQS endpoints.</p> </li> <li> <p> <code>RedrivePolicy</code> – When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can&#39;t be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing.</p> </li> <li> <p> <code>SubscriptionArn</code> – The subscription&#39;s ARN.</p> </li> <li> <p> <code>TopicArn</code> – The topic ARN that the subscription is associated with.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -731,6 +753,7 @@ impl GetSubscriptionAttributesResponseDeserializer {
 }
 /// <p>Input for GetTopicAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTopicAttributesInput {
     /// <p>The ARN of the topic whose properties you want to get.</p>
     pub topic_arn: String,
@@ -751,6 +774,7 @@ impl GetTopicAttributesInputSerializer {
 
 /// <p>Response for GetTopicAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTopicAttributesResponse {
     /// <p><p>A map of the topic&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The JSON serialization of the topic&#39;s delivery policy.</p> </li> <li> <p> <code>DisplayName</code> – The human-readable name used in the <code>From</code> field for notifications to <code>email</code> and <code>email-json</code> endpoints.</p> </li> <li> <p> <code>Owner</code> – The AWS account ID of the topic&#39;s owner.</p> </li> <li> <p> <code>Policy</code> – The JSON serialization of the topic&#39;s access control policy.</p> </li> <li> <p> <code>SubscriptionsConfirmed</code> – The number of confirmed subscriptions for the topic.</p> </li> <li> <p> <code>SubscriptionsDeleted</code> – The number of deleted subscriptions for the topic.</p> </li> <li> <p> <code>SubscriptionsPending</code> – The number of subscriptions pending confirmation for the topic.</p> </li> <li> <p> <code>TopicArn</code> – The topic&#39;s ARN.</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> – Yhe JSON serialization of the effective delivery policy, taking system defaults into account.</p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> - The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms">Key Terms</a>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -783,6 +807,7 @@ impl GetTopicAttributesResponseDeserializer {
 }
 /// <p>Input for ListEndpointsByPlatformApplication action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointsByPlatformApplicationInput {
     /// <p>NextToken string is used when calling ListEndpointsByPlatformApplication action to retrieve additional records that are available after the first page results.</p>
     pub next_token: Option<String>,
@@ -811,6 +836,7 @@ impl ListEndpointsByPlatformApplicationInputSerializer {
 
 /// <p>Response for ListEndpointsByPlatformApplication action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListEndpointsByPlatformApplicationResponse {
     /// <p>Endpoints returned for ListEndpointsByPlatformApplication action.</p>
     pub endpoints: Option<Vec<String>>,
@@ -883,6 +909,7 @@ impl ListOfPlatformApplicationsDeserializer {
 }
 /// <p>The input for the <code>ListPhoneNumbersOptedOut</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumbersOptedOutInput {
     /// <p>A <code>NextToken</code> string is used when you call the <code>ListPhoneNumbersOptedOut</code> action to retrieve additional records that are available after the first page of results.</p>
     pub next_token: Option<String>,
@@ -905,6 +932,7 @@ impl ListPhoneNumbersOptedOutInputSerializer {
 
 /// <p>The response from the <code>ListPhoneNumbersOptedOut</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPhoneNumbersOptedOutResponse {
     /// <p>A <code>NextToken</code> string is returned when you call the <code>ListPhoneNumbersOptedOut</code> action if additional records are available after the first page of results.</p>
     pub next_token: Option<String>,
@@ -941,6 +969,7 @@ impl ListPhoneNumbersOptedOutResponseDeserializer {
 }
 /// <p>Input for ListPlatformApplications action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPlatformApplicationsInput {
     /// <p>NextToken string is used when calling ListPlatformApplications action to retrieve additional records that are available after the first page results.</p>
     pub next_token: Option<String>,
@@ -963,6 +992,7 @@ impl ListPlatformApplicationsInputSerializer {
 
 /// <p>Response for ListPlatformApplications action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPlatformApplicationsResponse {
     /// <p>NextToken string is returned when calling ListPlatformApplications action if additional records are available after the first page results.</p>
     pub next_token: Option<String>,
@@ -1014,6 +1044,7 @@ impl ListStringSerializer {
 
 /// <p>Input for ListSubscriptionsByTopic action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscriptionsByTopicInput {
     /// <p>Token returned by the previous <code>ListSubscriptionsByTopic</code> request.</p>
     pub next_token: Option<String>,
@@ -1039,6 +1070,7 @@ impl ListSubscriptionsByTopicInputSerializer {
 
 /// <p>Response for ListSubscriptionsByTopic action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListSubscriptionsByTopicResponse {
     /// <p>Token to pass along to the next <code>ListSubscriptionsByTopic</code> request. This element is returned if there are more subscriptions to retrieve.</p>
     pub next_token: Option<String>,
@@ -1076,6 +1108,7 @@ impl ListSubscriptionsByTopicResponseDeserializer {
 }
 /// <p>Input for ListSubscriptions action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscriptionsInput {
     /// <p>Token returned by the previous <code>ListSubscriptions</code> request.</p>
     pub next_token: Option<String>,
@@ -1098,6 +1131,7 @@ impl ListSubscriptionsInputSerializer {
 
 /// <p>Response for ListSubscriptions action</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListSubscriptionsResponse {
     /// <p>Token to pass along to the next <code>ListSubscriptions</code> request. This element is returned if there are more subscriptions to retrieve.</p>
     pub next_token: Option<String>,
@@ -1134,6 +1168,7 @@ impl ListSubscriptionsResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the topic for which to list tags.</p>
     pub resource_arn: String,
@@ -1153,6 +1188,7 @@ impl ListTagsForResourceRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags associated with the specified topic.</p>
     pub tags: Option<Vec<Tag>>,
@@ -1183,6 +1219,7 @@ impl ListTagsForResourceResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTopicsInput {
     /// <p>Token returned by the previous <code>ListTopics</code> request.</p>
     pub next_token: Option<String>,
@@ -1205,6 +1242,7 @@ impl ListTopicsInputSerializer {
 
 /// <p>Response for ListTopics action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTopicsResponse {
     /// <p>Token to pass along to the next <code>ListTopics</code> request. This element is returned if there are additional topics to retrieve.</p>
     pub next_token: Option<String>,
@@ -1297,6 +1335,7 @@ impl MessageAttributeMapSerializer {
 
 /// <p>The user-specified message attribute value. For string data types, the value attribute has the same restrictions on the content as the message body. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/api/API_Publish.html">Publish</a>.</p> <p>Name, type, and value must not be empty or null. In addition, the message body should not be empty or null. All parts of the message attribute, including name, type, and value, are included in the message size restriction, which is currently 256 KB (262,144 bytes). For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMessageAttributes.html">Using Amazon SNS Message Attributes</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MessageAttributeValue {
     /// <p>Binary type attributes can store any binary data, for example, compressed data, encrypted data, or images.</p>
     pub binary_value: Option<bytes::Bytes>,
@@ -1352,6 +1391,7 @@ impl NextTokenDeserializer {
 }
 /// <p>Input for the OptInPhoneNumber action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OptInPhoneNumberInput {
     /// <p>The phone number to opt in.</p>
     pub phone_number: String,
@@ -1372,6 +1412,7 @@ impl OptInPhoneNumberInputSerializer {
 
 /// <p>The response for the OptInPhoneNumber action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OptInPhoneNumberResponse {}
 
 struct OptInPhoneNumberResponseDeserializer;
@@ -1420,6 +1461,7 @@ impl PhoneNumberListDeserializer {
 }
 /// <p>Platform application object.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PlatformApplication {
     /// <p>Attributes for platform application object.</p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -1467,6 +1509,7 @@ impl ProtocolDeserializer {
 }
 /// <p>Input for Publish action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublishInput {
     /// <p><p>The message you want to send.</p> <p>If you are publishing to a topic and you want to send the same message to all transport protocols, include the text of the message as a String value. If you want to send different messages for each transport protocol, set the value of the <code>MessageStructure</code> parameter to <code>json</code> and use a JSON object for the <code>Message</code> parameter. </p> <p/> <p>Constraints:</p> <ul> <li> <p>With the exception of SMS, messages must be UTF-8 encoded strings and at most 256 KB in size (262,144 bytes, not 262,144 characters).</p> </li> <li> <p>For SMS, each message can contain up to 140 characters. This character limit depends on the encoding schema. For example, an SMS message can contain 160 GSM characters, 140 ASCII characters, or 70 UCS-2 characters.</p> <p>If you publish a message that exceeds this size limit, Amazon SNS sends the message as multiple messages, each fitting within the size limit. Messages aren&#39;t truncated mid-word but are cut off at whole-word boundaries.</p> <p>The total size limit for a single SMS <code>Publish</code> action is 1,600 characters.</p> </li> </ul> <p>JSON-specific constraints:</p> <ul> <li> <p>Keys in the JSON object that correspond to supported transport protocols must have simple JSON string values.</p> </li> <li> <p>The values will be parsed (unescaped) before they are used in outgoing messages.</p> </li> <li> <p>Outbound notifications are JSON encoded (meaning that the characters will be reescaped for sending).</p> </li> <li> <p>Values have a minimum length of 0 (the empty string, &quot;&quot;, is allowed).</p> </li> <li> <p>Values have a maximum length bounded by the overall message size (so, including multiple protocols may limit message sizes).</p> </li> <li> <p>Non-string values will cause the key to be ignored.</p> </li> <li> <p>Keys that do not correspond to supported transport protocols are ignored.</p> </li> <li> <p>Duplicate keys are not allowed.</p> </li> <li> <p>Failure to parse or validate any key or value in the message will cause the <code>Publish</code> call to return an error (no partial delivery).</p> </li> </ul></p>
     pub message: String,
@@ -1521,6 +1564,7 @@ impl PublishInputSerializer {
 
 /// <p>Response for Publish action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublishResponse {
     /// <p>Unique identifier assigned to the published message.</p> <p>Length Constraint: Maximum 100 characters</p>
     pub message_id: Option<String>,
@@ -1546,6 +1590,7 @@ impl PublishResponseDeserializer {
 }
 /// <p>Input for RemovePermission action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemovePermissionInput {
     /// <p>The unique label of the statement you want to remove.</p>
     pub label: String,
@@ -1569,6 +1614,7 @@ impl RemovePermissionInputSerializer {
 
 /// <p>Input for SetEndpointAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetEndpointAttributesInput {
     /// <p><p>A map of the endpoint attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>CustomUserData</code> – arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> – flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> – device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul></p>
     pub attributes: ::std::collections::HashMap<String, String>,
@@ -1596,6 +1642,7 @@ impl SetEndpointAttributesInputSerializer {
 
 /// <p>Input for SetPlatformApplicationAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetPlatformApplicationAttributesInput {
     /// <p><p>A map of the platform application attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>PlatformCredential</code> – The credential received from the notification service. For APNS/APNS<em>SANDBOX, PlatformCredential is private key. For FCM, PlatformCredential is &quot;API key&quot;. For ADM, PlatformCredential is &quot;client secret&quot;.</p> </li> <li> <p> <code>PlatformPrincipal</code> – The principal received from the notification service. For APNS/APNS</em>SANDBOX, PlatformPrincipal is SSL certificate. For FCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is &quot;client id&quot;.</p> </li> <li> <p> <code>EventEndpointCreated</code> – Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> – Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> – Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> – Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application&#39;s endpoints.</p> </li> <li> <p> <code>SuccessFeedbackRoleArn</code> – IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>FailureFeedbackRoleArn</code> – IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>SuccessFeedbackSampleRate</code> – Sample rate percentage (0-100) of successfully delivered messages.</p> </li> </ul></p>
     pub attributes: ::std::collections::HashMap<String, String>,
@@ -1626,6 +1673,7 @@ impl SetPlatformApplicationAttributesInputSerializer {
 
 /// <p>The input for the SetSMSAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSMSAttributesInput {
     /// <p>The default settings for sending SMS messages from your account. You can set values for the following attribute names:</p> <p> <code>MonthlySpendLimit</code> – The maximum amount in USD that you are willing to spend each month to send SMS messages. When Amazon SNS determines that sending an SMS message would incur a cost that exceeds this limit, it stops sending SMS messages within minutes.</p> <important> <p>Amazon SNS stops sending SMS messages within minutes of the limit being crossed. During that interval, if you continue to send SMS messages, you will incur costs that exceed your limit.</p> </important> <p>By default, the spend limit is set to the maximum allowed by Amazon SNS. If you want to raise the limit, submit an <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-sns">SNS Limit Increase case</a>. For <b>New limit value</b>, enter your desired monthly spend limit. In the <b>Use Case Description</b> field, explain that you are requesting an SMS monthly spend limit increase.</p> <p> <code>DeliveryStatusIAMRole</code> – The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs. For each SMS message that you send, Amazon SNS writes a log that includes the message price, the success or failure status, the reason for failure (if the message failed), the message dwell time, and other information.</p> <p> <code>DeliveryStatusSuccessSamplingRate</code> – The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value can be an integer from 0 - 100. For example, to write logs only for failed deliveries, set this value to <code>0</code>. To write logs for 10% of your successful deliveries, set it to <code>10</code>.</p> <p> <code>DefaultSenderID</code> – A string, such as your business brand, that is displayed as the sender on the receiving device. Support for sender IDs varies by country. The sender ID can be 1 - 11 alphanumeric characters, and it must contain at least one letter.</p> <p> <code>DefaultSMSType</code> – The type of SMS message that you will send by default. You can assign the following values:</p> <ul> <li> <p> <code>Promotional</code> – (Default) Noncritical messages, such as marketing messages. Amazon SNS optimizes the message delivery to incur the lowest cost.</p> </li> <li> <p> <code>Transactional</code> – Critical messages that support customer transactions, such as one-time passcodes for multi-factor authentication. Amazon SNS optimizes the message delivery to achieve the highest reliability.</p> </li> </ul> <p> <code>UsageReportS3Bucket</code> – The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS. Each day, Amazon SNS will deliver a usage report as a CSV file to the bucket. The report includes the following information for each SMS message that was successfully delivered by your account:</p> <ul> <li> <p>Time that the message was published (in UTC)</p> </li> <li> <p>Message ID</p> </li> <li> <p>Destination phone number</p> </li> <li> <p>Message type</p> </li> <li> <p>Delivery status</p> </li> <li> <p>Message price (in USD)</p> </li> <li> <p>Part number (a message is split into multiple parts if it is too long for a single message)</p> </li> <li> <p>Total number of parts</p> </li> </ul> <p>To receive the report, the bucket must have a policy that allows the Amazon SNS service principle to perform the <code>s3:PutObject</code> and <code>s3:GetBucketLocation</code> actions.</p> <p>For an example bucket policy and usage report, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sms_stats.html">Monitoring SMS Activity</a> in the <i>Amazon SNS Developer Guide</i>.</p>
     pub attributes: ::std::collections::HashMap<String, String>,
@@ -1650,6 +1698,7 @@ impl SetSMSAttributesInputSerializer {
 
 /// <p>The response for the SetSMSAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetSMSAttributesResponse {}
 
 struct SetSMSAttributesResponseDeserializer;
@@ -1670,6 +1719,7 @@ impl SetSMSAttributesResponseDeserializer {
 }
 /// <p>Input for SetSubscriptionAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSubscriptionAttributesInput {
     /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> <li> <p> <code>RedrivePolicy</code> – When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can&#39;t be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing.</p> </li> </ul></p>
     pub attribute_name: String,
@@ -1704,6 +1754,7 @@ impl SetSubscriptionAttributesInputSerializer {
 
 /// <p>Input for SetTopicAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTopicAttributesInput {
     /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>DisplayName</code> – The display name to use for a topic with SMS subscriptions.</p> </li> <li> <p> <code>Policy</code> – The policy that defines who can access your topic. By default, only the topic owner can publish or subscribe to the topic.</p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> - The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms">Key Terms</a>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>. </p> </li> </ul></p>
     pub attribute_name: String,
@@ -1746,6 +1797,7 @@ impl StringDeserializer {
 }
 /// <p>Input for Subscribe action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubscribeInput {
     /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> <li> <p> <code>RedrivePolicy</code> – When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can&#39;t be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -1791,6 +1843,7 @@ impl SubscribeInputSerializer {
 
 /// <p>Response for Subscribe action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SubscribeResponse {
     /// <p>The ARN of the subscription if it is confirmed, or the string "pending confirmation" if the subscription requires confirmation. However, if the API request parameter <code>ReturnSubscriptionArn</code> is true, then the value is always the subscription ARN, even if the subscription requires confirmation.</p>
     pub subscription_arn: Option<String>,
@@ -1819,6 +1872,7 @@ impl SubscribeResponseDeserializer {
 }
 /// <p>A wrapper type for the attributes of an Amazon SNS subscription.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Subscription {
     /// <p>The subscription's endpoint (format depends on the protocol).</p>
     pub endpoint: Option<String>,
@@ -1935,6 +1989,8 @@ impl SubscriptionsListDeserializer {
 }
 /// <p>The list of tags to be added to the specified topic.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>The required key portion of the tag.</p>
     pub key: String,
@@ -2028,6 +2084,7 @@ impl TagListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the topic to which to add tags.</p>
     pub resource_arn: String,
@@ -2050,6 +2107,7 @@ impl TagResourceRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagResourceResponse {}
 
 struct TagResourceResponseDeserializer;
@@ -2081,6 +2139,7 @@ impl TagValueDeserializer {
 }
 /// <p>A wrapper type for the topic's Amazon Resource Name (ARN). To retrieve a topic's attributes, use <code>GetTopicAttributes</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Topic {
     /// <p>The topic's ARN.</p>
     pub topic_arn: Option<String>,
@@ -2171,6 +2230,7 @@ impl TopicsListDeserializer {
 }
 /// <p>Input for Unsubscribe action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnsubscribeInput {
     /// <p>The ARN of the subscription to be deleted.</p>
     pub subscription_arn: String,
@@ -2193,6 +2253,7 @@ impl UnsubscribeInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the topic from which to remove tags.</p>
     pub resource_arn: String,
@@ -2215,6 +2276,7 @@ impl UntagResourceRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 struct UntagResourceResponseDeserializer;
@@ -2291,19 +2353,15 @@ impl AddPermissionError {
 }
 impl fmt::Display for AddPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddPermissionError {
-    fn description(&self) -> &str {
         match *self {
-            AddPermissionError::AuthorizationError(ref cause) => cause,
-            AddPermissionError::InternalError(ref cause) => cause,
-            AddPermissionError::InvalidParameter(ref cause) => cause,
-            AddPermissionError::NotFound(ref cause) => cause,
+            AddPermissionError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::InternalError(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddPermissionError {}
 /// Errors returned by CheckIfPhoneNumberIsOptedOut
 #[derive(Debug, PartialEq)]
 pub enum CheckIfPhoneNumberIsOptedOutError {
@@ -2368,19 +2426,19 @@ impl CheckIfPhoneNumberIsOptedOutError {
 }
 impl fmt::Display for CheckIfPhoneNumberIsOptedOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CheckIfPhoneNumberIsOptedOutError {
-    fn description(&self) -> &str {
         match *self {
-            CheckIfPhoneNumberIsOptedOutError::AuthorizationError(ref cause) => cause,
-            CheckIfPhoneNumberIsOptedOutError::InternalError(ref cause) => cause,
-            CheckIfPhoneNumberIsOptedOutError::InvalidParameter(ref cause) => cause,
-            CheckIfPhoneNumberIsOptedOutError::Throttled(ref cause) => cause,
+            CheckIfPhoneNumberIsOptedOutError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CheckIfPhoneNumberIsOptedOutError::InternalError(ref cause) => write!(f, "{}", cause),
+            CheckIfPhoneNumberIsOptedOutError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CheckIfPhoneNumberIsOptedOutError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CheckIfPhoneNumberIsOptedOutError {}
 /// Errors returned by ConfirmSubscription
 #[derive(Debug, PartialEq)]
 pub enum ConfirmSubscriptionError {
@@ -2457,21 +2515,21 @@ impl ConfirmSubscriptionError {
 }
 impl fmt::Display for ConfirmSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfirmSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            ConfirmSubscriptionError::AuthorizationError(ref cause) => cause,
-            ConfirmSubscriptionError::FilterPolicyLimitExceeded(ref cause) => cause,
-            ConfirmSubscriptionError::InternalError(ref cause) => cause,
-            ConfirmSubscriptionError::InvalidParameter(ref cause) => cause,
-            ConfirmSubscriptionError::NotFound(ref cause) => cause,
-            ConfirmSubscriptionError::SubscriptionLimitExceeded(ref cause) => cause,
+            ConfirmSubscriptionError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ConfirmSubscriptionError::FilterPolicyLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ConfirmSubscriptionError::InternalError(ref cause) => write!(f, "{}", cause),
+            ConfirmSubscriptionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ConfirmSubscriptionError::NotFound(ref cause) => write!(f, "{}", cause),
+            ConfirmSubscriptionError::SubscriptionLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ConfirmSubscriptionError {}
 /// Errors returned by CreatePlatformApplication
 #[derive(Debug, PartialEq)]
 pub enum CreatePlatformApplicationError {
@@ -2525,18 +2583,14 @@ impl CreatePlatformApplicationError {
 }
 impl fmt::Display for CreatePlatformApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePlatformApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePlatformApplicationError::AuthorizationError(ref cause) => cause,
-            CreatePlatformApplicationError::InternalError(ref cause) => cause,
-            CreatePlatformApplicationError::InvalidParameter(ref cause) => cause,
+            CreatePlatformApplicationError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreatePlatformApplicationError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreatePlatformApplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePlatformApplicationError {}
 /// Errors returned by CreatePlatformEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreatePlatformEndpointError {
@@ -2595,19 +2649,15 @@ impl CreatePlatformEndpointError {
 }
 impl fmt::Display for CreatePlatformEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePlatformEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePlatformEndpointError::AuthorizationError(ref cause) => cause,
-            CreatePlatformEndpointError::InternalError(ref cause) => cause,
-            CreatePlatformEndpointError::InvalidParameter(ref cause) => cause,
-            CreatePlatformEndpointError::NotFound(ref cause) => cause,
+            CreatePlatformEndpointError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreatePlatformEndpointError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreatePlatformEndpointError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreatePlatformEndpointError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePlatformEndpointError {}
 /// Errors returned by CreateTopic
 #[derive(Debug, PartialEq)]
 pub enum CreateTopicError {
@@ -2701,24 +2751,20 @@ impl CreateTopicError {
 }
 impl fmt::Display for CreateTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTopicError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTopicError::AuthorizationError(ref cause) => cause,
-            CreateTopicError::ConcurrentAccess(ref cause) => cause,
-            CreateTopicError::InternalError(ref cause) => cause,
-            CreateTopicError::InvalidParameter(ref cause) => cause,
-            CreateTopicError::InvalidSecurity(ref cause) => cause,
-            CreateTopicError::StaleTag(ref cause) => cause,
-            CreateTopicError::TagLimitExceeded(ref cause) => cause,
-            CreateTopicError::TagPolicy(ref cause) => cause,
-            CreateTopicError::TopicLimitExceeded(ref cause) => cause,
+            CreateTopicError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::StaleTag(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::TagPolicy(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::TopicLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTopicError {}
 /// Errors returned by DeleteEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointError {
@@ -2770,18 +2816,14 @@ impl DeleteEndpointError {
 }
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEndpointError::AuthorizationError(ref cause) => cause,
-            DeleteEndpointError::InternalError(ref cause) => cause,
-            DeleteEndpointError::InvalidParameter(ref cause) => cause,
+            DeleteEndpointError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEndpointError {}
 /// Errors returned by DeletePlatformApplication
 #[derive(Debug, PartialEq)]
 pub enum DeletePlatformApplicationError {
@@ -2835,18 +2877,14 @@ impl DeletePlatformApplicationError {
 }
 impl fmt::Display for DeletePlatformApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePlatformApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePlatformApplicationError::AuthorizationError(ref cause) => cause,
-            DeletePlatformApplicationError::InternalError(ref cause) => cause,
-            DeletePlatformApplicationError::InvalidParameter(ref cause) => cause,
+            DeletePlatformApplicationError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeletePlatformApplicationError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeletePlatformApplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePlatformApplicationError {}
 /// Errors returned by DeleteTopic
 #[derive(Debug, PartialEq)]
 pub enum DeleteTopicError {
@@ -2926,22 +2964,18 @@ impl DeleteTopicError {
 }
 impl fmt::Display for DeleteTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTopicError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTopicError::AuthorizationError(ref cause) => cause,
-            DeleteTopicError::ConcurrentAccess(ref cause) => cause,
-            DeleteTopicError::InternalError(ref cause) => cause,
-            DeleteTopicError::InvalidParameter(ref cause) => cause,
-            DeleteTopicError::NotFound(ref cause) => cause,
-            DeleteTopicError::StaleTag(ref cause) => cause,
-            DeleteTopicError::TagPolicy(ref cause) => cause,
+            DeleteTopicError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::StaleTag(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTopicError {}
 /// Errors returned by GetEndpointAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetEndpointAttributesError {
@@ -3000,19 +3034,15 @@ impl GetEndpointAttributesError {
 }
 impl fmt::Display for GetEndpointAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetEndpointAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetEndpointAttributesError::AuthorizationError(ref cause) => cause,
-            GetEndpointAttributesError::InternalError(ref cause) => cause,
-            GetEndpointAttributesError::InvalidParameter(ref cause) => cause,
-            GetEndpointAttributesError::NotFound(ref cause) => cause,
+            GetEndpointAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetEndpointAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetEndpointAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetEndpointAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetEndpointAttributesError {}
 /// Errors returned by GetPlatformApplicationAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetPlatformApplicationAttributesError {
@@ -3079,19 +3109,21 @@ impl GetPlatformApplicationAttributesError {
 }
 impl fmt::Display for GetPlatformApplicationAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPlatformApplicationAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,
-            GetPlatformApplicationAttributesError::InternalError(ref cause) => cause,
-            GetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,
-            GetPlatformApplicationAttributesError::NotFound(ref cause) => cause,
+            GetPlatformApplicationAttributesError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPlatformApplicationAttributesError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPlatformApplicationAttributesError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPlatformApplicationAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPlatformApplicationAttributesError {}
 /// Errors returned by GetSMSAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetSMSAttributesError {
@@ -3150,19 +3182,15 @@ impl GetSMSAttributesError {
 }
 impl fmt::Display for GetSMSAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSMSAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetSMSAttributesError::AuthorizationError(ref cause) => cause,
-            GetSMSAttributesError::InternalError(ref cause) => cause,
-            GetSMSAttributesError::InvalidParameter(ref cause) => cause,
-            GetSMSAttributesError::Throttled(ref cause) => cause,
+            GetSMSAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetSMSAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetSMSAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetSMSAttributesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSMSAttributesError {}
 /// Errors returned by GetSubscriptionAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetSubscriptionAttributesError {
@@ -3223,19 +3251,15 @@ impl GetSubscriptionAttributesError {
 }
 impl fmt::Display for GetSubscriptionAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSubscriptionAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,
-            GetSubscriptionAttributesError::InternalError(ref cause) => cause,
-            GetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,
-            GetSubscriptionAttributesError::NotFound(ref cause) => cause,
+            GetSubscriptionAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetSubscriptionAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetSubscriptionAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetSubscriptionAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSubscriptionAttributesError {}
 /// Errors returned by GetTopicAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetTopicAttributesError {
@@ -3301,20 +3325,16 @@ impl GetTopicAttributesError {
 }
 impl fmt::Display for GetTopicAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTopicAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetTopicAttributesError::AuthorizationError(ref cause) => cause,
-            GetTopicAttributesError::InternalError(ref cause) => cause,
-            GetTopicAttributesError::InvalidParameter(ref cause) => cause,
-            GetTopicAttributesError::InvalidSecurity(ref cause) => cause,
-            GetTopicAttributesError::NotFound(ref cause) => cause,
+            GetTopicAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetTopicAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetTopicAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetTopicAttributesError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            GetTopicAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTopicAttributesError {}
 /// Errors returned by ListEndpointsByPlatformApplication
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointsByPlatformApplicationError {
@@ -3381,19 +3401,21 @@ impl ListEndpointsByPlatformApplicationError {
 }
 impl fmt::Display for ListEndpointsByPlatformApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEndpointsByPlatformApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            ListEndpointsByPlatformApplicationError::AuthorizationError(ref cause) => cause,
-            ListEndpointsByPlatformApplicationError::InternalError(ref cause) => cause,
-            ListEndpointsByPlatformApplicationError::InvalidParameter(ref cause) => cause,
-            ListEndpointsByPlatformApplicationError::NotFound(ref cause) => cause,
+            ListEndpointsByPlatformApplicationError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListEndpointsByPlatformApplicationError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListEndpointsByPlatformApplicationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListEndpointsByPlatformApplicationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEndpointsByPlatformApplicationError {}
 /// Errors returned by ListPhoneNumbersOptedOut
 #[derive(Debug, PartialEq)]
 pub enum ListPhoneNumbersOptedOutError {
@@ -3452,19 +3474,15 @@ impl ListPhoneNumbersOptedOutError {
 }
 impl fmt::Display for ListPhoneNumbersOptedOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPhoneNumbersOptedOutError {
-    fn description(&self) -> &str {
         match *self {
-            ListPhoneNumbersOptedOutError::AuthorizationError(ref cause) => cause,
-            ListPhoneNumbersOptedOutError::InternalError(ref cause) => cause,
-            ListPhoneNumbersOptedOutError::InvalidParameter(ref cause) => cause,
-            ListPhoneNumbersOptedOutError::Throttled(ref cause) => cause,
+            ListPhoneNumbersOptedOutError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersOptedOutError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersOptedOutError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersOptedOutError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPhoneNumbersOptedOutError {}
 /// Errors returned by ListPlatformApplications
 #[derive(Debug, PartialEq)]
 pub enum ListPlatformApplicationsError {
@@ -3516,18 +3534,14 @@ impl ListPlatformApplicationsError {
 }
 impl fmt::Display for ListPlatformApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPlatformApplicationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPlatformApplicationsError::AuthorizationError(ref cause) => cause,
-            ListPlatformApplicationsError::InternalError(ref cause) => cause,
-            ListPlatformApplicationsError::InvalidParameter(ref cause) => cause,
+            ListPlatformApplicationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListPlatformApplicationsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListPlatformApplicationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPlatformApplicationsError {}
 /// Errors returned by ListSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum ListSubscriptionsError {
@@ -3579,18 +3593,14 @@ impl ListSubscriptionsError {
 }
 impl fmt::Display for ListSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSubscriptionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSubscriptionsError::AuthorizationError(ref cause) => cause,
-            ListSubscriptionsError::InternalError(ref cause) => cause,
-            ListSubscriptionsError::InvalidParameter(ref cause) => cause,
+            ListSubscriptionsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSubscriptionsError {}
 /// Errors returned by ListSubscriptionsByTopic
 #[derive(Debug, PartialEq)]
 pub enum ListSubscriptionsByTopicError {
@@ -3649,19 +3659,15 @@ impl ListSubscriptionsByTopicError {
 }
 impl fmt::Display for ListSubscriptionsByTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSubscriptionsByTopicError {
-    fn description(&self) -> &str {
         match *self {
-            ListSubscriptionsByTopicError::AuthorizationError(ref cause) => cause,
-            ListSubscriptionsByTopicError::InternalError(ref cause) => cause,
-            ListSubscriptionsByTopicError::InvalidParameter(ref cause) => cause,
-            ListSubscriptionsByTopicError::NotFound(ref cause) => cause,
+            ListSubscriptionsByTopicError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsByTopicError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsByTopicError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsByTopicError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSubscriptionsByTopicError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -3727,20 +3733,16 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::AuthorizationError(ref cause) => cause,
-            ListTagsForResourceError::ConcurrentAccess(ref cause) => cause,
-            ListTagsForResourceError::InvalidParameter(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
-            ListTagsForResourceError::TagPolicy(ref cause) => cause,
+            ListTagsForResourceError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTopics
 #[derive(Debug, PartialEq)]
 pub enum ListTopicsError {
@@ -3792,18 +3794,14 @@ impl ListTopicsError {
 }
 impl fmt::Display for ListTopicsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTopicsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTopicsError::AuthorizationError(ref cause) => cause,
-            ListTopicsError::InternalError(ref cause) => cause,
-            ListTopicsError::InvalidParameter(ref cause) => cause,
+            ListTopicsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListTopicsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListTopicsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTopicsError {}
 /// Errors returned by OptInPhoneNumber
 #[derive(Debug, PartialEq)]
 pub enum OptInPhoneNumberError {
@@ -3862,19 +3860,15 @@ impl OptInPhoneNumberError {
 }
 impl fmt::Display for OptInPhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for OptInPhoneNumberError {
-    fn description(&self) -> &str {
         match *self {
-            OptInPhoneNumberError::AuthorizationError(ref cause) => cause,
-            OptInPhoneNumberError::InternalError(ref cause) => cause,
-            OptInPhoneNumberError::InvalidParameter(ref cause) => cause,
-            OptInPhoneNumberError::Throttled(ref cause) => cause,
+            OptInPhoneNumberError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            OptInPhoneNumberError::InternalError(ref cause) => write!(f, "{}", cause),
+            OptInPhoneNumberError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            OptInPhoneNumberError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for OptInPhoneNumberError {}
 /// Errors returned by Publish
 #[derive(Debug, PartialEq)]
 pub enum PublishError {
@@ -4001,29 +3995,25 @@ impl PublishError {
 }
 impl fmt::Display for PublishError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PublishError {
-    fn description(&self) -> &str {
         match *self {
-            PublishError::AuthorizationError(ref cause) => cause,
-            PublishError::EndpointDisabled(ref cause) => cause,
-            PublishError::InternalError(ref cause) => cause,
-            PublishError::InvalidParameter(ref cause) => cause,
-            PublishError::InvalidParameterValue(ref cause) => cause,
-            PublishError::InvalidSecurity(ref cause) => cause,
-            PublishError::KMSAccessDenied(ref cause) => cause,
-            PublishError::KMSDisabled(ref cause) => cause,
-            PublishError::KMSInvalidState(ref cause) => cause,
-            PublishError::KMSNotFound(ref cause) => cause,
-            PublishError::KMSOptInRequired(ref cause) => cause,
-            PublishError::KMSThrottling(ref cause) => cause,
-            PublishError::NotFound(ref cause) => cause,
-            PublishError::PlatformApplicationDisabled(ref cause) => cause,
+            PublishError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            PublishError::EndpointDisabled(ref cause) => write!(f, "{}", cause),
+            PublishError::InternalError(ref cause) => write!(f, "{}", cause),
+            PublishError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PublishError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PublishError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSAccessDenied(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSDisabled(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSNotFound(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSOptInRequired(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSThrottling(ref cause) => write!(f, "{}", cause),
+            PublishError::NotFound(ref cause) => write!(f, "{}", cause),
+            PublishError::PlatformApplicationDisabled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PublishError {}
 /// Errors returned by RemovePermission
 #[derive(Debug, PartialEq)]
 pub enum RemovePermissionError {
@@ -4082,19 +4072,15 @@ impl RemovePermissionError {
 }
 impl fmt::Display for RemovePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemovePermissionError {
-    fn description(&self) -> &str {
         match *self {
-            RemovePermissionError::AuthorizationError(ref cause) => cause,
-            RemovePermissionError::InternalError(ref cause) => cause,
-            RemovePermissionError::InvalidParameter(ref cause) => cause,
-            RemovePermissionError::NotFound(ref cause) => cause,
+            RemovePermissionError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::InternalError(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemovePermissionError {}
 /// Errors returned by SetEndpointAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetEndpointAttributesError {
@@ -4153,19 +4139,15 @@ impl SetEndpointAttributesError {
 }
 impl fmt::Display for SetEndpointAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetEndpointAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetEndpointAttributesError::AuthorizationError(ref cause) => cause,
-            SetEndpointAttributesError::InternalError(ref cause) => cause,
-            SetEndpointAttributesError::InvalidParameter(ref cause) => cause,
-            SetEndpointAttributesError::NotFound(ref cause) => cause,
+            SetEndpointAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SetEndpointAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetEndpointAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetEndpointAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetEndpointAttributesError {}
 /// Errors returned by SetPlatformApplicationAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetPlatformApplicationAttributesError {
@@ -4232,19 +4214,21 @@ impl SetPlatformApplicationAttributesError {
 }
 impl fmt::Display for SetPlatformApplicationAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetPlatformApplicationAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,
-            SetPlatformApplicationAttributesError::InternalError(ref cause) => cause,
-            SetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,
-            SetPlatformApplicationAttributesError::NotFound(ref cause) => cause,
+            SetPlatformApplicationAttributesError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetPlatformApplicationAttributesError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetPlatformApplicationAttributesError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetPlatformApplicationAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetPlatformApplicationAttributesError {}
 /// Errors returned by SetSMSAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetSMSAttributesError {
@@ -4303,19 +4287,15 @@ impl SetSMSAttributesError {
 }
 impl fmt::Display for SetSMSAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSMSAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetSMSAttributesError::AuthorizationError(ref cause) => cause,
-            SetSMSAttributesError::InternalError(ref cause) => cause,
-            SetSMSAttributesError::InvalidParameter(ref cause) => cause,
-            SetSMSAttributesError::Throttled(ref cause) => cause,
+            SetSMSAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SetSMSAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetSMSAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetSMSAttributesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetSMSAttributesError {}
 /// Errors returned by SetSubscriptionAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetSubscriptionAttributesError {
@@ -4385,20 +4365,18 @@ impl SetSubscriptionAttributesError {
 }
 impl fmt::Display for SetSubscriptionAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSubscriptionAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,
-            SetSubscriptionAttributesError::FilterPolicyLimitExceeded(ref cause) => cause,
-            SetSubscriptionAttributesError::InternalError(ref cause) => cause,
-            SetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,
-            SetSubscriptionAttributesError::NotFound(ref cause) => cause,
+            SetSubscriptionAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SetSubscriptionAttributesError::FilterPolicyLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetSubscriptionAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetSubscriptionAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetSubscriptionAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetSubscriptionAttributesError {}
 /// Errors returned by SetTopicAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetTopicAttributesError {
@@ -4464,20 +4442,16 @@ impl SetTopicAttributesError {
 }
 impl fmt::Display for SetTopicAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetTopicAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetTopicAttributesError::AuthorizationError(ref cause) => cause,
-            SetTopicAttributesError::InternalError(ref cause) => cause,
-            SetTopicAttributesError::InvalidParameter(ref cause) => cause,
-            SetTopicAttributesError::InvalidSecurity(ref cause) => cause,
-            SetTopicAttributesError::NotFound(ref cause) => cause,
+            SetTopicAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SetTopicAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetTopicAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetTopicAttributesError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            SetTopicAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetTopicAttributesError {}
 /// Errors returned by Subscribe
 #[derive(Debug, PartialEq)]
 pub enum SubscribeError {
@@ -4555,22 +4529,18 @@ impl SubscribeError {
 }
 impl fmt::Display for SubscribeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SubscribeError {
-    fn description(&self) -> &str {
         match *self {
-            SubscribeError::AuthorizationError(ref cause) => cause,
-            SubscribeError::FilterPolicyLimitExceeded(ref cause) => cause,
-            SubscribeError::InternalError(ref cause) => cause,
-            SubscribeError::InvalidParameter(ref cause) => cause,
-            SubscribeError::InvalidSecurity(ref cause) => cause,
-            SubscribeError::NotFound(ref cause) => cause,
-            SubscribeError::SubscriptionLimitExceeded(ref cause) => cause,
+            SubscribeError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SubscribeError::FilterPolicyLimitExceeded(ref cause) => write!(f, "{}", cause),
+            SubscribeError::InternalError(ref cause) => write!(f, "{}", cause),
+            SubscribeError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SubscribeError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            SubscribeError::NotFound(ref cause) => write!(f, "{}", cause),
+            SubscribeError::SubscriptionLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SubscribeError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -4650,22 +4620,18 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AuthorizationError(ref cause) => cause,
-            TagResourceError::ConcurrentAccess(ref cause) => cause,
-            TagResourceError::InvalidParameter(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::StaleTag(ref cause) => cause,
-            TagResourceError::TagLimitExceeded(ref cause) => cause,
-            TagResourceError::TagPolicy(ref cause) => cause,
+            TagResourceError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::StaleTag(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by Unsubscribe
 #[derive(Debug, PartialEq)]
 pub enum UnsubscribeError {
@@ -4731,20 +4697,16 @@ impl UnsubscribeError {
 }
 impl fmt::Display for UnsubscribeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UnsubscribeError {
-    fn description(&self) -> &str {
         match *self {
-            UnsubscribeError::AuthorizationError(ref cause) => cause,
-            UnsubscribeError::InternalError(ref cause) => cause,
-            UnsubscribeError::InvalidParameter(ref cause) => cause,
-            UnsubscribeError::InvalidSecurity(ref cause) => cause,
-            UnsubscribeError::NotFound(ref cause) => cause,
+            UnsubscribeError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            UnsubscribeError::InternalError(ref cause) => write!(f, "{}", cause),
+            UnsubscribeError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UnsubscribeError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            UnsubscribeError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UnsubscribeError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -4824,22 +4786,18 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AuthorizationError(ref cause) => cause,
-            UntagResourceError::ConcurrentAccess(ref cause) => cause,
-            UntagResourceError::InvalidParameter(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::StaleTag(ref cause) => cause,
-            UntagResourceError::TagLimitExceeded(ref cause) => cause,
-            UntagResourceError::TagPolicy(ref cause) => cause,
+            UntagResourceError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::StaleTag(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon SNS API. Amazon SNS clients implement this trait.
 pub trait Sns {
     /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>

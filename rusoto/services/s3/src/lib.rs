@@ -19,6 +19,11 @@
 extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
+#[cfg(any(feature = "serialize_structs", feature = "deserialize_structs"))]
+extern crate serde;
+#[cfg(any(feature = "serialize_structs", feature = "deserialize_structs"))]
+#[macro_use]
+extern crate serde_derive;
 extern crate xml;
 #[cfg(nightly)]
 extern crate test;

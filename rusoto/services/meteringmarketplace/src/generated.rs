@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>A BatchMeterUsageRequest contains UsageRecords, which indicate quantities of usage within your application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchMeterUsageRequest {
     /// <p>Product code is used to uniquely identify a product in AWS Marketplace. The product code should be the same as the one used during the publishing of a new product.</p>
     #[serde(rename = "ProductCode")]
@@ -49,6 +50,7 @@ pub struct BatchMeterUsageResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MeterUsageRequest {
     /// <p>Checks whether you have the permissions required for the action, but does not make the request. If you have the permissions, the request returns DryRunOperation; otherwise, it returns UnauthorizedException. Defaults to <code>false</code> if not specified.</p>
     #[serde(rename = "DryRun")]
@@ -79,6 +81,7 @@ pub struct MeterUsageResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterUsageRequest {
     /// <p>(Optional) To scope down the registration to a specific running software instance and guard against replay attacks.</p>
     #[serde(rename = "Nonce")]
@@ -107,6 +110,7 @@ pub struct RegisterUsageResult {
 
 /// <p>Contains input to the ResolveCustomer operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResolveCustomerRequest {
     /// <p>When a buyer visits your website during the registration process, the buyer submits a registration token through the browser. The registration token is resolved to obtain a CustomerIdentifier and product code.</p>
     #[serde(rename = "RegistrationToken")]
@@ -224,22 +228,18 @@ impl BatchMeterUsageError {
 }
 impl fmt::Display for BatchMeterUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchMeterUsageError {
-    fn description(&self) -> &str {
         match *self {
-            BatchMeterUsageError::DisabledApi(ref cause) => cause,
-            BatchMeterUsageError::InternalServiceError(ref cause) => cause,
-            BatchMeterUsageError::InvalidCustomerIdentifier(ref cause) => cause,
-            BatchMeterUsageError::InvalidProductCode(ref cause) => cause,
-            BatchMeterUsageError::InvalidUsageDimension(ref cause) => cause,
-            BatchMeterUsageError::Throttling(ref cause) => cause,
-            BatchMeterUsageError::TimestampOutOfBounds(ref cause) => cause,
+            BatchMeterUsageError::DisabledApi(ref cause) => write!(f, "{}", cause),
+            BatchMeterUsageError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            BatchMeterUsageError::InvalidCustomerIdentifier(ref cause) => write!(f, "{}", cause),
+            BatchMeterUsageError::InvalidProductCode(ref cause) => write!(f, "{}", cause),
+            BatchMeterUsageError::InvalidUsageDimension(ref cause) => write!(f, "{}", cause),
+            BatchMeterUsageError::Throttling(ref cause) => write!(f, "{}", cause),
+            BatchMeterUsageError::TimestampOutOfBounds(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchMeterUsageError {}
 /// Errors returned by MeterUsage
 #[derive(Debug, PartialEq)]
 pub enum MeterUsageError {
@@ -298,23 +298,19 @@ impl MeterUsageError {
 }
 impl fmt::Display for MeterUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for MeterUsageError {
-    fn description(&self) -> &str {
         match *self {
-            MeterUsageError::CustomerNotEntitled(ref cause) => cause,
-            MeterUsageError::DuplicateRequest(ref cause) => cause,
-            MeterUsageError::InternalServiceError(ref cause) => cause,
-            MeterUsageError::InvalidEndpointRegion(ref cause) => cause,
-            MeterUsageError::InvalidProductCode(ref cause) => cause,
-            MeterUsageError::InvalidUsageDimension(ref cause) => cause,
-            MeterUsageError::Throttling(ref cause) => cause,
-            MeterUsageError::TimestampOutOfBounds(ref cause) => cause,
+            MeterUsageError::CustomerNotEntitled(ref cause) => write!(f, "{}", cause),
+            MeterUsageError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            MeterUsageError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            MeterUsageError::InvalidEndpointRegion(ref cause) => write!(f, "{}", cause),
+            MeterUsageError::InvalidProductCode(ref cause) => write!(f, "{}", cause),
+            MeterUsageError::InvalidUsageDimension(ref cause) => write!(f, "{}", cause),
+            MeterUsageError::Throttling(ref cause) => write!(f, "{}", cause),
+            MeterUsageError::TimestampOutOfBounds(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for MeterUsageError {}
 /// Errors returned by RegisterUsage
 #[derive(Debug, PartialEq)]
 pub enum RegisterUsageError {
@@ -375,23 +371,19 @@ impl RegisterUsageError {
 }
 impl fmt::Display for RegisterUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterUsageError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterUsageError::CustomerNotEntitled(ref cause) => cause,
-            RegisterUsageError::DisabledApi(ref cause) => cause,
-            RegisterUsageError::InternalServiceError(ref cause) => cause,
-            RegisterUsageError::InvalidProductCode(ref cause) => cause,
-            RegisterUsageError::InvalidPublicKeyVersion(ref cause) => cause,
-            RegisterUsageError::InvalidRegion(ref cause) => cause,
-            RegisterUsageError::PlatformNotSupported(ref cause) => cause,
-            RegisterUsageError::Throttling(ref cause) => cause,
+            RegisterUsageError::CustomerNotEntitled(ref cause) => write!(f, "{}", cause),
+            RegisterUsageError::DisabledApi(ref cause) => write!(f, "{}", cause),
+            RegisterUsageError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            RegisterUsageError::InvalidProductCode(ref cause) => write!(f, "{}", cause),
+            RegisterUsageError::InvalidPublicKeyVersion(ref cause) => write!(f, "{}", cause),
+            RegisterUsageError::InvalidRegion(ref cause) => write!(f, "{}", cause),
+            RegisterUsageError::PlatformNotSupported(ref cause) => write!(f, "{}", cause),
+            RegisterUsageError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterUsageError {}
 /// Errors returned by ResolveCustomer
 #[derive(Debug, PartialEq)]
 pub enum ResolveCustomerError {
@@ -437,20 +429,16 @@ impl ResolveCustomerError {
 }
 impl fmt::Display for ResolveCustomerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResolveCustomerError {
-    fn description(&self) -> &str {
         match *self {
-            ResolveCustomerError::DisabledApi(ref cause) => cause,
-            ResolveCustomerError::ExpiredToken(ref cause) => cause,
-            ResolveCustomerError::InternalServiceError(ref cause) => cause,
-            ResolveCustomerError::InvalidToken(ref cause) => cause,
-            ResolveCustomerError::Throttling(ref cause) => cause,
+            ResolveCustomerError::DisabledApi(ref cause) => write!(f, "{}", cause),
+            ResolveCustomerError::ExpiredToken(ref cause) => write!(f, "{}", cause),
+            ResolveCustomerError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ResolveCustomerError::InvalidToken(ref cause) => write!(f, "{}", cause),
+            ResolveCustomerError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResolveCustomerError {}
 /// Trait representing the capabilities of the AWSMarketplace Metering API. AWSMarketplace Metering clients implement this trait.
 pub trait MarketplaceMetering {
     /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>

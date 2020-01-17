@@ -42,6 +42,7 @@ pub struct CognitoIdentityProvider {
 
 /// <p>Input to the CreateIdentityPool action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIdentityPoolInput {
     /// <p>Enables or disables the Basic (Classic) authentication flow. For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/authentication-flow.html">Identity Pools (Federated Identities) Authentication Flow</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
     #[serde(rename = "AllowClassicFlow")]
@@ -103,6 +104,7 @@ pub struct Credentials {
 
 /// <p>Input to the <code>DeleteIdentities</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIdentitiesInput {
     /// <p>A list of 1-60 identities that you want to delete.</p>
     #[serde(rename = "IdentityIdsToDelete")]
@@ -121,6 +123,7 @@ pub struct DeleteIdentitiesResponse {
 
 /// <p>Input to the DeleteIdentityPool action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIdentityPoolInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -129,6 +132,7 @@ pub struct DeleteIdentityPoolInput {
 
 /// <p>Input to the <code>DescribeIdentity</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -137,6 +141,7 @@ pub struct DescribeIdentityInput {
 
 /// <p>Input to the DescribeIdentityPool action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityPoolInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -145,6 +150,7 @@ pub struct DescribeIdentityPoolInput {
 
 /// <p>Input to the <code>GetCredentialsForIdentity</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCredentialsForIdentityInput {
     /// <p>The Amazon Resource Name (ARN) of the role to be assumed when multiple roles were received in the token from the identity provider. For example, a SAML-based identity provider. This parameter is optional for identity providers that do not support role customization.</p>
     #[serde(rename = "CustomRoleArn")]
@@ -175,6 +181,7 @@ pub struct GetCredentialsForIdentityResponse {
 
 /// <p>Input to the GetId action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdInput {
     /// <p>A standard AWS account ID (9+ digits).</p>
     #[serde(rename = "AccountId")]
@@ -201,6 +208,7 @@ pub struct GetIdResponse {
 
 /// <p>Input to the <code>GetIdentityPoolRoles</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdentityPoolRolesInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -227,6 +235,7 @@ pub struct GetIdentityPoolRolesResponse {
 
 /// <p>Input to the <code>GetOpenIdTokenForDeveloperIdentity</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpenIdTokenForDeveloperIdentityInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -260,6 +269,7 @@ pub struct GetOpenIdTokenForDeveloperIdentityResponse {
 
 /// <p>Input to the GetOpenIdToken action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpenIdTokenInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -364,6 +374,7 @@ pub struct IdentityPoolShortDescription {
 
 /// <p>Input to the ListIdentities action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIdentitiesInput {
     /// <p>An optional boolean parameter that allows you to hide disabled identities. If omitted, the ListIdentities API will include disabled identities in the response.</p>
     #[serde(rename = "HideDisabled")]
@@ -401,6 +412,7 @@ pub struct ListIdentitiesResponse {
 
 /// <p>Input to the ListIdentityPools action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIdentityPoolsInput {
     /// <p>The maximum number of identities to return.</p>
     #[serde(rename = "MaxResults")]
@@ -426,6 +438,7 @@ pub struct ListIdentityPoolsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the identity pool that the tags are assigned to.</p>
     #[serde(rename = "ResourceArn")]
@@ -443,6 +456,7 @@ pub struct ListTagsForResourceResponse {
 
 /// <p>Input to the <code>LookupDeveloperIdentityInput</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LookupDeveloperIdentityInput {
     /// <p>A unique ID used by your backend authentication process to identify a user. Typically, a developer identity provider would issue many developer user identifiers, in keeping with the number of users.</p>
     #[serde(rename = "DeveloperUserIdentifier")]
@@ -502,6 +516,7 @@ pub struct MappingRule {
 
 /// <p>Input to the <code>MergeDeveloperIdentities</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeDeveloperIdentitiesInput {
     /// <p>User identifier for the destination user. The value should be a <code>DeveloperUserIdentifier</code>.</p>
     #[serde(rename = "DestinationUserIdentifier")]
@@ -553,6 +568,7 @@ pub struct RulesConfigurationType {
 
 /// <p>Input to the <code>SetIdentityPoolRoles</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIdentityPoolRolesInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -567,6 +583,7 @@ pub struct SetIdentityPoolRolesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the identity pool to assign the tags to.</p>
     #[serde(rename = "ResourceArn")]
@@ -582,6 +599,7 @@ pub struct TagResourceResponse {}
 
 /// <p>Input to the <code>UnlinkDeveloperIdentity</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnlinkDeveloperIdentityInput {
     /// <p>The "domain" by which Cognito will refer to your users.</p>
     #[serde(rename = "DeveloperProviderName")]
@@ -599,6 +617,7 @@ pub struct UnlinkDeveloperIdentityInput {
 
 /// <p>Input to the UnlinkIdentity action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnlinkIdentityInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -626,6 +645,7 @@ pub struct UnprocessedIdentityId {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the identity pool that the tags are assigned to.</p>
     #[serde(rename = "ResourceArn")]
@@ -687,21 +707,17 @@ impl CreateIdentityPoolError {
 }
 impl fmt::Display for CreateIdentityPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateIdentityPoolError {
-    fn description(&self) -> &str {
         match *self {
-            CreateIdentityPoolError::InternalError(ref cause) => cause,
-            CreateIdentityPoolError::InvalidParameter(ref cause) => cause,
-            CreateIdentityPoolError::LimitExceeded(ref cause) => cause,
-            CreateIdentityPoolError::NotAuthorized(ref cause) => cause,
-            CreateIdentityPoolError::ResourceConflict(ref cause) => cause,
-            CreateIdentityPoolError::TooManyRequests(ref cause) => cause,
+            CreateIdentityPoolError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateIdentityPoolError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateIdentityPoolError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateIdentityPoolError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            CreateIdentityPoolError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            CreateIdentityPoolError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateIdentityPoolError {}
 /// Errors returned by DeleteIdentities
 #[derive(Debug, PartialEq)]
 pub enum DeleteIdentitiesError {
@@ -735,18 +751,14 @@ impl DeleteIdentitiesError {
 }
 impl fmt::Display for DeleteIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteIdentitiesError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteIdentitiesError::InternalError(ref cause) => cause,
-            DeleteIdentitiesError::InvalidParameter(ref cause) => cause,
-            DeleteIdentitiesError::TooManyRequests(ref cause) => cause,
+            DeleteIdentitiesError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteIdentitiesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteIdentitiesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteIdentitiesError {}
 /// Errors returned by DeleteIdentityPool
 #[derive(Debug, PartialEq)]
 pub enum DeleteIdentityPoolError {
@@ -790,20 +802,16 @@ impl DeleteIdentityPoolError {
 }
 impl fmt::Display for DeleteIdentityPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteIdentityPoolError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteIdentityPoolError::InternalError(ref cause) => cause,
-            DeleteIdentityPoolError::InvalidParameter(ref cause) => cause,
-            DeleteIdentityPoolError::NotAuthorized(ref cause) => cause,
-            DeleteIdentityPoolError::ResourceNotFound(ref cause) => cause,
-            DeleteIdentityPoolError::TooManyRequests(ref cause) => cause,
+            DeleteIdentityPoolError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteIdentityPoolError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteIdentityPoolError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteIdentityPoolError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteIdentityPoolError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteIdentityPoolError {}
 /// Errors returned by DescribeIdentity
 #[derive(Debug, PartialEq)]
 pub enum DescribeIdentityError {
@@ -847,20 +855,16 @@ impl DescribeIdentityError {
 }
 impl fmt::Display for DescribeIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeIdentityError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeIdentityError::InternalError(ref cause) => cause,
-            DescribeIdentityError::InvalidParameter(ref cause) => cause,
-            DescribeIdentityError::NotAuthorized(ref cause) => cause,
-            DescribeIdentityError::ResourceNotFound(ref cause) => cause,
-            DescribeIdentityError::TooManyRequests(ref cause) => cause,
+            DescribeIdentityError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeIdentityError {}
 /// Errors returned by DescribeIdentityPool
 #[derive(Debug, PartialEq)]
 pub enum DescribeIdentityPoolError {
@@ -910,20 +914,16 @@ impl DescribeIdentityPoolError {
 }
 impl fmt::Display for DescribeIdentityPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeIdentityPoolError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeIdentityPoolError::InternalError(ref cause) => cause,
-            DescribeIdentityPoolError::InvalidParameter(ref cause) => cause,
-            DescribeIdentityPoolError::NotAuthorized(ref cause) => cause,
-            DescribeIdentityPoolError::ResourceNotFound(ref cause) => cause,
-            DescribeIdentityPoolError::TooManyRequests(ref cause) => cause,
+            DescribeIdentityPoolError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityPoolError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityPoolError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityPoolError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityPoolError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeIdentityPoolError {}
 /// Errors returned by GetCredentialsForIdentity
 #[derive(Debug, PartialEq)]
 pub enum GetCredentialsForIdentityError {
@@ -998,23 +998,21 @@ impl GetCredentialsForIdentityError {
 }
 impl fmt::Display for GetCredentialsForIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCredentialsForIdentityError {
-    fn description(&self) -> &str {
         match *self {
-            GetCredentialsForIdentityError::ExternalService(ref cause) => cause,
-            GetCredentialsForIdentityError::InternalError(ref cause) => cause,
-            GetCredentialsForIdentityError::InvalidIdentityPoolConfiguration(ref cause) => cause,
-            GetCredentialsForIdentityError::InvalidParameter(ref cause) => cause,
-            GetCredentialsForIdentityError::NotAuthorized(ref cause) => cause,
-            GetCredentialsForIdentityError::ResourceConflict(ref cause) => cause,
-            GetCredentialsForIdentityError::ResourceNotFound(ref cause) => cause,
-            GetCredentialsForIdentityError::TooManyRequests(ref cause) => cause,
+            GetCredentialsForIdentityError::ExternalService(ref cause) => write!(f, "{}", cause),
+            GetCredentialsForIdentityError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetCredentialsForIdentityError::InvalidIdentityPoolConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCredentialsForIdentityError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetCredentialsForIdentityError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetCredentialsForIdentityError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            GetCredentialsForIdentityError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetCredentialsForIdentityError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCredentialsForIdentityError {}
 /// Errors returned by GetId
 #[derive(Debug, PartialEq)]
 pub enum GetIdError {
@@ -1073,23 +1071,19 @@ impl GetIdError {
 }
 impl fmt::Display for GetIdError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIdError {
-    fn description(&self) -> &str {
         match *self {
-            GetIdError::ExternalService(ref cause) => cause,
-            GetIdError::InternalError(ref cause) => cause,
-            GetIdError::InvalidParameter(ref cause) => cause,
-            GetIdError::LimitExceeded(ref cause) => cause,
-            GetIdError::NotAuthorized(ref cause) => cause,
-            GetIdError::ResourceConflict(ref cause) => cause,
-            GetIdError::ResourceNotFound(ref cause) => cause,
-            GetIdError::TooManyRequests(ref cause) => cause,
+            GetIdError::ExternalService(ref cause) => write!(f, "{}", cause),
+            GetIdError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetIdError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetIdError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetIdError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetIdError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            GetIdError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetIdError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetIdError {}
 /// Errors returned by GetIdentityPoolRoles
 #[derive(Debug, PartialEq)]
 pub enum GetIdentityPoolRolesError {
@@ -1146,21 +1140,17 @@ impl GetIdentityPoolRolesError {
 }
 impl fmt::Display for GetIdentityPoolRolesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIdentityPoolRolesError {
-    fn description(&self) -> &str {
         match *self {
-            GetIdentityPoolRolesError::InternalError(ref cause) => cause,
-            GetIdentityPoolRolesError::InvalidParameter(ref cause) => cause,
-            GetIdentityPoolRolesError::NotAuthorized(ref cause) => cause,
-            GetIdentityPoolRolesError::ResourceConflict(ref cause) => cause,
-            GetIdentityPoolRolesError::ResourceNotFound(ref cause) => cause,
-            GetIdentityPoolRolesError::TooManyRequests(ref cause) => cause,
+            GetIdentityPoolRolesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetIdentityPoolRolesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetIdentityPoolRolesError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetIdentityPoolRolesError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            GetIdentityPoolRolesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetIdentityPoolRolesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetIdentityPoolRolesError {}
 /// Errors returned by GetOpenIdToken
 #[derive(Debug, PartialEq)]
 pub enum GetOpenIdTokenError {
@@ -1214,22 +1204,18 @@ impl GetOpenIdTokenError {
 }
 impl fmt::Display for GetOpenIdTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOpenIdTokenError {
-    fn description(&self) -> &str {
         match *self {
-            GetOpenIdTokenError::ExternalService(ref cause) => cause,
-            GetOpenIdTokenError::InternalError(ref cause) => cause,
-            GetOpenIdTokenError::InvalidParameter(ref cause) => cause,
-            GetOpenIdTokenError::NotAuthorized(ref cause) => cause,
-            GetOpenIdTokenError::ResourceConflict(ref cause) => cause,
-            GetOpenIdTokenError::ResourceNotFound(ref cause) => cause,
-            GetOpenIdTokenError::TooManyRequests(ref cause) => cause,
+            GetOpenIdTokenError::ExternalService(ref cause) => write!(f, "{}", cause),
+            GetOpenIdTokenError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetOpenIdTokenError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetOpenIdTokenError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetOpenIdTokenError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            GetOpenIdTokenError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetOpenIdTokenError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOpenIdTokenError {}
 /// Errors returned by GetOpenIdTokenForDeveloperIdentity
 #[derive(Debug, PartialEq)]
 pub enum GetOpenIdTokenForDeveloperIdentityError {
@@ -1301,24 +1287,32 @@ impl GetOpenIdTokenForDeveloperIdentityError {
 }
 impl fmt::Display for GetOpenIdTokenForDeveloperIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOpenIdTokenForDeveloperIdentityError {
-    fn description(&self) -> &str {
         match *self {
             GetOpenIdTokenForDeveloperIdentityError::DeveloperUserAlreadyRegistered(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            GetOpenIdTokenForDeveloperIdentityError::InternalError(ref cause) => cause,
-            GetOpenIdTokenForDeveloperIdentityError::InvalidParameter(ref cause) => cause,
-            GetOpenIdTokenForDeveloperIdentityError::NotAuthorized(ref cause) => cause,
-            GetOpenIdTokenForDeveloperIdentityError::ResourceConflict(ref cause) => cause,
-            GetOpenIdTokenForDeveloperIdentityError::ResourceNotFound(ref cause) => cause,
-            GetOpenIdTokenForDeveloperIdentityError::TooManyRequests(ref cause) => cause,
+            GetOpenIdTokenForDeveloperIdentityError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetOpenIdTokenForDeveloperIdentityError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetOpenIdTokenForDeveloperIdentityError::NotAuthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetOpenIdTokenForDeveloperIdentityError::ResourceConflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetOpenIdTokenForDeveloperIdentityError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetOpenIdTokenForDeveloperIdentityError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetOpenIdTokenForDeveloperIdentityError {}
 /// Errors returned by ListIdentities
 #[derive(Debug, PartialEq)]
 pub enum ListIdentitiesError {
@@ -1362,20 +1356,16 @@ impl ListIdentitiesError {
 }
 impl fmt::Display for ListIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListIdentitiesError {
-    fn description(&self) -> &str {
         match *self {
-            ListIdentitiesError::InternalError(ref cause) => cause,
-            ListIdentitiesError::InvalidParameter(ref cause) => cause,
-            ListIdentitiesError::NotAuthorized(ref cause) => cause,
-            ListIdentitiesError::ResourceNotFound(ref cause) => cause,
-            ListIdentitiesError::TooManyRequests(ref cause) => cause,
+            ListIdentitiesError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListIdentitiesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListIdentitiesError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListIdentitiesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListIdentitiesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListIdentitiesError {}
 /// Errors returned by ListIdentityPools
 #[derive(Debug, PartialEq)]
 pub enum ListIdentityPoolsError {
@@ -1419,20 +1409,16 @@ impl ListIdentityPoolsError {
 }
 impl fmt::Display for ListIdentityPoolsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListIdentityPoolsError {
-    fn description(&self) -> &str {
         match *self {
-            ListIdentityPoolsError::InternalError(ref cause) => cause,
-            ListIdentityPoolsError::InvalidParameter(ref cause) => cause,
-            ListIdentityPoolsError::NotAuthorized(ref cause) => cause,
-            ListIdentityPoolsError::ResourceNotFound(ref cause) => cause,
-            ListIdentityPoolsError::TooManyRequests(ref cause) => cause,
+            ListIdentityPoolsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListIdentityPoolsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListIdentityPoolsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListIdentityPoolsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListIdentityPoolsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListIdentityPoolsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1480,20 +1466,16 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalError(ref cause) => cause,
-            ListTagsForResourceError::InvalidParameter(ref cause) => cause,
-            ListTagsForResourceError::NotAuthorized(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
-            ListTagsForResourceError::TooManyRequests(ref cause) => cause,
+            ListTagsForResourceError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by LookupDeveloperIdentity
 #[derive(Debug, PartialEq)]
 pub enum LookupDeveloperIdentityError {
@@ -1554,21 +1536,17 @@ impl LookupDeveloperIdentityError {
 }
 impl fmt::Display for LookupDeveloperIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for LookupDeveloperIdentityError {
-    fn description(&self) -> &str {
         match *self {
-            LookupDeveloperIdentityError::InternalError(ref cause) => cause,
-            LookupDeveloperIdentityError::InvalidParameter(ref cause) => cause,
-            LookupDeveloperIdentityError::NotAuthorized(ref cause) => cause,
-            LookupDeveloperIdentityError::ResourceConflict(ref cause) => cause,
-            LookupDeveloperIdentityError::ResourceNotFound(ref cause) => cause,
-            LookupDeveloperIdentityError::TooManyRequests(ref cause) => cause,
+            LookupDeveloperIdentityError::InternalError(ref cause) => write!(f, "{}", cause),
+            LookupDeveloperIdentityError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            LookupDeveloperIdentityError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            LookupDeveloperIdentityError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            LookupDeveloperIdentityError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            LookupDeveloperIdentityError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for LookupDeveloperIdentityError {}
 /// Errors returned by MergeDeveloperIdentities
 #[derive(Debug, PartialEq)]
 pub enum MergeDeveloperIdentitiesError {
@@ -1629,21 +1607,17 @@ impl MergeDeveloperIdentitiesError {
 }
 impl fmt::Display for MergeDeveloperIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for MergeDeveloperIdentitiesError {
-    fn description(&self) -> &str {
         match *self {
-            MergeDeveloperIdentitiesError::InternalError(ref cause) => cause,
-            MergeDeveloperIdentitiesError::InvalidParameter(ref cause) => cause,
-            MergeDeveloperIdentitiesError::NotAuthorized(ref cause) => cause,
-            MergeDeveloperIdentitiesError::ResourceConflict(ref cause) => cause,
-            MergeDeveloperIdentitiesError::ResourceNotFound(ref cause) => cause,
-            MergeDeveloperIdentitiesError::TooManyRequests(ref cause) => cause,
+            MergeDeveloperIdentitiesError::InternalError(ref cause) => write!(f, "{}", cause),
+            MergeDeveloperIdentitiesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            MergeDeveloperIdentitiesError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            MergeDeveloperIdentitiesError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            MergeDeveloperIdentitiesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            MergeDeveloperIdentitiesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for MergeDeveloperIdentitiesError {}
 /// Errors returned by SetIdentityPoolRoles
 #[derive(Debug, PartialEq)]
 pub enum SetIdentityPoolRolesError {
@@ -1707,22 +1681,18 @@ impl SetIdentityPoolRolesError {
 }
 impl fmt::Display for SetIdentityPoolRolesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetIdentityPoolRolesError {
-    fn description(&self) -> &str {
         match *self {
-            SetIdentityPoolRolesError::ConcurrentModification(ref cause) => cause,
-            SetIdentityPoolRolesError::InternalError(ref cause) => cause,
-            SetIdentityPoolRolesError::InvalidParameter(ref cause) => cause,
-            SetIdentityPoolRolesError::NotAuthorized(ref cause) => cause,
-            SetIdentityPoolRolesError::ResourceConflict(ref cause) => cause,
-            SetIdentityPoolRolesError::ResourceNotFound(ref cause) => cause,
-            SetIdentityPoolRolesError::TooManyRequests(ref cause) => cause,
+            SetIdentityPoolRolesError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            SetIdentityPoolRolesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetIdentityPoolRolesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetIdentityPoolRolesError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            SetIdentityPoolRolesError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            SetIdentityPoolRolesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SetIdentityPoolRolesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetIdentityPoolRolesError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1766,20 +1736,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InternalError(ref cause) => cause,
-            TagResourceError::InvalidParameter(ref cause) => cause,
-            TagResourceError::NotAuthorized(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::TooManyRequests(ref cause) => cause,
+            TagResourceError::InternalError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UnlinkDeveloperIdentity
 #[derive(Debug, PartialEq)]
 pub enum UnlinkDeveloperIdentityError {
@@ -1840,21 +1806,17 @@ impl UnlinkDeveloperIdentityError {
 }
 impl fmt::Display for UnlinkDeveloperIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UnlinkDeveloperIdentityError {
-    fn description(&self) -> &str {
         match *self {
-            UnlinkDeveloperIdentityError::InternalError(ref cause) => cause,
-            UnlinkDeveloperIdentityError::InvalidParameter(ref cause) => cause,
-            UnlinkDeveloperIdentityError::NotAuthorized(ref cause) => cause,
-            UnlinkDeveloperIdentityError::ResourceConflict(ref cause) => cause,
-            UnlinkDeveloperIdentityError::ResourceNotFound(ref cause) => cause,
-            UnlinkDeveloperIdentityError::TooManyRequests(ref cause) => cause,
+            UnlinkDeveloperIdentityError::InternalError(ref cause) => write!(f, "{}", cause),
+            UnlinkDeveloperIdentityError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UnlinkDeveloperIdentityError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UnlinkDeveloperIdentityError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            UnlinkDeveloperIdentityError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UnlinkDeveloperIdentityError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UnlinkDeveloperIdentityError {}
 /// Errors returned by UnlinkIdentity
 #[derive(Debug, PartialEq)]
 pub enum UnlinkIdentityError {
@@ -1908,22 +1870,18 @@ impl UnlinkIdentityError {
 }
 impl fmt::Display for UnlinkIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UnlinkIdentityError {
-    fn description(&self) -> &str {
         match *self {
-            UnlinkIdentityError::ExternalService(ref cause) => cause,
-            UnlinkIdentityError::InternalError(ref cause) => cause,
-            UnlinkIdentityError::InvalidParameter(ref cause) => cause,
-            UnlinkIdentityError::NotAuthorized(ref cause) => cause,
-            UnlinkIdentityError::ResourceConflict(ref cause) => cause,
-            UnlinkIdentityError::ResourceNotFound(ref cause) => cause,
-            UnlinkIdentityError::TooManyRequests(ref cause) => cause,
+            UnlinkIdentityError::ExternalService(ref cause) => write!(f, "{}", cause),
+            UnlinkIdentityError::InternalError(ref cause) => write!(f, "{}", cause),
+            UnlinkIdentityError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UnlinkIdentityError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UnlinkIdentityError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            UnlinkIdentityError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UnlinkIdentityError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UnlinkIdentityError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1967,20 +1925,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InternalError(ref cause) => cause,
-            UntagResourceError::InvalidParameter(ref cause) => cause,
-            UntagResourceError::NotAuthorized(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::TooManyRequests(ref cause) => cause,
+            UntagResourceError::InternalError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateIdentityPool
 #[derive(Debug, PartialEq)]
 pub enum UpdateIdentityPoolError {
@@ -2041,23 +1995,19 @@ impl UpdateIdentityPoolError {
 }
 impl fmt::Display for UpdateIdentityPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateIdentityPoolError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateIdentityPoolError::ConcurrentModification(ref cause) => cause,
-            UpdateIdentityPoolError::InternalError(ref cause) => cause,
-            UpdateIdentityPoolError::InvalidParameter(ref cause) => cause,
-            UpdateIdentityPoolError::LimitExceeded(ref cause) => cause,
-            UpdateIdentityPoolError::NotAuthorized(ref cause) => cause,
-            UpdateIdentityPoolError::ResourceConflict(ref cause) => cause,
-            UpdateIdentityPoolError::ResourceNotFound(ref cause) => cause,
-            UpdateIdentityPoolError::TooManyRequests(ref cause) => cause,
+            UpdateIdentityPoolError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateIdentityPoolError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateIdentityPoolError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateIdentityPoolError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateIdentityPoolError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateIdentityPoolError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            UpdateIdentityPoolError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateIdentityPoolError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateIdentityPoolError {}
 /// Trait representing the capabilities of the Amazon Cognito Identity API. Amazon Cognito Identity clients implement this trait.
 pub trait CognitoIdentity {
     /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>

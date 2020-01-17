@@ -65,6 +65,7 @@ pub struct AccountUsage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddLayerVersionPermissionRequest {
     /// <p>The API action that grants access to the layer. For example, <code>lambda:GetLayerVersion</code>.</p>
     #[serde(rename = "Action")]
@@ -105,6 +106,7 @@ pub struct AddLayerVersionPermissionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddPermissionRequest {
     /// <p>The action that the principal can use on the function. For example, <code>lambda:InvokeFunction</code> or <code>lambda:GetFunction</code>.</p>
     #[serde(rename = "Action")]
@@ -198,6 +200,7 @@ pub struct Concurrency {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAliasRequest {
     /// <p>A description of the alias.</p>
     #[serde(rename = "Description")]
@@ -219,6 +222,7 @@ pub struct CreateAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventSourceMappingRequest {
     /// <p><p>The maximum number of items to retrieve in a single batch.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - Default 10. Max 10.</p> </li> </ul></p>
     #[serde(rename = "BatchSize")]
@@ -269,6 +273,7 @@ pub struct CreateEventSourceMappingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFunctionRequest {
     /// <p>The code for the function.</p>
     #[serde(rename = "Code")]
@@ -341,6 +346,7 @@ pub struct DeadLetterConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAliasRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -351,6 +357,7 @@ pub struct DeleteAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventSourceMappingRequest {
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
@@ -358,6 +365,7 @@ pub struct DeleteEventSourceMappingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFunctionConcurrencyRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -365,6 +373,7 @@ pub struct DeleteFunctionConcurrencyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFunctionEventInvokeConfigRequest {
     /// <p>The name of the Lambda function, version, or alias.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:v1</code> (with alias).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -376,6 +385,7 @@ pub struct DeleteFunctionEventInvokeConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFunctionRequest {
     /// <p>The name of the Lambda function or version.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:1</code> (with version).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -387,6 +397,7 @@ pub struct DeleteFunctionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLayerVersionRequest {
     /// <p>The name or Amazon Resource Name (ARN) of the layer.</p>
     #[serde(rename = "LayerName")]
@@ -397,6 +408,7 @@ pub struct DeleteLayerVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProvisionedConcurrencyConfigRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -421,6 +433,7 @@ pub struct DestinationConfig {
 
 /// <p>A function's environment variable settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Environment {
     /// <p>Environment variable key-value pairs.</p>
     #[serde(rename = "Variables")]
@@ -520,6 +533,7 @@ pub struct EventSourceMappingConfiguration {
 
 /// <p>The code for the Lambda function. You can specify either an object in Amazon S3, or upload a deployment package directly.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FunctionCode {
     /// <p>An Amazon S3 bucket in the same AWS Region as your function. The bucket can be in a different AWS account.</p>
     #[serde(rename = "S3Bucket")]
@@ -694,6 +708,7 @@ pub struct FunctionEventInvokeConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountSettingsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -710,6 +725,7 @@ pub struct GetAccountSettingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAliasRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -720,6 +736,7 @@ pub struct GetAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEventSourceMappingRequest {
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
@@ -727,6 +744,7 @@ pub struct GetEventSourceMappingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionConcurrencyRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -743,6 +761,7 @@ pub struct GetFunctionConcurrencyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionConfigurationRequest {
     /// <p>The name of the Lambda function, version, or alias.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:v1</code> (with alias).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -754,6 +773,7 @@ pub struct GetFunctionConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionEventInvokeConfigRequest {
     /// <p>The name of the Lambda function, version, or alias.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:v1</code> (with alias).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -765,6 +785,7 @@ pub struct GetFunctionEventInvokeConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionRequest {
     /// <p>The name of the Lambda function, version, or alias.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:v1</code> (with alias).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -797,6 +818,7 @@ pub struct GetFunctionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLayerVersionByArnRequest {
     /// <p>The ARN of the layer version.</p>
     #[serde(rename = "Arn")]
@@ -804,6 +826,7 @@ pub struct GetLayerVersionByArnRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLayerVersionPolicyRequest {
     /// <p>The name or Amazon Resource Name (ARN) of the layer.</p>
     #[serde(rename = "LayerName")]
@@ -827,6 +850,7 @@ pub struct GetLayerVersionPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLayerVersionRequest {
     /// <p>The name or Amazon Resource Name (ARN) of the layer.</p>
     #[serde(rename = "LayerName")]
@@ -874,6 +898,7 @@ pub struct GetLayerVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyRequest {
     /// <p>The name of the Lambda function, version, or alias.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:v1</code> (with alias).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -898,6 +923,7 @@ pub struct GetPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProvisionedConcurrencyConfigRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -937,6 +963,7 @@ pub struct GetProvisionedConcurrencyConfigResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvocationRequest {
     /// <p>Up to 3583 bytes of base64-encoded data about the invoking client to pass to the function in the context object.</p>
     #[serde(rename = "ClientContext")]
@@ -983,6 +1010,7 @@ pub struct InvocationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvokeAsyncRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -1023,6 +1051,7 @@ pub struct Layer {
 
 /// <p>A ZIP archive that contains the contents of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. You can specify either an Amazon S3 location, or upload a layer archive directly.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LayerVersionContentInput {
     /// <p>The Amazon S3 bucket of the layer archive.</p>
     #[serde(rename = "S3Bucket")]
@@ -1114,6 +1143,7 @@ pub struct LayersListItem {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAliasesRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -1146,6 +1176,7 @@ pub struct ListAliasesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventSourceMappingsRequest {
     /// <p><p>The Amazon Resource Name (ARN) of the event source.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - The ARN of the data stream or a stream consumer.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - The ARN of the stream.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - The ARN of the queue.</p> </li> </ul></p>
     #[serde(rename = "EventSourceArn")]
@@ -1179,6 +1210,7 @@ pub struct ListEventSourceMappingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionEventInvokeConfigsRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -1207,6 +1239,7 @@ pub struct ListFunctionEventInvokeConfigsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionsRequest {
     /// <p>Set to <code>ALL</code> to include entries for all published versions of each function.</p>
     #[serde(rename = "FunctionVersion")]
@@ -1241,6 +1274,7 @@ pub struct ListFunctionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLayerVersionsRequest {
     /// <p>A runtime identifier. For example, <code>go1.x</code>.</p>
     #[serde(rename = "CompatibleRuntime")]
@@ -1273,6 +1307,7 @@ pub struct ListLayerVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLayersRequest {
     /// <p>A runtime identifier. For example, <code>go1.x</code>.</p>
     #[serde(rename = "CompatibleRuntime")]
@@ -1302,6 +1337,7 @@ pub struct ListLayersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisionedConcurrencyConfigsRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -1330,6 +1366,7 @@ pub struct ListProvisionedConcurrencyConfigsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
     /// <p>The function's Amazon Resource Name (ARN).</p>
     #[serde(rename = "Resource")]
@@ -1346,6 +1383,7 @@ pub struct ListTagsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVersionsByFunctionRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -1426,6 +1464,7 @@ pub struct ProvisionedConcurrencyConfigListItem {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublishLayerVersionRequest {
     /// <p>A list of compatible <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">function runtimes</a>. Used for filtering with <a>ListLayers</a> and <a>ListLayerVersions</a>.</p>
     #[serde(rename = "CompatibleRuntimes")]
@@ -1485,6 +1524,7 @@ pub struct PublishLayerVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublishVersionRequest {
     /// <p>Only publish a version if the hash value matches the value that's specified. Use this option to avoid publishing a version if the function code has changed since you last updated it. You can get the hash for the version that you uploaded from the output of <a>UpdateFunctionCode</a>.</p>
     #[serde(rename = "CodeSha256")]
@@ -1504,6 +1544,7 @@ pub struct PublishVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFunctionConcurrencyRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -1514,6 +1555,7 @@ pub struct PutFunctionConcurrencyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFunctionEventInvokeConfigRequest {
     /// <p><p>A destination for events after they have been sent to a function for processing.</p> <p class="title"> <b>Destinations</b> </p> <ul> <li> <p> <b>Function</b> - The Amazon Resource Name (ARN) of a Lambda function.</p> </li> <li> <p> <b>Queue</b> - The ARN of an SQS queue.</p> </li> <li> <p> <b>Topic</b> - The ARN of an SNS topic.</p> </li> <li> <p> <b>Event Bus</b> - The ARN of an Amazon EventBridge event bus.</p> </li> </ul></p>
     #[serde(rename = "DestinationConfig")]
@@ -1537,6 +1579,7 @@ pub struct PutFunctionEventInvokeConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutProvisionedConcurrencyConfigRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -1579,6 +1622,7 @@ pub struct PutProvisionedConcurrencyConfigResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveLayerVersionPermissionRequest {
     /// <p>The name or Amazon Resource Name (ARN) of the layer.</p>
     #[serde(rename = "LayerName")]
@@ -1596,6 +1640,7 @@ pub struct RemoveLayerVersionPermissionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemovePermissionRequest {
     /// <p>The name of the Lambda function, version, or alias.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:v1</code> (with alias).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -1614,6 +1659,7 @@ pub struct RemovePermissionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The function's Amazon Resource Name (ARN).</p>
     #[serde(rename = "Resource")]
@@ -1625,6 +1671,7 @@ pub struct TagResourceRequest {
 
 /// <p>The function's AWS X-Ray tracing configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TracingConfig {
     /// <p>The tracing mode.</p>
     #[serde(rename = "Mode")]
@@ -1643,6 +1690,7 @@ pub struct TracingConfigResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The function's Amazon Resource Name (ARN).</p>
     #[serde(rename = "Resource")]
@@ -1653,6 +1701,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAliasRequest {
     /// <p>A description of the alias.</p>
     #[serde(rename = "Description")]
@@ -1679,6 +1728,7 @@ pub struct UpdateAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEventSourceMappingRequest {
     /// <p><p>The maximum number of items to retrieve in a single batch.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - Default 10. Max 10.</p> </li> </ul></p>
     #[serde(rename = "BatchSize")]
@@ -1722,6 +1772,7 @@ pub struct UpdateEventSourceMappingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFunctionCodeRequest {
     /// <p>Set to true to validate the request parameters and access permissions without modifying the function code.</p>
     #[serde(rename = "DryRun")]
@@ -1762,6 +1813,7 @@ pub struct UpdateFunctionCodeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFunctionConfigurationRequest {
     /// <p>A dead letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#dlq">Dead Letter Queues</a>.</p>
     #[serde(rename = "DeadLetterConfig")]
@@ -1821,6 +1873,7 @@ pub struct UpdateFunctionConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFunctionEventInvokeConfigRequest {
     /// <p><p>A destination for events after they have been sent to a function for processing.</p> <p class="title"> <b>Destinations</b> </p> <ul> <li> <p> <b>Function</b> - The Amazon Resource Name (ARN) of a Lambda function.</p> </li> <li> <p> <b>Queue</b> - The ARN of an SQS queue.</p> </li> <li> <p> <b>Topic</b> - The ARN of an SNS topic.</p> </li> <li> <p> <b>Event Bus</b> - The ARN of an Amazon EventBridge event bus.</p> </li> </ul></p>
     #[serde(rename = "DestinationConfig")]
@@ -1845,6 +1898,7 @@ pub struct UpdateFunctionEventInvokeConfigRequest {
 
 /// <p>The VPC security groups and subnets that are attached to a Lambda function. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html">VPC Settings</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VpcConfig {
     /// <p>A list of VPC security groups IDs.</p>
     #[serde(rename = "SecurityGroupIds")]
@@ -1939,22 +1993,22 @@ impl AddLayerVersionPermissionError {
 }
 impl fmt::Display for AddLayerVersionPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddLayerVersionPermissionError {
-    fn description(&self) -> &str {
         match *self {
-            AddLayerVersionPermissionError::InvalidParameterValue(ref cause) => cause,
-            AddLayerVersionPermissionError::PolicyLengthExceeded(ref cause) => cause,
-            AddLayerVersionPermissionError::PreconditionFailed(ref cause) => cause,
-            AddLayerVersionPermissionError::ResourceConflict(ref cause) => cause,
-            AddLayerVersionPermissionError::ResourceNotFound(ref cause) => cause,
-            AddLayerVersionPermissionError::Service(ref cause) => cause,
-            AddLayerVersionPermissionError::TooManyRequests(ref cause) => cause,
+            AddLayerVersionPermissionError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddLayerVersionPermissionError::PolicyLengthExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddLayerVersionPermissionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            AddLayerVersionPermissionError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            AddLayerVersionPermissionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddLayerVersionPermissionError::Service(ref cause) => write!(f, "{}", cause),
+            AddLayerVersionPermissionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddLayerVersionPermissionError {}
 /// Errors returned by AddPermission
 #[derive(Debug, PartialEq)]
 pub enum AddPermissionError {
@@ -2008,22 +2062,18 @@ impl AddPermissionError {
 }
 impl fmt::Display for AddPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddPermissionError {
-    fn description(&self) -> &str {
         match *self {
-            AddPermissionError::InvalidParameterValue(ref cause) => cause,
-            AddPermissionError::PolicyLengthExceeded(ref cause) => cause,
-            AddPermissionError::PreconditionFailed(ref cause) => cause,
-            AddPermissionError::ResourceConflict(ref cause) => cause,
-            AddPermissionError::ResourceNotFound(ref cause) => cause,
-            AddPermissionError::Service(ref cause) => cause,
-            AddPermissionError::TooManyRequests(ref cause) => cause,
+            AddPermissionError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::PolicyLengthExceeded(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::Service(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddPermissionError {}
 /// Errors returned by CreateAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAliasError {
@@ -2067,20 +2117,16 @@ impl CreateAliasError {
 }
 impl fmt::Display for CreateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAliasError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAliasError::InvalidParameterValue(ref cause) => cause,
-            CreateAliasError::ResourceConflict(ref cause) => cause,
-            CreateAliasError::ResourceNotFound(ref cause) => cause,
-            CreateAliasError::Service(ref cause) => cause,
-            CreateAliasError::TooManyRequests(ref cause) => cause,
+            CreateAliasError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::Service(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAliasError {}
 /// Errors returned by CreateEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSourceMappingError {
@@ -2132,20 +2178,18 @@ impl CreateEventSourceMappingError {
 }
 impl fmt::Display for CreateEventSourceMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEventSourceMappingError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEventSourceMappingError::InvalidParameterValue(ref cause) => cause,
-            CreateEventSourceMappingError::ResourceConflict(ref cause) => cause,
-            CreateEventSourceMappingError::ResourceNotFound(ref cause) => cause,
-            CreateEventSourceMappingError::Service(ref cause) => cause,
-            CreateEventSourceMappingError::TooManyRequests(ref cause) => cause,
+            CreateEventSourceMappingError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSourceMappingError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            CreateEventSourceMappingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateEventSourceMappingError::Service(ref cause) => write!(f, "{}", cause),
+            CreateEventSourceMappingError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEventSourceMappingError {}
 /// Errors returned by CreateFunction
 #[derive(Debug, PartialEq)]
 pub enum CreateFunctionError {
@@ -2196,21 +2240,17 @@ impl CreateFunctionError {
 }
 impl fmt::Display for CreateFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFunctionError::CodeStorageExceeded(ref cause) => cause,
-            CreateFunctionError::InvalidParameterValue(ref cause) => cause,
-            CreateFunctionError::ResourceConflict(ref cause) => cause,
-            CreateFunctionError::ResourceNotFound(ref cause) => cause,
-            CreateFunctionError::Service(ref cause) => cause,
-            CreateFunctionError::TooManyRequests(ref cause) => cause,
+            CreateFunctionError::CodeStorageExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::Service(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFunctionError {}
 /// Errors returned by DeleteAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAliasError {
@@ -2249,19 +2289,15 @@ impl DeleteAliasError {
 }
 impl fmt::Display for DeleteAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAliasError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAliasError::InvalidParameterValue(ref cause) => cause,
-            DeleteAliasError::ResourceConflict(ref cause) => cause,
-            DeleteAliasError::Service(ref cause) => cause,
-            DeleteAliasError::TooManyRequests(ref cause) => cause,
+            DeleteAliasError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAliasError {}
 /// Errors returned by DeleteEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventSourceMappingError {
@@ -2313,20 +2349,18 @@ impl DeleteEventSourceMappingError {
 }
 impl fmt::Display for DeleteEventSourceMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEventSourceMappingError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEventSourceMappingError::InvalidParameterValue(ref cause) => cause,
-            DeleteEventSourceMappingError::ResourceInUse(ref cause) => cause,
-            DeleteEventSourceMappingError::ResourceNotFound(ref cause) => cause,
-            DeleteEventSourceMappingError::Service(ref cause) => cause,
-            DeleteEventSourceMappingError::TooManyRequests(ref cause) => cause,
+            DeleteEventSourceMappingError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteEventSourceMappingError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteEventSourceMappingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteEventSourceMappingError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteEventSourceMappingError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEventSourceMappingError {}
 /// Errors returned by DeleteFunction
 #[derive(Debug, PartialEq)]
 pub enum DeleteFunctionError {
@@ -2372,20 +2406,16 @@ impl DeleteFunctionError {
 }
 impl fmt::Display for DeleteFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFunctionError::InvalidParameterValue(ref cause) => cause,
-            DeleteFunctionError::ResourceConflict(ref cause) => cause,
-            DeleteFunctionError::ResourceNotFound(ref cause) => cause,
-            DeleteFunctionError::Service(ref cause) => cause,
-            DeleteFunctionError::TooManyRequests(ref cause) => cause,
+            DeleteFunctionError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFunctionError {}
 /// Errors returned by DeleteFunctionConcurrency
 #[derive(Debug, PartialEq)]
 pub enum DeleteFunctionConcurrencyError {
@@ -2437,20 +2467,18 @@ impl DeleteFunctionConcurrencyError {
 }
 impl fmt::Display for DeleteFunctionConcurrencyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFunctionConcurrencyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFunctionConcurrencyError::InvalidParameterValue(ref cause) => cause,
-            DeleteFunctionConcurrencyError::ResourceConflict(ref cause) => cause,
-            DeleteFunctionConcurrencyError::ResourceNotFound(ref cause) => cause,
-            DeleteFunctionConcurrencyError::Service(ref cause) => cause,
-            DeleteFunctionConcurrencyError::TooManyRequests(ref cause) => cause,
+            DeleteFunctionConcurrencyError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteFunctionConcurrencyError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionConcurrencyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionConcurrencyError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionConcurrencyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFunctionConcurrencyError {}
 /// Errors returned by DeleteFunctionEventInvokeConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteFunctionEventInvokeConfigError {
@@ -2499,19 +2527,21 @@ impl DeleteFunctionEventInvokeConfigError {
 }
 impl fmt::Display for DeleteFunctionEventInvokeConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFunctionEventInvokeConfigError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFunctionEventInvokeConfigError::InvalidParameterValue(ref cause) => cause,
-            DeleteFunctionEventInvokeConfigError::ResourceNotFound(ref cause) => cause,
-            DeleteFunctionEventInvokeConfigError::Service(ref cause) => cause,
-            DeleteFunctionEventInvokeConfigError::TooManyRequests(ref cause) => cause,
+            DeleteFunctionEventInvokeConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteFunctionEventInvokeConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteFunctionEventInvokeConfigError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionEventInvokeConfigError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteFunctionEventInvokeConfigError {}
 /// Errors returned by DeleteLayerVersion
 #[derive(Debug, PartialEq)]
 pub enum DeleteLayerVersionError {
@@ -2540,17 +2570,13 @@ impl DeleteLayerVersionError {
 }
 impl fmt::Display for DeleteLayerVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLayerVersionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLayerVersionError::Service(ref cause) => cause,
-            DeleteLayerVersionError::TooManyRequests(ref cause) => cause,
+            DeleteLayerVersionError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteLayerVersionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLayerVersionError {}
 /// Errors returned by DeleteProvisionedConcurrencyConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteProvisionedConcurrencyConfigError {
@@ -2606,20 +2632,24 @@ impl DeleteProvisionedConcurrencyConfigError {
 }
 impl fmt::Display for DeleteProvisionedConcurrencyConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteProvisionedConcurrencyConfigError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteProvisionedConcurrencyConfigError::InvalidParameterValue(ref cause) => cause,
-            DeleteProvisionedConcurrencyConfigError::ResourceConflict(ref cause) => cause,
-            DeleteProvisionedConcurrencyConfigError::ResourceNotFound(ref cause) => cause,
-            DeleteProvisionedConcurrencyConfigError::Service(ref cause) => cause,
-            DeleteProvisionedConcurrencyConfigError::TooManyRequests(ref cause) => cause,
+            DeleteProvisionedConcurrencyConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteProvisionedConcurrencyConfigError::ResourceConflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteProvisionedConcurrencyConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteProvisionedConcurrencyConfigError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteProvisionedConcurrencyConfigError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteProvisionedConcurrencyConfigError {}
 /// Errors returned by GetAccountSettings
 #[derive(Debug, PartialEq)]
 pub enum GetAccountSettingsError {
@@ -2648,17 +2678,13 @@ impl GetAccountSettingsError {
 }
 impl fmt::Display for GetAccountSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountSettingsError::Service(ref cause) => cause,
-            GetAccountSettingsError::TooManyRequests(ref cause) => cause,
+            GetAccountSettingsError::Service(ref cause) => write!(f, "{}", cause),
+            GetAccountSettingsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAccountSettingsError {}
 /// Errors returned by GetAlias
 #[derive(Debug, PartialEq)]
 pub enum GetAliasError {
@@ -2695,19 +2721,15 @@ impl GetAliasError {
 }
 impl fmt::Display for GetAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAliasError {
-    fn description(&self) -> &str {
         match *self {
-            GetAliasError::InvalidParameterValue(ref cause) => cause,
-            GetAliasError::ResourceNotFound(ref cause) => cause,
-            GetAliasError::Service(ref cause) => cause,
-            GetAliasError::TooManyRequests(ref cause) => cause,
+            GetAliasError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetAliasError::Service(ref cause) => write!(f, "{}", cause),
+            GetAliasError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAliasError {}
 /// Errors returned by GetEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum GetEventSourceMappingError {
@@ -2752,19 +2774,15 @@ impl GetEventSourceMappingError {
 }
 impl fmt::Display for GetEventSourceMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetEventSourceMappingError {
-    fn description(&self) -> &str {
         match *self {
-            GetEventSourceMappingError::InvalidParameterValue(ref cause) => cause,
-            GetEventSourceMappingError::ResourceNotFound(ref cause) => cause,
-            GetEventSourceMappingError::Service(ref cause) => cause,
-            GetEventSourceMappingError::TooManyRequests(ref cause) => cause,
+            GetEventSourceMappingError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetEventSourceMappingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetEventSourceMappingError::Service(ref cause) => write!(f, "{}", cause),
+            GetEventSourceMappingError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetEventSourceMappingError {}
 /// Errors returned by GetFunction
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionError {
@@ -2803,19 +2821,15 @@ impl GetFunctionError {
 }
 impl fmt::Display for GetFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            GetFunctionError::InvalidParameterValue(ref cause) => cause,
-            GetFunctionError::ResourceNotFound(ref cause) => cause,
-            GetFunctionError::Service(ref cause) => cause,
-            GetFunctionError::TooManyRequests(ref cause) => cause,
+            GetFunctionError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetFunctionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetFunctionError::Service(ref cause) => write!(f, "{}", cause),
+            GetFunctionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFunctionError {}
 /// Errors returned by GetFunctionConcurrency
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionConcurrencyError {
@@ -2860,19 +2874,15 @@ impl GetFunctionConcurrencyError {
 }
 impl fmt::Display for GetFunctionConcurrencyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFunctionConcurrencyError {
-    fn description(&self) -> &str {
         match *self {
-            GetFunctionConcurrencyError::InvalidParameterValue(ref cause) => cause,
-            GetFunctionConcurrencyError::ResourceNotFound(ref cause) => cause,
-            GetFunctionConcurrencyError::Service(ref cause) => cause,
-            GetFunctionConcurrencyError::TooManyRequests(ref cause) => cause,
+            GetFunctionConcurrencyError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetFunctionConcurrencyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetFunctionConcurrencyError::Service(ref cause) => write!(f, "{}", cause),
+            GetFunctionConcurrencyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFunctionConcurrencyError {}
 /// Errors returned by GetFunctionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionConfigurationError {
@@ -2917,19 +2927,17 @@ impl GetFunctionConfigurationError {
 }
 impl fmt::Display for GetFunctionConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFunctionConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetFunctionConfigurationError::InvalidParameterValue(ref cause) => cause,
-            GetFunctionConfigurationError::ResourceNotFound(ref cause) => cause,
-            GetFunctionConfigurationError::Service(ref cause) => cause,
-            GetFunctionConfigurationError::TooManyRequests(ref cause) => cause,
+            GetFunctionConfigurationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetFunctionConfigurationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetFunctionConfigurationError::Service(ref cause) => write!(f, "{}", cause),
+            GetFunctionConfigurationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFunctionConfigurationError {}
 /// Errors returned by GetFunctionEventInvokeConfig
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionEventInvokeConfigError {
@@ -2978,19 +2986,19 @@ impl GetFunctionEventInvokeConfigError {
 }
 impl fmt::Display for GetFunctionEventInvokeConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFunctionEventInvokeConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetFunctionEventInvokeConfigError::InvalidParameterValue(ref cause) => cause,
-            GetFunctionEventInvokeConfigError::ResourceNotFound(ref cause) => cause,
-            GetFunctionEventInvokeConfigError::Service(ref cause) => cause,
-            GetFunctionEventInvokeConfigError::TooManyRequests(ref cause) => cause,
+            GetFunctionEventInvokeConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetFunctionEventInvokeConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetFunctionEventInvokeConfigError::Service(ref cause) => write!(f, "{}", cause),
+            GetFunctionEventInvokeConfigError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFunctionEventInvokeConfigError {}
 /// Errors returned by GetLayerVersion
 #[derive(Debug, PartialEq)]
 pub enum GetLayerVersionError {
@@ -3031,19 +3039,15 @@ impl GetLayerVersionError {
 }
 impl fmt::Display for GetLayerVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLayerVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetLayerVersionError::InvalidParameterValue(ref cause) => cause,
-            GetLayerVersionError::ResourceNotFound(ref cause) => cause,
-            GetLayerVersionError::Service(ref cause) => cause,
-            GetLayerVersionError::TooManyRequests(ref cause) => cause,
+            GetLayerVersionError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetLayerVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetLayerVersionError::Service(ref cause) => write!(f, "{}", cause),
+            GetLayerVersionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLayerVersionError {}
 /// Errors returned by GetLayerVersionByArn
 #[derive(Debug, PartialEq)]
 pub enum GetLayerVersionByArnError {
@@ -3088,19 +3092,15 @@ impl GetLayerVersionByArnError {
 }
 impl fmt::Display for GetLayerVersionByArnError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLayerVersionByArnError {
-    fn description(&self) -> &str {
         match *self {
-            GetLayerVersionByArnError::InvalidParameterValue(ref cause) => cause,
-            GetLayerVersionByArnError::ResourceNotFound(ref cause) => cause,
-            GetLayerVersionByArnError::Service(ref cause) => cause,
-            GetLayerVersionByArnError::TooManyRequests(ref cause) => cause,
+            GetLayerVersionByArnError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetLayerVersionByArnError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetLayerVersionByArnError::Service(ref cause) => write!(f, "{}", cause),
+            GetLayerVersionByArnError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLayerVersionByArnError {}
 /// Errors returned by GetLayerVersionPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetLayerVersionPolicyError {
@@ -3145,19 +3145,15 @@ impl GetLayerVersionPolicyError {
 }
 impl fmt::Display for GetLayerVersionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLayerVersionPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetLayerVersionPolicyError::InvalidParameterValue(ref cause) => cause,
-            GetLayerVersionPolicyError::ResourceNotFound(ref cause) => cause,
-            GetLayerVersionPolicyError::Service(ref cause) => cause,
-            GetLayerVersionPolicyError::TooManyRequests(ref cause) => cause,
+            GetLayerVersionPolicyError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetLayerVersionPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetLayerVersionPolicyError::Service(ref cause) => write!(f, "{}", cause),
+            GetLayerVersionPolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLayerVersionPolicyError {}
 /// Errors returned by GetPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyError {
@@ -3196,19 +3192,15 @@ impl GetPolicyError {
 }
 impl fmt::Display for GetPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetPolicyError::InvalidParameterValue(ref cause) => cause,
-            GetPolicyError::ResourceNotFound(ref cause) => cause,
-            GetPolicyError::Service(ref cause) => cause,
-            GetPolicyError::TooManyRequests(ref cause) => cause,
+            GetPolicyError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::Service(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPolicyError {}
 /// Errors returned by GetProvisionedConcurrencyConfig
 #[derive(Debug, PartialEq)]
 pub enum GetProvisionedConcurrencyConfigError {
@@ -3266,22 +3258,24 @@ impl GetProvisionedConcurrencyConfigError {
 }
 impl fmt::Display for GetProvisionedConcurrencyConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetProvisionedConcurrencyConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetProvisionedConcurrencyConfigError::InvalidParameterValue(ref cause) => cause,
+            GetProvisionedConcurrencyConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetProvisionedConcurrencyConfigError::ProvisionedConcurrencyConfigNotFound(
                 ref cause,
-            ) => cause,
-            GetProvisionedConcurrencyConfigError::ResourceNotFound(ref cause) => cause,
-            GetProvisionedConcurrencyConfigError::Service(ref cause) => cause,
-            GetProvisionedConcurrencyConfigError::TooManyRequests(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            GetProvisionedConcurrencyConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetProvisionedConcurrencyConfigError::Service(ref cause) => write!(f, "{}", cause),
+            GetProvisionedConcurrencyConfigError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetProvisionedConcurrencyConfigError {}
 /// Errors returned by Invoke
 #[derive(Debug, PartialEq)]
 pub enum InvokeError {
@@ -3408,37 +3402,33 @@ impl InvokeError {
 }
 impl fmt::Display for InvokeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InvokeError {
-    fn description(&self) -> &str {
         match *self {
-            InvokeError::EC2AccessDenied(ref cause) => cause,
-            InvokeError::EC2Throttled(ref cause) => cause,
-            InvokeError::EC2Unexpected(ref cause) => cause,
-            InvokeError::ENILimitReached(ref cause) => cause,
-            InvokeError::InvalidParameterValue(ref cause) => cause,
-            InvokeError::InvalidRequestContent(ref cause) => cause,
-            InvokeError::InvalidRuntime(ref cause) => cause,
-            InvokeError::InvalidSecurityGroupID(ref cause) => cause,
-            InvokeError::InvalidSubnetID(ref cause) => cause,
-            InvokeError::InvalidZipFile(ref cause) => cause,
-            InvokeError::KMSAccessDenied(ref cause) => cause,
-            InvokeError::KMSDisabled(ref cause) => cause,
-            InvokeError::KMSInvalidState(ref cause) => cause,
-            InvokeError::KMSNotFound(ref cause) => cause,
-            InvokeError::RequestTooLarge(ref cause) => cause,
-            InvokeError::ResourceConflict(ref cause) => cause,
-            InvokeError::ResourceNotFound(ref cause) => cause,
-            InvokeError::ResourceNotReady(ref cause) => cause,
-            InvokeError::Service(ref cause) => cause,
-            InvokeError::SubnetIPAddressLimitReached(ref cause) => cause,
-            InvokeError::TooManyRequests(ref cause) => cause,
-            InvokeError::UnsupportedMediaType(ref cause) => cause,
+            InvokeError::EC2AccessDenied(ref cause) => write!(f, "{}", cause),
+            InvokeError::EC2Throttled(ref cause) => write!(f, "{}", cause),
+            InvokeError::EC2Unexpected(ref cause) => write!(f, "{}", cause),
+            InvokeError::ENILimitReached(ref cause) => write!(f, "{}", cause),
+            InvokeError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            InvokeError::InvalidRequestContent(ref cause) => write!(f, "{}", cause),
+            InvokeError::InvalidRuntime(ref cause) => write!(f, "{}", cause),
+            InvokeError::InvalidSecurityGroupID(ref cause) => write!(f, "{}", cause),
+            InvokeError::InvalidSubnetID(ref cause) => write!(f, "{}", cause),
+            InvokeError::InvalidZipFile(ref cause) => write!(f, "{}", cause),
+            InvokeError::KMSAccessDenied(ref cause) => write!(f, "{}", cause),
+            InvokeError::KMSDisabled(ref cause) => write!(f, "{}", cause),
+            InvokeError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            InvokeError::KMSNotFound(ref cause) => write!(f, "{}", cause),
+            InvokeError::RequestTooLarge(ref cause) => write!(f, "{}", cause),
+            InvokeError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            InvokeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            InvokeError::ResourceNotReady(ref cause) => write!(f, "{}", cause),
+            InvokeError::Service(ref cause) => write!(f, "{}", cause),
+            InvokeError::SubnetIPAddressLimitReached(ref cause) => write!(f, "{}", cause),
+            InvokeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            InvokeError::UnsupportedMediaType(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InvokeError {}
 /// Errors returned by InvokeAsync
 #[derive(Debug, PartialEq)]
 pub enum InvokeAsyncError {
@@ -3482,20 +3472,16 @@ impl InvokeAsyncError {
 }
 impl fmt::Display for InvokeAsyncError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InvokeAsyncError {
-    fn description(&self) -> &str {
         match *self {
-            InvokeAsyncError::InvalidRequestContent(ref cause) => cause,
-            InvokeAsyncError::InvalidRuntime(ref cause) => cause,
-            InvokeAsyncError::ResourceConflict(ref cause) => cause,
-            InvokeAsyncError::ResourceNotFound(ref cause) => cause,
-            InvokeAsyncError::Service(ref cause) => cause,
+            InvokeAsyncError::InvalidRequestContent(ref cause) => write!(f, "{}", cause),
+            InvokeAsyncError::InvalidRuntime(ref cause) => write!(f, "{}", cause),
+            InvokeAsyncError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            InvokeAsyncError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            InvokeAsyncError::Service(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InvokeAsyncError {}
 /// Errors returned by ListAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAliasesError {
@@ -3534,19 +3520,15 @@ impl ListAliasesError {
 }
 impl fmt::Display for ListAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAliasesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAliasesError::InvalidParameterValue(ref cause) => cause,
-            ListAliasesError::ResourceNotFound(ref cause) => cause,
-            ListAliasesError::Service(ref cause) => cause,
-            ListAliasesError::TooManyRequests(ref cause) => cause,
+            ListAliasesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::Service(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAliasesError {}
 /// Errors returned by ListEventSourceMappings
 #[derive(Debug, PartialEq)]
 pub enum ListEventSourceMappingsError {
@@ -3591,19 +3573,17 @@ impl ListEventSourceMappingsError {
 }
 impl fmt::Display for ListEventSourceMappingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEventSourceMappingsError {
-    fn description(&self) -> &str {
         match *self {
-            ListEventSourceMappingsError::InvalidParameterValue(ref cause) => cause,
-            ListEventSourceMappingsError::ResourceNotFound(ref cause) => cause,
-            ListEventSourceMappingsError::Service(ref cause) => cause,
-            ListEventSourceMappingsError::TooManyRequests(ref cause) => cause,
+            ListEventSourceMappingsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListEventSourceMappingsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListEventSourceMappingsError::Service(ref cause) => write!(f, "{}", cause),
+            ListEventSourceMappingsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEventSourceMappingsError {}
 /// Errors returned by ListFunctionEventInvokeConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListFunctionEventInvokeConfigsError {
@@ -3652,19 +3632,21 @@ impl ListFunctionEventInvokeConfigsError {
 }
 impl fmt::Display for ListFunctionEventInvokeConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFunctionEventInvokeConfigsError {
-    fn description(&self) -> &str {
         match *self {
-            ListFunctionEventInvokeConfigsError::InvalidParameterValue(ref cause) => cause,
-            ListFunctionEventInvokeConfigsError::ResourceNotFound(ref cause) => cause,
-            ListFunctionEventInvokeConfigsError::Service(ref cause) => cause,
-            ListFunctionEventInvokeConfigsError::TooManyRequests(ref cause) => cause,
+            ListFunctionEventInvokeConfigsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListFunctionEventInvokeConfigsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListFunctionEventInvokeConfigsError::Service(ref cause) => write!(f, "{}", cause),
+            ListFunctionEventInvokeConfigsError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListFunctionEventInvokeConfigsError {}
 /// Errors returned by ListFunctions
 #[derive(Debug, PartialEq)]
 pub enum ListFunctionsError {
@@ -3698,18 +3680,14 @@ impl ListFunctionsError {
 }
 impl fmt::Display for ListFunctionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFunctionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListFunctionsError::InvalidParameterValue(ref cause) => cause,
-            ListFunctionsError::Service(ref cause) => cause,
-            ListFunctionsError::TooManyRequests(ref cause) => cause,
+            ListFunctionsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListFunctionsError::Service(ref cause) => write!(f, "{}", cause),
+            ListFunctionsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFunctionsError {}
 /// Errors returned by ListLayerVersions
 #[derive(Debug, PartialEq)]
 pub enum ListLayerVersionsError {
@@ -3750,19 +3728,15 @@ impl ListLayerVersionsError {
 }
 impl fmt::Display for ListLayerVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLayerVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListLayerVersionsError::InvalidParameterValue(ref cause) => cause,
-            ListLayerVersionsError::ResourceNotFound(ref cause) => cause,
-            ListLayerVersionsError::Service(ref cause) => cause,
-            ListLayerVersionsError::TooManyRequests(ref cause) => cause,
+            ListLayerVersionsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListLayerVersionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListLayerVersionsError::Service(ref cause) => write!(f, "{}", cause),
+            ListLayerVersionsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListLayerVersionsError {}
 /// Errors returned by ListLayers
 #[derive(Debug, PartialEq)]
 pub enum ListLayersError {
@@ -3796,18 +3770,14 @@ impl ListLayersError {
 }
 impl fmt::Display for ListLayersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLayersError {
-    fn description(&self) -> &str {
         match *self {
-            ListLayersError::InvalidParameterValue(ref cause) => cause,
-            ListLayersError::Service(ref cause) => cause,
-            ListLayersError::TooManyRequests(ref cause) => cause,
+            ListLayersError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListLayersError::Service(ref cause) => write!(f, "{}", cause),
+            ListLayersError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListLayersError {}
 /// Errors returned by ListProvisionedConcurrencyConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListProvisionedConcurrencyConfigsError {
@@ -3856,19 +3826,21 @@ impl ListProvisionedConcurrencyConfigsError {
 }
 impl fmt::Display for ListProvisionedConcurrencyConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProvisionedConcurrencyConfigsError {
-    fn description(&self) -> &str {
         match *self {
-            ListProvisionedConcurrencyConfigsError::InvalidParameterValue(ref cause) => cause,
-            ListProvisionedConcurrencyConfigsError::ResourceNotFound(ref cause) => cause,
-            ListProvisionedConcurrencyConfigsError::Service(ref cause) => cause,
-            ListProvisionedConcurrencyConfigsError::TooManyRequests(ref cause) => cause,
+            ListProvisionedConcurrencyConfigsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListProvisionedConcurrencyConfigsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListProvisionedConcurrencyConfigsError::Service(ref cause) => write!(f, "{}", cause),
+            ListProvisionedConcurrencyConfigsError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListProvisionedConcurrencyConfigsError {}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
@@ -3905,19 +3877,15 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsError::InvalidParameterValue(ref cause) => cause,
-            ListTagsError::ResourceNotFound(ref cause) => cause,
-            ListTagsError::Service(ref cause) => cause,
-            ListTagsError::TooManyRequests(ref cause) => cause,
+            ListTagsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsError::Service(ref cause) => write!(f, "{}", cause),
+            ListTagsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsError {}
 /// Errors returned by ListVersionsByFunction
 #[derive(Debug, PartialEq)]
 pub enum ListVersionsByFunctionError {
@@ -3962,19 +3930,15 @@ impl ListVersionsByFunctionError {
 }
 impl fmt::Display for ListVersionsByFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVersionsByFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            ListVersionsByFunctionError::InvalidParameterValue(ref cause) => cause,
-            ListVersionsByFunctionError::ResourceNotFound(ref cause) => cause,
-            ListVersionsByFunctionError::Service(ref cause) => cause,
-            ListVersionsByFunctionError::TooManyRequests(ref cause) => cause,
+            ListVersionsByFunctionError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListVersionsByFunctionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListVersionsByFunctionError::Service(ref cause) => write!(f, "{}", cause),
+            ListVersionsByFunctionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVersionsByFunctionError {}
 /// Errors returned by PublishLayerVersion
 #[derive(Debug, PartialEq)]
 pub enum PublishLayerVersionError {
@@ -4024,20 +3988,16 @@ impl PublishLayerVersionError {
 }
 impl fmt::Display for PublishLayerVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PublishLayerVersionError {
-    fn description(&self) -> &str {
         match *self {
-            PublishLayerVersionError::CodeStorageExceeded(ref cause) => cause,
-            PublishLayerVersionError::InvalidParameterValue(ref cause) => cause,
-            PublishLayerVersionError::ResourceNotFound(ref cause) => cause,
-            PublishLayerVersionError::Service(ref cause) => cause,
-            PublishLayerVersionError::TooManyRequests(ref cause) => cause,
+            PublishLayerVersionError::CodeStorageExceeded(ref cause) => write!(f, "{}", cause),
+            PublishLayerVersionError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PublishLayerVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PublishLayerVersionError::Service(ref cause) => write!(f, "{}", cause),
+            PublishLayerVersionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PublishLayerVersionError {}
 /// Errors returned by PublishVersion
 #[derive(Debug, PartialEq)]
 pub enum PublishVersionError {
@@ -4093,22 +4053,18 @@ impl PublishVersionError {
 }
 impl fmt::Display for PublishVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PublishVersionError {
-    fn description(&self) -> &str {
         match *self {
-            PublishVersionError::CodeStorageExceeded(ref cause) => cause,
-            PublishVersionError::InvalidParameterValue(ref cause) => cause,
-            PublishVersionError::PreconditionFailed(ref cause) => cause,
-            PublishVersionError::ResourceConflict(ref cause) => cause,
-            PublishVersionError::ResourceNotFound(ref cause) => cause,
-            PublishVersionError::Service(ref cause) => cause,
-            PublishVersionError::TooManyRequests(ref cause) => cause,
+            PublishVersionError::CodeStorageExceeded(ref cause) => write!(f, "{}", cause),
+            PublishVersionError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PublishVersionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            PublishVersionError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            PublishVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PublishVersionError::Service(ref cause) => write!(f, "{}", cause),
+            PublishVersionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PublishVersionError {}
 /// Errors returned by PutFunctionConcurrency
 #[derive(Debug, PartialEq)]
 pub enum PutFunctionConcurrencyError {
@@ -4160,20 +4116,16 @@ impl PutFunctionConcurrencyError {
 }
 impl fmt::Display for PutFunctionConcurrencyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutFunctionConcurrencyError {
-    fn description(&self) -> &str {
         match *self {
-            PutFunctionConcurrencyError::InvalidParameterValue(ref cause) => cause,
-            PutFunctionConcurrencyError::ResourceConflict(ref cause) => cause,
-            PutFunctionConcurrencyError::ResourceNotFound(ref cause) => cause,
-            PutFunctionConcurrencyError::Service(ref cause) => cause,
-            PutFunctionConcurrencyError::TooManyRequests(ref cause) => cause,
+            PutFunctionConcurrencyError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutFunctionConcurrencyError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            PutFunctionConcurrencyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PutFunctionConcurrencyError::Service(ref cause) => write!(f, "{}", cause),
+            PutFunctionConcurrencyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutFunctionConcurrencyError {}
 /// Errors returned by PutFunctionEventInvokeConfig
 #[derive(Debug, PartialEq)]
 pub enum PutFunctionEventInvokeConfigError {
@@ -4222,19 +4174,19 @@ impl PutFunctionEventInvokeConfigError {
 }
 impl fmt::Display for PutFunctionEventInvokeConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutFunctionEventInvokeConfigError {
-    fn description(&self) -> &str {
         match *self {
-            PutFunctionEventInvokeConfigError::InvalidParameterValue(ref cause) => cause,
-            PutFunctionEventInvokeConfigError::ResourceNotFound(ref cause) => cause,
-            PutFunctionEventInvokeConfigError::Service(ref cause) => cause,
-            PutFunctionEventInvokeConfigError::TooManyRequests(ref cause) => cause,
+            PutFunctionEventInvokeConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutFunctionEventInvokeConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutFunctionEventInvokeConfigError::Service(ref cause) => write!(f, "{}", cause),
+            PutFunctionEventInvokeConfigError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutFunctionEventInvokeConfigError {}
 /// Errors returned by PutProvisionedConcurrencyConfig
 #[derive(Debug, PartialEq)]
 pub enum PutProvisionedConcurrencyConfigError {
@@ -4290,20 +4242,24 @@ impl PutProvisionedConcurrencyConfigError {
 }
 impl fmt::Display for PutProvisionedConcurrencyConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutProvisionedConcurrencyConfigError {
-    fn description(&self) -> &str {
         match *self {
-            PutProvisionedConcurrencyConfigError::InvalidParameterValue(ref cause) => cause,
-            PutProvisionedConcurrencyConfigError::ResourceConflict(ref cause) => cause,
-            PutProvisionedConcurrencyConfigError::ResourceNotFound(ref cause) => cause,
-            PutProvisionedConcurrencyConfigError::Service(ref cause) => cause,
-            PutProvisionedConcurrencyConfigError::TooManyRequests(ref cause) => cause,
+            PutProvisionedConcurrencyConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutProvisionedConcurrencyConfigError::ResourceConflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutProvisionedConcurrencyConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutProvisionedConcurrencyConfigError::Service(ref cause) => write!(f, "{}", cause),
+            PutProvisionedConcurrencyConfigError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutProvisionedConcurrencyConfigError {}
 /// Errors returned by RemoveLayerVersionPermission
 #[derive(Debug, PartialEq)]
 pub enum RemoveLayerVersionPermissionError {
@@ -4359,20 +4315,22 @@ impl RemoveLayerVersionPermissionError {
 }
 impl fmt::Display for RemoveLayerVersionPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveLayerVersionPermissionError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveLayerVersionPermissionError::InvalidParameterValue(ref cause) => cause,
-            RemoveLayerVersionPermissionError::PreconditionFailed(ref cause) => cause,
-            RemoveLayerVersionPermissionError::ResourceNotFound(ref cause) => cause,
-            RemoveLayerVersionPermissionError::Service(ref cause) => cause,
-            RemoveLayerVersionPermissionError::TooManyRequests(ref cause) => cause,
+            RemoveLayerVersionPermissionError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveLayerVersionPermissionError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveLayerVersionPermissionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveLayerVersionPermissionError::Service(ref cause) => write!(f, "{}", cause),
+            RemoveLayerVersionPermissionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveLayerVersionPermissionError {}
 /// Errors returned by RemovePermission
 #[derive(Debug, PartialEq)]
 pub enum RemovePermissionError {
@@ -4418,20 +4376,16 @@ impl RemovePermissionError {
 }
 impl fmt::Display for RemovePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemovePermissionError {
-    fn description(&self) -> &str {
         match *self {
-            RemovePermissionError::InvalidParameterValue(ref cause) => cause,
-            RemovePermissionError::PreconditionFailed(ref cause) => cause,
-            RemovePermissionError::ResourceNotFound(ref cause) => cause,
-            RemovePermissionError::Service(ref cause) => cause,
-            RemovePermissionError::TooManyRequests(ref cause) => cause,
+            RemovePermissionError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::Service(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemovePermissionError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -4470,19 +4424,15 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InvalidParameterValue(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::Service(ref cause) => cause,
-            TagResourceError::TooManyRequests(ref cause) => cause,
+            TagResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Service(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -4521,19 +4471,15 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InvalidParameterValue(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::Service(ref cause) => cause,
-            UntagResourceError::TooManyRequests(ref cause) => cause,
+            UntagResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Service(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateAlias
 #[derive(Debug, PartialEq)]
 pub enum UpdateAliasError {
@@ -4582,21 +4528,17 @@ impl UpdateAliasError {
 }
 impl fmt::Display for UpdateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAliasError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAliasError::InvalidParameterValue(ref cause) => cause,
-            UpdateAliasError::PreconditionFailed(ref cause) => cause,
-            UpdateAliasError::ResourceConflict(ref cause) => cause,
-            UpdateAliasError::ResourceNotFound(ref cause) => cause,
-            UpdateAliasError::Service(ref cause) => cause,
-            UpdateAliasError::TooManyRequests(ref cause) => cause,
+            UpdateAliasError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateAliasError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            UpdateAliasError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            UpdateAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAliasError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateAliasError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAliasError {}
 /// Errors returned by UpdateEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum UpdateEventSourceMappingError {
@@ -4655,21 +4597,19 @@ impl UpdateEventSourceMappingError {
 }
 impl fmt::Display for UpdateEventSourceMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateEventSourceMappingError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateEventSourceMappingError::InvalidParameterValue(ref cause) => cause,
-            UpdateEventSourceMappingError::ResourceConflict(ref cause) => cause,
-            UpdateEventSourceMappingError::ResourceInUse(ref cause) => cause,
-            UpdateEventSourceMappingError::ResourceNotFound(ref cause) => cause,
-            UpdateEventSourceMappingError::Service(ref cause) => cause,
-            UpdateEventSourceMappingError::TooManyRequests(ref cause) => cause,
+            UpdateEventSourceMappingError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateEventSourceMappingError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            UpdateEventSourceMappingError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateEventSourceMappingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateEventSourceMappingError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateEventSourceMappingError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateEventSourceMappingError {}
 /// Errors returned by UpdateFunctionCode
 #[derive(Debug, PartialEq)]
 pub enum UpdateFunctionCodeError {
@@ -4729,22 +4669,18 @@ impl UpdateFunctionCodeError {
 }
 impl fmt::Display for UpdateFunctionCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFunctionCodeError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFunctionCodeError::CodeStorageExceeded(ref cause) => cause,
-            UpdateFunctionCodeError::InvalidParameterValue(ref cause) => cause,
-            UpdateFunctionCodeError::PreconditionFailed(ref cause) => cause,
-            UpdateFunctionCodeError::ResourceConflict(ref cause) => cause,
-            UpdateFunctionCodeError::ResourceNotFound(ref cause) => cause,
-            UpdateFunctionCodeError::Service(ref cause) => cause,
-            UpdateFunctionCodeError::TooManyRequests(ref cause) => cause,
+            UpdateFunctionCodeError::CodeStorageExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionCodeError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionCodeError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionCodeError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionCodeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionCodeError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionCodeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFunctionCodeError {}
 /// Errors returned by UpdateFunctionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateFunctionConfigurationError {
@@ -4805,21 +4741,21 @@ impl UpdateFunctionConfigurationError {
 }
 impl fmt::Display for UpdateFunctionConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFunctionConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFunctionConfigurationError::InvalidParameterValue(ref cause) => cause,
-            UpdateFunctionConfigurationError::PreconditionFailed(ref cause) => cause,
-            UpdateFunctionConfigurationError::ResourceConflict(ref cause) => cause,
-            UpdateFunctionConfigurationError::ResourceNotFound(ref cause) => cause,
-            UpdateFunctionConfigurationError::Service(ref cause) => cause,
-            UpdateFunctionConfigurationError::TooManyRequests(ref cause) => cause,
+            UpdateFunctionConfigurationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFunctionConfigurationError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFunctionConfigurationError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionConfigurationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionConfigurationError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionConfigurationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFunctionConfigurationError {}
 /// Errors returned by UpdateFunctionEventInvokeConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateFunctionEventInvokeConfigError {
@@ -4868,19 +4804,21 @@ impl UpdateFunctionEventInvokeConfigError {
 }
 impl fmt::Display for UpdateFunctionEventInvokeConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFunctionEventInvokeConfigError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFunctionEventInvokeConfigError::InvalidParameterValue(ref cause) => cause,
-            UpdateFunctionEventInvokeConfigError::ResourceNotFound(ref cause) => cause,
-            UpdateFunctionEventInvokeConfigError::Service(ref cause) => cause,
-            UpdateFunctionEventInvokeConfigError::TooManyRequests(ref cause) => cause,
+            UpdateFunctionEventInvokeConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFunctionEventInvokeConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFunctionEventInvokeConfigError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionEventInvokeConfigError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateFunctionEventInvokeConfigError {}
 /// Trait representing the capabilities of the AWS Lambda API. AWS Lambda clients implement this trait.
 pub trait Lambda {
     /// <p>Adds permissions to the resource-based policy of a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Use this action to grant layer usage permission to other accounts. You can grant permission to a single account, all AWS accounts, or all accounts in an organization.</p> <p>To revoke permission, call <a>RemoveLayerVersionPermission</a> with the statement ID that you specified when you added it.</p>

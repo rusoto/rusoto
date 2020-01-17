@@ -23,12 +23,14 @@ use std::fmt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionRequest {
     #[serde(rename = "ConnectionId")]
     pub connection_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionRequest {
     #[serde(rename = "ConnectionId")]
     pub connection_id: String,
@@ -62,6 +64,7 @@ pub struct Identity {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostToConnectionRequest {
     /// <p>The identifier of the connection that a specific client is using.</p>
     #[serde(rename = "ConnectionId")]
@@ -109,18 +112,14 @@ impl DeleteConnectionError {
 }
 impl fmt::Display for DeleteConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConnectionError::Forbidden(ref cause) => cause,
-            DeleteConnectionError::Gone(ref cause) => cause,
-            DeleteConnectionError::LimitExceeded(ref cause) => cause,
+            DeleteConnectionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::Gone(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteConnectionError {}
 /// Errors returned by GetConnection
 #[derive(Debug, PartialEq)]
 pub enum GetConnectionError {
@@ -152,18 +151,14 @@ impl GetConnectionError {
 }
 impl fmt::Display for GetConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            GetConnectionError::Forbidden(ref cause) => cause,
-            GetConnectionError::Gone(ref cause) => cause,
-            GetConnectionError::LimitExceeded(ref cause) => cause,
+            GetConnectionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetConnectionError::Gone(ref cause) => write!(f, "{}", cause),
+            GetConnectionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetConnectionError {}
 /// Errors returned by PostToConnection
 #[derive(Debug, PartialEq)]
 pub enum PostToConnectionError {
@@ -202,19 +197,15 @@ impl PostToConnectionError {
 }
 impl fmt::Display for PostToConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PostToConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            PostToConnectionError::Forbidden(ref cause) => cause,
-            PostToConnectionError::Gone(ref cause) => cause,
-            PostToConnectionError::LimitExceeded(ref cause) => cause,
-            PostToConnectionError::PayloadTooLarge(ref cause) => cause,
+            PostToConnectionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PostToConnectionError::Gone(ref cause) => write!(f, "{}", cause),
+            PostToConnectionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PostToConnectionError::PayloadTooLarge(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PostToConnectionError {}
 /// Trait representing the capabilities of the AmazonApiGatewayManagementApi API. AmazonApiGatewayManagementApi clients implement this trait.
 pub trait ApiGatewayManagementApi {
     /// <p>Delete the connection with the provided id.</p>

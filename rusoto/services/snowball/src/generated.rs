@@ -85,6 +85,7 @@ pub struct Address {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelClusterRequest {
     /// <p>The 39-character ID for the cluster that you want to cancel, for example <code>CID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "ClusterId")]
@@ -96,6 +97,7 @@ pub struct CancelClusterRequest {
 pub struct CancelClusterResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
     /// <p>The 39-character job ID for the job that you want to cancel, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
@@ -201,6 +203,7 @@ pub struct CompatibleImage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAddressRequest {
     /// <p>The address that you want the Snowball shipped to.</p>
     #[serde(rename = "Address")]
@@ -217,6 +220,7 @@ pub struct CreateAddressResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
     /// <p>The ID for the address that you want the cluster shipped to.</p>
     #[serde(rename = "AddressId")]
@@ -265,6 +269,7 @@ pub struct CreateClusterResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
     /// <p>The ID for the address that you want the Snowball shipped to.</p>
     #[serde(rename = "AddressId")]
@@ -348,6 +353,7 @@ pub struct DataTransfer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAddressRequest {
     /// <p>The automatically generated ID for a specific address.</p>
     #[serde(rename = "AddressId")]
@@ -364,6 +370,7 @@ pub struct DescribeAddressResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAddressesRequest {
     /// <p>The number of <code>ADDRESS</code> objects to return.</p>
     #[serde(rename = "MaxResults")]
@@ -389,6 +396,7 @@ pub struct DescribeAddressesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterRequest {
     /// <p>The automatically generated ID for a cluster.</p>
     #[serde(rename = "ClusterId")]
@@ -405,6 +413,7 @@ pub struct DescribeClusterResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobRequest {
     /// <p>The automatically generated ID for a job, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
@@ -446,6 +455,7 @@ pub struct EventTriggerDefinition {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobManifestRequest {
     /// <p>The ID for a job that you want to get the manifest file for, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
@@ -462,6 +472,7 @@ pub struct GetJobManifestResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobUnlockCodeRequest {
     /// <p>The ID for the job that you want to get the <code>UnlockCode</code> value for, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
@@ -478,6 +489,7 @@ pub struct GetJobUnlockCodeResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSnowballUsageRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -494,6 +506,7 @@ pub struct GetSnowballUsageResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSoftwareUpdatesRequest {
     /// <p>The ID for a job that you want to get the software update file for, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
@@ -679,6 +692,7 @@ pub struct LambdaResource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClusterJobsRequest {
     /// <p>The 39-character ID for the cluster that you want to list, for example <code>CID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "ClusterId")]
@@ -707,6 +721,7 @@ pub struct ListClusterJobsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClustersRequest {
     /// <p>The number of <code>ClusterListEntry</code> objects to return.</p>
     #[serde(rename = "MaxResults")]
@@ -732,6 +747,7 @@ pub struct ListClustersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCompatibleImagesRequest {
     /// <p>The maximum number of results for the list of compatible images. Currently, a Snowball Edge device can store 10 AMIs.</p>
     #[serde(rename = "MaxResults")]
@@ -757,6 +773,7 @@ pub struct ListCompatibleImagesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p>The number of <code>JobListEntry</code> objects to return.</p>
     #[serde(rename = "MaxResults")]
@@ -844,6 +861,7 @@ pub struct ShippingDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClusterRequest {
     /// <p>The ID of the updated <a>Address</a> object.</p>
     #[serde(rename = "AddressId")]
@@ -883,6 +901,7 @@ pub struct UpdateClusterRequest {
 pub struct UpdateClusterResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobRequest {
     /// <p>The ID of the updated <a>Address</a> object.</p>
     #[serde(rename = "AddressId")]
@@ -958,18 +977,14 @@ impl CancelClusterError {
 }
 impl fmt::Display for CancelClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelClusterError {
-    fn description(&self) -> &str {
         match *self {
-            CancelClusterError::InvalidJobState(ref cause) => cause,
-            CancelClusterError::InvalidResource(ref cause) => cause,
-            CancelClusterError::KMSRequestFailed(ref cause) => cause,
+            CancelClusterError::InvalidJobState(ref cause) => write!(f, "{}", cause),
+            CancelClusterError::InvalidResource(ref cause) => write!(f, "{}", cause),
+            CancelClusterError::KMSRequestFailed(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelClusterError {}
 /// Errors returned by CancelJob
 #[derive(Debug, PartialEq)]
 pub enum CancelJobError {
@@ -1003,18 +1018,14 @@ impl CancelJobError {
 }
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelJobError {
-    fn description(&self) -> &str {
         match *self {
-            CancelJobError::InvalidJobState(ref cause) => cause,
-            CancelJobError::InvalidResource(ref cause) => cause,
-            CancelJobError::KMSRequestFailed(ref cause) => cause,
+            CancelJobError::InvalidJobState(ref cause) => write!(f, "{}", cause),
+            CancelJobError::InvalidResource(ref cause) => write!(f, "{}", cause),
+            CancelJobError::KMSRequestFailed(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelJobError {}
 /// Errors returned by CreateAddress
 #[derive(Debug, PartialEq)]
 pub enum CreateAddressError {
@@ -1043,17 +1054,13 @@ impl CreateAddressError {
 }
 impl fmt::Display for CreateAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAddressError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAddressError::InvalidAddress(ref cause) => cause,
-            CreateAddressError::UnsupportedAddress(ref cause) => cause,
+            CreateAddressError::InvalidAddress(ref cause) => write!(f, "{}", cause),
+            CreateAddressError::UnsupportedAddress(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAddressError {}
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
@@ -1094,19 +1101,15 @@ impl CreateClusterError {
 }
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateClusterError {
-    fn description(&self) -> &str {
         match *self {
-            CreateClusterError::Ec2RequestFailed(ref cause) => cause,
-            CreateClusterError::InvalidInputCombination(ref cause) => cause,
-            CreateClusterError::InvalidResource(ref cause) => cause,
-            CreateClusterError::KMSRequestFailed(ref cause) => cause,
+            CreateClusterError::Ec2RequestFailed(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InvalidInputCombination(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InvalidResource(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::KMSRequestFailed(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateClusterError {}
 /// Errors returned by CreateJob
 #[derive(Debug, PartialEq)]
 pub enum CreateJobError {
@@ -1150,20 +1153,16 @@ impl CreateJobError {
 }
 impl fmt::Display for CreateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateJobError::ClusterLimitExceeded(ref cause) => cause,
-            CreateJobError::Ec2RequestFailed(ref cause) => cause,
-            CreateJobError::InvalidInputCombination(ref cause) => cause,
-            CreateJobError::InvalidResource(ref cause) => cause,
-            CreateJobError::KMSRequestFailed(ref cause) => cause,
+            CreateJobError::ClusterLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateJobError::Ec2RequestFailed(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InvalidInputCombination(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InvalidResource(ref cause) => write!(f, "{}", cause),
+            CreateJobError::KMSRequestFailed(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateJobError {}
 /// Errors returned by DescribeAddress
 #[derive(Debug, PartialEq)]
 pub enum DescribeAddressError {
@@ -1187,16 +1186,12 @@ impl DescribeAddressError {
 }
 impl fmt::Display for DescribeAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAddressError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAddressError::InvalidResource(ref cause) => cause,
+            DescribeAddressError::InvalidResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAddressError {}
 /// Errors returned by DescribeAddresses
 #[derive(Debug, PartialEq)]
 pub enum DescribeAddressesError {
@@ -1225,17 +1220,13 @@ impl DescribeAddressesError {
 }
 impl fmt::Display for DescribeAddressesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAddressesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAddressesError::InvalidNextToken(ref cause) => cause,
-            DescribeAddressesError::InvalidResource(ref cause) => cause,
+            DescribeAddressesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeAddressesError::InvalidResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAddressesError {}
 /// Errors returned by DescribeCluster
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterError {
@@ -1259,16 +1250,12 @@ impl DescribeClusterError {
 }
 impl fmt::Display for DescribeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClusterError::InvalidResource(ref cause) => cause,
+            DescribeClusterError::InvalidResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClusterError {}
 /// Errors returned by DescribeJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobError {
@@ -1292,16 +1279,12 @@ impl DescribeJobError {
 }
 impl fmt::Display for DescribeJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeJobError::InvalidResource(ref cause) => cause,
+            DescribeJobError::InvalidResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeJobError {}
 /// Errors returned by GetJobManifest
 #[derive(Debug, PartialEq)]
 pub enum GetJobManifestError {
@@ -1330,17 +1313,13 @@ impl GetJobManifestError {
 }
 impl fmt::Display for GetJobManifestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobManifestError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobManifestError::InvalidJobState(ref cause) => cause,
-            GetJobManifestError::InvalidResource(ref cause) => cause,
+            GetJobManifestError::InvalidJobState(ref cause) => write!(f, "{}", cause),
+            GetJobManifestError::InvalidResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobManifestError {}
 /// Errors returned by GetJobUnlockCode
 #[derive(Debug, PartialEq)]
 pub enum GetJobUnlockCodeError {
@@ -1369,17 +1348,13 @@ impl GetJobUnlockCodeError {
 }
 impl fmt::Display for GetJobUnlockCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobUnlockCodeError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobUnlockCodeError::InvalidJobState(ref cause) => cause,
-            GetJobUnlockCodeError::InvalidResource(ref cause) => cause,
+            GetJobUnlockCodeError::InvalidJobState(ref cause) => write!(f, "{}", cause),
+            GetJobUnlockCodeError::InvalidResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobUnlockCodeError {}
 /// Errors returned by GetSnowballUsage
 #[derive(Debug, PartialEq)]
 pub enum GetSnowballUsageError {}
@@ -1397,14 +1372,10 @@ impl GetSnowballUsageError {
 }
 impl fmt::Display for GetSnowballUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSnowballUsageError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetSnowballUsageError {}
 /// Errors returned by GetSoftwareUpdates
 #[derive(Debug, PartialEq)]
 pub enum GetSoftwareUpdatesError {
@@ -1433,17 +1404,13 @@ impl GetSoftwareUpdatesError {
 }
 impl fmt::Display for GetSoftwareUpdatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSoftwareUpdatesError {
-    fn description(&self) -> &str {
         match *self {
-            GetSoftwareUpdatesError::InvalidJobState(ref cause) => cause,
-            GetSoftwareUpdatesError::InvalidResource(ref cause) => cause,
+            GetSoftwareUpdatesError::InvalidJobState(ref cause) => write!(f, "{}", cause),
+            GetSoftwareUpdatesError::InvalidResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSoftwareUpdatesError {}
 /// Errors returned by ListClusterJobs
 #[derive(Debug, PartialEq)]
 pub enum ListClusterJobsError {
@@ -1472,17 +1439,13 @@ impl ListClusterJobsError {
 }
 impl fmt::Display for ListClusterJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListClusterJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListClusterJobsError::InvalidNextToken(ref cause) => cause,
-            ListClusterJobsError::InvalidResource(ref cause) => cause,
+            ListClusterJobsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListClusterJobsError::InvalidResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListClusterJobsError {}
 /// Errors returned by ListClusters
 #[derive(Debug, PartialEq)]
 pub enum ListClustersError {
@@ -1506,16 +1469,12 @@ impl ListClustersError {
 }
 impl fmt::Display for ListClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListClustersError {
-    fn description(&self) -> &str {
         match *self {
-            ListClustersError::InvalidNextToken(ref cause) => cause,
+            ListClustersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListClustersError {}
 /// Errors returned by ListCompatibleImages
 #[derive(Debug, PartialEq)]
 pub enum ListCompatibleImagesError {
@@ -1548,17 +1507,13 @@ impl ListCompatibleImagesError {
 }
 impl fmt::Display for ListCompatibleImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCompatibleImagesError {
-    fn description(&self) -> &str {
         match *self {
-            ListCompatibleImagesError::Ec2RequestFailed(ref cause) => cause,
-            ListCompatibleImagesError::InvalidNextToken(ref cause) => cause,
+            ListCompatibleImagesError::Ec2RequestFailed(ref cause) => write!(f, "{}", cause),
+            ListCompatibleImagesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCompatibleImagesError {}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
@@ -1582,16 +1537,12 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobsError::InvalidNextToken(ref cause) => cause,
+            ListJobsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobsError {}
 /// Errors returned by UpdateCluster
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterError {
@@ -1637,20 +1588,16 @@ impl UpdateClusterError {
 }
 impl fmt::Display for UpdateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateClusterError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateClusterError::Ec2RequestFailed(ref cause) => cause,
-            UpdateClusterError::InvalidInputCombination(ref cause) => cause,
-            UpdateClusterError::InvalidJobState(ref cause) => cause,
-            UpdateClusterError::InvalidResource(ref cause) => cause,
-            UpdateClusterError::KMSRequestFailed(ref cause) => cause,
+            UpdateClusterError::Ec2RequestFailed(ref cause) => write!(f, "{}", cause),
+            UpdateClusterError::InvalidInputCombination(ref cause) => write!(f, "{}", cause),
+            UpdateClusterError::InvalidJobState(ref cause) => write!(f, "{}", cause),
+            UpdateClusterError::InvalidResource(ref cause) => write!(f, "{}", cause),
+            UpdateClusterError::KMSRequestFailed(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateClusterError {}
 /// Errors returned by UpdateJob
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobError {
@@ -1699,21 +1646,17 @@ impl UpdateJobError {
 }
 impl fmt::Display for UpdateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateJobError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateJobError::ClusterLimitExceeded(ref cause) => cause,
-            UpdateJobError::Ec2RequestFailed(ref cause) => cause,
-            UpdateJobError::InvalidInputCombination(ref cause) => cause,
-            UpdateJobError::InvalidJobState(ref cause) => cause,
-            UpdateJobError::InvalidResource(ref cause) => cause,
-            UpdateJobError::KMSRequestFailed(ref cause) => cause,
+            UpdateJobError::ClusterLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::Ec2RequestFailed(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InvalidInputCombination(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InvalidJobState(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InvalidResource(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::KMSRequestFailed(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateJobError {}
 /// Trait representing the capabilities of the Amazon Snowball API. Amazon Snowball clients implement this trait.
 pub trait Snowball {
     /// <p>Cancels a cluster job. You can only cancel a cluster job while it's in the <code>AwaitingQuorum</code> status. You'll have at least an hour after creating a cluster job to cancel it.</p>

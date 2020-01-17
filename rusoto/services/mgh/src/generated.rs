@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateCreatedArtifactRequest {
     /// <p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.) </p>
     #[serde(rename = "CreatedArtifact")]
@@ -45,6 +46,7 @@ pub struct AssociateCreatedArtifactRequest {
 pub struct AssociateCreatedArtifactResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDiscoveredResourceRequest {
     /// <p>Object representing a Resource.</p>
     #[serde(rename = "DiscoveredResource")]
@@ -66,6 +68,7 @@ pub struct AssociateDiscoveredResourceRequest {
 pub struct AssociateDiscoveredResourceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProgressUpdateStreamRequest {
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
     #[serde(rename = "DryRun")]
@@ -93,6 +96,7 @@ pub struct CreatedArtifact {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProgressUpdateStreamRequest {
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
     #[serde(rename = "DryRun")]
@@ -108,6 +112,7 @@ pub struct DeleteProgressUpdateStreamRequest {
 pub struct DeleteProgressUpdateStreamResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationStateRequest {
     /// <p>The configurationId in Application Discovery Service that uniquely identifies the grouped application.</p>
     #[serde(rename = "ApplicationId")]
@@ -128,6 +133,7 @@ pub struct DescribeApplicationStateResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMigrationTaskRequest {
     /// <p>The identifier given to the MigrationTask. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
@@ -147,6 +153,7 @@ pub struct DescribeMigrationTaskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateCreatedArtifactRequest {
     /// <p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.)</p>
     #[serde(rename = "CreatedArtifactName")]
@@ -168,6 +175,7 @@ pub struct DisassociateCreatedArtifactRequest {
 pub struct DisassociateCreatedArtifactResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDiscoveredResourceRequest {
     /// <p>ConfigurationId of the Application Discovery Service resource to be disassociated.</p>
     #[serde(rename = "ConfigurationId")]
@@ -201,6 +209,7 @@ pub struct DiscoveredResource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportMigrationTaskRequest {
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
     #[serde(rename = "DryRun")]
@@ -219,6 +228,7 @@ pub struct ImportMigrationTaskRequest {
 pub struct ImportMigrationTaskResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCreatedArtifactsRequest {
     /// <p>Maximum number of results to be returned per page.</p>
     #[serde(rename = "MaxResults")]
@@ -250,6 +260,7 @@ pub struct ListCreatedArtifactsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDiscoveredResourcesRequest {
     /// <p>The maximum number of results returned per page.</p>
     #[serde(rename = "MaxResults")]
@@ -281,6 +292,7 @@ pub struct ListDiscoveredResourcesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMigrationTasksRequest {
     /// <p>Value to specify how many results are returned per page.</p>
     #[serde(rename = "MaxResults")]
@@ -310,6 +322,7 @@ pub struct ListMigrationTasksResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProgressUpdateStreamsRequest {
     /// <p>Filter to limit the maximum number of results to list per page.</p>
     #[serde(rename = "MaxResults")]
@@ -391,6 +404,7 @@ pub struct MigrationTaskSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyApplicationStateRequest {
     /// <p>The configurationId in Application Discovery Service that uniquely identifies the grouped application.</p>
     #[serde(rename = "ApplicationId")]
@@ -413,6 +427,7 @@ pub struct NotifyApplicationStateRequest {
 pub struct NotifyApplicationStateResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyMigrationTaskStateRequest {
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
     #[serde(rename = "DryRun")]
@@ -450,6 +465,7 @@ pub struct ProgressUpdateStreamSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourceAttributesRequest {
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
     #[serde(rename = "DryRun")]
@@ -571,23 +587,21 @@ impl AssociateCreatedArtifactError {
 }
 impl fmt::Display for AssociateCreatedArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateCreatedArtifactError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateCreatedArtifactError::AccessDenied(ref cause) => cause,
-            AssociateCreatedArtifactError::DryRunOperation(ref cause) => cause,
-            AssociateCreatedArtifactError::HomeRegionNotSet(ref cause) => cause,
-            AssociateCreatedArtifactError::InternalServerError(ref cause) => cause,
-            AssociateCreatedArtifactError::InvalidInput(ref cause) => cause,
-            AssociateCreatedArtifactError::ResourceNotFound(ref cause) => cause,
-            AssociateCreatedArtifactError::ServiceUnavailable(ref cause) => cause,
-            AssociateCreatedArtifactError::UnauthorizedOperation(ref cause) => cause,
+            AssociateCreatedArtifactError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateCreatedArtifactError {}
 /// Errors returned by AssociateDiscoveredResource
 #[derive(Debug, PartialEq)]
 pub enum AssociateDiscoveredResourceError {
@@ -671,24 +685,26 @@ impl AssociateDiscoveredResourceError {
 }
 impl fmt::Display for AssociateDiscoveredResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateDiscoveredResourceError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateDiscoveredResourceError::AccessDenied(ref cause) => cause,
-            AssociateDiscoveredResourceError::DryRunOperation(ref cause) => cause,
-            AssociateDiscoveredResourceError::HomeRegionNotSet(ref cause) => cause,
-            AssociateDiscoveredResourceError::InternalServerError(ref cause) => cause,
-            AssociateDiscoveredResourceError::InvalidInput(ref cause) => cause,
-            AssociateDiscoveredResourceError::PolicyError(ref cause) => cause,
-            AssociateDiscoveredResourceError::ResourceNotFound(ref cause) => cause,
-            AssociateDiscoveredResourceError::ServiceUnavailable(ref cause) => cause,
-            AssociateDiscoveredResourceError::UnauthorizedOperation(ref cause) => cause,
+            AssociateDiscoveredResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AssociateDiscoveredResourceError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            AssociateDiscoveredResourceError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            AssociateDiscoveredResourceError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateDiscoveredResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AssociateDiscoveredResourceError::PolicyError(ref cause) => write!(f, "{}", cause),
+            AssociateDiscoveredResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateDiscoveredResourceError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateDiscoveredResourceError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateDiscoveredResourceError {}
 /// Errors returned by CreateProgressUpdateStream
 #[derive(Debug, PartialEq)]
 pub enum CreateProgressUpdateStreamError {
@@ -758,22 +774,24 @@ impl CreateProgressUpdateStreamError {
 }
 impl fmt::Display for CreateProgressUpdateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProgressUpdateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            CreateProgressUpdateStreamError::AccessDenied(ref cause) => cause,
-            CreateProgressUpdateStreamError::DryRunOperation(ref cause) => cause,
-            CreateProgressUpdateStreamError::HomeRegionNotSet(ref cause) => cause,
-            CreateProgressUpdateStreamError::InternalServerError(ref cause) => cause,
-            CreateProgressUpdateStreamError::InvalidInput(ref cause) => cause,
-            CreateProgressUpdateStreamError::ServiceUnavailable(ref cause) => cause,
-            CreateProgressUpdateStreamError::UnauthorizedOperation(ref cause) => cause,
+            CreateProgressUpdateStreamError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateProgressUpdateStreamError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            CreateProgressUpdateStreamError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            CreateProgressUpdateStreamError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateProgressUpdateStreamError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateProgressUpdateStreamError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateProgressUpdateStreamError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateProgressUpdateStreamError {}
 /// Errors returned by DeleteProgressUpdateStream
 #[derive(Debug, PartialEq)]
 pub enum DeleteProgressUpdateStreamError {
@@ -850,23 +868,25 @@ impl DeleteProgressUpdateStreamError {
 }
 impl fmt::Display for DeleteProgressUpdateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteProgressUpdateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteProgressUpdateStreamError::AccessDenied(ref cause) => cause,
-            DeleteProgressUpdateStreamError::DryRunOperation(ref cause) => cause,
-            DeleteProgressUpdateStreamError::HomeRegionNotSet(ref cause) => cause,
-            DeleteProgressUpdateStreamError::InternalServerError(ref cause) => cause,
-            DeleteProgressUpdateStreamError::InvalidInput(ref cause) => cause,
-            DeleteProgressUpdateStreamError::ResourceNotFound(ref cause) => cause,
-            DeleteProgressUpdateStreamError::ServiceUnavailable(ref cause) => cause,
-            DeleteProgressUpdateStreamError::UnauthorizedOperation(ref cause) => cause,
+            DeleteProgressUpdateStreamError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteProgressUpdateStreamError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            DeleteProgressUpdateStreamError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DeleteProgressUpdateStreamError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteProgressUpdateStreamError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteProgressUpdateStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteProgressUpdateStreamError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteProgressUpdateStreamError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteProgressUpdateStreamError {}
 /// Errors returned by DescribeApplicationState
 #[derive(Debug, PartialEq)]
 pub enum DescribeApplicationStateError {
@@ -934,22 +954,18 @@ impl DescribeApplicationStateError {
 }
 impl fmt::Display for DescribeApplicationStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeApplicationStateError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeApplicationStateError::AccessDenied(ref cause) => cause,
-            DescribeApplicationStateError::HomeRegionNotSet(ref cause) => cause,
-            DescribeApplicationStateError::InternalServerError(ref cause) => cause,
-            DescribeApplicationStateError::InvalidInput(ref cause) => cause,
-            DescribeApplicationStateError::PolicyError(ref cause) => cause,
-            DescribeApplicationStateError::ResourceNotFound(ref cause) => cause,
-            DescribeApplicationStateError::ServiceUnavailable(ref cause) => cause,
+            DescribeApplicationStateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::PolicyError(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeApplicationStateError {}
 /// Errors returned by DescribeMigrationTask
 #[derive(Debug, PartialEq)]
 pub enum DescribeMigrationTaskError {
@@ -1006,21 +1022,17 @@ impl DescribeMigrationTaskError {
 }
 impl fmt::Display for DescribeMigrationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMigrationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMigrationTaskError::AccessDenied(ref cause) => cause,
-            DescribeMigrationTaskError::HomeRegionNotSet(ref cause) => cause,
-            DescribeMigrationTaskError::InternalServerError(ref cause) => cause,
-            DescribeMigrationTaskError::InvalidInput(ref cause) => cause,
-            DescribeMigrationTaskError::ResourceNotFound(ref cause) => cause,
-            DescribeMigrationTaskError::ServiceUnavailable(ref cause) => cause,
+            DescribeMigrationTaskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeMigrationTaskError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeMigrationTaskError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeMigrationTaskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeMigrationTaskError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeMigrationTaskError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeMigrationTaskError {}
 /// Errors returned by DisassociateCreatedArtifact
 #[derive(Debug, PartialEq)]
 pub enum DisassociateCreatedArtifactError {
@@ -1097,23 +1109,25 @@ impl DisassociateCreatedArtifactError {
 }
 impl fmt::Display for DisassociateCreatedArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateCreatedArtifactError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateCreatedArtifactError::AccessDenied(ref cause) => cause,
-            DisassociateCreatedArtifactError::DryRunOperation(ref cause) => cause,
-            DisassociateCreatedArtifactError::HomeRegionNotSet(ref cause) => cause,
-            DisassociateCreatedArtifactError::InternalServerError(ref cause) => cause,
-            DisassociateCreatedArtifactError::InvalidInput(ref cause) => cause,
-            DisassociateCreatedArtifactError::ResourceNotFound(ref cause) => cause,
-            DisassociateCreatedArtifactError::ServiceUnavailable(ref cause) => cause,
-            DisassociateCreatedArtifactError::UnauthorizedOperation(ref cause) => cause,
+            DisassociateCreatedArtifactError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisassociateCreatedArtifactError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            DisassociateCreatedArtifactError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DisassociateCreatedArtifactError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateCreatedArtifactError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisassociateCreatedArtifactError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DisassociateCreatedArtifactError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateCreatedArtifactError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateCreatedArtifactError {}
 /// Errors returned by DisassociateDiscoveredResource
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDiscoveredResourceError {
@@ -1190,23 +1204,31 @@ impl DisassociateDiscoveredResourceError {
 }
 impl fmt::Display for DisassociateDiscoveredResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateDiscoveredResourceError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateDiscoveredResourceError::AccessDenied(ref cause) => cause,
-            DisassociateDiscoveredResourceError::DryRunOperation(ref cause) => cause,
-            DisassociateDiscoveredResourceError::HomeRegionNotSet(ref cause) => cause,
-            DisassociateDiscoveredResourceError::InternalServerError(ref cause) => cause,
-            DisassociateDiscoveredResourceError::InvalidInput(ref cause) => cause,
-            DisassociateDiscoveredResourceError::ResourceNotFound(ref cause) => cause,
-            DisassociateDiscoveredResourceError::ServiceUnavailable(ref cause) => cause,
-            DisassociateDiscoveredResourceError::UnauthorizedOperation(ref cause) => cause,
+            DisassociateDiscoveredResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisassociateDiscoveredResourceError::DryRunOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDiscoveredResourceError::HomeRegionNotSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDiscoveredResourceError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDiscoveredResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisassociateDiscoveredResourceError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDiscoveredResourceError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDiscoveredResourceError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateDiscoveredResourceError {}
 /// Errors returned by ImportMigrationTask
 #[derive(Debug, PartialEq)]
 pub enum ImportMigrationTaskError {
@@ -1275,23 +1297,19 @@ impl ImportMigrationTaskError {
 }
 impl fmt::Display for ImportMigrationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportMigrationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            ImportMigrationTaskError::AccessDenied(ref cause) => cause,
-            ImportMigrationTaskError::DryRunOperation(ref cause) => cause,
-            ImportMigrationTaskError::HomeRegionNotSet(ref cause) => cause,
-            ImportMigrationTaskError::InternalServerError(ref cause) => cause,
-            ImportMigrationTaskError::InvalidInput(ref cause) => cause,
-            ImportMigrationTaskError::ResourceNotFound(ref cause) => cause,
-            ImportMigrationTaskError::ServiceUnavailable(ref cause) => cause,
-            ImportMigrationTaskError::UnauthorizedOperation(ref cause) => cause,
+            ImportMigrationTaskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportMigrationTaskError {}
 /// Errors returned by ListCreatedArtifacts
 #[derive(Debug, PartialEq)]
 pub enum ListCreatedArtifactsError {
@@ -1348,21 +1366,17 @@ impl ListCreatedArtifactsError {
 }
 impl fmt::Display for ListCreatedArtifactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCreatedArtifactsError {
-    fn description(&self) -> &str {
         match *self {
-            ListCreatedArtifactsError::AccessDenied(ref cause) => cause,
-            ListCreatedArtifactsError::HomeRegionNotSet(ref cause) => cause,
-            ListCreatedArtifactsError::InternalServerError(ref cause) => cause,
-            ListCreatedArtifactsError::InvalidInput(ref cause) => cause,
-            ListCreatedArtifactsError::ResourceNotFound(ref cause) => cause,
-            ListCreatedArtifactsError::ServiceUnavailable(ref cause) => cause,
+            ListCreatedArtifactsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListCreatedArtifactsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ListCreatedArtifactsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListCreatedArtifactsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListCreatedArtifactsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListCreatedArtifactsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCreatedArtifactsError {}
 /// Errors returned by ListDiscoveredResources
 #[derive(Debug, PartialEq)]
 pub enum ListDiscoveredResourcesError {
@@ -1423,21 +1437,17 @@ impl ListDiscoveredResourcesError {
 }
 impl fmt::Display for ListDiscoveredResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDiscoveredResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDiscoveredResourcesError::AccessDenied(ref cause) => cause,
-            ListDiscoveredResourcesError::HomeRegionNotSet(ref cause) => cause,
-            ListDiscoveredResourcesError::InternalServerError(ref cause) => cause,
-            ListDiscoveredResourcesError::InvalidInput(ref cause) => cause,
-            ListDiscoveredResourcesError::ResourceNotFound(ref cause) => cause,
-            ListDiscoveredResourcesError::ServiceUnavailable(ref cause) => cause,
+            ListDiscoveredResourcesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDiscoveredResourcesError {}
 /// Errors returned by ListMigrationTasks
 #[derive(Debug, PartialEq)]
 pub enum ListMigrationTasksError {
@@ -1495,22 +1505,18 @@ impl ListMigrationTasksError {
 }
 impl fmt::Display for ListMigrationTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMigrationTasksError {
-    fn description(&self) -> &str {
         match *self {
-            ListMigrationTasksError::AccessDenied(ref cause) => cause,
-            ListMigrationTasksError::HomeRegionNotSet(ref cause) => cause,
-            ListMigrationTasksError::InternalServerError(ref cause) => cause,
-            ListMigrationTasksError::InvalidInput(ref cause) => cause,
-            ListMigrationTasksError::PolicyError(ref cause) => cause,
-            ListMigrationTasksError::ResourceNotFound(ref cause) => cause,
-            ListMigrationTasksError::ServiceUnavailable(ref cause) => cause,
+            ListMigrationTasksError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::PolicyError(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMigrationTasksError {}
 /// Errors returned by ListProgressUpdateStreams
 #[derive(Debug, PartialEq)]
 pub enum ListProgressUpdateStreamsError {
@@ -1564,20 +1570,18 @@ impl ListProgressUpdateStreamsError {
 }
 impl fmt::Display for ListProgressUpdateStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProgressUpdateStreamsError {
-    fn description(&self) -> &str {
         match *self {
-            ListProgressUpdateStreamsError::AccessDenied(ref cause) => cause,
-            ListProgressUpdateStreamsError::HomeRegionNotSet(ref cause) => cause,
-            ListProgressUpdateStreamsError::InternalServerError(ref cause) => cause,
-            ListProgressUpdateStreamsError::InvalidInput(ref cause) => cause,
-            ListProgressUpdateStreamsError::ServiceUnavailable(ref cause) => cause,
+            ListProgressUpdateStreamsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListProgressUpdateStreamsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ListProgressUpdateStreamsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListProgressUpdateStreamsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListProgressUpdateStreamsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListProgressUpdateStreamsError {}
 /// Errors returned by NotifyApplicationState
 #[derive(Debug, PartialEq)]
 pub enum NotifyApplicationStateError {
@@ -1653,24 +1657,20 @@ impl NotifyApplicationStateError {
 }
 impl fmt::Display for NotifyApplicationStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for NotifyApplicationStateError {
-    fn description(&self) -> &str {
         match *self {
-            NotifyApplicationStateError::AccessDenied(ref cause) => cause,
-            NotifyApplicationStateError::DryRunOperation(ref cause) => cause,
-            NotifyApplicationStateError::HomeRegionNotSet(ref cause) => cause,
-            NotifyApplicationStateError::InternalServerError(ref cause) => cause,
-            NotifyApplicationStateError::InvalidInput(ref cause) => cause,
-            NotifyApplicationStateError::PolicyError(ref cause) => cause,
-            NotifyApplicationStateError::ResourceNotFound(ref cause) => cause,
-            NotifyApplicationStateError::ServiceUnavailable(ref cause) => cause,
-            NotifyApplicationStateError::UnauthorizedOperation(ref cause) => cause,
+            NotifyApplicationStateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::PolicyError(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for NotifyApplicationStateError {}
 /// Errors returned by NotifyMigrationTaskState
 #[derive(Debug, PartialEq)]
 pub enum NotifyMigrationTaskStateError {
@@ -1745,23 +1745,21 @@ impl NotifyMigrationTaskStateError {
 }
 impl fmt::Display for NotifyMigrationTaskStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for NotifyMigrationTaskStateError {
-    fn description(&self) -> &str {
         match *self {
-            NotifyMigrationTaskStateError::AccessDenied(ref cause) => cause,
-            NotifyMigrationTaskStateError::DryRunOperation(ref cause) => cause,
-            NotifyMigrationTaskStateError::HomeRegionNotSet(ref cause) => cause,
-            NotifyMigrationTaskStateError::InternalServerError(ref cause) => cause,
-            NotifyMigrationTaskStateError::InvalidInput(ref cause) => cause,
-            NotifyMigrationTaskStateError::ResourceNotFound(ref cause) => cause,
-            NotifyMigrationTaskStateError::ServiceUnavailable(ref cause) => cause,
-            NotifyMigrationTaskStateError::UnauthorizedOperation(ref cause) => cause,
+            NotifyMigrationTaskStateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for NotifyMigrationTaskStateError {}
 /// Errors returned by PutResourceAttributes
 #[derive(Debug, PartialEq)]
 pub enum PutResourceAttributesError {
@@ -1832,23 +1830,19 @@ impl PutResourceAttributesError {
 }
 impl fmt::Display for PutResourceAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutResourceAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            PutResourceAttributesError::AccessDenied(ref cause) => cause,
-            PutResourceAttributesError::DryRunOperation(ref cause) => cause,
-            PutResourceAttributesError::HomeRegionNotSet(ref cause) => cause,
-            PutResourceAttributesError::InternalServerError(ref cause) => cause,
-            PutResourceAttributesError::InvalidInput(ref cause) => cause,
-            PutResourceAttributesError::ResourceNotFound(ref cause) => cause,
-            PutResourceAttributesError::ServiceUnavailable(ref cause) => cause,
-            PutResourceAttributesError::UnauthorizedOperation(ref cause) => cause,
+            PutResourceAttributesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutResourceAttributesError {}
 /// Trait representing the capabilities of the AWS Migration Hub API. AWS Migration Hub clients implement this trait.
 pub trait MigrationHub {
     /// <p><p>Associates a created artifact of an AWS cloud resource, the target receiving the migration, with the migration task performed by a migration tool. This API has the following traits:</p> <ul> <li> <p>Migration tools can call the <code>AssociateCreatedArtifact</code> operation to indicate which AWS artifact is associated with a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI&#39;s, EC2 instance, or DMS endpoint, etc.</p> </li> </ul></p>

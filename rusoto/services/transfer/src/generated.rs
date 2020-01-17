@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServerRequest {
     /// <p>The virtual private cloud (VPC) endpoint settings that you want to configure for your SFTP server. This parameter is required when you specify a value for the <code>EndpointType</code> parameter.</p>
     #[serde(rename = "EndpointDetails")]
@@ -64,6 +65,7 @@ pub struct CreateServerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p>The landing directory (folder) for a user when they log in to the server using their SFTP client. </p> <p>An example is &lt;<code>your-Amazon-S3-bucket-name&gt;/home/username</code>.</p>
     #[serde(rename = "HomeDirectory")]
@@ -112,6 +114,7 @@ pub struct CreateUserResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServerRequest {
     /// <p>A unique system-assigned identifier for an SFTP server instance.</p>
     #[serde(rename = "ServerId")]
@@ -119,6 +122,7 @@ pub struct DeleteServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSshPublicKeyRequest {
     /// <p>A system-assigned unique identifier for a Secure File Transfer Protocol (SFTP) server instance that has the user assigned to it.</p>
     #[serde(rename = "ServerId")]
@@ -132,6 +136,7 @@ pub struct DeleteSshPublicKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>A system-assigned unique identifier for an SFTP server instance that has the user assigned to it.</p>
     #[serde(rename = "ServerId")]
@@ -142,6 +147,7 @@ pub struct DeleteUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServerRequest {
     /// <p>A system-assigned unique identifier for an SFTP server.</p>
     #[serde(rename = "ServerId")]
@@ -157,6 +163,7 @@ pub struct DescribeServerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
     /// <p>A system-assigned unique identifier for an SFTP server that has this user assigned.</p>
     #[serde(rename = "ServerId")]
@@ -301,6 +308,7 @@ pub struct IdentityProviderDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportSshPublicKeyRequest {
     /// <p>A system-assigned unique identifier for an SFTP server.</p>
     #[serde(rename = "ServerId")]
@@ -329,6 +337,7 @@ pub struct ImportSshPublicKeyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServersRequest {
     /// <p>Specifies the number of servers to return as a response to the <code>ListServers</code> query.</p>
     #[serde(rename = "MaxResults")]
@@ -353,6 +362,7 @@ pub struct ListServersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>Requests the tags associated with a particular Amazon Resource Name (ARN). An ARN is an identifier for a specific AWS resource, such as a server, user, or role.</p>
     #[serde(rename = "Arn")]
@@ -385,6 +395,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>Specifies the number of users to return as a response to the <code>ListUsers</code> request.</p>
     #[serde(rename = "MaxResults")]
@@ -492,6 +503,7 @@ pub struct SshPublicKey {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartServerRequest {
     /// <p>A system-assigned unique identifier for an SFTP server that you start.</p>
     #[serde(rename = "ServerId")]
@@ -499,6 +511,7 @@ pub struct StartServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopServerRequest {
     /// <p>A system-assigned unique identifier for an SFTP server that you stopped.</p>
     #[serde(rename = "ServerId")]
@@ -517,6 +530,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>An Amazon Resource Name (ARN) for a specific AWS resource, such as a server, user, or role.</p>
     #[serde(rename = "Arn")]
@@ -527,6 +541,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestIdentityProviderRequest {
     /// <p>A system-assigned identifier for a specific server. That server's user authentication method is tested with a user name and password.</p>
     #[serde(rename = "ServerId")]
@@ -560,6 +575,7 @@ pub struct TestIdentityProviderResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>This is the value of the resource that will have the tag removed. An Amazon Resource Name (ARN) is an identifier for a specific AWS resource, such as a server, user, or role.</p>
     #[serde(rename = "Arn")]
@@ -570,6 +586,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServerRequest {
     /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your SFTP server. With a VPC endpoint, your SFTP server isn't accessible over the public internet.</p>
     #[serde(rename = "EndpointDetails")]
@@ -605,6 +622,7 @@ pub struct UpdateServerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
     /// <p>A parameter that specifies the landing directory (folder) for a user when they log in to the server using their client. </p> <p>An example is <code>&lt;your-Amazon-S3-bucket-name&gt;/home/username</code>.</p>
     #[serde(rename = "HomeDirectory")]
@@ -684,19 +702,15 @@ impl CreateServerError {
 }
 impl fmt::Display for CreateServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateServerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateServerError::InternalServiceError(ref cause) => cause,
-            CreateServerError::InvalidRequest(ref cause) => cause,
-            CreateServerError::ResourceExists(ref cause) => cause,
-            CreateServerError::ServiceUnavailable(ref cause) => cause,
+            CreateServerError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            CreateServerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateServerError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            CreateServerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateServerError {}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
@@ -740,20 +754,16 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserError::InternalServiceError(ref cause) => cause,
-            CreateUserError::InvalidRequest(ref cause) => cause,
-            CreateUserError::ResourceExists(ref cause) => cause,
-            CreateUserError::ResourceNotFound(ref cause) => cause,
-            CreateUserError::ServiceUnavailable(ref cause) => cause,
+            CreateUserError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            CreateUserError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserError {}
 /// Errors returned by DeleteServer
 #[derive(Debug, PartialEq)]
 pub enum DeleteServerError {
@@ -792,19 +802,15 @@ impl DeleteServerError {
 }
 impl fmt::Display for DeleteServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServerError::InternalServiceError(ref cause) => cause,
-            DeleteServerError::InvalidRequest(ref cause) => cause,
-            DeleteServerError::ResourceNotFound(ref cause) => cause,
-            DeleteServerError::ServiceUnavailable(ref cause) => cause,
+            DeleteServerError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DeleteServerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteServerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServerError {}
 /// Errors returned by DeleteSshPublicKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteSshPublicKeyError {
@@ -852,20 +858,16 @@ impl DeleteSshPublicKeyError {
 }
 impl fmt::Display for DeleteSshPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSshPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSshPublicKeyError::InternalServiceError(ref cause) => cause,
-            DeleteSshPublicKeyError::InvalidRequest(ref cause) => cause,
-            DeleteSshPublicKeyError::ResourceNotFound(ref cause) => cause,
-            DeleteSshPublicKeyError::ServiceUnavailable(ref cause) => cause,
-            DeleteSshPublicKeyError::Throttling(ref cause) => cause,
+            DeleteSshPublicKeyError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DeleteSshPublicKeyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteSshPublicKeyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteSshPublicKeyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteSshPublicKeyError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSshPublicKeyError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -904,19 +906,15 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserError::InternalServiceError(ref cause) => cause,
-            DeleteUserError::InvalidRequest(ref cause) => cause,
-            DeleteUserError::ResourceNotFound(ref cause) => cause,
-            DeleteUserError::ServiceUnavailable(ref cause) => cause,
+            DeleteUserError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserError {}
 /// Errors returned by DescribeServer
 #[derive(Debug, PartialEq)]
 pub enum DescribeServerError {
@@ -955,19 +953,15 @@ impl DescribeServerError {
 }
 impl fmt::Display for DescribeServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeServerError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeServerError::InternalServiceError(ref cause) => cause,
-            DescribeServerError::InvalidRequest(ref cause) => cause,
-            DescribeServerError::ResourceNotFound(ref cause) => cause,
-            DescribeServerError::ServiceUnavailable(ref cause) => cause,
+            DescribeServerError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DescribeServerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeServerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeServerError {}
 /// Errors returned by DescribeUser
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserError {
@@ -1006,19 +1000,15 @@ impl DescribeUserError {
 }
 impl fmt::Display for DescribeUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserError::InternalServiceError(ref cause) => cause,
-            DescribeUserError::InvalidRequest(ref cause) => cause,
-            DescribeUserError::ResourceNotFound(ref cause) => cause,
-            DescribeUserError::ServiceUnavailable(ref cause) => cause,
+            DescribeUserError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserError {}
 /// Errors returned by ImportSshPublicKey
 #[derive(Debug, PartialEq)]
 pub enum ImportSshPublicKeyError {
@@ -1071,21 +1061,17 @@ impl ImportSshPublicKeyError {
 }
 impl fmt::Display for ImportSshPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportSshPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            ImportSshPublicKeyError::InternalServiceError(ref cause) => cause,
-            ImportSshPublicKeyError::InvalidRequest(ref cause) => cause,
-            ImportSshPublicKeyError::ResourceExists(ref cause) => cause,
-            ImportSshPublicKeyError::ResourceNotFound(ref cause) => cause,
-            ImportSshPublicKeyError::ServiceUnavailable(ref cause) => cause,
-            ImportSshPublicKeyError::Throttling(ref cause) => cause,
+            ImportSshPublicKeyError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ImportSshPublicKeyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ImportSshPublicKeyError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            ImportSshPublicKeyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ImportSshPublicKeyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ImportSshPublicKeyError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportSshPublicKeyError {}
 /// Errors returned by ListServers
 #[derive(Debug, PartialEq)]
 pub enum ListServersError {
@@ -1124,19 +1110,15 @@ impl ListServersError {
 }
 impl fmt::Display for ListServersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListServersError {
-    fn description(&self) -> &str {
         match *self {
-            ListServersError::InternalServiceError(ref cause) => cause,
-            ListServersError::InvalidNextToken(ref cause) => cause,
-            ListServersError::InvalidRequest(ref cause) => cause,
-            ListServersError::ServiceUnavailable(ref cause) => cause,
+            ListServersError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListServersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListServersError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListServersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListServersError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1181,19 +1163,15 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalServiceError(ref cause) => cause,
-            ListTagsForResourceError::InvalidNextToken(ref cause) => cause,
-            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
-            ListTagsForResourceError::ServiceUnavailable(ref cause) => cause,
+            ListTagsForResourceError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
@@ -1237,20 +1215,16 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUsersError {
-    fn description(&self) -> &str {
         match *self {
-            ListUsersError::InternalServiceError(ref cause) => cause,
-            ListUsersError::InvalidNextToken(ref cause) => cause,
-            ListUsersError::InvalidRequest(ref cause) => cause,
-            ListUsersError::ResourceNotFound(ref cause) => cause,
-            ListUsersError::ServiceUnavailable(ref cause) => cause,
+            ListUsersError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListUsersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListUsersError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListUsersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListUsersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUsersError {}
 /// Errors returned by StartServer
 #[derive(Debug, PartialEq)]
 pub enum StartServerError {
@@ -1294,20 +1268,16 @@ impl StartServerError {
 }
 impl fmt::Display for StartServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartServerError {
-    fn description(&self) -> &str {
         match *self {
-            StartServerError::InternalServiceError(ref cause) => cause,
-            StartServerError::InvalidRequest(ref cause) => cause,
-            StartServerError::ResourceNotFound(ref cause) => cause,
-            StartServerError::ServiceUnavailable(ref cause) => cause,
-            StartServerError::Throttling(ref cause) => cause,
+            StartServerError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            StartServerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartServerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            StartServerError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartServerError {}
 /// Errors returned by StopServer
 #[derive(Debug, PartialEq)]
 pub enum StopServerError {
@@ -1351,20 +1321,16 @@ impl StopServerError {
 }
 impl fmt::Display for StopServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopServerError {
-    fn description(&self) -> &str {
         match *self {
-            StopServerError::InternalServiceError(ref cause) => cause,
-            StopServerError::InvalidRequest(ref cause) => cause,
-            StopServerError::ResourceNotFound(ref cause) => cause,
-            StopServerError::ServiceUnavailable(ref cause) => cause,
-            StopServerError::Throttling(ref cause) => cause,
+            StopServerError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            StopServerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StopServerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            StopServerError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopServerError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1403,19 +1369,15 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InternalServiceError(ref cause) => cause,
-            TagResourceError::InvalidRequest(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::ServiceUnavailable(ref cause) => cause,
+            TagResourceError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by TestIdentityProvider
 #[derive(Debug, PartialEq)]
 pub enum TestIdentityProviderError {
@@ -1460,19 +1422,15 @@ impl TestIdentityProviderError {
 }
 impl fmt::Display for TestIdentityProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestIdentityProviderError {
-    fn description(&self) -> &str {
         match *self {
-            TestIdentityProviderError::InternalServiceError(ref cause) => cause,
-            TestIdentityProviderError::InvalidRequest(ref cause) => cause,
-            TestIdentityProviderError::ResourceNotFound(ref cause) => cause,
-            TestIdentityProviderError::ServiceUnavailable(ref cause) => cause,
+            TestIdentityProviderError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            TestIdentityProviderError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TestIdentityProviderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TestIdentityProviderError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TestIdentityProviderError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1511,19 +1469,15 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InternalServiceError(ref cause) => cause,
-            UntagResourceError::InvalidRequest(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::ServiceUnavailable(ref cause) => cause,
+            UntagResourceError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateServer
 #[derive(Debug, PartialEq)]
 pub enum UpdateServerError {
@@ -1572,21 +1526,17 @@ impl UpdateServerError {
 }
 impl fmt::Display for UpdateServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServerError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServerError::InternalServiceError(ref cause) => cause,
-            UpdateServerError::InvalidRequest(ref cause) => cause,
-            UpdateServerError::ResourceExists(ref cause) => cause,
-            UpdateServerError::ResourceNotFound(ref cause) => cause,
-            UpdateServerError::ServiceUnavailable(ref cause) => cause,
-            UpdateServerError::Throttling(ref cause) => cause,
+            UpdateServerError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            UpdateServerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateServerError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            UpdateServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateServerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateServerError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServerError {}
 /// Errors returned by UpdateUser
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserError {
@@ -1630,20 +1580,16 @@ impl UpdateUserError {
 }
 impl fmt::Display for UpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserError::InternalServiceError(ref cause) => cause,
-            UpdateUserError::InvalidRequest(ref cause) => cause,
-            UpdateUserError::ResourceNotFound(ref cause) => cause,
-            UpdateUserError::ServiceUnavailable(ref cause) => cause,
-            UpdateUserError::Throttling(ref cause) => cause,
+            UpdateUserError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserError {}
 /// Trait representing the capabilities of the AWS Transfer API. AWS Transfer clients implement this trait.
 pub trait Transfer {
     /// <p>Instantiates an autoscaling virtual server based on Secure File Transfer Protocol (SFTP) in AWS. When you make updates to your server or when you work with users, use the service-generated <code>ServerId</code> property that is assigned to the newly created server.</p>

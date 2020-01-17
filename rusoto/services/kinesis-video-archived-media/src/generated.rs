@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Contains the range of timestamps for the requested media, and the source of the timestamps. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DASHFragmentSelector {
     /// <p>The source of the timestamps for the requested media.</p> <p>When <code>FragmentSelectorType</code> is set to <code>PRODUCER_TIMESTAMP</code> and <a>GetDASHStreamingSessionURLInput$PlaybackMode</a> is <code>ON_DEMAND</code> or <code>LIVE_REPLAY</code>, the first fragment ingested with a producer timestamp within the specified <a>FragmentSelector$TimestampRange</a> is included in the media playlist. In addition, the fragments with producer timestamps within the <code>TimestampRange</code> ingested immediately following the first fragment (up to the <a>GetDASHStreamingSessionURLInput$MaxManifestFragmentResults</a> value) are included. </p> <p>Fragments that have duplicate producer timestamps are deduplicated. This means that if producers are producing a stream of fragments with producer timestamps that are approximately equal to the true clock time, the MPEG-DASH manifest will contain all of the fragments within the requested timestamp range. If some fragments are ingested within the same time range and very different points in time, only the oldest ingested collection of fragments are returned.</p> <p>When <code>FragmentSelectorType</code> is set to <code>PRODUCER_TIMESTAMP</code> and <a>GetDASHStreamingSessionURLInput$PlaybackMode</a> is <code>LIVE</code>, the producer timestamps are used in the MP4 fragments and for deduplication. But the most recently ingested fragments based on server timestamps are included in the MPEG-DASH manifest. This means that even if fragments ingested in the past have producer timestamps with values now, they are not included in the HLS media playlist.</p> <p>The default is <code>SERVER_TIMESTAMP</code>.</p>
     #[serde(rename = "FragmentSelectorType")]
@@ -38,6 +39,7 @@ pub struct DASHFragmentSelector {
 
 /// <p><p>The start and end of the timestamp range for the requested media.</p> <p>This value should not be present if <code>PlaybackType</code> is <code>LIVE</code>.</p> <note> <p>The values in the <code>DASHimestampRange</code> are inclusive. Fragments that begin before the start time but continue past it, or fragments that begin before the end time but continue past it, are included in the session.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DASHTimestampRange {
     /// <p><p>The end of the timestamp range for the requested media. This value must be within 3 hours of the specified <code>StartTimestamp</code>, and it must be later than the <code>StartTimestamp</code> value.</p> <p>If <code>FragmentSelectorType</code> for the request is <code>SERVER<em>TIMESTAMP</code>, this value must be in the past.</p> <p>The <code>EndTimestamp</code> value is required for <code>ON</em>DEMAND</code> mode, but optional for <code>LIVE<em>REPLAY</code> mode. If the <code>EndTimestamp</code> is not set for <code>LIVE</em>REPLAY</code> mode then the session will continue to include newly ingested fragments until the session expires.</p> <note> <p>This value is inclusive. The <code>EndTimestamp</code> is compared to the (starting) timestamp of the fragment. Fragments that start before the <code>EndTimestamp</code> value and continue past it are included in the session.</p> </note></p>
     #[serde(rename = "EndTimestamp")]
@@ -77,6 +79,7 @@ pub struct Fragment {
 
 /// <p>Describes the timestamp range and timestamp origin of a range of fragments.</p> <p>Only fragments with a start timestamp greater than or equal to the given start time and less than or equal to the end time are returned. For example, if a stream contains fragments with the following start timestamps: </p> <ul> <li> <p>00:00:00</p> </li> <li> <p>00:00:02</p> </li> <li> <p>00:00:04</p> </li> <li> <p>00:00:06</p> </li> </ul> <p> A fragment selector range with a start time of 00:00:01 and end time of 00:00:04 would return the fragments with start times of 00:00:02 and 00:00:04. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FragmentSelector {
     /// <p>The origin of the timestamps to use (Server or Producer).</p>
     #[serde(rename = "FragmentSelectorType")]
@@ -87,6 +90,7 @@ pub struct FragmentSelector {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDASHStreamingSessionURLInput {
     /// <p>The time range of the requested fragment and the source of the timestamps.</p> <p>This parameter is required if <code>PlaybackMode</code> is <code>ON_DEMAND</code> or <code>LIVE_REPLAY</code>. This parameter is optional if PlaybackMode is<code/> <code>LIVE</code>. If <code>PlaybackMode</code> is <code>LIVE</code>, the <code>FragmentSelectorType</code> can be set, but the <code>TimestampRange</code> should not be set. If <code>PlaybackMode</code> is <code>ON_DEMAND</code> or <code>LIVE_REPLAY</code>, both <code>FragmentSelectorType</code> and <code>TimestampRange</code> must be set.</p>
     #[serde(rename = "DASHFragmentSelector")]
@@ -132,6 +136,7 @@ pub struct GetDASHStreamingSessionURLOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHLSStreamingSessionURLInput {
     /// <p>Specifies which format should be used for packaging the media. Specifying the <code>FRAGMENTED_MP4</code> container format packages the media into MP4 fragments (fMP4 or CMAF). This is the recommended packaging because there is minimal packaging overhead. The other container format option is <code>MPEG_TS</code>. HLS has supported MPEG TS chunks since it was released and is sometimes the only supported packaging on older HLS players. MPEG TS typically has a 5-25 percent packaging overhead. This means MPEG TS typically requires 5-25 percent more bandwidth and cost than fMP4.</p> <p>The default is <code>FRAGMENTED_MP4</code>.</p>
     #[serde(rename = "ContainerFormat")]
@@ -181,6 +186,7 @@ pub struct GetHLSStreamingSessionURLOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMediaForFragmentListInput {
     /// <p>A list of the numbers of fragments for which to retrieve media. You retrieve these values with <a>ListFragments</a>.</p>
     #[serde(rename = "Fragments")]
@@ -200,6 +206,7 @@ pub struct GetMediaForFragmentListOutput {
 
 /// <p>Contains the range of timestamps for the requested media, and the source of the timestamps.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HLSFragmentSelector {
     /// <p>The source of the timestamps for the requested media.</p> <p>When <code>FragmentSelectorType</code> is set to <code>PRODUCER_TIMESTAMP</code> and <a>GetHLSStreamingSessionURLInput$PlaybackMode</a> is <code>ON_DEMAND</code> or <code>LIVE_REPLAY</code>, the first fragment ingested with a producer timestamp within the specified <a>FragmentSelector$TimestampRange</a> is included in the media playlist. In addition, the fragments with producer timestamps within the <code>TimestampRange</code> ingested immediately following the first fragment (up to the <a>GetHLSStreamingSessionURLInput$MaxMediaPlaylistFragmentResults</a> value) are included. </p> <p>Fragments that have duplicate producer timestamps are deduplicated. This means that if producers are producing a stream of fragments with producer timestamps that are approximately equal to the true clock time, the HLS media playlists will contain all of the fragments within the requested timestamp range. If some fragments are ingested within the same time range and very different points in time, only the oldest ingested collection of fragments are returned.</p> <p>When <code>FragmentSelectorType</code> is set to <code>PRODUCER_TIMESTAMP</code> and <a>GetHLSStreamingSessionURLInput$PlaybackMode</a> is <code>LIVE</code>, the producer timestamps are used in the MP4 fragments and for deduplication. But the most recently ingested fragments based on server timestamps are included in the HLS media playlist. This means that even if fragments ingested in the past have producer timestamps with values now, they are not included in the HLS media playlist.</p> <p>The default is <code>SERVER_TIMESTAMP</code>.</p>
     #[serde(rename = "FragmentSelectorType")]
@@ -213,6 +220,7 @@ pub struct HLSFragmentSelector {
 
 /// <p><p>The start and end of the timestamp range for the requested media.</p> <p>This value should not be present if <code>PlaybackType</code> is <code>LIVE</code>.</p> <note> <p>The values in the <code>HLSTimestampRange</code> are inclusive. Fragments that begin before the start time but continue past it, or fragments that begin before the end time but continue past it, are included in the session.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HLSTimestampRange {
     /// <p><p>The end of the timestamp range for the requested media. This value must be within 3 hours of the specified <code>StartTimestamp</code>, and it must be later than the <code>StartTimestamp</code> value.</p> <p>If <code>FragmentSelectorType</code> for the request is <code>SERVER<em>TIMESTAMP</code>, this value must be in the past.</p> <p>The <code>EndTimestamp</code> value is required for <code>ON</em>DEMAND</code> mode, but optional for <code>LIVE<em>REPLAY</code> mode. If the <code>EndTimestamp</code> is not set for <code>LIVE</em>REPLAY</code> mode then the session will continue to include newly ingested fragments until the session expires.</p> <note> <p>This value is inclusive. The <code>EndTimestamp</code> is compared to the (starting) timestamp of the fragment. Fragments that start before the <code>EndTimestamp</code> value and continue past it are included in the session.</p> </note></p>
     #[serde(rename = "EndTimestamp")]
@@ -225,6 +233,7 @@ pub struct HLSTimestampRange {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFragmentsInput {
     /// <p>Describes the timestamp range and timestamp origin for the range of fragments to return.</p>
     #[serde(rename = "FragmentSelector")]
@@ -258,6 +267,7 @@ pub struct ListFragmentsOutput {
 
 /// <p>The range of timestamps for which to return fragments.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TimestampRange {
     /// <p>The ending timestamp in the range of timestamps for which to return fragments.</p>
     #[serde(rename = "EndTimestamp")]
@@ -343,23 +353,27 @@ impl GetDASHStreamingSessionURLError {
 }
 impl fmt::Display for GetDASHStreamingSessionURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDASHStreamingSessionURLError {
-    fn description(&self) -> &str {
         match *self {
-            GetDASHStreamingSessionURLError::ClientLimitExceeded(ref cause) => cause,
-            GetDASHStreamingSessionURLError::InvalidArgument(ref cause) => cause,
-            GetDASHStreamingSessionURLError::InvalidCodecPrivateData(ref cause) => cause,
-            GetDASHStreamingSessionURLError::MissingCodecPrivateData(ref cause) => cause,
-            GetDASHStreamingSessionURLError::NoDataRetention(ref cause) => cause,
-            GetDASHStreamingSessionURLError::NotAuthorized(ref cause) => cause,
-            GetDASHStreamingSessionURLError::ResourceNotFound(ref cause) => cause,
-            GetDASHStreamingSessionURLError::UnsupportedStreamMediaType(ref cause) => cause,
+            GetDASHStreamingSessionURLError::ClientLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDASHStreamingSessionURLError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetDASHStreamingSessionURLError::InvalidCodecPrivateData(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDASHStreamingSessionURLError::MissingCodecPrivateData(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDASHStreamingSessionURLError::NoDataRetention(ref cause) => write!(f, "{}", cause),
+            GetDASHStreamingSessionURLError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetDASHStreamingSessionURLError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetDASHStreamingSessionURLError::UnsupportedStreamMediaType(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetDASHStreamingSessionURLError {}
 /// Errors returned by GetHLSStreamingSessionURL
 #[derive(Debug, PartialEq)]
 pub enum GetHLSStreamingSessionURLError {
@@ -434,23 +448,27 @@ impl GetHLSStreamingSessionURLError {
 }
 impl fmt::Display for GetHLSStreamingSessionURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetHLSStreamingSessionURLError {
-    fn description(&self) -> &str {
         match *self {
-            GetHLSStreamingSessionURLError::ClientLimitExceeded(ref cause) => cause,
-            GetHLSStreamingSessionURLError::InvalidArgument(ref cause) => cause,
-            GetHLSStreamingSessionURLError::InvalidCodecPrivateData(ref cause) => cause,
-            GetHLSStreamingSessionURLError::MissingCodecPrivateData(ref cause) => cause,
-            GetHLSStreamingSessionURLError::NoDataRetention(ref cause) => cause,
-            GetHLSStreamingSessionURLError::NotAuthorized(ref cause) => cause,
-            GetHLSStreamingSessionURLError::ResourceNotFound(ref cause) => cause,
-            GetHLSStreamingSessionURLError::UnsupportedStreamMediaType(ref cause) => cause,
+            GetHLSStreamingSessionURLError::ClientLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetHLSStreamingSessionURLError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetHLSStreamingSessionURLError::InvalidCodecPrivateData(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetHLSStreamingSessionURLError::MissingCodecPrivateData(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetHLSStreamingSessionURLError::NoDataRetention(ref cause) => write!(f, "{}", cause),
+            GetHLSStreamingSessionURLError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetHLSStreamingSessionURLError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetHLSStreamingSessionURLError::UnsupportedStreamMediaType(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetHLSStreamingSessionURLError {}
 /// Errors returned by GetMediaForFragmentList
 #[derive(Debug, PartialEq)]
 pub enum GetMediaForFragmentListError {
@@ -497,19 +515,15 @@ impl GetMediaForFragmentListError {
 }
 impl fmt::Display for GetMediaForFragmentListError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMediaForFragmentListError {
-    fn description(&self) -> &str {
         match *self {
-            GetMediaForFragmentListError::ClientLimitExceeded(ref cause) => cause,
-            GetMediaForFragmentListError::InvalidArgument(ref cause) => cause,
-            GetMediaForFragmentListError::NotAuthorized(ref cause) => cause,
-            GetMediaForFragmentListError::ResourceNotFound(ref cause) => cause,
+            GetMediaForFragmentListError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetMediaForFragmentListError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetMediaForFragmentListError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetMediaForFragmentListError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMediaForFragmentListError {}
 /// Errors returned by ListFragments
 #[derive(Debug, PartialEq)]
 pub enum ListFragmentsError {
@@ -548,19 +562,15 @@ impl ListFragmentsError {
 }
 impl fmt::Display for ListFragmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFragmentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListFragmentsError::ClientLimitExceeded(ref cause) => cause,
-            ListFragmentsError::InvalidArgument(ref cause) => cause,
-            ListFragmentsError::NotAuthorized(ref cause) => cause,
-            ListFragmentsError::ResourceNotFound(ref cause) => cause,
+            ListFragmentsError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListFragmentsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListFragmentsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListFragmentsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFragmentsError {}
 /// Trait representing the capabilities of the Kinesis Video Archived Media API. Kinesis Video Archived Media clients implement this trait.
 pub trait KinesisVideoArchivedMedia {
     /// <p><p>Retrieves an MPEG Dynamic Adaptive Streaming over HTTP (DASH) URL for the stream. You can then open the URL in a media player to view the stream contents.</p> <p>Both the <code>StreamName</code> and the <code>StreamARN</code> parameters are optional, but you must specify either the <code>StreamName</code> or the <code>StreamARN</code> when invoking this API operation.</p> <p>An Amazon Kinesis video stream has the following requirements for providing data through MPEG-DASH:</p> <ul> <li> <p>The media must contain h.264 or h.265 encoded video and, optionally, AAC or G.711 encoded audio. Specifically, the codec ID of track 1 should be <code>V<em>MPEG/ISO/AVC</code> (for h.264) or V</em>MPEGH/ISO/HEVC (for H.265). Optionally, the codec ID of track 2 should be <code>A<em>AAC</code> (for AAC) or A</em>MS/ACM (for G.711).</p> </li> <li> <p>Data retention must be greater than 0.</p> </li> <li> <p>The video track of each fragment must contain codec private data in the Advanced Video Coding (AVC) for H.264 format and HEVC for H.265 format. For more information, see <a href="https://www.iso.org/standard/55980.html">MPEG-4 specification ISO/IEC 14496-15</a>. For information about adapting stream data to a given format, see <a href="http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/producer-reference-nal.html">NAL Adaptation Flags</a>.</p> </li> <li> <p>The audio track (if present) of each fragment must contain codec private data in the AAC format (<a href="https://www.iso.org/standard/43345.html">AAC specification ISO/IEC 13818-7</a>) or the <a href="http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html">MS Wave format</a>.</p> </li> </ul> <p>The following procedure shows how to use MPEG-DASH with Kinesis Video Streams:</p> <ol> <li> <p>Get an endpoint using <a href="http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_GetDataEndpoint.html">GetDataEndpoint</a>, specifying <code>GET<em>DASH</em>STREAMING<em>SESSION</em>URL</code> for the <code>APIName</code> parameter.</p> </li> <li> <p>Retrieve the MPEG-DASH URL using <code>GetDASHStreamingSessionURL</code>. Kinesis Video Streams creates an MPEG-DASH streaming session to be used for accessing content in a stream using the MPEG-DASH protocol. <code>GetDASHStreamingSessionURL</code> returns an authenticated URL (that includes an encrypted session token) for the session&#39;s MPEG-DASH <i>manifest</i> (the root resource needed for streaming with MPEG-DASH).</p> <note> <p>Don&#39;t share or store this token where an unauthorized entity could access it. The token provides access to the content of the stream. Safeguard the token with the same measures that you would use with your AWS credentials.</p> </note> <p>The media that is made available through the manifest consists only of the requested stream, time range, and format. No other media data (such as frames outside the requested window or alternate bitrates) is made available.</p> </li> <li> <p>Provide the URL (containing the encrypted session token) for the MPEG-DASH manifest to a media player that supports the MPEG-DASH protocol. Kinesis Video Streams makes the initialization fragment and media fragments available through the manifest URL. The initialization fragment contains the codec private data for the stream, and other data needed to set up the video or audio decoder and renderer. The media fragments contain encoded video frames or encoded audio samples.</p> </li> <li> <p>The media player receives the authenticated URL and requests stream metadata and media data normally. When the media player requests data, it calls the following actions:</p> <ul> <li> <p> <b>GetDASHManifest:</b> Retrieves an MPEG DASH manifest, which contains the metadata for the media that you want to playback.</p> </li> <li> <p> <b>GetMP4InitFragment:</b> Retrieves the MP4 initialization fragment. The media player typically loads the initialization fragment before loading any media fragments. This fragment contains the &quot;<code>fytp</code>&quot; and &quot;<code>moov</code>&quot; MP4 atoms, and the child atoms that are needed to initialize the media player decoder.</p> <p>The initialization fragment does not correspond to a fragment in a Kinesis video stream. It contains only the codec private data for the stream and respective track, which the media player needs to decode the media frames.</p> </li> <li> <p> <b>GetMP4MediaFragment:</b> Retrieves MP4 media fragments. These fragments contain the &quot;<code>moof</code>&quot; and &quot;<code>mdat</code>&quot; MP4 atoms and their child atoms, containing the encoded fragment&#39;s media frames and their timestamps. </p> <note> <p>After the first media fragment is made available in a streaming session, any fragments that don&#39;t contain the same codec private data cause an error to be returned when those different media fragments are loaded. Therefore, the codec private data should not change between fragments in a session. This also means that the session fails if the fragments in a stream change from having only video to having both audio and video.</p> </note> <p>Data retrieved with this action is billable. See <a href="https://aws.amazon.com/kinesis/video-streams/pricing/">Pricing</a> for details.</p> </li> </ul> </li> </ol> <note> <p>The following restrictions apply to MPEG-DASH sessions:</p> <ul> <li> <p>A streaming session URL should not be shared between players. The service might throttle a session if multiple media players are sharing it. For connection limits, see <a href="http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/limits.html">Kinesis Video Streams Limits</a>.</p> </li> <li> <p>A Kinesis video stream can have a maximum of ten active MPEG-DASH streaming sessions. If a new session is created when the maximum number of sessions is already active, the oldest (earliest created) session is closed. The number of active <code>GetMedia</code> connections on a Kinesis video stream does not count against this limit, and the number of active MPEG-DASH sessions does not count against the active <code>GetMedia</code> connection limit.</p> <note> <p>The maximum limits for active HLS and MPEG-DASH streaming sessions are independent of each other. </p> </note> </li> </ul> </note> <p>You can monitor the amount of data that the media player consumes by monitoring the <code>GetMP4MediaFragment.OutgoingBytes</code> Amazon CloudWatch metric. For information about using CloudWatch to monitor Kinesis Video Streams, see <a href="http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/monitoring.html">Monitoring Kinesis Video Streams</a>. For pricing information, see <a href="https://aws.amazon.com/kinesis/video-streams/pricing/">Amazon Kinesis Video Streams Pricing</a> and <a href="https://aws.amazon.com/pricing/">AWS Pricing</a>. Charges for both HLS sessions and outgoing AWS data apply.</p> <p>For more information about HLS, see <a href="https://developer.apple.com/streaming/">HTTP Live Streaming</a> on the <a href="https://developer.apple.com">Apple Developer site</a>.</p> <important> <p>If an error is thrown after invoking a Kinesis Video Streams archived media API, in addition to the HTTP status code and the response body, it includes the following pieces of information: </p> <ul> <li> <p> <code>x-amz-ErrorType</code> HTTP header – contains a more specific error type in addition to what the HTTP status code provides. </p> </li> <li> <p> <code>x-amz-RequestId</code> HTTP header – if you want to report an issue to AWS, the support team can better diagnose the problem if given the Request Id.</p> </li> </ul> <p>Both the HTTP status code and the ErrorType header can be utilized to make programmatic decisions about whether errors are retry-able and under what conditions, as well as provide information on what actions the client programmer might need to take in order to successfully try again.</p> <p>For more information, see the <b>Errors</b> section at the bottom of this topic, as well as <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/CommonErrors.html">Common Errors</a>. </p> </important></p>

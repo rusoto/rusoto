@@ -294,6 +294,7 @@ pub struct ActivityTypeInfos {
 
 /// <p>Provides the details of the <code>CancelTimer</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelTimerDecisionAttributes {
     /// <p> The unique ID of the timer to cancel.</p>
     #[serde(rename = "timerId")]
@@ -317,6 +318,7 @@ pub struct CancelTimerFailedEventAttributes {
 
 /// <p>Provides the details of the <code>CancelWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelWorkflowExecutionDecisionAttributes {
     /// <p> Details of the cancellation.</p>
     #[serde(rename = "details")]
@@ -462,6 +464,7 @@ pub struct ChildWorkflowExecutionTimedOutEventAttributes {
 
 /// <p>Used to filter the closed workflow executions in visibility APIs by their close status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloseStatusFilter {
     /// <p> The close status that must match the close status of an execution for it to meet the criteria of this filter.</p>
     #[serde(rename = "status")]
@@ -470,6 +473,7 @@ pub struct CloseStatusFilter {
 
 /// <p>Provides the details of the <code>CompleteWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteWorkflowExecutionDecisionAttributes {
     /// <p>The result of the workflow execution. The form of the result is implementation defined.</p>
     #[serde(rename = "result")]
@@ -491,6 +495,7 @@ pub struct CompleteWorkflowExecutionFailedEventAttributes {
 
 /// <p>Provides the details of the <code>ContinueAsNewWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the following parameters by using a <code>Condition</code> element with the appropriate keys.</p> <ul> <li> <p> <code>tag</code> – A tag used to identify the workflow execution</p> </li> <li> <p> <code>taskList</code> – String constraint. The key is <code>swf:taskList.name</code>.</p> </li> <li> <p> <code>workflowType.version</code> – String constraint. The key is <code>swf:workflowType.version</code>.</p> </li> </ul> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContinueAsNewWorkflowExecutionDecisionAttributes {
     /// <p><p>If set, specifies the policy to use for the child workflow executions of the new execution if it is terminated by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This policy overrides the default child policy specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul> <note> <p>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "childPolicy")]
@@ -543,6 +548,7 @@ pub struct ContinueAsNewWorkflowExecutionFailedEventAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CountClosedWorkflowExecutionsInput {
     /// <p><p>If specified, only workflow executions that match this close status are counted. This filter has an affect only if <code>executionStatus</code> is specified as <code>CLOSED</code>.</p> <note> <p> <code>closeStatusFilter</code>, <code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</p> </note></p>
     #[serde(rename = "closeStatusFilter")]
@@ -574,6 +580,7 @@ pub struct CountClosedWorkflowExecutionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CountOpenWorkflowExecutionsInput {
     /// <p>The name of the domain containing the workflow executions to count.</p>
     #[serde(rename = "domain")]
@@ -596,6 +603,7 @@ pub struct CountOpenWorkflowExecutionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CountPendingActivityTasksInput {
     /// <p>The name of the domain that contains the task list.</p>
     #[serde(rename = "domain")]
@@ -606,6 +614,7 @@ pub struct CountPendingActivityTasksInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CountPendingDecisionTasksInput {
     /// <p>The name of the domain that contains the task list.</p>
     #[serde(rename = "domain")]
@@ -617,6 +626,7 @@ pub struct CountPendingDecisionTasksInput {
 
 /// <p><p>Specifies a decision made by the decider. A decision can be one of these types:</p> <ul> <li> <p> <code>CancelTimer</code> – Cancels a previously started timer and records a <code>TimerCanceled</code> event in the history.</p> </li> <li> <p> <code>CancelWorkflowExecution</code> – Closes the workflow execution and records a <code>WorkflowExecutionCanceled</code> event in the history.</p> </li> <li> <p> <code>CompleteWorkflowExecution</code> – Closes the workflow execution and records a <code>WorkflowExecutionCompleted</code> event in the history .</p> </li> <li> <p> <code>ContinueAsNewWorkflowExecution</code> – Closes the workflow execution and starts a new workflow execution of the same type using the same workflow ID and a unique run Id. A <code>WorkflowExecutionContinuedAsNew</code> event is recorded in the history.</p> </li> <li> <p> <code>FailWorkflowExecution</code> – Closes the workflow execution and records a <code>WorkflowExecutionFailed</code> event in the history.</p> </li> <li> <p> <code>RecordMarker</code> – Records a <code>MarkerRecorded</code> event in the history. Markers can be used for adding custom information in the history for instance to let deciders know that they don&#39;t need to look at the history beyond the marker event.</p> </li> <li> <p> <code>RequestCancelActivityTask</code> – Attempts to cancel a previously scheduled activity task. If the activity task was scheduled but has not been assigned to a worker, then it is canceled. If the activity task was already assigned to a worker, then the worker is informed that cancellation has been requested in the response to <a>RecordActivityTaskHeartbeat</a>.</p> </li> <li> <p> <code>RequestCancelExternalWorkflowExecution</code> – Requests that a request be made to cancel the specified external workflow execution and records a <code>RequestCancelExternalWorkflowExecutionInitiated</code> event in the history.</p> </li> <li> <p> <code>ScheduleActivityTask</code> – Schedules an activity task.</p> </li> <li> <p> <code>SignalExternalWorkflowExecution</code> – Requests a signal to be delivered to the specified external workflow execution and records a <code>SignalExternalWorkflowExecutionInitiated</code> event in the history.</p> </li> <li> <p> <code>StartChildWorkflowExecution</code> – Requests that a child workflow execution be started and records a <code>StartChildWorkflowExecutionInitiated</code> event in the history. The child workflow execution is a separate workflow execution with its own history.</p> </li> <li> <p> <code>StartTimer</code> – Starts a timer for this workflow execution and records a <code>TimerStarted</code> event in the history. This timer fires after the specified delay and record a <code>TimerFired</code> event.</p> </li> </ul> <p> <b>Access Control</b> </p> <p>If you grant permission to use <code>RespondDecisionTaskCompleted</code>, you can use IAM policies to express permissions for the list of decisions returned by this action as if they were members of the API. Treating decisions as a pseudo API maintains a uniform conceptual model and helps keep policies readable. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> <p> <b>Decision Failure</b> </p> <p>Decisions can fail for several reasons</p> <ul> <li> <p>The ordering of decisions should follow a logical flow. Some decisions might not make sense in the current context of the workflow execution and therefore fails.</p> </li> <li> <p>A limit on your account was reached.</p> </li> <li> <p>The decision lacks sufficient permissions.</p> </li> </ul> <p>One of the following events might be added to the history to indicate an error. The event attribute&#39;s <code>cause</code> parameter indicates the cause. If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> <ul> <li> <p> <code>ScheduleActivityTaskFailed</code> – A <code>ScheduleActivityTask</code> decision failed. This could happen if the activity type specified in the decision isn&#39;t registered, is in a deprecated state, or the decision isn&#39;t properly configured.</p> </li> <li> <p> <code>RequestCancelActivityTaskFailed</code> – A <code>RequestCancelActivityTask</code> decision failed. This could happen if there is no open activity task with the specified activityId.</p> </li> <li> <p> <code>StartTimerFailed</code> – A <code>StartTimer</code> decision failed. This could happen if there is another open timer with the same timerId.</p> </li> <li> <p> <code>CancelTimerFailed</code> – A <code>CancelTimer</code> decision failed. This could happen if there is no open timer with the specified timerId.</p> </li> <li> <p> <code>StartChildWorkflowExecutionFailed</code> – A <code>StartChildWorkflowExecution</code> decision failed. This could happen if the workflow type specified isn&#39;t registered, is deprecated, or the decision isn&#39;t properly configured.</p> </li> <li> <p> <code>SignalExternalWorkflowExecutionFailed</code> – A <code>SignalExternalWorkflowExecution</code> decision failed. This could happen if the <code>workflowID</code> specified in the decision was incorrect.</p> </li> <li> <p> <code>RequestCancelExternalWorkflowExecutionFailed</code> – A <code>RequestCancelExternalWorkflowExecution</code> decision failed. This could happen if the <code>workflowID</code> specified in the decision was incorrect.</p> </li> <li> <p> <code>CancelWorkflowExecutionFailed</code> – A <code>CancelWorkflowExecution</code> decision failed. This could happen if there is an unhandled decision task pending in the workflow execution.</p> </li> <li> <p> <code>CompleteWorkflowExecutionFailed</code> – A <code>CompleteWorkflowExecution</code> decision failed. This could happen if there is an unhandled decision task pending in the workflow execution.</p> </li> <li> <p> <code>ContinueAsNewWorkflowExecutionFailed</code> – A <code>ContinueAsNewWorkflowExecution</code> decision failed. This could happen if there is an unhandled decision task pending in the workflow execution or the ContinueAsNewWorkflowExecution decision was not configured correctly.</p> </li> <li> <p> <code>FailWorkflowExecutionFailed</code> – A <code>FailWorkflowExecution</code> decision failed. This could happen if there is an unhandled decision task pending in the workflow execution.</p> </li> </ul> <p>The preceding error events might occur due to an error in the decider logic, which might put the workflow execution in an unstable state The cause field in the event structure for the error event indicates the cause of the error.</p> <note> <p>A workflow execution may be closed by the decider by returning one of the following decisions when completing a decision task: <code>CompleteWorkflowExecution</code>, <code>FailWorkflowExecution</code>, <code>CancelWorkflowExecution</code> and <code>ContinueAsNewWorkflowExecution</code>. An <code>UnhandledDecision</code> fault is returned if a workflow closing decision is specified and a signal or activity event had been added to the history while the decision task was being performed by the decider. Unlike the above situations which are logic issues, this fault is always possible because of race conditions in a distributed system. The right action here is to call <a>RespondDecisionTaskCompleted</a> without any decisions. This would result in another decision task with these new events included in the history. The decider should handle the new events and may decide to close the workflow execution.</p> </note> <p> <b>How to Code a Decision</b> </p> <p>You code a decision by first setting the decision type field to one of the above decision values, and then set the corresponding attributes field shown below:</p> <ul> <li> <p> <code> <a>ScheduleActivityTaskDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>RequestCancelActivityTaskDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>CompleteWorkflowExecutionDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>FailWorkflowExecutionDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>CancelWorkflowExecutionDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>ContinueAsNewWorkflowExecutionDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>RecordMarkerDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>StartTimerDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>CancelTimerDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>SignalExternalWorkflowExecutionDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>RequestCancelExternalWorkflowExecutionDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>StartChildWorkflowExecutionDecisionAttributes</a> </code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Decision {
     /// <p>Provides the details of the <code>CancelTimer</code> decision. It isn't set for other decision types.</p>
     #[serde(rename = "cancelTimerDecisionAttributes")]
@@ -775,6 +785,7 @@ pub struct DecisionTaskTimedOutEventAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateActivityTypeInput {
     /// <p>The activity type to deprecate.</p>
     #[serde(rename = "activityType")]
@@ -785,6 +796,7 @@ pub struct DeprecateActivityTypeInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateDomainInput {
     /// <p>The name of the domain to deprecate.</p>
     #[serde(rename = "name")]
@@ -792,6 +804,7 @@ pub struct DeprecateDomainInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateWorkflowTypeInput {
     /// <p>The name of the domain in which the workflow type is registered.</p>
     #[serde(rename = "domain")]
@@ -802,6 +815,7 @@ pub struct DeprecateWorkflowTypeInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActivityTypeInput {
     /// <p>The activity type to get information about. Activity types are identified by the <code>name</code> and <code>version</code> that were supplied when the activity was registered.</p>
     #[serde(rename = "activityType")]
@@ -812,6 +826,7 @@ pub struct DescribeActivityTypeInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainInput {
     /// <p>The name of the domain to describe.</p>
     #[serde(rename = "name")]
@@ -819,6 +834,7 @@ pub struct DescribeDomainInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkflowExecutionInput {
     /// <p>The name of the domain containing the workflow execution.</p>
     #[serde(rename = "domain")]
@@ -829,6 +845,7 @@ pub struct DescribeWorkflowExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkflowTypeInput {
     /// <p>The name of the domain in which this workflow type is registered.</p>
     #[serde(rename = "domain")]
@@ -894,6 +911,7 @@ pub struct DomainInfos {
 
 /// <p>Used to filter the workflow executions in visibility APIs by various time-based rules. Each parameter, if specified, defines a rule that must be satisfied by each returned query result. The parameter values are in the <a href="https://en.wikipedia.org/wiki/Unix_time">Unix Time format</a>. For example: <code>"oldestDate": 1325376070.</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecutionTimeFilter {
     /// <p>Specifies the latest start or close date and time to return.</p>
     #[serde(rename = "latestDate")]
@@ -930,6 +948,7 @@ pub struct ExternalWorkflowExecutionSignaledEventAttributes {
 
 /// <p>Provides the details of the <code>FailWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FailWorkflowExecutionDecisionAttributes {
     /// <p> Details of the failure.</p>
     #[serde(rename = "details")]
@@ -954,6 +973,7 @@ pub struct FailWorkflowExecutionFailedEventAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowExecutionHistoryInput {
     /// <p>The name of the domain containing the workflow execution.</p>
     #[serde(rename = "domain")]
@@ -1339,6 +1359,7 @@ pub struct LambdaFunctionTimedOutEventAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActivityTypesInput {
     /// <p>The name of the domain in which the activity types have been registered.</p>
     #[serde(rename = "domain")]
@@ -1365,6 +1386,7 @@ pub struct ListActivityTypesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClosedWorkflowExecutionsInput {
     /// <p><p>If specified, only workflow executions that match this <i>close status</i> are listed. For example, if TERMINATED is specified, then only TERMINATED workflow executions are listed.</p> <note> <p> <code>closeStatusFilter</code>, <code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</p> </note></p>
     #[serde(rename = "closeStatusFilter")]
@@ -1408,6 +1430,7 @@ pub struct ListClosedWorkflowExecutionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsInput {
     /// <p>The maximum number of results that are returned per call. Use <code>nextPageToken</code> to obtain further pages of results. </p>
     #[serde(rename = "maximumPageSize")]
@@ -1427,6 +1450,7 @@ pub struct ListDomainsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOpenWorkflowExecutionsInput {
     /// <p>The name of the domain that contains the workflow executions to list.</p>
     #[serde(rename = "domain")]
@@ -1461,6 +1485,7 @@ pub struct ListOpenWorkflowExecutionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>The Amazon Resource Name (ARN) for the Amazon SWF domain.</p>
     #[serde(rename = "resourceArn")]
@@ -1477,6 +1502,7 @@ pub struct ListTagsForResourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkflowTypesInput {
     /// <p>The name of the domain in which the workflow types have been registered.</p>
     #[serde(rename = "domain")]
@@ -1532,6 +1558,7 @@ pub struct PendingTaskCount {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PollForActivityTaskInput {
     /// <p>The name of the domain that contains the task lists being polled.</p>
     #[serde(rename = "domain")]
@@ -1546,6 +1573,7 @@ pub struct PollForActivityTaskInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PollForDecisionTaskInput {
     /// <p>The name of the domain containing the task lists to poll.</p>
     #[serde(rename = "domain")]
@@ -1572,6 +1600,7 @@ pub struct PollForDecisionTaskInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RecordActivityTaskHeartbeatInput {
     /// <p>If specified, contains details about the progress of the task.</p>
     #[serde(rename = "details")]
@@ -1584,6 +1613,7 @@ pub struct RecordActivityTaskHeartbeatInput {
 
 /// <p>Provides the details of the <code>RecordMarker</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RecordMarkerDecisionAttributes {
     /// <p> The details of the marker.</p>
     #[serde(rename = "details")]
@@ -1610,6 +1640,7 @@ pub struct RecordMarkerFailedEventAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterActivityTypeInput {
     /// <p>If set, specifies the default maximum time before which a worker processing a task of this type must report progress by calling <a>RecordActivityTaskHeartbeat</a>. If the timeout is exceeded, the activity task is automatically timed out. This default can be overridden when scheduling an activity task using the <code>ScheduleActivityTask</code> <a>Decision</a>. If the activity worker subsequently attempts to record a heartbeat or returns a result, the activity worker receives an <code>UnknownResource</code> fault. In this case, Amazon SWF no longer considers the activity task to be valid; the activity worker should clean up the activity task.</p> <p>The duration is specified in seconds, an integer greater than or equal to <code>0</code>. You can use <code>NONE</code> to specify unlimited duration.</p>
     #[serde(rename = "defaultTaskHeartbeatTimeout")]
@@ -1651,6 +1682,7 @@ pub struct RegisterActivityTypeInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterDomainInput {
     /// <p>A text description of the domain.</p>
     #[serde(rename = "description")]
@@ -1669,6 +1701,7 @@ pub struct RegisterDomainInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterWorkflowTypeInput {
     /// <p><p>If set, specifies the default policy to use for the child workflow executions when a workflow execution of this type is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> <a>Decision</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "defaultChildPolicy")]
@@ -1711,6 +1744,7 @@ pub struct RegisterWorkflowTypeInput {
 
 /// <p>Provides the details of the <code>RequestCancelActivityTask</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestCancelActivityTaskDecisionAttributes {
     /// <p>The <code>activityId</code> of the activity task to be canceled.</p>
     #[serde(rename = "activityId")]
@@ -1734,6 +1768,7 @@ pub struct RequestCancelActivityTaskFailedEventAttributes {
 
 /// <p>Provides the details of the <code>RequestCancelExternalWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestCancelExternalWorkflowExecutionDecisionAttributes {
     /// <p>The data attached to the event that can be used by the decider in subsequent workflow tasks.</p>
     #[serde(rename = "control")]
@@ -1795,6 +1830,7 @@ pub struct RequestCancelExternalWorkflowExecutionInitiatedEventAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestCancelWorkflowExecutionInput {
     /// <p>The name of the domain containing the workflow execution to cancel.</p>
     #[serde(rename = "domain")]
@@ -1821,6 +1857,7 @@ pub struct ResourceTag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RespondActivityTaskCanceledInput {
     /// <p> Information about the cancellation.</p>
     #[serde(rename = "details")]
@@ -1832,6 +1869,7 @@ pub struct RespondActivityTaskCanceledInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RespondActivityTaskCompletedInput {
     /// <p>The result of the activity task. It is a free form string that is implementation specific.</p>
     #[serde(rename = "result")]
@@ -1843,6 +1881,7 @@ pub struct RespondActivityTaskCompletedInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RespondActivityTaskFailedInput {
     /// <p> Detailed information about the failure.</p>
     #[serde(rename = "details")]
@@ -1859,6 +1898,7 @@ pub struct RespondActivityTaskFailedInput {
 
 /// <p>Input data for a TaskCompleted response to a decision task.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RespondDecisionTaskCompletedInput {
     /// <p>The list of decisions (possibly empty) made by the decider while processing this decision task. See the docs for the <a>Decision</a> structure for details.</p>
     #[serde(rename = "decisions")]
@@ -1885,6 +1925,7 @@ pub struct Run {
 
 /// <p>Provides the details of the <code>ScheduleActivityTask</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the following parameters by using a <code>Condition</code> element with the appropriate keys.</p> <ul> <li> <p> <code>activityType.name</code> – String constraint. The key is <code>swf:activityType.name</code>.</p> </li> <li> <p> <code>activityType.version</code> – String constraint. The key is <code>swf:activityType.version</code>.</p> </li> <li> <p> <code>taskList</code> – String constraint. The key is <code>swf:taskList.name</code>.</p> </li> </ul> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleActivityTaskDecisionAttributes {
     /// <p> The <code>activityId</code> of the activity task.</p> <p>The specified string must not start or end with whitespace. It must not contain a <code>:</code> (colon), <code>/</code> (slash), <code>|</code> (vertical bar), or any control characters (<code>\u0000-\u001f</code> | <code>\u007f-\u009f</code>). Also, it must not contain the literal string <code>arn</code>.</p>
     #[serde(rename = "activityId")]
@@ -1946,6 +1987,7 @@ pub struct ScheduleActivityTaskFailedEventAttributes {
 
 /// <p>Decision attributes specified in <code>scheduleLambdaFunctionDecisionAttributes</code> within the list of decisions <code>decisions</code> passed to <a>RespondDecisionTaskCompleted</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleLambdaFunctionDecisionAttributes {
     /// <p>The data attached to the event that the decider can use in subsequent workflow tasks. This data isn't sent to the Lambda task.</p>
     #[serde(rename = "control")]
@@ -1987,6 +2029,7 @@ pub struct ScheduleLambdaFunctionFailedEventAttributes {
 
 /// <p>Provides the details of the <code>SignalExternalWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SignalExternalWorkflowExecutionDecisionAttributes {
     /// <p>The data attached to the event that can be used by the decider in subsequent decision tasks.</p>
     #[serde(rename = "control")]
@@ -2062,6 +2105,7 @@ pub struct SignalExternalWorkflowExecutionInitiatedEventAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SignalWorkflowExecutionInput {
     /// <p>The name of the domain containing the workflow execution to signal.</p>
     #[serde(rename = "domain")]
@@ -2084,6 +2128,7 @@ pub struct SignalWorkflowExecutionInput {
 
 /// <p>Provides the details of the <code>StartChildWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the following parameters by using a <code>Condition</code> element with the appropriate keys.</p> <ul> <li> <p> <code>tagList.member.N</code> – The key is "swf:tagList.N" where N is the tag number from 0 to 4, inclusive.</p> </li> <li> <p> <code>taskList</code> – String constraint. The key is <code>swf:taskList.name</code>.</p> </li> <li> <p> <code>workflowType.name</code> – String constraint. The key is <code>swf:workflowType.name</code>.</p> </li> <li> <p> <code>workflowType.version</code> – String constraint. The key is <code>swf:workflowType.version</code>.</p> </li> </ul> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChildWorkflowExecutionDecisionAttributes {
     /// <p><p> If set, specifies the policy to use for the child workflow executions if the workflow execution being started is terminated by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This policy overrides the default child policy specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul> <note> <p>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "childPolicy")]
@@ -2223,6 +2268,7 @@ pub struct StartLambdaFunctionFailedEventAttributes {
 
 /// <p>Provides the details of the <code>StartTimer</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTimerDecisionAttributes {
     /// <p>The data attached to the event that can be used by the decider in subsequent workflow tasks.</p>
     #[serde(rename = "control")]
@@ -2252,6 +2298,7 @@ pub struct StartTimerFailedEventAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartWorkflowExecutionInput {
     /// <p><p>If set, specifies the policy to use for the child workflow executions of this workflow execution if it is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This policy overrides the default child policy specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul> <note> <p>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "childPolicy")]
@@ -2298,6 +2345,7 @@ pub struct StartWorkflowExecutionInput {
 
 /// <p>Used to filter the workflow executions in visibility APIs based on a tag.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagFilter {
     /// <p> Specifies the tag that must be associated with the execution for it to meet the filter criteria.</p> <p>Tags may only contain unicode letters, digits, whitespace, or these symbols: <code>_ . : / = + - @</code>.</p>
     #[serde(rename = "tag")]
@@ -2305,6 +2353,7 @@ pub struct TagFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) for the Amazon SWF domain.</p>
     #[serde(rename = "resourceArn")]
@@ -2323,6 +2372,7 @@ pub struct TaskList {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateWorkflowExecutionInput {
     /// <p><p>If set, specifies the policy to use for the child workflow executions of the workflow execution being terminated. This policy overrides the child policy specified for the workflow execution at registration time or when starting the execution.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul> <note> <p>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "childPolicy")]
@@ -2395,6 +2445,7 @@ pub struct TimerStartedEventAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UndeprecateActivityTypeInput {
     /// <p>The activity type to undeprecate.</p>
     #[serde(rename = "activityType")]
@@ -2405,6 +2456,7 @@ pub struct UndeprecateActivityTypeInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UndeprecateDomainInput {
     /// <p>The name of the domain of the deprecated workflow type.</p>
     #[serde(rename = "name")]
@@ -2412,6 +2464,7 @@ pub struct UndeprecateDomainInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UndeprecateWorkflowTypeInput {
     /// <p>The name of the domain of the deprecated workflow type.</p>
     #[serde(rename = "domain")]
@@ -2422,6 +2475,7 @@ pub struct UndeprecateWorkflowTypeInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>The Amazon Resource Name (ARN) for the Amazon SWF domain.</p>
     #[serde(rename = "resourceArn")]
@@ -2612,6 +2666,7 @@ pub struct WorkflowExecutionFailedEventAttributes {
 
 /// <p>Used to filter the workflow executions in visibility APIs by their <code>workflowId</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct WorkflowExecutionFilter {
     /// <p>The workflowId to pass of match the criteria of this filter.</p>
     #[serde(rename = "workflowId")]
@@ -2851,6 +2906,7 @@ pub struct WorkflowTypeDetail {
 
 /// <p>Used to filter workflow execution query results by type. Each parameter, if specified, defines a rule that must be satisfied by each returned result.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct WorkflowTypeFilter {
     /// <p> Name of the workflow type.</p>
     #[serde(rename = "name")]
@@ -2931,17 +2987,17 @@ impl CountClosedWorkflowExecutionsError {
 }
 impl fmt::Display for CountClosedWorkflowExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CountClosedWorkflowExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            CountClosedWorkflowExecutionsError::OperationNotPermittedFault(ref cause) => cause,
-            CountClosedWorkflowExecutionsError::UnknownResourceFault(ref cause) => cause,
+            CountClosedWorkflowExecutionsError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CountClosedWorkflowExecutionsError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CountClosedWorkflowExecutionsError {}
 /// Errors returned by CountOpenWorkflowExecutions
 #[derive(Debug, PartialEq)]
 pub enum CountOpenWorkflowExecutionsError {
@@ -2976,17 +3032,17 @@ impl CountOpenWorkflowExecutionsError {
 }
 impl fmt::Display for CountOpenWorkflowExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CountOpenWorkflowExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            CountOpenWorkflowExecutionsError::OperationNotPermittedFault(ref cause) => cause,
-            CountOpenWorkflowExecutionsError::UnknownResourceFault(ref cause) => cause,
+            CountOpenWorkflowExecutionsError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CountOpenWorkflowExecutionsError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CountOpenWorkflowExecutionsError {}
 /// Errors returned by CountPendingActivityTasks
 #[derive(Debug, PartialEq)]
 pub enum CountPendingActivityTasksError {
@@ -3019,17 +3075,17 @@ impl CountPendingActivityTasksError {
 }
 impl fmt::Display for CountPendingActivityTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CountPendingActivityTasksError {
-    fn description(&self) -> &str {
         match *self {
-            CountPendingActivityTasksError::OperationNotPermittedFault(ref cause) => cause,
-            CountPendingActivityTasksError::UnknownResourceFault(ref cause) => cause,
+            CountPendingActivityTasksError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CountPendingActivityTasksError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CountPendingActivityTasksError {}
 /// Errors returned by CountPendingDecisionTasks
 #[derive(Debug, PartialEq)]
 pub enum CountPendingDecisionTasksError {
@@ -3062,17 +3118,17 @@ impl CountPendingDecisionTasksError {
 }
 impl fmt::Display for CountPendingDecisionTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CountPendingDecisionTasksError {
-    fn description(&self) -> &str {
         match *self {
-            CountPendingDecisionTasksError::OperationNotPermittedFault(ref cause) => cause,
-            CountPendingDecisionTasksError::UnknownResourceFault(ref cause) => cause,
+            CountPendingDecisionTasksError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CountPendingDecisionTasksError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CountPendingDecisionTasksError {}
 /// Errors returned by DeprecateActivityType
 #[derive(Debug, PartialEq)]
 pub enum DeprecateActivityTypeError {
@@ -3112,18 +3168,16 @@ impl DeprecateActivityTypeError {
 }
 impl fmt::Display for DeprecateActivityTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeprecateActivityTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DeprecateActivityTypeError::OperationNotPermittedFault(ref cause) => cause,
-            DeprecateActivityTypeError::TypeDeprecatedFault(ref cause) => cause,
-            DeprecateActivityTypeError::UnknownResourceFault(ref cause) => cause,
+            DeprecateActivityTypeError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeprecateActivityTypeError::TypeDeprecatedFault(ref cause) => write!(f, "{}", cause),
+            DeprecateActivityTypeError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeprecateActivityTypeError {}
 /// Errors returned by DeprecateDomain
 #[derive(Debug, PartialEq)]
 pub enum DeprecateDomainError {
@@ -3163,18 +3217,14 @@ impl DeprecateDomainError {
 }
 impl fmt::Display for DeprecateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeprecateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DeprecateDomainError::DomainDeprecatedFault(ref cause) => cause,
-            DeprecateDomainError::OperationNotPermittedFault(ref cause) => cause,
-            DeprecateDomainError::UnknownResourceFault(ref cause) => cause,
+            DeprecateDomainError::DomainDeprecatedFault(ref cause) => write!(f, "{}", cause),
+            DeprecateDomainError::OperationNotPermittedFault(ref cause) => write!(f, "{}", cause),
+            DeprecateDomainError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeprecateDomainError {}
 /// Errors returned by DeprecateWorkflowType
 #[derive(Debug, PartialEq)]
 pub enum DeprecateWorkflowTypeError {
@@ -3214,18 +3264,16 @@ impl DeprecateWorkflowTypeError {
 }
 impl fmt::Display for DeprecateWorkflowTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeprecateWorkflowTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DeprecateWorkflowTypeError::OperationNotPermittedFault(ref cause) => cause,
-            DeprecateWorkflowTypeError::TypeDeprecatedFault(ref cause) => cause,
-            DeprecateWorkflowTypeError::UnknownResourceFault(ref cause) => cause,
+            DeprecateWorkflowTypeError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeprecateWorkflowTypeError::TypeDeprecatedFault(ref cause) => write!(f, "{}", cause),
+            DeprecateWorkflowTypeError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeprecateWorkflowTypeError {}
 /// Errors returned by DescribeActivityType
 #[derive(Debug, PartialEq)]
 pub enum DescribeActivityTypeError {
@@ -3258,17 +3306,15 @@ impl DescribeActivityTypeError {
 }
 impl fmt::Display for DescribeActivityTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeActivityTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeActivityTypeError::OperationNotPermittedFault(ref cause) => cause,
-            DescribeActivityTypeError::UnknownResourceFault(ref cause) => cause,
+            DescribeActivityTypeError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeActivityTypeError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeActivityTypeError {}
 /// Errors returned by DescribeDomain
 #[derive(Debug, PartialEq)]
 pub enum DescribeDomainError {
@@ -3299,17 +3345,13 @@ impl DescribeDomainError {
 }
 impl fmt::Display for DescribeDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDomainError::OperationNotPermittedFault(ref cause) => cause,
-            DescribeDomainError::UnknownResourceFault(ref cause) => cause,
+            DescribeDomainError::OperationNotPermittedFault(ref cause) => write!(f, "{}", cause),
+            DescribeDomainError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDomainError {}
 /// Errors returned by DescribeWorkflowExecution
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkflowExecutionError {
@@ -3342,17 +3384,17 @@ impl DescribeWorkflowExecutionError {
 }
 impl fmt::Display for DescribeWorkflowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWorkflowExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeWorkflowExecutionError::OperationNotPermittedFault(ref cause) => cause,
-            DescribeWorkflowExecutionError::UnknownResourceFault(ref cause) => cause,
+            DescribeWorkflowExecutionError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeWorkflowExecutionError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeWorkflowExecutionError {}
 /// Errors returned by DescribeWorkflowType
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkflowTypeError {
@@ -3385,17 +3427,15 @@ impl DescribeWorkflowTypeError {
 }
 impl fmt::Display for DescribeWorkflowTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWorkflowTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeWorkflowTypeError::OperationNotPermittedFault(ref cause) => cause,
-            DescribeWorkflowTypeError::UnknownResourceFault(ref cause) => cause,
+            DescribeWorkflowTypeError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeWorkflowTypeError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeWorkflowTypeError {}
 /// Errors returned by GetWorkflowExecutionHistory
 #[derive(Debug, PartialEq)]
 pub enum GetWorkflowExecutionHistoryError {
@@ -3430,17 +3470,17 @@ impl GetWorkflowExecutionHistoryError {
 }
 impl fmt::Display for GetWorkflowExecutionHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetWorkflowExecutionHistoryError {
-    fn description(&self) -> &str {
         match *self {
-            GetWorkflowExecutionHistoryError::OperationNotPermittedFault(ref cause) => cause,
-            GetWorkflowExecutionHistoryError::UnknownResourceFault(ref cause) => cause,
+            GetWorkflowExecutionHistoryError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetWorkflowExecutionHistoryError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetWorkflowExecutionHistoryError {}
 /// Errors returned by ListActivityTypes
 #[derive(Debug, PartialEq)]
 pub enum ListActivityTypesError {
@@ -3473,17 +3513,13 @@ impl ListActivityTypesError {
 }
 impl fmt::Display for ListActivityTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListActivityTypesError {
-    fn description(&self) -> &str {
         match *self {
-            ListActivityTypesError::OperationNotPermittedFault(ref cause) => cause,
-            ListActivityTypesError::UnknownResourceFault(ref cause) => cause,
+            ListActivityTypesError::OperationNotPermittedFault(ref cause) => write!(f, "{}", cause),
+            ListActivityTypesError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListActivityTypesError {}
 /// Errors returned by ListClosedWorkflowExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListClosedWorkflowExecutionsError {
@@ -3518,17 +3554,17 @@ impl ListClosedWorkflowExecutionsError {
 }
 impl fmt::Display for ListClosedWorkflowExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListClosedWorkflowExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListClosedWorkflowExecutionsError::OperationNotPermittedFault(ref cause) => cause,
-            ListClosedWorkflowExecutionsError::UnknownResourceFault(ref cause) => cause,
+            ListClosedWorkflowExecutionsError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListClosedWorkflowExecutionsError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListClosedWorkflowExecutionsError {}
 /// Errors returned by ListDomains
 #[derive(Debug, PartialEq)]
 pub enum ListDomainsError {
@@ -3554,16 +3590,12 @@ impl ListDomainsError {
 }
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDomainsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDomainsError::OperationNotPermittedFault(ref cause) => cause,
+            ListDomainsError::OperationNotPermittedFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDomainsError {}
 /// Errors returned by ListOpenWorkflowExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListOpenWorkflowExecutionsError {
@@ -3598,17 +3630,17 @@ impl ListOpenWorkflowExecutionsError {
 }
 impl fmt::Display for ListOpenWorkflowExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOpenWorkflowExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListOpenWorkflowExecutionsError::OperationNotPermittedFault(ref cause) => cause,
-            ListOpenWorkflowExecutionsError::UnknownResourceFault(ref cause) => cause,
+            ListOpenWorkflowExecutionsError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListOpenWorkflowExecutionsError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListOpenWorkflowExecutionsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -3648,18 +3680,16 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::LimitExceededFault(ref cause) => cause,
-            ListTagsForResourceError::OperationNotPermittedFault(ref cause) => cause,
-            ListTagsForResourceError::UnknownResourceFault(ref cause) => cause,
+            ListTagsForResourceError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTagsForResourceError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListWorkflowTypes
 #[derive(Debug, PartialEq)]
 pub enum ListWorkflowTypesError {
@@ -3692,17 +3722,13 @@ impl ListWorkflowTypesError {
 }
 impl fmt::Display for ListWorkflowTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWorkflowTypesError {
-    fn description(&self) -> &str {
         match *self {
-            ListWorkflowTypesError::OperationNotPermittedFault(ref cause) => cause,
-            ListWorkflowTypesError::UnknownResourceFault(ref cause) => cause,
+            ListWorkflowTypesError::OperationNotPermittedFault(ref cause) => write!(f, "{}", cause),
+            ListWorkflowTypesError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListWorkflowTypesError {}
 /// Errors returned by PollForActivityTask
 #[derive(Debug, PartialEq)]
 pub enum PollForActivityTaskError {
@@ -3742,18 +3768,16 @@ impl PollForActivityTaskError {
 }
 impl fmt::Display for PollForActivityTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PollForActivityTaskError {
-    fn description(&self) -> &str {
         match *self {
-            PollForActivityTaskError::LimitExceededFault(ref cause) => cause,
-            PollForActivityTaskError::OperationNotPermittedFault(ref cause) => cause,
-            PollForActivityTaskError::UnknownResourceFault(ref cause) => cause,
+            PollForActivityTaskError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            PollForActivityTaskError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PollForActivityTaskError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PollForActivityTaskError {}
 /// Errors returned by PollForDecisionTask
 #[derive(Debug, PartialEq)]
 pub enum PollForDecisionTaskError {
@@ -3793,18 +3817,16 @@ impl PollForDecisionTaskError {
 }
 impl fmt::Display for PollForDecisionTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PollForDecisionTaskError {
-    fn description(&self) -> &str {
         match *self {
-            PollForDecisionTaskError::LimitExceededFault(ref cause) => cause,
-            PollForDecisionTaskError::OperationNotPermittedFault(ref cause) => cause,
-            PollForDecisionTaskError::UnknownResourceFault(ref cause) => cause,
+            PollForDecisionTaskError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            PollForDecisionTaskError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PollForDecisionTaskError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PollForDecisionTaskError {}
 /// Errors returned by RecordActivityTaskHeartbeat
 #[derive(Debug, PartialEq)]
 pub enum RecordActivityTaskHeartbeatError {
@@ -3839,17 +3861,17 @@ impl RecordActivityTaskHeartbeatError {
 }
 impl fmt::Display for RecordActivityTaskHeartbeatError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RecordActivityTaskHeartbeatError {
-    fn description(&self) -> &str {
         match *self {
-            RecordActivityTaskHeartbeatError::OperationNotPermittedFault(ref cause) => cause,
-            RecordActivityTaskHeartbeatError::UnknownResourceFault(ref cause) => cause,
+            RecordActivityTaskHeartbeatError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RecordActivityTaskHeartbeatError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RecordActivityTaskHeartbeatError {}
 /// Errors returned by RegisterActivityType
 #[derive(Debug, PartialEq)]
 pub enum RegisterActivityTypeError {
@@ -3896,19 +3918,17 @@ impl RegisterActivityTypeError {
 }
 impl fmt::Display for RegisterActivityTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterActivityTypeError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterActivityTypeError::LimitExceededFault(ref cause) => cause,
-            RegisterActivityTypeError::OperationNotPermittedFault(ref cause) => cause,
-            RegisterActivityTypeError::TypeAlreadyExistsFault(ref cause) => cause,
-            RegisterActivityTypeError::UnknownResourceFault(ref cause) => cause,
+            RegisterActivityTypeError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            RegisterActivityTypeError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterActivityTypeError::TypeAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            RegisterActivityTypeError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterActivityTypeError {}
 /// Errors returned by RegisterDomain
 #[derive(Debug, PartialEq)]
 pub enum RegisterDomainError {
@@ -3951,19 +3971,15 @@ impl RegisterDomainError {
 }
 impl fmt::Display for RegisterDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterDomainError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterDomainError::DomainAlreadyExistsFault(ref cause) => cause,
-            RegisterDomainError::LimitExceededFault(ref cause) => cause,
-            RegisterDomainError::OperationNotPermittedFault(ref cause) => cause,
-            RegisterDomainError::TooManyTagsFault(ref cause) => cause,
+            RegisterDomainError::DomainAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            RegisterDomainError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            RegisterDomainError::OperationNotPermittedFault(ref cause) => write!(f, "{}", cause),
+            RegisterDomainError::TooManyTagsFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterDomainError {}
 /// Errors returned by RegisterWorkflowType
 #[derive(Debug, PartialEq)]
 pub enum RegisterWorkflowTypeError {
@@ -4010,19 +4026,17 @@ impl RegisterWorkflowTypeError {
 }
 impl fmt::Display for RegisterWorkflowTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterWorkflowTypeError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterWorkflowTypeError::LimitExceededFault(ref cause) => cause,
-            RegisterWorkflowTypeError::OperationNotPermittedFault(ref cause) => cause,
-            RegisterWorkflowTypeError::TypeAlreadyExistsFault(ref cause) => cause,
-            RegisterWorkflowTypeError::UnknownResourceFault(ref cause) => cause,
+            RegisterWorkflowTypeError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            RegisterWorkflowTypeError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterWorkflowTypeError::TypeAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            RegisterWorkflowTypeError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterWorkflowTypeError {}
 /// Errors returned by RequestCancelWorkflowExecution
 #[derive(Debug, PartialEq)]
 pub enum RequestCancelWorkflowExecutionError {
@@ -4057,17 +4071,17 @@ impl RequestCancelWorkflowExecutionError {
 }
 impl fmt::Display for RequestCancelWorkflowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RequestCancelWorkflowExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            RequestCancelWorkflowExecutionError::OperationNotPermittedFault(ref cause) => cause,
-            RequestCancelWorkflowExecutionError::UnknownResourceFault(ref cause) => cause,
+            RequestCancelWorkflowExecutionError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RequestCancelWorkflowExecutionError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RequestCancelWorkflowExecutionError {}
 /// Errors returned by RespondActivityTaskCanceled
 #[derive(Debug, PartialEq)]
 pub enum RespondActivityTaskCanceledError {
@@ -4102,17 +4116,17 @@ impl RespondActivityTaskCanceledError {
 }
 impl fmt::Display for RespondActivityTaskCanceledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RespondActivityTaskCanceledError {
-    fn description(&self) -> &str {
         match *self {
-            RespondActivityTaskCanceledError::OperationNotPermittedFault(ref cause) => cause,
-            RespondActivityTaskCanceledError::UnknownResourceFault(ref cause) => cause,
+            RespondActivityTaskCanceledError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RespondActivityTaskCanceledError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RespondActivityTaskCanceledError {}
 /// Errors returned by RespondActivityTaskCompleted
 #[derive(Debug, PartialEq)]
 pub enum RespondActivityTaskCompletedError {
@@ -4147,17 +4161,17 @@ impl RespondActivityTaskCompletedError {
 }
 impl fmt::Display for RespondActivityTaskCompletedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RespondActivityTaskCompletedError {
-    fn description(&self) -> &str {
         match *self {
-            RespondActivityTaskCompletedError::OperationNotPermittedFault(ref cause) => cause,
-            RespondActivityTaskCompletedError::UnknownResourceFault(ref cause) => cause,
+            RespondActivityTaskCompletedError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RespondActivityTaskCompletedError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RespondActivityTaskCompletedError {}
 /// Errors returned by RespondActivityTaskFailed
 #[derive(Debug, PartialEq)]
 pub enum RespondActivityTaskFailedError {
@@ -4190,17 +4204,17 @@ impl RespondActivityTaskFailedError {
 }
 impl fmt::Display for RespondActivityTaskFailedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RespondActivityTaskFailedError {
-    fn description(&self) -> &str {
         match *self {
-            RespondActivityTaskFailedError::OperationNotPermittedFault(ref cause) => cause,
-            RespondActivityTaskFailedError::UnknownResourceFault(ref cause) => cause,
+            RespondActivityTaskFailedError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RespondActivityTaskFailedError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RespondActivityTaskFailedError {}
 /// Errors returned by RespondDecisionTaskCompleted
 #[derive(Debug, PartialEq)]
 pub enum RespondDecisionTaskCompletedError {
@@ -4235,17 +4249,17 @@ impl RespondDecisionTaskCompletedError {
 }
 impl fmt::Display for RespondDecisionTaskCompletedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RespondDecisionTaskCompletedError {
-    fn description(&self) -> &str {
         match *self {
-            RespondDecisionTaskCompletedError::OperationNotPermittedFault(ref cause) => cause,
-            RespondDecisionTaskCompletedError::UnknownResourceFault(ref cause) => cause,
+            RespondDecisionTaskCompletedError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RespondDecisionTaskCompletedError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RespondDecisionTaskCompletedError {}
 /// Errors returned by SignalWorkflowExecution
 #[derive(Debug, PartialEq)]
 pub enum SignalWorkflowExecutionError {
@@ -4278,17 +4292,15 @@ impl SignalWorkflowExecutionError {
 }
 impl fmt::Display for SignalWorkflowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SignalWorkflowExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            SignalWorkflowExecutionError::OperationNotPermittedFault(ref cause) => cause,
-            SignalWorkflowExecutionError::UnknownResourceFault(ref cause) => cause,
+            SignalWorkflowExecutionError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SignalWorkflowExecutionError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SignalWorkflowExecutionError {}
 /// Errors returned by StartWorkflowExecution
 #[derive(Debug, PartialEq)]
 pub enum StartWorkflowExecutionError {
@@ -4349,21 +4361,21 @@ impl StartWorkflowExecutionError {
 }
 impl fmt::Display for StartWorkflowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartWorkflowExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            StartWorkflowExecutionError::DefaultUndefinedFault(ref cause) => cause,
-            StartWorkflowExecutionError::LimitExceededFault(ref cause) => cause,
-            StartWorkflowExecutionError::OperationNotPermittedFault(ref cause) => cause,
-            StartWorkflowExecutionError::TypeDeprecatedFault(ref cause) => cause,
-            StartWorkflowExecutionError::UnknownResourceFault(ref cause) => cause,
-            StartWorkflowExecutionError::WorkflowExecutionAlreadyStartedFault(ref cause) => cause,
+            StartWorkflowExecutionError::DefaultUndefinedFault(ref cause) => write!(f, "{}", cause),
+            StartWorkflowExecutionError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            StartWorkflowExecutionError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartWorkflowExecutionError::TypeDeprecatedFault(ref cause) => write!(f, "{}", cause),
+            StartWorkflowExecutionError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
+            StartWorkflowExecutionError::WorkflowExecutionAlreadyStartedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartWorkflowExecutionError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -4404,19 +4416,15 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::LimitExceededFault(ref cause) => cause,
-            TagResourceError::OperationNotPermittedFault(ref cause) => cause,
-            TagResourceError::TooManyTagsFault(ref cause) => cause,
-            TagResourceError::UnknownResourceFault(ref cause) => cause,
+            TagResourceError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            TagResourceError::OperationNotPermittedFault(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTagsFault(ref cause) => write!(f, "{}", cause),
+            TagResourceError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by TerminateWorkflowExecution
 #[derive(Debug, PartialEq)]
 pub enum TerminateWorkflowExecutionError {
@@ -4451,17 +4459,17 @@ impl TerminateWorkflowExecutionError {
 }
 impl fmt::Display for TerminateWorkflowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TerminateWorkflowExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            TerminateWorkflowExecutionError::OperationNotPermittedFault(ref cause) => cause,
-            TerminateWorkflowExecutionError::UnknownResourceFault(ref cause) => cause,
+            TerminateWorkflowExecutionError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TerminateWorkflowExecutionError::UnknownResourceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for TerminateWorkflowExecutionError {}
 /// Errors returned by UndeprecateActivityType
 #[derive(Debug, PartialEq)]
 pub enum UndeprecateActivityTypeError {
@@ -4501,18 +4509,18 @@ impl UndeprecateActivityTypeError {
 }
 impl fmt::Display for UndeprecateActivityTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UndeprecateActivityTypeError {
-    fn description(&self) -> &str {
         match *self {
-            UndeprecateActivityTypeError::OperationNotPermittedFault(ref cause) => cause,
-            UndeprecateActivityTypeError::TypeAlreadyExistsFault(ref cause) => cause,
-            UndeprecateActivityTypeError::UnknownResourceFault(ref cause) => cause,
+            UndeprecateActivityTypeError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UndeprecateActivityTypeError::TypeAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UndeprecateActivityTypeError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UndeprecateActivityTypeError {}
 /// Errors returned by UndeprecateDomain
 #[derive(Debug, PartialEq)]
 pub enum UndeprecateDomainError {
@@ -4552,18 +4560,14 @@ impl UndeprecateDomainError {
 }
 impl fmt::Display for UndeprecateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UndeprecateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            UndeprecateDomainError::DomainAlreadyExistsFault(ref cause) => cause,
-            UndeprecateDomainError::OperationNotPermittedFault(ref cause) => cause,
-            UndeprecateDomainError::UnknownResourceFault(ref cause) => cause,
+            UndeprecateDomainError::DomainAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            UndeprecateDomainError::OperationNotPermittedFault(ref cause) => write!(f, "{}", cause),
+            UndeprecateDomainError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UndeprecateDomainError {}
 /// Errors returned by UndeprecateWorkflowType
 #[derive(Debug, PartialEq)]
 pub enum UndeprecateWorkflowTypeError {
@@ -4603,18 +4607,18 @@ impl UndeprecateWorkflowTypeError {
 }
 impl fmt::Display for UndeprecateWorkflowTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UndeprecateWorkflowTypeError {
-    fn description(&self) -> &str {
         match *self {
-            UndeprecateWorkflowTypeError::OperationNotPermittedFault(ref cause) => cause,
-            UndeprecateWorkflowTypeError::TypeAlreadyExistsFault(ref cause) => cause,
-            UndeprecateWorkflowTypeError::UnknownResourceFault(ref cause) => cause,
+            UndeprecateWorkflowTypeError::OperationNotPermittedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UndeprecateWorkflowTypeError::TypeAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UndeprecateWorkflowTypeError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UndeprecateWorkflowTypeError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -4650,18 +4654,14 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::LimitExceededFault(ref cause) => cause,
-            UntagResourceError::OperationNotPermittedFault(ref cause) => cause,
-            UntagResourceError::UnknownResourceFault(ref cause) => cause,
+            UntagResourceError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::OperationNotPermittedFault(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::UnknownResourceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon SWF API. Amazon SWF clients implement this trait.
 pub trait Swf {
     /// <p>Returns the number of closed workflow executions within the given domain that meet the specified filtering criteria.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not exactly reflect recent updates and changes.</p> </note> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the following parameters by using a <code>Condition</code> element with the appropriate keys.</p> <ul> <li> <p> <code>tagFilter.tag</code>: String constraint. The key is <code>swf:tagFilter.tag</code>.</p> </li> <li> <p> <code>typeFilter.name</code>: String constraint. The key is <code>swf:typeFilter.name</code>.</p> </li> <li> <p> <code>typeFilter.version</code>: String constraint. The key is <code>swf:typeFilter.version</code>.</p> </li> </ul> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>

@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationCloudWatchLoggingOptionRequest {
     /// <p>The Kinesis Analytics application name.</p>
     #[serde(rename = "ApplicationName")]
@@ -41,6 +42,7 @@ pub struct AddApplicationCloudWatchLoggingOptionRequest {
 pub struct AddApplicationCloudWatchLoggingOptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationInputProcessingConfigurationRequest {
     /// <p>Name of the application to which you want to add the input processing configuration.</p>
     #[serde(rename = "ApplicationName")]
@@ -62,6 +64,7 @@ pub struct AddApplicationInputProcessingConfigurationResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationInputRequest {
     /// <p>Name of your existing Amazon Kinesis Analytics application to which you want to add the streaming source.</p>
     #[serde(rename = "ApplicationName")]
@@ -81,6 +84,7 @@ pub struct AddApplicationInputResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationOutputRequest {
     /// <p>Name of the application to which you want to add the output configuration.</p>
     #[serde(rename = "ApplicationName")]
@@ -100,6 +104,7 @@ pub struct AddApplicationOutputResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationReferenceDataSourceRequest {
     /// <p>Name of an existing application.</p>
     #[serde(rename = "ApplicationName")]
@@ -184,6 +189,7 @@ pub struct ApplicationSummary {
 
 /// <p>Describes updates to apply to an existing Amazon Kinesis Analytics application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationUpdate {
     /// <p>Describes application code updates.</p>
     #[serde(rename = "ApplicationCodeUpdate")]
@@ -220,6 +226,7 @@ pub struct CSVMappingParameters {
 
 /// <p>Provides a description of CloudWatch logging options, including the log stream Amazon Resource Name (ARN) and the role ARN.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudWatchLoggingOption {
     /// <p>ARN of the CloudWatch log to receive application messages.</p>
     #[serde(rename = "LogStreamARN")]
@@ -247,6 +254,7 @@ pub struct CloudWatchLoggingOptionDescription {
 
 /// <p>Describes CloudWatch logging option updates.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudWatchLoggingOptionUpdate {
     /// <p>ID of the CloudWatch logging option to update</p>
     #[serde(rename = "CloudWatchLoggingOptionId")]
@@ -263,6 +271,7 @@ pub struct CloudWatchLoggingOptionUpdate {
 
 /// <p>TBD</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
     /// <p>One or more SQL statements that read input data, transform it, and generate output. For example, you can write a SQL statement that reads data from one in-application stream, generates a running average of the number of advertisement clicks by vendor, and insert resulting rows in another in-application stream using pumps. For more information about the typical pattern, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-app-code.html">Application Code</a>. </p> <p>You can provide such series of SQL statements, where output of one statement can be used as the input for the next statement. You store intermediate results by creating in-application streams and pumps.</p> <p>Note that the application code must create the streams with names specified in the <code>Outputs</code>. For example, if your <code>Outputs</code> defines output streams named <code>ExampleOutputStream1</code> and <code>ExampleOutputStream2</code>, then your application code must create these streams. </p>
     #[serde(rename = "ApplicationCode")]
@@ -303,6 +312,7 @@ pub struct CreateApplicationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
     /// <p>The Kinesis Analytics application name.</p>
     #[serde(rename = "ApplicationName")]
@@ -320,6 +330,7 @@ pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
 pub struct DeleteApplicationCloudWatchLoggingOptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationInputProcessingConfigurationRequest {
     /// <p>The Kinesis Analytics application name.</p>
     #[serde(rename = "ApplicationName")]
@@ -338,6 +349,7 @@ pub struct DeleteApplicationInputProcessingConfigurationResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationOutputRequest {
     /// <p>Amazon Kinesis Analytics application name.</p>
     #[serde(rename = "ApplicationName")]
@@ -356,6 +368,7 @@ pub struct DeleteApplicationOutputRequest {
 pub struct DeleteApplicationOutputResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationReferenceDataSourceRequest {
     /// <p>Name of an existing application.</p>
     #[serde(rename = "ApplicationName")]
@@ -374,6 +387,7 @@ pub struct DeleteApplicationReferenceDataSourceResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationRequest {
     /// <p>Name of the Amazon Kinesis Analytics application to delete.</p>
     #[serde(rename = "ApplicationName")]
@@ -390,6 +404,7 @@ pub struct DeleteApplicationResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationRequest {
     /// <p>Name of the application.</p>
     #[serde(rename = "ApplicationName")]
@@ -414,6 +429,7 @@ pub struct DestinationSchema {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DiscoverInputSchemaRequest {
     /// <p>The <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_InputProcessingConfiguration.html">InputProcessingConfiguration</a> to use to preprocess the records before discovering the schema of the records.</p>
     #[serde(rename = "InputProcessingConfiguration")]
@@ -461,6 +477,7 @@ pub struct DiscoverInputSchemaResponse {
 
 /// <p>When you configure the application input, you specify the streaming source, the in-application stream name that is created, and the mapping between the two. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Input {
     /// <p>Describes the number of in-application streams to create. </p> <p>Data from your source is routed to these in-application input streams.</p> <p> (see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>.</p>
     #[serde(rename = "InputParallelism")]
@@ -488,6 +505,7 @@ pub struct Input {
 
 /// <p>When you start your application, you provide this configuration, which identifies the input source and the point in the input source at which you want the application to start processing records.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputConfiguration {
     /// <p>Input source ID. You can get this ID by calling the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_DescribeApplication.html">DescribeApplication</a> operation.</p>
     #[serde(rename = "Id")]
@@ -541,6 +559,7 @@ pub struct InputDescription {
 
 /// <p>An object that contains the Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a> function that is used to preprocess records in the stream, and the ARN of the IAM role that is used to access the AWS Lambda function. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputLambdaProcessor {
     /// <p><p>The ARN of the <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a> function that operates on records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARN")]
@@ -566,6 +585,7 @@ pub struct InputLambdaProcessorDescription {
 
 /// <p>Represents an update to the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_InputLambdaProcessor.html">InputLambdaProcessor</a> that is used to preprocess the records in the stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputLambdaProcessorUpdate {
     /// <p><p>The Amazon Resource Name (ARN) of the new <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a> function that is used to preprocess the records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARNUpdate")]
@@ -588,6 +608,7 @@ pub struct InputParallelism {
 
 /// <p>Provides updates to the parallelism count.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputParallelismUpdate {
     /// <p>Number of in-application streams to create for the specified streaming source.</p>
     #[serde(rename = "CountUpdate")]
@@ -597,6 +618,7 @@ pub struct InputParallelismUpdate {
 
 /// <p>Provides a description of a processor that is used to preprocess the records in the stream before being processed by your application code. Currently, the only input processor available is <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputProcessingConfiguration {
     /// <p>The <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_InputLambdaProcessor.html">InputLambdaProcessor</a> that is used to preprocess the records in the stream before being processed by your application code.</p>
     #[serde(rename = "InputLambdaProcessor")]
@@ -615,6 +637,7 @@ pub struct InputProcessingConfigurationDescription {
 
 /// <p>Describes updates to an <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_InputProcessingConfiguration.html">InputProcessingConfiguration</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputProcessingConfigurationUpdate {
     /// <p>Provides update information for an <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_InputLambdaProcessor.html">InputLambdaProcessor</a>.</p>
     #[serde(rename = "InputLambdaProcessorUpdate")]
@@ -623,6 +646,7 @@ pub struct InputProcessingConfigurationUpdate {
 
 /// <p>Describes updates for the application's input schema.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputSchemaUpdate {
     /// <p>A list of <code>RecordColumn</code> objects. Each object describes the mapping of the streaming source element to the corresponding column in the in-application stream. </p>
     #[serde(rename = "RecordColumnUpdates")]
@@ -649,6 +673,7 @@ pub struct InputStartingPositionConfiguration {
 
 /// <p>Describes updates to a specific input configuration (identified by the <code>InputId</code> of an application). </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputUpdate {
     /// <p>Input ID of the application input to be updated.</p>
     #[serde(rename = "InputId")]
@@ -689,6 +714,7 @@ pub struct JSONMappingParameters {
 
 /// <p> Identifies an Amazon Kinesis Firehose delivery stream as the streaming source. You provide the delivery stream's Amazon Resource Name (ARN) and an IAM role ARN that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseInput {
     /// <p>ARN of the input delivery stream.</p>
     #[serde(rename = "ResourceARN")]
@@ -714,6 +740,7 @@ pub struct KinesisFirehoseInputDescription {
 
 /// <p>When updating application input configuration, provides information about an Amazon Kinesis Firehose delivery stream as the streaming source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseInputUpdate {
     /// <p>Amazon Resource Name (ARN) of the input Amazon Kinesis Firehose delivery stream to read.</p>
     #[serde(rename = "ResourceARNUpdate")]
@@ -727,6 +754,7 @@ pub struct KinesisFirehoseInputUpdate {
 
 /// <p>When configuring application output, identifies an Amazon Kinesis Firehose delivery stream as the destination. You provide the stream Amazon Resource Name (ARN) and an IAM role that enables Amazon Kinesis Analytics to write to the stream on your behalf.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseOutput {
     /// <p>ARN of the destination Amazon Kinesis Firehose delivery stream to write to.</p>
     #[serde(rename = "ResourceARN")]
@@ -752,6 +780,7 @@ pub struct KinesisFirehoseOutputDescription {
 
 /// <p> When updating an output configuration using the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_UpdateApplication.html">UpdateApplication</a> operation, provides information about an Amazon Kinesis Firehose delivery stream configured as the destination. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseOutputUpdate {
     /// <p>Amazon Resource Name (ARN) of the Amazon Kinesis Firehose delivery stream to write to.</p>
     #[serde(rename = "ResourceARNUpdate")]
@@ -765,6 +794,7 @@ pub struct KinesisFirehoseOutputUpdate {
 
 /// <p> Identifies an Amazon Kinesis stream as the streaming source. You provide the stream's Amazon Resource Name (ARN) and an IAM role ARN that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsInput {
     /// <p>ARN of the input Amazon Kinesis stream to read.</p>
     #[serde(rename = "ResourceARN")]
@@ -790,6 +820,7 @@ pub struct KinesisStreamsInputDescription {
 
 /// <p>When updating application input configuration, provides information about an Amazon Kinesis stream as the streaming source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsInputUpdate {
     /// <p>Amazon Resource Name (ARN) of the input Amazon Kinesis stream to read.</p>
     #[serde(rename = "ResourceARNUpdate")]
@@ -803,6 +834,7 @@ pub struct KinesisStreamsInputUpdate {
 
 /// <p>When configuring application output, identifies an Amazon Kinesis stream as the destination. You provide the stream Amazon Resource Name (ARN) and also an IAM role ARN that Amazon Kinesis Analytics can use to write to the stream on your behalf.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsOutput {
     /// <p>ARN of the destination Amazon Kinesis stream to write to.</p>
     #[serde(rename = "ResourceARN")]
@@ -828,6 +860,7 @@ pub struct KinesisStreamsOutputDescription {
 
 /// <p> When updating an output configuration using the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_UpdateApplication.html">UpdateApplication</a> operation, provides information about an Amazon Kinesis stream configured as the destination. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsOutputUpdate {
     /// <p>Amazon Resource Name (ARN) of the Amazon Kinesis stream where you want to write the output.</p>
     #[serde(rename = "ResourceARNUpdate")]
@@ -841,6 +874,7 @@ pub struct KinesisStreamsOutputUpdate {
 
 /// <p>When configuring application output, identifies an AWS Lambda function as the destination. You provide the function Amazon Resource Name (ARN) and also an IAM role ARN that Amazon Kinesis Analytics can use to write to the function on your behalf. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaOutput {
     /// <p><p>Amazon Resource Name (ARN) of the destination Lambda function to write to.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARN")]
@@ -866,6 +900,7 @@ pub struct LambdaOutputDescription {
 
 /// <p>When updating an output configuration using the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_UpdateApplication.html">UpdateApplication</a> operation, provides information about an AWS Lambda function configured as the destination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaOutputUpdate {
     /// <p><p>Amazon Resource Name (ARN) of the destination Lambda function.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARNUpdate")]
@@ -879,6 +914,7 @@ pub struct LambdaOutputUpdate {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
     /// <p>Name of the application to start the list with. When using pagination to retrieve the list, you don't need to specify this parameter in the first request. However, in subsequent requests, you add the last application name from the previous response to get the next page of applications.</p>
     #[serde(rename = "ExclusiveStartApplicationName")]
@@ -903,6 +939,7 @@ pub struct ListApplicationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the application for which to retrieve tags.</p>
     #[serde(rename = "ResourceARN")]
@@ -933,6 +970,7 @@ pub struct MappingParameters {
 
 /// <p> Describes application output configuration in which you identify an in-application stream and a destination where you want the in-application stream data to be written. The destination can be an Amazon Kinesis stream or an Amazon Kinesis Firehose delivery stream. </p> <p/> <p>For limits on how many destinations an application can write and other limitations, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Output {
     /// <p>Describes the data format when records are written to the destination. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Configuring Application Output</a>.</p>
     #[serde(rename = "DestinationSchema")]
@@ -986,6 +1024,7 @@ pub struct OutputDescription {
 
 /// <p> Describes updates to the output configuration identified by the <code>OutputId</code>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OutputUpdate {
     /// <p>Describes the data format when records are written to the destination. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Configuring Application Output</a>.</p>
     #[serde(rename = "DestinationSchemaUpdate")]
@@ -1041,6 +1080,7 @@ pub struct RecordFormat {
 
 /// <p>Describes the reference data source by providing the source information (S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReferenceDataSource {
     /// <p>Describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream.</p>
     #[serde(rename = "ReferenceSchema")]
@@ -1075,6 +1115,7 @@ pub struct ReferenceDataSourceDescription {
 
 /// <p>When you update a reference data source configuration for an application, this object provides all the updated values (such as the source bucket name and object key name), the in-application table name that is created, and updated mapping information that maps the data in the Amazon S3 object to the in-application reference table that is created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReferenceDataSourceUpdate {
     /// <p>ID of the reference data source being updated. You can use the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_DescribeApplication.html">DescribeApplication</a> operation to get this value.</p>
     #[serde(rename = "ReferenceId")]
@@ -1095,6 +1136,7 @@ pub struct ReferenceDataSourceUpdate {
 
 /// <p>Provides a description of an Amazon S3 data source, including the Amazon Resource Name (ARN) of the S3 bucket, the ARN of the IAM role that is used to access the bucket, and the name of the Amazon S3 object that contains the data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3Configuration {
     /// <p>ARN of the S3 bucket that contains the data.</p>
     #[serde(rename = "BucketARN")]
@@ -1109,6 +1151,7 @@ pub struct S3Configuration {
 
 /// <p>Identifies the S3 bucket and object that contains the reference data. Also identifies the IAM role Amazon Kinesis Analytics can assume to read this object on your behalf.</p> <p>An Amazon Kinesis Analytics application loads reference data only once. If the data changes, you call the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_UpdateApplication.html">UpdateApplication</a> operation to trigger reloading of data into your application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ReferenceDataSource {
     /// <p>Amazon Resource Name (ARN) of the S3 bucket.</p>
     #[serde(rename = "BucketARN")]
@@ -1138,6 +1181,7 @@ pub struct S3ReferenceDataSourceDescription {
 
 /// <p>Describes the S3 bucket name, object key name, and IAM role that Amazon Kinesis Analytics can assume to read the Amazon S3 object on your behalf and populate the in-application reference table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ReferenceDataSourceUpdate {
     /// <p>Amazon Resource Name (ARN) of the S3 bucket.</p>
     #[serde(rename = "BucketARNUpdate")]
@@ -1170,6 +1214,7 @@ pub struct SourceSchema {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartApplicationRequest {
     /// <p>Name of the application.</p>
     #[serde(rename = "ApplicationName")]
@@ -1186,6 +1231,7 @@ pub struct StartApplicationResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopApplicationRequest {
     /// <p>Name of the running application to stop.</p>
     #[serde(rename = "ApplicationName")]
@@ -1210,6 +1256,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the application to assign the tags.</p>
     #[serde(rename = "ResourceARN")]
@@ -1224,6 +1271,7 @@ pub struct TagResourceRequest {
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the Kinesis Analytics application from which to remove the tags.</p>
     #[serde(rename = "ResourceARN")]
@@ -1238,6 +1286,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
     /// <p>Name of the Amazon Kinesis Analytics application to update.</p>
     #[serde(rename = "ApplicationName")]
@@ -1309,20 +1358,26 @@ impl AddApplicationCloudWatchLoggingOptionError {
 }
 impl fmt::Display for AddApplicationCloudWatchLoggingOptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddApplicationCloudWatchLoggingOptionError {
-    fn description(&self) -> &str {
         match *self {
-            AddApplicationCloudWatchLoggingOptionError::ConcurrentModification(ref cause) => cause,
-            AddApplicationCloudWatchLoggingOptionError::InvalidArgument(ref cause) => cause,
-            AddApplicationCloudWatchLoggingOptionError::ResourceInUse(ref cause) => cause,
-            AddApplicationCloudWatchLoggingOptionError::ResourceNotFound(ref cause) => cause,
-            AddApplicationCloudWatchLoggingOptionError::UnsupportedOperation(ref cause) => cause,
+            AddApplicationCloudWatchLoggingOptionError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationCloudWatchLoggingOptionError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationCloudWatchLoggingOptionError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationCloudWatchLoggingOptionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationCloudWatchLoggingOptionError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AddApplicationCloudWatchLoggingOptionError {}
 /// Errors returned by AddApplicationInput
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationInputError {
@@ -1377,21 +1432,17 @@ impl AddApplicationInputError {
 }
 impl fmt::Display for AddApplicationInputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddApplicationInputError {
-    fn description(&self) -> &str {
         match *self {
-            AddApplicationInputError::CodeValidation(ref cause) => cause,
-            AddApplicationInputError::ConcurrentModification(ref cause) => cause,
-            AddApplicationInputError::InvalidArgument(ref cause) => cause,
-            AddApplicationInputError::ResourceInUse(ref cause) => cause,
-            AddApplicationInputError::ResourceNotFound(ref cause) => cause,
-            AddApplicationInputError::UnsupportedOperation(ref cause) => cause,
+            AddApplicationInputError::CodeValidation(ref cause) => write!(f, "{}", cause),
+            AddApplicationInputError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            AddApplicationInputError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            AddApplicationInputError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            AddApplicationInputError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddApplicationInputError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddApplicationInputError {}
 /// Errors returned by AddApplicationInputProcessingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationInputProcessingConfigurationError {
@@ -1451,24 +1502,26 @@ impl AddApplicationInputProcessingConfigurationError {
 }
 impl fmt::Display for AddApplicationInputProcessingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddApplicationInputProcessingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
             AddApplicationInputProcessingConfigurationError::ConcurrentModification(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            AddApplicationInputProcessingConfigurationError::InvalidArgument(ref cause) => cause,
-            AddApplicationInputProcessingConfigurationError::ResourceInUse(ref cause) => cause,
-            AddApplicationInputProcessingConfigurationError::ResourceNotFound(ref cause) => cause,
+            AddApplicationInputProcessingConfigurationError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationInputProcessingConfigurationError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationInputProcessingConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
             AddApplicationInputProcessingConfigurationError::UnsupportedOperation(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for AddApplicationInputProcessingConfigurationError {}
 /// Errors returned by AddApplicationOutput
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationOutputError {
@@ -1520,20 +1573,16 @@ impl AddApplicationOutputError {
 }
 impl fmt::Display for AddApplicationOutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddApplicationOutputError {
-    fn description(&self) -> &str {
         match *self {
-            AddApplicationOutputError::ConcurrentModification(ref cause) => cause,
-            AddApplicationOutputError::InvalidArgument(ref cause) => cause,
-            AddApplicationOutputError::ResourceInUse(ref cause) => cause,
-            AddApplicationOutputError::ResourceNotFound(ref cause) => cause,
-            AddApplicationOutputError::UnsupportedOperation(ref cause) => cause,
+            AddApplicationOutputError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            AddApplicationOutputError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            AddApplicationOutputError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            AddApplicationOutputError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddApplicationOutputError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddApplicationOutputError {}
 /// Errors returned by AddApplicationReferenceDataSource
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationReferenceDataSourceError {
@@ -1589,20 +1638,26 @@ impl AddApplicationReferenceDataSourceError {
 }
 impl fmt::Display for AddApplicationReferenceDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddApplicationReferenceDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            AddApplicationReferenceDataSourceError::ConcurrentModification(ref cause) => cause,
-            AddApplicationReferenceDataSourceError::InvalidArgument(ref cause) => cause,
-            AddApplicationReferenceDataSourceError::ResourceInUse(ref cause) => cause,
-            AddApplicationReferenceDataSourceError::ResourceNotFound(ref cause) => cause,
-            AddApplicationReferenceDataSourceError::UnsupportedOperation(ref cause) => cause,
+            AddApplicationReferenceDataSourceError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationReferenceDataSourceError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationReferenceDataSourceError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationReferenceDataSourceError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationReferenceDataSourceError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AddApplicationReferenceDataSourceError {}
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
@@ -1653,21 +1708,17 @@ impl CreateApplicationError {
 }
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateApplicationError::CodeValidation(ref cause) => cause,
-            CreateApplicationError::ConcurrentModification(ref cause) => cause,
-            CreateApplicationError::InvalidArgument(ref cause) => cause,
-            CreateApplicationError::LimitExceeded(ref cause) => cause,
-            CreateApplicationError::ResourceInUse(ref cause) => cause,
-            CreateApplicationError::TooManyTags(ref cause) => cause,
+            CreateApplicationError::CodeValidation(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateApplicationError {}
 /// Errors returned by DeleteApplication
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationError {
@@ -1710,19 +1761,15 @@ impl DeleteApplicationError {
 }
 impl fmt::Display for DeleteApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApplicationError::ConcurrentModification(ref cause) => cause,
-            DeleteApplicationError::ResourceInUse(ref cause) => cause,
-            DeleteApplicationError::ResourceNotFound(ref cause) => cause,
-            DeleteApplicationError::UnsupportedOperation(ref cause) => cause,
+            DeleteApplicationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteApplicationError {}
 /// Errors returned by DeleteApplicationCloudWatchLoggingOption
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationCloudWatchLoggingOptionError {
@@ -1782,22 +1829,26 @@ impl DeleteApplicationCloudWatchLoggingOptionError {
 }
 impl fmt::Display for DeleteApplicationCloudWatchLoggingOptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationCloudWatchLoggingOptionError {
-    fn description(&self) -> &str {
         match *self {
             DeleteApplicationCloudWatchLoggingOptionError::ConcurrentModification(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DeleteApplicationCloudWatchLoggingOptionError::InvalidArgument(ref cause) => cause,
-            DeleteApplicationCloudWatchLoggingOptionError::ResourceInUse(ref cause) => cause,
-            DeleteApplicationCloudWatchLoggingOptionError::ResourceNotFound(ref cause) => cause,
-            DeleteApplicationCloudWatchLoggingOptionError::UnsupportedOperation(ref cause) => cause,
+            DeleteApplicationCloudWatchLoggingOptionError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationCloudWatchLoggingOptionError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationCloudWatchLoggingOptionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationCloudWatchLoggingOptionError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteApplicationCloudWatchLoggingOptionError {}
 /// Errors returned by DeleteApplicationInputProcessingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationInputProcessingConfigurationError {
@@ -1861,26 +1912,26 @@ impl DeleteApplicationInputProcessingConfigurationError {
 }
 impl fmt::Display for DeleteApplicationInputProcessingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationInputProcessingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
             DeleteApplicationInputProcessingConfigurationError::ConcurrentModification(
                 ref cause,
-            ) => cause,
-            DeleteApplicationInputProcessingConfigurationError::InvalidArgument(ref cause) => cause,
-            DeleteApplicationInputProcessingConfigurationError::ResourceInUse(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DeleteApplicationInputProcessingConfigurationError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationInputProcessingConfigurationError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteApplicationInputProcessingConfigurationError::ResourceNotFound(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DeleteApplicationInputProcessingConfigurationError::UnsupportedOperation(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DeleteApplicationInputProcessingConfigurationError {}
 /// Errors returned by DeleteApplicationOutput
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationOutputError {
@@ -1934,20 +1985,18 @@ impl DeleteApplicationOutputError {
 }
 impl fmt::Display for DeleteApplicationOutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationOutputError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApplicationOutputError::ConcurrentModification(ref cause) => cause,
-            DeleteApplicationOutputError::InvalidArgument(ref cause) => cause,
-            DeleteApplicationOutputError::ResourceInUse(ref cause) => cause,
-            DeleteApplicationOutputError::ResourceNotFound(ref cause) => cause,
-            DeleteApplicationOutputError::UnsupportedOperation(ref cause) => cause,
+            DeleteApplicationOutputError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationOutputError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationOutputError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationOutputError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationOutputError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteApplicationOutputError {}
 /// Errors returned by DeleteApplicationReferenceDataSource
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationReferenceDataSourceError {
@@ -2003,20 +2052,26 @@ impl DeleteApplicationReferenceDataSourceError {
 }
 impl fmt::Display for DeleteApplicationReferenceDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationReferenceDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApplicationReferenceDataSourceError::ConcurrentModification(ref cause) => cause,
-            DeleteApplicationReferenceDataSourceError::InvalidArgument(ref cause) => cause,
-            DeleteApplicationReferenceDataSourceError::ResourceInUse(ref cause) => cause,
-            DeleteApplicationReferenceDataSourceError::ResourceNotFound(ref cause) => cause,
-            DeleteApplicationReferenceDataSourceError::UnsupportedOperation(ref cause) => cause,
+            DeleteApplicationReferenceDataSourceError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationReferenceDataSourceError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationReferenceDataSourceError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationReferenceDataSourceError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationReferenceDataSourceError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteApplicationReferenceDataSourceError {}
 /// Errors returned by DescribeApplication
 #[derive(Debug, PartialEq)]
 pub enum DescribeApplicationError {
@@ -2049,17 +2104,13 @@ impl DescribeApplicationError {
 }
 impl fmt::Display for DescribeApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeApplicationError::ResourceNotFound(ref cause) => cause,
-            DescribeApplicationError::UnsupportedOperation(ref cause) => cause,
+            DescribeApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeApplicationError {}
 /// Errors returned by DiscoverInputSchema
 #[derive(Debug, PartialEq)]
 pub enum DiscoverInputSchemaError {
@@ -2104,19 +2155,17 @@ impl DiscoverInputSchemaError {
 }
 impl fmt::Display for DiscoverInputSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DiscoverInputSchemaError {
-    fn description(&self) -> &str {
         match *self {
-            DiscoverInputSchemaError::InvalidArgument(ref cause) => cause,
-            DiscoverInputSchemaError::ResourceProvisionedThroughputExceeded(ref cause) => cause,
-            DiscoverInputSchemaError::ServiceUnavailable(ref cause) => cause,
-            DiscoverInputSchemaError::UnableToDetectSchema(ref cause) => cause,
+            DiscoverInputSchemaError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DiscoverInputSchemaError::ResourceProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DiscoverInputSchemaError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DiscoverInputSchemaError::UnableToDetectSchema(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DiscoverInputSchemaError {}
 /// Errors returned by ListApplications
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationsError {}
@@ -2134,14 +2183,10 @@ impl ListApplicationsError {
 }
 impl fmt::Display for ListApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListApplicationsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListApplicationsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2179,18 +2224,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::ConcurrentModification(ref cause) => cause,
-            ListTagsForResourceError::InvalidArgument(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by StartApplication
 #[derive(Debug, PartialEq)]
 pub enum StartApplicationError {
@@ -2238,20 +2279,18 @@ impl StartApplicationError {
 }
 impl fmt::Display for StartApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            StartApplicationError::InvalidApplicationConfiguration(ref cause) => cause,
-            StartApplicationError::InvalidArgument(ref cause) => cause,
-            StartApplicationError::ResourceInUse(ref cause) => cause,
-            StartApplicationError::ResourceNotFound(ref cause) => cause,
-            StartApplicationError::UnsupportedOperation(ref cause) => cause,
+            StartApplicationError::InvalidApplicationConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartApplicationError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            StartApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StartApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartApplicationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartApplicationError {}
 /// Errors returned by StopApplication
 #[derive(Debug, PartialEq)]
 pub enum StopApplicationError {
@@ -2287,18 +2326,14 @@ impl StopApplicationError {
 }
 impl fmt::Display for StopApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            StopApplicationError::ResourceInUse(ref cause) => cause,
-            StopApplicationError::ResourceNotFound(ref cause) => cause,
-            StopApplicationError::UnsupportedOperation(ref cause) => cause,
+            StopApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StopApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StopApplicationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopApplicationError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2342,20 +2377,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ConcurrentModification(ref cause) => cause,
-            TagResourceError::InvalidArgument(ref cause) => cause,
-            TagResourceError::ResourceInUse(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -2401,20 +2432,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ConcurrentModification(ref cause) => cause,
-            UntagResourceError::InvalidArgument(ref cause) => cause,
-            UntagResourceError::ResourceInUse(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::TooManyTags(ref cause) => cause,
+            UntagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {
@@ -2467,21 +2494,17 @@ impl UpdateApplicationError {
 }
 impl fmt::Display for UpdateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateApplicationError::CodeValidation(ref cause) => cause,
-            UpdateApplicationError::ConcurrentModification(ref cause) => cause,
-            UpdateApplicationError::InvalidArgument(ref cause) => cause,
-            UpdateApplicationError::ResourceInUse(ref cause) => cause,
-            UpdateApplicationError::ResourceNotFound(ref cause) => cause,
-            UpdateApplicationError::UnsupportedOperation(ref cause) => cause,
+            UpdateApplicationError::CodeValidation(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateApplicationError {}
 /// Trait representing the capabilities of the Kinesis Analytics API. Kinesis Analytics clients implement this trait.
 pub trait KinesisAnalytics {
     /// <p><note> <p>This documentation is for version 1 of the Amazon Kinesis Data Analytics API, which only supports SQL applications. Version 2 of the API supports SQL and Java applications. For more information about version 2, see <a href="/kinesisanalytics/latest/apiv2/Welcome.html">Amazon Kinesis Data Analytics API V2 Documentation</a>.</p> </note> <p>Adds a CloudWatch log stream to monitor application configuration errors. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html">Working with Amazon CloudWatch Logs</a>.</p></p>

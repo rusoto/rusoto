@@ -60,6 +60,7 @@ pub struct AddressBookData {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApproveSkillRequest {
     /// <p>The unique identifier of the skill.</p>
     #[serde(rename = "SkillId")]
@@ -71,6 +72,7 @@ pub struct ApproveSkillRequest {
 pub struct ApproveSkillResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateContactWithAddressBookRequest {
     /// <p>The ARN of the address book with which to associate the contact.</p>
     #[serde(rename = "AddressBookArn")]
@@ -85,6 +87,7 @@ pub struct AssociateContactWithAddressBookRequest {
 pub struct AssociateContactWithAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDeviceWithNetworkProfileRequest {
     /// <p>The device ARN.</p>
     #[serde(rename = "DeviceArn")]
@@ -99,6 +102,7 @@ pub struct AssociateDeviceWithNetworkProfileRequest {
 pub struct AssociateDeviceWithNetworkProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDeviceWithRoomRequest {
     /// <p>The ARN of the device to associate to a room. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -115,6 +119,7 @@ pub struct AssociateDeviceWithRoomRequest {
 pub struct AssociateDeviceWithRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSkillGroupWithRoomRequest {
     /// <p>The ARN of the room with which to associate the skill group. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -131,6 +136,7 @@ pub struct AssociateSkillGroupWithRoomRequest {
 pub struct AssociateSkillGroupWithRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSkillWithSkillGroupRequest {
     /// <p>The ARN of the skill group to associate the skill to. Required.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -146,6 +152,7 @@ pub struct AssociateSkillWithSkillGroupRequest {
 pub struct AssociateSkillWithSkillGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSkillWithUsersRequest {
     /// <p>The private skill ID you want to make available to enrolled users.</p>
     #[serde(rename = "SkillId")]
@@ -158,6 +165,7 @@ pub struct AssociateSkillWithUsersResponse {}
 
 /// <p>The audio message. There is a 1 MB limit on the audio file input and the only supported format is MP3. To convert your MP3 audio files to an Alexa-friendly, </p> <p>required codec version (MPEG version 2) and bit rate (48 kbps), you might use converter software. One option for this is a command-line tool, FFmpeg. For more information, see <a href="https://www.ffmpeg.org/">FFmpeg</a>. The following command converts the provided &lt;input-file&gt; to an MP3 file that is played in the announcement:</p> <p> <code>ffmpeg -i &lt;input-file&gt; -ac 2 -codec:a libmp3lame -b:a 48k -ar 16000 &lt;output-file.mp3&gt;</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Audio {
     /// <p>The locale of the audio message. Currently, en-US is supported.</p>
     #[serde(rename = "Locale")]
@@ -386,6 +394,7 @@ pub struct ContactData {
 
 /// <p>The content definition. This can contain only one text, SSML, or audio list object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Content {
     /// <p>The list of audio messages.</p>
     #[serde(rename = "AudioList")]
@@ -402,6 +411,7 @@ pub struct Content {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAddressBookRequest {
     /// <p>A unique, user-specified identifier for the request that ensures idempotency.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -426,6 +436,7 @@ pub struct CreateAddressBookResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBusinessReportScheduleRequest {
     /// <p>The client request token.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -465,6 +476,7 @@ pub struct CreateBusinessReportScheduleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConferenceProviderRequest {
     /// <p>The request token of the client.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -499,6 +511,7 @@ pub struct CreateConferenceProviderResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContactRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -540,6 +553,7 @@ pub struct CreateContactResponse {
 
 /// <p>Creates settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndOfMeetingReminder {
     /// <p>Whether an end of meeting reminder is enabled or not.</p>
     #[serde(rename = "Enabled")]
@@ -553,6 +567,7 @@ pub struct CreateEndOfMeetingReminder {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGatewayGroupRequest {
     /// <p> A unique, user-specified identifier for the request that ensures idempotency.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -577,6 +592,7 @@ pub struct CreateGatewayGroupResponse {
 
 /// <p>Creates settings for the instant booking feature that are applied to a room profile. When users start their meeting with Alexa, Alexa automatically books the room for the configured duration if the room is available.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstantBooking {
     /// <p>Duration between 15 and 240 minutes at increments of 15 that determines how long to book an available room when a meeting is started with Alexa.</p>
     #[serde(rename = "DurationInMinutes")]
@@ -588,6 +604,7 @@ pub struct CreateInstantBooking {
 
 /// <p>Creates meeting room settings of a room profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeetingRoomConfiguration {
     #[serde(rename = "EndOfMeetingReminder")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -607,6 +624,7 @@ pub struct CreateMeetingRoomConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkProfileRequest {
     /// <p>The ARN of the Private Certificate Authority (PCA) created in AWS Certificate Manager (ACM). This is used to issue certificates to the devices. </p>
     #[serde(rename = "CertificateAuthorityArn")]
@@ -655,6 +673,7 @@ pub struct CreateNetworkProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProfileRequest {
     /// <p>The valid address for the room.</p>
     #[serde(rename = "Address")]
@@ -711,6 +730,7 @@ pub struct CreateProfileResponse {
 
 /// <p>Creates settings for the require check in feature that are applied to a room profile. Require check in allows a meeting room’s Alexa or AVS device to prompt the user to check in; otherwise, the room will be released.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRequireCheckIn {
     /// <p>Whether require check in is enabled or not.</p>
     #[serde(rename = "Enabled")]
@@ -721,6 +741,7 @@ pub struct CreateRequireCheckIn {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoomRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency. </p>
     #[serde(rename = "ClientRequestToken")]
@@ -757,6 +778,7 @@ pub struct CreateRoomResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSkillGroupRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency. </p>
     #[serde(rename = "ClientRequestToken")]
@@ -781,6 +803,7 @@ pub struct CreateSkillGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency. </p>
     #[serde(rename = "ClientRequestToken")]
@@ -817,6 +840,7 @@ pub struct CreateUserResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAddressBookRequest {
     /// <p>The ARN of the address book to delete.</p>
     #[serde(rename = "AddressBookArn")]
@@ -828,6 +852,7 @@ pub struct DeleteAddressBookRequest {
 pub struct DeleteAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBusinessReportScheduleRequest {
     /// <p>The ARN of the business report schedule.</p>
     #[serde(rename = "ScheduleArn")]
@@ -839,6 +864,7 @@ pub struct DeleteBusinessReportScheduleRequest {
 pub struct DeleteBusinessReportScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConferenceProviderRequest {
     /// <p>The ARN of the conference provider.</p>
     #[serde(rename = "ConferenceProviderArn")]
@@ -850,6 +876,7 @@ pub struct DeleteConferenceProviderRequest {
 pub struct DeleteConferenceProviderResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteContactRequest {
     /// <p>The ARN of the contact to delete.</p>
     #[serde(rename = "ContactArn")]
@@ -861,6 +888,7 @@ pub struct DeleteContactRequest {
 pub struct DeleteContactResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceRequest {
     /// <p>The ARN of the device for which to request details.</p>
     #[serde(rename = "DeviceArn")]
@@ -872,6 +900,7 @@ pub struct DeleteDeviceRequest {
 pub struct DeleteDeviceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceUsageDataRequest {
     /// <p>The ARN of the device.</p>
     #[serde(rename = "DeviceArn")]
@@ -886,6 +915,7 @@ pub struct DeleteDeviceUsageDataRequest {
 pub struct DeleteDeviceUsageDataResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGatewayGroupRequest {
     /// <p>The ARN of the gateway group to delete.</p>
     #[serde(rename = "GatewayGroupArn")]
@@ -897,6 +927,7 @@ pub struct DeleteGatewayGroupRequest {
 pub struct DeleteGatewayGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNetworkProfileRequest {
     /// <p>The ARN of the network profile associated with a device.</p>
     #[serde(rename = "NetworkProfileArn")]
@@ -908,6 +939,7 @@ pub struct DeleteNetworkProfileRequest {
 pub struct DeleteNetworkProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProfileRequest {
     /// <p>The ARN of the room profile to delete. Required.</p>
     #[serde(rename = "ProfileArn")]
@@ -920,6 +952,7 @@ pub struct DeleteProfileRequest {
 pub struct DeleteProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomRequest {
     /// <p>The ARN of the room to delete. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -932,6 +965,7 @@ pub struct DeleteRoomRequest {
 pub struct DeleteRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomSkillParameterRequest {
     /// <p>The room skill parameter key for which to remove details.</p>
     #[serde(rename = "ParameterKey")]
@@ -950,6 +984,7 @@ pub struct DeleteRoomSkillParameterRequest {
 pub struct DeleteRoomSkillParameterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSkillAuthorizationRequest {
     /// <p>The room that the skill is authorized for.</p>
     #[serde(rename = "RoomArn")]
@@ -965,6 +1000,7 @@ pub struct DeleteSkillAuthorizationRequest {
 pub struct DeleteSkillAuthorizationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSkillGroupRequest {
     /// <p>The ARN of the skill group to delete. Required.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -977,6 +1013,7 @@ pub struct DeleteSkillGroupRequest {
 pub struct DeleteSkillGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>The ARN of the user's enrollment in the organization. Required.</p>
     #[serde(rename = "EnrollmentId")]
@@ -1178,6 +1215,7 @@ pub struct DeviceStatusInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateContactFromAddressBookRequest {
     /// <p>The ARN of the address from which to disassociate the contact.</p>
     #[serde(rename = "AddressBookArn")]
@@ -1192,6 +1230,7 @@ pub struct DisassociateContactFromAddressBookRequest {
 pub struct DisassociateContactFromAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDeviceFromRoomRequest {
     /// <p>The ARN of the device to disassociate from a room. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -1204,6 +1243,7 @@ pub struct DisassociateDeviceFromRoomRequest {
 pub struct DisassociateDeviceFromRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSkillFromSkillGroupRequest {
     /// <p>The unique identifier of a skill. Required.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -1219,6 +1259,7 @@ pub struct DisassociateSkillFromSkillGroupRequest {
 pub struct DisassociateSkillFromSkillGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSkillFromUsersRequest {
     /// <p> The private skill ID you want to make unavailable for enrolled users.</p>
     #[serde(rename = "SkillId")]
@@ -1230,6 +1271,7 @@ pub struct DisassociateSkillFromUsersRequest {
 pub struct DisassociateSkillFromUsersResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSkillGroupFromRoomRequest {
     /// <p>The ARN of the room from which the skill group is to be disassociated. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -1265,6 +1307,7 @@ pub struct EndOfMeetingReminder {
 
 /// <p>A filter name and value pair that is used to return a more specific list of results. Filters can be used to match a set of resources by various criteria.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>The key of a filter.</p>
     #[serde(rename = "Key")]
@@ -1275,6 +1318,7 @@ pub struct Filter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ForgetSmartHomeAppliancesRequest {
     /// <p>The room that the appliances are associated with.</p>
     #[serde(rename = "RoomArn")]
@@ -1374,6 +1418,7 @@ pub struct GatewaySummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAddressBookRequest {
     /// <p>The ARN of the address book for which to request details.</p>
     #[serde(rename = "AddressBookArn")]
@@ -1390,6 +1435,7 @@ pub struct GetAddressBookResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConferencePreferenceRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1402,6 +1448,7 @@ pub struct GetConferencePreferenceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConferenceProviderRequest {
     /// <p>The ARN of the newly created conference provider.</p>
     #[serde(rename = "ConferenceProviderArn")]
@@ -1418,6 +1465,7 @@ pub struct GetConferenceProviderResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContactRequest {
     /// <p>The ARN of the contact for which to request details.</p>
     #[serde(rename = "ContactArn")]
@@ -1434,6 +1482,7 @@ pub struct GetContactResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceRequest {
     /// <p>The ARN of the device for which to request details. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -1451,6 +1500,7 @@ pub struct GetDeviceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGatewayGroupRequest {
     /// <p>The ARN of the gateway group to get.</p>
     #[serde(rename = "GatewayGroupArn")]
@@ -1466,6 +1516,7 @@ pub struct GetGatewayGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGatewayRequest {
     /// <p>The ARN of the gateway to get.</p>
     #[serde(rename = "GatewayArn")]
@@ -1482,6 +1533,7 @@ pub struct GetGatewayResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvitationConfigurationRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1502,6 +1554,7 @@ pub struct GetInvitationConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNetworkProfileRequest {
     /// <p>The ARN of the network profile associated with a device.</p>
     #[serde(rename = "NetworkProfileArn")]
@@ -1518,6 +1571,7 @@ pub struct GetNetworkProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProfileRequest {
     /// <p>The ARN of the room profile for which to request details. Required.</p>
     #[serde(rename = "ProfileArn")]
@@ -1535,6 +1589,7 @@ pub struct GetProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoomRequest {
     /// <p>The ARN of the room for which to request details. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -1552,6 +1607,7 @@ pub struct GetRoomResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoomSkillParameterRequest {
     /// <p>The room skill parameter key for which to get details. Required.</p>
     #[serde(rename = "ParameterKey")]
@@ -1575,6 +1631,7 @@ pub struct GetRoomSkillParameterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSkillGroupRequest {
     /// <p>The ARN of the skill group for which to get details. Required.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -1617,6 +1674,7 @@ pub struct InstantBooking {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBusinessReportSchedulesRequest {
     /// <p>The maximum number of schedules listed in the call.</p>
     #[serde(rename = "MaxResults")]
@@ -1642,6 +1700,7 @@ pub struct ListBusinessReportSchedulesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConferenceProvidersRequest {
     /// <p>The maximum number of conference providers to be returned, per paginated calls.</p>
     #[serde(rename = "MaxResults")]
@@ -1667,6 +1726,7 @@ pub struct ListConferenceProvidersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceEventsRequest {
     /// <p>The ARN of a device.</p>
     #[serde(rename = "DeviceArn")]
@@ -1699,6 +1759,7 @@ pub struct ListDeviceEventsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGatewayGroupsRequest {
     /// <p>The maximum number of gateway group summaries to return. The default is 50.</p>
     #[serde(rename = "MaxResults")]
@@ -1724,6 +1785,7 @@ pub struct ListGatewayGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGatewaysRequest {
     /// <p>The gateway group ARN for which to list gateways.</p>
     #[serde(rename = "GatewayGroupArn")]
@@ -1753,6 +1815,7 @@ pub struct ListGatewaysResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSkillsRequest {
     /// <p>Whether the skill is enabled under the user's account.</p>
     #[serde(rename = "EnablementType")]
@@ -1790,6 +1853,7 @@ pub struct ListSkillsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSkillsStoreCategoriesRequest {
     /// <p>The maximum number of categories returned, per paginated calls.</p>
     #[serde(rename = "MaxResults")]
@@ -1815,6 +1879,7 @@ pub struct ListSkillsStoreCategoriesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSkillsStoreSkillsByCategoryRequest {
     /// <p>The category ID for which the skills are being retrieved from the skill store.</p>
     #[serde(rename = "CategoryId")]
@@ -1843,6 +1908,7 @@ pub struct ListSkillsStoreSkillsByCategoryResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSmartHomeAppliancesRequest {
     /// <p>The maximum number of appliances to be returned, per paginated calls.</p>
     #[serde(rename = "MaxResults")]
@@ -1871,6 +1937,7 @@ pub struct ListSmartHomeAppliancesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
     /// <p>The ARN of the specified resource for which to list tags.</p>
     #[serde(rename = "Arn")]
@@ -2141,6 +2208,7 @@ pub struct ProfileData {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConferencePreferenceRequest {
     /// <p>The conference preference of a specific conference provider.</p>
     #[serde(rename = "ConferencePreference")]
@@ -2152,6 +2220,7 @@ pub struct PutConferencePreferenceRequest {
 pub struct PutConferencePreferenceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutInvitationConfigurationRequest {
     /// <p>The email ID of the organization or individual contact that the enrolled user can use. </p>
     #[serde(rename = "ContactEmail")]
@@ -2171,6 +2240,7 @@ pub struct PutInvitationConfigurationRequest {
 pub struct PutInvitationConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRoomSkillParameterRequest {
     /// <p>The ARN of the room associated with the room skill parameter. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -2189,6 +2259,7 @@ pub struct PutRoomSkillParameterRequest {
 pub struct PutRoomSkillParameterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSkillAuthorizationRequest {
     /// <p>The authorization result specific to OAUTH code grant output. "Code” must be populated in the AuthorizationResult map to establish the authorization.</p>
     #[serde(rename = "AuthorizationResult")]
@@ -2207,6 +2278,7 @@ pub struct PutSkillAuthorizationRequest {
 pub struct PutSkillAuthorizationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterAVSDeviceRequest {
     /// <p>The device type ID for your AVS device generated by Amazon when the OEM creates a new product on Amazon's Developer Console.</p>
     #[serde(rename = "AmazonId")]
@@ -2235,6 +2307,7 @@ pub struct RegisterAVSDeviceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectSkillRequest {
     /// <p>The unique identifier of the skill.</p>
     #[serde(rename = "SkillId")]
@@ -2260,6 +2333,7 @@ pub struct RequireCheckIn {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResolveRoomRequest {
     /// <p>The ARN of the skill that was requested. Required.</p>
     #[serde(rename = "SkillId")]
@@ -2287,6 +2361,7 @@ pub struct ResolveRoomResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeInvitationRequest {
     /// <p>The ARN of the enrollment invitation to revoke. Required.</p>
     #[serde(rename = "EnrollmentId")]
@@ -2370,6 +2445,7 @@ pub struct RoomSkillParameter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchAddressBooksRequest {
     /// <p>The filters to use to list a specified set of address books. The supported filter key is AddressBookName.</p>
     #[serde(rename = "Filters")]
@@ -2407,6 +2483,7 @@ pub struct SearchAddressBooksResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchContactsRequest {
     /// <p>The filters to use to list a specified set of address books. The supported filter keys are DisplayName, FirstName, LastName, and AddressBookArns.</p>
     #[serde(rename = "Filters")]
@@ -2444,6 +2521,7 @@ pub struct SearchContactsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchDevicesRequest {
     /// <p>The filters to use to list a specified set of devices. Supported filter keys are DeviceName, DeviceStatus, DeviceStatusDetailCode, RoomName, DeviceType, DeviceSerialNumber, UnassociatedOnly, ConnectionStatus (ONLINE and OFFLINE), NetworkProfileName, NetworkProfileArn, Feature, and FailureCode.</p>
     #[serde(rename = "Filters")]
@@ -2481,6 +2559,7 @@ pub struct SearchDevicesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchNetworkProfilesRequest {
     /// <p>The filters to use to list a specified set of network profiles. Valid filters are NetworkProfileName, Ssid, and SecurityType.</p>
     #[serde(rename = "Filters")]
@@ -2518,6 +2597,7 @@ pub struct SearchNetworkProfilesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchProfilesRequest {
     /// <p>The filters to use to list a specified set of room profiles. Supported filter keys are ProfileName and Address. Required. </p>
     #[serde(rename = "Filters")]
@@ -2555,6 +2635,7 @@ pub struct SearchProfilesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchRoomsRequest {
     /// <p>The filters to use to list a specified set of rooms. The supported filter keys are RoomName and ProfileName.</p>
     #[serde(rename = "Filters")]
@@ -2592,6 +2673,7 @@ pub struct SearchRoomsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchSkillGroupsRequest {
     /// <p>The filters to use to list a specified set of skill groups. The supported filter key is SkillGroupName. </p>
     #[serde(rename = "Filters")]
@@ -2629,6 +2711,7 @@ pub struct SearchSkillGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchUsersRequest {
     /// <p>The filters to use for listing a specific set of users. Required. Supported filter keys are UserId, FirstName, LastName, Email, and EnrollmentStatus.</p>
     #[serde(rename = "Filters")]
@@ -2666,6 +2749,7 @@ pub struct SearchUsersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendAnnouncementRequest {
     /// <p>The unique, user-specified identifier for the request that ensures idempotency.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -2692,6 +2776,7 @@ pub struct SendAnnouncementResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendInvitationRequest {
     /// <p>The ARN of the user to whom to send an invitation. Required.</p>
     #[serde(rename = "UserArn")]
@@ -2876,6 +2961,7 @@ pub struct SmartHomeAppliance {
 
 /// <p>An object representing a sort criteria. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Sort {
     /// <p>The sort key of a sort object.</p>
     #[serde(rename = "Key")]
@@ -2887,6 +2973,7 @@ pub struct Sort {
 
 /// <p>The SSML message. For more information, see <a href="https://developer.amazon.com/docs/custom-skills/speech-synthesis-markup-language-ssml-reference.html">SSML Reference</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Ssml {
     /// <p>The locale of the SSML message. Currently, en-US is supported.</p>
     #[serde(rename = "Locale")]
@@ -2897,6 +2984,7 @@ pub struct Ssml {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeviceSyncRequest {
     /// <p>The ARN of the device to sync. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -2916,6 +3004,7 @@ pub struct StartDeviceSyncRequest {
 pub struct StartDeviceSyncResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSmartHomeApplianceDiscoveryRequest {
     /// <p>The room where smart home appliance discovery was initiated.</p>
     #[serde(rename = "RoomArn")]
@@ -2938,6 +3027,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource to which to add metadata tags. Required. </p>
     #[serde(rename = "Arn")]
@@ -2953,6 +3043,7 @@ pub struct TagResourceResponse {}
 
 /// <p>The text message.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Text {
     /// <p>The locale of the text message. Currently, en-US is supported.</p>
     #[serde(rename = "Locale")]
@@ -2963,6 +3054,7 @@ pub struct Text {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource from which to remove metadata tags. Required. </p>
     #[serde(rename = "Arn")]
@@ -2977,6 +3069,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAddressBookRequest {
     /// <p>The ARN of the room to update.</p>
     #[serde(rename = "AddressBookArn")]
@@ -2996,6 +3089,7 @@ pub struct UpdateAddressBookRequest {
 pub struct UpdateAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBusinessReportScheduleRequest {
     /// <p>The format of the generated report (individual CSV files or zipped files of individual files).</p>
     #[serde(rename = "Format")]
@@ -3027,6 +3121,7 @@ pub struct UpdateBusinessReportScheduleRequest {
 pub struct UpdateBusinessReportScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConferenceProviderRequest {
     /// <p>The ARN of the conference provider.</p>
     #[serde(rename = "ConferenceProviderArn")]
@@ -3052,6 +3147,7 @@ pub struct UpdateConferenceProviderRequest {
 pub struct UpdateConferenceProviderResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContactRequest {
     /// <p>The ARN of the contact to update.</p>
     #[serde(rename = "ContactArn")]
@@ -3087,6 +3183,7 @@ pub struct UpdateContactRequest {
 pub struct UpdateContactResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceRequest {
     /// <p>The ARN of the device to update. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -3104,6 +3201,7 @@ pub struct UpdateDeviceResponse {}
 
 /// <p>Settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndOfMeetingReminder {
     /// <p>Whether an end of meeting reminder is enabled or not.</p>
     #[serde(rename = "Enabled")]
@@ -3120,6 +3218,7 @@ pub struct UpdateEndOfMeetingReminder {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayGroupRequest {
     /// <p>The updated description of the gateway group.</p>
     #[serde(rename = "Description")]
@@ -3139,6 +3238,7 @@ pub struct UpdateGatewayGroupRequest {
 pub struct UpdateGatewayGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayRequest {
     /// <p>The updated description of the gateway.</p>
     #[serde(rename = "Description")]
@@ -3163,6 +3263,7 @@ pub struct UpdateGatewayResponse {}
 
 /// <p>Updates settings for the instant booking feature that are applied to a room profile. If instant booking is enabled, Alexa automatically reserves a room if it is free when a user joins a meeting with Alexa.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstantBooking {
     /// <p>Duration between 15 and 240 minutes at increments of 15 that determines how long to book an available room when a meeting is started with Alexa.</p>
     #[serde(rename = "DurationInMinutes")]
@@ -3176,6 +3277,7 @@ pub struct UpdateInstantBooking {
 
 /// <p>Updates meeting room settings of a room profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMeetingRoomConfiguration {
     /// <p>Settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending. </p>
     #[serde(rename = "EndOfMeetingReminder")]
@@ -3196,6 +3298,7 @@ pub struct UpdateMeetingRoomConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNetworkProfileRequest {
     /// <p>The ARN of the Private Certificate Authority (PCA) created in AWS Certificate Manager (ACM). This is used to issue certificates to the devices. </p>
     #[serde(rename = "CertificateAuthorityArn")]
@@ -3231,6 +3334,7 @@ pub struct UpdateNetworkProfileRequest {
 pub struct UpdateNetworkProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProfileRequest {
     /// <p>The updated address for the room profile.</p>
     #[serde(rename = "Address")]
@@ -3292,6 +3396,7 @@ pub struct UpdateProfileResponse {}
 
 /// <p>Updates settings for the require check in feature that are applied to a room profile. Require check in allows a meeting room’s Alexa or AVS device to prompt the user to check in; otherwise, the room will be released. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRequireCheckIn {
     /// <p>Whether require check in is enabled or not.</p>
     #[serde(rename = "Enabled")]
@@ -3304,6 +3409,7 @@ pub struct UpdateRequireCheckIn {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoomRequest {
     /// <p>The updated description for the room.</p>
     #[serde(rename = "Description")]
@@ -3332,6 +3438,7 @@ pub struct UpdateRoomRequest {
 pub struct UpdateRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSkillGroupRequest {
     /// <p>The updated description for the skill group.</p>
     #[serde(rename = "Description")]
@@ -3414,18 +3521,14 @@ impl ApproveSkillError {
 }
 impl fmt::Display for ApproveSkillError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ApproveSkillError {
-    fn description(&self) -> &str {
         match *self {
-            ApproveSkillError::ConcurrentModification(ref cause) => cause,
-            ApproveSkillError::LimitExceeded(ref cause) => cause,
-            ApproveSkillError::NotFound(ref cause) => cause,
+            ApproveSkillError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            ApproveSkillError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ApproveSkillError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ApproveSkillError {}
 /// Errors returned by AssociateContactWithAddressBook
 #[derive(Debug, PartialEq)]
 pub enum AssociateContactWithAddressBookError {
@@ -3453,16 +3556,14 @@ impl AssociateContactWithAddressBookError {
 }
 impl fmt::Display for AssociateContactWithAddressBookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateContactWithAddressBookError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateContactWithAddressBookError::LimitExceeded(ref cause) => cause,
+            AssociateContactWithAddressBookError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateContactWithAddressBookError {}
 /// Errors returned by AssociateDeviceWithNetworkProfile
 #[derive(Debug, PartialEq)]
 pub enum AssociateDeviceWithNetworkProfileError {
@@ -3504,18 +3605,18 @@ impl AssociateDeviceWithNetworkProfileError {
 }
 impl fmt::Display for AssociateDeviceWithNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateDeviceWithNetworkProfileError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateDeviceWithNetworkProfileError::ConcurrentModification(ref cause) => cause,
-            AssociateDeviceWithNetworkProfileError::DeviceNotRegistered(ref cause) => cause,
-            AssociateDeviceWithNetworkProfileError::NotFound(ref cause) => cause,
+            AssociateDeviceWithNetworkProfileError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateDeviceWithNetworkProfileError::DeviceNotRegistered(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateDeviceWithNetworkProfileError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateDeviceWithNetworkProfileError {}
 /// Errors returned by AssociateDeviceWithRoom
 #[derive(Debug, PartialEq)]
 pub enum AssociateDeviceWithRoomError {
@@ -3555,18 +3656,16 @@ impl AssociateDeviceWithRoomError {
 }
 impl fmt::Display for AssociateDeviceWithRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateDeviceWithRoomError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateDeviceWithRoomError::ConcurrentModification(ref cause) => cause,
-            AssociateDeviceWithRoomError::DeviceNotRegistered(ref cause) => cause,
-            AssociateDeviceWithRoomError::LimitExceeded(ref cause) => cause,
+            AssociateDeviceWithRoomError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateDeviceWithRoomError::DeviceNotRegistered(ref cause) => write!(f, "{}", cause),
+            AssociateDeviceWithRoomError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateDeviceWithRoomError {}
 /// Errors returned by AssociateSkillGroupWithRoom
 #[derive(Debug, PartialEq)]
 pub enum AssociateSkillGroupWithRoomError {
@@ -3594,16 +3693,14 @@ impl AssociateSkillGroupWithRoomError {
 }
 impl fmt::Display for AssociateSkillGroupWithRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateSkillGroupWithRoomError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateSkillGroupWithRoomError::ConcurrentModification(ref cause) => cause,
+            AssociateSkillGroupWithRoomError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateSkillGroupWithRoomError {}
 /// Errors returned by AssociateSkillWithSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum AssociateSkillWithSkillGroupError {
@@ -3645,18 +3742,16 @@ impl AssociateSkillWithSkillGroupError {
 }
 impl fmt::Display for AssociateSkillWithSkillGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateSkillWithSkillGroupError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateSkillWithSkillGroupError::ConcurrentModification(ref cause) => cause,
-            AssociateSkillWithSkillGroupError::NotFound(ref cause) => cause,
-            AssociateSkillWithSkillGroupError::SkillNotLinked(ref cause) => cause,
+            AssociateSkillWithSkillGroupError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateSkillWithSkillGroupError::NotFound(ref cause) => write!(f, "{}", cause),
+            AssociateSkillWithSkillGroupError::SkillNotLinked(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateSkillWithSkillGroupError {}
 /// Errors returned by AssociateSkillWithUsers
 #[derive(Debug, PartialEq)]
 pub enum AssociateSkillWithUsersError {
@@ -3687,17 +3782,15 @@ impl AssociateSkillWithUsersError {
 }
 impl fmt::Display for AssociateSkillWithUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateSkillWithUsersError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateSkillWithUsersError::ConcurrentModification(ref cause) => cause,
-            AssociateSkillWithUsersError::NotFound(ref cause) => cause,
+            AssociateSkillWithUsersError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateSkillWithUsersError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateSkillWithUsersError {}
 /// Errors returned by CreateAddressBook
 #[derive(Debug, PartialEq)]
 pub enum CreateAddressBookError {
@@ -3726,17 +3819,13 @@ impl CreateAddressBookError {
 }
 impl fmt::Display for CreateAddressBookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAddressBookError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAddressBookError::AlreadyExists(ref cause) => cause,
-            CreateAddressBookError::LimitExceeded(ref cause) => cause,
+            CreateAddressBookError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateAddressBookError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAddressBookError {}
 /// Errors returned by CreateBusinessReportSchedule
 #[derive(Debug, PartialEq)]
 pub enum CreateBusinessReportScheduleError {
@@ -3764,16 +3853,12 @@ impl CreateBusinessReportScheduleError {
 }
 impl fmt::Display for CreateBusinessReportScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBusinessReportScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBusinessReportScheduleError::AlreadyExists(ref cause) => cause,
+            CreateBusinessReportScheduleError::AlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBusinessReportScheduleError {}
 /// Errors returned by CreateConferenceProvider
 #[derive(Debug, PartialEq)]
 pub enum CreateConferenceProviderError {
@@ -3799,16 +3884,12 @@ impl CreateConferenceProviderError {
 }
 impl fmt::Display for CreateConferenceProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateConferenceProviderError {
-    fn description(&self) -> &str {
         match *self {
-            CreateConferenceProviderError::AlreadyExists(ref cause) => cause,
+            CreateConferenceProviderError::AlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateConferenceProviderError {}
 /// Errors returned by CreateContact
 #[derive(Debug, PartialEq)]
 pub enum CreateContactError {
@@ -3837,17 +3918,13 @@ impl CreateContactError {
 }
 impl fmt::Display for CreateContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateContactError {
-    fn description(&self) -> &str {
         match *self {
-            CreateContactError::AlreadyExists(ref cause) => cause,
-            CreateContactError::LimitExceeded(ref cause) => cause,
+            CreateContactError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateContactError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateContactError {}
 /// Errors returned by CreateGatewayGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateGatewayGroupError {
@@ -3876,17 +3953,13 @@ impl CreateGatewayGroupError {
 }
 impl fmt::Display for CreateGatewayGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGatewayGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGatewayGroupError::AlreadyExists(ref cause) => cause,
-            CreateGatewayGroupError::LimitExceeded(ref cause) => cause,
+            CreateGatewayGroupError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateGatewayGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGatewayGroupError {}
 /// Errors returned by CreateNetworkProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateNetworkProfileError {
@@ -3936,20 +4009,20 @@ impl CreateNetworkProfileError {
 }
 impl fmt::Display for CreateNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateNetworkProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateNetworkProfileError::AlreadyExists(ref cause) => cause,
-            CreateNetworkProfileError::ConcurrentModification(ref cause) => cause,
-            CreateNetworkProfileError::InvalidCertificateAuthority(ref cause) => cause,
-            CreateNetworkProfileError::InvalidServiceLinkedRoleState(ref cause) => cause,
-            CreateNetworkProfileError::LimitExceeded(ref cause) => cause,
+            CreateNetworkProfileError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateNetworkProfileError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateNetworkProfileError::InvalidCertificateAuthority(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateNetworkProfileError::InvalidServiceLinkedRoleState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateNetworkProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateNetworkProfileError {}
 /// Errors returned by CreateProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateProfileError {
@@ -3985,18 +4058,14 @@ impl CreateProfileError {
 }
 impl fmt::Display for CreateProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateProfileError::AlreadyExists(ref cause) => cause,
-            CreateProfileError::ConcurrentModification(ref cause) => cause,
-            CreateProfileError::LimitExceeded(ref cause) => cause,
+            CreateProfileError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateProfileError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateProfileError {}
 /// Errors returned by CreateRoom
 #[derive(Debug, PartialEq)]
 pub enum CreateRoomError {
@@ -4025,17 +4094,13 @@ impl CreateRoomError {
 }
 impl fmt::Display for CreateRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRoomError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRoomError::AlreadyExists(ref cause) => cause,
-            CreateRoomError::LimitExceeded(ref cause) => cause,
+            CreateRoomError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateRoomError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRoomError {}
 /// Errors returned by CreateSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateSkillGroupError {
@@ -4071,18 +4136,14 @@ impl CreateSkillGroupError {
 }
 impl fmt::Display for CreateSkillGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSkillGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSkillGroupError::AlreadyExists(ref cause) => cause,
-            CreateSkillGroupError::ConcurrentModification(ref cause) => cause,
-            CreateSkillGroupError::LimitExceeded(ref cause) => cause,
+            CreateSkillGroupError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateSkillGroupError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateSkillGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSkillGroupError {}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
@@ -4116,18 +4177,14 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserError::ConcurrentModification(ref cause) => cause,
-            CreateUserError::LimitExceeded(ref cause) => cause,
-            CreateUserError::ResourceInUse(ref cause) => cause,
+            CreateUserError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateUserError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserError {}
 /// Errors returned by DeleteAddressBook
 #[derive(Debug, PartialEq)]
 pub enum DeleteAddressBookError {
@@ -4158,17 +4215,13 @@ impl DeleteAddressBookError {
 }
 impl fmt::Display for DeleteAddressBookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAddressBookError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAddressBookError::ConcurrentModification(ref cause) => cause,
-            DeleteAddressBookError::NotFound(ref cause) => cause,
+            DeleteAddressBookError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteAddressBookError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAddressBookError {}
 /// Errors returned by DeleteBusinessReportSchedule
 #[derive(Debug, PartialEq)]
 pub enum DeleteBusinessReportScheduleError {
@@ -4203,17 +4256,15 @@ impl DeleteBusinessReportScheduleError {
 }
 impl fmt::Display for DeleteBusinessReportScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBusinessReportScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBusinessReportScheduleError::ConcurrentModification(ref cause) => cause,
-            DeleteBusinessReportScheduleError::NotFound(ref cause) => cause,
+            DeleteBusinessReportScheduleError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteBusinessReportScheduleError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBusinessReportScheduleError {}
 /// Errors returned by DeleteConferenceProvider
 #[derive(Debug, PartialEq)]
 pub enum DeleteConferenceProviderError {
@@ -4237,16 +4288,12 @@ impl DeleteConferenceProviderError {
 }
 impl fmt::Display for DeleteConferenceProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConferenceProviderError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConferenceProviderError::NotFound(ref cause) => cause,
+            DeleteConferenceProviderError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteConferenceProviderError {}
 /// Errors returned by DeleteContact
 #[derive(Debug, PartialEq)]
 pub enum DeleteContactError {
@@ -4277,17 +4324,13 @@ impl DeleteContactError {
 }
 impl fmt::Display for DeleteContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteContactError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteContactError::ConcurrentModification(ref cause) => cause,
-            DeleteContactError::NotFound(ref cause) => cause,
+            DeleteContactError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteContactError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteContactError {}
 /// Errors returned by DeleteDevice
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeviceError {
@@ -4323,18 +4366,14 @@ impl DeleteDeviceError {
 }
 impl fmt::Display for DeleteDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDeviceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDeviceError::ConcurrentModification(ref cause) => cause,
-            DeleteDeviceError::InvalidCertificateAuthority(ref cause) => cause,
-            DeleteDeviceError::NotFound(ref cause) => cause,
+            DeleteDeviceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteDeviceError::InvalidCertificateAuthority(ref cause) => write!(f, "{}", cause),
+            DeleteDeviceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDeviceError {}
 /// Errors returned by DeleteDeviceUsageData
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeviceUsageDataError {
@@ -4370,18 +4409,14 @@ impl DeleteDeviceUsageDataError {
 }
 impl fmt::Display for DeleteDeviceUsageDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDeviceUsageDataError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDeviceUsageDataError::DeviceNotRegistered(ref cause) => cause,
-            DeleteDeviceUsageDataError::LimitExceeded(ref cause) => cause,
-            DeleteDeviceUsageDataError::NotFound(ref cause) => cause,
+            DeleteDeviceUsageDataError::DeviceNotRegistered(ref cause) => write!(f, "{}", cause),
+            DeleteDeviceUsageDataError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteDeviceUsageDataError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDeviceUsageDataError {}
 /// Errors returned by DeleteGatewayGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteGatewayGroupError {
@@ -4407,16 +4442,12 @@ impl DeleteGatewayGroupError {
 }
 impl fmt::Display for DeleteGatewayGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGatewayGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGatewayGroupError::ResourceAssociated(ref cause) => cause,
+            DeleteGatewayGroupError::ResourceAssociated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGatewayGroupError {}
 /// Errors returned by DeleteNetworkProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteNetworkProfileError {
@@ -4452,18 +4483,14 @@ impl DeleteNetworkProfileError {
 }
 impl fmt::Display for DeleteNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNetworkProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteNetworkProfileError::ConcurrentModification(ref cause) => cause,
-            DeleteNetworkProfileError::NotFound(ref cause) => cause,
-            DeleteNetworkProfileError::ResourceInUse(ref cause) => cause,
+            DeleteNetworkProfileError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteNetworkProfileError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteNetworkProfileError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteNetworkProfileError {}
 /// Errors returned by DeleteProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteProfileError {
@@ -4494,17 +4521,13 @@ impl DeleteProfileError {
 }
 impl fmt::Display for DeleteProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteProfileError::ConcurrentModification(ref cause) => cause,
-            DeleteProfileError::NotFound(ref cause) => cause,
+            DeleteProfileError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteProfileError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteProfileError {}
 /// Errors returned by DeleteRoom
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoomError {
@@ -4533,17 +4556,13 @@ impl DeleteRoomError {
 }
 impl fmt::Display for DeleteRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRoomError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRoomError::ConcurrentModification(ref cause) => cause,
-            DeleteRoomError::NotFound(ref cause) => cause,
+            DeleteRoomError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteRoomError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRoomError {}
 /// Errors returned by DeleteRoomSkillParameter
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoomSkillParameterError {
@@ -4569,16 +4588,14 @@ impl DeleteRoomSkillParameterError {
 }
 impl fmt::Display for DeleteRoomSkillParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRoomSkillParameterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRoomSkillParameterError::ConcurrentModification(ref cause) => cause,
+            DeleteRoomSkillParameterError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteRoomSkillParameterError {}
 /// Errors returned by DeleteSkillAuthorization
 #[derive(Debug, PartialEq)]
 pub enum DeleteSkillAuthorizationError {
@@ -4609,17 +4626,15 @@ impl DeleteSkillAuthorizationError {
 }
 impl fmt::Display for DeleteSkillAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSkillAuthorizationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSkillAuthorizationError::ConcurrentModification(ref cause) => cause,
-            DeleteSkillAuthorizationError::NotFound(ref cause) => cause,
+            DeleteSkillAuthorizationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteSkillAuthorizationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSkillAuthorizationError {}
 /// Errors returned by DeleteSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteSkillGroupError {
@@ -4650,17 +4665,13 @@ impl DeleteSkillGroupError {
 }
 impl fmt::Display for DeleteSkillGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSkillGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSkillGroupError::ConcurrentModification(ref cause) => cause,
-            DeleteSkillGroupError::NotFound(ref cause) => cause,
+            DeleteSkillGroupError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteSkillGroupError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSkillGroupError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -4689,17 +4700,13 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserError::ConcurrentModification(ref cause) => cause,
-            DeleteUserError::NotFound(ref cause) => cause,
+            DeleteUserError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserError {}
 /// Errors returned by DisassociateContactFromAddressBook
 #[derive(Debug, PartialEq)]
 pub enum DisassociateContactFromAddressBookError {}
@@ -4719,14 +4726,10 @@ impl DisassociateContactFromAddressBookError {
 }
 impl fmt::Display for DisassociateContactFromAddressBookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateContactFromAddressBookError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DisassociateContactFromAddressBookError {}
 /// Errors returned by DisassociateDeviceFromRoom
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDeviceFromRoomError {
@@ -4761,17 +4764,17 @@ impl DisassociateDeviceFromRoomError {
 }
 impl fmt::Display for DisassociateDeviceFromRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateDeviceFromRoomError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateDeviceFromRoomError::ConcurrentModification(ref cause) => cause,
-            DisassociateDeviceFromRoomError::DeviceNotRegistered(ref cause) => cause,
+            DisassociateDeviceFromRoomError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDeviceFromRoomError::DeviceNotRegistered(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateDeviceFromRoomError {}
 /// Errors returned by DisassociateSkillFromSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum DisassociateSkillFromSkillGroupError {
@@ -4806,17 +4809,15 @@ impl DisassociateSkillFromSkillGroupError {
 }
 impl fmt::Display for DisassociateSkillFromSkillGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateSkillFromSkillGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateSkillFromSkillGroupError::ConcurrentModification(ref cause) => cause,
-            DisassociateSkillFromSkillGroupError::NotFound(ref cause) => cause,
+            DisassociateSkillFromSkillGroupError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateSkillFromSkillGroupError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateSkillFromSkillGroupError {}
 /// Errors returned by DisassociateSkillFromUsers
 #[derive(Debug, PartialEq)]
 pub enum DisassociateSkillFromUsersError {
@@ -4849,17 +4850,15 @@ impl DisassociateSkillFromUsersError {
 }
 impl fmt::Display for DisassociateSkillFromUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateSkillFromUsersError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateSkillFromUsersError::ConcurrentModification(ref cause) => cause,
-            DisassociateSkillFromUsersError::NotFound(ref cause) => cause,
+            DisassociateSkillFromUsersError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateSkillFromUsersError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateSkillFromUsersError {}
 /// Errors returned by DisassociateSkillGroupFromRoom
 #[derive(Debug, PartialEq)]
 pub enum DisassociateSkillGroupFromRoomError {
@@ -4887,16 +4886,14 @@ impl DisassociateSkillGroupFromRoomError {
 }
 impl fmt::Display for DisassociateSkillGroupFromRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateSkillGroupFromRoomError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateSkillGroupFromRoomError::ConcurrentModification(ref cause) => cause,
+            DisassociateSkillGroupFromRoomError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateSkillGroupFromRoomError {}
 /// Errors returned by ForgetSmartHomeAppliances
 #[derive(Debug, PartialEq)]
 pub enum ForgetSmartHomeAppliancesError {
@@ -4920,16 +4917,12 @@ impl ForgetSmartHomeAppliancesError {
 }
 impl fmt::Display for ForgetSmartHomeAppliancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ForgetSmartHomeAppliancesError {
-    fn description(&self) -> &str {
         match *self {
-            ForgetSmartHomeAppliancesError::NotFound(ref cause) => cause,
+            ForgetSmartHomeAppliancesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ForgetSmartHomeAppliancesError {}
 /// Errors returned by GetAddressBook
 #[derive(Debug, PartialEq)]
 pub enum GetAddressBookError {
@@ -4953,16 +4946,12 @@ impl GetAddressBookError {
 }
 impl fmt::Display for GetAddressBookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAddressBookError {
-    fn description(&self) -> &str {
         match *self {
-            GetAddressBookError::NotFound(ref cause) => cause,
+            GetAddressBookError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAddressBookError {}
 /// Errors returned by GetConferencePreference
 #[derive(Debug, PartialEq)]
 pub enum GetConferencePreferenceError {
@@ -4986,16 +4975,12 @@ impl GetConferencePreferenceError {
 }
 impl fmt::Display for GetConferencePreferenceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConferencePreferenceError {
-    fn description(&self) -> &str {
         match *self {
-            GetConferencePreferenceError::NotFound(ref cause) => cause,
+            GetConferencePreferenceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetConferencePreferenceError {}
 /// Errors returned by GetConferenceProvider
 #[derive(Debug, PartialEq)]
 pub enum GetConferenceProviderError {
@@ -5019,16 +5004,12 @@ impl GetConferenceProviderError {
 }
 impl fmt::Display for GetConferenceProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConferenceProviderError {
-    fn description(&self) -> &str {
         match *self {
-            GetConferenceProviderError::NotFound(ref cause) => cause,
+            GetConferenceProviderError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetConferenceProviderError {}
 /// Errors returned by GetContact
 #[derive(Debug, PartialEq)]
 pub enum GetContactError {
@@ -5052,16 +5033,12 @@ impl GetContactError {
 }
 impl fmt::Display for GetContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetContactError {
-    fn description(&self) -> &str {
         match *self {
-            GetContactError::NotFound(ref cause) => cause,
+            GetContactError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetContactError {}
 /// Errors returned by GetDevice
 #[derive(Debug, PartialEq)]
 pub enum GetDeviceError {
@@ -5085,16 +5062,12 @@ impl GetDeviceError {
 }
 impl fmt::Display for GetDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeviceError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeviceError::NotFound(ref cause) => cause,
+            GetDeviceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDeviceError {}
 /// Errors returned by GetGateway
 #[derive(Debug, PartialEq)]
 pub enum GetGatewayError {
@@ -5118,16 +5091,12 @@ impl GetGatewayError {
 }
 impl fmt::Display for GetGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            GetGatewayError::NotFound(ref cause) => cause,
+            GetGatewayError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGatewayError {}
 /// Errors returned by GetGatewayGroup
 #[derive(Debug, PartialEq)]
 pub enum GetGatewayGroupError {
@@ -5151,16 +5120,12 @@ impl GetGatewayGroupError {
 }
 impl fmt::Display for GetGatewayGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGatewayGroupError {
-    fn description(&self) -> &str {
         match *self {
-            GetGatewayGroupError::NotFound(ref cause) => cause,
+            GetGatewayGroupError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGatewayGroupError {}
 /// Errors returned by GetInvitationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetInvitationConfigurationError {
@@ -5186,16 +5151,12 @@ impl GetInvitationConfigurationError {
 }
 impl fmt::Display for GetInvitationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInvitationConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetInvitationConfigurationError::NotFound(ref cause) => cause,
+            GetInvitationConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInvitationConfigurationError {}
 /// Errors returned by GetNetworkProfile
 #[derive(Debug, PartialEq)]
 pub enum GetNetworkProfileError {
@@ -5226,17 +5187,15 @@ impl GetNetworkProfileError {
 }
 impl fmt::Display for GetNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetNetworkProfileError {
-    fn description(&self) -> &str {
         match *self {
-            GetNetworkProfileError::InvalidSecretsManagerResource(ref cause) => cause,
-            GetNetworkProfileError::NotFound(ref cause) => cause,
+            GetNetworkProfileError::InvalidSecretsManagerResource(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetNetworkProfileError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetNetworkProfileError {}
 /// Errors returned by GetProfile
 #[derive(Debug, PartialEq)]
 pub enum GetProfileError {
@@ -5260,16 +5219,12 @@ impl GetProfileError {
 }
 impl fmt::Display for GetProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetProfileError {
-    fn description(&self) -> &str {
         match *self {
-            GetProfileError::NotFound(ref cause) => cause,
+            GetProfileError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetProfileError {}
 /// Errors returned by GetRoom
 #[derive(Debug, PartialEq)]
 pub enum GetRoomError {
@@ -5293,16 +5248,12 @@ impl GetRoomError {
 }
 impl fmt::Display for GetRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRoomError {
-    fn description(&self) -> &str {
         match *self {
-            GetRoomError::NotFound(ref cause) => cause,
+            GetRoomError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRoomError {}
 /// Errors returned by GetRoomSkillParameter
 #[derive(Debug, PartialEq)]
 pub enum GetRoomSkillParameterError {
@@ -5326,16 +5277,12 @@ impl GetRoomSkillParameterError {
 }
 impl fmt::Display for GetRoomSkillParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRoomSkillParameterError {
-    fn description(&self) -> &str {
         match *self {
-            GetRoomSkillParameterError::NotFound(ref cause) => cause,
+            GetRoomSkillParameterError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRoomSkillParameterError {}
 /// Errors returned by GetSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum GetSkillGroupError {
@@ -5359,16 +5306,12 @@ impl GetSkillGroupError {
 }
 impl fmt::Display for GetSkillGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSkillGroupError {
-    fn description(&self) -> &str {
         match *self {
-            GetSkillGroupError::NotFound(ref cause) => cause,
+            GetSkillGroupError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSkillGroupError {}
 /// Errors returned by ListBusinessReportSchedules
 #[derive(Debug, PartialEq)]
 pub enum ListBusinessReportSchedulesError {}
@@ -5388,14 +5331,10 @@ impl ListBusinessReportSchedulesError {
 }
 impl fmt::Display for ListBusinessReportSchedulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBusinessReportSchedulesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListBusinessReportSchedulesError {}
 /// Errors returned by ListConferenceProviders
 #[derive(Debug, PartialEq)]
 pub enum ListConferenceProvidersError {}
@@ -5413,14 +5352,10 @@ impl ListConferenceProvidersError {
 }
 impl fmt::Display for ListConferenceProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListConferenceProvidersError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListConferenceProvidersError {}
 /// Errors returned by ListDeviceEvents
 #[derive(Debug, PartialEq)]
 pub enum ListDeviceEventsError {
@@ -5444,16 +5379,12 @@ impl ListDeviceEventsError {
 }
 impl fmt::Display for ListDeviceEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDeviceEventsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDeviceEventsError::NotFound(ref cause) => cause,
+            ListDeviceEventsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDeviceEventsError {}
 /// Errors returned by ListGatewayGroups
 #[derive(Debug, PartialEq)]
 pub enum ListGatewayGroupsError {}
@@ -5471,14 +5402,10 @@ impl ListGatewayGroupsError {
 }
 impl fmt::Display for ListGatewayGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGatewayGroupsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListGatewayGroupsError {}
 /// Errors returned by ListGateways
 #[derive(Debug, PartialEq)]
 pub enum ListGatewaysError {}
@@ -5496,14 +5423,10 @@ impl ListGatewaysError {
 }
 impl fmt::Display for ListGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGatewaysError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListGatewaysError {}
 /// Errors returned by ListSkills
 #[derive(Debug, PartialEq)]
 pub enum ListSkillsError {}
@@ -5521,14 +5444,10 @@ impl ListSkillsError {
 }
 impl fmt::Display for ListSkillsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSkillsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListSkillsError {}
 /// Errors returned by ListSkillsStoreCategories
 #[derive(Debug, PartialEq)]
 pub enum ListSkillsStoreCategoriesError {}
@@ -5546,14 +5465,10 @@ impl ListSkillsStoreCategoriesError {
 }
 impl fmt::Display for ListSkillsStoreCategoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSkillsStoreCategoriesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListSkillsStoreCategoriesError {}
 /// Errors returned by ListSkillsStoreSkillsByCategory
 #[derive(Debug, PartialEq)]
 pub enum ListSkillsStoreSkillsByCategoryError {}
@@ -5573,14 +5488,10 @@ impl ListSkillsStoreSkillsByCategoryError {
 }
 impl fmt::Display for ListSkillsStoreSkillsByCategoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSkillsStoreSkillsByCategoryError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListSkillsStoreSkillsByCategoryError {}
 /// Errors returned by ListSmartHomeAppliances
 #[derive(Debug, PartialEq)]
 pub enum ListSmartHomeAppliancesError {
@@ -5604,16 +5515,12 @@ impl ListSmartHomeAppliancesError {
 }
 impl fmt::Display for ListSmartHomeAppliancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSmartHomeAppliancesError {
-    fn description(&self) -> &str {
         match *self {
-            ListSmartHomeAppliancesError::NotFound(ref cause) => cause,
+            ListSmartHomeAppliancesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSmartHomeAppliancesError {}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
@@ -5637,16 +5544,12 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsError::NotFound(ref cause) => cause,
+            ListTagsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsError {}
 /// Errors returned by PutConferencePreference
 #[derive(Debug, PartialEq)]
 pub enum PutConferencePreferenceError {
@@ -5670,16 +5573,12 @@ impl PutConferencePreferenceError {
 }
 impl fmt::Display for PutConferencePreferenceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutConferencePreferenceError {
-    fn description(&self) -> &str {
         match *self {
-            PutConferencePreferenceError::NotFound(ref cause) => cause,
+            PutConferencePreferenceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutConferencePreferenceError {}
 /// Errors returned by PutInvitationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutInvitationConfigurationError {
@@ -5712,17 +5611,15 @@ impl PutInvitationConfigurationError {
 }
 impl fmt::Display for PutInvitationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutInvitationConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutInvitationConfigurationError::ConcurrentModification(ref cause) => cause,
-            PutInvitationConfigurationError::NotFound(ref cause) => cause,
+            PutInvitationConfigurationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutInvitationConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutInvitationConfigurationError {}
 /// Errors returned by PutRoomSkillParameter
 #[derive(Debug, PartialEq)]
 pub enum PutRoomSkillParameterError {
@@ -5748,16 +5645,12 @@ impl PutRoomSkillParameterError {
 }
 impl fmt::Display for PutRoomSkillParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRoomSkillParameterError {
-    fn description(&self) -> &str {
         match *self {
-            PutRoomSkillParameterError::ConcurrentModification(ref cause) => cause,
+            PutRoomSkillParameterError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutRoomSkillParameterError {}
 /// Errors returned by PutSkillAuthorization
 #[derive(Debug, PartialEq)]
 pub enum PutSkillAuthorizationError {
@@ -5788,17 +5681,13 @@ impl PutSkillAuthorizationError {
 }
 impl fmt::Display for PutSkillAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutSkillAuthorizationError {
-    fn description(&self) -> &str {
         match *self {
-            PutSkillAuthorizationError::ConcurrentModification(ref cause) => cause,
-            PutSkillAuthorizationError::Unauthorized(ref cause) => cause,
+            PutSkillAuthorizationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            PutSkillAuthorizationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutSkillAuthorizationError {}
 /// Errors returned by RegisterAVSDevice
 #[derive(Debug, PartialEq)]
 pub enum RegisterAVSDeviceError {
@@ -5834,18 +5723,14 @@ impl RegisterAVSDeviceError {
 }
 impl fmt::Display for RegisterAVSDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterAVSDeviceError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterAVSDeviceError::ConcurrentModification(ref cause) => cause,
-            RegisterAVSDeviceError::InvalidDevice(ref cause) => cause,
-            RegisterAVSDeviceError::LimitExceeded(ref cause) => cause,
+            RegisterAVSDeviceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            RegisterAVSDeviceError::InvalidDevice(ref cause) => write!(f, "{}", cause),
+            RegisterAVSDeviceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterAVSDeviceError {}
 /// Errors returned by RejectSkill
 #[derive(Debug, PartialEq)]
 pub enum RejectSkillError {
@@ -5874,17 +5759,13 @@ impl RejectSkillError {
 }
 impl fmt::Display for RejectSkillError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RejectSkillError {
-    fn description(&self) -> &str {
         match *self {
-            RejectSkillError::ConcurrentModification(ref cause) => cause,
-            RejectSkillError::NotFound(ref cause) => cause,
+            RejectSkillError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            RejectSkillError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RejectSkillError {}
 /// Errors returned by ResolveRoom
 #[derive(Debug, PartialEq)]
 pub enum ResolveRoomError {
@@ -5908,16 +5789,12 @@ impl ResolveRoomError {
 }
 impl fmt::Display for ResolveRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResolveRoomError {
-    fn description(&self) -> &str {
         match *self {
-            ResolveRoomError::NotFound(ref cause) => cause,
+            ResolveRoomError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResolveRoomError {}
 /// Errors returned by RevokeInvitation
 #[derive(Debug, PartialEq)]
 pub enum RevokeInvitationError {
@@ -5948,17 +5825,13 @@ impl RevokeInvitationError {
 }
 impl fmt::Display for RevokeInvitationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RevokeInvitationError {
-    fn description(&self) -> &str {
         match *self {
-            RevokeInvitationError::ConcurrentModification(ref cause) => cause,
-            RevokeInvitationError::NotFound(ref cause) => cause,
+            RevokeInvitationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            RevokeInvitationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RevokeInvitationError {}
 /// Errors returned by SearchAddressBooks
 #[derive(Debug, PartialEq)]
 pub enum SearchAddressBooksError {}
@@ -5976,14 +5849,10 @@ impl SearchAddressBooksError {
 }
 impl fmt::Display for SearchAddressBooksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchAddressBooksError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SearchAddressBooksError {}
 /// Errors returned by SearchContacts
 #[derive(Debug, PartialEq)]
 pub enum SearchContactsError {}
@@ -6001,14 +5870,10 @@ impl SearchContactsError {
 }
 impl fmt::Display for SearchContactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchContactsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SearchContactsError {}
 /// Errors returned by SearchDevices
 #[derive(Debug, PartialEq)]
 pub enum SearchDevicesError {}
@@ -6026,14 +5891,10 @@ impl SearchDevicesError {
 }
 impl fmt::Display for SearchDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchDevicesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SearchDevicesError {}
 /// Errors returned by SearchNetworkProfiles
 #[derive(Debug, PartialEq)]
 pub enum SearchNetworkProfilesError {}
@@ -6051,14 +5912,10 @@ impl SearchNetworkProfilesError {
 }
 impl fmt::Display for SearchNetworkProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchNetworkProfilesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SearchNetworkProfilesError {}
 /// Errors returned by SearchProfiles
 #[derive(Debug, PartialEq)]
 pub enum SearchProfilesError {}
@@ -6076,14 +5933,10 @@ impl SearchProfilesError {
 }
 impl fmt::Display for SearchProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchProfilesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SearchProfilesError {}
 /// Errors returned by SearchRooms
 #[derive(Debug, PartialEq)]
 pub enum SearchRoomsError {}
@@ -6101,14 +5954,10 @@ impl SearchRoomsError {
 }
 impl fmt::Display for SearchRoomsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchRoomsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SearchRoomsError {}
 /// Errors returned by SearchSkillGroups
 #[derive(Debug, PartialEq)]
 pub enum SearchSkillGroupsError {}
@@ -6126,14 +5975,10 @@ impl SearchSkillGroupsError {
 }
 impl fmt::Display for SearchSkillGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchSkillGroupsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SearchSkillGroupsError {}
 /// Errors returned by SearchUsers
 #[derive(Debug, PartialEq)]
 pub enum SearchUsersError {}
@@ -6151,14 +5996,10 @@ impl SearchUsersError {
 }
 impl fmt::Display for SearchUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchUsersError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SearchUsersError {}
 /// Errors returned by SendAnnouncement
 #[derive(Debug, PartialEq)]
 pub enum SendAnnouncementError {
@@ -6187,17 +6028,13 @@ impl SendAnnouncementError {
 }
 impl fmt::Display for SendAnnouncementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendAnnouncementError {
-    fn description(&self) -> &str {
         match *self {
-            SendAnnouncementError::AlreadyExists(ref cause) => cause,
-            SendAnnouncementError::LimitExceeded(ref cause) => cause,
+            SendAnnouncementError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            SendAnnouncementError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendAnnouncementError {}
 /// Errors returned by SendInvitation
 #[derive(Debug, PartialEq)]
 pub enum SendInvitationError {
@@ -6233,18 +6070,14 @@ impl SendInvitationError {
 }
 impl fmt::Display for SendInvitationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendInvitationError {
-    fn description(&self) -> &str {
         match *self {
-            SendInvitationError::ConcurrentModification(ref cause) => cause,
-            SendInvitationError::InvalidUserStatus(ref cause) => cause,
-            SendInvitationError::NotFound(ref cause) => cause,
+            SendInvitationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            SendInvitationError::InvalidUserStatus(ref cause) => write!(f, "{}", cause),
+            SendInvitationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendInvitationError {}
 /// Errors returned by StartDeviceSync
 #[derive(Debug, PartialEq)]
 pub enum StartDeviceSyncError {
@@ -6268,16 +6101,12 @@ impl StartDeviceSyncError {
 }
 impl fmt::Display for StartDeviceSyncError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDeviceSyncError {
-    fn description(&self) -> &str {
         match *self {
-            StartDeviceSyncError::DeviceNotRegistered(ref cause) => cause,
+            StartDeviceSyncError::DeviceNotRegistered(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartDeviceSyncError {}
 /// Errors returned by StartSmartHomeApplianceDiscovery
 #[derive(Debug, PartialEq)]
 pub enum StartSmartHomeApplianceDiscoveryError {
@@ -6305,16 +6134,12 @@ impl StartSmartHomeApplianceDiscoveryError {
 }
 impl fmt::Display for StartSmartHomeApplianceDiscoveryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartSmartHomeApplianceDiscoveryError {
-    fn description(&self) -> &str {
         match *self {
-            StartSmartHomeApplianceDiscoveryError::NotFound(ref cause) => cause,
+            StartSmartHomeApplianceDiscoveryError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartSmartHomeApplianceDiscoveryError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -6338,16 +6163,12 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::NotFound(ref cause) => cause,
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -6371,16 +6192,12 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::NotFound(ref cause) => cause,
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateAddressBook
 #[derive(Debug, PartialEq)]
 pub enum UpdateAddressBookError {
@@ -6416,18 +6233,14 @@ impl UpdateAddressBookError {
 }
 impl fmt::Display for UpdateAddressBookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAddressBookError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAddressBookError::ConcurrentModification(ref cause) => cause,
-            UpdateAddressBookError::NameInUse(ref cause) => cause,
-            UpdateAddressBookError::NotFound(ref cause) => cause,
+            UpdateAddressBookError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateAddressBookError::NameInUse(ref cause) => write!(f, "{}", cause),
+            UpdateAddressBookError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAddressBookError {}
 /// Errors returned by UpdateBusinessReportSchedule
 #[derive(Debug, PartialEq)]
 pub enum UpdateBusinessReportScheduleError {
@@ -6462,17 +6275,15 @@ impl UpdateBusinessReportScheduleError {
 }
 impl fmt::Display for UpdateBusinessReportScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBusinessReportScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBusinessReportScheduleError::ConcurrentModification(ref cause) => cause,
-            UpdateBusinessReportScheduleError::NotFound(ref cause) => cause,
+            UpdateBusinessReportScheduleError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateBusinessReportScheduleError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBusinessReportScheduleError {}
 /// Errors returned by UpdateConferenceProvider
 #[derive(Debug, PartialEq)]
 pub enum UpdateConferenceProviderError {
@@ -6496,16 +6307,12 @@ impl UpdateConferenceProviderError {
 }
 impl fmt::Display for UpdateConferenceProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateConferenceProviderError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateConferenceProviderError::NotFound(ref cause) => cause,
+            UpdateConferenceProviderError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateConferenceProviderError {}
 /// Errors returned by UpdateContact
 #[derive(Debug, PartialEq)]
 pub enum UpdateContactError {
@@ -6536,17 +6343,13 @@ impl UpdateContactError {
 }
 impl fmt::Display for UpdateContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateContactError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateContactError::ConcurrentModification(ref cause) => cause,
-            UpdateContactError::NotFound(ref cause) => cause,
+            UpdateContactError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateContactError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateContactError {}
 /// Errors returned by UpdateDevice
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeviceError {
@@ -6580,18 +6383,14 @@ impl UpdateDeviceError {
 }
 impl fmt::Display for UpdateDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDeviceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDeviceError::ConcurrentModification(ref cause) => cause,
-            UpdateDeviceError::DeviceNotRegistered(ref cause) => cause,
-            UpdateDeviceError::NotFound(ref cause) => cause,
+            UpdateDeviceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateDeviceError::DeviceNotRegistered(ref cause) => write!(f, "{}", cause),
+            UpdateDeviceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDeviceError {}
 /// Errors returned by UpdateGateway
 #[derive(Debug, PartialEq)]
 pub enum UpdateGatewayError {
@@ -6620,17 +6419,13 @@ impl UpdateGatewayError {
 }
 impl fmt::Display for UpdateGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGatewayError::NameInUse(ref cause) => cause,
-            UpdateGatewayError::NotFound(ref cause) => cause,
+            UpdateGatewayError::NameInUse(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGatewayError {}
 /// Errors returned by UpdateGatewayGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateGatewayGroupError {
@@ -6659,17 +6454,13 @@ impl UpdateGatewayGroupError {
 }
 impl fmt::Display for UpdateGatewayGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGatewayGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGatewayGroupError::NameInUse(ref cause) => cause,
-            UpdateGatewayGroupError::NotFound(ref cause) => cause,
+            UpdateGatewayGroupError::NameInUse(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayGroupError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGatewayGroupError {}
 /// Errors returned by UpdateNetworkProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateNetworkProfileError {
@@ -6719,20 +6510,20 @@ impl UpdateNetworkProfileError {
 }
 impl fmt::Display for UpdateNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNetworkProfileError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNetworkProfileError::ConcurrentModification(ref cause) => cause,
-            UpdateNetworkProfileError::InvalidCertificateAuthority(ref cause) => cause,
-            UpdateNetworkProfileError::InvalidSecretsManagerResource(ref cause) => cause,
-            UpdateNetworkProfileError::NameInUse(ref cause) => cause,
-            UpdateNetworkProfileError::NotFound(ref cause) => cause,
+            UpdateNetworkProfileError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateNetworkProfileError::InvalidCertificateAuthority(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateNetworkProfileError::InvalidSecretsManagerResource(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateNetworkProfileError::NameInUse(ref cause) => write!(f, "{}", cause),
+            UpdateNetworkProfileError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateNetworkProfileError {}
 /// Errors returned by UpdateProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateProfileError {
@@ -6768,18 +6559,14 @@ impl UpdateProfileError {
 }
 impl fmt::Display for UpdateProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateProfileError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateProfileError::ConcurrentModification(ref cause) => cause,
-            UpdateProfileError::NameInUse(ref cause) => cause,
-            UpdateProfileError::NotFound(ref cause) => cause,
+            UpdateProfileError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateProfileError::NameInUse(ref cause) => write!(f, "{}", cause),
+            UpdateProfileError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateProfileError {}
 /// Errors returned by UpdateRoom
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoomError {
@@ -6808,17 +6595,13 @@ impl UpdateRoomError {
 }
 impl fmt::Display for UpdateRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRoomError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRoomError::NameInUse(ref cause) => cause,
-            UpdateRoomError::NotFound(ref cause) => cause,
+            UpdateRoomError::NameInUse(ref cause) => write!(f, "{}", cause),
+            UpdateRoomError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRoomError {}
 /// Errors returned by UpdateSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateSkillGroupError {
@@ -6854,18 +6637,14 @@ impl UpdateSkillGroupError {
 }
 impl fmt::Display for UpdateSkillGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSkillGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSkillGroupError::ConcurrentModification(ref cause) => cause,
-            UpdateSkillGroupError::NameInUse(ref cause) => cause,
-            UpdateSkillGroupError::NotFound(ref cause) => cause,
+            UpdateSkillGroupError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateSkillGroupError::NameInUse(ref cause) => write!(f, "{}", cause),
+            UpdateSkillGroupError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSkillGroupError {}
 /// Trait representing the capabilities of the Alexa For Business API. Alexa For Business clients implement this trait.
 pub trait AlexaForBusiness {
     /// <p>Associates a skill with the organization under the customer's AWS account. If a skill is private, the user implicitly accepts access to this skill during enablement.</p>

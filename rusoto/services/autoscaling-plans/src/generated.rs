@@ -37,6 +37,7 @@ pub struct ApplicationSource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScalingPlanRequest {
     /// <p>A CloudFormation stack or set of tags. You can create one scaling plan per application source.</p>
     #[serde(rename = "ApplicationSource")]
@@ -116,6 +117,7 @@ pub struct Datapoint {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScalingPlanRequest {
     /// <p>The name of the scaling plan.</p>
     #[serde(rename = "ScalingPlanName")]
@@ -130,6 +132,7 @@ pub struct DeleteScalingPlanRequest {
 pub struct DeleteScalingPlanResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingPlanResourcesRequest {
     /// <p>The maximum number of scalable resources to return. The value must be between 1 and 50. The default value is 50.</p>
     #[serde(rename = "MaxResults")]
@@ -161,6 +164,7 @@ pub struct DescribeScalingPlanResourcesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingPlansRequest {
     /// <p>The sources for the applications (up to 10). If you specify scaling plan names, you cannot specify application sources.</p>
     #[serde(rename = "ApplicationSources")]
@@ -198,6 +202,7 @@ pub struct DescribeScalingPlansResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetScalingPlanResourceForecastDataRequest {
     /// <p>The exclusive end time of the time range for the forecast data to get. The maximum time duration between the start and end time is seven days. </p> <p>Although this parameter can accept a date and time that is more than two days in the future, the availability of forecast data has limits. AWS Auto Scaling only issues forecasts for periods of two days in advance.</p>
     #[serde(rename = "EndTime")]
@@ -450,6 +455,7 @@ pub struct TargetTrackingConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateScalingPlanRequest {
     /// <p>A CloudFormation stack or set of tags.</p>
     #[serde(rename = "ApplicationSource")]
@@ -504,18 +510,14 @@ impl CreateScalingPlanError {
 }
 impl fmt::Display for CreateScalingPlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateScalingPlanError {
-    fn description(&self) -> &str {
         match *self {
-            CreateScalingPlanError::ConcurrentUpdate(ref cause) => cause,
-            CreateScalingPlanError::InternalService(ref cause) => cause,
-            CreateScalingPlanError::LimitExceeded(ref cause) => cause,
+            CreateScalingPlanError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            CreateScalingPlanError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateScalingPlanError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateScalingPlanError {}
 /// Errors returned by DeleteScalingPlan
 #[derive(Debug, PartialEq)]
 pub enum DeleteScalingPlanError {
@@ -549,18 +551,14 @@ impl DeleteScalingPlanError {
 }
 impl fmt::Display for DeleteScalingPlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteScalingPlanError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteScalingPlanError::ConcurrentUpdate(ref cause) => cause,
-            DeleteScalingPlanError::InternalService(ref cause) => cause,
-            DeleteScalingPlanError::ObjectNotFound(ref cause) => cause,
+            DeleteScalingPlanError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DeleteScalingPlanError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteScalingPlanError::ObjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteScalingPlanError {}
 /// Errors returned by DescribeScalingPlanResources
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingPlanResourcesError {
@@ -602,18 +600,18 @@ impl DescribeScalingPlanResourcesError {
 }
 impl fmt::Display for DescribeScalingPlanResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScalingPlanResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScalingPlanResourcesError::ConcurrentUpdate(ref cause) => cause,
-            DescribeScalingPlanResourcesError::InternalService(ref cause) => cause,
-            DescribeScalingPlanResourcesError::InvalidNextToken(ref cause) => cause,
+            DescribeScalingPlanResourcesError::ConcurrentUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeScalingPlanResourcesError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeScalingPlanResourcesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeScalingPlanResourcesError {}
 /// Errors returned by DescribeScalingPlans
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingPlansError {
@@ -653,18 +651,14 @@ impl DescribeScalingPlansError {
 }
 impl fmt::Display for DescribeScalingPlansError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScalingPlansError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScalingPlansError::ConcurrentUpdate(ref cause) => cause,
-            DescribeScalingPlansError::InternalService(ref cause) => cause,
-            DescribeScalingPlansError::InvalidNextToken(ref cause) => cause,
+            DescribeScalingPlansError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DescribeScalingPlansError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeScalingPlansError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScalingPlansError {}
 /// Errors returned by GetScalingPlanResourceForecastData
 #[derive(Debug, PartialEq)]
 pub enum GetScalingPlanResourceForecastDataError {
@@ -692,16 +686,14 @@ impl GetScalingPlanResourceForecastDataError {
 }
 impl fmt::Display for GetScalingPlanResourceForecastDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetScalingPlanResourceForecastDataError {
-    fn description(&self) -> &str {
         match *self {
-            GetScalingPlanResourceForecastDataError::InternalService(ref cause) => cause,
+            GetScalingPlanResourceForecastDataError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetScalingPlanResourceForecastDataError {}
 /// Errors returned by UpdateScalingPlan
 #[derive(Debug, PartialEq)]
 pub enum UpdateScalingPlanError {
@@ -735,18 +727,14 @@ impl UpdateScalingPlanError {
 }
 impl fmt::Display for UpdateScalingPlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateScalingPlanError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateScalingPlanError::ConcurrentUpdate(ref cause) => cause,
-            UpdateScalingPlanError::InternalService(ref cause) => cause,
-            UpdateScalingPlanError::ObjectNotFound(ref cause) => cause,
+            UpdateScalingPlanError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            UpdateScalingPlanError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateScalingPlanError::ObjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateScalingPlanError {}
 /// Trait representing the capabilities of the AWS Auto Scaling Plans API. AWS Auto Scaling Plans clients implement this trait.
 pub trait AutoscalingPlans {
     /// <p>Creates a scaling plan.</p>

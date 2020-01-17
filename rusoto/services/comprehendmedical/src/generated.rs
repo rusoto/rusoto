@@ -63,6 +63,7 @@ pub struct Attribute {
 
 /// <p>Provides information for filtering a list of detection jobs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ComprehendMedicalAsyncJobFilter {
     /// <p>Filters on the name of the job.</p>
     #[serde(rename = "JobName")]
@@ -145,6 +146,7 @@ pub struct ComprehendMedicalAsyncJobProperties {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntitiesDetectionV2JobRequest {
     /// <p>The identifier that Amazon Comprehend Medical generated for the job. The <code>StartEntitiesDetectionV2Job</code> operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -161,6 +163,7 @@ pub struct DescribeEntitiesDetectionV2JobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePHIDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend Medical generated for the job. The <code>StartPHIDetectionJob</code> operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -177,6 +180,7 @@ pub struct DescribePHIDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectEntitiesRequest {
     /// <p> A UTF-8 text string containing the clinical content being examined for entities. Each string must contain fewer than 20,000 bytes of characters.</p>
     #[serde(rename = "Text")]
@@ -203,6 +207,7 @@ pub struct DetectEntitiesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectEntitiesV2Request {
     /// <p>A UTF-8 string containing the clinical content being examined for entities. Each string must contain fewer than 20,000 bytes of characters.</p>
     #[serde(rename = "Text")]
@@ -229,6 +234,7 @@ pub struct DetectEntitiesV2Response {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectPHIRequest {
     /// <p> A UTF-8 text string containing the clinical content being examined for PHI entities. Each string must contain fewer than 20,000 bytes of characters. </p>
     #[serde(rename = "Text")]
@@ -305,6 +311,7 @@ pub struct InputDataConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesDetectionV2JobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs based on their names, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -335,6 +342,7 @@ pub struct ListEntitiesDetectionV2JobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPHIDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs based on their names, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -377,6 +385,7 @@ pub struct OutputDataConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartEntitiesDetectionV2JobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend Medical generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -414,6 +423,7 @@ pub struct StartEntitiesDetectionV2JobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPHIDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend Medical generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -451,6 +461,7 @@ pub struct StartPHIDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopEntitiesDetectionV2JobRequest {
     /// <p>The identifier of the medical entities job to stop.</p>
     #[serde(rename = "JobId")]
@@ -467,6 +478,7 @@ pub struct StopEntitiesDetectionV2JobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopPHIDetectionJobRequest {
     /// <p>The identifier of the PHI detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -558,19 +570,23 @@ impl DescribeEntitiesDetectionV2JobError {
 }
 impl fmt::Display for DescribeEntitiesDetectionV2JobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEntitiesDetectionV2JobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEntitiesDetectionV2JobError::InternalServer(ref cause) => cause,
-            DescribeEntitiesDetectionV2JobError::InvalidRequest(ref cause) => cause,
-            DescribeEntitiesDetectionV2JobError::ResourceNotFound(ref cause) => cause,
-            DescribeEntitiesDetectionV2JobError::TooManyRequests(ref cause) => cause,
+            DescribeEntitiesDetectionV2JobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEntitiesDetectionV2JobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEntitiesDetectionV2JobError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEntitiesDetectionV2JobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeEntitiesDetectionV2JobError {}
 /// Errors returned by DescribePHIDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribePHIDetectionJobError {
@@ -617,19 +633,15 @@ impl DescribePHIDetectionJobError {
 }
 impl fmt::Display for DescribePHIDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePHIDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePHIDetectionJobError::InternalServer(ref cause) => cause,
-            DescribePHIDetectionJobError::InvalidRequest(ref cause) => cause,
-            DescribePHIDetectionJobError::ResourceNotFound(ref cause) => cause,
-            DescribePHIDetectionJobError::TooManyRequests(ref cause) => cause,
+            DescribePHIDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribePHIDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribePHIDetectionJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribePHIDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribePHIDetectionJobError {}
 /// Errors returned by DetectEntities
 #[derive(Debug, PartialEq)]
 pub enum DetectEntitiesError {
@@ -680,21 +692,17 @@ impl DetectEntitiesError {
 }
 impl fmt::Display for DetectEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectEntitiesError {
-    fn description(&self) -> &str {
         match *self {
-            DetectEntitiesError::InternalServer(ref cause) => cause,
-            DetectEntitiesError::InvalidEncoding(ref cause) => cause,
-            DetectEntitiesError::InvalidRequest(ref cause) => cause,
-            DetectEntitiesError::ServiceUnavailable(ref cause) => cause,
-            DetectEntitiesError::TextSizeLimitExceeded(ref cause) => cause,
-            DetectEntitiesError::TooManyRequests(ref cause) => cause,
+            DetectEntitiesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::InvalidEncoding(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectEntitiesError {}
 /// Errors returned by DetectEntitiesV2
 #[derive(Debug, PartialEq)]
 pub enum DetectEntitiesV2Error {
@@ -745,21 +753,17 @@ impl DetectEntitiesV2Error {
 }
 impl fmt::Display for DetectEntitiesV2Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectEntitiesV2Error {
-    fn description(&self) -> &str {
         match *self {
-            DetectEntitiesV2Error::InternalServer(ref cause) => cause,
-            DetectEntitiesV2Error::InvalidEncoding(ref cause) => cause,
-            DetectEntitiesV2Error::InvalidRequest(ref cause) => cause,
-            DetectEntitiesV2Error::ServiceUnavailable(ref cause) => cause,
-            DetectEntitiesV2Error::TextSizeLimitExceeded(ref cause) => cause,
-            DetectEntitiesV2Error::TooManyRequests(ref cause) => cause,
+            DetectEntitiesV2Error::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesV2Error::InvalidEncoding(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesV2Error::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesV2Error::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesV2Error::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesV2Error::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectEntitiesV2Error {}
 /// Errors returned by DetectPHI
 #[derive(Debug, PartialEq)]
 pub enum DetectPHIError {
@@ -808,21 +812,17 @@ impl DetectPHIError {
 }
 impl fmt::Display for DetectPHIError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectPHIError {
-    fn description(&self) -> &str {
         match *self {
-            DetectPHIError::InternalServer(ref cause) => cause,
-            DetectPHIError::InvalidEncoding(ref cause) => cause,
-            DetectPHIError::InvalidRequest(ref cause) => cause,
-            DetectPHIError::ServiceUnavailable(ref cause) => cause,
-            DetectPHIError::TextSizeLimitExceeded(ref cause) => cause,
-            DetectPHIError::TooManyRequests(ref cause) => cause,
+            DetectPHIError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectPHIError::InvalidEncoding(ref cause) => write!(f, "{}", cause),
+            DetectPHIError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectPHIError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DetectPHIError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectPHIError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectPHIError {}
 /// Errors returned by ListEntitiesDetectionV2Jobs
 #[derive(Debug, PartialEq)]
 pub enum ListEntitiesDetectionV2JobsError {
@@ -864,18 +864,14 @@ impl ListEntitiesDetectionV2JobsError {
 }
 impl fmt::Display for ListEntitiesDetectionV2JobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEntitiesDetectionV2JobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListEntitiesDetectionV2JobsError::InternalServer(ref cause) => cause,
-            ListEntitiesDetectionV2JobsError::InvalidRequest(ref cause) => cause,
-            ListEntitiesDetectionV2JobsError::TooManyRequests(ref cause) => cause,
+            ListEntitiesDetectionV2JobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListEntitiesDetectionV2JobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListEntitiesDetectionV2JobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEntitiesDetectionV2JobsError {}
 /// Errors returned by ListPHIDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListPHIDetectionJobsError {
@@ -911,18 +907,14 @@ impl ListPHIDetectionJobsError {
 }
 impl fmt::Display for ListPHIDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPHIDetectionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPHIDetectionJobsError::InternalServer(ref cause) => cause,
-            ListPHIDetectionJobsError::InvalidRequest(ref cause) => cause,
-            ListPHIDetectionJobsError::TooManyRequests(ref cause) => cause,
+            ListPHIDetectionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListPHIDetectionJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListPHIDetectionJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPHIDetectionJobsError {}
 /// Errors returned by StartEntitiesDetectionV2Job
 #[derive(Debug, PartialEq)]
 pub enum StartEntitiesDetectionV2JobError {
@@ -971,19 +963,15 @@ impl StartEntitiesDetectionV2JobError {
 }
 impl fmt::Display for StartEntitiesDetectionV2JobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartEntitiesDetectionV2JobError {
-    fn description(&self) -> &str {
         match *self {
-            StartEntitiesDetectionV2JobError::InternalServer(ref cause) => cause,
-            StartEntitiesDetectionV2JobError::InvalidRequest(ref cause) => cause,
-            StartEntitiesDetectionV2JobError::ResourceNotFound(ref cause) => cause,
-            StartEntitiesDetectionV2JobError::TooManyRequests(ref cause) => cause,
+            StartEntitiesDetectionV2JobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartEntitiesDetectionV2JobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartEntitiesDetectionV2JobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartEntitiesDetectionV2JobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartEntitiesDetectionV2JobError {}
 /// Errors returned by StartPHIDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartPHIDetectionJobError {
@@ -1026,19 +1014,15 @@ impl StartPHIDetectionJobError {
 }
 impl fmt::Display for StartPHIDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartPHIDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartPHIDetectionJobError::InternalServer(ref cause) => cause,
-            StartPHIDetectionJobError::InvalidRequest(ref cause) => cause,
-            StartPHIDetectionJobError::ResourceNotFound(ref cause) => cause,
-            StartPHIDetectionJobError::TooManyRequests(ref cause) => cause,
+            StartPHIDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartPHIDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartPHIDetectionJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartPHIDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartPHIDetectionJobError {}
 /// Errors returned by StopEntitiesDetectionV2Job
 #[derive(Debug, PartialEq)]
 pub enum StopEntitiesDetectionV2JobError {
@@ -1080,18 +1064,14 @@ impl StopEntitiesDetectionV2JobError {
 }
 impl fmt::Display for StopEntitiesDetectionV2JobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopEntitiesDetectionV2JobError {
-    fn description(&self) -> &str {
         match *self {
-            StopEntitiesDetectionV2JobError::InternalServer(ref cause) => cause,
-            StopEntitiesDetectionV2JobError::InvalidRequest(ref cause) => cause,
-            StopEntitiesDetectionV2JobError::ResourceNotFound(ref cause) => cause,
+            StopEntitiesDetectionV2JobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopEntitiesDetectionV2JobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopEntitiesDetectionV2JobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopEntitiesDetectionV2JobError {}
 /// Errors returned by StopPHIDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StopPHIDetectionJobError {
@@ -1127,18 +1107,14 @@ impl StopPHIDetectionJobError {
 }
 impl fmt::Display for StopPHIDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopPHIDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopPHIDetectionJobError::InternalServer(ref cause) => cause,
-            StopPHIDetectionJobError::InvalidRequest(ref cause) => cause,
-            StopPHIDetectionJobError::ResourceNotFound(ref cause) => cause,
+            StopPHIDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopPHIDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopPHIDetectionJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopPHIDetectionJobError {}
 /// Trait representing the capabilities of the ComprehendMedical API. ComprehendMedical clients implement this trait.
 pub trait ComprehendMedical {
     /// <p>Gets the properties associated with a medical entities detection job. Use this operation to get the status of a detection job.</p>

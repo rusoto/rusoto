@@ -35,6 +35,8 @@ use xml::EventReader;
 
 /// <p>Information about an action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Action {
     /// <p>[HTTPS listeners] Information for using Amazon Cognito to authenticate users. Specify only when <code>Type</code> is <code>authenticate-cognito</code>.</p>
     pub authenticate_cognito_config: Option<AuthenticateCognitoActionConfig>,
@@ -218,6 +220,7 @@ impl ActionsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddListenerCertificatesInput {
     /// <p>The certificate to add. You can specify one certificate per call. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p>
     pub certificates: Vec<Certificate>,
@@ -244,6 +247,7 @@ impl AddListenerCertificatesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AddListenerCertificatesOutput {
     /// <p>Information about the certificates in the certificate list.</p>
     pub certificates: Option<Vec<Certificate>>,
@@ -274,6 +278,7 @@ impl AddListenerCertificatesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     pub resource_arns: Vec<String>,
@@ -300,6 +305,7 @@ impl AddTagsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AddTagsOutput {}
 
 struct AddTagsOutputDeserializer;
@@ -410,6 +416,8 @@ impl AuthenticateCognitoActionConditionalBehaviorEnumDeserializer {
 }
 /// <p>Request parameters to use when integrating with Amazon Cognito to authenticate users.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthenticateCognitoActionConfig {
     /// <p>The query parameters (up to 10) to include in the redirect request to the authorization endpoint.</p>
     pub authentication_request_extra_params: Option<::std::collections::HashMap<String, String>>,
@@ -720,6 +728,8 @@ impl AuthenticateOidcActionConditionalBehaviorEnumDeserializer {
 }
 /// <p>Request parameters when using an identity provider (IdP) that is compliant with OpenID Connect (OIDC) to authenticate users.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthenticateOidcActionConfig {
     /// <p>The query parameters (up to 10) to include in the redirect request to the authorization endpoint.</p>
     pub authentication_request_extra_params: Option<::std::collections::HashMap<String, String>>,
@@ -980,6 +990,7 @@ impl AuthenticateOidcActionUserInfoEndpointDeserializer {
 }
 /// <p>Information about an Availability Zone.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AvailabilityZone {
     /// <p>[Network Load Balancers] If you need static IP addresses for your load balancer, you can specify one Elastic IP address per Availability Zone when you create an internal-facing load balancer. For internal load balancers, you can specify a private IP address from the IPv4 range of the subnet.</p>
     pub load_balancer_addresses: Option<Vec<LoadBalancerAddress>>,
@@ -1048,6 +1059,8 @@ impl CanonicalHostedZoneIdDeserializer {
 }
 /// <p>Information about an SSL server certificate.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Certificate {
     /// <p>The Amazon Resource Name (ARN) of the certificate.</p>
     pub certificate_arn: Option<String>,
@@ -1140,6 +1153,7 @@ impl CertificateListSerializer {
 
 /// <p>Information about a cipher used in a policy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Cipher {
     /// <p>The name of the cipher.</p>
     pub name: Option<String>,
@@ -1217,6 +1231,7 @@ impl ConditionFieldNameDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateListenerInput {
     /// <p>[HTTPS and TLS listeners] The default certificate for the listener. You must provide exactly one certificate. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p> <p>To create a certificate list for the listener, use <a>AddListenerCertificates</a>.</p>
     pub certificates: Option<Vec<Certificate>>,
@@ -1266,6 +1281,7 @@ impl CreateListenerInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateListenerOutput {
     /// <p>Information about the listener.</p>
     pub listeners: Option<Vec<Listener>>,
@@ -1292,6 +1308,7 @@ impl CreateListenerOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerInput {
     /// <p>[Application Load Balancers] The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>
     pub ip_address_type: Option<String>,
@@ -1354,6 +1371,7 @@ impl CreateLoadBalancerInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateLoadBalancerOutput {
     /// <p>Information about the load balancer.</p>
     pub load_balancers: Option<Vec<LoadBalancer>>,
@@ -1384,6 +1402,7 @@ impl CreateLoadBalancerOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRuleInput {
     /// <p>The actions. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>, and it must be the last action to be performed.</p> <p>If the action type is <code>forward</code>, you specify one or more target groups. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP, TLS, UDP, or TCP_UDP for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
     pub actions: Vec<Action>,
@@ -1416,6 +1435,7 @@ impl CreateRuleInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateRuleOutput {
     /// <p>Information about the rule.</p>
     pub rules: Option<Vec<Rule>>,
@@ -1442,6 +1462,7 @@ impl CreateRuleOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTargetGroupInput {
     /// <p>Indicates whether health checks are enabled. If the target type is <code>lambda</code>, health checks are disabled by default but can be enabled. If the target type is <code>instance</code> or <code>ip</code>, health checks are always enabled and cannot be disabled.</p>
     pub health_check_enabled: Option<bool>,
@@ -1541,6 +1562,7 @@ impl CreateTargetGroupInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTargetGroupOutput {
     /// <p>Information about the target group.</p>
     pub target_groups: Option<Vec<TargetGroup>>,
@@ -1604,6 +1626,7 @@ impl DefaultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteListenerInput {
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
@@ -1623,6 +1646,7 @@ impl DeleteListenerInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteListenerOutput {}
 
 struct DeleteListenerOutputDeserializer;
@@ -1642,6 +1666,7 @@ impl DeleteListenerOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoadBalancerInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
@@ -1664,6 +1689,7 @@ impl DeleteLoadBalancerInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteLoadBalancerOutput {}
 
 struct DeleteLoadBalancerOutputDeserializer;
@@ -1683,6 +1709,7 @@ impl DeleteLoadBalancerOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleInput {
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     pub rule_arn: String,
@@ -1702,6 +1729,7 @@ impl DeleteRuleInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteRuleOutput {}
 
 struct DeleteRuleOutputDeserializer;
@@ -1721,6 +1749,7 @@ impl DeleteRuleOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTargetGroupInput {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
@@ -1743,6 +1772,7 @@ impl DeleteTargetGroupInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTargetGroupOutput {}
 
 struct DeleteTargetGroupOutputDeserializer;
@@ -1762,6 +1792,7 @@ impl DeleteTargetGroupOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTargetsInput {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
@@ -1791,6 +1822,7 @@ impl DeregisterTargetsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeregisterTargetsOutput {}
 
 struct DeregisterTargetsOutputDeserializer;
@@ -1810,6 +1842,7 @@ impl DeregisterTargetsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountLimitsInput {
     /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
     pub marker: Option<String>,
@@ -1836,6 +1869,7 @@ impl DescribeAccountLimitsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccountLimitsOutput {
     /// <p>Information about the limits.</p>
     pub limits: Option<Vec<Limit>>,
@@ -1872,6 +1906,7 @@ impl DescribeAccountLimitsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeListenerCertificatesInput {
     /// <p>The Amazon Resource Names (ARN) of the listener.</p>
     pub listener_arn: String,
@@ -1901,6 +1936,7 @@ impl DescribeListenerCertificatesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeListenerCertificatesOutput {
     /// <p>Information about the certificates.</p>
     pub certificates: Option<Vec<Certificate>>,
@@ -1937,6 +1973,7 @@ impl DescribeListenerCertificatesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeListenersInput {
     /// <p>The Amazon Resource Names (ARN) of the listeners.</p>
     pub listener_arns: Option<Vec<String>>,
@@ -1977,6 +2014,7 @@ impl DescribeListenersInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeListenersOutput {
     /// <p>Information about the listeners.</p>
     pub listeners: Option<Vec<Listener>>,
@@ -2013,6 +2051,7 @@ impl DescribeListenersOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBalancerAttributesInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
@@ -2035,6 +2074,7 @@ impl DescribeLoadBalancerAttributesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLoadBalancerAttributesOutput {
     /// <p>Information about the load balancer attributes.</p>
     pub attributes: Option<Vec<LoadBalancerAttribute>>,
@@ -2065,6 +2105,7 @@ impl DescribeLoadBalancerAttributesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBalancersInput {
     /// <p>The Amazon Resource Names (ARN) of the load balancers. You can specify up to 20 load balancers in a single call.</p>
     pub load_balancer_arns: Option<Vec<String>>,
@@ -2109,6 +2150,7 @@ impl DescribeLoadBalancersInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLoadBalancersOutput {
     /// <p>Information about the load balancers.</p>
     pub load_balancers: Option<Vec<LoadBalancer>>,
@@ -2145,6 +2187,7 @@ impl DescribeLoadBalancersOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRulesInput {
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: Option<String>,
@@ -2185,6 +2228,7 @@ impl DescribeRulesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeRulesOutput {
     /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
     pub next_marker: Option<String>,
@@ -2216,6 +2260,7 @@ impl DescribeRulesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSSLPoliciesInput {
     /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
     pub marker: Option<String>,
@@ -2251,6 +2296,7 @@ impl DescribeSSLPoliciesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSSLPoliciesOutput {
     /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
     pub next_marker: Option<String>,
@@ -2287,6 +2333,7 @@ impl DescribeSSLPoliciesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsInput {
     /// <p>The Amazon Resource Names (ARN) of the resources.</p>
     pub resource_arns: Vec<String>,
@@ -2310,6 +2357,7 @@ impl DescribeTagsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTagsOutput {
     /// <p>Information about the tags.</p>
     pub tag_descriptions: Option<Vec<TagDescription>>,
@@ -2336,6 +2384,7 @@ impl DescribeTagsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTargetGroupAttributesInput {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
@@ -2358,6 +2407,7 @@ impl DescribeTargetGroupAttributesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTargetGroupAttributesOutput {
     /// <p>Information about the target group attributes</p>
     pub attributes: Option<Vec<TargetGroupAttribute>>,
@@ -2388,6 +2438,7 @@ impl DescribeTargetGroupAttributesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTargetGroupsInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: Option<String>,
@@ -2437,6 +2488,7 @@ impl DescribeTargetGroupsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTargetGroupsOutput {
     /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
     pub next_marker: Option<String>,
@@ -2473,6 +2525,7 @@ impl DescribeTargetGroupsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTargetHealthInput {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
@@ -2504,6 +2557,7 @@ impl DescribeTargetHealthInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTargetHealthOutput {
     /// <p>Information about the health of the targets.</p>
     pub target_health_descriptions: Option<Vec<TargetHealthDescription>>,
@@ -2549,6 +2603,8 @@ impl DescriptionDeserializer {
 }
 /// <p>Information about an action that returns a custom HTTP response.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FixedResponseActionConfig {
     /// <p>The content type.</p> <p>Valid Values: text/plain | text/css | text/html | application/javascript | application/json</p>
     pub content_type: Option<String>,
@@ -2652,6 +2708,8 @@ impl FixedResponseActionStatusCodeDeserializer {
 }
 /// <p>Information about a forward action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ForwardActionConfig {
     /// <p>The target group stickiness for the rule.</p>
     pub target_group_stickiness_config: Option<TargetGroupStickinessConfig>,
@@ -2770,6 +2828,8 @@ impl HealthCheckTimeoutSecondsDeserializer {
 }
 /// <p>Information about a host header condition.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HostHeaderConditionConfig {
     /// <p>One or more host names. The maximum size of each name is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character).</p> <p>If you specify multiple strings, the condition is satisfied if one of the strings matches the host name.</p>
     pub values: Option<Vec<String>>,
@@ -2832,6 +2892,8 @@ impl HttpCodeDeserializer {
 }
 /// <p>Information about an HTTP header condition.</p> <p>There is a set of standard HTTP header fields. You can also define custom HTTP header fields.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HttpHeaderConditionConfig {
     /// <p>The name of the HTTP header field. The maximum size is 40 characters. The header name is case insensitive. The allowed characters are specified by RFC 7230. Wildcards are not supported.</p> <p>You can't use an HTTP header condition to specify the host header. Use <a>HostHeaderConditionConfig</a> to specify a host header condition.</p>
     pub http_header_name: Option<String>,
@@ -2906,6 +2968,8 @@ impl HttpHeaderConditionNameDeserializer {
 }
 /// <p>Information about an HTTP method condition.</p> <p>HTTP defines a set of request methods, also referred to as HTTP verbs. For more information, see the <a href="https://www.iana.org/assignments/http-methods/http-methods.xhtml">HTTP Method Registry</a>. You can also define custom HTTP methods.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HttpRequestMethodConditionConfig {
     /// <p>The name of the request method. The maximum size is 40 characters. The allowed characters are A-Z, hyphen (-), and underscore (_). The comparison is case sensitive. Wildcards are not supported; therefore, the method name must be an exact match.</p> <p>If you specify multiple strings, the condition is satisfied if one of the strings matches the HTTP request method. We recommend that you route GET and HEAD requests in the same way, because the response to a HEAD request may be cached.</p>
     pub values: Option<Vec<String>>,
@@ -2990,6 +3054,7 @@ impl IsDefaultDeserializer {
 }
 /// <p>Information about an Elastic Load Balancing resource limit for your AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Limit {
     /// <p>The maximum value of the limit.</p>
     pub max: Option<String>,
@@ -3063,6 +3128,7 @@ impl ListOfStringSerializer {
 
 /// <p>Information about a listener.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Listener {
     /// <p>[HTTPS or TLS listener] The default certificate for the listener.</p>
     pub certificates: Option<Vec<Certificate>>,
@@ -3167,6 +3233,7 @@ impl ListenersDeserializer {
 }
 /// <p>Information about a load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoadBalancer {
     /// <p>The Availability Zones for the load balancer.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
@@ -3269,6 +3336,7 @@ impl LoadBalancerDeserializer {
 }
 /// <p>Information about a static IP address for a load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoadBalancerAddress {
     /// <p>[Network Load Balancers] The allocation ID of the Elastic IP address for an internal-facing load balancer.</p>
     pub allocation_id: Option<String>,
@@ -3369,6 +3437,8 @@ impl LoadBalancerArnsSerializer {
 
 /// <p>Information about a load balancer attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoadBalancerAttribute {
     /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - Indicates whether access logs are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - The prefix for the location in the S3 bucket for the access logs.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul> <p>The following attributes are supported by only Application Load Balancers:</p> <ul> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - The idle timeout value, in seconds. The valid range is 1-4000 seconds. The default is 60 seconds.</p> </li> <li> <p> <code>routing.http.drop<em>invalid</em>header<em>fields.enabled</code> - Indicates whether HTTP headers with invalid header fields are removed by the load balancer (<code>true</code>) or routed to targets (<code>false</code>). The default is <code>false</code>.</p> </li> <li> <p> <code>routing.http2.enabled</code> - Indicates whether HTTP/2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>true</code>.</p> </li> </ul> <p>The following attributes are supported by only Network Load Balancers:</p> <ul> <li> <p> <code>load</em>balancing.cross_zone.enabled</code> - Indicates whether cross-zone load balancing is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
     pub key: Option<String>,
@@ -3509,6 +3579,7 @@ impl LoadBalancerSchemeEnumDeserializer {
 }
 /// <p>Information about the state of the load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoadBalancerState {
     /// <p>The state code. The initial state of the load balancer is <code>provisioning</code>. After the load balancer is fully set up and ready to route traffic, its state is <code>active</code>. If the load balancer could not be set up, its state is <code>failed</code>.</p>
     pub code: Option<String>,
@@ -3591,6 +3662,8 @@ impl MarkerDeserializer {
 }
 /// <p>Information to use when checking for a successful response from a target.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Matcher {
     /// <p>The HTTP codes.</p> <p>For Application Load Balancers, you can specify values between 200 and 499, and the default value is 200. You can specify multiple values (for example, "200,202") or a range of values (for example, "200-299").</p> <p>For Network Load Balancers, this is 200–399.</p>
     pub http_code: String,
@@ -3640,6 +3713,7 @@ impl MaxDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyListenerInput {
     /// <p>[HTTPS and TLS listeners] The default certificate for the listener. You must provide exactly one certificate. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p> <p>To create a certificate list, use <a>AddListenerCertificates</a>.</p>
     pub certificates: Option<Vec<Certificate>>,
@@ -3692,6 +3766,7 @@ impl ModifyListenerInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyListenerOutput {
     /// <p>Information about the modified listener.</p>
     pub listeners: Option<Vec<Listener>>,
@@ -3718,6 +3793,7 @@ impl ModifyListenerOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyLoadBalancerAttributesInput {
     /// <p>The load balancer attributes.</p>
     pub attributes: Vec<LoadBalancerAttribute>,
@@ -3747,6 +3823,7 @@ impl ModifyLoadBalancerAttributesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyLoadBalancerAttributesOutput {
     /// <p>Information about the load balancer attributes.</p>
     pub attributes: Option<Vec<LoadBalancerAttribute>>,
@@ -3777,6 +3854,7 @@ impl ModifyLoadBalancerAttributesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyRuleInput {
     /// <p>The actions. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>, and it must be the last action to be performed.</p> <p>If the action type is <code>forward</code>, you specify one or more target groups. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP, TLS, UDP, or TCP_UDP for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
     pub actions: Option<Vec<Action>>,
@@ -3810,6 +3888,7 @@ impl ModifyRuleInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyRuleOutput {
     /// <p>Information about the modified rule.</p>
     pub rules: Option<Vec<Rule>>,
@@ -3836,6 +3915,7 @@ impl ModifyRuleOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyTargetGroupAttributesInput {
     /// <p>The attributes.</p>
     pub attributes: Vec<TargetGroupAttribute>,
@@ -3865,6 +3945,7 @@ impl ModifyTargetGroupAttributesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyTargetGroupAttributesOutput {
     /// <p>Information about the attributes.</p>
     pub attributes: Option<Vec<TargetGroupAttribute>>,
@@ -3895,6 +3976,7 @@ impl ModifyTargetGroupAttributesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyTargetGroupInput {
     /// <p>Indicates whether health checks are enabled.</p>
     pub health_check_enabled: Option<bool>,
@@ -3977,6 +4059,7 @@ impl ModifyTargetGroupInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyTargetGroupOutput {
     /// <p>Information about the modified target group.</p>
     pub target_groups: Option<Vec<TargetGroup>>,
@@ -4030,6 +4113,8 @@ impl PathDeserializer {
 }
 /// <p>Information about a path pattern condition.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PathPatternConditionConfig {
     /// <p>One or more path patterns to compare against the request URL. The maximum size of each string is 128 characters. The comparison is case sensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character).</p> <p>If you specify multiple strings, the condition is satisfied if one of them matches the request URL. The path pattern is compared only to the path of the URL, not to its query string. To compare against the query string, use <a>QueryStringConditionConfig</a>.</p>
     pub values: Option<Vec<String>>,
@@ -4114,6 +4199,8 @@ impl ProtocolEnumDeserializer {
 }
 /// <p>Information about a query string condition.</p> <p>The query string component of a URI starts after the first '?' character and is terminated by either a '#' character or the end of the URI. A typical query string contains key/value pairs separated by '&amp;' characters. The allowed characters are specified by RFC 3986. Any character can be percentage encoded.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryStringConditionConfig {
     /// <p>One or more key/value pairs or values to find in the query string. The maximum size of each string is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). To search for a literal '*' or '?' character in a query string, you must escape these characters in <code>Values</code> using a '\' character.</p> <p>If you specify multiple key/value pairs or values, the condition is satisfied if one of them is found in the query string.</p>
     pub values: Option<Vec<QueryStringKeyValuePair>>,
@@ -4165,6 +4252,8 @@ impl QueryStringConditionConfigSerializer {
 
 /// <p>Information about a key/value pair.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryStringKeyValuePair {
     /// <p>The key. You can omit the key.</p>
     pub key: Option<String>,
@@ -4249,6 +4338,8 @@ impl QueryStringKeyValuePairListSerializer {
 
 /// <p>Information about a redirect action.</p> <p>A URI consists of the following components: protocol://hostname:port/path?query. You must modify at least one of the following components to avoid a redirect loop: protocol, hostname, port, or path. Any components that you do not modify retain their original values.</p> <p>You can reuse URI components using the following reserved keywords:</p> <ul> <li> <p>#{protocol}</p> </li> <li> <p>#{host}</p> </li> <li> <p>#{port}</p> </li> <li> <p>#{path} (the leading "/" is removed)</p> </li> <li> <p>#{query}</p> </li> </ul> <p>For example, you can change the path to "/new/#{path}", the hostname to "example.#{host}", or the query to "#{query}&amp;value=xyz".</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedirectActionConfig {
     /// <p>The hostname. This component is not percent-encoded. The hostname can contain #{host}.</p>
     pub host: Option<String>,
@@ -4398,6 +4489,7 @@ impl RedirectActionStatusCodeEnumDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTargetsInput {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
@@ -4427,6 +4519,7 @@ impl RegisterTargetsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RegisterTargetsOutput {}
 
 struct RegisterTargetsOutputDeserializer;
@@ -4446,6 +4539,7 @@ impl RegisterTargetsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveListenerCertificatesInput {
     /// <p>The certificate to remove. You can specify one certificate per call. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p>
     pub certificates: Vec<Certificate>,
@@ -4472,6 +4566,7 @@ impl RemoveListenerCertificatesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveListenerCertificatesOutput {}
 
 struct RemoveListenerCertificatesOutputDeserializer;
@@ -4491,6 +4586,7 @@ impl RemoveListenerCertificatesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsInput {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     pub resource_arns: Vec<String>,
@@ -4517,6 +4613,7 @@ impl RemoveTagsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveTagsOutput {}
 
 struct RemoveTagsOutputDeserializer;
@@ -4560,6 +4657,7 @@ impl ResourceArnsSerializer {
 
 /// <p>Information about a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Rule {
     /// <p>The actions. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>redirect</code>, or <code>fixed-response</code>, and it must be the last action to be performed.</p>
     pub actions: Option<Vec<Action>>,
@@ -4629,6 +4727,8 @@ impl RuleArnsSerializer {
 
 /// <p>Information about a condition for a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RuleCondition {
     /// <p><p>The field in the HTTP request. The following are the possible values:</p> <ul> <li> <p> <code>http-header</code> </p> </li> <li> <p> <code>http-request-method</code> </p> </li> <li> <p> <code>host-header</code> </p> </li> <li> <p> <code>path-pattern</code> </p> </li> <li> <p> <code>query-string</code> </p> </li> <li> <p> <code>source-ip</code> </p> </li> </ul></p>
     pub field: Option<String>,
@@ -4819,6 +4919,7 @@ impl RulePriorityListSerializer {
 
 /// <p>Information about the priorities for the rules for a listener.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RulePriorityPair {
     /// <p>The rule priority.</p>
     pub priority: Option<i64>,
@@ -4902,6 +5003,7 @@ impl SecurityGroupsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIpAddressTypeInput {
     /// <p>The IP address type. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>. Network Load Balancers must use <code>ipv4</code>.</p>
     pub ip_address_type: String,
@@ -4930,6 +5032,7 @@ impl SetIpAddressTypeInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIpAddressTypeOutput {
     /// <p>The IP address type.</p>
     pub ip_address_type: Option<String>,
@@ -4957,6 +5060,7 @@ impl SetIpAddressTypeOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetRulePrioritiesInput {
     /// <p>The rule priorities.</p>
     pub rule_priorities: Vec<RulePriorityPair>,
@@ -4980,6 +5084,7 @@ impl SetRulePrioritiesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetRulePrioritiesOutput {
     /// <p>Information about the rules.</p>
     pub rules: Option<Vec<Rule>>,
@@ -5010,6 +5115,7 @@ impl SetRulePrioritiesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSecurityGroupsInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
@@ -5039,6 +5145,7 @@ impl SetSecurityGroupsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetSecurityGroupsOutput {
     /// <p>The IDs of the security groups associated with the load balancer.</p>
     pub security_group_ids: Option<Vec<String>>,
@@ -5069,6 +5176,7 @@ impl SetSecurityGroupsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSubnetsInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
@@ -5105,6 +5213,7 @@ impl SetSubnetsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetSubnetsOutput {
     /// <p>Information about the subnet and Availability Zone.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
@@ -5132,6 +5241,8 @@ impl SetSubnetsOutputDeserializer {
 }
 /// <p>Information about a source IP condition.</p> <p>You can use this condition to route based on the IP address of the source that connects to the load balancer. If a client is behind a proxy, this is the IP address of the proxy not the IP address of the client.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SourceIpConditionConfig {
     /// <p>One or more source IP addresses, in CIDR format. You can use both IPv4 and IPv6 addresses. Wildcards are not supported.</p> <p>If you specify multiple addresses, the condition is satisfied if the source IP address of the request matches one of the CIDR blocks. This condition is not satisfied by the addresses in the X-Forwarded-For header. To search for addresses in the X-Forwarded-For header, use <a>HttpHeaderConditionConfig</a>.</p>
     pub values: Option<Vec<String>>,
@@ -5200,6 +5311,7 @@ impl SslPoliciesDeserializer {
 }
 /// <p>Information about a policy used for SSL negotiation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SslPolicy {
     /// <p>The ciphers.</p>
     pub ciphers: Option<Vec<Cipher>>,
@@ -5334,6 +5446,7 @@ impl SubnetIdDeserializer {
 }
 /// <p>Information about a subnet mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubnetMapping {
     /// <p>[Network Load Balancers] The allocation ID of the Elastic IP address for an internet-facing load balancer.</p>
     pub allocation_id: Option<String>,
@@ -5388,6 +5501,8 @@ impl SubnetsSerializer {
 
 /// <p>Information about a tag.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>The key of the tag.</p>
     pub key: String,
@@ -5432,6 +5547,7 @@ impl TagSerializer {
 
 /// <p>The tags associated with a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagDescription {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     pub resource_arn: Option<String>,
@@ -5545,6 +5661,8 @@ impl TagValueDeserializer {
 }
 /// <p>Information about a target.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TargetDescription {
     /// <p>An Availability Zone or <code>all</code>. This determines whether the target receives traffic from the load balancer nodes in the specified Availability Zone or from all enabled Availability Zones for the load balancer.</p> <p>This parameter is not supported if the target type of the target group is <code>instance</code>.</p> <p>If the target type is <code>ip</code> and the IP address is in a subnet of the VPC for the target group, the Availability Zone is automatically detected and this parameter is optional. If the IP address is outside the VPC, this parameter is required.</p> <p>With an Application Load Balancer, if the target type is <code>ip</code> and the IP address is outside the VPC for the target group, the only supported value is <code>all</code>.</p> <p>If the target type is <code>lambda</code>, this parameter is optional and the only supported value is <code>all</code>.</p>
     pub availability_zone: Option<String>,
@@ -5614,6 +5732,7 @@ impl TargetDescriptionsSerializer {
 
 /// <p>Information about a target group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TargetGroup {
     /// <p>Indicates whether health checks are enabled.</p>
     pub health_check_enabled: Option<bool>,
@@ -5774,6 +5893,8 @@ impl TargetGroupArnsSerializer {
 
 /// <p>Information about a target group attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TargetGroupAttribute {
     /// <p><p>The name of the attribute.</p> <p>The following attribute is supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount of time, in seconds, for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds. If the target is a Lambda function, this attribute is not supported.</p> </li> </ul> <p>The following attributes are supported by Application Load Balancers if the target is not a Lambda function:</p> <ul> <li> <p> <code>load<em>balancing.algorithm.type</code> - The load balancing algorithm determines how the load balancer selects targets when routing requests. The value is <code>round</em>robin</code> or <code>least<em>outstanding</em>requests</code>. The default is <code>round<em>robin</code>.</p> </li> <li> <p> <code>slow</em>start.duration<em>seconds</code> - The time period, in seconds, during which a newly registered target receives a linearly increasing share of the traffic to the target group. After this time period ends, the target receives its full share of traffic. The range is 30-900 seconds (15 minutes). Slow start mode is disabled by default.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible value is <code>lb</em>cookie</code>.</p> </li> <li> <p> <code>stickiness.lb<em>cookie.duration</em>seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul> <p>The following attribute is supported only if the target is a Lambda function.</p> <ul> <li> <p> <code>lambda.multi<em>value</em>headers.enabled</code> - Indicates whether the request and response headers exchanged between the load balancer and the Lambda function include arrays of values or strings. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>. If the value is <code>false</code> and the request contains a duplicate header field name or query parameter key, the load balancer uses the last value sent by the client.</p> </li> </ul> <p>The following attribute is supported only by Network Load Balancers:</p> <ul> <li> <p> <code>proxy<em>protocol</em>v2.enabled</code> - Indicates whether Proxy Protocol version 2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
     pub key: Option<String>,
@@ -5932,6 +6053,8 @@ impl TargetGroupNamesSerializer {
 
 /// <p>Information about the target group stickiness for a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TargetGroupStickinessConfig {
     /// <p>The time period, in seconds, during which requests from a client should be routed to the same target group. The range is 1-604800 seconds (7 days).</p>
     pub duration_seconds: Option<i64>,
@@ -6014,6 +6137,8 @@ impl TargetGroupStickinessEnabledDeserializer {
 }
 /// <p>Information about how traffic will be distributed between multiple target groups in a forward rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TargetGroupTuple {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: Option<String>,
@@ -6094,6 +6219,7 @@ impl TargetGroupsDeserializer {
 }
 /// <p>Information about the current health of a target.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TargetHealth {
     /// <p>A description of the target health that provides additional details. If the state is <code>healthy</code>, a description is not provided.</p>
     pub description: Option<String>,
@@ -6134,6 +6260,7 @@ impl TargetHealthDeserializer {
 }
 /// <p>Information about the health of a target.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TargetHealthDescription {
     /// <p>The port to use to connect with the target.</p>
     pub health_check_port: Option<String>,
@@ -6314,18 +6441,14 @@ impl AddListenerCertificatesError {
 }
 impl fmt::Display for AddListenerCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddListenerCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            AddListenerCertificatesError::CertificateNotFound(ref cause) => cause,
-            AddListenerCertificatesError::ListenerNotFound(ref cause) => cause,
-            AddListenerCertificatesError::TooManyCertificates(ref cause) => cause,
+            AddListenerCertificatesError::CertificateNotFound(ref cause) => write!(f, "{}", cause),
+            AddListenerCertificatesError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            AddListenerCertificatesError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddListenerCertificatesError {}
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
@@ -6384,19 +6507,15 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsError::DuplicateTagKeys(ref cause) => cause,
-            AddTagsError::LoadBalancerNotFound(ref cause) => cause,
-            AddTagsError::TargetGroupNotFound(ref cause) => cause,
-            AddTagsError::TooManyTags(ref cause) => cause,
+            AddTagsError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            AddTagsError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            AddTagsError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            AddTagsError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsError {}
 /// Errors returned by CreateListener
 #[derive(Debug, PartialEq)]
 pub enum CreateListenerError {
@@ -6543,31 +6662,31 @@ impl CreateListenerError {
 }
 impl fmt::Display for CreateListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateListenerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateListenerError::CertificateNotFound(ref cause) => cause,
-            CreateListenerError::DuplicateListener(ref cause) => cause,
-            CreateListenerError::IncompatibleProtocols(ref cause) => cause,
-            CreateListenerError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateListenerError::InvalidLoadBalancerAction(ref cause) => cause,
-            CreateListenerError::LoadBalancerNotFound(ref cause) => cause,
-            CreateListenerError::SSLPolicyNotFound(ref cause) => cause,
-            CreateListenerError::TargetGroupAssociationLimit(ref cause) => cause,
-            CreateListenerError::TargetGroupNotFound(ref cause) => cause,
-            CreateListenerError::TooManyActions(ref cause) => cause,
-            CreateListenerError::TooManyCertificates(ref cause) => cause,
-            CreateListenerError::TooManyListeners(ref cause) => cause,
-            CreateListenerError::TooManyRegistrationsForTargetId(ref cause) => cause,
-            CreateListenerError::TooManyTargets(ref cause) => cause,
-            CreateListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => cause,
-            CreateListenerError::UnsupportedProtocol(ref cause) => cause,
+            CreateListenerError::CertificateNotFound(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::DuplicateListener(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::IncompatibleProtocols(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::InvalidConfigurationRequest(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::InvalidLoadBalancerAction(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::SSLPolicyNotFound(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TargetGroupAssociationLimit(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TooManyActions(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TooManyListeners(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TooManyRegistrationsForTargetId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateListenerError::TooManyTargets(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateListenerError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateListenerError {}
 /// Errors returned by CreateLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerError {
@@ -6695,28 +6814,28 @@ impl CreateLoadBalancerError {
 }
 impl fmt::Display for CreateLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoadBalancerError::AllocationIdNotFound(ref cause) => cause,
-            CreateLoadBalancerError::AvailabilityZoneNotSupported(ref cause) => cause,
-            CreateLoadBalancerError::DuplicateLoadBalancerName(ref cause) => cause,
-            CreateLoadBalancerError::DuplicateTagKeys(ref cause) => cause,
-            CreateLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateLoadBalancerError::InvalidScheme(ref cause) => cause,
-            CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
-            CreateLoadBalancerError::InvalidSubnet(ref cause) => cause,
-            CreateLoadBalancerError::OperationNotPermitted(ref cause) => cause,
-            CreateLoadBalancerError::ResourceInUse(ref cause) => cause,
-            CreateLoadBalancerError::SubnetNotFound(ref cause) => cause,
-            CreateLoadBalancerError::TooManyLoadBalancers(ref cause) => cause,
-            CreateLoadBalancerError::TooManyTags(ref cause) => cause,
+            CreateLoadBalancerError::AllocationIdNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::AvailabilityZoneNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerError::DuplicateLoadBalancerName(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerError::InvalidScheme(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::SubnetNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::TooManyLoadBalancers(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLoadBalancerError {}
 /// Errors returned by CreateRule
 #[derive(Debug, PartialEq)]
 pub enum CreateRuleError {
@@ -6847,29 +6966,27 @@ impl CreateRuleError {
 }
 impl fmt::Display for CreateRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRuleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRuleError::IncompatibleProtocols(ref cause) => cause,
-            CreateRuleError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateRuleError::InvalidLoadBalancerAction(ref cause) => cause,
-            CreateRuleError::ListenerNotFound(ref cause) => cause,
-            CreateRuleError::PriorityInUse(ref cause) => cause,
-            CreateRuleError::TargetGroupAssociationLimit(ref cause) => cause,
-            CreateRuleError::TargetGroupNotFound(ref cause) => cause,
-            CreateRuleError::TooManyActions(ref cause) => cause,
-            CreateRuleError::TooManyRegistrationsForTargetId(ref cause) => cause,
-            CreateRuleError::TooManyRules(ref cause) => cause,
-            CreateRuleError::TooManyTargetGroups(ref cause) => cause,
-            CreateRuleError::TooManyTargets(ref cause) => cause,
-            CreateRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => cause,
-            CreateRuleError::UnsupportedProtocol(ref cause) => cause,
+            CreateRuleError::IncompatibleProtocols(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::InvalidConfigurationRequest(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::InvalidLoadBalancerAction(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::PriorityInUse(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TargetGroupAssociationLimit(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyActions(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyRegistrationsForTargetId(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyRules(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyTargetGroups(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyTargets(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRuleError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRuleError {}
 /// Errors returned by CreateTargetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateTargetGroupError {
@@ -6923,18 +7040,16 @@ impl CreateTargetGroupError {
 }
 impl fmt::Display for CreateTargetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTargetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTargetGroupError::DuplicateTargetGroupName(ref cause) => cause,
-            CreateTargetGroupError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateTargetGroupError::TooManyTargetGroups(ref cause) => cause,
+            CreateTargetGroupError::DuplicateTargetGroupName(ref cause) => write!(f, "{}", cause),
+            CreateTargetGroupError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTargetGroupError::TooManyTargetGroups(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTargetGroupError {}
 /// Errors returned by DeleteListener
 #[derive(Debug, PartialEq)]
 pub enum DeleteListenerError {
@@ -6972,16 +7087,12 @@ impl DeleteListenerError {
 }
 impl fmt::Display for DeleteListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteListenerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteListenerError::ListenerNotFound(ref cause) => cause,
+            DeleteListenerError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteListenerError {}
 /// Errors returned by DeleteLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerError {
@@ -7033,18 +7144,14 @@ impl DeleteLoadBalancerError {
 }
 impl fmt::Display for DeleteLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoadBalancerError::LoadBalancerNotFound(ref cause) => cause,
-            DeleteLoadBalancerError::OperationNotPermitted(ref cause) => cause,
-            DeleteLoadBalancerError::ResourceInUse(ref cause) => cause,
+            DeleteLoadBalancerError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLoadBalancerError {}
 /// Errors returned by DeleteRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteRuleError {
@@ -7089,17 +7196,13 @@ impl DeleteRuleError {
 }
 impl fmt::Display for DeleteRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRuleError::OperationNotPermitted(ref cause) => cause,
-            DeleteRuleError::RuleNotFound(ref cause) => cause,
+            DeleteRuleError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DeleteRuleError::RuleNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRuleError {}
 /// Errors returned by DeleteTargetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteTargetGroupError {
@@ -7137,16 +7240,12 @@ impl DeleteTargetGroupError {
 }
 impl fmt::Display for DeleteTargetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTargetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTargetGroupError::ResourceInUse(ref cause) => cause,
+            DeleteTargetGroupError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTargetGroupError {}
 /// Errors returned by DeregisterTargets
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTargetsError {
@@ -7191,17 +7290,13 @@ impl DeregisterTargetsError {
 }
 impl fmt::Display for DeregisterTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterTargetsError::InvalidTarget(ref cause) => cause,
-            DeregisterTargetsError::TargetGroupNotFound(ref cause) => cause,
+            DeregisterTargetsError::InvalidTarget(ref cause) => write!(f, "{}", cause),
+            DeregisterTargetsError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterTargetsError {}
 /// Errors returned by DescribeAccountLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountLimitsError {}
@@ -7231,14 +7326,10 @@ impl DescribeAccountLimitsError {
 }
 impl fmt::Display for DescribeAccountLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountLimitsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAccountLimitsError {}
 /// Errors returned by DescribeListenerCertificates
 #[derive(Debug, PartialEq)]
 pub enum DescribeListenerCertificatesError {
@@ -7280,16 +7371,14 @@ impl DescribeListenerCertificatesError {
 }
 impl fmt::Display for DescribeListenerCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeListenerCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeListenerCertificatesError::ListenerNotFound(ref cause) => cause,
+            DescribeListenerCertificatesError::ListenerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeListenerCertificatesError {}
 /// Errors returned by DescribeListeners
 #[derive(Debug, PartialEq)]
 pub enum DescribeListenersError {
@@ -7341,18 +7430,14 @@ impl DescribeListenersError {
 }
 impl fmt::Display for DescribeListenersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeListenersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeListenersError::ListenerNotFound(ref cause) => cause,
-            DescribeListenersError::LoadBalancerNotFound(ref cause) => cause,
-            DescribeListenersError::UnsupportedProtocol(ref cause) => cause,
+            DescribeListenersError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeListenersError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeListenersError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeListenersError {}
 /// Errors returned by DescribeLoadBalancerAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerAttributesError {
@@ -7394,16 +7479,14 @@ impl DescribeLoadBalancerAttributesError {
 }
 impl fmt::Display for DescribeLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancerAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancerAttributesError::LoadBalancerNotFound(ref cause) => cause,
+            DescribeLoadBalancerAttributesError::LoadBalancerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLoadBalancerAttributesError {}
 /// Errors returned by DescribeLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancersError {
@@ -7441,16 +7524,12 @@ impl DescribeLoadBalancersError {
 }
 impl fmt::Display for DescribeLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancersError::LoadBalancerNotFound(ref cause) => cause,
+            DescribeLoadBalancersError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLoadBalancersError {}
 /// Errors returned by DescribeRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeRulesError {
@@ -7502,18 +7581,14 @@ impl DescribeRulesError {
 }
 impl fmt::Display for DescribeRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRulesError::ListenerNotFound(ref cause) => cause,
-            DescribeRulesError::RuleNotFound(ref cause) => cause,
-            DescribeRulesError::UnsupportedProtocol(ref cause) => cause,
+            DescribeRulesError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeRulesError::RuleNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeRulesError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeRulesError {}
 /// Errors returned by DescribeSSLPolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeSSLPoliciesError {
@@ -7551,16 +7626,12 @@ impl DescribeSSLPoliciesError {
 }
 impl fmt::Display for DescribeSSLPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSSLPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSSLPoliciesError::SSLPolicyNotFound(ref cause) => cause,
+            DescribeSSLPoliciesError::SSLPolicyNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSSLPoliciesError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
@@ -7619,19 +7690,15 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::ListenerNotFound(ref cause) => cause,
-            DescribeTagsError::LoadBalancerNotFound(ref cause) => cause,
-            DescribeTagsError::RuleNotFound(ref cause) => cause,
-            DescribeTagsError::TargetGroupNotFound(ref cause) => cause,
+            DescribeTagsError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::RuleNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by DescribeTargetGroupAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeTargetGroupAttributesError {
@@ -7673,16 +7740,14 @@ impl DescribeTargetGroupAttributesError {
 }
 impl fmt::Display for DescribeTargetGroupAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTargetGroupAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTargetGroupAttributesError::TargetGroupNotFound(ref cause) => cause,
+            DescribeTargetGroupAttributesError::TargetGroupNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTargetGroupAttributesError {}
 /// Errors returned by DescribeTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeTargetGroupsError {
@@ -7727,17 +7792,13 @@ impl DescribeTargetGroupsError {
 }
 impl fmt::Display for DescribeTargetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTargetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTargetGroupsError::LoadBalancerNotFound(ref cause) => cause,
-            DescribeTargetGroupsError::TargetGroupNotFound(ref cause) => cause,
+            DescribeTargetGroupsError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTargetGroupsError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTargetGroupsError {}
 /// Errors returned by DescribeTargetHealth
 #[derive(Debug, PartialEq)]
 pub enum DescribeTargetHealthError {
@@ -7789,18 +7850,14 @@ impl DescribeTargetHealthError {
 }
 impl fmt::Display for DescribeTargetHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTargetHealthError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTargetHealthError::HealthUnavailable(ref cause) => cause,
-            DescribeTargetHealthError::InvalidTarget(ref cause) => cause,
-            DescribeTargetHealthError::TargetGroupNotFound(ref cause) => cause,
+            DescribeTargetHealthError::HealthUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeTargetHealthError::InvalidTarget(ref cause) => write!(f, "{}", cause),
+            DescribeTargetHealthError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTargetHealthError {}
 /// Errors returned by ModifyListener
 #[derive(Debug, PartialEq)]
 pub enum ModifyListenerError {
@@ -7947,31 +8004,31 @@ impl ModifyListenerError {
 }
 impl fmt::Display for ModifyListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyListenerError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyListenerError::CertificateNotFound(ref cause) => cause,
-            ModifyListenerError::DuplicateListener(ref cause) => cause,
-            ModifyListenerError::IncompatibleProtocols(ref cause) => cause,
-            ModifyListenerError::InvalidConfigurationRequest(ref cause) => cause,
-            ModifyListenerError::InvalidLoadBalancerAction(ref cause) => cause,
-            ModifyListenerError::ListenerNotFound(ref cause) => cause,
-            ModifyListenerError::SSLPolicyNotFound(ref cause) => cause,
-            ModifyListenerError::TargetGroupAssociationLimit(ref cause) => cause,
-            ModifyListenerError::TargetGroupNotFound(ref cause) => cause,
-            ModifyListenerError::TooManyActions(ref cause) => cause,
-            ModifyListenerError::TooManyCertificates(ref cause) => cause,
-            ModifyListenerError::TooManyListeners(ref cause) => cause,
-            ModifyListenerError::TooManyRegistrationsForTargetId(ref cause) => cause,
-            ModifyListenerError::TooManyTargets(ref cause) => cause,
-            ModifyListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => cause,
-            ModifyListenerError::UnsupportedProtocol(ref cause) => cause,
+            ModifyListenerError::CertificateNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::DuplicateListener(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::IncompatibleProtocols(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::InvalidConfigurationRequest(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::InvalidLoadBalancerAction(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::SSLPolicyNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TargetGroupAssociationLimit(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TooManyActions(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TooManyListeners(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TooManyRegistrationsForTargetId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyListenerError::TooManyTargets(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyListenerError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyListenerError {}
 /// Errors returned by ModifyLoadBalancerAttributes
 #[derive(Debug, PartialEq)]
 pub enum ModifyLoadBalancerAttributesError {
@@ -8022,17 +8079,17 @@ impl ModifyLoadBalancerAttributesError {
 }
 impl fmt::Display for ModifyLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyLoadBalancerAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(ref cause) => cause,
-            ModifyLoadBalancerAttributesError::LoadBalancerNotFound(ref cause) => cause,
+            ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyLoadBalancerAttributesError::LoadBalancerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyLoadBalancerAttributesError {}
 /// Errors returned by ModifyRule
 #[derive(Debug, PartialEq)]
 pub enum ModifyRuleError {
@@ -8142,26 +8199,24 @@ impl ModifyRuleError {
 }
 impl fmt::Display for ModifyRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyRuleError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyRuleError::IncompatibleProtocols(ref cause) => cause,
-            ModifyRuleError::InvalidLoadBalancerAction(ref cause) => cause,
-            ModifyRuleError::OperationNotPermitted(ref cause) => cause,
-            ModifyRuleError::RuleNotFound(ref cause) => cause,
-            ModifyRuleError::TargetGroupAssociationLimit(ref cause) => cause,
-            ModifyRuleError::TargetGroupNotFound(ref cause) => cause,
-            ModifyRuleError::TooManyActions(ref cause) => cause,
-            ModifyRuleError::TooManyRegistrationsForTargetId(ref cause) => cause,
-            ModifyRuleError::TooManyTargets(ref cause) => cause,
-            ModifyRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => cause,
-            ModifyRuleError::UnsupportedProtocol(ref cause) => cause,
+            ModifyRuleError::IncompatibleProtocols(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::InvalidLoadBalancerAction(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::RuleNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::TargetGroupAssociationLimit(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::TooManyActions(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::TooManyRegistrationsForTargetId(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::TooManyTargets(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyRuleError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyRuleError {}
 /// Errors returned by ModifyTargetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyTargetGroupError {
@@ -8208,17 +8263,15 @@ impl ModifyTargetGroupError {
 }
 impl fmt::Display for ModifyTargetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyTargetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyTargetGroupError::InvalidConfigurationRequest(ref cause) => cause,
-            ModifyTargetGroupError::TargetGroupNotFound(ref cause) => cause,
+            ModifyTargetGroupError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyTargetGroupError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyTargetGroupError {}
 /// Errors returned by ModifyTargetGroupAttributes
 #[derive(Debug, PartialEq)]
 pub enum ModifyTargetGroupAttributesError {
@@ -8269,17 +8322,17 @@ impl ModifyTargetGroupAttributesError {
 }
 impl fmt::Display for ModifyTargetGroupAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyTargetGroupAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyTargetGroupAttributesError::InvalidConfigurationRequest(ref cause) => cause,
-            ModifyTargetGroupAttributesError::TargetGroupNotFound(ref cause) => cause,
+            ModifyTargetGroupAttributesError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyTargetGroupAttributesError::TargetGroupNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyTargetGroupAttributesError {}
 /// Errors returned by RegisterTargets
 #[derive(Debug, PartialEq)]
 pub enum RegisterTargetsError {
@@ -8340,19 +8393,17 @@ impl RegisterTargetsError {
 }
 impl fmt::Display for RegisterTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterTargetsError::InvalidTarget(ref cause) => cause,
-            RegisterTargetsError::TargetGroupNotFound(ref cause) => cause,
-            RegisterTargetsError::TooManyRegistrationsForTargetId(ref cause) => cause,
-            RegisterTargetsError::TooManyTargets(ref cause) => cause,
+            RegisterTargetsError::InvalidTarget(ref cause) => write!(f, "{}", cause),
+            RegisterTargetsError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            RegisterTargetsError::TooManyRegistrationsForTargetId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterTargetsError::TooManyTargets(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterTargetsError {}
 /// Errors returned by RemoveListenerCertificates
 #[derive(Debug, PartialEq)]
 pub enum RemoveListenerCertificatesError {
@@ -8401,17 +8452,15 @@ impl RemoveListenerCertificatesError {
 }
 impl fmt::Display for RemoveListenerCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveListenerCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveListenerCertificatesError::ListenerNotFound(ref cause) => cause,
-            RemoveListenerCertificatesError::OperationNotPermitted(ref cause) => cause,
+            RemoveListenerCertificatesError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveListenerCertificatesError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveListenerCertificatesError {}
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
@@ -8477,20 +8526,16 @@ impl RemoveTagsError {
 }
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsError::ListenerNotFound(ref cause) => cause,
-            RemoveTagsError::LoadBalancerNotFound(ref cause) => cause,
-            RemoveTagsError::RuleNotFound(ref cause) => cause,
-            RemoveTagsError::TargetGroupNotFound(ref cause) => cause,
-            RemoveTagsError::TooManyTags(ref cause) => cause,
+            RemoveTagsError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::RuleNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsError {}
 /// Errors returned by SetIpAddressType
 #[derive(Debug, PartialEq)]
 pub enum SetIpAddressTypeError {
@@ -8544,18 +8589,14 @@ impl SetIpAddressTypeError {
 }
 impl fmt::Display for SetIpAddressTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetIpAddressTypeError {
-    fn description(&self) -> &str {
         match *self {
-            SetIpAddressTypeError::InvalidConfigurationRequest(ref cause) => cause,
-            SetIpAddressTypeError::InvalidSubnet(ref cause) => cause,
-            SetIpAddressTypeError::LoadBalancerNotFound(ref cause) => cause,
+            SetIpAddressTypeError::InvalidConfigurationRequest(ref cause) => write!(f, "{}", cause),
+            SetIpAddressTypeError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            SetIpAddressTypeError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetIpAddressTypeError {}
 /// Errors returned by SetRulePriorities
 #[derive(Debug, PartialEq)]
 pub enum SetRulePrioritiesError {
@@ -8607,18 +8648,14 @@ impl SetRulePrioritiesError {
 }
 impl fmt::Display for SetRulePrioritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetRulePrioritiesError {
-    fn description(&self) -> &str {
         match *self {
-            SetRulePrioritiesError::OperationNotPermitted(ref cause) => cause,
-            SetRulePrioritiesError::PriorityInUse(ref cause) => cause,
-            SetRulePrioritiesError::RuleNotFound(ref cause) => cause,
+            SetRulePrioritiesError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            SetRulePrioritiesError::PriorityInUse(ref cause) => write!(f, "{}", cause),
+            SetRulePrioritiesError::RuleNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetRulePrioritiesError {}
 /// Errors returned by SetSecurityGroups
 #[derive(Debug, PartialEq)]
 pub enum SetSecurityGroupsError {
@@ -8672,18 +8709,16 @@ impl SetSecurityGroupsError {
 }
 impl fmt::Display for SetSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSecurityGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            SetSecurityGroupsError::InvalidConfigurationRequest(ref cause) => cause,
-            SetSecurityGroupsError::InvalidSecurityGroup(ref cause) => cause,
-            SetSecurityGroupsError::LoadBalancerNotFound(ref cause) => cause,
+            SetSecurityGroupsError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetSecurityGroupsError::InvalidSecurityGroup(ref cause) => write!(f, "{}", cause),
+            SetSecurityGroupsError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetSecurityGroupsError {}
 /// Errors returned by SetSubnets
 #[derive(Debug, PartialEq)]
 pub enum SetSubnetsError {
@@ -8756,21 +8791,17 @@ impl SetSubnetsError {
 }
 impl fmt::Display for SetSubnetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSubnetsError {
-    fn description(&self) -> &str {
         match *self {
-            SetSubnetsError::AllocationIdNotFound(ref cause) => cause,
-            SetSubnetsError::AvailabilityZoneNotSupported(ref cause) => cause,
-            SetSubnetsError::InvalidConfigurationRequest(ref cause) => cause,
-            SetSubnetsError::InvalidSubnet(ref cause) => cause,
-            SetSubnetsError::LoadBalancerNotFound(ref cause) => cause,
-            SetSubnetsError::SubnetNotFound(ref cause) => cause,
+            SetSubnetsError::AllocationIdNotFound(ref cause) => write!(f, "{}", cause),
+            SetSubnetsError::AvailabilityZoneNotSupported(ref cause) => write!(f, "{}", cause),
+            SetSubnetsError::InvalidConfigurationRequest(ref cause) => write!(f, "{}", cause),
+            SetSubnetsError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            SetSubnetsError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            SetSubnetsError::SubnetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetSubnetsError {}
 /// Trait representing the capabilities of the Elastic Load Balancing v2 API. Elastic Load Balancing v2 clients implement this trait.
 pub trait Elb {
     /// <p>Adds the specified SSL server certificate to the certificate list for the specified HTTPS or TLS listener.</p> <p>If the certificate in already in the certificate list, the call is successful but the certificate is not added again.</p> <p>To get the certificate list for a listener, use <a>DescribeListenerCertificates</a>. To remove certificates from the certificate list for a listener, use <a>RemoveListenerCertificates</a>. To replace the default certificate for a listener, use <a>ModifyListener</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#https-listener-certificates">SSL Certificates</a> in the <i>Application Load Balancers Guide</i>.</p>

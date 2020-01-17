@@ -35,6 +35,8 @@ use xml::EventReader;
 
 /// <p></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Attribute {
     /// <p></p>
     pub alternate_name_encoding: Option<String>,
@@ -157,6 +159,7 @@ impl AttributeNameListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteAttributesRequest {
     /// <p>The name of the domain in which the attributes are being deleted.</p>
     pub domain_name: String,
@@ -183,6 +186,7 @@ impl BatchDeleteAttributesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchPutAttributesRequest {
     /// <p>The name of the domain in which the attributes are being stored.</p>
     pub domain_name: String,
@@ -209,6 +213,7 @@ impl BatchPutAttributesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainRequest {
     /// <p>The name of the domain to create. The name can range between 3 and 255 characters and can contain the following characters: a-z, A-Z, 0-9, &#39;_&#39;, &#39;-&#39;, and &#39;.&#39;.</p>
     pub domain_name: String,
@@ -228,6 +233,7 @@ impl CreateDomainRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletableItem {
     pub attributes: Option<Vec<Attribute>>,
     pub name: String,
@@ -265,6 +271,7 @@ impl DeletableItemListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAttributesRequest {
     /// <p>A list of Attributes. Similar to columns on a spreadsheet, attributes represent categories of data that can be assigned to items.</p>
     pub attributes: Option<Vec<Attribute>>,
@@ -305,6 +312,7 @@ impl DeleteAttributesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainRequest {
     /// <p>The name of the domain to delete.</p>
     pub domain_name: String,
@@ -324,6 +332,7 @@ impl DeleteDomainRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DomainMetadataRequest {
     /// <p>The name of the domain for which to display the metadata of.</p>
     pub domain_name: String,
@@ -343,6 +352,7 @@ impl DomainMetadataRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DomainMetadataResult {
     /// <p>The number of unique attribute names in the domain.</p>
     pub attribute_name_count: Option<i64>,
@@ -437,6 +447,7 @@ impl DomainNameListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAttributesRequest {
     /// <p>The names of the attributes.</p>
     pub attribute_names: Option<Vec<String>>,
@@ -473,6 +484,7 @@ impl GetAttributesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAttributesResult {
     /// <p>The list of attributes returned by the operation.</p>
     pub attributes: Option<Vec<Attribute>>,
@@ -511,6 +523,7 @@ impl IntegerDeserializer {
 }
 /// <p></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Item {
     /// <p></p>
     pub alternate_name_encoding: Option<String>,
@@ -573,6 +586,7 @@ impl ItemListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsRequest {
     /// <p>The maximum number of domain names you want returned. The range is 1 to 100. The default setting is 100.</p>
     pub max_number_of_domains: Option<i64>,
@@ -599,6 +613,7 @@ impl ListDomainsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDomainsResult {
     /// <p>A list of domain names that match the expression.</p>
     pub domain_names: Option<Vec<String>>,
@@ -641,6 +656,7 @@ impl LongDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAttributesRequest {
     /// <p>The list of attributes.</p>
     pub attributes: Vec<ReplaceableAttribute>,
@@ -680,6 +696,7 @@ impl PutAttributesRequestSerializer {
 
 /// <p></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceableAttribute {
     /// <p>The name of the replaceable attribute.</p>
     pub name: String,
@@ -719,6 +736,7 @@ impl ReplaceableAttributeListSerializer {
 
 /// <p></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceableItem {
     /// <p>The list of attributes for a replaceable item.</p>
     pub attributes: Vec<ReplaceableAttribute>,
@@ -756,6 +774,7 @@ impl ReplaceableItemListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectRequest {
     /// <p>Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read.</p>
     pub consistent_read: Option<bool>,
@@ -788,6 +807,7 @@ impl SelectRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SelectResult {
     /// <p>A list of items that match the select expression.</p>
     pub items: Option<Vec<Item>>,
@@ -831,6 +851,7 @@ impl StringDeserializer {
 }
 /// <p> Specifies the conditions under which data should be updated. If an update condition is specified for a request, the data will only be updated if the condition is satisfied. For example, if an attribute with a specific name and value exists, or if a specific attribute doesn't exist. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCondition {
     /// <p>A value specifying whether or not the specified attribute must exist with the specified value in order for the update condition to be satisfied. Specify <code>true</code> if the attribute must exist for the update condition to be satisfied. Specify <code>false</code> if the attribute should not exist in order for the update condition to be satisfied.</p>
     pub exists: Option<bool>,
@@ -890,14 +911,10 @@ impl BatchDeleteAttributesError {
 }
 impl fmt::Display for BatchDeleteAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeleteAttributesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for BatchDeleteAttributesError {}
 /// Errors returned by BatchPutAttributes
 #[derive(Debug, PartialEq)]
 pub enum BatchPutAttributesError {
@@ -1001,24 +1018,28 @@ impl BatchPutAttributesError {
 }
 impl fmt::Display for BatchPutAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchPutAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            BatchPutAttributesError::DuplicateItemName(ref cause) => cause,
-            BatchPutAttributesError::InvalidParameterValue(ref cause) => cause,
-            BatchPutAttributesError::MissingParameter(ref cause) => cause,
-            BatchPutAttributesError::NoSuchDomain(ref cause) => cause,
-            BatchPutAttributesError::NumberDomainAttributesExceeded(ref cause) => cause,
-            BatchPutAttributesError::NumberDomainBytesExceeded(ref cause) => cause,
-            BatchPutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,
-            BatchPutAttributesError::NumberSubmittedAttributesExceeded(ref cause) => cause,
-            BatchPutAttributesError::NumberSubmittedItemsExceeded(ref cause) => cause,
+            BatchPutAttributesError::DuplicateItemName(ref cause) => write!(f, "{}", cause),
+            BatchPutAttributesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            BatchPutAttributesError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            BatchPutAttributesError::NoSuchDomain(ref cause) => write!(f, "{}", cause),
+            BatchPutAttributesError::NumberDomainAttributesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchPutAttributesError::NumberDomainBytesExceeded(ref cause) => write!(f, "{}", cause),
+            BatchPutAttributesError::NumberItemAttributesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchPutAttributesError::NumberSubmittedAttributesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchPutAttributesError::NumberSubmittedItemsExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchPutAttributesError {}
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
@@ -1070,18 +1091,14 @@ impl CreateDomainError {
 }
 impl fmt::Display for CreateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDomainError::InvalidParameterValue(ref cause) => cause,
-            CreateDomainError::MissingParameter(ref cause) => cause,
-            CreateDomainError::NumberDomainsExceeded(ref cause) => cause,
+            CreateDomainError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::NumberDomainsExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDomainError {}
 /// Errors returned by DeleteAttributes
 #[derive(Debug, PartialEq)]
 pub enum DeleteAttributesError {
@@ -1140,19 +1157,15 @@ impl DeleteAttributesError {
 }
 impl fmt::Display for DeleteAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAttributesError::AttributeDoesNotExist(ref cause) => cause,
-            DeleteAttributesError::InvalidParameterValue(ref cause) => cause,
-            DeleteAttributesError::MissingParameter(ref cause) => cause,
-            DeleteAttributesError::NoSuchDomain(ref cause) => cause,
+            DeleteAttributesError::AttributeDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DeleteAttributesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteAttributesError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            DeleteAttributesError::NoSuchDomain(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAttributesError {}
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
@@ -1190,16 +1203,12 @@ impl DeleteDomainError {
 }
 impl fmt::Display for DeleteDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDomainError::MissingParameter(ref cause) => cause,
+            DeleteDomainError::MissingParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDomainError {}
 /// Errors returned by DomainMetadata
 #[derive(Debug, PartialEq)]
 pub enum DomainMetadataError {
@@ -1244,17 +1253,13 @@ impl DomainMetadataError {
 }
 impl fmt::Display for DomainMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DomainMetadataError {
-    fn description(&self) -> &str {
         match *self {
-            DomainMetadataError::MissingParameter(ref cause) => cause,
-            DomainMetadataError::NoSuchDomain(ref cause) => cause,
+            DomainMetadataError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            DomainMetadataError::NoSuchDomain(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DomainMetadataError {}
 /// Errors returned by GetAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetAttributesError {
@@ -1306,18 +1311,14 @@ impl GetAttributesError {
 }
 impl fmt::Display for GetAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetAttributesError::InvalidParameterValue(ref cause) => cause,
-            GetAttributesError::MissingParameter(ref cause) => cause,
-            GetAttributesError::NoSuchDomain(ref cause) => cause,
+            GetAttributesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetAttributesError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            GetAttributesError::NoSuchDomain(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAttributesError {}
 /// Errors returned by ListDomains
 #[derive(Debug, PartialEq)]
 pub enum ListDomainsError {
@@ -1362,17 +1363,13 @@ impl ListDomainsError {
 }
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDomainsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDomainsError::InvalidNextToken(ref cause) => cause,
-            ListDomainsError::InvalidParameterValue(ref cause) => cause,
+            ListDomainsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListDomainsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDomainsError {}
 /// Errors returned by PutAttributes
 #[derive(Debug, PartialEq)]
 pub enum PutAttributesError {
@@ -1454,22 +1451,18 @@ impl PutAttributesError {
 }
 impl fmt::Display for PutAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            PutAttributesError::AttributeDoesNotExist(ref cause) => cause,
-            PutAttributesError::InvalidParameterValue(ref cause) => cause,
-            PutAttributesError::MissingParameter(ref cause) => cause,
-            PutAttributesError::NoSuchDomain(ref cause) => cause,
-            PutAttributesError::NumberDomainAttributesExceeded(ref cause) => cause,
-            PutAttributesError::NumberDomainBytesExceeded(ref cause) => cause,
-            PutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,
+            PutAttributesError::AttributeDoesNotExist(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::NoSuchDomain(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::NumberDomainAttributesExceeded(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::NumberDomainBytesExceeded(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::NumberItemAttributesExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutAttributesError {}
 /// Errors returned by Select
 #[derive(Debug, PartialEq)]
 pub enum SelectError {
@@ -1563,24 +1556,20 @@ impl SelectError {
 }
 impl fmt::Display for SelectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SelectError {
-    fn description(&self) -> &str {
         match *self {
-            SelectError::InvalidNextToken(ref cause) => cause,
-            SelectError::InvalidNumberPredicates(ref cause) => cause,
-            SelectError::InvalidNumberValueTests(ref cause) => cause,
-            SelectError::InvalidParameterValue(ref cause) => cause,
-            SelectError::InvalidQueryExpression(ref cause) => cause,
-            SelectError::MissingParameter(ref cause) => cause,
-            SelectError::NoSuchDomain(ref cause) => cause,
-            SelectError::RequestTimeout(ref cause) => cause,
-            SelectError::TooManyRequestedAttributes(ref cause) => cause,
+            SelectError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            SelectError::InvalidNumberPredicates(ref cause) => write!(f, "{}", cause),
+            SelectError::InvalidNumberValueTests(ref cause) => write!(f, "{}", cause),
+            SelectError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            SelectError::InvalidQueryExpression(ref cause) => write!(f, "{}", cause),
+            SelectError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            SelectError::NoSuchDomain(ref cause) => write!(f, "{}", cause),
+            SelectError::RequestTimeout(ref cause) => write!(f, "{}", cause),
+            SelectError::TooManyRequestedAttributes(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SelectError {}
 /// Trait representing the capabilities of the Amazon SimpleDB API. Amazon SimpleDB clients implement this trait.
 pub trait SimpleDb {
     /// <p> Performs multiple DeleteAttributes operations in a single call, which reduces round trips and latencies. This enables Amazon SimpleDB to optimize requests, which generally yields better throughput. </p> <p> The following limitations are enforced for this operation: <ul> <li>1 MB request size</li> <li>25 item limit per BatchDeleteAttributes operation</li> </ul> </p>

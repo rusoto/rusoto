@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Container for the parameters to the GenerateDataSet operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateDataSetRequest {
     /// <p>(Optional) Key-value pairs which will be returned, unmodified, in the Amazon SNS notification message and the data set metadata file. These key-value pairs can be used to correlated responses with tracking information from other systems.</p>
     #[serde(rename = "customerDefinedValues")]
@@ -63,6 +64,7 @@ pub struct GenerateDataSetResult {
 
 /// <p>Container for the parameters to the StartSupportDataExport operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSupportDataExportRequest {
     /// <p>(Optional) Key-value pairs which will be returned, unmodified, in the Amazon SNS notification message and the data set metadata file.</p>
     #[serde(rename = "customerDefinedValues")]
@@ -124,16 +126,12 @@ impl GenerateDataSetError {
 }
 impl fmt::Display for GenerateDataSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateDataSetError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateDataSetError::MarketplaceCommerceAnalytics(ref cause) => cause,
+            GenerateDataSetError::MarketplaceCommerceAnalytics(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GenerateDataSetError {}
 /// Errors returned by StartSupportDataExport
 #[derive(Debug, PartialEq)]
 pub enum StartSupportDataExportError {
@@ -159,16 +157,14 @@ impl StartSupportDataExportError {
 }
 impl fmt::Display for StartSupportDataExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartSupportDataExportError {
-    fn description(&self) -> &str {
         match *self {
-            StartSupportDataExportError::MarketplaceCommerceAnalytics(ref cause) => cause,
+            StartSupportDataExportError::MarketplaceCommerceAnalytics(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartSupportDataExportError {}
 /// Trait representing the capabilities of the AWS Marketplace Commerce Analytics API. AWS Marketplace Commerce Analytics clients implement this trait.
 pub trait MarketplaceCommerceAnalytics {
     /// <p>Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data<em>set</em>type}_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>

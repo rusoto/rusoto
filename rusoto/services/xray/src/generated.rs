@@ -71,6 +71,7 @@ pub struct AvailabilityZoneDetail {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BackendConnectionErrors {
     /// <p><p/></p>
     #[serde(rename = "ConnectionRefusedCount")]
@@ -99,6 +100,7 @@ pub struct BackendConnectionErrors {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetTracesRequest {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -127,6 +129,7 @@ pub struct BatchGetTracesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
     /// <p>The filter expression defining criteria by which to group traces.</p>
     #[serde(rename = "FilterExpression")]
@@ -147,6 +150,7 @@ pub struct CreateGroupResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSamplingRuleRequest {
     /// <p>The rule definition.</p>
     #[serde(rename = "SamplingRule")]
@@ -163,6 +167,7 @@ pub struct CreateSamplingRuleResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
     /// <p>The ARN of the group that was generated on creation.</p>
     #[serde(rename = "GroupARN")]
@@ -179,6 +184,7 @@ pub struct DeleteGroupRequest {
 pub struct DeleteGroupResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSamplingRuleRequest {
     /// <p>The ARN of the sampling rule. Specify a rule by either name or ARN, but not both.</p>
     #[serde(rename = "RuleARN")]
@@ -422,6 +428,7 @@ pub struct FaultStatistics {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEncryptionConfigRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -434,6 +441,7 @@ pub struct GetEncryptionConfigResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupRequest {
     /// <p>The ARN of the group that was generated on creation.</p>
     #[serde(rename = "GroupARN")]
@@ -455,6 +463,7 @@ pub struct GetGroupResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupsRequest {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -476,6 +485,7 @@ pub struct GetGroupsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSamplingRulesRequest {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -497,6 +507,7 @@ pub struct GetSamplingRulesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSamplingStatisticSummariesRequest {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -518,6 +529,7 @@ pub struct GetSamplingStatisticSummariesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSamplingTargetsRequest {
     /// <p>Information about rules that the service is using to sample requests.</p>
     #[serde(rename = "SamplingStatisticsDocuments")]
@@ -542,6 +554,7 @@ pub struct GetSamplingTargetsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceGraphRequest {
     /// <p>The end of the timeframe for which to generate a graph.</p>
     #[serde(rename = "EndTime")]
@@ -589,6 +602,7 @@ pub struct GetServiceGraphResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTimeSeriesServiceStatisticsRequest {
     /// <p>The end of the time frame for which to aggregate statistics.</p>
     #[serde(rename = "EndTime")]
@@ -636,6 +650,7 @@ pub struct GetTimeSeriesServiceStatisticsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTraceGraphRequest {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -660,6 +675,7 @@ pub struct GetTraceGraphResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTraceSummariesRequest {
     /// <p>The end of the time frame for which to retrieve traces.</p>
     #[serde(rename = "EndTime")]
@@ -797,6 +813,7 @@ pub struct InstanceIdDetail {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEncryptionConfigRequest {
     /// <p>An AWS KMS customer master key (CMK) in one of the following formats:</p> <ul> <li> <p> <b>Alias</b> - The name of the key. For example, <code>alias/MyKey</code>.</p> </li> <li> <p> <b>Key ID</b> - The KMS key ID of the key. For example, <code>ae4aa6d49-a4d8-9df9-a475-4ff6d7898456</code>.</p> </li> <li> <p> <b>ARN</b> - The full Amazon Resource Name of the key ID or alias. For example, <code>arn:aws:kms:us-east-2:123456789012:key/ae4aa6d49-a4d8-9df9-a475-4ff6d7898456</code>. Use this format to specify a key in a different account.</p> </li> </ul> <p>Omit this key if you set <code>Type</code> to <code>NONE</code>.</p>
     #[serde(rename = "KeyId")]
@@ -817,6 +834,7 @@ pub struct PutEncryptionConfigResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutTelemetryRecordsRequest {
     /// <p><p/></p>
     #[serde(rename = "EC2InstanceId")]
@@ -840,6 +858,7 @@ pub struct PutTelemetryRecordsRequest {
 pub struct PutTelemetryRecordsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutTraceSegmentsRequest {
     /// <p>A string containing a JSON document defining one or more segments or subsegments.</p>
     #[serde(rename = "TraceSegmentDocuments")]
@@ -1004,6 +1023,7 @@ pub struct SamplingRuleRecord {
 
 /// <p>A document specifying changes to a sampling rule's configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SamplingRuleUpdate {
     /// <p>Matches attributes derived from the request.</p>
     #[serde(rename = "Attributes")]
@@ -1083,6 +1103,7 @@ pub struct SamplingStatisticSummary {
 
 /// <p>Request sampling results for a single rule from a service. Results are for the last 10 seconds unless the service has been assigned a longer reporting interval after a previous call to <a>GetSamplingTargets</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SamplingStatisticsDocument {
     /// <p>The number of requests recorded with borrowed reservoir quota.</p>
     #[serde(rename = "BorrowCount")]
@@ -1107,6 +1128,7 @@ pub struct SamplingStatisticsDocument {
 
 /// <p>The name and value of a sampling rule to apply to a trace summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SamplingStrategy {
     /// <p>The name of a sampling rule.</p>
     #[serde(rename = "Name")]
@@ -1266,6 +1288,7 @@ pub struct ServiceStatistics {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TelemetryRecord {
     /// <p><p/></p>
     #[serde(rename = "BackendConnectionErrors")]
@@ -1467,6 +1490,7 @@ pub struct UnprocessedTraceSegment {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
     /// <p>The updated filter expression defining criteria by which to group traces.</p>
     #[serde(rename = "FilterExpression")]
@@ -1492,6 +1516,7 @@ pub struct UpdateGroupResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSamplingRuleRequest {
     /// <p>The rule and fields to change.</p>
     #[serde(rename = "SamplingRuleUpdate")]
@@ -1549,17 +1574,13 @@ impl BatchGetTracesError {
 }
 impl fmt::Display for BatchGetTracesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetTracesError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetTracesError::InvalidRequest(ref cause) => cause,
-            BatchGetTracesError::Throttled(ref cause) => cause,
+            BatchGetTracesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            BatchGetTracesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetTracesError {}
 /// Errors returned by CreateGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupError {
@@ -1588,17 +1609,13 @@ impl CreateGroupError {
 }
 impl fmt::Display for CreateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGroupError::InvalidRequest(ref cause) => cause,
-            CreateGroupError::Throttled(ref cause) => cause,
+            CreateGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGroupError {}
 /// Errors returned by CreateSamplingRule
 #[derive(Debug, PartialEq)]
 pub enum CreateSamplingRuleError {
@@ -1634,18 +1651,14 @@ impl CreateSamplingRuleError {
 }
 impl fmt::Display for CreateSamplingRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSamplingRuleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSamplingRuleError::InvalidRequest(ref cause) => cause,
-            CreateSamplingRuleError::RuleLimitExceeded(ref cause) => cause,
-            CreateSamplingRuleError::Throttled(ref cause) => cause,
+            CreateSamplingRuleError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateSamplingRuleError::RuleLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateSamplingRuleError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSamplingRuleError {}
 /// Errors returned by DeleteGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupError {
@@ -1674,17 +1687,13 @@ impl DeleteGroupError {
 }
 impl fmt::Display for DeleteGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGroupError::InvalidRequest(ref cause) => cause,
-            DeleteGroupError::Throttled(ref cause) => cause,
+            DeleteGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGroupError {}
 /// Errors returned by DeleteSamplingRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteSamplingRuleError {
@@ -1713,17 +1722,13 @@ impl DeleteSamplingRuleError {
 }
 impl fmt::Display for DeleteSamplingRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSamplingRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSamplingRuleError::InvalidRequest(ref cause) => cause,
-            DeleteSamplingRuleError::Throttled(ref cause) => cause,
+            DeleteSamplingRuleError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteSamplingRuleError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSamplingRuleError {}
 /// Errors returned by GetEncryptionConfig
 #[derive(Debug, PartialEq)]
 pub enum GetEncryptionConfigError {
@@ -1752,17 +1757,13 @@ impl GetEncryptionConfigError {
 }
 impl fmt::Display for GetEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetEncryptionConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetEncryptionConfigError::InvalidRequest(ref cause) => cause,
-            GetEncryptionConfigError::Throttled(ref cause) => cause,
+            GetEncryptionConfigError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetEncryptionConfigError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetEncryptionConfigError {}
 /// Errors returned by GetGroup
 #[derive(Debug, PartialEq)]
 pub enum GetGroupError {
@@ -1791,17 +1792,13 @@ impl GetGroupError {
 }
 impl fmt::Display for GetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            GetGroupError::InvalidRequest(ref cause) => cause,
-            GetGroupError::Throttled(ref cause) => cause,
+            GetGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetGroupError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGroupError {}
 /// Errors returned by GetGroups
 #[derive(Debug, PartialEq)]
 pub enum GetGroupsError {
@@ -1830,17 +1827,13 @@ impl GetGroupsError {
 }
 impl fmt::Display for GetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            GetGroupsError::InvalidRequest(ref cause) => cause,
-            GetGroupsError::Throttled(ref cause) => cause,
+            GetGroupsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetGroupsError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGroupsError {}
 /// Errors returned by GetSamplingRules
 #[derive(Debug, PartialEq)]
 pub enum GetSamplingRulesError {
@@ -1869,17 +1862,13 @@ impl GetSamplingRulesError {
 }
 impl fmt::Display for GetSamplingRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSamplingRulesError {
-    fn description(&self) -> &str {
         match *self {
-            GetSamplingRulesError::InvalidRequest(ref cause) => cause,
-            GetSamplingRulesError::Throttled(ref cause) => cause,
+            GetSamplingRulesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetSamplingRulesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSamplingRulesError {}
 /// Errors returned by GetSamplingStatisticSummaries
 #[derive(Debug, PartialEq)]
 pub enum GetSamplingStatisticSummariesError {
@@ -1914,17 +1903,13 @@ impl GetSamplingStatisticSummariesError {
 }
 impl fmt::Display for GetSamplingStatisticSummariesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSamplingStatisticSummariesError {
-    fn description(&self) -> &str {
         match *self {
-            GetSamplingStatisticSummariesError::InvalidRequest(ref cause) => cause,
-            GetSamplingStatisticSummariesError::Throttled(ref cause) => cause,
+            GetSamplingStatisticSummariesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetSamplingStatisticSummariesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSamplingStatisticSummariesError {}
 /// Errors returned by GetSamplingTargets
 #[derive(Debug, PartialEq)]
 pub enum GetSamplingTargetsError {
@@ -1953,17 +1938,13 @@ impl GetSamplingTargetsError {
 }
 impl fmt::Display for GetSamplingTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSamplingTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            GetSamplingTargetsError::InvalidRequest(ref cause) => cause,
-            GetSamplingTargetsError::Throttled(ref cause) => cause,
+            GetSamplingTargetsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetSamplingTargetsError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSamplingTargetsError {}
 /// Errors returned by GetServiceGraph
 #[derive(Debug, PartialEq)]
 pub enum GetServiceGraphError {
@@ -1992,17 +1973,13 @@ impl GetServiceGraphError {
 }
 impl fmt::Display for GetServiceGraphError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServiceGraphError {
-    fn description(&self) -> &str {
         match *self {
-            GetServiceGraphError::InvalidRequest(ref cause) => cause,
-            GetServiceGraphError::Throttled(ref cause) => cause,
+            GetServiceGraphError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetServiceGraphError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetServiceGraphError {}
 /// Errors returned by GetTimeSeriesServiceStatistics
 #[derive(Debug, PartialEq)]
 pub enum GetTimeSeriesServiceStatisticsError {
@@ -2037,17 +2014,15 @@ impl GetTimeSeriesServiceStatisticsError {
 }
 impl fmt::Display for GetTimeSeriesServiceStatisticsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTimeSeriesServiceStatisticsError {
-    fn description(&self) -> &str {
         match *self {
-            GetTimeSeriesServiceStatisticsError::InvalidRequest(ref cause) => cause,
-            GetTimeSeriesServiceStatisticsError::Throttled(ref cause) => cause,
+            GetTimeSeriesServiceStatisticsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetTimeSeriesServiceStatisticsError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTimeSeriesServiceStatisticsError {}
 /// Errors returned by GetTraceGraph
 #[derive(Debug, PartialEq)]
 pub enum GetTraceGraphError {
@@ -2076,17 +2051,13 @@ impl GetTraceGraphError {
 }
 impl fmt::Display for GetTraceGraphError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTraceGraphError {
-    fn description(&self) -> &str {
         match *self {
-            GetTraceGraphError::InvalidRequest(ref cause) => cause,
-            GetTraceGraphError::Throttled(ref cause) => cause,
+            GetTraceGraphError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetTraceGraphError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTraceGraphError {}
 /// Errors returned by GetTraceSummaries
 #[derive(Debug, PartialEq)]
 pub enum GetTraceSummariesError {
@@ -2115,17 +2086,13 @@ impl GetTraceSummariesError {
 }
 impl fmt::Display for GetTraceSummariesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTraceSummariesError {
-    fn description(&self) -> &str {
         match *self {
-            GetTraceSummariesError::InvalidRequest(ref cause) => cause,
-            GetTraceSummariesError::Throttled(ref cause) => cause,
+            GetTraceSummariesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetTraceSummariesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTraceSummariesError {}
 /// Errors returned by PutEncryptionConfig
 #[derive(Debug, PartialEq)]
 pub enum PutEncryptionConfigError {
@@ -2154,17 +2121,13 @@ impl PutEncryptionConfigError {
 }
 impl fmt::Display for PutEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutEncryptionConfigError {
-    fn description(&self) -> &str {
         match *self {
-            PutEncryptionConfigError::InvalidRequest(ref cause) => cause,
-            PutEncryptionConfigError::Throttled(ref cause) => cause,
+            PutEncryptionConfigError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            PutEncryptionConfigError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutEncryptionConfigError {}
 /// Errors returned by PutTelemetryRecords
 #[derive(Debug, PartialEq)]
 pub enum PutTelemetryRecordsError {
@@ -2193,17 +2156,13 @@ impl PutTelemetryRecordsError {
 }
 impl fmt::Display for PutTelemetryRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutTelemetryRecordsError {
-    fn description(&self) -> &str {
         match *self {
-            PutTelemetryRecordsError::InvalidRequest(ref cause) => cause,
-            PutTelemetryRecordsError::Throttled(ref cause) => cause,
+            PutTelemetryRecordsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            PutTelemetryRecordsError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutTelemetryRecordsError {}
 /// Errors returned by PutTraceSegments
 #[derive(Debug, PartialEq)]
 pub enum PutTraceSegmentsError {
@@ -2232,17 +2191,13 @@ impl PutTraceSegmentsError {
 }
 impl fmt::Display for PutTraceSegmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutTraceSegmentsError {
-    fn description(&self) -> &str {
         match *self {
-            PutTraceSegmentsError::InvalidRequest(ref cause) => cause,
-            PutTraceSegmentsError::Throttled(ref cause) => cause,
+            PutTraceSegmentsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            PutTraceSegmentsError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutTraceSegmentsError {}
 /// Errors returned by UpdateGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateGroupError {
@@ -2271,17 +2226,13 @@ impl UpdateGroupError {
 }
 impl fmt::Display for UpdateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGroupError::InvalidRequest(ref cause) => cause,
-            UpdateGroupError::Throttled(ref cause) => cause,
+            UpdateGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateGroupError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGroupError {}
 /// Errors returned by UpdateSamplingRule
 #[derive(Debug, PartialEq)]
 pub enum UpdateSamplingRuleError {
@@ -2310,17 +2261,13 @@ impl UpdateSamplingRuleError {
 }
 impl fmt::Display for UpdateSamplingRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSamplingRuleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSamplingRuleError::InvalidRequest(ref cause) => cause,
-            UpdateSamplingRuleError::Throttled(ref cause) => cause,
+            UpdateSamplingRuleError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateSamplingRuleError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSamplingRuleError {}
 /// Trait representing the capabilities of the AWS X-Ray API. AWS X-Ray clients implement this trait.
 pub trait XRay {
     /// <p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>

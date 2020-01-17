@@ -35,6 +35,7 @@ use xml::EventReader;
 
 /// <p>A discrete item that contains the description and URL of an artifact (such as a PDF).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Artifact {
     pub description: Option<String>,
     pub url: Option<String>,
@@ -81,6 +82,7 @@ impl ArtifactListDeserializer {
 }
 /// <p>Input structure for the CancelJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobInput {
     pub api_version: Option<String>,
     pub job_id: String,
@@ -104,6 +106,7 @@ impl CancelJobInputSerializer {
 
 /// <p>Output structure for the CancelJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelJobOutput {
     pub success: Option<bool>,
 }
@@ -139,6 +142,7 @@ impl CarrierDeserializer {
 }
 /// <p>Input structure for the CreateJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobInput {
     pub api_version: Option<String>,
     pub job_type: String,
@@ -170,6 +174,7 @@ impl CreateJobInputSerializer {
 
 /// <p>Output structure for the CreateJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateJobOutput {
     pub artifact_list: Option<Vec<Artifact>>,
     pub job_id: Option<String>,
@@ -277,6 +282,7 @@ impl GenericStringDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetShippingLabelInput {
     pub api_version: Option<String>,
     pub city: Option<String>,
@@ -339,6 +345,7 @@ impl GetShippingLabelInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetShippingLabelOutput {
     pub shipping_label_url: Option<String>,
     pub warning: Option<String>,
@@ -370,6 +377,7 @@ impl GetShippingLabelOutputDeserializer {
 }
 /// <p>Input structure for the GetStatus operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStatusInput {
     pub api_version: Option<String>,
     pub job_id: String,
@@ -393,6 +401,7 @@ impl GetStatusInputSerializer {
 
 /// <p>Output structure for the GetStatus operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStatusOutput {
     pub artifact_list: Option<Vec<Artifact>>,
     pub carrier: Option<String>,
@@ -526,6 +535,7 @@ impl IsTruncatedDeserializer {
 }
 /// <p>Representation of a job returned by the ListJobs operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Job {
     pub creation_date: Option<String>,
     pub is_canceled: Option<bool>,
@@ -614,6 +624,7 @@ impl JobsListDeserializer {
 }
 /// <p>Input structure for the ListJobs operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsInput {
     pub api_version: Option<String>,
     pub marker: Option<String>,
@@ -643,6 +654,7 @@ impl ListJobsInputSerializer {
 
 /// <p>Output structure for the ListJobs operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListJobsOutput {
     pub is_truncated: Option<bool>,
     pub jobs: Option<Vec<Job>>,
@@ -795,6 +807,7 @@ impl URLDeserializer {
 }
 /// <p>Input structure for the UpateJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobInput {
     pub api_version: Option<String>,
     pub job_id: String,
@@ -824,6 +837,7 @@ impl UpdateJobInputSerializer {
 
 /// <p>Output structure for the UpateJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateJobOutput {
     pub artifact_list: Option<Vec<Artifact>>,
     pub success: Option<bool>,
@@ -942,21 +956,17 @@ impl CancelJobError {
 }
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelJobError {
-    fn description(&self) -> &str {
         match *self {
-            CancelJobError::CanceledJobId(ref cause) => cause,
-            CancelJobError::ExpiredJobId(ref cause) => cause,
-            CancelJobError::InvalidAccessKeyId(ref cause) => cause,
-            CancelJobError::InvalidJobId(ref cause) => cause,
-            CancelJobError::InvalidVersion(ref cause) => cause,
-            CancelJobError::UnableToCancelJobId(ref cause) => cause,
+            CancelJobError::CanceledJobId(ref cause) => write!(f, "{}", cause),
+            CancelJobError::ExpiredJobId(ref cause) => write!(f, "{}", cause),
+            CancelJobError::InvalidAccessKeyId(ref cause) => write!(f, "{}", cause),
+            CancelJobError::InvalidJobId(ref cause) => write!(f, "{}", cause),
+            CancelJobError::InvalidVersion(ref cause) => write!(f, "{}", cause),
+            CancelJobError::UnableToCancelJobId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelJobError {}
 /// Errors returned by CreateJob
 #[derive(Debug, PartialEq)]
 pub enum CreateJobError {
@@ -1099,31 +1109,27 @@ impl CreateJobError {
 }
 impl fmt::Display for CreateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateJobError::BucketPermission(ref cause) => cause,
-            CreateJobError::CreateJobQuotaExceeded(ref cause) => cause,
-            CreateJobError::InvalidAccessKeyId(ref cause) => cause,
-            CreateJobError::InvalidAddress(ref cause) => cause,
-            CreateJobError::InvalidCustoms(ref cause) => cause,
-            CreateJobError::InvalidFileSystem(ref cause) => cause,
-            CreateJobError::InvalidJobId(ref cause) => cause,
-            CreateJobError::InvalidManifestField(ref cause) => cause,
-            CreateJobError::InvalidParameter(ref cause) => cause,
-            CreateJobError::InvalidVersion(ref cause) => cause,
-            CreateJobError::MalformedManifest(ref cause) => cause,
-            CreateJobError::MissingCustoms(ref cause) => cause,
-            CreateJobError::MissingManifestField(ref cause) => cause,
-            CreateJobError::MissingParameter(ref cause) => cause,
-            CreateJobError::MultipleRegions(ref cause) => cause,
-            CreateJobError::NoSuchBucket(ref cause) => cause,
+            CreateJobError::BucketPermission(ref cause) => write!(f, "{}", cause),
+            CreateJobError::CreateJobQuotaExceeded(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InvalidAccessKeyId(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InvalidAddress(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InvalidCustoms(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InvalidFileSystem(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InvalidJobId(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InvalidManifestField(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InvalidVersion(ref cause) => write!(f, "{}", cause),
+            CreateJobError::MalformedManifest(ref cause) => write!(f, "{}", cause),
+            CreateJobError::MissingCustoms(ref cause) => write!(f, "{}", cause),
+            CreateJobError::MissingManifestField(ref cause) => write!(f, "{}", cause),
+            CreateJobError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            CreateJobError::MultipleRegions(ref cause) => write!(f, "{}", cause),
+            CreateJobError::NoSuchBucket(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateJobError {}
 /// Errors returned by GetShippingLabel
 #[derive(Debug, PartialEq)]
 pub enum GetShippingLabelError {
@@ -1203,22 +1209,18 @@ impl GetShippingLabelError {
 }
 impl fmt::Display for GetShippingLabelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetShippingLabelError {
-    fn description(&self) -> &str {
         match *self {
-            GetShippingLabelError::CanceledJobId(ref cause) => cause,
-            GetShippingLabelError::ExpiredJobId(ref cause) => cause,
-            GetShippingLabelError::InvalidAccessKeyId(ref cause) => cause,
-            GetShippingLabelError::InvalidAddress(ref cause) => cause,
-            GetShippingLabelError::InvalidJobId(ref cause) => cause,
-            GetShippingLabelError::InvalidParameter(ref cause) => cause,
-            GetShippingLabelError::InvalidVersion(ref cause) => cause,
+            GetShippingLabelError::CanceledJobId(ref cause) => write!(f, "{}", cause),
+            GetShippingLabelError::ExpiredJobId(ref cause) => write!(f, "{}", cause),
+            GetShippingLabelError::InvalidAccessKeyId(ref cause) => write!(f, "{}", cause),
+            GetShippingLabelError::InvalidAddress(ref cause) => write!(f, "{}", cause),
+            GetShippingLabelError::InvalidJobId(ref cause) => write!(f, "{}", cause),
+            GetShippingLabelError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetShippingLabelError::InvalidVersion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetShippingLabelError {}
 /// Errors returned by GetStatus
 #[derive(Debug, PartialEq)]
 pub enum GetStatusError {
@@ -1284,20 +1286,16 @@ impl GetStatusError {
 }
 impl fmt::Display for GetStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetStatusError::CanceledJobId(ref cause) => cause,
-            GetStatusError::ExpiredJobId(ref cause) => cause,
-            GetStatusError::InvalidAccessKeyId(ref cause) => cause,
-            GetStatusError::InvalidJobId(ref cause) => cause,
-            GetStatusError::InvalidVersion(ref cause) => cause,
+            GetStatusError::CanceledJobId(ref cause) => write!(f, "{}", cause),
+            GetStatusError::ExpiredJobId(ref cause) => write!(f, "{}", cause),
+            GetStatusError::InvalidAccessKeyId(ref cause) => write!(f, "{}", cause),
+            GetStatusError::InvalidJobId(ref cause) => write!(f, "{}", cause),
+            GetStatusError::InvalidVersion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetStatusError {}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
@@ -1349,18 +1347,14 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobsError::InvalidAccessKeyId(ref cause) => cause,
-            ListJobsError::InvalidParameter(ref cause) => cause,
-            ListJobsError::InvalidVersion(ref cause) => cause,
+            ListJobsError::InvalidAccessKeyId(ref cause) => write!(f, "{}", cause),
+            ListJobsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListJobsError::InvalidVersion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobsError {}
 /// Errors returned by UpdateJob
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobError {
@@ -1517,33 +1511,29 @@ impl UpdateJobError {
 }
 impl fmt::Display for UpdateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateJobError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateJobError::BucketPermission(ref cause) => cause,
-            UpdateJobError::CanceledJobId(ref cause) => cause,
-            UpdateJobError::ExpiredJobId(ref cause) => cause,
-            UpdateJobError::InvalidAccessKeyId(ref cause) => cause,
-            UpdateJobError::InvalidAddress(ref cause) => cause,
-            UpdateJobError::InvalidCustoms(ref cause) => cause,
-            UpdateJobError::InvalidFileSystem(ref cause) => cause,
-            UpdateJobError::InvalidJobId(ref cause) => cause,
-            UpdateJobError::InvalidManifestField(ref cause) => cause,
-            UpdateJobError::InvalidParameter(ref cause) => cause,
-            UpdateJobError::InvalidVersion(ref cause) => cause,
-            UpdateJobError::MalformedManifest(ref cause) => cause,
-            UpdateJobError::MissingCustoms(ref cause) => cause,
-            UpdateJobError::MissingManifestField(ref cause) => cause,
-            UpdateJobError::MissingParameter(ref cause) => cause,
-            UpdateJobError::MultipleRegions(ref cause) => cause,
-            UpdateJobError::NoSuchBucket(ref cause) => cause,
-            UpdateJobError::UnableToUpdateJobId(ref cause) => cause,
+            UpdateJobError::BucketPermission(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::CanceledJobId(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::ExpiredJobId(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InvalidAccessKeyId(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InvalidAddress(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InvalidCustoms(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InvalidFileSystem(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InvalidJobId(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InvalidManifestField(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InvalidVersion(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::MalformedManifest(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::MissingCustoms(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::MissingManifestField(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::MultipleRegions(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::NoSuchBucket(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::UnableToUpdateJobId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateJobError {}
 /// Trait representing the capabilities of the AWS Import/Export API. AWS Import/Export clients implement this trait.
 pub trait ImportExport {
     /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>

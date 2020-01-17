@@ -26,6 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>A chat message.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChatMessage {
     /// <p>The content of the chat message.</p>
     #[serde(rename = "Content")]
@@ -58,6 +59,7 @@ pub struct ContactFlowSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p>The identifier of the user account in the directory used for identity management. If Amazon Connect cannot access the directory, you can specify this identifier to authenticate users. If you include the identifier, we assume that Amazon Connect cannot access the directory. Otherwise, the identity information is used to authenticate users from your directory.</p> <p>This parameter is required if you are using an existing directory for identity management in Amazon Connect when Amazon Connect cannot access your directory to authenticate users. If you are using SAML for identity management and include this parameter, an error is returned.</p>
     #[serde(rename = "DirectoryUserId")]
@@ -173,6 +175,7 @@ pub struct CurrentMetricResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -183,6 +186,7 @@ pub struct DeleteUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserHierarchyGroupRequest {
     /// <p>The identifier of the hierarchy group.</p>
     #[serde(rename = "HierarchyGroupId")]
@@ -202,6 +206,7 @@ pub struct DescribeUserHierarchyGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserHierarchyStructureRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -218,6 +223,7 @@ pub struct DescribeUserHierarchyStructureResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -252,6 +258,7 @@ pub struct Dimensions {
 
 /// <p>Contains the filter to apply when retrieving metrics.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filters {
     /// <p>The channel to use to filter the metrics.</p>
     #[serde(rename = "Channels")]
@@ -264,6 +271,7 @@ pub struct Filters {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContactAttributesRequest {
     /// <p>The identifier of the initial contact.</p>
     #[serde(rename = "InitialContactId")]
@@ -283,6 +291,7 @@ pub struct GetContactAttributesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCurrentMetricDataRequest {
     /// <p><p>The metrics to retrieve. Specify the name and unit for each metric. The following metrics are available:</p> <dl> <dt>AGENTS<em>AFTER</em>CONTACT<em>WORK</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>AVAILABLE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS<em>ERROR</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>NON<em>PRODUCTIVE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>ON<em>CALL</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>ON<em>CONTACT</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>ONLINE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS<em>STAFFED</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>CONTACTS</em>IN<em>QUEUE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>CONTACTS</em>SCHEDULED</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>OLDEST<em>CONTACT</em>AGE</dt> <dd> <p>Unit: SECONDS</p> </dd> <dt>SLOTS<em>ACTIVE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>SLOTS</em>AVAILABLE</dt> <dd> <p>Unit: COUNT</p> </dd> </dl></p>
     #[serde(rename = "CurrentMetrics")]
@@ -325,6 +334,7 @@ pub struct GetCurrentMetricDataResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFederationTokenRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -341,6 +351,7 @@ pub struct GetFederationTokenResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMetricDataRequest {
     /// <p>The timestamp, in UNIX Epoch time format, at which to end the reporting interval for the retrieval of historical metrics data. The time must be specified using an interval of 5 minutes, such as 11:00, 11:05, 11:10, and must be later than the start time timestamp.</p> <p>The time range between the start and end time must be less than 24 hours.</p>
     #[serde(rename = "EndTime")]
@@ -566,6 +577,7 @@ pub struct HoursOfOperationSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContactFlowsRequest {
     /// <p>The type of contact flow.</p>
     #[serde(rename = "ContactFlowTypes")]
@@ -598,6 +610,7 @@ pub struct ListContactFlowsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHoursOfOperationsRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -626,6 +639,7 @@ pub struct ListHoursOfOperationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumbersRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -662,6 +676,7 @@ pub struct ListPhoneNumbersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueuesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -694,6 +709,7 @@ pub struct ListQueuesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoutingProfilesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -722,6 +738,7 @@ pub struct ListRoutingProfilesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -750,6 +767,7 @@ pub struct ListSecurityProfilesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "resourceArn")]
@@ -766,6 +784,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserHierarchyGroupsRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -794,6 +813,7 @@ pub struct ListUserHierarchyGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -823,6 +843,7 @@ pub struct ListUsersResponse {
 
 /// <p>The customer's details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParticipantDetails {
     /// <p>Display name of the participant.</p>
     #[serde(rename = "DisplayName")]
@@ -928,6 +949,7 @@ pub struct SecurityProfileSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChatContactRequest {
     /// <p>A custom key-value pair using an attribute map. The attributes are standard Amazon Connect attributes, and can be accessed in contact flows just like any other contact attributes. </p> <p>There can be up to 32,768 UTF-8 bytes across all key-value pairs per contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p>
     #[serde(rename = "Attributes")]
@@ -970,6 +992,7 @@ pub struct StartChatContactResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartOutboundVoiceContactRequest {
     /// <p>A custom key-value pair using an attribute map. The attributes are standard Amazon Connect attributes, and can be accessed in contact flows just like any other contact attributes.</p> <p>There can be up to 32,768 UTF-8 bytes across all key-value pairs per contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p>
     #[serde(rename = "Attributes")]
@@ -1008,6 +1031,7 @@ pub struct StartOutboundVoiceContactResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopContactRequest {
     /// <p>The ID of the contact.</p>
     #[serde(rename = "ContactId")]
@@ -1022,6 +1046,7 @@ pub struct StopContactRequest {
 pub struct StopContactResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "resourceArn")]
@@ -1045,6 +1070,7 @@ pub struct Threshold {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "resourceArn")]
@@ -1055,6 +1081,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContactAttributesRequest {
     /// <p>The Amazon Connect attributes. These attributes can be accessed in contact flows just like any other contact attributes.</p> <p>You can have up to 32,768 UTF-8 bytes across all attributes for a contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p>
     #[serde(rename = "Attributes")]
@@ -1072,6 +1099,7 @@ pub struct UpdateContactAttributesRequest {
 pub struct UpdateContactAttributesResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserHierarchyRequest {
     /// <p>The identifier of the hierarchy group.</p>
     #[serde(rename = "HierarchyGroupId")]
@@ -1086,6 +1114,7 @@ pub struct UpdateUserHierarchyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserIdentityInfoRequest {
     /// <p>The identity information for the user.</p>
     #[serde(rename = "IdentityInfo")]
@@ -1099,6 +1128,7 @@ pub struct UpdateUserIdentityInfoRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPhoneConfigRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -1112,6 +1142,7 @@ pub struct UpdateUserPhoneConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRoutingProfileRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -1125,6 +1156,7 @@ pub struct UpdateUserRoutingProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserSecurityProfilesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -1291,22 +1323,18 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserError::DuplicateResource(ref cause) => cause,
-            CreateUserError::InternalService(ref cause) => cause,
-            CreateUserError::InvalidParameter(ref cause) => cause,
-            CreateUserError::InvalidRequest(ref cause) => cause,
-            CreateUserError::LimitExceeded(ref cause) => cause,
-            CreateUserError::ResourceNotFound(ref cause) => cause,
-            CreateUserError::Throttling(ref cause) => cause,
+            CreateUserError::DuplicateResource(ref cause) => write!(f, "{}", cause),
+            CreateUserError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateUserError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateUserError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateUserError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -1350,20 +1378,16 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserError::InternalService(ref cause) => cause,
-            DeleteUserError::InvalidParameter(ref cause) => cause,
-            DeleteUserError::InvalidRequest(ref cause) => cause,
-            DeleteUserError::ResourceNotFound(ref cause) => cause,
-            DeleteUserError::Throttling(ref cause) => cause,
+            DeleteUserError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserError {}
 /// Errors returned by DescribeUser
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserError {
@@ -1407,20 +1431,16 @@ impl DescribeUserError {
 }
 impl fmt::Display for DescribeUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserError::InternalService(ref cause) => cause,
-            DescribeUserError::InvalidParameter(ref cause) => cause,
-            DescribeUserError::InvalidRequest(ref cause) => cause,
-            DescribeUserError::ResourceNotFound(ref cause) => cause,
-            DescribeUserError::Throttling(ref cause) => cause,
+            DescribeUserError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserError {}
 /// Errors returned by DescribeUserHierarchyGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserHierarchyGroupError {
@@ -1476,20 +1496,16 @@ impl DescribeUserHierarchyGroupError {
 }
 impl fmt::Display for DescribeUserHierarchyGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserHierarchyGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserHierarchyGroupError::InternalService(ref cause) => cause,
-            DescribeUserHierarchyGroupError::InvalidParameter(ref cause) => cause,
-            DescribeUserHierarchyGroupError::InvalidRequest(ref cause) => cause,
-            DescribeUserHierarchyGroupError::ResourceNotFound(ref cause) => cause,
-            DescribeUserHierarchyGroupError::Throttling(ref cause) => cause,
+            DescribeUserHierarchyGroupError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeUserHierarchyGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeUserHierarchyGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeUserHierarchyGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeUserHierarchyGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserHierarchyGroupError {}
 /// Errors returned by DescribeUserHierarchyStructure
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserHierarchyStructureError {
@@ -1545,20 +1561,24 @@ impl DescribeUserHierarchyStructureError {
 }
 impl fmt::Display for DescribeUserHierarchyStructureError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserHierarchyStructureError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserHierarchyStructureError::InternalService(ref cause) => cause,
-            DescribeUserHierarchyStructureError::InvalidParameter(ref cause) => cause,
-            DescribeUserHierarchyStructureError::InvalidRequest(ref cause) => cause,
-            DescribeUserHierarchyStructureError::ResourceNotFound(ref cause) => cause,
-            DescribeUserHierarchyStructureError::Throttling(ref cause) => cause,
+            DescribeUserHierarchyStructureError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeUserHierarchyStructureError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeUserHierarchyStructureError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeUserHierarchyStructureError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeUserHierarchyStructureError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserHierarchyStructureError {}
 /// Errors returned by GetContactAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetContactAttributesError {
@@ -1596,18 +1616,14 @@ impl GetContactAttributesError {
 }
 impl fmt::Display for GetContactAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetContactAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetContactAttributesError::InternalService(ref cause) => cause,
-            GetContactAttributesError::InvalidRequest(ref cause) => cause,
-            GetContactAttributesError::ResourceNotFound(ref cause) => cause,
+            GetContactAttributesError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetContactAttributesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetContactAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetContactAttributesError {}
 /// Errors returned by GetCurrentMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetCurrentMetricDataError {
@@ -1657,20 +1673,16 @@ impl GetCurrentMetricDataError {
 }
 impl fmt::Display for GetCurrentMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCurrentMetricDataError {
-    fn description(&self) -> &str {
         match *self {
-            GetCurrentMetricDataError::InternalService(ref cause) => cause,
-            GetCurrentMetricDataError::InvalidParameter(ref cause) => cause,
-            GetCurrentMetricDataError::InvalidRequest(ref cause) => cause,
-            GetCurrentMetricDataError::ResourceNotFound(ref cause) => cause,
-            GetCurrentMetricDataError::Throttling(ref cause) => cause,
+            GetCurrentMetricDataError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetCurrentMetricDataError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetCurrentMetricDataError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetCurrentMetricDataError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetCurrentMetricDataError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCurrentMetricDataError {}
 /// Errors returned by GetFederationToken
 #[derive(Debug, PartialEq)]
 pub enum GetFederationTokenError {
@@ -1721,21 +1733,17 @@ impl GetFederationTokenError {
 }
 impl fmt::Display for GetFederationTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFederationTokenError {
-    fn description(&self) -> &str {
         match *self {
-            GetFederationTokenError::DuplicateResource(ref cause) => cause,
-            GetFederationTokenError::InternalService(ref cause) => cause,
-            GetFederationTokenError::InvalidParameter(ref cause) => cause,
-            GetFederationTokenError::InvalidRequest(ref cause) => cause,
-            GetFederationTokenError::ResourceNotFound(ref cause) => cause,
-            GetFederationTokenError::UserNotFound(ref cause) => cause,
+            GetFederationTokenError::DuplicateResource(ref cause) => write!(f, "{}", cause),
+            GetFederationTokenError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetFederationTokenError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetFederationTokenError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetFederationTokenError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetFederationTokenError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFederationTokenError {}
 /// Errors returned by GetMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetMetricDataError {
@@ -1779,20 +1787,16 @@ impl GetMetricDataError {
 }
 impl fmt::Display for GetMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMetricDataError {
-    fn description(&self) -> &str {
         match *self {
-            GetMetricDataError::InternalService(ref cause) => cause,
-            GetMetricDataError::InvalidParameter(ref cause) => cause,
-            GetMetricDataError::InvalidRequest(ref cause) => cause,
-            GetMetricDataError::ResourceNotFound(ref cause) => cause,
-            GetMetricDataError::Throttling(ref cause) => cause,
+            GetMetricDataError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetMetricDataError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetMetricDataError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetMetricDataError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetMetricDataError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMetricDataError {}
 /// Errors returned by ListContactFlows
 #[derive(Debug, PartialEq)]
 pub enum ListContactFlowsError {
@@ -1836,20 +1840,16 @@ impl ListContactFlowsError {
 }
 impl fmt::Display for ListContactFlowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListContactFlowsError {
-    fn description(&self) -> &str {
         match *self {
-            ListContactFlowsError::InternalService(ref cause) => cause,
-            ListContactFlowsError::InvalidParameter(ref cause) => cause,
-            ListContactFlowsError::InvalidRequest(ref cause) => cause,
-            ListContactFlowsError::ResourceNotFound(ref cause) => cause,
-            ListContactFlowsError::Throttling(ref cause) => cause,
+            ListContactFlowsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListContactFlowsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListContactFlowsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListContactFlowsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListContactFlowsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListContactFlowsError {}
 /// Errors returned by ListHoursOfOperations
 #[derive(Debug, PartialEq)]
 pub enum ListHoursOfOperationsError {
@@ -1901,20 +1901,16 @@ impl ListHoursOfOperationsError {
 }
 impl fmt::Display for ListHoursOfOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHoursOfOperationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListHoursOfOperationsError::InternalService(ref cause) => cause,
-            ListHoursOfOperationsError::InvalidParameter(ref cause) => cause,
-            ListHoursOfOperationsError::InvalidRequest(ref cause) => cause,
-            ListHoursOfOperationsError::ResourceNotFound(ref cause) => cause,
-            ListHoursOfOperationsError::Throttling(ref cause) => cause,
+            ListHoursOfOperationsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListHoursOfOperationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListHoursOfOperationsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListHoursOfOperationsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListHoursOfOperationsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListHoursOfOperationsError {}
 /// Errors returned by ListPhoneNumbers
 #[derive(Debug, PartialEq)]
 pub enum ListPhoneNumbersError {
@@ -1958,20 +1954,16 @@ impl ListPhoneNumbersError {
 }
 impl fmt::Display for ListPhoneNumbersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPhoneNumbersError {
-    fn description(&self) -> &str {
         match *self {
-            ListPhoneNumbersError::InternalService(ref cause) => cause,
-            ListPhoneNumbersError::InvalidParameter(ref cause) => cause,
-            ListPhoneNumbersError::InvalidRequest(ref cause) => cause,
-            ListPhoneNumbersError::ResourceNotFound(ref cause) => cause,
-            ListPhoneNumbersError::Throttling(ref cause) => cause,
+            ListPhoneNumbersError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPhoneNumbersError {}
 /// Errors returned by ListQueues
 #[derive(Debug, PartialEq)]
 pub enum ListQueuesError {
@@ -2015,20 +2007,16 @@ impl ListQueuesError {
 }
 impl fmt::Display for ListQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListQueuesError {
-    fn description(&self) -> &str {
         match *self {
-            ListQueuesError::InternalService(ref cause) => cause,
-            ListQueuesError::InvalidParameter(ref cause) => cause,
-            ListQueuesError::InvalidRequest(ref cause) => cause,
-            ListQueuesError::ResourceNotFound(ref cause) => cause,
-            ListQueuesError::Throttling(ref cause) => cause,
+            ListQueuesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListQueuesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListQueuesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListQueuesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListQueuesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListQueuesError {}
 /// Errors returned by ListRoutingProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListRoutingProfilesError {
@@ -2076,20 +2064,16 @@ impl ListRoutingProfilesError {
 }
 impl fmt::Display for ListRoutingProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRoutingProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            ListRoutingProfilesError::InternalService(ref cause) => cause,
-            ListRoutingProfilesError::InvalidParameter(ref cause) => cause,
-            ListRoutingProfilesError::InvalidRequest(ref cause) => cause,
-            ListRoutingProfilesError::ResourceNotFound(ref cause) => cause,
-            ListRoutingProfilesError::Throttling(ref cause) => cause,
+            ListRoutingProfilesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListRoutingProfilesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListRoutingProfilesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListRoutingProfilesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListRoutingProfilesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRoutingProfilesError {}
 /// Errors returned by ListSecurityProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListSecurityProfilesError {
@@ -2139,20 +2123,16 @@ impl ListSecurityProfilesError {
 }
 impl fmt::Display for ListSecurityProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSecurityProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            ListSecurityProfilesError::InternalService(ref cause) => cause,
-            ListSecurityProfilesError::InvalidParameter(ref cause) => cause,
-            ListSecurityProfilesError::InvalidRequest(ref cause) => cause,
-            ListSecurityProfilesError::ResourceNotFound(ref cause) => cause,
-            ListSecurityProfilesError::Throttling(ref cause) => cause,
+            ListSecurityProfilesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListSecurityProfilesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListSecurityProfilesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListSecurityProfilesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListSecurityProfilesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSecurityProfilesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2200,20 +2180,16 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalService(ref cause) => cause,
-            ListTagsForResourceError::InvalidParameter(ref cause) => cause,
-            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
-            ListTagsForResourceError::Throttling(ref cause) => cause,
+            ListTagsForResourceError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListUserHierarchyGroups
 #[derive(Debug, PartialEq)]
 pub enum ListUserHierarchyGroupsError {
@@ -2265,20 +2241,16 @@ impl ListUserHierarchyGroupsError {
 }
 impl fmt::Display for ListUserHierarchyGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUserHierarchyGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListUserHierarchyGroupsError::InternalService(ref cause) => cause,
-            ListUserHierarchyGroupsError::InvalidParameter(ref cause) => cause,
-            ListUserHierarchyGroupsError::InvalidRequest(ref cause) => cause,
-            ListUserHierarchyGroupsError::ResourceNotFound(ref cause) => cause,
-            ListUserHierarchyGroupsError::Throttling(ref cause) => cause,
+            ListUserHierarchyGroupsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListUserHierarchyGroupsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListUserHierarchyGroupsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListUserHierarchyGroupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListUserHierarchyGroupsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUserHierarchyGroupsError {}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
@@ -2322,20 +2294,16 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUsersError {
-    fn description(&self) -> &str {
         match *self {
-            ListUsersError::InternalService(ref cause) => cause,
-            ListUsersError::InvalidParameter(ref cause) => cause,
-            ListUsersError::InvalidRequest(ref cause) => cause,
-            ListUsersError::ResourceNotFound(ref cause) => cause,
-            ListUsersError::Throttling(ref cause) => cause,
+            ListUsersError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListUsersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListUsersError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListUsersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListUsersError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUsersError {}
 /// Errors returned by StartChatContact
 #[derive(Debug, PartialEq)]
 pub enum StartChatContactError {
@@ -2379,20 +2347,16 @@ impl StartChatContactError {
 }
 impl fmt::Display for StartChatContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartChatContactError {
-    fn description(&self) -> &str {
         match *self {
-            StartChatContactError::InternalService(ref cause) => cause,
-            StartChatContactError::InvalidParameter(ref cause) => cause,
-            StartChatContactError::InvalidRequest(ref cause) => cause,
-            StartChatContactError::LimitExceeded(ref cause) => cause,
-            StartChatContactError::ResourceNotFound(ref cause) => cause,
+            StartChatContactError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartChatContactError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartChatContactError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartChatContactError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartChatContactError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartChatContactError {}
 /// Errors returned by StartOutboundVoiceContact
 #[derive(Debug, PartialEq)]
 pub enum StartOutboundVoiceContactError {
@@ -2460,22 +2424,22 @@ impl StartOutboundVoiceContactError {
 }
 impl fmt::Display for StartOutboundVoiceContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartOutboundVoiceContactError {
-    fn description(&self) -> &str {
         match *self {
-            StartOutboundVoiceContactError::DestinationNotAllowed(ref cause) => cause,
-            StartOutboundVoiceContactError::InternalService(ref cause) => cause,
-            StartOutboundVoiceContactError::InvalidParameter(ref cause) => cause,
-            StartOutboundVoiceContactError::InvalidRequest(ref cause) => cause,
-            StartOutboundVoiceContactError::LimitExceeded(ref cause) => cause,
-            StartOutboundVoiceContactError::OutboundContactNotPermitted(ref cause) => cause,
-            StartOutboundVoiceContactError::ResourceNotFound(ref cause) => cause,
+            StartOutboundVoiceContactError::DestinationNotAllowed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartOutboundVoiceContactError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartOutboundVoiceContactError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartOutboundVoiceContactError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartOutboundVoiceContactError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartOutboundVoiceContactError::OutboundContactNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartOutboundVoiceContactError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartOutboundVoiceContactError {}
 /// Errors returned by StopContact
 #[derive(Debug, PartialEq)]
 pub enum StopContactError {
@@ -2519,20 +2483,16 @@ impl StopContactError {
 }
 impl fmt::Display for StopContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopContactError {
-    fn description(&self) -> &str {
         match *self {
-            StopContactError::ContactNotFound(ref cause) => cause,
-            StopContactError::InternalService(ref cause) => cause,
-            StopContactError::InvalidParameter(ref cause) => cause,
-            StopContactError::InvalidRequest(ref cause) => cause,
-            StopContactError::ResourceNotFound(ref cause) => cause,
+            StopContactError::ContactNotFound(ref cause) => write!(f, "{}", cause),
+            StopContactError::InternalService(ref cause) => write!(f, "{}", cause),
+            StopContactError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StopContactError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopContactError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopContactError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2576,20 +2536,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InternalService(ref cause) => cause,
-            TagResourceError::InvalidParameter(ref cause) => cause,
-            TagResourceError::InvalidRequest(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::Throttling(ref cause) => cause,
+            TagResourceError::InternalService(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -2633,20 +2589,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InternalService(ref cause) => cause,
-            UntagResourceError::InvalidParameter(ref cause) => cause,
-            UntagResourceError::InvalidRequest(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::Throttling(ref cause) => cause,
+            UntagResourceError::InternalService(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateContactAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateContactAttributesError {
@@ -2693,19 +2645,15 @@ impl UpdateContactAttributesError {
 }
 impl fmt::Display for UpdateContactAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateContactAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateContactAttributesError::InternalService(ref cause) => cause,
-            UpdateContactAttributesError::InvalidParameter(ref cause) => cause,
-            UpdateContactAttributesError::InvalidRequest(ref cause) => cause,
-            UpdateContactAttributesError::ResourceNotFound(ref cause) => cause,
+            UpdateContactAttributesError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateContactAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateContactAttributesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateContactAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateContactAttributesError {}
 /// Errors returned by UpdateUserHierarchy
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserHierarchyError {
@@ -2753,20 +2701,16 @@ impl UpdateUserHierarchyError {
 }
 impl fmt::Display for UpdateUserHierarchyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserHierarchyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserHierarchyError::InternalService(ref cause) => cause,
-            UpdateUserHierarchyError::InvalidParameter(ref cause) => cause,
-            UpdateUserHierarchyError::InvalidRequest(ref cause) => cause,
-            UpdateUserHierarchyError::ResourceNotFound(ref cause) => cause,
-            UpdateUserHierarchyError::Throttling(ref cause) => cause,
+            UpdateUserHierarchyError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateUserHierarchyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateUserHierarchyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateUserHierarchyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserHierarchyError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserHierarchyError {}
 /// Errors returned by UpdateUserIdentityInfo
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserIdentityInfoError {
@@ -2818,20 +2762,16 @@ impl UpdateUserIdentityInfoError {
 }
 impl fmt::Display for UpdateUserIdentityInfoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserIdentityInfoError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserIdentityInfoError::InternalService(ref cause) => cause,
-            UpdateUserIdentityInfoError::InvalidParameter(ref cause) => cause,
-            UpdateUserIdentityInfoError::InvalidRequest(ref cause) => cause,
-            UpdateUserIdentityInfoError::ResourceNotFound(ref cause) => cause,
-            UpdateUserIdentityInfoError::Throttling(ref cause) => cause,
+            UpdateUserIdentityInfoError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateUserIdentityInfoError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateUserIdentityInfoError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateUserIdentityInfoError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserIdentityInfoError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserIdentityInfoError {}
 /// Errors returned by UpdateUserPhoneConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserPhoneConfigError {
@@ -2883,20 +2823,16 @@ impl UpdateUserPhoneConfigError {
 }
 impl fmt::Display for UpdateUserPhoneConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserPhoneConfigError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserPhoneConfigError::InternalService(ref cause) => cause,
-            UpdateUserPhoneConfigError::InvalidParameter(ref cause) => cause,
-            UpdateUserPhoneConfigError::InvalidRequest(ref cause) => cause,
-            UpdateUserPhoneConfigError::ResourceNotFound(ref cause) => cause,
-            UpdateUserPhoneConfigError::Throttling(ref cause) => cause,
+            UpdateUserPhoneConfigError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateUserPhoneConfigError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateUserPhoneConfigError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateUserPhoneConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserPhoneConfigError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserPhoneConfigError {}
 /// Errors returned by UpdateUserRoutingProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserRoutingProfileError {
@@ -2948,20 +2884,16 @@ impl UpdateUserRoutingProfileError {
 }
 impl fmt::Display for UpdateUserRoutingProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserRoutingProfileError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserRoutingProfileError::InternalService(ref cause) => cause,
-            UpdateUserRoutingProfileError::InvalidParameter(ref cause) => cause,
-            UpdateUserRoutingProfileError::InvalidRequest(ref cause) => cause,
-            UpdateUserRoutingProfileError::ResourceNotFound(ref cause) => cause,
-            UpdateUserRoutingProfileError::Throttling(ref cause) => cause,
+            UpdateUserRoutingProfileError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateUserRoutingProfileError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateUserRoutingProfileError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateUserRoutingProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserRoutingProfileError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserRoutingProfileError {}
 /// Errors returned by UpdateUserSecurityProfiles
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserSecurityProfilesError {
@@ -3017,20 +2949,16 @@ impl UpdateUserSecurityProfilesError {
 }
 impl fmt::Display for UpdateUserSecurityProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserSecurityProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserSecurityProfilesError::InternalService(ref cause) => cause,
-            UpdateUserSecurityProfilesError::InvalidParameter(ref cause) => cause,
-            UpdateUserSecurityProfilesError::InvalidRequest(ref cause) => cause,
-            UpdateUserSecurityProfilesError::ResourceNotFound(ref cause) => cause,
-            UpdateUserSecurityProfilesError::Throttling(ref cause) => cause,
+            UpdateUserSecurityProfilesError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateUserSecurityProfilesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateUserSecurityProfilesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateUserSecurityProfilesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserSecurityProfilesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserSecurityProfilesError {}
 /// Trait representing the capabilities of the Amazon Connect API. Amazon Connect clients implement this trait.
 pub trait Connect {
     /// <p>Creates a user account for the specified Amazon Connect instance.</p>

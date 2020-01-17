@@ -38,6 +38,7 @@ pub struct BatchDetectDominantLanguageItemResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectDominantLanguageRequest {
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document should contain at least 20 characters and must contain fewer than 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "TextList")]
@@ -70,6 +71,7 @@ pub struct BatchDetectEntitiesItemResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectEntitiesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -105,6 +107,7 @@ pub struct BatchDetectKeyPhrasesItemResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectKeyPhrasesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -144,6 +147,7 @@ pub struct BatchDetectSentimentItemResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectSentimentRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -179,6 +183,7 @@ pub struct BatchDetectSyntaxItemResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectSyntaxRequest {
     /// <p>The language of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -262,6 +267,7 @@ pub struct ClassifierMetadata {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClassifyDocumentRequest {
     /// <p>The Amazon Resource Number (ARN) of the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -281,6 +287,7 @@ pub struct ClassifyDocumentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentClassifierRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -326,6 +333,7 @@ pub struct CreateDocumentClassifierResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointRequest {
     /// <p>An idempotency token provided by the customer. If this token matches a previous endpoint creation request, Amazon Comprehend will not return a <code>ResourceInUseException</code>. </p>
     #[serde(rename = "ClientRequestToken")]
@@ -356,6 +364,7 @@ pub struct CreateEndpointResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEntityRecognizerRequest {
     /// <p> A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -397,6 +406,7 @@ pub struct CreateEntityRecognizerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentClassifierRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the document classifier. </p>
     #[serde(rename = "DocumentClassifierArn")]
@@ -408,6 +418,7 @@ pub struct DeleteDocumentClassifierRequest {
 pub struct DeleteDocumentClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointRequest {
     /// <p>The Amazon Resource Number (ARN) of the endpoint being deleted.</p>
     #[serde(rename = "EndpointArn")]
@@ -419,6 +430,7 @@ pub struct DeleteEndpointRequest {
 pub struct DeleteEndpointResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEntityRecognizerRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
     #[serde(rename = "EntityRecognizerArn")]
@@ -430,6 +442,7 @@ pub struct DeleteEntityRecognizerRequest {
 pub struct DeleteEntityRecognizerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentClassificationJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -446,6 +459,7 @@ pub struct DescribeDocumentClassificationJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentClassifierRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the document classifier. The operation returns this identifier in its response.</p>
     #[serde(rename = "DocumentClassifierArn")]
@@ -462,6 +476,7 @@ pub struct DescribeDocumentClassifierResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDominantLanguageDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -478,6 +493,7 @@ pub struct DescribeDominantLanguageDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointRequest {
     /// <p>The Amazon Resource Number (ARN) of the endpoint being described.</p>
     #[serde(rename = "EndpointArn")]
@@ -494,6 +510,7 @@ pub struct DescribeEndpointResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntitiesDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -510,6 +527,7 @@ pub struct DescribeEntitiesDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntityRecognizerRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
     #[serde(rename = "EntityRecognizerArn")]
@@ -526,6 +544,7 @@ pub struct DescribeEntityRecognizerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeKeyPhrasesDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -542,6 +561,7 @@ pub struct DescribeKeyPhrasesDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSentimentDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -558,6 +578,7 @@ pub struct DescribeSentimentDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTopicsDetectionJobRequest {
     /// <p>The identifier assigned by the user to the detection job.</p>
     #[serde(rename = "JobId")]
@@ -574,6 +595,7 @@ pub struct DescribeTopicsDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectDominantLanguageRequest {
     /// <p>A UTF-8 text string. Each string should contain at least 20 characters and must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "Text")]
@@ -590,6 +612,7 @@ pub struct DetectDominantLanguageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectEntitiesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -609,6 +632,7 @@ pub struct DetectEntitiesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectKeyPhrasesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -628,6 +652,7 @@ pub struct DetectKeyPhrasesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectSentimentRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -651,6 +676,7 @@ pub struct DetectSentimentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectSyntaxRequest {
     /// <p>The language code of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt").</p>
     #[serde(rename = "LanguageCode")]
@@ -685,6 +711,7 @@ pub struct DocumentClass {
 
 /// <p>Provides information for filtering a list of document classification jobs. For more information, see the operation. You can provide only one filter parameter in each request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentClassificationJobFilter {
     /// <p>Filters on the name of the job.</p>
     #[serde(rename = "JobName")]
@@ -760,6 +787,7 @@ pub struct DocumentClassificationJobProperties {
 
 /// <p>Provides information for filtering a list of document classifiers. You can only specify one filtering parameter in a request. For more information, see the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentClassifierFilter {
     /// <p>Filters the list of classifiers based on status. </p>
     #[serde(rename = "Status")]
@@ -874,6 +902,7 @@ pub struct DominantLanguage {
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DominantLanguageDetectionJobFilter {
     /// <p>Filters on the name of the job.</p>
     #[serde(rename = "JobName")]
@@ -945,6 +974,7 @@ pub struct DominantLanguageDetectionJobProperties {
 
 /// <p>The filter used to determine which endpoints are are returned. You can filter jobs on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EndpointFilter {
     /// <p>Specifies a date after which the returned endpoint or endpoints were created.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -1004,6 +1034,7 @@ pub struct EndpointProperties {
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EntitiesDetectionJobFilter {
     /// <p>Filters on the name of the job.</p>
     #[serde(rename = "JobName")]
@@ -1151,6 +1182,7 @@ pub struct EntityRecognizerEvaluationMetrics {
 
 /// <p>Provides information for filtering a list of entity recognizers. You can only specify one filtering parameter in a request. For more information, see the operation./&gt;</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EntityRecognizerFilter {
     /// <p>The status of an entity recognizer.</p>
     #[serde(rename = "Status")]
@@ -1345,6 +1377,7 @@ pub struct KeyPhrase {
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KeyPhrasesDetectionJobFilter {
     /// <p>Filters on the name of the job.</p>
     #[serde(rename = "JobName")]
@@ -1419,6 +1452,7 @@ pub struct KeyPhrasesDetectionJobProperties {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentClassificationJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their names, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1449,6 +1483,7 @@ pub struct ListDocumentClassificationJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentClassifiersRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1478,6 +1513,7 @@ pub struct ListDocumentClassifiersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDominantLanguageDetectionJobsRequest {
     /// <p>Filters that jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1508,6 +1544,7 @@ pub struct ListDominantLanguageDetectionJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointsRequest {
     /// <p>Filters the endpoints that are returned. You can filter endpoints on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>
     #[serde(rename = "Filter")]
@@ -1537,6 +1574,7 @@ pub struct ListEndpointsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1566,6 +1604,7 @@ pub struct ListEntitiesDetectionJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntityRecognizersRequest {
     /// <p>Filters the list of entities returned. You can filter on <code>Status</code>, <code>SubmitTimeBefore</code>, or <code>SubmitTimeAfter</code>. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1595,6 +1634,7 @@ pub struct ListEntityRecognizersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListKeyPhrasesDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1624,6 +1664,7 @@ pub struct ListKeyPhrasesDetectionJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSentimentDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1653,6 +1694,7 @@ pub struct ListSentimentDetectionJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the given Amazon Comprehend resource you are querying. </p>
     #[serde(rename = "ResourceArn")]
@@ -1673,6 +1715,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTopicsDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. Jobs can be filtered on their name, status, or the date and time that they were submitted. You can set only one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1729,6 +1772,7 @@ pub struct PartOfSpeechTag {
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SentimentDetectionJobFilter {
     /// <p>Filters on the name of the job.</p>
     #[serde(rename = "JobName")]
@@ -1825,6 +1869,7 @@ pub struct SentimentScore {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDocumentClassificationJobRequest {
     /// <p>A unique identifier for the request. If you do not set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -1870,6 +1915,7 @@ pub struct StartDocumentClassificationJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDominantLanguageDetectionJobRequest {
     /// <p>A unique identifier for the request. If you do not set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -1912,6 +1958,7 @@ pub struct StartDominantLanguageDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartEntitiesDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -1961,6 +2008,7 @@ pub struct StartEntitiesDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartKeyPhrasesDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -2006,6 +2054,7 @@ pub struct StartKeyPhrasesDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSentimentDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -2051,6 +2100,7 @@ pub struct StartSentimentDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTopicsDetectionJobRequest {
     /// <p>A unique identifier for the request. If you do not set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -2097,6 +2147,7 @@ pub struct StartTopicsDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDominantLanguageDetectionJobRequest {
     /// <p>The identifier of the dominant language detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -2117,6 +2168,7 @@ pub struct StopDominantLanguageDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopEntitiesDetectionJobRequest {
     /// <p>The identifier of the entities detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -2137,6 +2189,7 @@ pub struct StopEntitiesDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopKeyPhrasesDetectionJobRequest {
     /// <p>The identifier of the key phrases detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -2157,6 +2210,7 @@ pub struct StopKeyPhrasesDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopSentimentDetectionJobRequest {
     /// <p>The identifier of the sentiment detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -2177,6 +2231,7 @@ pub struct StopSentimentDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTrainingDocumentClassifierRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the document classifier currently being trained.</p>
     #[serde(rename = "DocumentClassifierArn")]
@@ -2188,6 +2243,7 @@ pub struct StopTrainingDocumentClassifierRequest {
 pub struct StopTrainingDocumentClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTrainingEntityRecognizerRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer currently being trained.</p>
     #[serde(rename = "EntityRecognizerArn")]
@@ -2237,6 +2293,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the given Amazon Comprehend resource to which you want to associate the tags. </p>
     #[serde(rename = "ResourceArn")]
@@ -2252,6 +2309,7 @@ pub struct TagResourceResponse {}
 
 /// <p>Provides information for filtering topic detection jobs. For more information, see .</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicsDetectionJobFilter {
     /// <p><p/></p>
     #[serde(rename = "JobName")]
@@ -2326,6 +2384,7 @@ pub struct TopicsDetectionJobProperties {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p> The Amazon Resource Name (ARN) of the given Amazon Comprehend resource from which you want to remove the tags. </p>
     #[serde(rename = "ResourceArn")]
@@ -2340,6 +2399,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointRequest {
     /// <p> The desired number of inference units to be used by the model using this endpoint. Each inference unit represents of a throughput of 100 characters per second.</p>
     #[serde(rename = "DesiredInferenceUnits")]
@@ -2412,19 +2472,19 @@ impl BatchDetectDominantLanguageError {
 }
 impl fmt::Display for BatchDetectDominantLanguageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDetectDominantLanguageError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDetectDominantLanguageError::BatchSizeLimitExceeded(ref cause) => cause,
-            BatchDetectDominantLanguageError::InternalServer(ref cause) => cause,
-            BatchDetectDominantLanguageError::InvalidRequest(ref cause) => cause,
-            BatchDetectDominantLanguageError::TextSizeLimitExceeded(ref cause) => cause,
+            BatchDetectDominantLanguageError::BatchSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDetectDominantLanguageError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchDetectDominantLanguageError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            BatchDetectDominantLanguageError::TextSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchDetectDominantLanguageError {}
 /// Errors returned by BatchDetectEntities
 #[derive(Debug, PartialEq)]
 pub enum BatchDetectEntitiesError {
@@ -2474,20 +2534,16 @@ impl BatchDetectEntitiesError {
 }
 impl fmt::Display for BatchDetectEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDetectEntitiesError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDetectEntitiesError::BatchSizeLimitExceeded(ref cause) => cause,
-            BatchDetectEntitiesError::InternalServer(ref cause) => cause,
-            BatchDetectEntitiesError::InvalidRequest(ref cause) => cause,
-            BatchDetectEntitiesError::TextSizeLimitExceeded(ref cause) => cause,
-            BatchDetectEntitiesError::UnsupportedLanguage(ref cause) => cause,
+            BatchDetectEntitiesError::BatchSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectEntitiesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchDetectEntitiesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            BatchDetectEntitiesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectEntitiesError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDetectEntitiesError {}
 /// Errors returned by BatchDetectKeyPhrases
 #[derive(Debug, PartialEq)]
 pub enum BatchDetectKeyPhrasesError {
@@ -2541,20 +2597,16 @@ impl BatchDetectKeyPhrasesError {
 }
 impl fmt::Display for BatchDetectKeyPhrasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDetectKeyPhrasesError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(ref cause) => cause,
-            BatchDetectKeyPhrasesError::InternalServer(ref cause) => cause,
-            BatchDetectKeyPhrasesError::InvalidRequest(ref cause) => cause,
-            BatchDetectKeyPhrasesError::TextSizeLimitExceeded(ref cause) => cause,
-            BatchDetectKeyPhrasesError::UnsupportedLanguage(ref cause) => cause,
+            BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectKeyPhrasesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchDetectKeyPhrasesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            BatchDetectKeyPhrasesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectKeyPhrasesError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDetectKeyPhrasesError {}
 /// Errors returned by BatchDetectSentiment
 #[derive(Debug, PartialEq)]
 pub enum BatchDetectSentimentError {
@@ -2604,20 +2656,16 @@ impl BatchDetectSentimentError {
 }
 impl fmt::Display for BatchDetectSentimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDetectSentimentError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDetectSentimentError::BatchSizeLimitExceeded(ref cause) => cause,
-            BatchDetectSentimentError::InternalServer(ref cause) => cause,
-            BatchDetectSentimentError::InvalidRequest(ref cause) => cause,
-            BatchDetectSentimentError::TextSizeLimitExceeded(ref cause) => cause,
-            BatchDetectSentimentError::UnsupportedLanguage(ref cause) => cause,
+            BatchDetectSentimentError::BatchSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectSentimentError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchDetectSentimentError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            BatchDetectSentimentError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectSentimentError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDetectSentimentError {}
 /// Errors returned by BatchDetectSyntax
 #[derive(Debug, PartialEq)]
 pub enum BatchDetectSyntaxError {
@@ -2667,20 +2715,16 @@ impl BatchDetectSyntaxError {
 }
 impl fmt::Display for BatchDetectSyntaxError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDetectSyntaxError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDetectSyntaxError::BatchSizeLimitExceeded(ref cause) => cause,
-            BatchDetectSyntaxError::InternalServer(ref cause) => cause,
-            BatchDetectSyntaxError::InvalidRequest(ref cause) => cause,
-            BatchDetectSyntaxError::TextSizeLimitExceeded(ref cause) => cause,
-            BatchDetectSyntaxError::UnsupportedLanguage(ref cause) => cause,
+            BatchDetectSyntaxError::BatchSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectSyntaxError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchDetectSyntaxError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            BatchDetectSyntaxError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectSyntaxError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDetectSyntaxError {}
 /// Errors returned by ClassifyDocument
 #[derive(Debug, PartialEq)]
 pub enum ClassifyDocumentError {
@@ -2723,19 +2767,15 @@ impl ClassifyDocumentError {
 }
 impl fmt::Display for ClassifyDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ClassifyDocumentError {
-    fn description(&self) -> &str {
         match *self {
-            ClassifyDocumentError::InternalServer(ref cause) => cause,
-            ClassifyDocumentError::InvalidRequest(ref cause) => cause,
-            ClassifyDocumentError::ResourceUnavailable(ref cause) => cause,
-            ClassifyDocumentError::TextSizeLimitExceeded(ref cause) => cause,
+            ClassifyDocumentError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ClassifyDocumentError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ClassifyDocumentError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            ClassifyDocumentError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ClassifyDocumentError {}
 /// Errors returned by CreateDocumentClassifier
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentClassifierError {
@@ -2810,23 +2850,21 @@ impl CreateDocumentClassifierError {
 }
 impl fmt::Display for CreateDocumentClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDocumentClassifierError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDocumentClassifierError::InternalServer(ref cause) => cause,
-            CreateDocumentClassifierError::InvalidRequest(ref cause) => cause,
-            CreateDocumentClassifierError::KmsKeyValidation(ref cause) => cause,
-            CreateDocumentClassifierError::ResourceInUse(ref cause) => cause,
-            CreateDocumentClassifierError::ResourceLimitExceeded(ref cause) => cause,
-            CreateDocumentClassifierError::TooManyRequests(ref cause) => cause,
-            CreateDocumentClassifierError::TooManyTags(ref cause) => cause,
-            CreateDocumentClassifierError::UnsupportedLanguage(ref cause) => cause,
+            CreateDocumentClassifierError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateDocumentClassifierError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateDocumentClassifierError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            CreateDocumentClassifierError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateDocumentClassifierError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDocumentClassifierError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateDocumentClassifierError::TooManyTags(ref cause) => write!(f, "{}", cause),
+            CreateDocumentClassifierError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDocumentClassifierError {}
 /// Errors returned by CreateEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateEndpointError {
@@ -2887,23 +2925,19 @@ impl CreateEndpointError {
 }
 impl fmt::Display for CreateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEndpointError::InternalServer(ref cause) => cause,
-            CreateEndpointError::InvalidRequest(ref cause) => cause,
-            CreateEndpointError::ResourceInUse(ref cause) => cause,
-            CreateEndpointError::ResourceLimitExceeded(ref cause) => cause,
-            CreateEndpointError::ResourceNotFound(ref cause) => cause,
-            CreateEndpointError::ResourceUnavailable(ref cause) => cause,
-            CreateEndpointError::TooManyRequests(ref cause) => cause,
-            CreateEndpointError::TooManyTags(ref cause) => cause,
+            CreateEndpointError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEndpointError {}
 /// Errors returned by CreateEntityRecognizer
 #[derive(Debug, PartialEq)]
 pub enum CreateEntityRecognizerError {
@@ -2976,23 +3010,19 @@ impl CreateEntityRecognizerError {
 }
 impl fmt::Display for CreateEntityRecognizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEntityRecognizerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEntityRecognizerError::InternalServer(ref cause) => cause,
-            CreateEntityRecognizerError::InvalidRequest(ref cause) => cause,
-            CreateEntityRecognizerError::KmsKeyValidation(ref cause) => cause,
-            CreateEntityRecognizerError::ResourceInUse(ref cause) => cause,
-            CreateEntityRecognizerError::ResourceLimitExceeded(ref cause) => cause,
-            CreateEntityRecognizerError::TooManyRequests(ref cause) => cause,
-            CreateEntityRecognizerError::TooManyTags(ref cause) => cause,
-            CreateEntityRecognizerError::UnsupportedLanguage(ref cause) => cause,
+            CreateEntityRecognizerError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::TooManyTags(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEntityRecognizerError {}
 /// Errors returned by DeleteDocumentClassifier
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentClassifierError {
@@ -3053,21 +3083,17 @@ impl DeleteDocumentClassifierError {
 }
 impl fmt::Display for DeleteDocumentClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDocumentClassifierError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDocumentClassifierError::InternalServer(ref cause) => cause,
-            DeleteDocumentClassifierError::InvalidRequest(ref cause) => cause,
-            DeleteDocumentClassifierError::ResourceInUse(ref cause) => cause,
-            DeleteDocumentClassifierError::ResourceNotFound(ref cause) => cause,
-            DeleteDocumentClassifierError::ResourceUnavailable(ref cause) => cause,
-            DeleteDocumentClassifierError::TooManyRequests(ref cause) => cause,
+            DeleteDocumentClassifierError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentClassifierError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentClassifierError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentClassifierError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentClassifierError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentClassifierError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDocumentClassifierError {}
 /// Errors returned by DeleteEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointError {
@@ -3111,20 +3137,16 @@ impl DeleteEndpointError {
 }
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEndpointError::InternalServer(ref cause) => cause,
-            DeleteEndpointError::InvalidRequest(ref cause) => cause,
-            DeleteEndpointError::ResourceInUse(ref cause) => cause,
-            DeleteEndpointError::ResourceNotFound(ref cause) => cause,
-            DeleteEndpointError::TooManyRequests(ref cause) => cause,
+            DeleteEndpointError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEndpointError {}
 /// Errors returned by DeleteEntityRecognizer
 #[derive(Debug, PartialEq)]
 pub enum DeleteEntityRecognizerError {
@@ -3185,21 +3207,17 @@ impl DeleteEntityRecognizerError {
 }
 impl fmt::Display for DeleteEntityRecognizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEntityRecognizerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEntityRecognizerError::InternalServer(ref cause) => cause,
-            DeleteEntityRecognizerError::InvalidRequest(ref cause) => cause,
-            DeleteEntityRecognizerError::ResourceInUse(ref cause) => cause,
-            DeleteEntityRecognizerError::ResourceNotFound(ref cause) => cause,
-            DeleteEntityRecognizerError::ResourceUnavailable(ref cause) => cause,
-            DeleteEntityRecognizerError::TooManyRequests(ref cause) => cause,
+            DeleteEntityRecognizerError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteEntityRecognizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteEntityRecognizerError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteEntityRecognizerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteEntityRecognizerError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteEntityRecognizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEntityRecognizerError {}
 /// Errors returned by DescribeDocumentClassificationJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeDocumentClassificationJobError {
@@ -3248,19 +3266,23 @@ impl DescribeDocumentClassificationJobError {
 }
 impl fmt::Display for DescribeDocumentClassificationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDocumentClassificationJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDocumentClassificationJobError::InternalServer(ref cause) => cause,
-            DescribeDocumentClassificationJobError::InvalidRequest(ref cause) => cause,
-            DescribeDocumentClassificationJobError::JobNotFound(ref cause) => cause,
-            DescribeDocumentClassificationJobError::TooManyRequests(ref cause) => cause,
+            DescribeDocumentClassificationJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDocumentClassificationJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDocumentClassificationJobError::JobNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDocumentClassificationJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDocumentClassificationJobError {}
 /// Errors returned by DescribeDocumentClassifier
 #[derive(Debug, PartialEq)]
 pub enum DescribeDocumentClassifierError {
@@ -3309,19 +3331,15 @@ impl DescribeDocumentClassifierError {
 }
 impl fmt::Display for DescribeDocumentClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDocumentClassifierError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDocumentClassifierError::InternalServer(ref cause) => cause,
-            DescribeDocumentClassifierError::InvalidRequest(ref cause) => cause,
-            DescribeDocumentClassifierError::ResourceNotFound(ref cause) => cause,
-            DescribeDocumentClassifierError::TooManyRequests(ref cause) => cause,
+            DescribeDocumentClassifierError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentClassifierError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentClassifierError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentClassifierError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDocumentClassifierError {}
 /// Errors returned by DescribeDominantLanguageDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeDominantLanguageDetectionJobError {
@@ -3370,19 +3388,23 @@ impl DescribeDominantLanguageDetectionJobError {
 }
 impl fmt::Display for DescribeDominantLanguageDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDominantLanguageDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDominantLanguageDetectionJobError::InternalServer(ref cause) => cause,
-            DescribeDominantLanguageDetectionJobError::InvalidRequest(ref cause) => cause,
-            DescribeDominantLanguageDetectionJobError::JobNotFound(ref cause) => cause,
-            DescribeDominantLanguageDetectionJobError::TooManyRequests(ref cause) => cause,
+            DescribeDominantLanguageDetectionJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDominantLanguageDetectionJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDominantLanguageDetectionJobError::JobNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDominantLanguageDetectionJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDominantLanguageDetectionJobError {}
 /// Errors returned by DescribeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointError {
@@ -3421,19 +3443,15 @@ impl DescribeEndpointError {
 }
 impl fmt::Display for DescribeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEndpointError::InternalServer(ref cause) => cause,
-            DescribeEndpointError::InvalidRequest(ref cause) => cause,
-            DescribeEndpointError::ResourceNotFound(ref cause) => cause,
-            DescribeEndpointError::TooManyRequests(ref cause) => cause,
+            DescribeEndpointError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEndpointError {}
 /// Errors returned by DescribeEntitiesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeEntitiesDetectionJobError {
@@ -3482,19 +3500,15 @@ impl DescribeEntitiesDetectionJobError {
 }
 impl fmt::Display for DescribeEntitiesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEntitiesDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEntitiesDetectionJobError::InternalServer(ref cause) => cause,
-            DescribeEntitiesDetectionJobError::InvalidRequest(ref cause) => cause,
-            DescribeEntitiesDetectionJobError::JobNotFound(ref cause) => cause,
-            DescribeEntitiesDetectionJobError::TooManyRequests(ref cause) => cause,
+            DescribeEntitiesDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeEntitiesDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeEntitiesDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeEntitiesDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEntitiesDetectionJobError {}
 /// Errors returned by DescribeEntityRecognizer
 #[derive(Debug, PartialEq)]
 pub enum DescribeEntityRecognizerError {
@@ -3541,19 +3555,15 @@ impl DescribeEntityRecognizerError {
 }
 impl fmt::Display for DescribeEntityRecognizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEntityRecognizerError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEntityRecognizerError::InternalServer(ref cause) => cause,
-            DescribeEntityRecognizerError::InvalidRequest(ref cause) => cause,
-            DescribeEntityRecognizerError::ResourceNotFound(ref cause) => cause,
-            DescribeEntityRecognizerError::TooManyRequests(ref cause) => cause,
+            DescribeEntityRecognizerError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeEntityRecognizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeEntityRecognizerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeEntityRecognizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEntityRecognizerError {}
 /// Errors returned by DescribeKeyPhrasesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeKeyPhrasesDetectionJobError {
@@ -3602,19 +3612,21 @@ impl DescribeKeyPhrasesDetectionJobError {
 }
 impl fmt::Display for DescribeKeyPhrasesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeKeyPhrasesDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeKeyPhrasesDetectionJobError::InternalServer(ref cause) => cause,
-            DescribeKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => cause,
-            DescribeKeyPhrasesDetectionJobError::JobNotFound(ref cause) => cause,
-            DescribeKeyPhrasesDetectionJobError::TooManyRequests(ref cause) => cause,
+            DescribeKeyPhrasesDetectionJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeKeyPhrasesDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeKeyPhrasesDetectionJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeKeyPhrasesDetectionJobError {}
 /// Errors returned by DescribeSentimentDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeSentimentDetectionJobError {
@@ -3663,19 +3675,17 @@ impl DescribeSentimentDetectionJobError {
 }
 impl fmt::Display for DescribeSentimentDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSentimentDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSentimentDetectionJobError::InternalServer(ref cause) => cause,
-            DescribeSentimentDetectionJobError::InvalidRequest(ref cause) => cause,
-            DescribeSentimentDetectionJobError::JobNotFound(ref cause) => cause,
-            DescribeSentimentDetectionJobError::TooManyRequests(ref cause) => cause,
+            DescribeSentimentDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeSentimentDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeSentimentDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeSentimentDetectionJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeSentimentDetectionJobError {}
 /// Errors returned by DescribeTopicsDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeTopicsDetectionJobError {
@@ -3724,19 +3734,15 @@ impl DescribeTopicsDetectionJobError {
 }
 impl fmt::Display for DescribeTopicsDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTopicsDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTopicsDetectionJobError::InternalServer(ref cause) => cause,
-            DescribeTopicsDetectionJobError::InvalidRequest(ref cause) => cause,
-            DescribeTopicsDetectionJobError::JobNotFound(ref cause) => cause,
-            DescribeTopicsDetectionJobError::TooManyRequests(ref cause) => cause,
+            DescribeTopicsDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeTopicsDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeTopicsDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTopicsDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTopicsDetectionJobError {}
 /// Errors returned by DetectDominantLanguage
 #[derive(Debug, PartialEq)]
 pub enum DetectDominantLanguageError {
@@ -3776,18 +3782,14 @@ impl DetectDominantLanguageError {
 }
 impl fmt::Display for DetectDominantLanguageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectDominantLanguageError {
-    fn description(&self) -> &str {
         match *self {
-            DetectDominantLanguageError::InternalServer(ref cause) => cause,
-            DetectDominantLanguageError::InvalidRequest(ref cause) => cause,
-            DetectDominantLanguageError::TextSizeLimitExceeded(ref cause) => cause,
+            DetectDominantLanguageError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectDominantLanguageError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectDominantLanguageError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectDominantLanguageError {}
 /// Errors returned by DetectEntities
 #[derive(Debug, PartialEq)]
 pub enum DetectEntitiesError {
@@ -3828,19 +3830,15 @@ impl DetectEntitiesError {
 }
 impl fmt::Display for DetectEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectEntitiesError {
-    fn description(&self) -> &str {
         match *self {
-            DetectEntitiesError::InternalServer(ref cause) => cause,
-            DetectEntitiesError::InvalidRequest(ref cause) => cause,
-            DetectEntitiesError::TextSizeLimitExceeded(ref cause) => cause,
-            DetectEntitiesError::UnsupportedLanguage(ref cause) => cause,
+            DetectEntitiesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectEntitiesError {}
 /// Errors returned by DetectKeyPhrases
 #[derive(Debug, PartialEq)]
 pub enum DetectKeyPhrasesError {
@@ -3883,19 +3881,15 @@ impl DetectKeyPhrasesError {
 }
 impl fmt::Display for DetectKeyPhrasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectKeyPhrasesError {
-    fn description(&self) -> &str {
         match *self {
-            DetectKeyPhrasesError::InternalServer(ref cause) => cause,
-            DetectKeyPhrasesError::InvalidRequest(ref cause) => cause,
-            DetectKeyPhrasesError::TextSizeLimitExceeded(ref cause) => cause,
-            DetectKeyPhrasesError::UnsupportedLanguage(ref cause) => cause,
+            DetectKeyPhrasesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectKeyPhrasesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectKeyPhrasesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectKeyPhrasesError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectKeyPhrasesError {}
 /// Errors returned by DetectSentiment
 #[derive(Debug, PartialEq)]
 pub enum DetectSentimentError {
@@ -3936,19 +3930,15 @@ impl DetectSentimentError {
 }
 impl fmt::Display for DetectSentimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectSentimentError {
-    fn description(&self) -> &str {
         match *self {
-            DetectSentimentError::InternalServer(ref cause) => cause,
-            DetectSentimentError::InvalidRequest(ref cause) => cause,
-            DetectSentimentError::TextSizeLimitExceeded(ref cause) => cause,
-            DetectSentimentError::UnsupportedLanguage(ref cause) => cause,
+            DetectSentimentError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectSentimentError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectSentimentError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectSentimentError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectSentimentError {}
 /// Errors returned by DetectSyntax
 #[derive(Debug, PartialEq)]
 pub enum DetectSyntaxError {
@@ -3987,19 +3977,15 @@ impl DetectSyntaxError {
 }
 impl fmt::Display for DetectSyntaxError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectSyntaxError {
-    fn description(&self) -> &str {
         match *self {
-            DetectSyntaxError::InternalServer(ref cause) => cause,
-            DetectSyntaxError::InvalidRequest(ref cause) => cause,
-            DetectSyntaxError::TextSizeLimitExceeded(ref cause) => cause,
-            DetectSyntaxError::UnsupportedLanguage(ref cause) => cause,
+            DetectSyntaxError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectSyntaxError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectSyntaxError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectSyntaxError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectSyntaxError {}
 /// Errors returned by ListDocumentClassificationJobs
 #[derive(Debug, PartialEq)]
 pub enum ListDocumentClassificationJobsError {
@@ -4048,19 +4034,21 @@ impl ListDocumentClassificationJobsError {
 }
 impl fmt::Display for ListDocumentClassificationJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDocumentClassificationJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDocumentClassificationJobsError::InternalServer(ref cause) => cause,
-            ListDocumentClassificationJobsError::InvalidFilter(ref cause) => cause,
-            ListDocumentClassificationJobsError::InvalidRequest(ref cause) => cause,
-            ListDocumentClassificationJobsError::TooManyRequests(ref cause) => cause,
+            ListDocumentClassificationJobsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDocumentClassificationJobsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListDocumentClassificationJobsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDocumentClassificationJobsError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListDocumentClassificationJobsError {}
 /// Errors returned by ListDocumentClassifiers
 #[derive(Debug, PartialEq)]
 pub enum ListDocumentClassifiersError {
@@ -4107,19 +4095,15 @@ impl ListDocumentClassifiersError {
 }
 impl fmt::Display for ListDocumentClassifiersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDocumentClassifiersError {
-    fn description(&self) -> &str {
         match *self {
-            ListDocumentClassifiersError::InternalServer(ref cause) => cause,
-            ListDocumentClassifiersError::InvalidFilter(ref cause) => cause,
-            ListDocumentClassifiersError::InvalidRequest(ref cause) => cause,
-            ListDocumentClassifiersError::TooManyRequests(ref cause) => cause,
+            ListDocumentClassifiersError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListDocumentClassifiersError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListDocumentClassifiersError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListDocumentClassifiersError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDocumentClassifiersError {}
 /// Errors returned by ListDominantLanguageDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListDominantLanguageDetectionJobsError {
@@ -4168,19 +4152,23 @@ impl ListDominantLanguageDetectionJobsError {
 }
 impl fmt::Display for ListDominantLanguageDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDominantLanguageDetectionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDominantLanguageDetectionJobsError::InternalServer(ref cause) => cause,
-            ListDominantLanguageDetectionJobsError::InvalidFilter(ref cause) => cause,
-            ListDominantLanguageDetectionJobsError::InvalidRequest(ref cause) => cause,
-            ListDominantLanguageDetectionJobsError::TooManyRequests(ref cause) => cause,
+            ListDominantLanguageDetectionJobsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDominantLanguageDetectionJobsError::InvalidFilter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDominantLanguageDetectionJobsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDominantLanguageDetectionJobsError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListDominantLanguageDetectionJobsError {}
 /// Errors returned by ListEndpoints
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointsError {
@@ -4214,18 +4202,14 @@ impl ListEndpointsError {
 }
 impl fmt::Display for ListEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEndpointsError {
-    fn description(&self) -> &str {
         match *self {
-            ListEndpointsError::InternalServer(ref cause) => cause,
-            ListEndpointsError::InvalidRequest(ref cause) => cause,
-            ListEndpointsError::TooManyRequests(ref cause) => cause,
+            ListEndpointsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListEndpointsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListEndpointsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEndpointsError {}
 /// Errors returned by ListEntitiesDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListEntitiesDetectionJobsError {
@@ -4272,19 +4256,15 @@ impl ListEntitiesDetectionJobsError {
 }
 impl fmt::Display for ListEntitiesDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEntitiesDetectionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListEntitiesDetectionJobsError::InternalServer(ref cause) => cause,
-            ListEntitiesDetectionJobsError::InvalidFilter(ref cause) => cause,
-            ListEntitiesDetectionJobsError::InvalidRequest(ref cause) => cause,
-            ListEntitiesDetectionJobsError::TooManyRequests(ref cause) => cause,
+            ListEntitiesDetectionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListEntitiesDetectionJobsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListEntitiesDetectionJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListEntitiesDetectionJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEntitiesDetectionJobsError {}
 /// Errors returned by ListEntityRecognizers
 #[derive(Debug, PartialEq)]
 pub enum ListEntityRecognizersError {
@@ -4329,19 +4309,15 @@ impl ListEntityRecognizersError {
 }
 impl fmt::Display for ListEntityRecognizersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEntityRecognizersError {
-    fn description(&self) -> &str {
         match *self {
-            ListEntityRecognizersError::InternalServer(ref cause) => cause,
-            ListEntityRecognizersError::InvalidFilter(ref cause) => cause,
-            ListEntityRecognizersError::InvalidRequest(ref cause) => cause,
-            ListEntityRecognizersError::TooManyRequests(ref cause) => cause,
+            ListEntityRecognizersError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListEntityRecognizersError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListEntityRecognizersError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListEntityRecognizersError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEntityRecognizersError {}
 /// Errors returned by ListKeyPhrasesDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListKeyPhrasesDetectionJobsError {
@@ -4390,19 +4366,15 @@ impl ListKeyPhrasesDetectionJobsError {
 }
 impl fmt::Display for ListKeyPhrasesDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListKeyPhrasesDetectionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListKeyPhrasesDetectionJobsError::InternalServer(ref cause) => cause,
-            ListKeyPhrasesDetectionJobsError::InvalidFilter(ref cause) => cause,
-            ListKeyPhrasesDetectionJobsError::InvalidRequest(ref cause) => cause,
-            ListKeyPhrasesDetectionJobsError::TooManyRequests(ref cause) => cause,
+            ListKeyPhrasesDetectionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListKeyPhrasesDetectionJobsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListKeyPhrasesDetectionJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListKeyPhrasesDetectionJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListKeyPhrasesDetectionJobsError {}
 /// Errors returned by ListSentimentDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListSentimentDetectionJobsError {
@@ -4451,19 +4423,15 @@ impl ListSentimentDetectionJobsError {
 }
 impl fmt::Display for ListSentimentDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSentimentDetectionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSentimentDetectionJobsError::InternalServer(ref cause) => cause,
-            ListSentimentDetectionJobsError::InvalidFilter(ref cause) => cause,
-            ListSentimentDetectionJobsError::InvalidRequest(ref cause) => cause,
-            ListSentimentDetectionJobsError::TooManyRequests(ref cause) => cause,
+            ListSentimentDetectionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListSentimentDetectionJobsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListSentimentDetectionJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListSentimentDetectionJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSentimentDetectionJobsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -4499,18 +4467,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalServer(ref cause) => cause,
-            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTopicsDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListTopicsDetectionJobsError {
@@ -4557,19 +4521,15 @@ impl ListTopicsDetectionJobsError {
 }
 impl fmt::Display for ListTopicsDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTopicsDetectionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTopicsDetectionJobsError::InternalServer(ref cause) => cause,
-            ListTopicsDetectionJobsError::InvalidFilter(ref cause) => cause,
-            ListTopicsDetectionJobsError::InvalidRequest(ref cause) => cause,
-            ListTopicsDetectionJobsError::TooManyRequests(ref cause) => cause,
+            ListTopicsDetectionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListTopicsDetectionJobsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListTopicsDetectionJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTopicsDetectionJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTopicsDetectionJobsError {}
 /// Errors returned by StartDocumentClassificationJob
 #[derive(Debug, PartialEq)]
 pub enum StartDocumentClassificationJobError {
@@ -4632,21 +4592,29 @@ impl StartDocumentClassificationJobError {
 }
 impl fmt::Display for StartDocumentClassificationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDocumentClassificationJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartDocumentClassificationJobError::InternalServer(ref cause) => cause,
-            StartDocumentClassificationJobError::InvalidRequest(ref cause) => cause,
-            StartDocumentClassificationJobError::KmsKeyValidation(ref cause) => cause,
-            StartDocumentClassificationJobError::ResourceNotFound(ref cause) => cause,
-            StartDocumentClassificationJobError::ResourceUnavailable(ref cause) => cause,
-            StartDocumentClassificationJobError::TooManyRequests(ref cause) => cause,
+            StartDocumentClassificationJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentClassificationJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentClassificationJobError::KmsKeyValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentClassificationJobError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentClassificationJobError::ResourceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentClassificationJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartDocumentClassificationJobError {}
 /// Errors returned by StartDominantLanguageDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartDominantLanguageDetectionJobError {
@@ -4695,19 +4663,23 @@ impl StartDominantLanguageDetectionJobError {
 }
 impl fmt::Display for StartDominantLanguageDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDominantLanguageDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartDominantLanguageDetectionJobError::InternalServer(ref cause) => cause,
-            StartDominantLanguageDetectionJobError::InvalidRequest(ref cause) => cause,
-            StartDominantLanguageDetectionJobError::KmsKeyValidation(ref cause) => cause,
-            StartDominantLanguageDetectionJobError::TooManyRequests(ref cause) => cause,
+            StartDominantLanguageDetectionJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDominantLanguageDetectionJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDominantLanguageDetectionJobError::KmsKeyValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDominantLanguageDetectionJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartDominantLanguageDetectionJobError {}
 /// Errors returned by StartEntitiesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartEntitiesDetectionJobError {
@@ -4768,21 +4740,19 @@ impl StartEntitiesDetectionJobError {
 }
 impl fmt::Display for StartEntitiesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartEntitiesDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartEntitiesDetectionJobError::InternalServer(ref cause) => cause,
-            StartEntitiesDetectionJobError::InvalidRequest(ref cause) => cause,
-            StartEntitiesDetectionJobError::KmsKeyValidation(ref cause) => cause,
-            StartEntitiesDetectionJobError::ResourceNotFound(ref cause) => cause,
-            StartEntitiesDetectionJobError::ResourceUnavailable(ref cause) => cause,
-            StartEntitiesDetectionJobError::TooManyRequests(ref cause) => cause,
+            StartEntitiesDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartEntitiesDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartEntitiesDetectionJobError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            StartEntitiesDetectionJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartEntitiesDetectionJobError::ResourceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartEntitiesDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartEntitiesDetectionJobError {}
 /// Errors returned by StartKeyPhrasesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartKeyPhrasesDetectionJobError {
@@ -4831,19 +4801,15 @@ impl StartKeyPhrasesDetectionJobError {
 }
 impl fmt::Display for StartKeyPhrasesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartKeyPhrasesDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartKeyPhrasesDetectionJobError::InternalServer(ref cause) => cause,
-            StartKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => cause,
-            StartKeyPhrasesDetectionJobError::KmsKeyValidation(ref cause) => cause,
-            StartKeyPhrasesDetectionJobError::TooManyRequests(ref cause) => cause,
+            StartKeyPhrasesDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartKeyPhrasesDetectionJobError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            StartKeyPhrasesDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartKeyPhrasesDetectionJobError {}
 /// Errors returned by StartSentimentDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartSentimentDetectionJobError {
@@ -4892,19 +4858,15 @@ impl StartSentimentDetectionJobError {
 }
 impl fmt::Display for StartSentimentDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartSentimentDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartSentimentDetectionJobError::InternalServer(ref cause) => cause,
-            StartSentimentDetectionJobError::InvalidRequest(ref cause) => cause,
-            StartSentimentDetectionJobError::KmsKeyValidation(ref cause) => cause,
-            StartSentimentDetectionJobError::TooManyRequests(ref cause) => cause,
+            StartSentimentDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartSentimentDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartSentimentDetectionJobError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            StartSentimentDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartSentimentDetectionJobError {}
 /// Errors returned by StartTopicsDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartTopicsDetectionJobError {
@@ -4951,19 +4913,15 @@ impl StartTopicsDetectionJobError {
 }
 impl fmt::Display for StartTopicsDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartTopicsDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartTopicsDetectionJobError::InternalServer(ref cause) => cause,
-            StartTopicsDetectionJobError::InvalidRequest(ref cause) => cause,
-            StartTopicsDetectionJobError::KmsKeyValidation(ref cause) => cause,
-            StartTopicsDetectionJobError::TooManyRequests(ref cause) => cause,
+            StartTopicsDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartTopicsDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartTopicsDetectionJobError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            StartTopicsDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartTopicsDetectionJobError {}
 /// Errors returned by StopDominantLanguageDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StopDominantLanguageDetectionJobError {
@@ -5005,18 +4963,18 @@ impl StopDominantLanguageDetectionJobError {
 }
 impl fmt::Display for StopDominantLanguageDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopDominantLanguageDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopDominantLanguageDetectionJobError::InternalServer(ref cause) => cause,
-            StopDominantLanguageDetectionJobError::InvalidRequest(ref cause) => cause,
-            StopDominantLanguageDetectionJobError::JobNotFound(ref cause) => cause,
+            StopDominantLanguageDetectionJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDominantLanguageDetectionJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDominantLanguageDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopDominantLanguageDetectionJobError {}
 /// Errors returned by StopEntitiesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StopEntitiesDetectionJobError {
@@ -5056,18 +5014,14 @@ impl StopEntitiesDetectionJobError {
 }
 impl fmt::Display for StopEntitiesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopEntitiesDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopEntitiesDetectionJobError::InternalServer(ref cause) => cause,
-            StopEntitiesDetectionJobError::InvalidRequest(ref cause) => cause,
-            StopEntitiesDetectionJobError::JobNotFound(ref cause) => cause,
+            StopEntitiesDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopEntitiesDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopEntitiesDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopEntitiesDetectionJobError {}
 /// Errors returned by StopKeyPhrasesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StopKeyPhrasesDetectionJobError {
@@ -5109,18 +5063,14 @@ impl StopKeyPhrasesDetectionJobError {
 }
 impl fmt::Display for StopKeyPhrasesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopKeyPhrasesDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopKeyPhrasesDetectionJobError::InternalServer(ref cause) => cause,
-            StopKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => cause,
-            StopKeyPhrasesDetectionJobError::JobNotFound(ref cause) => cause,
+            StopKeyPhrasesDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopKeyPhrasesDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopKeyPhrasesDetectionJobError {}
 /// Errors returned by StopSentimentDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StopSentimentDetectionJobError {
@@ -5160,18 +5110,14 @@ impl StopSentimentDetectionJobError {
 }
 impl fmt::Display for StopSentimentDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopSentimentDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopSentimentDetectionJobError::InternalServer(ref cause) => cause,
-            StopSentimentDetectionJobError::InvalidRequest(ref cause) => cause,
-            StopSentimentDetectionJobError::JobNotFound(ref cause) => cause,
+            StopSentimentDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopSentimentDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopSentimentDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopSentimentDetectionJobError {}
 /// Errors returned by StopTrainingDocumentClassifier
 #[derive(Debug, PartialEq)]
 pub enum StopTrainingDocumentClassifierError {
@@ -5220,19 +5166,23 @@ impl StopTrainingDocumentClassifierError {
 }
 impl fmt::Display for StopTrainingDocumentClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopTrainingDocumentClassifierError {
-    fn description(&self) -> &str {
         match *self {
-            StopTrainingDocumentClassifierError::InternalServer(ref cause) => cause,
-            StopTrainingDocumentClassifierError::InvalidRequest(ref cause) => cause,
-            StopTrainingDocumentClassifierError::ResourceNotFound(ref cause) => cause,
-            StopTrainingDocumentClassifierError::TooManyRequests(ref cause) => cause,
+            StopTrainingDocumentClassifierError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopTrainingDocumentClassifierError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopTrainingDocumentClassifierError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopTrainingDocumentClassifierError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StopTrainingDocumentClassifierError {}
 /// Errors returned by StopTrainingEntityRecognizer
 #[derive(Debug, PartialEq)]
 pub enum StopTrainingEntityRecognizerError {
@@ -5281,19 +5231,17 @@ impl StopTrainingEntityRecognizerError {
 }
 impl fmt::Display for StopTrainingEntityRecognizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopTrainingEntityRecognizerError {
-    fn description(&self) -> &str {
         match *self {
-            StopTrainingEntityRecognizerError::InternalServer(ref cause) => cause,
-            StopTrainingEntityRecognizerError::InvalidRequest(ref cause) => cause,
-            StopTrainingEntityRecognizerError::ResourceNotFound(ref cause) => cause,
-            StopTrainingEntityRecognizerError::TooManyRequests(ref cause) => cause,
+            StopTrainingEntityRecognizerError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopTrainingEntityRecognizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopTrainingEntityRecognizerError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopTrainingEntityRecognizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopTrainingEntityRecognizerError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -5337,20 +5285,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ConcurrentModification(ref cause) => cause,
-            TagResourceError::InternalServer(ref cause) => cause,
-            TagResourceError::InvalidRequest(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -5396,20 +5340,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ConcurrentModification(ref cause) => cause,
-            UntagResourceError::InternalServer(ref cause) => cause,
-            UntagResourceError::InvalidRequest(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::TooManyTagKeys(ref cause) => cause,
+            UntagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyTagKeys(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateEndpoint
 #[derive(Debug, PartialEq)]
 pub enum UpdateEndpointError {
@@ -5465,22 +5405,18 @@ impl UpdateEndpointError {
 }
 impl fmt::Display for UpdateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateEndpointError::InternalServer(ref cause) => cause,
-            UpdateEndpointError::InvalidRequest(ref cause) => cause,
-            UpdateEndpointError::ResourceInUse(ref cause) => cause,
-            UpdateEndpointError::ResourceLimitExceeded(ref cause) => cause,
-            UpdateEndpointError::ResourceNotFound(ref cause) => cause,
-            UpdateEndpointError::ResourceUnavailable(ref cause) => cause,
-            UpdateEndpointError::TooManyRequests(ref cause) => cause,
+            UpdateEndpointError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateEndpointError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateEndpointError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateEndpointError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateEndpointError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateEndpointError {}
 /// Trait representing the capabilities of the Amazon Comprehend API. Amazon Comprehend clients implement this trait.
 pub trait Comprehend {
     /// <p>Determines the dominant language of the input text for a batch of documents. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>

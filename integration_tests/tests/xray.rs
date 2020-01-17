@@ -6,7 +6,7 @@ extern crate time;
 
 use rusoto_core::Region;
 use rusoto_xray::{GetServiceGraphRequest, XRay, XRayClient};
-use time::get_time;
+use time::Time;
 
 // duplicates the AWS X-Ray CLI example, which gets an (empty) service graph
 // for the last 600 seconds
@@ -14,7 +14,7 @@ use time::get_time;
 fn should_get_service_graph() {
     let client = XRayClient::new(Region::UsEast1);
 
-    let time = (get_time().sec - 30) as f64; // 30 seconds in the past
+    let time = (Time::now().second() - 30) as f64; // 30 seconds in the past
 
     let request = GetServiceGraphRequest {
         start_time: time - 600.0,

@@ -160,6 +160,7 @@ pub struct ApprovalStateChangedEventMetadata {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateApprovalRuleTemplateWithRepositoryInput {
     /// <p>The name for the approval rule template. </p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -188,6 +189,7 @@ pub struct CodeCommitBatchAssociateApprovalRuleTemplateWithRepositoriesError {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAssociateApprovalRuleTemplateWithRepositoriesInput {
     /// <p>The name of the template you want to associate with one or more repositories.</p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -224,6 +226,7 @@ pub struct CodeCommitBatchDescribeMergeConflictsError {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDescribeMergeConflictsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
@@ -308,6 +311,7 @@ pub struct CodeCommitBatchDisassociateApprovalRuleTemplateFromRepositoriesError 
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDisassociateApprovalRuleTemplateFromRepositoriesInput {
     /// <p>The name of the template that you want to disassociate from one or more repositories.</p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -347,6 +351,7 @@ pub struct CodeCommitBatchGetCommitsError {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetCommitsInput {
     /// <p><p>The full commit IDs of the commits to get information about.</p> <note> <p>You must supply the full SHA IDs of each commit. You cannot use shortened SHA IDs.</p> </note></p>
     #[serde(rename = "commitIds")]
@@ -371,6 +376,7 @@ pub struct BatchGetCommitsOutput {
 
 /// <p>Represents the input of a batch get repositories operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetRepositoriesInput {
     /// <p><p>The names of the repositories to get information about.</p> <note> <p>The length constraint limit is for each string in the array. The array itself can be empty.</p> </note></p>
     #[serde(rename = "repositoryNames")]
@@ -629,6 +635,7 @@ pub struct ConflictMetadata {
 
 /// <p>If AUTOMERGE is the conflict resolution strategy, a list of inputs to use when resolving conflicts during a merge.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConflictResolution {
     /// <p>Files to be deleted as part of the merge conflict resolution.</p>
     #[serde(rename = "deleteFiles")]
@@ -645,6 +652,7 @@ pub struct ConflictResolution {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApprovalRuleTemplateInput {
     /// <p><p>The content of the approval rule that is created on pull requests in associated repositories. If you specify one or more destination references (branches), approval rules are created in an associated repository only if their destination references (branches) match those specified in the template.</p> <note> <p>When you create the content of the approval rule template, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following are counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/iam/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
     #[serde(rename = "approvalRuleTemplateContent")]
@@ -668,6 +676,7 @@ pub struct CreateApprovalRuleTemplateOutput {
 
 /// <p>Represents the input of a create branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBranchInput {
     /// <p>The name of the new branch to create.</p>
     #[serde(rename = "branchName")]
@@ -681,6 +690,7 @@ pub struct CreateBranchInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCommitInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
@@ -748,6 +758,7 @@ pub struct CreateCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePullRequestApprovalRuleInput {
     /// <p><p>The content of the approval rule, including the number of approvals needed and the structure of an approval pool defined for approvals, if any. For more information about approval pools, see the AWS CodeCommit User Guide.</p> <note> <p>When you create the content of the approval rule, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following would be counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/iam/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
     #[serde(rename = "approvalRuleContent")]
@@ -769,6 +780,7 @@ pub struct CreatePullRequestApprovalRuleOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePullRequestInput {
     /// <p><p>A unique, client-generated idempotency token that, when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request returns information about the initial request that used that token.</p> <note> <p>The AWS SDKs prepopulate client request tokens. If you are using an AWS SDK, an idempotency token is created for you.</p> </note></p>
     #[serde(rename = "clientRequestToken")]
@@ -796,6 +808,7 @@ pub struct CreatePullRequestOutput {
 
 /// <p>Represents the input of a create repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRepositoryInput {
     /// <p><p>A comment or description about the new repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a webpage can expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a webpage.</p> </note></p>
     #[serde(rename = "repositoryDescription")]
@@ -821,6 +834,7 @@ pub struct CreateRepositoryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUnreferencedMergeCommitInput {
     /// <p>The name of the author who created the unreferenced commit. This information is used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
@@ -878,6 +892,7 @@ pub struct CreateUnreferencedMergeCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApprovalRuleTemplateInput {
     /// <p>The name of the approval rule template to delete.</p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -894,6 +909,7 @@ pub struct DeleteApprovalRuleTemplateOutput {
 
 /// <p>Represents the input of a delete branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBranchInput {
     /// <p>The name of the branch to delete.</p>
     #[serde(rename = "branchName")]
@@ -914,6 +930,7 @@ pub struct DeleteBranchOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCommentContentInput {
     /// <p>The unique, system-generated ID of the comment. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
     #[serde(rename = "commentId")]
@@ -931,6 +948,7 @@ pub struct DeleteCommentContentOutput {
 
 /// <p>A file that is deleted as part of a commit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileEntry {
     /// <p>The full path of the file to be deleted, including the name of the file.</p>
     #[serde(rename = "filePath")]
@@ -938,6 +956,7 @@ pub struct DeleteFileEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileInput {
     /// <p>The name of the branch where the commit that deletes the file is made.</p>
     #[serde(rename = "branchName")]
@@ -987,6 +1006,7 @@ pub struct DeleteFileOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePullRequestApprovalRuleInput {
     /// <p>The name of the approval rule you want to delete.</p>
     #[serde(rename = "approvalRuleName")]
@@ -1006,6 +1026,7 @@ pub struct DeletePullRequestApprovalRuleOutput {
 
 /// <p>Represents the input of a delete repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRepositoryInput {
     /// <p>The name of the repository to delete.</p>
     #[serde(rename = "repositoryName")]
@@ -1023,6 +1044,7 @@ pub struct DeleteRepositoryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMergeConflictsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
@@ -1083,6 +1105,7 @@ pub struct DescribeMergeConflictsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePullRequestEventsInput {
     /// <p>The Amazon Resource Name (ARN) of the user whose actions resulted in the event. Examples include updating the pull request with more commits or changing the status of a pull request.</p>
     #[serde(rename = "actorArn")]
@@ -1136,6 +1159,7 @@ pub struct Difference {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateApprovalRuleTemplateFromRepositoryInput {
     /// <p>The name of the approval rule template to disassociate from a specified repository.</p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -1146,6 +1170,7 @@ pub struct DisassociateApprovalRuleTemplateFromRepositoryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EvaluatePullRequestApprovalRulesInput {
     /// <p>The system-generated ID of the pull request you want to evaluate.</p>
     #[serde(rename = "pullRequestId")]
@@ -1280,6 +1305,7 @@ pub struct Folder {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApprovalRuleTemplateInput {
     /// <p>The name of the approval rule template for which you want to get information.</p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -1296,6 +1322,7 @@ pub struct GetApprovalRuleTemplateOutput {
 
 /// <p>Represents the input of a get blob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlobInput {
     /// <p>The ID of the blob, which is its SHA-1 pointer.</p>
     #[serde(rename = "blobId")]
@@ -1321,6 +1348,7 @@ pub struct GetBlobOutput {
 
 /// <p>Represents the input of a get branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBranchInput {
     /// <p>The name of the branch for which you want to retrieve information.</p>
     #[serde(rename = "branchName")]
@@ -1343,6 +1371,7 @@ pub struct GetBranchOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentInput {
     /// <p>The unique, system-generated ID of the comment. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
     #[serde(rename = "commentId")]
@@ -1359,6 +1388,7 @@ pub struct GetCommentOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentsForComparedCommitInput {
     /// <p>To establish the directionality of the comparison, the full commit ID of the after commit.</p>
     #[serde(rename = "afterCommitId")]
@@ -1394,6 +1424,7 @@ pub struct GetCommentsForComparedCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentsForPullRequestInput {
     /// <p>The full commit ID of the commit in the source branch that was the tip of the branch at the time the comment was made.</p>
     #[serde(rename = "afterCommitId")]
@@ -1435,6 +1466,7 @@ pub struct GetCommentsForPullRequestOutput {
 
 /// <p>Represents the input of a get commit operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommitInput {
     /// <p>The commit ID. Commit IDs are the full SHA ID of the commit.</p>
     #[serde(rename = "commitId")]
@@ -1454,6 +1486,7 @@ pub struct GetCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDifferencesInput {
     /// <p>A non-zero, non-negative integer used to limit the number of returned results.</p>
     #[serde(rename = "MaxResults")]
@@ -1497,6 +1530,7 @@ pub struct GetDifferencesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFileInput {
     /// <p>The fully quaified reference that identifies the commit that contains the file. For example, you can specify a full commit ID, a tag, a branch name, or a reference such as refs/heads/master. If none is provided, the head commit is used.</p>
     #[serde(rename = "commitSpecifier")]
@@ -1539,6 +1573,7 @@ pub struct GetFileOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFolderInput {
     /// <p>A fully qualified reference used to identify a commit that contains the version of the folder's content to return. A fully qualified reference can be a commit ID, branch name, tag, or reference such as HEAD. If no specifier is provided, the folder content is returned as it exists in the HEAD commit.</p>
     #[serde(rename = "commitSpecifier")]
@@ -1584,6 +1619,7 @@ pub struct GetFolderOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMergeCommitInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
@@ -1626,6 +1662,7 @@ pub struct GetMergeCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMergeConflictsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
@@ -1683,6 +1720,7 @@ pub struct GetMergeConflictsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMergeOptionsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
@@ -1721,6 +1759,7 @@ pub struct GetMergeOptionsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPullRequestApprovalStatesInput {
     /// <p>The system-generated ID for the pull request.</p>
     #[serde(rename = "pullRequestId")]
@@ -1740,6 +1779,7 @@ pub struct GetPullRequestApprovalStatesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPullRequestInput {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
@@ -1755,6 +1795,7 @@ pub struct GetPullRequestOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPullRequestOverrideStateInput {
     /// <p>The ID of the pull request for which you want to get information about whether approval rules have been set aside (overridden).</p>
     #[serde(rename = "pullRequestId")]
@@ -1779,6 +1820,7 @@ pub struct GetPullRequestOverrideStateOutput {
 
 /// <p>Represents the input of a get repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRepositoryInput {
     /// <p>The name of the repository to get information about.</p>
     #[serde(rename = "repositoryName")]
@@ -1797,6 +1839,7 @@ pub struct GetRepositoryOutput {
 
 /// <p>Represents the input of a get repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRepositoryTriggersInput {
     /// <p>The name of the repository for which the trigger is configured.</p>
     #[serde(rename = "repositoryName")]
@@ -1836,6 +1879,7 @@ pub struct IsBinaryFile {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApprovalRuleTemplatesInput {
     /// <p>A non-zero, non-negative integer used to limit the number of returned results.</p>
     #[serde(rename = "maxResults")]
@@ -1861,6 +1905,7 @@ pub struct ListApprovalRuleTemplatesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociatedApprovalRuleTemplatesForRepositoryInput {
     /// <p>A non-zero, non-negative integer used to limit the number of returned results.</p>
     #[serde(rename = "maxResults")]
@@ -1890,6 +1935,7 @@ pub struct ListAssociatedApprovalRuleTemplatesForRepositoryOutput {
 
 /// <p>Represents the input of a list branches operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBranchesInput {
     /// <p>An enumeration token that allows the operation to batch the results.</p>
     #[serde(rename = "nextToken")]
@@ -1915,6 +1961,7 @@ pub struct ListBranchesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPullRequestsInput {
     /// <p>Optional. The Amazon Resource Name (ARN) of the user who created the pull request. If used, this filters the results to pull requests created by that user.</p>
     #[serde(rename = "authorArn")]
@@ -1950,6 +1997,7 @@ pub struct ListPullRequestsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRepositoriesForApprovalRuleTemplateInput {
     /// <p>The name of the approval rule template for which you want to list repositories that are associated with that template.</p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -1979,6 +2027,7 @@ pub struct ListRepositoriesForApprovalRuleTemplateOutput {
 
 /// <p>Represents the input of a list repositories operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRepositoriesInput {
     /// <p>An enumeration token that allows the operation to batch the results of the operation. Batch sizes are 1,000 for list repository operations. When the client sends the token back to AWS CodeCommit, another page of 1,000 records is retrieved.</p>
     #[serde(rename = "nextToken")]
@@ -2009,6 +2058,7 @@ pub struct ListRepositoriesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>An enumeration token that, when provided in a request, returns the next batch of the results.</p>
     #[serde(rename = "nextToken")]
@@ -2050,6 +2100,7 @@ pub struct Location {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeBranchesByFastForwardInput {
     /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit (for example, a branch name or a full commit ID).</p>
     #[serde(rename = "destinationCommitSpecifier")]
@@ -2080,6 +2131,7 @@ pub struct MergeBranchesByFastForwardOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeBranchesBySquashInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
@@ -2138,6 +2190,7 @@ pub struct MergeBranchesBySquashOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeBranchesByThreeWayInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
@@ -2272,6 +2325,7 @@ pub struct MergeOperations {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergePullRequestByFastForwardInput {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
@@ -2295,6 +2349,7 @@ pub struct MergePullRequestByFastForwardOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergePullRequestBySquashInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
@@ -2345,6 +2400,7 @@ pub struct MergePullRequestBySquashOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergePullRequestByThreeWayInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
@@ -2427,6 +2483,7 @@ pub struct OriginApprovalRuleTemplate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OverridePullRequestApprovalRulesInput {
     /// <p>Whether you want to set aside approval rule requirements for the pull request (OVERRIDE) or revoke a previous override and apply approval rule requirements (REVOKE). REVOKE status is not stored.</p>
     #[serde(rename = "overrideStatus")]
@@ -2440,6 +2497,7 @@ pub struct OverridePullRequestApprovalRulesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostCommentForComparedCommitInput {
     /// <p>To establish the directionality of the comparison, the full commit ID of the after commit.</p>
     #[serde(rename = "afterCommitId")]
@@ -2498,6 +2556,7 @@ pub struct PostCommentForComparedCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostCommentForPullRequestInput {
     /// <p>The full commit ID of the commit in the source branch that is the current tip of the branch for the pull request when you post the comment.</p>
     #[serde(rename = "afterCommitId")]
@@ -2562,6 +2621,7 @@ pub struct PostCommentForPullRequestOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostCommentReplyInput {
     /// <p>A unique, client-generated idempotency token that, when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request returns information about the initial request that used that token.</p>
     #[serde(rename = "clientRequestToken")]
@@ -2794,6 +2854,7 @@ pub struct PullRequestTarget {
 
 /// <p>Information about a file added or updated as part of a commit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFileEntry {
     /// <p>The content of the file, if a source file is not specified.</p>
     #[serde(rename = "fileContent")]
@@ -2818,6 +2879,7 @@ pub struct PutFileEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFileInput {
     /// <p>The name of the branch where you want to add or update the file. If this is an empty repository, this branch is created.</p>
     #[serde(rename = "branchName")]
@@ -2874,6 +2936,7 @@ pub struct PutFileOutput {
 
 /// <p>Represents the input of a put repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRepositoryTriggersInput {
     /// <p>The name of the repository where you want to create or update the trigger.</p>
     #[serde(rename = "repositoryName")]
@@ -2895,6 +2958,7 @@ pub struct PutRepositoryTriggersOutput {
 
 /// <p>Information about a replacement content entry in the conflict of a merge or pull request operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceContentEntry {
     /// <p>The base-64 encoded content to use when the replacement type is USE_NEW_CONTENT.</p>
     #[serde(rename = "content")]
@@ -3015,6 +3079,7 @@ pub struct RepositoryTriggerExecutionFailure {
 
 /// <p>Information about the file mode changes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetFileModeEntry {
     /// <p>The file mode for the file.</p>
     #[serde(rename = "fileMode")]
@@ -3026,6 +3091,7 @@ pub struct SetFileModeEntry {
 
 /// <p>Information about a source file that is part of changes made in a commit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SourceFileSpecifier {
     /// <p>The full path to the file, including the name of the file.</p>
     #[serde(rename = "filePath")]
@@ -3077,6 +3143,7 @@ pub struct SymbolicLink {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to which you want to add or update tags.</p>
     #[serde(rename = "resourceArn")]
@@ -3088,6 +3155,7 @@ pub struct TagResourceInput {
 
 /// <p>Returns information about a target for a pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Target {
     /// <p>The branch of the repository where the pull request changes are merged. Also known as the destination branch.</p>
     #[serde(rename = "destinationReference")]
@@ -3103,6 +3171,7 @@ pub struct Target {
 
 /// <p>Represents the input of a test repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestRepositoryTriggersInput {
     /// <p>The name of the repository in which to test the triggers.</p>
     #[serde(rename = "repositoryName")]
@@ -3127,6 +3196,7 @@ pub struct TestRepositoryTriggersOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to which you want to remove tags.</p>
     #[serde(rename = "resourceArn")]
@@ -3137,6 +3207,7 @@ pub struct UntagResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApprovalRuleTemplateContentInput {
     /// <p>The name of the approval rule template where you want to update the content of the rule. </p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -3158,6 +3229,7 @@ pub struct UpdateApprovalRuleTemplateContentOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApprovalRuleTemplateDescriptionInput {
     /// <p>The updated description of the approval rule template.</p>
     #[serde(rename = "approvalRuleTemplateDescription")]
@@ -3176,6 +3248,7 @@ pub struct UpdateApprovalRuleTemplateDescriptionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApprovalRuleTemplateNameInput {
     /// <p>The new name you want to apply to the approval rule template.</p>
     #[serde(rename = "newApprovalRuleTemplateName")]
@@ -3194,6 +3267,7 @@ pub struct UpdateApprovalRuleTemplateNameOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCommentInput {
     /// <p>The system-generated ID of the comment you want to update. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
     #[serde(rename = "commentId")]
@@ -3214,6 +3288,7 @@ pub struct UpdateCommentOutput {
 
 /// <p>Represents the input of an update default branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDefaultBranchInput {
     /// <p>The name of the branch to set as the default.</p>
     #[serde(rename = "defaultBranchName")]
@@ -3224,6 +3299,7 @@ pub struct UpdateDefaultBranchInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestApprovalRuleContentInput {
     /// <p>The name of the approval rule you want to update.</p>
     #[serde(rename = "approvalRuleName")]
@@ -3249,6 +3325,7 @@ pub struct UpdatePullRequestApprovalRuleContentOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestApprovalStateInput {
     /// <p>The approval state to associate with the user on the pull request.</p>
     #[serde(rename = "approvalState")]
@@ -3262,6 +3339,7 @@ pub struct UpdatePullRequestApprovalStateInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestDescriptionInput {
     /// <p>The updated content of the description for the pull request. This content replaces the existing description.</p>
     #[serde(rename = "description")]
@@ -3280,6 +3358,7 @@ pub struct UpdatePullRequestDescriptionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestStatusInput {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
@@ -3298,6 +3377,7 @@ pub struct UpdatePullRequestStatusOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestTitleInput {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
@@ -3317,6 +3397,7 @@ pub struct UpdatePullRequestTitleOutput {
 
 /// <p>Represents the input of an update repository description operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRepositoryDescriptionInput {
     /// <p>The new comment or description for the specified repository. Repository descriptions are limited to 1,000 characters.</p>
     #[serde(rename = "repositoryDescription")]
@@ -3329,6 +3410,7 @@ pub struct UpdateRepositoryDescriptionInput {
 
 /// <p>Represents the input of an update repository description operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRepositoryNameInput {
     /// <p>The new name for the repository.</p>
     #[serde(rename = "newName")]
@@ -3412,27 +3494,23 @@ _ => {}
 }
 impl fmt::Display for AssociateApprovalRuleTemplateWithRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateApprovalRuleTemplateWithRepositoryError {
-    fn description(&self) -> &str {
         match *self {
-                            AssociateApprovalRuleTemplateWithRepositoryError::ApprovalRuleTemplateDoesNotExist(ref cause) => cause,
-AssociateApprovalRuleTemplateWithRepositoryError::ApprovalRuleTemplateNameRequired(ref cause) => cause,
-AssociateApprovalRuleTemplateWithRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-AssociateApprovalRuleTemplateWithRepositoryError::EncryptionKeyAccessDenied(ref cause) => cause,
-AssociateApprovalRuleTemplateWithRepositoryError::EncryptionKeyDisabled(ref cause) => cause,
-AssociateApprovalRuleTemplateWithRepositoryError::EncryptionKeyNotFound(ref cause) => cause,
-AssociateApprovalRuleTemplateWithRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,
-AssociateApprovalRuleTemplateWithRepositoryError::InvalidApprovalRuleTemplateName(ref cause) => cause,
-AssociateApprovalRuleTemplateWithRepositoryError::InvalidRepositoryName(ref cause) => cause,
-AssociateApprovalRuleTemplateWithRepositoryError::MaximumRuleTemplatesAssociatedWithRepository(ref cause) => cause,
-AssociateApprovalRuleTemplateWithRepositoryError::RepositoryDoesNotExist(ref cause) => cause,
-AssociateApprovalRuleTemplateWithRepositoryError::RepositoryNameRequired(ref cause) => cause
+                            AssociateApprovalRuleTemplateWithRepositoryError::ApprovalRuleTemplateDoesNotExist(ref cause) => write!(f, "{}", cause),
+AssociateApprovalRuleTemplateWithRepositoryError::ApprovalRuleTemplateNameRequired(ref cause) => write!(f, "{}", cause),
+AssociateApprovalRuleTemplateWithRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+AssociateApprovalRuleTemplateWithRepositoryError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+AssociateApprovalRuleTemplateWithRepositoryError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+AssociateApprovalRuleTemplateWithRepositoryError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+AssociateApprovalRuleTemplateWithRepositoryError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+AssociateApprovalRuleTemplateWithRepositoryError::InvalidApprovalRuleTemplateName(ref cause) => write!(f, "{}", cause),
+AssociateApprovalRuleTemplateWithRepositoryError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+AssociateApprovalRuleTemplateWithRepositoryError::MaximumRuleTemplatesAssociatedWithRepository(ref cause) => write!(f, "{}", cause),
+AssociateApprovalRuleTemplateWithRepositoryError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+AssociateApprovalRuleTemplateWithRepositoryError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for AssociateApprovalRuleTemplateWithRepositoryError {}
 /// Errors returned by BatchAssociateApprovalRuleTemplateWithRepositories
 #[derive(Debug, PartialEq)]
 pub enum BatchAssociateApprovalRuleTemplateWithRepositoriesError {
@@ -3483,25 +3561,21 @@ _ => {}
 }
 impl fmt::Display for BatchAssociateApprovalRuleTemplateWithRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchAssociateApprovalRuleTemplateWithRepositoriesError {
-    fn description(&self) -> &str {
         match *self {
-                            BatchAssociateApprovalRuleTemplateWithRepositoriesError::ApprovalRuleTemplateDoesNotExist(ref cause) => cause,
-BatchAssociateApprovalRuleTemplateWithRepositoriesError::ApprovalRuleTemplateNameRequired(ref cause) => cause,
-BatchAssociateApprovalRuleTemplateWithRepositoriesError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-BatchAssociateApprovalRuleTemplateWithRepositoriesError::EncryptionKeyAccessDenied(ref cause) => cause,
-BatchAssociateApprovalRuleTemplateWithRepositoriesError::EncryptionKeyDisabled(ref cause) => cause,
-BatchAssociateApprovalRuleTemplateWithRepositoriesError::EncryptionKeyNotFound(ref cause) => cause,
-BatchAssociateApprovalRuleTemplateWithRepositoriesError::EncryptionKeyUnavailable(ref cause) => cause,
-BatchAssociateApprovalRuleTemplateWithRepositoriesError::InvalidApprovalRuleTemplateName(ref cause) => cause,
-BatchAssociateApprovalRuleTemplateWithRepositoriesError::MaximumRepositoryNamesExceeded(ref cause) => cause,
-BatchAssociateApprovalRuleTemplateWithRepositoriesError::RepositoryNamesRequired(ref cause) => cause
+                            BatchAssociateApprovalRuleTemplateWithRepositoriesError::ApprovalRuleTemplateDoesNotExist(ref cause) => write!(f, "{}", cause),
+BatchAssociateApprovalRuleTemplateWithRepositoriesError::ApprovalRuleTemplateNameRequired(ref cause) => write!(f, "{}", cause),
+BatchAssociateApprovalRuleTemplateWithRepositoriesError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+BatchAssociateApprovalRuleTemplateWithRepositoriesError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+BatchAssociateApprovalRuleTemplateWithRepositoriesError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+BatchAssociateApprovalRuleTemplateWithRepositoriesError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+BatchAssociateApprovalRuleTemplateWithRepositoriesError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+BatchAssociateApprovalRuleTemplateWithRepositoriesError::InvalidApprovalRuleTemplateName(ref cause) => write!(f, "{}", cause),
+BatchAssociateApprovalRuleTemplateWithRepositoriesError::MaximumRepositoryNamesExceeded(ref cause) => write!(f, "{}", cause),
+BatchAssociateApprovalRuleTemplateWithRepositoriesError::RepositoryNamesRequired(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for BatchAssociateApprovalRuleTemplateWithRepositoriesError {}
 /// Errors returned by BatchDescribeMergeConflicts
 #[derive(Debug, PartialEq)]
 pub enum BatchDescribeMergeConflictsError {
@@ -3671,36 +3745,70 @@ impl BatchDescribeMergeConflictsError {
 }
 impl fmt::Display for BatchDescribeMergeConflictsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDescribeMergeConflictsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDescribeMergeConflictsError::CommitDoesNotExist(ref cause) => cause,
-            BatchDescribeMergeConflictsError::CommitRequired(ref cause) => cause,
-            BatchDescribeMergeConflictsError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            BatchDescribeMergeConflictsError::EncryptionKeyAccessDenied(ref cause) => cause,
-            BatchDescribeMergeConflictsError::EncryptionKeyDisabled(ref cause) => cause,
-            BatchDescribeMergeConflictsError::EncryptionKeyNotFound(ref cause) => cause,
-            BatchDescribeMergeConflictsError::EncryptionKeyUnavailable(ref cause) => cause,
-            BatchDescribeMergeConflictsError::InvalidCommit(ref cause) => cause,
-            BatchDescribeMergeConflictsError::InvalidConflictDetailLevel(ref cause) => cause,
-            BatchDescribeMergeConflictsError::InvalidConflictResolutionStrategy(ref cause) => cause,
-            BatchDescribeMergeConflictsError::InvalidContinuationToken(ref cause) => cause,
-            BatchDescribeMergeConflictsError::InvalidMaxConflictFiles(ref cause) => cause,
-            BatchDescribeMergeConflictsError::InvalidMaxMergeHunks(ref cause) => cause,
-            BatchDescribeMergeConflictsError::InvalidMergeOption(ref cause) => cause,
-            BatchDescribeMergeConflictsError::InvalidRepositoryName(ref cause) => cause,
-            BatchDescribeMergeConflictsError::MaximumFileContentToLoadExceeded(ref cause) => cause,
-            BatchDescribeMergeConflictsError::MaximumItemsToCompareExceeded(ref cause) => cause,
-            BatchDescribeMergeConflictsError::MergeOptionRequired(ref cause) => cause,
-            BatchDescribeMergeConflictsError::RepositoryDoesNotExist(ref cause) => cause,
-            BatchDescribeMergeConflictsError::RepositoryNameRequired(ref cause) => cause,
-            BatchDescribeMergeConflictsError::TipsDivergenceExceeded(ref cause) => cause,
+            BatchDescribeMergeConflictsError::CommitDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::CommitRequired(ref cause) => write!(f, "{}", cause),
+            BatchDescribeMergeConflictsError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::InvalidCommit(ref cause) => write!(f, "{}", cause),
+            BatchDescribeMergeConflictsError::InvalidConflictDetailLevel(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::InvalidConflictResolutionStrategy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::InvalidContinuationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::InvalidMaxConflictFiles(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::InvalidMaxMergeHunks(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::InvalidMergeOption(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::InvalidRepositoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::MaximumFileContentToLoadExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::MaximumItemsToCompareExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::MergeOptionRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDescribeMergeConflictsError::TipsDivergenceExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchDescribeMergeConflictsError {}
 /// Errors returned by BatchDisassociateApprovalRuleTemplateFromRepositories
 #[derive(Debug, PartialEq)]
 pub enum BatchDisassociateApprovalRuleTemplateFromRepositoriesError {
@@ -3751,25 +3859,21 @@ _ => {}
 }
 impl fmt::Display for BatchDisassociateApprovalRuleTemplateFromRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDisassociateApprovalRuleTemplateFromRepositoriesError {
-    fn description(&self) -> &str {
         match *self {
-                            BatchDisassociateApprovalRuleTemplateFromRepositoriesError::ApprovalRuleTemplateDoesNotExist(ref cause) => cause,
-BatchDisassociateApprovalRuleTemplateFromRepositoriesError::ApprovalRuleTemplateNameRequired(ref cause) => cause,
-BatchDisassociateApprovalRuleTemplateFromRepositoriesError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-BatchDisassociateApprovalRuleTemplateFromRepositoriesError::EncryptionKeyAccessDenied(ref cause) => cause,
-BatchDisassociateApprovalRuleTemplateFromRepositoriesError::EncryptionKeyDisabled(ref cause) => cause,
-BatchDisassociateApprovalRuleTemplateFromRepositoriesError::EncryptionKeyNotFound(ref cause) => cause,
-BatchDisassociateApprovalRuleTemplateFromRepositoriesError::EncryptionKeyUnavailable(ref cause) => cause,
-BatchDisassociateApprovalRuleTemplateFromRepositoriesError::InvalidApprovalRuleTemplateName(ref cause) => cause,
-BatchDisassociateApprovalRuleTemplateFromRepositoriesError::MaximumRepositoryNamesExceeded(ref cause) => cause,
-BatchDisassociateApprovalRuleTemplateFromRepositoriesError::RepositoryNamesRequired(ref cause) => cause
+                            BatchDisassociateApprovalRuleTemplateFromRepositoriesError::ApprovalRuleTemplateDoesNotExist(ref cause) => write!(f, "{}", cause),
+BatchDisassociateApprovalRuleTemplateFromRepositoriesError::ApprovalRuleTemplateNameRequired(ref cause) => write!(f, "{}", cause),
+BatchDisassociateApprovalRuleTemplateFromRepositoriesError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+BatchDisassociateApprovalRuleTemplateFromRepositoriesError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+BatchDisassociateApprovalRuleTemplateFromRepositoriesError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+BatchDisassociateApprovalRuleTemplateFromRepositoriesError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+BatchDisassociateApprovalRuleTemplateFromRepositoriesError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+BatchDisassociateApprovalRuleTemplateFromRepositoriesError::InvalidApprovalRuleTemplateName(ref cause) => write!(f, "{}", cause),
+BatchDisassociateApprovalRuleTemplateFromRepositoriesError::MaximumRepositoryNamesExceeded(ref cause) => write!(f, "{}", cause),
+BatchDisassociateApprovalRuleTemplateFromRepositoriesError::RepositoryNamesRequired(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for BatchDisassociateApprovalRuleTemplateFromRepositoriesError {}
 /// Errors returned by BatchGetCommits
 #[derive(Debug, PartialEq)]
 pub enum BatchGetCommitsError {
@@ -3858,25 +3962,23 @@ impl BatchGetCommitsError {
 }
 impl fmt::Display for BatchGetCommitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetCommitsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetCommitsError::CommitIdsLimitExceeded(ref cause) => cause,
-            BatchGetCommitsError::CommitIdsListRequired(ref cause) => cause,
-            BatchGetCommitsError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            BatchGetCommitsError::EncryptionKeyAccessDenied(ref cause) => cause,
-            BatchGetCommitsError::EncryptionKeyDisabled(ref cause) => cause,
-            BatchGetCommitsError::EncryptionKeyNotFound(ref cause) => cause,
-            BatchGetCommitsError::EncryptionKeyUnavailable(ref cause) => cause,
-            BatchGetCommitsError::InvalidRepositoryName(ref cause) => cause,
-            BatchGetCommitsError::RepositoryDoesNotExist(ref cause) => cause,
-            BatchGetCommitsError::RepositoryNameRequired(ref cause) => cause,
+            BatchGetCommitsError::CommitIdsLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchGetCommitsError::CommitIdsListRequired(ref cause) => write!(f, "{}", cause),
+            BatchGetCommitsError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetCommitsError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            BatchGetCommitsError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            BatchGetCommitsError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            BatchGetCommitsError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            BatchGetCommitsError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            BatchGetCommitsError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            BatchGetCommitsError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetCommitsError {}
 /// Errors returned by BatchGetRepositories
 #[derive(Debug, PartialEq)]
 pub enum BatchGetRepositoriesError {
@@ -3951,23 +4053,27 @@ impl BatchGetRepositoriesError {
 }
 impl fmt::Display for BatchGetRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetRepositoriesError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetRepositoriesError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            BatchGetRepositoriesError::EncryptionKeyAccessDenied(ref cause) => cause,
-            BatchGetRepositoriesError::EncryptionKeyDisabled(ref cause) => cause,
-            BatchGetRepositoriesError::EncryptionKeyNotFound(ref cause) => cause,
-            BatchGetRepositoriesError::EncryptionKeyUnavailable(ref cause) => cause,
-            BatchGetRepositoriesError::InvalidRepositoryName(ref cause) => cause,
-            BatchGetRepositoriesError::MaximumRepositoryNamesExceeded(ref cause) => cause,
-            BatchGetRepositoriesError::RepositoryNamesRequired(ref cause) => cause,
+            BatchGetRepositoriesError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetRepositoriesError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetRepositoriesError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            BatchGetRepositoriesError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            BatchGetRepositoriesError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetRepositoriesError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            BatchGetRepositoriesError::MaximumRepositoryNamesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetRepositoriesError::RepositoryNamesRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetRepositoriesError {}
 /// Errors returned by CreateApprovalRuleTemplate
 #[derive(Debug, PartialEq)]
 pub enum CreateApprovalRuleTemplateError {
@@ -4045,28 +4151,32 @@ impl CreateApprovalRuleTemplateError {
 }
 impl fmt::Display for CreateApprovalRuleTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApprovalRuleTemplateError {
-    fn description(&self) -> &str {
         match *self {
             CreateApprovalRuleTemplateError::ApprovalRuleTemplateContentRequired(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             CreateApprovalRuleTemplateError::ApprovalRuleTemplateNameAlreadyExists(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateApprovalRuleTemplateError::ApprovalRuleTemplateNameRequired(ref cause) => cause,
-            CreateApprovalRuleTemplateError::InvalidApprovalRuleTemplateContent(ref cause) => cause,
+            CreateApprovalRuleTemplateError::ApprovalRuleTemplateNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateApprovalRuleTemplateError::InvalidApprovalRuleTemplateContent(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateApprovalRuleTemplateError::InvalidApprovalRuleTemplateDescription(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateApprovalRuleTemplateError::InvalidApprovalRuleTemplateName(ref cause) => cause,
-            CreateApprovalRuleTemplateError::NumberOfRuleTemplatesExceeded(ref cause) => cause,
+            CreateApprovalRuleTemplateError::InvalidApprovalRuleTemplateName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateApprovalRuleTemplateError::NumberOfRuleTemplatesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateApprovalRuleTemplateError {}
 /// Errors returned by CreateBranch
 #[derive(Debug, PartialEq)]
 pub enum CreateBranchError {
@@ -4161,29 +4271,25 @@ impl CreateBranchError {
 }
 impl fmt::Display for CreateBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBranchError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBranchError::BranchNameExists(ref cause) => cause,
-            CreateBranchError::BranchNameRequired(ref cause) => cause,
-            CreateBranchError::CommitDoesNotExist(ref cause) => cause,
-            CreateBranchError::CommitIdRequired(ref cause) => cause,
-            CreateBranchError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            CreateBranchError::EncryptionKeyAccessDenied(ref cause) => cause,
-            CreateBranchError::EncryptionKeyDisabled(ref cause) => cause,
-            CreateBranchError::EncryptionKeyNotFound(ref cause) => cause,
-            CreateBranchError::EncryptionKeyUnavailable(ref cause) => cause,
-            CreateBranchError::InvalidBranchName(ref cause) => cause,
-            CreateBranchError::InvalidCommitId(ref cause) => cause,
-            CreateBranchError::InvalidRepositoryName(ref cause) => cause,
-            CreateBranchError::RepositoryDoesNotExist(ref cause) => cause,
-            CreateBranchError::RepositoryNameRequired(ref cause) => cause,
+            CreateBranchError::BranchNameExists(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::BranchNameRequired(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::CommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::CommitIdRequired(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::InvalidBranchName(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::InvalidCommitId(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBranchError {}
 /// Errors returned by CreateCommit
 #[derive(Debug, PartialEq)]
 pub enum CreateCommitError {
@@ -4420,53 +4526,57 @@ impl CreateCommitError {
 }
 impl fmt::Display for CreateCommitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCommitError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCommitError::BranchDoesNotExist(ref cause) => cause,
-            CreateCommitError::BranchNameIsTagName(ref cause) => cause,
-            CreateCommitError::BranchNameRequired(ref cause) => cause,
-            CreateCommitError::CommitMessageLengthExceeded(ref cause) => cause,
-            CreateCommitError::DirectoryNameConflictsWithFileName(ref cause) => cause,
-            CreateCommitError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            CreateCommitError::EncryptionKeyAccessDenied(ref cause) => cause,
-            CreateCommitError::EncryptionKeyDisabled(ref cause) => cause,
-            CreateCommitError::EncryptionKeyNotFound(ref cause) => cause,
-            CreateCommitError::EncryptionKeyUnavailable(ref cause) => cause,
-            CreateCommitError::FileContentAndSourceFileSpecified(ref cause) => cause,
-            CreateCommitError::FileContentSizeLimitExceeded(ref cause) => cause,
-            CreateCommitError::FileDoesNotExist(ref cause) => cause,
-            CreateCommitError::FileEntryRequired(ref cause) => cause,
-            CreateCommitError::FileModeRequired(ref cause) => cause,
-            CreateCommitError::FileNameConflictsWithDirectoryName(ref cause) => cause,
-            CreateCommitError::FilePathConflictsWithSubmodulePath(ref cause) => cause,
-            CreateCommitError::FolderContentSizeLimitExceeded(ref cause) => cause,
-            CreateCommitError::InvalidBranchName(ref cause) => cause,
-            CreateCommitError::InvalidDeletionParameter(ref cause) => cause,
-            CreateCommitError::InvalidEmail(ref cause) => cause,
-            CreateCommitError::InvalidFileMode(ref cause) => cause,
-            CreateCommitError::InvalidParentCommitId(ref cause) => cause,
-            CreateCommitError::InvalidPath(ref cause) => cause,
-            CreateCommitError::InvalidRepositoryName(ref cause) => cause,
-            CreateCommitError::MaximumFileEntriesExceeded(ref cause) => cause,
-            CreateCommitError::NameLengthExceeded(ref cause) => cause,
-            CreateCommitError::NoChange(ref cause) => cause,
-            CreateCommitError::ParentCommitDoesNotExist(ref cause) => cause,
-            CreateCommitError::ParentCommitIdOutdated(ref cause) => cause,
-            CreateCommitError::ParentCommitIdRequired(ref cause) => cause,
-            CreateCommitError::PathRequired(ref cause) => cause,
-            CreateCommitError::PutFileEntryConflict(ref cause) => cause,
-            CreateCommitError::RepositoryDoesNotExist(ref cause) => cause,
-            CreateCommitError::RepositoryNameRequired(ref cause) => cause,
-            CreateCommitError::RestrictedSourceFile(ref cause) => cause,
-            CreateCommitError::SamePathRequest(ref cause) => cause,
-            CreateCommitError::SourceFileOrContentRequired(ref cause) => cause,
+            CreateCommitError::BranchDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::BranchNameIsTagName(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::BranchNameRequired(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::CommitMessageLengthExceeded(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::DirectoryNameConflictsWithFileName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCommitError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::FileContentAndSourceFileSpecified(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCommitError::FileContentSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::FileDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::FileEntryRequired(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::FileModeRequired(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::FileNameConflictsWithDirectoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCommitError::FilePathConflictsWithSubmodulePath(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCommitError::FolderContentSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::InvalidBranchName(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::InvalidDeletionParameter(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::InvalidEmail(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::InvalidFileMode(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::InvalidParentCommitId(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::MaximumFileEntriesExceeded(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::NameLengthExceeded(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::NoChange(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::ParentCommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::ParentCommitIdOutdated(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::ParentCommitIdRequired(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::PathRequired(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::PutFileEntryConflict(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::RestrictedSourceFile(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::SamePathRequest(ref cause) => write!(f, "{}", cause),
+            CreateCommitError::SourceFileOrContentRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCommitError {}
 /// Errors returned by CreatePullRequest
 #[derive(Debug, PartialEq)]
 pub enum CreatePullRequestError {
@@ -4648,40 +4758,46 @@ impl CreatePullRequestError {
 }
 impl fmt::Display for CreatePullRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePullRequestError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePullRequestError::ClientRequestTokenRequired(ref cause) => cause,
-            CreatePullRequestError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            CreatePullRequestError::EncryptionKeyAccessDenied(ref cause) => cause,
-            CreatePullRequestError::EncryptionKeyDisabled(ref cause) => cause,
-            CreatePullRequestError::EncryptionKeyNotFound(ref cause) => cause,
-            CreatePullRequestError::EncryptionKeyUnavailable(ref cause) => cause,
-            CreatePullRequestError::IdempotencyParameterMismatch(ref cause) => cause,
-            CreatePullRequestError::InvalidClientRequestToken(ref cause) => cause,
-            CreatePullRequestError::InvalidDescription(ref cause) => cause,
-            CreatePullRequestError::InvalidReferenceName(ref cause) => cause,
-            CreatePullRequestError::InvalidRepositoryName(ref cause) => cause,
-            CreatePullRequestError::InvalidTarget(ref cause) => cause,
-            CreatePullRequestError::InvalidTargets(ref cause) => cause,
-            CreatePullRequestError::InvalidTitle(ref cause) => cause,
-            CreatePullRequestError::MaximumOpenPullRequestsExceeded(ref cause) => cause,
-            CreatePullRequestError::MultipleRepositoriesInPullRequest(ref cause) => cause,
-            CreatePullRequestError::ReferenceDoesNotExist(ref cause) => cause,
-            CreatePullRequestError::ReferenceNameRequired(ref cause) => cause,
-            CreatePullRequestError::ReferenceTypeNotSupported(ref cause) => cause,
-            CreatePullRequestError::RepositoryDoesNotExist(ref cause) => cause,
-            CreatePullRequestError::RepositoryNameRequired(ref cause) => cause,
-            CreatePullRequestError::SourceAndDestinationAreSame(ref cause) => cause,
-            CreatePullRequestError::TargetRequired(ref cause) => cause,
-            CreatePullRequestError::TargetsRequired(ref cause) => cause,
-            CreatePullRequestError::TitleRequired(ref cause) => cause,
+            CreatePullRequestError::ClientRequestTokenRequired(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::IdempotencyParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestError::InvalidClientRequestToken(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::InvalidDescription(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::InvalidReferenceName(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::InvalidTarget(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::InvalidTargets(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::InvalidTitle(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::MaximumOpenPullRequestsExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestError::MultipleRepositoriesInPullRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestError::ReferenceDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::ReferenceNameRequired(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::ReferenceTypeNotSupported(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::SourceAndDestinationAreSame(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestError::TargetRequired(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::TargetsRequired(ref cause) => write!(f, "{}", cause),
+            CreatePullRequestError::TitleRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePullRequestError {}
 /// Errors returned by CreatePullRequestApprovalRule
 #[derive(Debug, PartialEq)]
 pub enum CreatePullRequestApprovalRuleError {
@@ -4809,30 +4925,56 @@ impl CreatePullRequestApprovalRuleError {
 }
 impl fmt::Display for CreatePullRequestApprovalRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePullRequestApprovalRuleError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePullRequestApprovalRuleError::ApprovalRuleContentRequired(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::ApprovalRuleNameAlreadyExists(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::ApprovalRuleNameRequired(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::EncryptionKeyAccessDenied(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::EncryptionKeyDisabled(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::EncryptionKeyNotFound(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::EncryptionKeyUnavailable(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::InvalidApprovalRuleContent(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::InvalidApprovalRuleName(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::InvalidPullRequestId(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::NumberOfRulesExceeded(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::PullRequestAlreadyClosed(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::PullRequestDoesNotExist(ref cause) => cause,
-            CreatePullRequestApprovalRuleError::PullRequestIdRequired(ref cause) => cause,
+            CreatePullRequestApprovalRuleError::ApprovalRuleContentRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::ApprovalRuleNameAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::ApprovalRuleNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::InvalidApprovalRuleContent(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::InvalidApprovalRuleName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::NumberOfRulesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::PullRequestAlreadyClosed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePullRequestApprovalRuleError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreatePullRequestApprovalRuleError {}
 /// Errors returned by CreateRepository
 #[derive(Debug, PartialEq)]
 pub enum CreateRepositoryError {
@@ -4943,29 +5085,29 @@ impl CreateRepositoryError {
 }
 impl fmt::Display for CreateRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRepositoryError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            CreateRepositoryError::EncryptionKeyAccessDenied(ref cause) => cause,
-            CreateRepositoryError::EncryptionKeyDisabled(ref cause) => cause,
-            CreateRepositoryError::EncryptionKeyNotFound(ref cause) => cause,
-            CreateRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,
-            CreateRepositoryError::InvalidRepositoryDescription(ref cause) => cause,
-            CreateRepositoryError::InvalidRepositoryName(ref cause) => cause,
-            CreateRepositoryError::InvalidSystemTagUsage(ref cause) => cause,
-            CreateRepositoryError::InvalidTagsMap(ref cause) => cause,
-            CreateRepositoryError::RepositoryLimitExceeded(ref cause) => cause,
-            CreateRepositoryError::RepositoryNameExists(ref cause) => cause,
-            CreateRepositoryError::RepositoryNameRequired(ref cause) => cause,
-            CreateRepositoryError::TagPolicy(ref cause) => cause,
-            CreateRepositoryError::TooManyTags(ref cause) => cause,
+            CreateRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRepositoryError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::InvalidRepositoryDescription(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRepositoryError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::InvalidSystemTagUsage(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::InvalidTagsMap(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::RepositoryLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::RepositoryNameExists(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::TagPolicy(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRepositoryError {}
 /// Errors returned by CreateUnreferencedMergeCommit
 #[derive(Debug, PartialEq)]
 pub enum CreateUnreferencedMergeCommitError {
@@ -5246,59 +5388,109 @@ impl CreateUnreferencedMergeCommitError {
 }
 impl fmt::Display for CreateUnreferencedMergeCommitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUnreferencedMergeCommitError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUnreferencedMergeCommitError::CommitDoesNotExist(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::CommitMessageLengthExceeded(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::CommitRequired(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::ConcurrentReferenceUpdate(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::EncryptionKeyAccessDenied(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::EncryptionKeyDisabled(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::EncryptionKeyNotFound(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::EncryptionKeyUnavailable(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::FileContentSizeLimitExceeded(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::FileModeRequired(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::FolderContentSizeLimitExceeded(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::InvalidCommit(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::InvalidConflictDetailLevel(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::InvalidConflictResolution(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::InvalidConflictResolutionStrategy(ref cause) => {
-                cause
+            CreateUnreferencedMergeCommitError::CommitDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
             }
-            CreateUnreferencedMergeCommitError::InvalidEmail(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::InvalidFileMode(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::InvalidMergeOption(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::InvalidPath(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::InvalidReplacementContent(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::InvalidReplacementType(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::InvalidRepositoryName(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::ManualMergeRequired(ref cause) => cause,
+            CreateUnreferencedMergeCommitError::CommitMessageLengthExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::CommitRequired(ref cause) => write!(f, "{}", cause),
+            CreateUnreferencedMergeCommitError::ConcurrentReferenceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::FileContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::FileModeRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::FolderContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::InvalidCommit(ref cause) => write!(f, "{}", cause),
+            CreateUnreferencedMergeCommitError::InvalidConflictDetailLevel(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::InvalidConflictResolution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::InvalidConflictResolutionStrategy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::InvalidEmail(ref cause) => write!(f, "{}", cause),
+            CreateUnreferencedMergeCommitError::InvalidFileMode(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::InvalidMergeOption(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            CreateUnreferencedMergeCommitError::InvalidReplacementContent(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::InvalidReplacementType(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::InvalidRepositoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::ManualMergeRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateUnreferencedMergeCommitError::MaximumConflictResolutionEntriesExceeded(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             CreateUnreferencedMergeCommitError::MaximumFileContentToLoadExceeded(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateUnreferencedMergeCommitError::MaximumItemsToCompareExceeded(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::MergeOptionRequired(ref cause) => cause,
+            CreateUnreferencedMergeCommitError::MaximumItemsToCompareExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::MergeOptionRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateUnreferencedMergeCommitError::MultipleConflictResolutionEntries(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateUnreferencedMergeCommitError::NameLengthExceeded(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::PathRequired(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::ReplacementContentRequired(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::ReplacementTypeRequired(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::RepositoryDoesNotExist(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::RepositoryNameRequired(ref cause) => cause,
-            CreateUnreferencedMergeCommitError::TipsDivergenceExceeded(ref cause) => cause,
+            CreateUnreferencedMergeCommitError::NameLengthExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::PathRequired(ref cause) => write!(f, "{}", cause),
+            CreateUnreferencedMergeCommitError::ReplacementContentRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::ReplacementTypeRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUnreferencedMergeCommitError::TipsDivergenceExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateUnreferencedMergeCommitError {}
 /// Errors returned by DeleteApprovalRuleTemplate
 #[derive(Debug, PartialEq)]
 pub enum DeleteApprovalRuleTemplateError {
@@ -5340,18 +5532,20 @@ impl DeleteApprovalRuleTemplateError {
 }
 impl fmt::Display for DeleteApprovalRuleTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApprovalRuleTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApprovalRuleTemplateError::ApprovalRuleTemplateInUse(ref cause) => cause,
-            DeleteApprovalRuleTemplateError::ApprovalRuleTemplateNameRequired(ref cause) => cause,
-            DeleteApprovalRuleTemplateError::InvalidApprovalRuleTemplateName(ref cause) => cause,
+            DeleteApprovalRuleTemplateError::ApprovalRuleTemplateInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApprovalRuleTemplateError::ApprovalRuleTemplateNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApprovalRuleTemplateError::InvalidApprovalRuleTemplateName(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteApprovalRuleTemplateError {}
 /// Errors returned by DeleteBranch
 #[derive(Debug, PartialEq)]
 pub enum DeleteBranchError {
@@ -5433,26 +5627,22 @@ impl DeleteBranchError {
 }
 impl fmt::Display for DeleteBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBranchError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBranchError::BranchNameRequired(ref cause) => cause,
-            DeleteBranchError::DefaultBranchCannotBeDeleted(ref cause) => cause,
-            DeleteBranchError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            DeleteBranchError::EncryptionKeyAccessDenied(ref cause) => cause,
-            DeleteBranchError::EncryptionKeyDisabled(ref cause) => cause,
-            DeleteBranchError::EncryptionKeyNotFound(ref cause) => cause,
-            DeleteBranchError::EncryptionKeyUnavailable(ref cause) => cause,
-            DeleteBranchError::InvalidBranchName(ref cause) => cause,
-            DeleteBranchError::InvalidRepositoryName(ref cause) => cause,
-            DeleteBranchError::RepositoryDoesNotExist(ref cause) => cause,
-            DeleteBranchError::RepositoryNameRequired(ref cause) => cause,
+            DeleteBranchError::BranchNameRequired(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::DefaultBranchCannotBeDeleted(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::InvalidBranchName(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBranchError {}
 /// Errors returned by DeleteCommentContent
 #[derive(Debug, PartialEq)]
 pub enum DeleteCommentContentError {
@@ -5497,19 +5687,15 @@ impl DeleteCommentContentError {
 }
 impl fmt::Display for DeleteCommentContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCommentContentError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCommentContentError::CommentDeleted(ref cause) => cause,
-            DeleteCommentContentError::CommentDoesNotExist(ref cause) => cause,
-            DeleteCommentContentError::CommentIdRequired(ref cause) => cause,
-            DeleteCommentContentError::InvalidCommentId(ref cause) => cause,
+            DeleteCommentContentError::CommentDeleted(ref cause) => write!(f, "{}", cause),
+            DeleteCommentContentError::CommentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DeleteCommentContentError::CommentIdRequired(ref cause) => write!(f, "{}", cause),
+            DeleteCommentContentError::InvalidCommentId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCommentContentError {}
 /// Errors returned by DeleteFile
 #[derive(Debug, PartialEq)]
 pub enum DeleteFileError {
@@ -5644,37 +5830,33 @@ impl DeleteFileError {
 }
 impl fmt::Display for DeleteFileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFileError::BranchDoesNotExist(ref cause) => cause,
-            DeleteFileError::BranchNameIsTagName(ref cause) => cause,
-            DeleteFileError::BranchNameRequired(ref cause) => cause,
-            DeleteFileError::CommitMessageLengthExceeded(ref cause) => cause,
-            DeleteFileError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            DeleteFileError::EncryptionKeyAccessDenied(ref cause) => cause,
-            DeleteFileError::EncryptionKeyDisabled(ref cause) => cause,
-            DeleteFileError::EncryptionKeyNotFound(ref cause) => cause,
-            DeleteFileError::EncryptionKeyUnavailable(ref cause) => cause,
-            DeleteFileError::FileDoesNotExist(ref cause) => cause,
-            DeleteFileError::InvalidBranchName(ref cause) => cause,
-            DeleteFileError::InvalidEmail(ref cause) => cause,
-            DeleteFileError::InvalidParentCommitId(ref cause) => cause,
-            DeleteFileError::InvalidPath(ref cause) => cause,
-            DeleteFileError::InvalidRepositoryName(ref cause) => cause,
-            DeleteFileError::NameLengthExceeded(ref cause) => cause,
-            DeleteFileError::ParentCommitDoesNotExist(ref cause) => cause,
-            DeleteFileError::ParentCommitIdOutdated(ref cause) => cause,
-            DeleteFileError::ParentCommitIdRequired(ref cause) => cause,
-            DeleteFileError::PathRequired(ref cause) => cause,
-            DeleteFileError::RepositoryDoesNotExist(ref cause) => cause,
-            DeleteFileError::RepositoryNameRequired(ref cause) => cause,
+            DeleteFileError::BranchDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::BranchNameIsTagName(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::BranchNameRequired(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::CommitMessageLengthExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::FileDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::InvalidBranchName(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::InvalidEmail(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::InvalidParentCommitId(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::NameLengthExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::ParentCommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::ParentCommitIdOutdated(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::ParentCommitIdRequired(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::PathRequired(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DeleteFileError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFileError {}
 /// Errors returned by DeletePullRequestApprovalRule
 #[derive(Debug, PartialEq)]
 pub enum DeletePullRequestApprovalRuleError {
@@ -5783,29 +5965,47 @@ impl DeletePullRequestApprovalRuleError {
 }
 impl fmt::Display for DeletePullRequestApprovalRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePullRequestApprovalRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePullRequestApprovalRuleError::ApprovalRuleNameRequired(ref cause) => cause,
-            DeletePullRequestApprovalRuleError::CannotDeleteApprovalRuleFromTemplate(ref cause) => {
-                cause
+            DeletePullRequestApprovalRuleError::ApprovalRuleNameRequired(ref cause) => {
+                write!(f, "{}", cause)
             }
-            DeletePullRequestApprovalRuleError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            DeletePullRequestApprovalRuleError::EncryptionKeyAccessDenied(ref cause) => cause,
-            DeletePullRequestApprovalRuleError::EncryptionKeyDisabled(ref cause) => cause,
-            DeletePullRequestApprovalRuleError::EncryptionKeyNotFound(ref cause) => cause,
-            DeletePullRequestApprovalRuleError::EncryptionKeyUnavailable(ref cause) => cause,
-            DeletePullRequestApprovalRuleError::InvalidApprovalRuleName(ref cause) => cause,
-            DeletePullRequestApprovalRuleError::InvalidPullRequestId(ref cause) => cause,
-            DeletePullRequestApprovalRuleError::PullRequestAlreadyClosed(ref cause) => cause,
-            DeletePullRequestApprovalRuleError::PullRequestDoesNotExist(ref cause) => cause,
-            DeletePullRequestApprovalRuleError::PullRequestIdRequired(ref cause) => cause,
+            DeletePullRequestApprovalRuleError::CannotDeleteApprovalRuleFromTemplate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePullRequestApprovalRuleError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePullRequestApprovalRuleError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePullRequestApprovalRuleError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePullRequestApprovalRuleError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePullRequestApprovalRuleError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePullRequestApprovalRuleError::InvalidApprovalRuleName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePullRequestApprovalRuleError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePullRequestApprovalRuleError::PullRequestAlreadyClosed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePullRequestApprovalRuleError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePullRequestApprovalRuleError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeletePullRequestApprovalRuleError {}
 /// Errors returned by DeleteRepository
 #[derive(Debug, PartialEq)]
 pub enum DeleteRepositoryError {
@@ -5873,22 +6073,20 @@ impl DeleteRepositoryError {
 }
 impl fmt::Display for DeleteRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRepositoryError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            DeleteRepositoryError::EncryptionKeyAccessDenied(ref cause) => cause,
-            DeleteRepositoryError::EncryptionKeyDisabled(ref cause) => cause,
-            DeleteRepositoryError::EncryptionKeyNotFound(ref cause) => cause,
-            DeleteRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,
-            DeleteRepositoryError::InvalidRepositoryName(ref cause) => cause,
-            DeleteRepositoryError::RepositoryNameRequired(ref cause) => cause,
+            DeleteRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRepositoryError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteRepositoryError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            DeleteRepositoryError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRepositoryError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteRepositoryError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            DeleteRepositoryError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRepositoryError {}
 /// Errors returned by DescribeMergeConflicts
 #[derive(Debug, PartialEq)]
 pub enum DescribeMergeConflictsError {
@@ -6064,38 +6262,56 @@ impl DescribeMergeConflictsError {
 }
 impl fmt::Display for DescribeMergeConflictsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMergeConflictsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMergeConflictsError::CommitDoesNotExist(ref cause) => cause,
-            DescribeMergeConflictsError::CommitRequired(ref cause) => cause,
-            DescribeMergeConflictsError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            DescribeMergeConflictsError::EncryptionKeyAccessDenied(ref cause) => cause,
-            DescribeMergeConflictsError::EncryptionKeyDisabled(ref cause) => cause,
-            DescribeMergeConflictsError::EncryptionKeyNotFound(ref cause) => cause,
-            DescribeMergeConflictsError::EncryptionKeyUnavailable(ref cause) => cause,
-            DescribeMergeConflictsError::FileDoesNotExist(ref cause) => cause,
-            DescribeMergeConflictsError::InvalidCommit(ref cause) => cause,
-            DescribeMergeConflictsError::InvalidConflictDetailLevel(ref cause) => cause,
-            DescribeMergeConflictsError::InvalidConflictResolutionStrategy(ref cause) => cause,
-            DescribeMergeConflictsError::InvalidContinuationToken(ref cause) => cause,
-            DescribeMergeConflictsError::InvalidMaxMergeHunks(ref cause) => cause,
-            DescribeMergeConflictsError::InvalidMergeOption(ref cause) => cause,
-            DescribeMergeConflictsError::InvalidPath(ref cause) => cause,
-            DescribeMergeConflictsError::InvalidRepositoryName(ref cause) => cause,
-            DescribeMergeConflictsError::MaximumFileContentToLoadExceeded(ref cause) => cause,
-            DescribeMergeConflictsError::MaximumItemsToCompareExceeded(ref cause) => cause,
-            DescribeMergeConflictsError::MergeOptionRequired(ref cause) => cause,
-            DescribeMergeConflictsError::PathRequired(ref cause) => cause,
-            DescribeMergeConflictsError::RepositoryDoesNotExist(ref cause) => cause,
-            DescribeMergeConflictsError::RepositoryNameRequired(ref cause) => cause,
-            DescribeMergeConflictsError::TipsDivergenceExceeded(ref cause) => cause,
+            DescribeMergeConflictsError::CommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DescribeMergeConflictsError::CommitRequired(ref cause) => write!(f, "{}", cause),
+            DescribeMergeConflictsError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMergeConflictsError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMergeConflictsError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            DescribeMergeConflictsError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeMergeConflictsError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMergeConflictsError::FileDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DescribeMergeConflictsError::InvalidCommit(ref cause) => write!(f, "{}", cause),
+            DescribeMergeConflictsError::InvalidConflictDetailLevel(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMergeConflictsError::InvalidConflictResolutionStrategy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMergeConflictsError::InvalidContinuationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMergeConflictsError::InvalidMaxMergeHunks(ref cause) => write!(f, "{}", cause),
+            DescribeMergeConflictsError::InvalidMergeOption(ref cause) => write!(f, "{}", cause),
+            DescribeMergeConflictsError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            DescribeMergeConflictsError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            DescribeMergeConflictsError::MaximumFileContentToLoadExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMergeConflictsError::MaximumItemsToCompareExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMergeConflictsError::MergeOptionRequired(ref cause) => write!(f, "{}", cause),
+            DescribeMergeConflictsError::PathRequired(ref cause) => write!(f, "{}", cause),
+            DescribeMergeConflictsError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMergeConflictsError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMergeConflictsError::TipsDivergenceExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMergeConflictsError {}
 /// Errors returned by DescribePullRequestEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribePullRequestEventsError {
@@ -6205,28 +6421,44 @@ impl DescribePullRequestEventsError {
 }
 impl fmt::Display for DescribePullRequestEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePullRequestEventsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePullRequestEventsError::ActorDoesNotExist(ref cause) => cause,
-            DescribePullRequestEventsError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            DescribePullRequestEventsError::EncryptionKeyAccessDenied(ref cause) => cause,
-            DescribePullRequestEventsError::EncryptionKeyDisabled(ref cause) => cause,
-            DescribePullRequestEventsError::EncryptionKeyNotFound(ref cause) => cause,
-            DescribePullRequestEventsError::EncryptionKeyUnavailable(ref cause) => cause,
-            DescribePullRequestEventsError::InvalidActorArn(ref cause) => cause,
-            DescribePullRequestEventsError::InvalidContinuationToken(ref cause) => cause,
-            DescribePullRequestEventsError::InvalidMaxResults(ref cause) => cause,
-            DescribePullRequestEventsError::InvalidPullRequestEventType(ref cause) => cause,
-            DescribePullRequestEventsError::InvalidPullRequestId(ref cause) => cause,
-            DescribePullRequestEventsError::PullRequestDoesNotExist(ref cause) => cause,
-            DescribePullRequestEventsError::PullRequestIdRequired(ref cause) => cause,
+            DescribePullRequestEventsError::ActorDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DescribePullRequestEventsError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePullRequestEventsError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePullRequestEventsError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePullRequestEventsError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePullRequestEventsError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePullRequestEventsError::InvalidActorArn(ref cause) => write!(f, "{}", cause),
+            DescribePullRequestEventsError::InvalidContinuationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePullRequestEventsError::InvalidMaxResults(ref cause) => write!(f, "{}", cause),
+            DescribePullRequestEventsError::InvalidPullRequestEventType(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePullRequestEventsError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePullRequestEventsError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePullRequestEventsError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribePullRequestEventsError {}
 /// Errors returned by DisassociateApprovalRuleTemplateFromRepository
 #[derive(Debug, PartialEq)]
 pub enum DisassociateApprovalRuleTemplateFromRepositoryError {
@@ -6280,26 +6512,22 @@ _ => {}
 }
 impl fmt::Display for DisassociateApprovalRuleTemplateFromRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateApprovalRuleTemplateFromRepositoryError {
-    fn description(&self) -> &str {
         match *self {
-                            DisassociateApprovalRuleTemplateFromRepositoryError::ApprovalRuleTemplateDoesNotExist(ref cause) => cause,
-DisassociateApprovalRuleTemplateFromRepositoryError::ApprovalRuleTemplateNameRequired(ref cause) => cause,
-DisassociateApprovalRuleTemplateFromRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-DisassociateApprovalRuleTemplateFromRepositoryError::EncryptionKeyAccessDenied(ref cause) => cause,
-DisassociateApprovalRuleTemplateFromRepositoryError::EncryptionKeyDisabled(ref cause) => cause,
-DisassociateApprovalRuleTemplateFromRepositoryError::EncryptionKeyNotFound(ref cause) => cause,
-DisassociateApprovalRuleTemplateFromRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,
-DisassociateApprovalRuleTemplateFromRepositoryError::InvalidApprovalRuleTemplateName(ref cause) => cause,
-DisassociateApprovalRuleTemplateFromRepositoryError::InvalidRepositoryName(ref cause) => cause,
-DisassociateApprovalRuleTemplateFromRepositoryError::RepositoryDoesNotExist(ref cause) => cause,
-DisassociateApprovalRuleTemplateFromRepositoryError::RepositoryNameRequired(ref cause) => cause
+                            DisassociateApprovalRuleTemplateFromRepositoryError::ApprovalRuleTemplateDoesNotExist(ref cause) => write!(f, "{}", cause),
+DisassociateApprovalRuleTemplateFromRepositoryError::ApprovalRuleTemplateNameRequired(ref cause) => write!(f, "{}", cause),
+DisassociateApprovalRuleTemplateFromRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+DisassociateApprovalRuleTemplateFromRepositoryError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+DisassociateApprovalRuleTemplateFromRepositoryError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+DisassociateApprovalRuleTemplateFromRepositoryError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+DisassociateApprovalRuleTemplateFromRepositoryError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+DisassociateApprovalRuleTemplateFromRepositoryError::InvalidApprovalRuleTemplateName(ref cause) => write!(f, "{}", cause),
+DisassociateApprovalRuleTemplateFromRepositoryError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+DisassociateApprovalRuleTemplateFromRepositoryError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+DisassociateApprovalRuleTemplateFromRepositoryError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for DisassociateApprovalRuleTemplateFromRepositoryError {}
 /// Errors returned by EvaluatePullRequestApprovalRules
 #[derive(Debug, PartialEq)]
 pub enum EvaluatePullRequestApprovalRulesError {
@@ -6399,28 +6627,44 @@ impl EvaluatePullRequestApprovalRulesError {
 }
 impl fmt::Display for EvaluatePullRequestApprovalRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EvaluatePullRequestApprovalRulesError {
-    fn description(&self) -> &str {
         match *self {
             EvaluatePullRequestApprovalRulesError::EncryptionIntegrityChecksFailed(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            EvaluatePullRequestApprovalRulesError::EncryptionKeyAccessDenied(ref cause) => cause,
-            EvaluatePullRequestApprovalRulesError::EncryptionKeyDisabled(ref cause) => cause,
-            EvaluatePullRequestApprovalRulesError::EncryptionKeyNotFound(ref cause) => cause,
-            EvaluatePullRequestApprovalRulesError::EncryptionKeyUnavailable(ref cause) => cause,
-            EvaluatePullRequestApprovalRulesError::InvalidPullRequestId(ref cause) => cause,
-            EvaluatePullRequestApprovalRulesError::InvalidRevisionId(ref cause) => cause,
-            EvaluatePullRequestApprovalRulesError::PullRequestDoesNotExist(ref cause) => cause,
-            EvaluatePullRequestApprovalRulesError::PullRequestIdRequired(ref cause) => cause,
-            EvaluatePullRequestApprovalRulesError::RevisionIdRequired(ref cause) => cause,
-            EvaluatePullRequestApprovalRulesError::RevisionNotCurrent(ref cause) => cause,
+            EvaluatePullRequestApprovalRulesError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EvaluatePullRequestApprovalRulesError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EvaluatePullRequestApprovalRulesError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EvaluatePullRequestApprovalRulesError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EvaluatePullRequestApprovalRulesError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EvaluatePullRequestApprovalRulesError::InvalidRevisionId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EvaluatePullRequestApprovalRulesError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EvaluatePullRequestApprovalRulesError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EvaluatePullRequestApprovalRulesError::RevisionIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EvaluatePullRequestApprovalRulesError::RevisionNotCurrent(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for EvaluatePullRequestApprovalRulesError {}
 /// Errors returned by GetApprovalRuleTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetApprovalRuleTemplateError {
@@ -6460,18 +6704,20 @@ impl GetApprovalRuleTemplateError {
 }
 impl fmt::Display for GetApprovalRuleTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetApprovalRuleTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            GetApprovalRuleTemplateError::ApprovalRuleTemplateDoesNotExist(ref cause) => cause,
-            GetApprovalRuleTemplateError::ApprovalRuleTemplateNameRequired(ref cause) => cause,
-            GetApprovalRuleTemplateError::InvalidApprovalRuleTemplateName(ref cause) => cause,
+            GetApprovalRuleTemplateError::ApprovalRuleTemplateDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetApprovalRuleTemplateError::ApprovalRuleTemplateNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetApprovalRuleTemplateError::InvalidApprovalRuleTemplateName(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetApprovalRuleTemplateError {}
 /// Errors returned by GetBlob
 #[derive(Debug, PartialEq)]
 pub enum GetBlobError {
@@ -6552,27 +6798,23 @@ impl GetBlobError {
 }
 impl fmt::Display for GetBlobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBlobError {
-    fn description(&self) -> &str {
         match *self {
-            GetBlobError::BlobIdDoesNotExist(ref cause) => cause,
-            GetBlobError::BlobIdRequired(ref cause) => cause,
-            GetBlobError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetBlobError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetBlobError::EncryptionKeyDisabled(ref cause) => cause,
-            GetBlobError::EncryptionKeyNotFound(ref cause) => cause,
-            GetBlobError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetBlobError::FileTooLarge(ref cause) => cause,
-            GetBlobError::InvalidBlobId(ref cause) => cause,
-            GetBlobError::InvalidRepositoryName(ref cause) => cause,
-            GetBlobError::RepositoryDoesNotExist(ref cause) => cause,
-            GetBlobError::RepositoryNameRequired(ref cause) => cause,
+            GetBlobError::BlobIdDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetBlobError::BlobIdRequired(ref cause) => write!(f, "{}", cause),
+            GetBlobError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            GetBlobError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetBlobError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetBlobError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetBlobError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GetBlobError::FileTooLarge(ref cause) => write!(f, "{}", cause),
+            GetBlobError::InvalidBlobId(ref cause) => write!(f, "{}", cause),
+            GetBlobError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            GetBlobError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetBlobError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBlobError {}
 /// Errors returned by GetBranch
 #[derive(Debug, PartialEq)]
 pub enum GetBranchError {
@@ -6648,26 +6890,22 @@ impl GetBranchError {
 }
 impl fmt::Display for GetBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBranchError {
-    fn description(&self) -> &str {
         match *self {
-            GetBranchError::BranchDoesNotExist(ref cause) => cause,
-            GetBranchError::BranchNameRequired(ref cause) => cause,
-            GetBranchError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetBranchError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetBranchError::EncryptionKeyDisabled(ref cause) => cause,
-            GetBranchError::EncryptionKeyNotFound(ref cause) => cause,
-            GetBranchError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetBranchError::InvalidBranchName(ref cause) => cause,
-            GetBranchError::InvalidRepositoryName(ref cause) => cause,
-            GetBranchError::RepositoryDoesNotExist(ref cause) => cause,
-            GetBranchError::RepositoryNameRequired(ref cause) => cause,
+            GetBranchError::BranchDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetBranchError::BranchNameRequired(ref cause) => write!(f, "{}", cause),
+            GetBranchError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            GetBranchError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetBranchError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetBranchError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetBranchError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GetBranchError::InvalidBranchName(ref cause) => write!(f, "{}", cause),
+            GetBranchError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            GetBranchError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetBranchError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBranchError {}
 /// Errors returned by GetComment
 #[derive(Debug, PartialEq)]
 pub enum GetCommentError {
@@ -6706,19 +6944,15 @@ impl GetCommentError {
 }
 impl fmt::Display for GetCommentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCommentError {
-    fn description(&self) -> &str {
         match *self {
-            GetCommentError::CommentDeleted(ref cause) => cause,
-            GetCommentError::CommentDoesNotExist(ref cause) => cause,
-            GetCommentError::CommentIdRequired(ref cause) => cause,
-            GetCommentError::InvalidCommentId(ref cause) => cause,
+            GetCommentError::CommentDeleted(ref cause) => write!(f, "{}", cause),
+            GetCommentError::CommentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetCommentError::CommentIdRequired(ref cause) => write!(f, "{}", cause),
+            GetCommentError::InvalidCommentId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCommentError {}
 /// Errors returned by GetCommentsForComparedCommit
 #[derive(Debug, PartialEq)]
 pub enum GetCommentsForComparedCommitError {
@@ -6830,28 +7064,48 @@ impl GetCommentsForComparedCommitError {
 }
 impl fmt::Display for GetCommentsForComparedCommitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCommentsForComparedCommitError {
-    fn description(&self) -> &str {
         match *self {
-            GetCommentsForComparedCommitError::CommitDoesNotExist(ref cause) => cause,
-            GetCommentsForComparedCommitError::CommitIdRequired(ref cause) => cause,
-            GetCommentsForComparedCommitError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetCommentsForComparedCommitError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetCommentsForComparedCommitError::EncryptionKeyDisabled(ref cause) => cause,
-            GetCommentsForComparedCommitError::EncryptionKeyNotFound(ref cause) => cause,
-            GetCommentsForComparedCommitError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetCommentsForComparedCommitError::InvalidCommitId(ref cause) => cause,
-            GetCommentsForComparedCommitError::InvalidContinuationToken(ref cause) => cause,
-            GetCommentsForComparedCommitError::InvalidMaxResults(ref cause) => cause,
-            GetCommentsForComparedCommitError::InvalidRepositoryName(ref cause) => cause,
-            GetCommentsForComparedCommitError::RepositoryDoesNotExist(ref cause) => cause,
-            GetCommentsForComparedCommitError::RepositoryNameRequired(ref cause) => cause,
+            GetCommentsForComparedCommitError::CommitDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForComparedCommitError::CommitIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForComparedCommitError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForComparedCommitError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForComparedCommitError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForComparedCommitError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForComparedCommitError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForComparedCommitError::InvalidCommitId(ref cause) => write!(f, "{}", cause),
+            GetCommentsForComparedCommitError::InvalidContinuationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForComparedCommitError::InvalidMaxResults(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForComparedCommitError::InvalidRepositoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForComparedCommitError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForComparedCommitError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetCommentsForComparedCommitError {}
 /// Errors returned by GetCommentsForPullRequest
 #[derive(Debug, PartialEq)]
 pub enum GetCommentsForPullRequestError {
@@ -6991,34 +7245,54 @@ impl GetCommentsForPullRequestError {
 }
 impl fmt::Display for GetCommentsForPullRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCommentsForPullRequestError {
-    fn description(&self) -> &str {
         match *self {
-            GetCommentsForPullRequestError::CommitDoesNotExist(ref cause) => cause,
-            GetCommentsForPullRequestError::CommitIdRequired(ref cause) => cause,
-            GetCommentsForPullRequestError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetCommentsForPullRequestError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetCommentsForPullRequestError::EncryptionKeyDisabled(ref cause) => cause,
-            GetCommentsForPullRequestError::EncryptionKeyNotFound(ref cause) => cause,
-            GetCommentsForPullRequestError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetCommentsForPullRequestError::InvalidCommitId(ref cause) => cause,
-            GetCommentsForPullRequestError::InvalidContinuationToken(ref cause) => cause,
-            GetCommentsForPullRequestError::InvalidMaxResults(ref cause) => cause,
-            GetCommentsForPullRequestError::InvalidPullRequestId(ref cause) => cause,
-            GetCommentsForPullRequestError::InvalidRepositoryName(ref cause) => cause,
-            GetCommentsForPullRequestError::PullRequestDoesNotExist(ref cause) => cause,
-            GetCommentsForPullRequestError::PullRequestIdRequired(ref cause) => cause,
-            GetCommentsForPullRequestError::RepositoryDoesNotExist(ref cause) => cause,
-            GetCommentsForPullRequestError::RepositoryNameRequired(ref cause) => cause,
+            GetCommentsForPullRequestError::CommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetCommentsForPullRequestError::CommitIdRequired(ref cause) => write!(f, "{}", cause),
+            GetCommentsForPullRequestError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForPullRequestError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForPullRequestError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForPullRequestError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForPullRequestError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForPullRequestError::InvalidCommitId(ref cause) => write!(f, "{}", cause),
+            GetCommentsForPullRequestError::InvalidContinuationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForPullRequestError::InvalidMaxResults(ref cause) => write!(f, "{}", cause),
+            GetCommentsForPullRequestError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForPullRequestError::InvalidRepositoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForPullRequestError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForPullRequestError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForPullRequestError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCommentsForPullRequestError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetCommentsForPullRequestError::RepositoryNotAssociatedWithPullRequest(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GetCommentsForPullRequestError {}
 /// Errors returned by GetCommit
 #[derive(Debug, PartialEq)]
 pub enum GetCommitError {
@@ -7094,26 +7368,22 @@ impl GetCommitError {
 }
 impl fmt::Display for GetCommitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCommitError {
-    fn description(&self) -> &str {
         match *self {
-            GetCommitError::CommitIdDoesNotExist(ref cause) => cause,
-            GetCommitError::CommitIdRequired(ref cause) => cause,
-            GetCommitError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetCommitError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetCommitError::EncryptionKeyDisabled(ref cause) => cause,
-            GetCommitError::EncryptionKeyNotFound(ref cause) => cause,
-            GetCommitError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetCommitError::InvalidCommitId(ref cause) => cause,
-            GetCommitError::InvalidRepositoryName(ref cause) => cause,
-            GetCommitError::RepositoryDoesNotExist(ref cause) => cause,
-            GetCommitError::RepositoryNameRequired(ref cause) => cause,
+            GetCommitError::CommitIdDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetCommitError::CommitIdRequired(ref cause) => write!(f, "{}", cause),
+            GetCommitError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            GetCommitError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetCommitError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetCommitError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetCommitError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GetCommitError::InvalidCommitId(ref cause) => write!(f, "{}", cause),
+            GetCommitError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            GetCommitError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetCommitError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCommitError {}
 /// Errors returned by GetDifferences
 #[derive(Debug, PartialEq)]
 pub enum GetDifferencesError {
@@ -7230,31 +7500,29 @@ impl GetDifferencesError {
 }
 impl fmt::Display for GetDifferencesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDifferencesError {
-    fn description(&self) -> &str {
         match *self {
-            GetDifferencesError::CommitDoesNotExist(ref cause) => cause,
-            GetDifferencesError::CommitRequired(ref cause) => cause,
-            GetDifferencesError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetDifferencesError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetDifferencesError::EncryptionKeyDisabled(ref cause) => cause,
-            GetDifferencesError::EncryptionKeyNotFound(ref cause) => cause,
-            GetDifferencesError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetDifferencesError::InvalidCommit(ref cause) => cause,
-            GetDifferencesError::InvalidCommitId(ref cause) => cause,
-            GetDifferencesError::InvalidContinuationToken(ref cause) => cause,
-            GetDifferencesError::InvalidMaxResults(ref cause) => cause,
-            GetDifferencesError::InvalidPath(ref cause) => cause,
-            GetDifferencesError::InvalidRepositoryName(ref cause) => cause,
-            GetDifferencesError::PathDoesNotExist(ref cause) => cause,
-            GetDifferencesError::RepositoryDoesNotExist(ref cause) => cause,
-            GetDifferencesError::RepositoryNameRequired(ref cause) => cause,
+            GetDifferencesError::CommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::CommitRequired(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDifferencesError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::InvalidCommit(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::InvalidCommitId(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::InvalidContinuationToken(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::InvalidMaxResults(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::PathDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetDifferencesError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDifferencesError {}
 /// Errors returned by GetFile
 #[derive(Debug, PartialEq)]
 pub enum GetFileError {
@@ -7345,29 +7613,25 @@ impl GetFileError {
 }
 impl fmt::Display for GetFileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFileError {
-    fn description(&self) -> &str {
         match *self {
-            GetFileError::CommitDoesNotExist(ref cause) => cause,
-            GetFileError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetFileError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetFileError::EncryptionKeyDisabled(ref cause) => cause,
-            GetFileError::EncryptionKeyNotFound(ref cause) => cause,
-            GetFileError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetFileError::FileDoesNotExist(ref cause) => cause,
-            GetFileError::FileTooLarge(ref cause) => cause,
-            GetFileError::InvalidCommit(ref cause) => cause,
-            GetFileError::InvalidPath(ref cause) => cause,
-            GetFileError::InvalidRepositoryName(ref cause) => cause,
-            GetFileError::PathRequired(ref cause) => cause,
-            GetFileError::RepositoryDoesNotExist(ref cause) => cause,
-            GetFileError::RepositoryNameRequired(ref cause) => cause,
+            GetFileError::CommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetFileError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            GetFileError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetFileError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetFileError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetFileError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GetFileError::FileDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetFileError::FileTooLarge(ref cause) => write!(f, "{}", cause),
+            GetFileError::InvalidCommit(ref cause) => write!(f, "{}", cause),
+            GetFileError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            GetFileError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            GetFileError::PathRequired(ref cause) => write!(f, "{}", cause),
+            GetFileError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetFileError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFileError {}
 /// Errors returned by GetFolder
 #[derive(Debug, PartialEq)]
 pub enum GetFolderError {
@@ -7453,28 +7717,24 @@ impl GetFolderError {
 }
 impl fmt::Display for GetFolderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFolderError {
-    fn description(&self) -> &str {
         match *self {
-            GetFolderError::CommitDoesNotExist(ref cause) => cause,
-            GetFolderError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetFolderError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetFolderError::EncryptionKeyDisabled(ref cause) => cause,
-            GetFolderError::EncryptionKeyNotFound(ref cause) => cause,
-            GetFolderError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetFolderError::FolderDoesNotExist(ref cause) => cause,
-            GetFolderError::InvalidCommit(ref cause) => cause,
-            GetFolderError::InvalidPath(ref cause) => cause,
-            GetFolderError::InvalidRepositoryName(ref cause) => cause,
-            GetFolderError::PathRequired(ref cause) => cause,
-            GetFolderError::RepositoryDoesNotExist(ref cause) => cause,
-            GetFolderError::RepositoryNameRequired(ref cause) => cause,
+            GetFolderError::CommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetFolderError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            GetFolderError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetFolderError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetFolderError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetFolderError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GetFolderError::FolderDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetFolderError::InvalidCommit(ref cause) => write!(f, "{}", cause),
+            GetFolderError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            GetFolderError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            GetFolderError::PathRequired(ref cause) => write!(f, "{}", cause),
+            GetFolderError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetFolderError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFolderError {}
 /// Errors returned by GetMergeCommit
 #[derive(Debug, PartialEq)]
 pub enum GetMergeCommitError {
@@ -7578,28 +7838,28 @@ impl GetMergeCommitError {
 }
 impl fmt::Display for GetMergeCommitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMergeCommitError {
-    fn description(&self) -> &str {
         match *self {
-            GetMergeCommitError::CommitDoesNotExist(ref cause) => cause,
-            GetMergeCommitError::CommitRequired(ref cause) => cause,
-            GetMergeCommitError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetMergeCommitError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetMergeCommitError::EncryptionKeyDisabled(ref cause) => cause,
-            GetMergeCommitError::EncryptionKeyNotFound(ref cause) => cause,
-            GetMergeCommitError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetMergeCommitError::InvalidCommit(ref cause) => cause,
-            GetMergeCommitError::InvalidConflictDetailLevel(ref cause) => cause,
-            GetMergeCommitError::InvalidConflictResolutionStrategy(ref cause) => cause,
-            GetMergeCommitError::InvalidRepositoryName(ref cause) => cause,
-            GetMergeCommitError::RepositoryDoesNotExist(ref cause) => cause,
-            GetMergeCommitError::RepositoryNameRequired(ref cause) => cause,
+            GetMergeCommitError::CommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetMergeCommitError::CommitRequired(ref cause) => write!(f, "{}", cause),
+            GetMergeCommitError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMergeCommitError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetMergeCommitError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetMergeCommitError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetMergeCommitError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GetMergeCommitError::InvalidCommit(ref cause) => write!(f, "{}", cause),
+            GetMergeCommitError::InvalidConflictDetailLevel(ref cause) => write!(f, "{}", cause),
+            GetMergeCommitError::InvalidConflictResolutionStrategy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMergeCommitError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            GetMergeCommitError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetMergeCommitError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMergeCommitError {}
 /// Errors returned by GetMergeConflicts
 #[derive(Debug, PartialEq)]
 pub enum GetMergeConflictsError {
@@ -7768,37 +8028,45 @@ impl GetMergeConflictsError {
 }
 impl fmt::Display for GetMergeConflictsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMergeConflictsError {
-    fn description(&self) -> &str {
         match *self {
-            GetMergeConflictsError::CommitDoesNotExist(ref cause) => cause,
-            GetMergeConflictsError::CommitRequired(ref cause) => cause,
-            GetMergeConflictsError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetMergeConflictsError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetMergeConflictsError::EncryptionKeyDisabled(ref cause) => cause,
-            GetMergeConflictsError::EncryptionKeyNotFound(ref cause) => cause,
-            GetMergeConflictsError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetMergeConflictsError::InvalidCommit(ref cause) => cause,
-            GetMergeConflictsError::InvalidConflictDetailLevel(ref cause) => cause,
-            GetMergeConflictsError::InvalidConflictResolutionStrategy(ref cause) => cause,
-            GetMergeConflictsError::InvalidContinuationToken(ref cause) => cause,
-            GetMergeConflictsError::InvalidDestinationCommitSpecifier(ref cause) => cause,
-            GetMergeConflictsError::InvalidMaxConflictFiles(ref cause) => cause,
-            GetMergeConflictsError::InvalidMergeOption(ref cause) => cause,
-            GetMergeConflictsError::InvalidRepositoryName(ref cause) => cause,
-            GetMergeConflictsError::InvalidSourceCommitSpecifier(ref cause) => cause,
-            GetMergeConflictsError::MaximumFileContentToLoadExceeded(ref cause) => cause,
-            GetMergeConflictsError::MaximumItemsToCompareExceeded(ref cause) => cause,
-            GetMergeConflictsError::MergeOptionRequired(ref cause) => cause,
-            GetMergeConflictsError::RepositoryDoesNotExist(ref cause) => cause,
-            GetMergeConflictsError::RepositoryNameRequired(ref cause) => cause,
-            GetMergeConflictsError::TipsDivergenceExceeded(ref cause) => cause,
+            GetMergeConflictsError::CommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::CommitRequired(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMergeConflictsError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::InvalidCommit(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::InvalidConflictDetailLevel(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::InvalidConflictResolutionStrategy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMergeConflictsError::InvalidContinuationToken(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::InvalidDestinationCommitSpecifier(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMergeConflictsError::InvalidMaxConflictFiles(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::InvalidMergeOption(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::InvalidSourceCommitSpecifier(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMergeConflictsError::MaximumFileContentToLoadExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMergeConflictsError::MaximumItemsToCompareExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMergeConflictsError::MergeOptionRequired(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
+            GetMergeConflictsError::TipsDivergenceExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMergeConflictsError {}
 /// Errors returned by GetMergeOptions
 #[derive(Debug, PartialEq)]
 pub enum GetMergeOptionsError {
@@ -7923,31 +8191,35 @@ impl GetMergeOptionsError {
 }
 impl fmt::Display for GetMergeOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMergeOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            GetMergeOptionsError::CommitDoesNotExist(ref cause) => cause,
-            GetMergeOptionsError::CommitRequired(ref cause) => cause,
-            GetMergeOptionsError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetMergeOptionsError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetMergeOptionsError::EncryptionKeyDisabled(ref cause) => cause,
-            GetMergeOptionsError::EncryptionKeyNotFound(ref cause) => cause,
-            GetMergeOptionsError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetMergeOptionsError::InvalidCommit(ref cause) => cause,
-            GetMergeOptionsError::InvalidConflictDetailLevel(ref cause) => cause,
-            GetMergeOptionsError::InvalidConflictResolutionStrategy(ref cause) => cause,
-            GetMergeOptionsError::InvalidRepositoryName(ref cause) => cause,
-            GetMergeOptionsError::MaximumFileContentToLoadExceeded(ref cause) => cause,
-            GetMergeOptionsError::MaximumItemsToCompareExceeded(ref cause) => cause,
-            GetMergeOptionsError::RepositoryDoesNotExist(ref cause) => cause,
-            GetMergeOptionsError::RepositoryNameRequired(ref cause) => cause,
-            GetMergeOptionsError::TipsDivergenceExceeded(ref cause) => cause,
+            GetMergeOptionsError::CommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetMergeOptionsError::CommitRequired(ref cause) => write!(f, "{}", cause),
+            GetMergeOptionsError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMergeOptionsError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetMergeOptionsError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetMergeOptionsError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetMergeOptionsError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GetMergeOptionsError::InvalidCommit(ref cause) => write!(f, "{}", cause),
+            GetMergeOptionsError::InvalidConflictDetailLevel(ref cause) => write!(f, "{}", cause),
+            GetMergeOptionsError::InvalidConflictResolutionStrategy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMergeOptionsError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            GetMergeOptionsError::MaximumFileContentToLoadExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMergeOptionsError::MaximumItemsToCompareExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMergeOptionsError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetMergeOptionsError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
+            GetMergeOptionsError::TipsDivergenceExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMergeOptionsError {}
 /// Errors returned by GetPullRequest
 #[derive(Debug, PartialEq)]
 pub enum GetPullRequestError {
@@ -8020,23 +8292,21 @@ impl GetPullRequestError {
 }
 impl fmt::Display for GetPullRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPullRequestError {
-    fn description(&self) -> &str {
         match *self {
-            GetPullRequestError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetPullRequestError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetPullRequestError::EncryptionKeyDisabled(ref cause) => cause,
-            GetPullRequestError::EncryptionKeyNotFound(ref cause) => cause,
-            GetPullRequestError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetPullRequestError::InvalidPullRequestId(ref cause) => cause,
-            GetPullRequestError::PullRequestDoesNotExist(ref cause) => cause,
-            GetPullRequestError::PullRequestIdRequired(ref cause) => cause,
+            GetPullRequestError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetPullRequestError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetPullRequestError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetPullRequestError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GetPullRequestError::InvalidPullRequestId(ref cause) => write!(f, "{}", cause),
+            GetPullRequestError::PullRequestDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetPullRequestError::PullRequestIdRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPullRequestError {}
 /// Errors returned by GetPullRequestApprovalStates
 #[derive(Debug, PartialEq)]
 pub enum GetPullRequestApprovalStatesError {
@@ -8127,25 +8397,41 @@ impl GetPullRequestApprovalStatesError {
 }
 impl fmt::Display for GetPullRequestApprovalStatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPullRequestApprovalStatesError {
-    fn description(&self) -> &str {
         match *self {
-            GetPullRequestApprovalStatesError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetPullRequestApprovalStatesError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetPullRequestApprovalStatesError::EncryptionKeyDisabled(ref cause) => cause,
-            GetPullRequestApprovalStatesError::EncryptionKeyNotFound(ref cause) => cause,
-            GetPullRequestApprovalStatesError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetPullRequestApprovalStatesError::InvalidPullRequestId(ref cause) => cause,
-            GetPullRequestApprovalStatesError::InvalidRevisionId(ref cause) => cause,
-            GetPullRequestApprovalStatesError::PullRequestDoesNotExist(ref cause) => cause,
-            GetPullRequestApprovalStatesError::PullRequestIdRequired(ref cause) => cause,
-            GetPullRequestApprovalStatesError::RevisionIdRequired(ref cause) => cause,
+            GetPullRequestApprovalStatesError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestApprovalStatesError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestApprovalStatesError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestApprovalStatesError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestApprovalStatesError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestApprovalStatesError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestApprovalStatesError::InvalidRevisionId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestApprovalStatesError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestApprovalStatesError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestApprovalStatesError::RevisionIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetPullRequestApprovalStatesError {}
 /// Errors returned by GetPullRequestOverrideState
 #[derive(Debug, PartialEq)]
 pub enum GetPullRequestOverrideStateError {
@@ -8236,25 +8522,41 @@ impl GetPullRequestOverrideStateError {
 }
 impl fmt::Display for GetPullRequestOverrideStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPullRequestOverrideStateError {
-    fn description(&self) -> &str {
         match *self {
-            GetPullRequestOverrideStateError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetPullRequestOverrideStateError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetPullRequestOverrideStateError::EncryptionKeyDisabled(ref cause) => cause,
-            GetPullRequestOverrideStateError::EncryptionKeyNotFound(ref cause) => cause,
-            GetPullRequestOverrideStateError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetPullRequestOverrideStateError::InvalidPullRequestId(ref cause) => cause,
-            GetPullRequestOverrideStateError::InvalidRevisionId(ref cause) => cause,
-            GetPullRequestOverrideStateError::PullRequestDoesNotExist(ref cause) => cause,
-            GetPullRequestOverrideStateError::PullRequestIdRequired(ref cause) => cause,
-            GetPullRequestOverrideStateError::RevisionIdRequired(ref cause) => cause,
+            GetPullRequestOverrideStateError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestOverrideStateError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestOverrideStateError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestOverrideStateError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestOverrideStateError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestOverrideStateError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestOverrideStateError::InvalidRevisionId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestOverrideStateError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestOverrideStateError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPullRequestOverrideStateError::RevisionIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetPullRequestOverrideStateError {}
 /// Errors returned by GetRepository
 #[derive(Debug, PartialEq)]
 pub enum GetRepositoryError {
@@ -8323,23 +8625,21 @@ impl GetRepositoryError {
 }
 impl fmt::Display for GetRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRepositoryError {
-    fn description(&self) -> &str {
         match *self {
-            GetRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetRepositoryError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetRepositoryError::EncryptionKeyDisabled(ref cause) => cause,
-            GetRepositoryError::EncryptionKeyNotFound(ref cause) => cause,
-            GetRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetRepositoryError::InvalidRepositoryName(ref cause) => cause,
-            GetRepositoryError::RepositoryDoesNotExist(ref cause) => cause,
-            GetRepositoryError::RepositoryNameRequired(ref cause) => cause,
+            GetRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRepositoryError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRepositoryError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetRepositoryError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetRepositoryError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GetRepositoryError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            GetRepositoryError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetRepositoryError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRepositoryError {}
 /// Errors returned by GetRepositoryTriggers
 #[derive(Debug, PartialEq)]
 pub enum GetRepositoryTriggersError {
@@ -8414,23 +8714,25 @@ impl GetRepositoryTriggersError {
 }
 impl fmt::Display for GetRepositoryTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRepositoryTriggersError {
-    fn description(&self) -> &str {
         match *self {
-            GetRepositoryTriggersError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            GetRepositoryTriggersError::EncryptionKeyAccessDenied(ref cause) => cause,
-            GetRepositoryTriggersError::EncryptionKeyDisabled(ref cause) => cause,
-            GetRepositoryTriggersError::EncryptionKeyNotFound(ref cause) => cause,
-            GetRepositoryTriggersError::EncryptionKeyUnavailable(ref cause) => cause,
-            GetRepositoryTriggersError::InvalidRepositoryName(ref cause) => cause,
-            GetRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => cause,
-            GetRepositoryTriggersError::RepositoryNameRequired(ref cause) => cause,
+            GetRepositoryTriggersError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRepositoryTriggersError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRepositoryTriggersError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetRepositoryTriggersError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetRepositoryTriggersError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRepositoryTriggersError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            GetRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetRepositoryTriggersError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRepositoryTriggersError {}
 /// Errors returned by ListApprovalRuleTemplates
 #[derive(Debug, PartialEq)]
 pub enum ListApprovalRuleTemplatesError {
@@ -8463,17 +8765,15 @@ impl ListApprovalRuleTemplatesError {
 }
 impl fmt::Display for ListApprovalRuleTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListApprovalRuleTemplatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListApprovalRuleTemplatesError::InvalidContinuationToken(ref cause) => cause,
-            ListApprovalRuleTemplatesError::InvalidMaxResults(ref cause) => cause,
+            ListApprovalRuleTemplatesError::InvalidContinuationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListApprovalRuleTemplatesError::InvalidMaxResults(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListApprovalRuleTemplatesError {}
 /// Errors returned by ListAssociatedApprovalRuleTemplatesForRepository
 #[derive(Debug, PartialEq)]
 pub enum ListAssociatedApprovalRuleTemplatesForRepositoryError {
@@ -8524,25 +8824,21 @@ _ => {}
 }
 impl fmt::Display for ListAssociatedApprovalRuleTemplatesForRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAssociatedApprovalRuleTemplatesForRepositoryError {
-    fn description(&self) -> &str {
         match *self {
-                            ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionKeyAccessDenied(ref cause) => cause,
-ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionKeyDisabled(ref cause) => cause,
-ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionKeyNotFound(ref cause) => cause,
-ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,
-ListAssociatedApprovalRuleTemplatesForRepositoryError::InvalidContinuationToken(ref cause) => cause,
-ListAssociatedApprovalRuleTemplatesForRepositoryError::InvalidMaxResults(ref cause) => cause,
-ListAssociatedApprovalRuleTemplatesForRepositoryError::InvalidRepositoryName(ref cause) => cause,
-ListAssociatedApprovalRuleTemplatesForRepositoryError::RepositoryDoesNotExist(ref cause) => cause,
-ListAssociatedApprovalRuleTemplatesForRepositoryError::RepositoryNameRequired(ref cause) => cause
+                            ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+ListAssociatedApprovalRuleTemplatesForRepositoryError::InvalidContinuationToken(ref cause) => write!(f, "{}", cause),
+ListAssociatedApprovalRuleTemplatesForRepositoryError::InvalidMaxResults(ref cause) => write!(f, "{}", cause),
+ListAssociatedApprovalRuleTemplatesForRepositoryError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+ListAssociatedApprovalRuleTemplatesForRepositoryError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+ListAssociatedApprovalRuleTemplatesForRepositoryError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for ListAssociatedApprovalRuleTemplatesForRepositoryError {}
 /// Errors returned by ListBranches
 #[derive(Debug, PartialEq)]
 pub enum ListBranchesError {
@@ -8614,24 +8910,20 @@ impl ListBranchesError {
 }
 impl fmt::Display for ListBranchesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBranchesError {
-    fn description(&self) -> &str {
         match *self {
-            ListBranchesError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            ListBranchesError::EncryptionKeyAccessDenied(ref cause) => cause,
-            ListBranchesError::EncryptionKeyDisabled(ref cause) => cause,
-            ListBranchesError::EncryptionKeyNotFound(ref cause) => cause,
-            ListBranchesError::EncryptionKeyUnavailable(ref cause) => cause,
-            ListBranchesError::InvalidContinuationToken(ref cause) => cause,
-            ListBranchesError::InvalidRepositoryName(ref cause) => cause,
-            ListBranchesError::RepositoryDoesNotExist(ref cause) => cause,
-            ListBranchesError::RepositoryNameRequired(ref cause) => cause,
+            ListBranchesError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            ListBranchesError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            ListBranchesError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            ListBranchesError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            ListBranchesError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            ListBranchesError::InvalidContinuationToken(ref cause) => write!(f, "{}", cause),
+            ListBranchesError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            ListBranchesError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            ListBranchesError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBranchesError {}
 /// Errors returned by ListPullRequests
 #[derive(Debug, PartialEq)]
 pub enum ListPullRequestsError {
@@ -8735,28 +9027,26 @@ impl ListPullRequestsError {
 }
 impl fmt::Display for ListPullRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPullRequestsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPullRequestsError::AuthorDoesNotExist(ref cause) => cause,
-            ListPullRequestsError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            ListPullRequestsError::EncryptionKeyAccessDenied(ref cause) => cause,
-            ListPullRequestsError::EncryptionKeyDisabled(ref cause) => cause,
-            ListPullRequestsError::EncryptionKeyNotFound(ref cause) => cause,
-            ListPullRequestsError::EncryptionKeyUnavailable(ref cause) => cause,
-            ListPullRequestsError::InvalidAuthorArn(ref cause) => cause,
-            ListPullRequestsError::InvalidContinuationToken(ref cause) => cause,
-            ListPullRequestsError::InvalidMaxResults(ref cause) => cause,
-            ListPullRequestsError::InvalidPullRequestStatus(ref cause) => cause,
-            ListPullRequestsError::InvalidRepositoryName(ref cause) => cause,
-            ListPullRequestsError::RepositoryDoesNotExist(ref cause) => cause,
-            ListPullRequestsError::RepositoryNameRequired(ref cause) => cause,
+            ListPullRequestsError::AuthorDoesNotExist(ref cause) => write!(f, "{}", cause),
+            ListPullRequestsError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListPullRequestsError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            ListPullRequestsError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            ListPullRequestsError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            ListPullRequestsError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            ListPullRequestsError::InvalidAuthorArn(ref cause) => write!(f, "{}", cause),
+            ListPullRequestsError::InvalidContinuationToken(ref cause) => write!(f, "{}", cause),
+            ListPullRequestsError::InvalidMaxResults(ref cause) => write!(f, "{}", cause),
+            ListPullRequestsError::InvalidPullRequestStatus(ref cause) => write!(f, "{}", cause),
+            ListPullRequestsError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            ListPullRequestsError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            ListPullRequestsError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPullRequestsError {}
 /// Errors returned by ListRepositories
 #[derive(Debug, PartialEq)]
 pub enum ListRepositoriesError {
@@ -8792,18 +9082,14 @@ impl ListRepositoriesError {
 }
 impl fmt::Display for ListRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRepositoriesError {
-    fn description(&self) -> &str {
         match *self {
-            ListRepositoriesError::InvalidContinuationToken(ref cause) => cause,
-            ListRepositoriesError::InvalidOrder(ref cause) => cause,
-            ListRepositoriesError::InvalidSortBy(ref cause) => cause,
+            ListRepositoriesError::InvalidContinuationToken(ref cause) => write!(f, "{}", cause),
+            ListRepositoriesError::InvalidOrder(ref cause) => write!(f, "{}", cause),
+            ListRepositoriesError::InvalidSortBy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRepositoriesError {}
 /// Errors returned by ListRepositoriesForApprovalRuleTemplate
 #[derive(Debug, PartialEq)]
 pub enum ListRepositoriesForApprovalRuleTemplateError {
@@ -8904,39 +9190,41 @@ impl ListRepositoriesForApprovalRuleTemplateError {
 }
 impl fmt::Display for ListRepositoriesForApprovalRuleTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRepositoriesForApprovalRuleTemplateError {
-    fn description(&self) -> &str {
         match *self {
             ListRepositoriesForApprovalRuleTemplateError::ApprovalRuleTemplateDoesNotExist(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             ListRepositoriesForApprovalRuleTemplateError::ApprovalRuleTemplateNameRequired(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             ListRepositoriesForApprovalRuleTemplateError::EncryptionIntegrityChecksFailed(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             ListRepositoriesForApprovalRuleTemplateError::EncryptionKeyAccessDenied(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            ListRepositoriesForApprovalRuleTemplateError::EncryptionKeyDisabled(ref cause) => cause,
-            ListRepositoriesForApprovalRuleTemplateError::EncryptionKeyNotFound(ref cause) => cause,
+            ListRepositoriesForApprovalRuleTemplateError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListRepositoriesForApprovalRuleTemplateError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ListRepositoriesForApprovalRuleTemplateError::EncryptionKeyUnavailable(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             ListRepositoriesForApprovalRuleTemplateError::InvalidApprovalRuleTemplateName(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             ListRepositoriesForApprovalRuleTemplateError::InvalidContinuationToken(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            ListRepositoriesForApprovalRuleTemplateError::InvalidMaxResults(ref cause) => cause,
+            ListRepositoriesForApprovalRuleTemplateError::InvalidMaxResults(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListRepositoriesForApprovalRuleTemplateError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -8983,19 +9271,15 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InvalidRepositoryName(ref cause) => cause,
-            ListTagsForResourceError::InvalidResourceArn(ref cause) => cause,
-            ListTagsForResourceError::RepositoryDoesNotExist(ref cause) => cause,
-            ListTagsForResourceError::ResourceArnRequired(ref cause) => cause,
+            ListTagsForResourceError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidResourceArn(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceArnRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by MergeBranchesByFastForward
 #[derive(Debug, PartialEq)]
 pub enum MergeBranchesByFastForwardError {
@@ -9149,34 +9433,62 @@ impl MergeBranchesByFastForwardError {
 }
 impl fmt::Display for MergeBranchesByFastForwardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for MergeBranchesByFastForwardError {
-    fn description(&self) -> &str {
         match *self {
-            MergeBranchesByFastForwardError::BranchDoesNotExist(ref cause) => cause,
-            MergeBranchesByFastForwardError::BranchNameIsTagName(ref cause) => cause,
-            MergeBranchesByFastForwardError::BranchNameRequired(ref cause) => cause,
-            MergeBranchesByFastForwardError::CommitDoesNotExist(ref cause) => cause,
-            MergeBranchesByFastForwardError::CommitRequired(ref cause) => cause,
-            MergeBranchesByFastForwardError::ConcurrentReferenceUpdate(ref cause) => cause,
-            MergeBranchesByFastForwardError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            MergeBranchesByFastForwardError::EncryptionKeyAccessDenied(ref cause) => cause,
-            MergeBranchesByFastForwardError::EncryptionKeyDisabled(ref cause) => cause,
-            MergeBranchesByFastForwardError::EncryptionKeyNotFound(ref cause) => cause,
-            MergeBranchesByFastForwardError::EncryptionKeyUnavailable(ref cause) => cause,
-            MergeBranchesByFastForwardError::InvalidBranchName(ref cause) => cause,
-            MergeBranchesByFastForwardError::InvalidCommit(ref cause) => cause,
-            MergeBranchesByFastForwardError::InvalidRepositoryName(ref cause) => cause,
-            MergeBranchesByFastForwardError::InvalidTargetBranch(ref cause) => cause,
-            MergeBranchesByFastForwardError::ManualMergeRequired(ref cause) => cause,
-            MergeBranchesByFastForwardError::RepositoryDoesNotExist(ref cause) => cause,
-            MergeBranchesByFastForwardError::RepositoryNameRequired(ref cause) => cause,
-            MergeBranchesByFastForwardError::TipsDivergenceExceeded(ref cause) => cause,
+            MergeBranchesByFastForwardError::BranchDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::BranchNameIsTagName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::BranchNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::CommitDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::CommitRequired(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByFastForwardError::ConcurrentReferenceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::InvalidBranchName(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByFastForwardError::InvalidCommit(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByFastForwardError::InvalidRepositoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::InvalidTargetBranch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::ManualMergeRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByFastForwardError::TipsDivergenceExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for MergeBranchesByFastForwardError {}
 /// Errors returned by MergeBranchesBySquash
 #[derive(Debug, PartialEq)]
 pub enum MergeBranchesBySquashError {
@@ -9462,56 +9774,84 @@ impl MergeBranchesBySquashError {
 }
 impl fmt::Display for MergeBranchesBySquashError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for MergeBranchesBySquashError {
-    fn description(&self) -> &str {
         match *self {
-            MergeBranchesBySquashError::BranchDoesNotExist(ref cause) => cause,
-            MergeBranchesBySquashError::BranchNameIsTagName(ref cause) => cause,
-            MergeBranchesBySquashError::BranchNameRequired(ref cause) => cause,
-            MergeBranchesBySquashError::CommitDoesNotExist(ref cause) => cause,
-            MergeBranchesBySquashError::CommitMessageLengthExceeded(ref cause) => cause,
-            MergeBranchesBySquashError::CommitRequired(ref cause) => cause,
-            MergeBranchesBySquashError::ConcurrentReferenceUpdate(ref cause) => cause,
-            MergeBranchesBySquashError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            MergeBranchesBySquashError::EncryptionKeyAccessDenied(ref cause) => cause,
-            MergeBranchesBySquashError::EncryptionKeyDisabled(ref cause) => cause,
-            MergeBranchesBySquashError::EncryptionKeyNotFound(ref cause) => cause,
-            MergeBranchesBySquashError::EncryptionKeyUnavailable(ref cause) => cause,
-            MergeBranchesBySquashError::FileContentSizeLimitExceeded(ref cause) => cause,
-            MergeBranchesBySquashError::FileModeRequired(ref cause) => cause,
-            MergeBranchesBySquashError::FolderContentSizeLimitExceeded(ref cause) => cause,
-            MergeBranchesBySquashError::InvalidBranchName(ref cause) => cause,
-            MergeBranchesBySquashError::InvalidCommit(ref cause) => cause,
-            MergeBranchesBySquashError::InvalidConflictDetailLevel(ref cause) => cause,
-            MergeBranchesBySquashError::InvalidConflictResolution(ref cause) => cause,
-            MergeBranchesBySquashError::InvalidConflictResolutionStrategy(ref cause) => cause,
-            MergeBranchesBySquashError::InvalidEmail(ref cause) => cause,
-            MergeBranchesBySquashError::InvalidFileMode(ref cause) => cause,
-            MergeBranchesBySquashError::InvalidPath(ref cause) => cause,
-            MergeBranchesBySquashError::InvalidReplacementContent(ref cause) => cause,
-            MergeBranchesBySquashError::InvalidReplacementType(ref cause) => cause,
-            MergeBranchesBySquashError::InvalidRepositoryName(ref cause) => cause,
-            MergeBranchesBySquashError::InvalidTargetBranch(ref cause) => cause,
-            MergeBranchesBySquashError::ManualMergeRequired(ref cause) => cause,
-            MergeBranchesBySquashError::MaximumConflictResolutionEntriesExceeded(ref cause) => {
-                cause
+            MergeBranchesBySquashError::BranchDoesNotExist(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::BranchNameIsTagName(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::BranchNameRequired(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::CommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::CommitMessageLengthExceeded(ref cause) => {
+                write!(f, "{}", cause)
             }
-            MergeBranchesBySquashError::MaximumFileContentToLoadExceeded(ref cause) => cause,
-            MergeBranchesBySquashError::MaximumItemsToCompareExceeded(ref cause) => cause,
-            MergeBranchesBySquashError::MultipleConflictResolutionEntries(ref cause) => cause,
-            MergeBranchesBySquashError::NameLengthExceeded(ref cause) => cause,
-            MergeBranchesBySquashError::PathRequired(ref cause) => cause,
-            MergeBranchesBySquashError::ReplacementContentRequired(ref cause) => cause,
-            MergeBranchesBySquashError::ReplacementTypeRequired(ref cause) => cause,
-            MergeBranchesBySquashError::RepositoryDoesNotExist(ref cause) => cause,
-            MergeBranchesBySquashError::RepositoryNameRequired(ref cause) => cause,
-            MergeBranchesBySquashError::TipsDivergenceExceeded(ref cause) => cause,
+            MergeBranchesBySquashError::CommitRequired(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::ConcurrentReferenceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::FileContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::FileModeRequired(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::FolderContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::InvalidBranchName(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::InvalidCommit(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::InvalidConflictDetailLevel(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::InvalidConflictResolution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::InvalidConflictResolutionStrategy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::InvalidEmail(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::InvalidFileMode(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::InvalidReplacementContent(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::InvalidReplacementType(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::InvalidTargetBranch(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::ManualMergeRequired(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::MaximumConflictResolutionEntriesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::MaximumFileContentToLoadExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::MaximumItemsToCompareExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::MultipleConflictResolutionEntries(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::NameLengthExceeded(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::PathRequired(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::ReplacementContentRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::ReplacementTypeRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesBySquashError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
+            MergeBranchesBySquashError::TipsDivergenceExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for MergeBranchesBySquashError {}
 /// Errors returned by MergeBranchesByThreeWay
 #[derive(Debug, PartialEq)]
 pub enum MergeBranchesByThreeWayError {
@@ -9803,56 +10143,98 @@ impl MergeBranchesByThreeWayError {
 }
 impl fmt::Display for MergeBranchesByThreeWayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for MergeBranchesByThreeWayError {
-    fn description(&self) -> &str {
         match *self {
-            MergeBranchesByThreeWayError::BranchDoesNotExist(ref cause) => cause,
-            MergeBranchesByThreeWayError::BranchNameIsTagName(ref cause) => cause,
-            MergeBranchesByThreeWayError::BranchNameRequired(ref cause) => cause,
-            MergeBranchesByThreeWayError::CommitDoesNotExist(ref cause) => cause,
-            MergeBranchesByThreeWayError::CommitMessageLengthExceeded(ref cause) => cause,
-            MergeBranchesByThreeWayError::CommitRequired(ref cause) => cause,
-            MergeBranchesByThreeWayError::ConcurrentReferenceUpdate(ref cause) => cause,
-            MergeBranchesByThreeWayError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            MergeBranchesByThreeWayError::EncryptionKeyAccessDenied(ref cause) => cause,
-            MergeBranchesByThreeWayError::EncryptionKeyDisabled(ref cause) => cause,
-            MergeBranchesByThreeWayError::EncryptionKeyNotFound(ref cause) => cause,
-            MergeBranchesByThreeWayError::EncryptionKeyUnavailable(ref cause) => cause,
-            MergeBranchesByThreeWayError::FileContentSizeLimitExceeded(ref cause) => cause,
-            MergeBranchesByThreeWayError::FileModeRequired(ref cause) => cause,
-            MergeBranchesByThreeWayError::FolderContentSizeLimitExceeded(ref cause) => cause,
-            MergeBranchesByThreeWayError::InvalidBranchName(ref cause) => cause,
-            MergeBranchesByThreeWayError::InvalidCommit(ref cause) => cause,
-            MergeBranchesByThreeWayError::InvalidConflictDetailLevel(ref cause) => cause,
-            MergeBranchesByThreeWayError::InvalidConflictResolution(ref cause) => cause,
-            MergeBranchesByThreeWayError::InvalidConflictResolutionStrategy(ref cause) => cause,
-            MergeBranchesByThreeWayError::InvalidEmail(ref cause) => cause,
-            MergeBranchesByThreeWayError::InvalidFileMode(ref cause) => cause,
-            MergeBranchesByThreeWayError::InvalidPath(ref cause) => cause,
-            MergeBranchesByThreeWayError::InvalidReplacementContent(ref cause) => cause,
-            MergeBranchesByThreeWayError::InvalidReplacementType(ref cause) => cause,
-            MergeBranchesByThreeWayError::InvalidRepositoryName(ref cause) => cause,
-            MergeBranchesByThreeWayError::InvalidTargetBranch(ref cause) => cause,
-            MergeBranchesByThreeWayError::ManualMergeRequired(ref cause) => cause,
-            MergeBranchesByThreeWayError::MaximumConflictResolutionEntriesExceeded(ref cause) => {
-                cause
+            MergeBranchesByThreeWayError::BranchDoesNotExist(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::BranchNameIsTagName(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::BranchNameRequired(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::CommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::CommitMessageLengthExceeded(ref cause) => {
+                write!(f, "{}", cause)
             }
-            MergeBranchesByThreeWayError::MaximumFileContentToLoadExceeded(ref cause) => cause,
-            MergeBranchesByThreeWayError::MaximumItemsToCompareExceeded(ref cause) => cause,
-            MergeBranchesByThreeWayError::MultipleConflictResolutionEntries(ref cause) => cause,
-            MergeBranchesByThreeWayError::NameLengthExceeded(ref cause) => cause,
-            MergeBranchesByThreeWayError::PathRequired(ref cause) => cause,
-            MergeBranchesByThreeWayError::ReplacementContentRequired(ref cause) => cause,
-            MergeBranchesByThreeWayError::ReplacementTypeRequired(ref cause) => cause,
-            MergeBranchesByThreeWayError::RepositoryDoesNotExist(ref cause) => cause,
-            MergeBranchesByThreeWayError::RepositoryNameRequired(ref cause) => cause,
-            MergeBranchesByThreeWayError::TipsDivergenceExceeded(ref cause) => cause,
+            MergeBranchesByThreeWayError::CommitRequired(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::ConcurrentReferenceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::FileContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::FileModeRequired(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::FolderContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::InvalidBranchName(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::InvalidCommit(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::InvalidConflictDetailLevel(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::InvalidConflictResolution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::InvalidConflictResolutionStrategy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::InvalidEmail(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::InvalidFileMode(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::InvalidReplacementContent(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::InvalidReplacementType(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::InvalidRepositoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::InvalidTargetBranch(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::ManualMergeRequired(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::MaximumConflictResolutionEntriesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::MaximumFileContentToLoadExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::MaximumItemsToCompareExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::MultipleConflictResolutionEntries(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::NameLengthExceeded(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::PathRequired(ref cause) => write!(f, "{}", cause),
+            MergeBranchesByThreeWayError::ReplacementContentRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::ReplacementTypeRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergeBranchesByThreeWayError::TipsDivergenceExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for MergeBranchesByThreeWayError {}
 /// Errors returned by MergePullRequestByFastForward
 #[derive(Debug, PartialEq)]
 pub enum MergePullRequestByFastForwardError {
@@ -10014,38 +10396,68 @@ impl MergePullRequestByFastForwardError {
 }
 impl fmt::Display for MergePullRequestByFastForwardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for MergePullRequestByFastForwardError {
-    fn description(&self) -> &str {
         match *self {
-            MergePullRequestByFastForwardError::ConcurrentReferenceUpdate(ref cause) => cause,
-            MergePullRequestByFastForwardError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            MergePullRequestByFastForwardError::EncryptionKeyAccessDenied(ref cause) => cause,
-            MergePullRequestByFastForwardError::EncryptionKeyDisabled(ref cause) => cause,
-            MergePullRequestByFastForwardError::EncryptionKeyNotFound(ref cause) => cause,
-            MergePullRequestByFastForwardError::EncryptionKeyUnavailable(ref cause) => cause,
-            MergePullRequestByFastForwardError::InvalidCommitId(ref cause) => cause,
-            MergePullRequestByFastForwardError::InvalidPullRequestId(ref cause) => cause,
-            MergePullRequestByFastForwardError::InvalidRepositoryName(ref cause) => cause,
-            MergePullRequestByFastForwardError::ManualMergeRequired(ref cause) => cause,
-            MergePullRequestByFastForwardError::PullRequestAlreadyClosed(ref cause) => cause,
-            MergePullRequestByFastForwardError::PullRequestApprovalRulesNotSatisfied(ref cause) => {
-                cause
+            MergePullRequestByFastForwardError::ConcurrentReferenceUpdate(ref cause) => {
+                write!(f, "{}", cause)
             }
-            MergePullRequestByFastForwardError::PullRequestDoesNotExist(ref cause) => cause,
-            MergePullRequestByFastForwardError::PullRequestIdRequired(ref cause) => cause,
-            MergePullRequestByFastForwardError::ReferenceDoesNotExist(ref cause) => cause,
-            MergePullRequestByFastForwardError::RepositoryDoesNotExist(ref cause) => cause,
-            MergePullRequestByFastForwardError::RepositoryNameRequired(ref cause) => cause,
+            MergePullRequestByFastForwardError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::InvalidCommitId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::InvalidRepositoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::ManualMergeRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::PullRequestAlreadyClosed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::PullRequestApprovalRulesNotSatisfied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::ReferenceDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByFastForwardError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
             MergePullRequestByFastForwardError::RepositoryNotAssociatedWithPullRequest(
                 ref cause,
-            ) => cause,
-            MergePullRequestByFastForwardError::TipOfSourceReferenceIsDifferent(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            MergePullRequestByFastForwardError::TipOfSourceReferenceIsDifferent(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for MergePullRequestByFastForwardError {}
 /// Errors returned by MergePullRequestBySquash
 #[derive(Debug, PartialEq)]
 pub enum MergePullRequestBySquashError {
@@ -10336,57 +10748,111 @@ impl MergePullRequestBySquashError {
 }
 impl fmt::Display for MergePullRequestBySquashError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for MergePullRequestBySquashError {
-    fn description(&self) -> &str {
         match *self {
-            MergePullRequestBySquashError::CommitMessageLengthExceeded(ref cause) => cause,
-            MergePullRequestBySquashError::ConcurrentReferenceUpdate(ref cause) => cause,
-            MergePullRequestBySquashError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            MergePullRequestBySquashError::EncryptionKeyAccessDenied(ref cause) => cause,
-            MergePullRequestBySquashError::EncryptionKeyDisabled(ref cause) => cause,
-            MergePullRequestBySquashError::EncryptionKeyNotFound(ref cause) => cause,
-            MergePullRequestBySquashError::EncryptionKeyUnavailable(ref cause) => cause,
-            MergePullRequestBySquashError::FileContentSizeLimitExceeded(ref cause) => cause,
-            MergePullRequestBySquashError::FolderContentSizeLimitExceeded(ref cause) => cause,
-            MergePullRequestBySquashError::InvalidCommitId(ref cause) => cause,
-            MergePullRequestBySquashError::InvalidConflictDetailLevel(ref cause) => cause,
-            MergePullRequestBySquashError::InvalidConflictResolution(ref cause) => cause,
-            MergePullRequestBySquashError::InvalidConflictResolutionStrategy(ref cause) => cause,
-            MergePullRequestBySquashError::InvalidEmail(ref cause) => cause,
-            MergePullRequestBySquashError::InvalidFileMode(ref cause) => cause,
-            MergePullRequestBySquashError::InvalidPath(ref cause) => cause,
-            MergePullRequestBySquashError::InvalidPullRequestId(ref cause) => cause,
-            MergePullRequestBySquashError::InvalidReplacementContent(ref cause) => cause,
-            MergePullRequestBySquashError::InvalidReplacementType(ref cause) => cause,
-            MergePullRequestBySquashError::InvalidRepositoryName(ref cause) => cause,
-            MergePullRequestBySquashError::ManualMergeRequired(ref cause) => cause,
+            MergePullRequestBySquashError::CommitMessageLengthExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::ConcurrentReferenceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::FileContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::FolderContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::InvalidCommitId(ref cause) => write!(f, "{}", cause),
+            MergePullRequestBySquashError::InvalidConflictDetailLevel(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::InvalidConflictResolution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::InvalidConflictResolutionStrategy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::InvalidEmail(ref cause) => write!(f, "{}", cause),
+            MergePullRequestBySquashError::InvalidFileMode(ref cause) => write!(f, "{}", cause),
+            MergePullRequestBySquashError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            MergePullRequestBySquashError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::InvalidReplacementContent(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::InvalidReplacementType(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::InvalidRepositoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::ManualMergeRequired(ref cause) => write!(f, "{}", cause),
             MergePullRequestBySquashError::MaximumConflictResolutionEntriesExceeded(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            MergePullRequestBySquashError::MaximumFileContentToLoadExceeded(ref cause) => cause,
-            MergePullRequestBySquashError::MaximumItemsToCompareExceeded(ref cause) => cause,
-            MergePullRequestBySquashError::MultipleConflictResolutionEntries(ref cause) => cause,
-            MergePullRequestBySquashError::NameLengthExceeded(ref cause) => cause,
-            MergePullRequestBySquashError::PathRequired(ref cause) => cause,
-            MergePullRequestBySquashError::PullRequestAlreadyClosed(ref cause) => cause,
-            MergePullRequestBySquashError::PullRequestApprovalRulesNotSatisfied(ref cause) => cause,
-            MergePullRequestBySquashError::PullRequestDoesNotExist(ref cause) => cause,
-            MergePullRequestBySquashError::PullRequestIdRequired(ref cause) => cause,
-            MergePullRequestBySquashError::ReplacementContentRequired(ref cause) => cause,
-            MergePullRequestBySquashError::ReplacementTypeRequired(ref cause) => cause,
-            MergePullRequestBySquashError::RepositoryDoesNotExist(ref cause) => cause,
-            MergePullRequestBySquashError::RepositoryNameRequired(ref cause) => cause,
+            MergePullRequestBySquashError::MaximumFileContentToLoadExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::MaximumItemsToCompareExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::MultipleConflictResolutionEntries(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::NameLengthExceeded(ref cause) => write!(f, "{}", cause),
+            MergePullRequestBySquashError::PathRequired(ref cause) => write!(f, "{}", cause),
+            MergePullRequestBySquashError::PullRequestAlreadyClosed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::PullRequestApprovalRulesNotSatisfied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::ReplacementContentRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::ReplacementTypeRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
             MergePullRequestBySquashError::RepositoryNotAssociatedWithPullRequest(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            MergePullRequestBySquashError::TipOfSourceReferenceIsDifferent(ref cause) => cause,
-            MergePullRequestBySquashError::TipsDivergenceExceeded(ref cause) => cause,
+            MergePullRequestBySquashError::TipOfSourceReferenceIsDifferent(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestBySquashError::TipsDivergenceExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for MergePullRequestBySquashError {}
 /// Errors returned by MergePullRequestByThreeWay
 #[derive(Debug, PartialEq)]
 pub enum MergePullRequestByThreeWayError {
@@ -10679,59 +11145,115 @@ impl MergePullRequestByThreeWayError {
 }
 impl fmt::Display for MergePullRequestByThreeWayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for MergePullRequestByThreeWayError {
-    fn description(&self) -> &str {
         match *self {
-            MergePullRequestByThreeWayError::CommitMessageLengthExceeded(ref cause) => cause,
-            MergePullRequestByThreeWayError::ConcurrentReferenceUpdate(ref cause) => cause,
-            MergePullRequestByThreeWayError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            MergePullRequestByThreeWayError::EncryptionKeyAccessDenied(ref cause) => cause,
-            MergePullRequestByThreeWayError::EncryptionKeyDisabled(ref cause) => cause,
-            MergePullRequestByThreeWayError::EncryptionKeyNotFound(ref cause) => cause,
-            MergePullRequestByThreeWayError::EncryptionKeyUnavailable(ref cause) => cause,
-            MergePullRequestByThreeWayError::FileContentSizeLimitExceeded(ref cause) => cause,
-            MergePullRequestByThreeWayError::FolderContentSizeLimitExceeded(ref cause) => cause,
-            MergePullRequestByThreeWayError::InvalidCommitId(ref cause) => cause,
-            MergePullRequestByThreeWayError::InvalidConflictDetailLevel(ref cause) => cause,
-            MergePullRequestByThreeWayError::InvalidConflictResolution(ref cause) => cause,
-            MergePullRequestByThreeWayError::InvalidConflictResolutionStrategy(ref cause) => cause,
-            MergePullRequestByThreeWayError::InvalidEmail(ref cause) => cause,
-            MergePullRequestByThreeWayError::InvalidFileMode(ref cause) => cause,
-            MergePullRequestByThreeWayError::InvalidPath(ref cause) => cause,
-            MergePullRequestByThreeWayError::InvalidPullRequestId(ref cause) => cause,
-            MergePullRequestByThreeWayError::InvalidReplacementContent(ref cause) => cause,
-            MergePullRequestByThreeWayError::InvalidReplacementType(ref cause) => cause,
-            MergePullRequestByThreeWayError::InvalidRepositoryName(ref cause) => cause,
-            MergePullRequestByThreeWayError::ManualMergeRequired(ref cause) => cause,
+            MergePullRequestByThreeWayError::CommitMessageLengthExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::ConcurrentReferenceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::FileContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::FolderContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::InvalidCommitId(ref cause) => write!(f, "{}", cause),
+            MergePullRequestByThreeWayError::InvalidConflictDetailLevel(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::InvalidConflictResolution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::InvalidConflictResolutionStrategy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::InvalidEmail(ref cause) => write!(f, "{}", cause),
+            MergePullRequestByThreeWayError::InvalidFileMode(ref cause) => write!(f, "{}", cause),
+            MergePullRequestByThreeWayError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            MergePullRequestByThreeWayError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::InvalidReplacementContent(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::InvalidReplacementType(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::InvalidRepositoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::ManualMergeRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
             MergePullRequestByThreeWayError::MaximumConflictResolutionEntriesExceeded(
                 ref cause,
-            ) => cause,
-            MergePullRequestByThreeWayError::MaximumFileContentToLoadExceeded(ref cause) => cause,
-            MergePullRequestByThreeWayError::MaximumItemsToCompareExceeded(ref cause) => cause,
-            MergePullRequestByThreeWayError::MultipleConflictResolutionEntries(ref cause) => cause,
-            MergePullRequestByThreeWayError::NameLengthExceeded(ref cause) => cause,
-            MergePullRequestByThreeWayError::PathRequired(ref cause) => cause,
-            MergePullRequestByThreeWayError::PullRequestAlreadyClosed(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            MergePullRequestByThreeWayError::MaximumFileContentToLoadExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::MaximumItemsToCompareExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::MultipleConflictResolutionEntries(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::NameLengthExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::PathRequired(ref cause) => write!(f, "{}", cause),
+            MergePullRequestByThreeWayError::PullRequestAlreadyClosed(ref cause) => {
+                write!(f, "{}", cause)
+            }
             MergePullRequestByThreeWayError::PullRequestApprovalRulesNotSatisfied(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            MergePullRequestByThreeWayError::PullRequestDoesNotExist(ref cause) => cause,
-            MergePullRequestByThreeWayError::PullRequestIdRequired(ref cause) => cause,
-            MergePullRequestByThreeWayError::ReplacementContentRequired(ref cause) => cause,
-            MergePullRequestByThreeWayError::ReplacementTypeRequired(ref cause) => cause,
-            MergePullRequestByThreeWayError::RepositoryDoesNotExist(ref cause) => cause,
-            MergePullRequestByThreeWayError::RepositoryNameRequired(ref cause) => cause,
+            MergePullRequestByThreeWayError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::ReplacementContentRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::ReplacementTypeRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
             MergePullRequestByThreeWayError::RepositoryNotAssociatedWithPullRequest(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            MergePullRequestByThreeWayError::TipOfSourceReferenceIsDifferent(ref cause) => cause,
-            MergePullRequestByThreeWayError::TipsDivergenceExceeded(ref cause) => cause,
+            MergePullRequestByThreeWayError::TipOfSourceReferenceIsDifferent(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            MergePullRequestByThreeWayError::TipsDivergenceExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for MergePullRequestByThreeWayError {}
 /// Errors returned by OverridePullRequestApprovalRules
 #[derive(Debug, PartialEq)]
 pub enum OverridePullRequestApprovalRulesError {
@@ -10859,32 +11381,56 @@ impl OverridePullRequestApprovalRulesError {
 }
 impl fmt::Display for OverridePullRequestApprovalRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for OverridePullRequestApprovalRulesError {
-    fn description(&self) -> &str {
         match *self {
             OverridePullRequestApprovalRulesError::EncryptionIntegrityChecksFailed(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            OverridePullRequestApprovalRulesError::EncryptionKeyAccessDenied(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::EncryptionKeyDisabled(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::EncryptionKeyNotFound(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::EncryptionKeyUnavailable(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::InvalidOverrideStatus(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::InvalidPullRequestId(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::InvalidRevisionId(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::OverrideAlreadySet(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::OverrideStatusRequired(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::PullRequestAlreadyClosed(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::PullRequestDoesNotExist(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::PullRequestIdRequired(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::RevisionIdRequired(ref cause) => cause,
-            OverridePullRequestApprovalRulesError::RevisionNotCurrent(ref cause) => cause,
+            OverridePullRequestApprovalRulesError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::InvalidOverrideStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::InvalidRevisionId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::OverrideAlreadySet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::OverrideStatusRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::PullRequestAlreadyClosed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::RevisionIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OverridePullRequestApprovalRulesError::RevisionNotCurrent(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for OverridePullRequestApprovalRulesError {}
 /// Errors returned by PostCommentForComparedCommit
 #[derive(Debug, PartialEq)]
 pub enum PostCommentForComparedCommitError {
@@ -11068,40 +11614,74 @@ impl PostCommentForComparedCommitError {
 }
 impl fmt::Display for PostCommentForComparedCommitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PostCommentForComparedCommitError {
-    fn description(&self) -> &str {
         match *self {
             PostCommentForComparedCommitError::BeforeCommitIdAndAfterCommitIdAreSame(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            PostCommentForComparedCommitError::ClientRequestTokenRequired(ref cause) => cause,
-            PostCommentForComparedCommitError::CommentContentRequired(ref cause) => cause,
-            PostCommentForComparedCommitError::CommentContentSizeLimitExceeded(ref cause) => cause,
-            PostCommentForComparedCommitError::CommitDoesNotExist(ref cause) => cause,
-            PostCommentForComparedCommitError::CommitIdRequired(ref cause) => cause,
-            PostCommentForComparedCommitError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            PostCommentForComparedCommitError::EncryptionKeyAccessDenied(ref cause) => cause,
-            PostCommentForComparedCommitError::EncryptionKeyDisabled(ref cause) => cause,
-            PostCommentForComparedCommitError::EncryptionKeyNotFound(ref cause) => cause,
-            PostCommentForComparedCommitError::EncryptionKeyUnavailable(ref cause) => cause,
-            PostCommentForComparedCommitError::IdempotencyParameterMismatch(ref cause) => cause,
-            PostCommentForComparedCommitError::InvalidClientRequestToken(ref cause) => cause,
-            PostCommentForComparedCommitError::InvalidCommitId(ref cause) => cause,
-            PostCommentForComparedCommitError::InvalidFileLocation(ref cause) => cause,
-            PostCommentForComparedCommitError::InvalidFilePosition(ref cause) => cause,
-            PostCommentForComparedCommitError::InvalidPath(ref cause) => cause,
-            PostCommentForComparedCommitError::InvalidRelativeFileVersionEnum(ref cause) => cause,
-            PostCommentForComparedCommitError::InvalidRepositoryName(ref cause) => cause,
-            PostCommentForComparedCommitError::PathDoesNotExist(ref cause) => cause,
-            PostCommentForComparedCommitError::PathRequired(ref cause) => cause,
-            PostCommentForComparedCommitError::RepositoryDoesNotExist(ref cause) => cause,
-            PostCommentForComparedCommitError::RepositoryNameRequired(ref cause) => cause,
+            PostCommentForComparedCommitError::ClientRequestTokenRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::CommentContentRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::CommentContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::CommitDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::CommitIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::IdempotencyParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::InvalidClientRequestToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::InvalidCommitId(ref cause) => write!(f, "{}", cause),
+            PostCommentForComparedCommitError::InvalidFileLocation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::InvalidFilePosition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            PostCommentForComparedCommitError::InvalidRelativeFileVersionEnum(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::InvalidRepositoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::PathDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::PathRequired(ref cause) => write!(f, "{}", cause),
+            PostCommentForComparedCommitError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForComparedCommitError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PostCommentForComparedCommitError {}
 /// Errors returned by PostCommentForPullRequest
 #[derive(Debug, PartialEq)]
 pub enum PostCommentForPullRequestError {
@@ -11313,46 +11893,80 @@ impl PostCommentForPullRequestError {
 }
 impl fmt::Display for PostCommentForPullRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PostCommentForPullRequestError {
-    fn description(&self) -> &str {
         match *self {
             PostCommentForPullRequestError::BeforeCommitIdAndAfterCommitIdAreSame(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            PostCommentForPullRequestError::ClientRequestTokenRequired(ref cause) => cause,
-            PostCommentForPullRequestError::CommentContentRequired(ref cause) => cause,
-            PostCommentForPullRequestError::CommentContentSizeLimitExceeded(ref cause) => cause,
-            PostCommentForPullRequestError::CommitDoesNotExist(ref cause) => cause,
-            PostCommentForPullRequestError::CommitIdRequired(ref cause) => cause,
-            PostCommentForPullRequestError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            PostCommentForPullRequestError::EncryptionKeyAccessDenied(ref cause) => cause,
-            PostCommentForPullRequestError::EncryptionKeyDisabled(ref cause) => cause,
-            PostCommentForPullRequestError::EncryptionKeyNotFound(ref cause) => cause,
-            PostCommentForPullRequestError::EncryptionKeyUnavailable(ref cause) => cause,
-            PostCommentForPullRequestError::IdempotencyParameterMismatch(ref cause) => cause,
-            PostCommentForPullRequestError::InvalidClientRequestToken(ref cause) => cause,
-            PostCommentForPullRequestError::InvalidCommitId(ref cause) => cause,
-            PostCommentForPullRequestError::InvalidFileLocation(ref cause) => cause,
-            PostCommentForPullRequestError::InvalidFilePosition(ref cause) => cause,
-            PostCommentForPullRequestError::InvalidPath(ref cause) => cause,
-            PostCommentForPullRequestError::InvalidPullRequestId(ref cause) => cause,
-            PostCommentForPullRequestError::InvalidRelativeFileVersionEnum(ref cause) => cause,
-            PostCommentForPullRequestError::InvalidRepositoryName(ref cause) => cause,
-            PostCommentForPullRequestError::PathDoesNotExist(ref cause) => cause,
-            PostCommentForPullRequestError::PathRequired(ref cause) => cause,
-            PostCommentForPullRequestError::PullRequestDoesNotExist(ref cause) => cause,
-            PostCommentForPullRequestError::PullRequestIdRequired(ref cause) => cause,
-            PostCommentForPullRequestError::RepositoryDoesNotExist(ref cause) => cause,
-            PostCommentForPullRequestError::RepositoryNameRequired(ref cause) => cause,
+            PostCommentForPullRequestError::ClientRequestTokenRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::CommentContentRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::CommentContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::CommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            PostCommentForPullRequestError::CommitIdRequired(ref cause) => write!(f, "{}", cause),
+            PostCommentForPullRequestError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::IdempotencyParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::InvalidClientRequestToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::InvalidCommitId(ref cause) => write!(f, "{}", cause),
+            PostCommentForPullRequestError::InvalidFileLocation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::InvalidFilePosition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            PostCommentForPullRequestError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::InvalidRelativeFileVersionEnum(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::InvalidRepositoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::PathDoesNotExist(ref cause) => write!(f, "{}", cause),
+            PostCommentForPullRequestError::PathRequired(ref cause) => write!(f, "{}", cause),
+            PostCommentForPullRequestError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentForPullRequestError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
             PostCommentForPullRequestError::RepositoryNotAssociatedWithPullRequest(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for PostCommentForPullRequestError {}
 /// Errors returned by PostCommentReply
 #[derive(Debug, PartialEq)]
 pub enum PostCommentReplyError {
@@ -11423,23 +12037,23 @@ impl PostCommentReplyError {
 }
 impl fmt::Display for PostCommentReplyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PostCommentReplyError {
-    fn description(&self) -> &str {
         match *self {
-            PostCommentReplyError::ClientRequestTokenRequired(ref cause) => cause,
-            PostCommentReplyError::CommentContentRequired(ref cause) => cause,
-            PostCommentReplyError::CommentContentSizeLimitExceeded(ref cause) => cause,
-            PostCommentReplyError::CommentDoesNotExist(ref cause) => cause,
-            PostCommentReplyError::CommentIdRequired(ref cause) => cause,
-            PostCommentReplyError::IdempotencyParameterMismatch(ref cause) => cause,
-            PostCommentReplyError::InvalidClientRequestToken(ref cause) => cause,
-            PostCommentReplyError::InvalidCommentId(ref cause) => cause,
+            PostCommentReplyError::ClientRequestTokenRequired(ref cause) => write!(f, "{}", cause),
+            PostCommentReplyError::CommentContentRequired(ref cause) => write!(f, "{}", cause),
+            PostCommentReplyError::CommentContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentReplyError::CommentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            PostCommentReplyError::CommentIdRequired(ref cause) => write!(f, "{}", cause),
+            PostCommentReplyError::IdempotencyParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PostCommentReplyError::InvalidClientRequestToken(ref cause) => write!(f, "{}", cause),
+            PostCommentReplyError::InvalidCommentId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PostCommentReplyError {}
 /// Errors returned by PutFile
 #[derive(Debug, PartialEq)]
 pub enum PutFileError {
@@ -11620,45 +12234,41 @@ impl PutFileError {
 }
 impl fmt::Display for PutFileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutFileError {
-    fn description(&self) -> &str {
         match *self {
-            PutFileError::BranchDoesNotExist(ref cause) => cause,
-            PutFileError::BranchNameIsTagName(ref cause) => cause,
-            PutFileError::BranchNameRequired(ref cause) => cause,
-            PutFileError::CommitMessageLengthExceeded(ref cause) => cause,
-            PutFileError::DirectoryNameConflictsWithFileName(ref cause) => cause,
-            PutFileError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            PutFileError::EncryptionKeyAccessDenied(ref cause) => cause,
-            PutFileError::EncryptionKeyDisabled(ref cause) => cause,
-            PutFileError::EncryptionKeyNotFound(ref cause) => cause,
-            PutFileError::EncryptionKeyUnavailable(ref cause) => cause,
-            PutFileError::FileContentRequired(ref cause) => cause,
-            PutFileError::FileContentSizeLimitExceeded(ref cause) => cause,
-            PutFileError::FileNameConflictsWithDirectoryName(ref cause) => cause,
-            PutFileError::FilePathConflictsWithSubmodulePath(ref cause) => cause,
-            PutFileError::FolderContentSizeLimitExceeded(ref cause) => cause,
-            PutFileError::InvalidBranchName(ref cause) => cause,
-            PutFileError::InvalidDeletionParameter(ref cause) => cause,
-            PutFileError::InvalidEmail(ref cause) => cause,
-            PutFileError::InvalidFileMode(ref cause) => cause,
-            PutFileError::InvalidParentCommitId(ref cause) => cause,
-            PutFileError::InvalidPath(ref cause) => cause,
-            PutFileError::InvalidRepositoryName(ref cause) => cause,
-            PutFileError::NameLengthExceeded(ref cause) => cause,
-            PutFileError::ParentCommitDoesNotExist(ref cause) => cause,
-            PutFileError::ParentCommitIdOutdated(ref cause) => cause,
-            PutFileError::ParentCommitIdRequired(ref cause) => cause,
-            PutFileError::PathRequired(ref cause) => cause,
-            PutFileError::RepositoryDoesNotExist(ref cause) => cause,
-            PutFileError::RepositoryNameRequired(ref cause) => cause,
-            PutFileError::SameFileContent(ref cause) => cause,
+            PutFileError::BranchDoesNotExist(ref cause) => write!(f, "{}", cause),
+            PutFileError::BranchNameIsTagName(ref cause) => write!(f, "{}", cause),
+            PutFileError::BranchNameRequired(ref cause) => write!(f, "{}", cause),
+            PutFileError::CommitMessageLengthExceeded(ref cause) => write!(f, "{}", cause),
+            PutFileError::DirectoryNameConflictsWithFileName(ref cause) => write!(f, "{}", cause),
+            PutFileError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            PutFileError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            PutFileError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            PutFileError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            PutFileError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            PutFileError::FileContentRequired(ref cause) => write!(f, "{}", cause),
+            PutFileError::FileContentSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutFileError::FileNameConflictsWithDirectoryName(ref cause) => write!(f, "{}", cause),
+            PutFileError::FilePathConflictsWithSubmodulePath(ref cause) => write!(f, "{}", cause),
+            PutFileError::FolderContentSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutFileError::InvalidBranchName(ref cause) => write!(f, "{}", cause),
+            PutFileError::InvalidDeletionParameter(ref cause) => write!(f, "{}", cause),
+            PutFileError::InvalidEmail(ref cause) => write!(f, "{}", cause),
+            PutFileError::InvalidFileMode(ref cause) => write!(f, "{}", cause),
+            PutFileError::InvalidParentCommitId(ref cause) => write!(f, "{}", cause),
+            PutFileError::InvalidPath(ref cause) => write!(f, "{}", cause),
+            PutFileError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            PutFileError::NameLengthExceeded(ref cause) => write!(f, "{}", cause),
+            PutFileError::ParentCommitDoesNotExist(ref cause) => write!(f, "{}", cause),
+            PutFileError::ParentCommitIdOutdated(ref cause) => write!(f, "{}", cause),
+            PutFileError::ParentCommitIdRequired(ref cause) => write!(f, "{}", cause),
+            PutFileError::PathRequired(ref cause) => write!(f, "{}", cause),
+            PutFileError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            PutFileError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
+            PutFileError::SameFileContent(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutFileError {}
 /// Errors returned by PutRepositoryTriggers
 #[derive(Debug, PartialEq)]
 pub enum PutRepositoryTriggersError {
@@ -11828,36 +12438,64 @@ impl PutRepositoryTriggersError {
 }
 impl fmt::Display for PutRepositoryTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRepositoryTriggersError {
-    fn description(&self) -> &str {
         match *self {
-            PutRepositoryTriggersError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            PutRepositoryTriggersError::EncryptionKeyAccessDenied(ref cause) => cause,
-            PutRepositoryTriggersError::EncryptionKeyDisabled(ref cause) => cause,
-            PutRepositoryTriggersError::EncryptionKeyNotFound(ref cause) => cause,
-            PutRepositoryTriggersError::EncryptionKeyUnavailable(ref cause) => cause,
-            PutRepositoryTriggersError::InvalidRepositoryName(ref cause) => cause,
-            PutRepositoryTriggersError::InvalidRepositoryTriggerBranchName(ref cause) => cause,
-            PutRepositoryTriggersError::InvalidRepositoryTriggerCustomData(ref cause) => cause,
-            PutRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(ref cause) => cause,
-            PutRepositoryTriggersError::InvalidRepositoryTriggerEvents(ref cause) => cause,
-            PutRepositoryTriggersError::InvalidRepositoryTriggerName(ref cause) => cause,
-            PutRepositoryTriggersError::InvalidRepositoryTriggerRegion(ref cause) => cause,
-            PutRepositoryTriggersError::MaximumBranchesExceeded(ref cause) => cause,
-            PutRepositoryTriggersError::MaximumRepositoryTriggersExceeded(ref cause) => cause,
-            PutRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => cause,
-            PutRepositoryTriggersError::RepositoryNameRequired(ref cause) => cause,
-            PutRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(ref cause) => cause,
-            PutRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(ref cause) => cause,
-            PutRepositoryTriggersError::RepositoryTriggerEventsListRequired(ref cause) => cause,
-            PutRepositoryTriggersError::RepositoryTriggerNameRequired(ref cause) => cause,
-            PutRepositoryTriggersError::RepositoryTriggersListRequired(ref cause) => cause,
+            PutRepositoryTriggersError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            PutRepositoryTriggersError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            PutRepositoryTriggersError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            PutRepositoryTriggersError::InvalidRepositoryTriggerBranchName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::InvalidRepositoryTriggerCustomData(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::InvalidRepositoryTriggerEvents(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::InvalidRepositoryTriggerName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::InvalidRepositoryTriggerRegion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::MaximumBranchesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::MaximumRepositoryTriggersExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            PutRepositoryTriggersError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
+            PutRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::RepositoryTriggerEventsListRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::RepositoryTriggerNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRepositoryTriggersError::RepositoryTriggersListRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutRepositoryTriggersError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -11921,24 +12559,20 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InvalidRepositoryName(ref cause) => cause,
-            TagResourceError::InvalidResourceArn(ref cause) => cause,
-            TagResourceError::InvalidSystemTagUsage(ref cause) => cause,
-            TagResourceError::InvalidTagsMap(ref cause) => cause,
-            TagResourceError::RepositoryDoesNotExist(ref cause) => cause,
-            TagResourceError::ResourceArnRequired(ref cause) => cause,
-            TagResourceError::TagPolicy(ref cause) => cause,
-            TagResourceError::TagsMapRequired(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidResourceArn(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidSystemTagUsage(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidTagsMap(ref cause) => write!(f, "{}", cause),
+            TagResourceError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceArnRequired(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagPolicy(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagsMapRequired(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by TestRepositoryTriggers
 #[derive(Debug, PartialEq)]
 pub enum TestRepositoryTriggersError {
@@ -12110,40 +12744,68 @@ impl TestRepositoryTriggersError {
 }
 impl fmt::Display for TestRepositoryTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestRepositoryTriggersError {
-    fn description(&self) -> &str {
         match *self {
-            TestRepositoryTriggersError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            TestRepositoryTriggersError::EncryptionKeyAccessDenied(ref cause) => cause,
-            TestRepositoryTriggersError::EncryptionKeyDisabled(ref cause) => cause,
-            TestRepositoryTriggersError::EncryptionKeyNotFound(ref cause) => cause,
-            TestRepositoryTriggersError::EncryptionKeyUnavailable(ref cause) => cause,
-            TestRepositoryTriggersError::InvalidRepositoryName(ref cause) => cause,
-            TestRepositoryTriggersError::InvalidRepositoryTriggerBranchName(ref cause) => cause,
-            TestRepositoryTriggersError::InvalidRepositoryTriggerCustomData(ref cause) => cause,
-            TestRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(ref cause) => cause,
-            TestRepositoryTriggersError::InvalidRepositoryTriggerEvents(ref cause) => cause,
-            TestRepositoryTriggersError::InvalidRepositoryTriggerName(ref cause) => cause,
-            TestRepositoryTriggersError::InvalidRepositoryTriggerRegion(ref cause) => cause,
-            TestRepositoryTriggersError::MaximumBranchesExceeded(ref cause) => cause,
-            TestRepositoryTriggersError::MaximumRepositoryTriggersExceeded(ref cause) => cause,
-            TestRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => cause,
-            TestRepositoryTriggersError::RepositoryNameRequired(ref cause) => cause,
+            TestRepositoryTriggersError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            TestRepositoryTriggersError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            TestRepositoryTriggersError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            TestRepositoryTriggersError::InvalidRepositoryTriggerBranchName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::InvalidRepositoryTriggerCustomData(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::InvalidRepositoryTriggerEvents(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::InvalidRepositoryTriggerName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::InvalidRepositoryTriggerRegion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::MaximumBranchesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::MaximumRepositoryTriggersExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
             TestRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             TestRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            TestRepositoryTriggersError::RepositoryTriggerEventsListRequired(ref cause) => cause,
-            TestRepositoryTriggersError::RepositoryTriggerNameRequired(ref cause) => cause,
-            TestRepositoryTriggersError::RepositoryTriggersListRequired(ref cause) => cause,
+            TestRepositoryTriggersError::RepositoryTriggerEventsListRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::RepositoryTriggerNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestRepositoryTriggersError::RepositoryTriggersListRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for TestRepositoryTriggersError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -12209,24 +12871,20 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InvalidRepositoryName(ref cause) => cause,
-            UntagResourceError::InvalidResourceArn(ref cause) => cause,
-            UntagResourceError::InvalidSystemTagUsage(ref cause) => cause,
-            UntagResourceError::InvalidTagKeysList(ref cause) => cause,
-            UntagResourceError::RepositoryDoesNotExist(ref cause) => cause,
-            UntagResourceError::ResourceArnRequired(ref cause) => cause,
-            UntagResourceError::TagKeysListRequired(ref cause) => cause,
-            UntagResourceError::TagPolicy(ref cause) => cause,
-            UntagResourceError::TooManyTags(ref cause) => cause,
+            UntagResourceError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidResourceArn(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidSystemTagUsage(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidTagKeysList(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceArnRequired(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TagKeysListRequired(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TagPolicy(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateApprovalRuleTemplateContent
 #[derive(Debug, PartialEq)]
 pub enum UpdateApprovalRuleTemplateContentError {
@@ -12299,31 +12957,29 @@ impl UpdateApprovalRuleTemplateContentError {
 }
 impl fmt::Display for UpdateApprovalRuleTemplateContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApprovalRuleTemplateContentError {
-    fn description(&self) -> &str {
         match *self {
             UpdateApprovalRuleTemplateContentError::ApprovalRuleTemplateContentRequired(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             UpdateApprovalRuleTemplateContentError::ApprovalRuleTemplateDoesNotExist(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             UpdateApprovalRuleTemplateContentError::ApprovalRuleTemplateNameRequired(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             UpdateApprovalRuleTemplateContentError::InvalidApprovalRuleTemplateContent(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             UpdateApprovalRuleTemplateContentError::InvalidApprovalRuleTemplateName(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            UpdateApprovalRuleTemplateContentError::InvalidRuleContentSha256(ref cause) => cause,
+            UpdateApprovalRuleTemplateContentError::InvalidRuleContentSha256(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateApprovalRuleTemplateContentError {}
 /// Errors returned by UpdateApprovalRuleTemplateDescription
 #[derive(Debug, PartialEq)]
 pub enum UpdateApprovalRuleTemplateDescriptionError {
@@ -12356,27 +13012,23 @@ _ => {}
 }
 impl fmt::Display for UpdateApprovalRuleTemplateDescriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApprovalRuleTemplateDescriptionError {
-    fn description(&self) -> &str {
         match *self {
             UpdateApprovalRuleTemplateDescriptionError::ApprovalRuleTemplateDoesNotExist(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             UpdateApprovalRuleTemplateDescriptionError::ApprovalRuleTemplateNameRequired(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             UpdateApprovalRuleTemplateDescriptionError::InvalidApprovalRuleTemplateDescription(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             UpdateApprovalRuleTemplateDescriptionError::InvalidApprovalRuleTemplateName(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateApprovalRuleTemplateDescriptionError {}
 /// Errors returned by UpdateApprovalRuleTemplateName
 #[derive(Debug, PartialEq)]
 pub enum UpdateApprovalRuleTemplateNameError {
@@ -12433,27 +13085,23 @@ impl UpdateApprovalRuleTemplateNameError {
 }
 impl fmt::Display for UpdateApprovalRuleTemplateNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApprovalRuleTemplateNameError {
-    fn description(&self) -> &str {
         match *self {
             UpdateApprovalRuleTemplateNameError::ApprovalRuleTemplateDoesNotExist(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             UpdateApprovalRuleTemplateNameError::ApprovalRuleTemplateNameAlreadyExists(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             UpdateApprovalRuleTemplateNameError::ApprovalRuleTemplateNameRequired(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             UpdateApprovalRuleTemplateNameError::InvalidApprovalRuleTemplateName(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for UpdateApprovalRuleTemplateNameError {}
 /// Errors returned by UpdateComment
 #[derive(Debug, PartialEq)]
 pub enum UpdateCommentError {
@@ -12513,22 +13161,20 @@ impl UpdateCommentError {
 }
 impl fmt::Display for UpdateCommentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCommentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCommentError::CommentContentRequired(ref cause) => cause,
-            UpdateCommentError::CommentContentSizeLimitExceeded(ref cause) => cause,
-            UpdateCommentError::CommentDeleted(ref cause) => cause,
-            UpdateCommentError::CommentDoesNotExist(ref cause) => cause,
-            UpdateCommentError::CommentIdRequired(ref cause) => cause,
-            UpdateCommentError::CommentNotCreatedByCaller(ref cause) => cause,
-            UpdateCommentError::InvalidCommentId(ref cause) => cause,
+            UpdateCommentError::CommentContentRequired(ref cause) => write!(f, "{}", cause),
+            UpdateCommentError::CommentContentSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCommentError::CommentDeleted(ref cause) => write!(f, "{}", cause),
+            UpdateCommentError::CommentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdateCommentError::CommentIdRequired(ref cause) => write!(f, "{}", cause),
+            UpdateCommentError::CommentNotCreatedByCaller(ref cause) => write!(f, "{}", cause),
+            UpdateCommentError::InvalidCommentId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateCommentError {}
 /// Errors returned by UpdateDefaultBranch
 #[derive(Debug, PartialEq)]
 pub enum UpdateDefaultBranchError {
@@ -12624,26 +13270,26 @@ impl UpdateDefaultBranchError {
 }
 impl fmt::Display for UpdateDefaultBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDefaultBranchError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDefaultBranchError::BranchDoesNotExist(ref cause) => cause,
-            UpdateDefaultBranchError::BranchNameRequired(ref cause) => cause,
-            UpdateDefaultBranchError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            UpdateDefaultBranchError::EncryptionKeyAccessDenied(ref cause) => cause,
-            UpdateDefaultBranchError::EncryptionKeyDisabled(ref cause) => cause,
-            UpdateDefaultBranchError::EncryptionKeyNotFound(ref cause) => cause,
-            UpdateDefaultBranchError::EncryptionKeyUnavailable(ref cause) => cause,
-            UpdateDefaultBranchError::InvalidBranchName(ref cause) => cause,
-            UpdateDefaultBranchError::InvalidRepositoryName(ref cause) => cause,
-            UpdateDefaultBranchError::RepositoryDoesNotExist(ref cause) => cause,
-            UpdateDefaultBranchError::RepositoryNameRequired(ref cause) => cause,
+            UpdateDefaultBranchError::BranchDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdateDefaultBranchError::BranchNameRequired(ref cause) => write!(f, "{}", cause),
+            UpdateDefaultBranchError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDefaultBranchError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDefaultBranchError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            UpdateDefaultBranchError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDefaultBranchError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateDefaultBranchError::InvalidBranchName(ref cause) => write!(f, "{}", cause),
+            UpdateDefaultBranchError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            UpdateDefaultBranchError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdateDefaultBranchError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDefaultBranchError {}
 /// Errors returned by UpdatePullRequestApprovalRuleContent
 #[derive(Debug, PartialEq)]
 pub enum UpdatePullRequestApprovalRuleContentError {
@@ -12794,41 +13440,59 @@ impl UpdatePullRequestApprovalRuleContentError {
 }
 impl fmt::Display for UpdatePullRequestApprovalRuleContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePullRequestApprovalRuleContentError {
-    fn description(&self) -> &str {
         match *self {
             UpdatePullRequestApprovalRuleContentError::ApprovalRuleContentRequired(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            UpdatePullRequestApprovalRuleContentError::ApprovalRuleDoesNotExist(ref cause) => cause,
-            UpdatePullRequestApprovalRuleContentError::ApprovalRuleNameRequired(ref cause) => cause,
+            UpdatePullRequestApprovalRuleContentError::ApprovalRuleDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalRuleContentError::ApprovalRuleNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
             UpdatePullRequestApprovalRuleContentError::CannotModifyApprovalRuleFromTemplate(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             UpdatePullRequestApprovalRuleContentError::EncryptionIntegrityChecksFailed(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             UpdatePullRequestApprovalRuleContentError::EncryptionKeyAccessDenied(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            UpdatePullRequestApprovalRuleContentError::EncryptionKeyDisabled(ref cause) => cause,
-            UpdatePullRequestApprovalRuleContentError::EncryptionKeyNotFound(ref cause) => cause,
-            UpdatePullRequestApprovalRuleContentError::EncryptionKeyUnavailable(ref cause) => cause,
+            UpdatePullRequestApprovalRuleContentError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalRuleContentError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalRuleContentError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
             UpdatePullRequestApprovalRuleContentError::InvalidApprovalRuleContent(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            UpdatePullRequestApprovalRuleContentError::InvalidApprovalRuleName(ref cause) => cause,
-            UpdatePullRequestApprovalRuleContentError::InvalidPullRequestId(ref cause) => cause,
-            UpdatePullRequestApprovalRuleContentError::InvalidRuleContentSha256(ref cause) => cause,
-            UpdatePullRequestApprovalRuleContentError::PullRequestAlreadyClosed(ref cause) => cause,
-            UpdatePullRequestApprovalRuleContentError::PullRequestDoesNotExist(ref cause) => cause,
-            UpdatePullRequestApprovalRuleContentError::PullRequestIdRequired(ref cause) => cause,
+            UpdatePullRequestApprovalRuleContentError::InvalidApprovalRuleName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalRuleContentError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalRuleContentError::InvalidRuleContentSha256(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalRuleContentError::PullRequestAlreadyClosed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalRuleContentError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalRuleContentError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdatePullRequestApprovalRuleContentError {}
 /// Errors returned by UpdatePullRequestApprovalState
 #[derive(Debug, PartialEq)]
 pub enum UpdatePullRequestApprovalStateError {
@@ -12967,37 +13631,59 @@ impl UpdatePullRequestApprovalStateError {
 }
 impl fmt::Display for UpdatePullRequestApprovalStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePullRequestApprovalStateError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePullRequestApprovalStateError::ApprovalStateRequired(ref cause) => cause,
+            UpdatePullRequestApprovalStateError::ApprovalStateRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
             UpdatePullRequestApprovalStateError::EncryptionIntegrityChecksFailed(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            UpdatePullRequestApprovalStateError::EncryptionKeyAccessDenied(ref cause) => cause,
-            UpdatePullRequestApprovalStateError::EncryptionKeyDisabled(ref cause) => cause,
-            UpdatePullRequestApprovalStateError::EncryptionKeyNotFound(ref cause) => cause,
-            UpdatePullRequestApprovalStateError::EncryptionKeyUnavailable(ref cause) => cause,
-            UpdatePullRequestApprovalStateError::InvalidApprovalState(ref cause) => cause,
-            UpdatePullRequestApprovalStateError::InvalidPullRequestId(ref cause) => cause,
-            UpdatePullRequestApprovalStateError::InvalidRevisionId(ref cause) => cause,
+            UpdatePullRequestApprovalStateError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalStateError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalStateError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalStateError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalStateError::InvalidApprovalState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalStateError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalStateError::InvalidRevisionId(ref cause) => {
+                write!(f, "{}", cause)
+            }
             UpdatePullRequestApprovalStateError::MaximumNumberOfApprovalsExceeded(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            UpdatePullRequestApprovalStateError::PullRequestAlreadyClosed(ref cause) => cause,
+            UpdatePullRequestApprovalStateError::PullRequestAlreadyClosed(ref cause) => {
+                write!(f, "{}", cause)
+            }
             UpdatePullRequestApprovalStateError::PullRequestCannotBeApprovedByAuthor(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            UpdatePullRequestApprovalStateError::PullRequestDoesNotExist(ref cause) => cause,
-            UpdatePullRequestApprovalStateError::PullRequestIdRequired(ref cause) => cause,
-            UpdatePullRequestApprovalStateError::RevisionIdRequired(ref cause) => cause,
-            UpdatePullRequestApprovalStateError::RevisionNotCurrent(ref cause) => cause,
+            UpdatePullRequestApprovalStateError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalStateError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalStateError::RevisionIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestApprovalStateError::RevisionNotCurrent(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdatePullRequestApprovalStateError {}
 /// Errors returned by UpdatePullRequestDescription
 #[derive(Debug, PartialEq)]
 pub enum UpdatePullRequestDescriptionError {
@@ -13053,20 +13739,26 @@ impl UpdatePullRequestDescriptionError {
 }
 impl fmt::Display for UpdatePullRequestDescriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePullRequestDescriptionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePullRequestDescriptionError::InvalidDescription(ref cause) => cause,
-            UpdatePullRequestDescriptionError::InvalidPullRequestId(ref cause) => cause,
-            UpdatePullRequestDescriptionError::PullRequestAlreadyClosed(ref cause) => cause,
-            UpdatePullRequestDescriptionError::PullRequestDoesNotExist(ref cause) => cause,
-            UpdatePullRequestDescriptionError::PullRequestIdRequired(ref cause) => cause,
+            UpdatePullRequestDescriptionError::InvalidDescription(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestDescriptionError::InvalidPullRequestId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestDescriptionError::PullRequestAlreadyClosed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestDescriptionError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestDescriptionError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdatePullRequestDescriptionError {}
 /// Errors returned by UpdatePullRequestStatus
 #[derive(Debug, PartialEq)]
 pub enum UpdatePullRequestStatusError {
@@ -13162,26 +13854,42 @@ impl UpdatePullRequestStatusError {
 }
 impl fmt::Display for UpdatePullRequestStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePullRequestStatusError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePullRequestStatusError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            UpdatePullRequestStatusError::EncryptionKeyAccessDenied(ref cause) => cause,
-            UpdatePullRequestStatusError::EncryptionKeyDisabled(ref cause) => cause,
-            UpdatePullRequestStatusError::EncryptionKeyNotFound(ref cause) => cause,
-            UpdatePullRequestStatusError::EncryptionKeyUnavailable(ref cause) => cause,
-            UpdatePullRequestStatusError::InvalidPullRequestId(ref cause) => cause,
-            UpdatePullRequestStatusError::InvalidPullRequestStatus(ref cause) => cause,
-            UpdatePullRequestStatusError::InvalidPullRequestStatusUpdate(ref cause) => cause,
-            UpdatePullRequestStatusError::PullRequestDoesNotExist(ref cause) => cause,
-            UpdatePullRequestStatusError::PullRequestIdRequired(ref cause) => cause,
-            UpdatePullRequestStatusError::PullRequestStatusRequired(ref cause) => cause,
+            UpdatePullRequestStatusError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestStatusError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestStatusError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestStatusError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestStatusError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestStatusError::InvalidPullRequestId(ref cause) => write!(f, "{}", cause),
+            UpdatePullRequestStatusError::InvalidPullRequestStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestStatusError::InvalidPullRequestStatusUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestStatusError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestStatusError::PullRequestIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestStatusError::PullRequestStatusRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdatePullRequestStatusError {}
 /// Errors returned by UpdatePullRequestTitle
 #[derive(Debug, PartialEq)]
 pub enum UpdatePullRequestTitleError {
@@ -13240,21 +13948,21 @@ impl UpdatePullRequestTitleError {
 }
 impl fmt::Display for UpdatePullRequestTitleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePullRequestTitleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePullRequestTitleError::InvalidPullRequestId(ref cause) => cause,
-            UpdatePullRequestTitleError::InvalidTitle(ref cause) => cause,
-            UpdatePullRequestTitleError::PullRequestAlreadyClosed(ref cause) => cause,
-            UpdatePullRequestTitleError::PullRequestDoesNotExist(ref cause) => cause,
-            UpdatePullRequestTitleError::PullRequestIdRequired(ref cause) => cause,
-            UpdatePullRequestTitleError::TitleRequired(ref cause) => cause,
+            UpdatePullRequestTitleError::InvalidPullRequestId(ref cause) => write!(f, "{}", cause),
+            UpdatePullRequestTitleError::InvalidTitle(ref cause) => write!(f, "{}", cause),
+            UpdatePullRequestTitleError::PullRequestAlreadyClosed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestTitleError::PullRequestDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePullRequestTitleError::PullRequestIdRequired(ref cause) => write!(f, "{}", cause),
+            UpdatePullRequestTitleError::TitleRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePullRequestTitleError {}
 /// Errors returned by UpdateRepositoryDescription
 #[derive(Debug, PartialEq)]
 pub enum UpdateRepositoryDescriptionError {
@@ -13338,24 +14046,38 @@ impl UpdateRepositoryDescriptionError {
 }
 impl fmt::Display for UpdateRepositoryDescriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRepositoryDescriptionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRepositoryDescriptionError::EncryptionIntegrityChecksFailed(ref cause) => cause,
-            UpdateRepositoryDescriptionError::EncryptionKeyAccessDenied(ref cause) => cause,
-            UpdateRepositoryDescriptionError::EncryptionKeyDisabled(ref cause) => cause,
-            UpdateRepositoryDescriptionError::EncryptionKeyNotFound(ref cause) => cause,
-            UpdateRepositoryDescriptionError::EncryptionKeyUnavailable(ref cause) => cause,
-            UpdateRepositoryDescriptionError::InvalidRepositoryDescription(ref cause) => cause,
-            UpdateRepositoryDescriptionError::InvalidRepositoryName(ref cause) => cause,
-            UpdateRepositoryDescriptionError::RepositoryDoesNotExist(ref cause) => cause,
-            UpdateRepositoryDescriptionError::RepositoryNameRequired(ref cause) => cause,
+            UpdateRepositoryDescriptionError::EncryptionIntegrityChecksFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRepositoryDescriptionError::EncryptionKeyAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRepositoryDescriptionError::EncryptionKeyDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRepositoryDescriptionError::EncryptionKeyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRepositoryDescriptionError::EncryptionKeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRepositoryDescriptionError::InvalidRepositoryDescription(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRepositoryDescriptionError::InvalidRepositoryName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRepositoryDescriptionError::RepositoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRepositoryDescriptionError::RepositoryNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateRepositoryDescriptionError {}
 /// Errors returned by UpdateRepositoryName
 #[derive(Debug, PartialEq)]
 pub enum UpdateRepositoryNameError {
@@ -13402,19 +14124,15 @@ impl UpdateRepositoryNameError {
 }
 impl fmt::Display for UpdateRepositoryNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRepositoryNameError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRepositoryNameError::InvalidRepositoryName(ref cause) => cause,
-            UpdateRepositoryNameError::RepositoryDoesNotExist(ref cause) => cause,
-            UpdateRepositoryNameError::RepositoryNameExists(ref cause) => cause,
-            UpdateRepositoryNameError::RepositoryNameRequired(ref cause) => cause,
+            UpdateRepositoryNameError::InvalidRepositoryName(ref cause) => write!(f, "{}", cause),
+            UpdateRepositoryNameError::RepositoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdateRepositoryNameError::RepositoryNameExists(ref cause) => write!(f, "{}", cause),
+            UpdateRepositoryNameError::RepositoryNameRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRepositoryNameError {}
 /// Trait representing the capabilities of the CodeCommit API. CodeCommit clients implement this trait.
 pub trait CodeCommit {
     /// <p>Creates an association between an approval rule template and a specified repository. Then, the next time a pull request is created in the repository where the destination reference (if specified) matches the destination reference (branch) for the pull request, an approval rule that matches the template conditions is automatically created for that pull request. If no destination references are specified in the template, an approval rule that matches the template contents is created for all pull requests in that repository.</p>

@@ -102,6 +102,7 @@ pub struct AgentNetworkInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateConfigurationItemsToApplicationRequest {
     /// <p>The configuration ID of an application with which items are to be associated.</p>
     #[serde(rename = "applicationConfigurationId")]
@@ -134,6 +135,7 @@ pub struct DiscoveryBatchDeleteImportDataError {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteImportDataRequest {
     /// <p>The IDs for the import tasks that you want to delete.</p>
     #[serde(rename = "importTaskIds")]
@@ -214,6 +216,7 @@ pub struct ContinuousExportDescription {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
     /// <p>Description of the application to be created.</p>
     #[serde(rename = "description")]
@@ -234,6 +237,7 @@ pub struct CreateApplicationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
     /// <p>A list of configuration items that you want to tag.</p>
     #[serde(rename = "configurationIds")]
@@ -302,6 +306,7 @@ pub struct CustomerConnectorInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationsRequest {
     /// <p>Configuration ID of an application to be deleted.</p>
     #[serde(rename = "configurationIds")]
@@ -313,6 +318,7 @@ pub struct DeleteApplicationsRequest {
 pub struct DeleteApplicationsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
     /// <p>A list of configuration items with tags that you want to delete.</p>
     #[serde(rename = "configurationIds")]
@@ -328,6 +334,7 @@ pub struct DeleteTagsRequest {
 pub struct DeleteTagsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAgentsRequest {
     /// <p>The agent or the Connector IDs for which you want information. If you specify no IDs, the system returns information about all agents/Connectors associated with your AWS user account.</p>
     #[serde(rename = "agentIds")]
@@ -361,6 +368,7 @@ pub struct DescribeAgentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationsRequest {
     /// <p>One or more configuration IDs.</p>
     #[serde(rename = "configurationIds")]
@@ -377,6 +385,7 @@ pub struct DescribeConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContinuousExportsRequest {
     /// <p>The unique IDs assigned to the exports.</p>
     #[serde(rename = "exportIds")]
@@ -406,6 +415,7 @@ pub struct DescribeContinuousExportsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportConfigurationsRequest {
     /// <p>A list of continuous export IDs to search for.</p>
     #[serde(rename = "exportIds")]
@@ -435,6 +445,7 @@ pub struct DescribeExportConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportTasksRequest {
     /// <p>One or more unique identifiers used to query the status of an export request.</p>
     #[serde(rename = "exportIds")]
@@ -468,6 +479,7 @@ pub struct DescribeExportTasksResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImportTasksRequest {
     /// <p>An array of name-value pairs that you provide to filter the results for the <code>DescribeImportTask</code> request to a specific subset of results. Currently, wildcard values aren't supported for filters.</p>
     #[serde(rename = "filters")]
@@ -497,6 +509,7 @@ pub struct DescribeImportTasksResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
     /// <p>You can filter the list using a <i>key</i>-<i>value</i> format. You can separate these items by using logical operators. Allowed filters include <code>tagKey</code>, <code>tagValue</code>, and <code>configurationId</code>. </p>
     #[serde(rename = "filters")]
@@ -526,6 +539,7 @@ pub struct DescribeTagsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateConfigurationItemsFromApplicationRequest {
     /// <p>Configuration ID of an application from which each item is disassociated.</p>
     #[serde(rename = "applicationConfigurationId")]
@@ -550,6 +564,7 @@ pub struct ExportConfigurationsResponse {
 
 /// <p>Used to select which agent's data is to be exported. A single agent ID may be selected for export using the <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_StartExportTask.html">StartExportTask</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportFilter {
     /// <p>Supported condition: <code>EQUALS</code> </p>
     #[serde(rename = "condition")]
@@ -598,6 +613,7 @@ pub struct ExportInfo {
 
 /// <p>A filter that can use conditional operators.</p> <p>For more information about filters, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html">Querying Discovered Configuration Items</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>A conditional operator. The following operators are valid: EQUALS, NOT_EQUALS, CONTAINS, NOT_CONTAINS. If you specify multiple filters, the system utilizes all filters as though concatenated by <i>AND</i>. If you specify multiple values for a particular filter, the system differentiates the values using <i>OR</i>. Calling either <i>DescribeConfigurations</i> or <i>ListConfigurations</i> returns attributes of matching configuration items.</p>
     #[serde(rename = "condition")]
@@ -611,6 +627,7 @@ pub struct Filter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiscoverySummaryRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -702,6 +719,7 @@ pub struct ImportTask {
 
 /// <p><p>A name-values pair of elements you can use to filter the results when querying your import tasks. Currently, wildcards are not supported for filters.</p> <note> <p>When filtering by import status, all other filter values are ignored.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportTaskFilter {
     /// <p>The name, status, or import task ID for a specific import task.</p>
     #[serde(rename = "name")]
@@ -714,6 +732,7 @@ pub struct ImportTaskFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationsRequest {
     /// <p>A valid configuration identified by Application Discovery Service. </p>
     #[serde(rename = "configurationType")]
@@ -750,6 +769,7 @@ pub struct ListConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServerNeighborsRequest {
     /// <p>Configuration ID of the server for which neighbors are being listed.</p>
     #[serde(rename = "configurationId")]
@@ -813,6 +833,7 @@ pub struct NeighborConnectionDetail {
 
 /// <p>A field and direction for ordered output.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OrderByElement {
     /// <p>The field on which to order.</p>
     #[serde(rename = "fieldName")]
@@ -824,6 +845,7 @@ pub struct OrderByElement {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartContinuousExportRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -852,6 +874,7 @@ pub struct StartContinuousExportResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDataCollectionByAgentIdsRequest {
     /// <p>The IDs of the agents or connectors from which to start collecting data. If you send a request to an agent/connector ID that you do not have permission to contact, according to your AWS account, the service does not throw an exception. Instead, it returns the error in the <i>Description</i> field. If you send a request to multiple agents/connectors and you do not have permission to contact some of those agents/connectors, the system does not throw an exception. Instead, the system shows <code>Failed</code> in the <i>Description</i> field.</p>
     #[serde(rename = "agentIds")]
@@ -868,6 +891,7 @@ pub struct StartDataCollectionByAgentIdsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartExportTaskRequest {
     /// <p>The end timestamp for exported data from the single Application Discovery Agent selected in the filters. If no value is specified, exported data includes the most recent data collected by the agent.</p>
     #[serde(rename = "endTime")]
@@ -897,6 +921,7 @@ pub struct StartExportTaskResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImportTaskRequest {
     /// <p>Optional. A unique token that you can provide to prevent the same import request from occurring more than once. If you don't provide a token, a token is automatically generated.</p> <p>Sending more than one <code>StartImportTask</code> request with the same client request token will return information about the original import task with that client request token.</p>
     #[serde(rename = "clientRequestToken")]
@@ -920,6 +945,7 @@ pub struct StartImportTaskResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopContinuousExportRequest {
     /// <p>The unique ID assigned to this export.</p>
     #[serde(rename = "exportId")]
@@ -940,6 +966,7 @@ pub struct StopContinuousExportResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDataCollectionByAgentIdsRequest {
     /// <p>The IDs of the agents or connectors from which to stop collecting data.</p>
     #[serde(rename = "agentIds")]
@@ -957,6 +984,7 @@ pub struct StopDataCollectionByAgentIdsResponse {
 
 /// <p>Metadata that help you categorize IT assets.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>The type of tag on which to filter.</p>
     #[serde(rename = "key")]
@@ -968,6 +996,7 @@ pub struct Tag {
 
 /// <p>The tag filter. Valid names are: <code>tagKey</code>, <code>tagValue</code>, <code>configurationId</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagFilter {
     /// <p>A name of the tag filter.</p>
     #[serde(rename = "name")]
@@ -978,6 +1007,7 @@ pub struct TagFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
     /// <p>Configuration ID of the application to be updated.</p>
     #[serde(rename = "configurationId")]
@@ -1053,22 +1083,26 @@ impl AssociateConfigurationItemsToApplicationError {
 }
 impl fmt::Display for AssociateConfigurationItemsToApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateConfigurationItemsToApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateConfigurationItemsToApplicationError::AuthorizationError(ref cause) => cause,
-            AssociateConfigurationItemsToApplicationError::HomeRegionNotSet(ref cause) => cause,
-            AssociateConfigurationItemsToApplicationError::InvalidParameter(ref cause) => cause,
-            AssociateConfigurationItemsToApplicationError::InvalidParameterValue(ref cause) => {
-                cause
+            AssociateConfigurationItemsToApplicationError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
             }
-            AssociateConfigurationItemsToApplicationError::ServerInternalError(ref cause) => cause,
+            AssociateConfigurationItemsToApplicationError::HomeRegionNotSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateConfigurationItemsToApplicationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateConfigurationItemsToApplicationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateConfigurationItemsToApplicationError::ServerInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateConfigurationItemsToApplicationError {}
 /// Errors returned by BatchDeleteImportData
 #[derive(Debug, PartialEq)]
 pub enum BatchDeleteImportDataError {
@@ -1122,20 +1156,16 @@ impl BatchDeleteImportDataError {
 }
 impl fmt::Display for BatchDeleteImportDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeleteImportDataError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDeleteImportDataError::AuthorizationError(ref cause) => cause,
-            BatchDeleteImportDataError::HomeRegionNotSet(ref cause) => cause,
-            BatchDeleteImportDataError::InvalidParameter(ref cause) => cause,
-            BatchDeleteImportDataError::InvalidParameterValue(ref cause) => cause,
-            BatchDeleteImportDataError::ServerInternalError(ref cause) => cause,
+            BatchDeleteImportDataError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            BatchDeleteImportDataError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            BatchDeleteImportDataError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            BatchDeleteImportDataError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            BatchDeleteImportDataError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDeleteImportDataError {}
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
@@ -1185,20 +1215,16 @@ impl CreateApplicationError {
 }
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateApplicationError::AuthorizationError(ref cause) => cause,
-            CreateApplicationError::HomeRegionNotSet(ref cause) => cause,
-            CreateApplicationError::InvalidParameter(ref cause) => cause,
-            CreateApplicationError::InvalidParameterValue(ref cause) => cause,
-            CreateApplicationError::ServerInternalError(ref cause) => cause,
+            CreateApplicationError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateApplicationError {}
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
@@ -1247,21 +1273,17 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTagsError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTagsError::AuthorizationError(ref cause) => cause,
-            CreateTagsError::HomeRegionNotSet(ref cause) => cause,
-            CreateTagsError::InvalidParameter(ref cause) => cause,
-            CreateTagsError::InvalidParameterValue(ref cause) => cause,
-            CreateTagsError::ResourceNotFound(ref cause) => cause,
-            CreateTagsError::ServerInternalError(ref cause) => cause,
+            CreateTagsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTagsError {}
 /// Errors returned by DeleteApplications
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationsError {
@@ -1311,20 +1333,16 @@ impl DeleteApplicationsError {
 }
 impl fmt::Display for DeleteApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApplicationsError::AuthorizationError(ref cause) => cause,
-            DeleteApplicationsError::HomeRegionNotSet(ref cause) => cause,
-            DeleteApplicationsError::InvalidParameter(ref cause) => cause,
-            DeleteApplicationsError::InvalidParameterValue(ref cause) => cause,
-            DeleteApplicationsError::ServerInternalError(ref cause) => cause,
+            DeleteApplicationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteApplicationsError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
@@ -1373,21 +1391,17 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTagsError::AuthorizationError(ref cause) => cause,
-            DeleteTagsError::HomeRegionNotSet(ref cause) => cause,
-            DeleteTagsError::InvalidParameter(ref cause) => cause,
-            DeleteTagsError::InvalidParameterValue(ref cause) => cause,
-            DeleteTagsError::ResourceNotFound(ref cause) => cause,
-            DeleteTagsError::ServerInternalError(ref cause) => cause,
+            DeleteTagsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTagsError {}
 /// Errors returned by DescribeAgents
 #[derive(Debug, PartialEq)]
 pub enum DescribeAgentsError {
@@ -1433,20 +1447,16 @@ impl DescribeAgentsError {
 }
 impl fmt::Display for DescribeAgentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAgentsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAgentsError::AuthorizationError(ref cause) => cause,
-            DescribeAgentsError::HomeRegionNotSet(ref cause) => cause,
-            DescribeAgentsError::InvalidParameter(ref cause) => cause,
-            DescribeAgentsError::InvalidParameterValue(ref cause) => cause,
-            DescribeAgentsError::ServerInternalError(ref cause) => cause,
+            DescribeAgentsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DescribeAgentsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeAgentsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeAgentsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeAgentsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAgentsError {}
 /// Errors returned by DescribeConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationsError {
@@ -1500,20 +1510,16 @@ impl DescribeConfigurationsError {
 }
 impl fmt::Display for DescribeConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationsError::AuthorizationError(ref cause) => cause,
-            DescribeConfigurationsError::HomeRegionNotSet(ref cause) => cause,
-            DescribeConfigurationsError::InvalidParameter(ref cause) => cause,
-            DescribeConfigurationsError::InvalidParameterValue(ref cause) => cause,
-            DescribeConfigurationsError::ServerInternalError(ref cause) => cause,
+            DescribeConfigurationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConfigurationsError {}
 /// Errors returned by DescribeContinuousExports
 #[derive(Debug, PartialEq)]
 pub enum DescribeContinuousExportsError {
@@ -1581,22 +1587,24 @@ impl DescribeContinuousExportsError {
 }
 impl fmt::Display for DescribeContinuousExportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeContinuousExportsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeContinuousExportsError::AuthorizationError(ref cause) => cause,
-            DescribeContinuousExportsError::HomeRegionNotSet(ref cause) => cause,
-            DescribeContinuousExportsError::InvalidParameter(ref cause) => cause,
-            DescribeContinuousExportsError::InvalidParameterValue(ref cause) => cause,
-            DescribeContinuousExportsError::OperationNotPermitted(ref cause) => cause,
-            DescribeContinuousExportsError::ResourceNotFound(ref cause) => cause,
-            DescribeContinuousExportsError::ServerInternalError(ref cause) => cause,
+            DescribeContinuousExportsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DescribeContinuousExportsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeContinuousExportsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeContinuousExportsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeContinuousExportsError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeContinuousExportsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeContinuousExportsError::ServerInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeContinuousExportsError {}
 /// Errors returned by DescribeExportConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeExportConfigurationsError {
@@ -1659,21 +1667,29 @@ impl DescribeExportConfigurationsError {
 }
 impl fmt::Display for DescribeExportConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeExportConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeExportConfigurationsError::AuthorizationError(ref cause) => cause,
-            DescribeExportConfigurationsError::HomeRegionNotSet(ref cause) => cause,
-            DescribeExportConfigurationsError::InvalidParameter(ref cause) => cause,
-            DescribeExportConfigurationsError::InvalidParameterValue(ref cause) => cause,
-            DescribeExportConfigurationsError::ResourceNotFound(ref cause) => cause,
-            DescribeExportConfigurationsError::ServerInternalError(ref cause) => cause,
+            DescribeExportConfigurationsError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeExportConfigurationsError::HomeRegionNotSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeExportConfigurationsError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeExportConfigurationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeExportConfigurationsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeExportConfigurationsError::ServerInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeExportConfigurationsError {}
 /// Errors returned by DescribeExportTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeExportTasksError {
@@ -1727,20 +1743,16 @@ impl DescribeExportTasksError {
 }
 impl fmt::Display for DescribeExportTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeExportTasksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeExportTasksError::AuthorizationError(ref cause) => cause,
-            DescribeExportTasksError::HomeRegionNotSet(ref cause) => cause,
-            DescribeExportTasksError::InvalidParameter(ref cause) => cause,
-            DescribeExportTasksError::InvalidParameterValue(ref cause) => cause,
-            DescribeExportTasksError::ServerInternalError(ref cause) => cause,
+            DescribeExportTasksError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DescribeExportTasksError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeExportTasksError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeExportTasksError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeExportTasksError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeExportTasksError {}
 /// Errors returned by DescribeImportTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeImportTasksError {
@@ -1794,20 +1806,16 @@ impl DescribeImportTasksError {
 }
 impl fmt::Display for DescribeImportTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeImportTasksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeImportTasksError::AuthorizationError(ref cause) => cause,
-            DescribeImportTasksError::HomeRegionNotSet(ref cause) => cause,
-            DescribeImportTasksError::InvalidParameter(ref cause) => cause,
-            DescribeImportTasksError::InvalidParameterValue(ref cause) => cause,
-            DescribeImportTasksError::ServerInternalError(ref cause) => cause,
+            DescribeImportTasksError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DescribeImportTasksError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeImportTasksError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeImportTasksError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeImportTasksError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeImportTasksError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
@@ -1856,21 +1864,17 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::AuthorizationError(ref cause) => cause,
-            DescribeTagsError::HomeRegionNotSet(ref cause) => cause,
-            DescribeTagsError::InvalidParameter(ref cause) => cause,
-            DescribeTagsError::InvalidParameterValue(ref cause) => cause,
-            DescribeTagsError::ResourceNotFound(ref cause) => cause,
-            DescribeTagsError::ServerInternalError(ref cause) => cause,
+            DescribeTagsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by DisassociateConfigurationItemsFromApplication
 #[derive(Debug, PartialEq)]
 pub enum DisassociateConfigurationItemsFromApplicationError {
@@ -1936,30 +1940,26 @@ impl DisassociateConfigurationItemsFromApplicationError {
 }
 impl fmt::Display for DisassociateConfigurationItemsFromApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateConfigurationItemsFromApplicationError {
-    fn description(&self) -> &str {
         match *self {
             DisassociateConfigurationItemsFromApplicationError::AuthorizationError(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DisassociateConfigurationItemsFromApplicationError::HomeRegionNotSet(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DisassociateConfigurationItemsFromApplicationError::InvalidParameter(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DisassociateConfigurationItemsFromApplicationError::InvalidParameterValue(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             DisassociateConfigurationItemsFromApplicationError::ServerInternalError(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DisassociateConfigurationItemsFromApplicationError {}
 /// Errors returned by ExportConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ExportConfigurationsError {
@@ -2020,21 +2020,17 @@ impl ExportConfigurationsError {
 }
 impl fmt::Display for ExportConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExportConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            ExportConfigurationsError::AuthorizationError(ref cause) => cause,
-            ExportConfigurationsError::HomeRegionNotSet(ref cause) => cause,
-            ExportConfigurationsError::InvalidParameter(ref cause) => cause,
-            ExportConfigurationsError::InvalidParameterValue(ref cause) => cause,
-            ExportConfigurationsError::OperationNotPermitted(ref cause) => cause,
-            ExportConfigurationsError::ServerInternalError(ref cause) => cause,
+            ExportConfigurationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ExportConfigurationsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ExportConfigurationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ExportConfigurationsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ExportConfigurationsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            ExportConfigurationsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExportConfigurationsError {}
 /// Errors returned by GetDiscoverySummary
 #[derive(Debug, PartialEq)]
 pub enum GetDiscoverySummaryError {
@@ -2088,20 +2084,16 @@ impl GetDiscoverySummaryError {
 }
 impl fmt::Display for GetDiscoverySummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDiscoverySummaryError {
-    fn description(&self) -> &str {
         match *self {
-            GetDiscoverySummaryError::AuthorizationError(ref cause) => cause,
-            GetDiscoverySummaryError::HomeRegionNotSet(ref cause) => cause,
-            GetDiscoverySummaryError::InvalidParameter(ref cause) => cause,
-            GetDiscoverySummaryError::InvalidParameterValue(ref cause) => cause,
-            GetDiscoverySummaryError::ServerInternalError(ref cause) => cause,
+            GetDiscoverySummaryError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetDiscoverySummaryError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            GetDiscoverySummaryError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetDiscoverySummaryError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetDiscoverySummaryError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDiscoverySummaryError {}
 /// Errors returned by ListConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListConfigurationsError {
@@ -2156,21 +2148,17 @@ impl ListConfigurationsError {
 }
 impl fmt::Display for ListConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListConfigurationsError::AuthorizationError(ref cause) => cause,
-            ListConfigurationsError::HomeRegionNotSet(ref cause) => cause,
-            ListConfigurationsError::InvalidParameter(ref cause) => cause,
-            ListConfigurationsError::InvalidParameterValue(ref cause) => cause,
-            ListConfigurationsError::ResourceNotFound(ref cause) => cause,
-            ListConfigurationsError::ServerInternalError(ref cause) => cause,
+            ListConfigurationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListConfigurationsError {}
 /// Errors returned by ListServerNeighbors
 #[derive(Debug, PartialEq)]
 pub enum ListServerNeighborsError {
@@ -2224,20 +2212,16 @@ impl ListServerNeighborsError {
 }
 impl fmt::Display for ListServerNeighborsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListServerNeighborsError {
-    fn description(&self) -> &str {
         match *self {
-            ListServerNeighborsError::AuthorizationError(ref cause) => cause,
-            ListServerNeighborsError::HomeRegionNotSet(ref cause) => cause,
-            ListServerNeighborsError::InvalidParameter(ref cause) => cause,
-            ListServerNeighborsError::InvalidParameterValue(ref cause) => cause,
-            ListServerNeighborsError::ServerInternalError(ref cause) => cause,
+            ListServerNeighborsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListServerNeighborsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ListServerNeighborsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListServerNeighborsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListServerNeighborsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListServerNeighborsError {}
 /// Errors returned by StartContinuousExport
 #[derive(Debug, PartialEq)]
 pub enum StartContinuousExportError {
@@ -2308,23 +2292,19 @@ impl StartContinuousExportError {
 }
 impl fmt::Display for StartContinuousExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartContinuousExportError {
-    fn description(&self) -> &str {
         match *self {
-            StartContinuousExportError::AuthorizationError(ref cause) => cause,
-            StartContinuousExportError::ConflictError(ref cause) => cause,
-            StartContinuousExportError::HomeRegionNotSet(ref cause) => cause,
-            StartContinuousExportError::InvalidParameter(ref cause) => cause,
-            StartContinuousExportError::InvalidParameterValue(ref cause) => cause,
-            StartContinuousExportError::OperationNotPermitted(ref cause) => cause,
-            StartContinuousExportError::ResourceInUse(ref cause) => cause,
-            StartContinuousExportError::ServerInternalError(ref cause) => cause,
+            StartContinuousExportError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::ConflictError(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartContinuousExportError {}
 /// Errors returned by StartDataCollectionByAgentIds
 #[derive(Debug, PartialEq)]
 pub enum StartDataCollectionByAgentIdsError {
@@ -2380,20 +2360,26 @@ impl StartDataCollectionByAgentIdsError {
 }
 impl fmt::Display for StartDataCollectionByAgentIdsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDataCollectionByAgentIdsError {
-    fn description(&self) -> &str {
         match *self {
-            StartDataCollectionByAgentIdsError::AuthorizationError(ref cause) => cause,
-            StartDataCollectionByAgentIdsError::HomeRegionNotSet(ref cause) => cause,
-            StartDataCollectionByAgentIdsError::InvalidParameter(ref cause) => cause,
-            StartDataCollectionByAgentIdsError::InvalidParameterValue(ref cause) => cause,
-            StartDataCollectionByAgentIdsError::ServerInternalError(ref cause) => cause,
+            StartDataCollectionByAgentIdsError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDataCollectionByAgentIdsError::HomeRegionNotSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDataCollectionByAgentIdsError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDataCollectionByAgentIdsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDataCollectionByAgentIdsError::ServerInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartDataCollectionByAgentIdsError {}
 /// Errors returned by StartExportTask
 #[derive(Debug, PartialEq)]
 pub enum StartExportTaskError {
@@ -2446,21 +2432,17 @@ impl StartExportTaskError {
 }
 impl fmt::Display for StartExportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartExportTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StartExportTaskError::AuthorizationError(ref cause) => cause,
-            StartExportTaskError::HomeRegionNotSet(ref cause) => cause,
-            StartExportTaskError::InvalidParameter(ref cause) => cause,
-            StartExportTaskError::InvalidParameterValue(ref cause) => cause,
-            StartExportTaskError::OperationNotPermitted(ref cause) => cause,
-            StartExportTaskError::ServerInternalError(ref cause) => cause,
+            StartExportTaskError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            StartExportTaskError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            StartExportTaskError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartExportTaskError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StartExportTaskError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StartExportTaskError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartExportTaskError {}
 /// Errors returned by StartImportTask
 #[derive(Debug, PartialEq)]
 pub enum StartImportTaskError {
@@ -2511,21 +2493,17 @@ impl StartImportTaskError {
 }
 impl fmt::Display for StartImportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartImportTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StartImportTaskError::AuthorizationError(ref cause) => cause,
-            StartImportTaskError::HomeRegionNotSet(ref cause) => cause,
-            StartImportTaskError::InvalidParameter(ref cause) => cause,
-            StartImportTaskError::InvalidParameterValue(ref cause) => cause,
-            StartImportTaskError::ResourceInUse(ref cause) => cause,
-            StartImportTaskError::ServerInternalError(ref cause) => cause,
+            StartImportTaskError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            StartImportTaskError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            StartImportTaskError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartImportTaskError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StartImportTaskError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StartImportTaskError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartImportTaskError {}
 /// Errors returned by StopContinuousExport
 #[derive(Debug, PartialEq)]
 pub enum StopContinuousExportError {
@@ -2598,23 +2576,19 @@ impl StopContinuousExportError {
 }
 impl fmt::Display for StopContinuousExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopContinuousExportError {
-    fn description(&self) -> &str {
         match *self {
-            StopContinuousExportError::AuthorizationError(ref cause) => cause,
-            StopContinuousExportError::HomeRegionNotSet(ref cause) => cause,
-            StopContinuousExportError::InvalidParameter(ref cause) => cause,
-            StopContinuousExportError::InvalidParameterValue(ref cause) => cause,
-            StopContinuousExportError::OperationNotPermitted(ref cause) => cause,
-            StopContinuousExportError::ResourceInUse(ref cause) => cause,
-            StopContinuousExportError::ResourceNotFound(ref cause) => cause,
-            StopContinuousExportError::ServerInternalError(ref cause) => cause,
+            StopContinuousExportError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopContinuousExportError {}
 /// Errors returned by StopDataCollectionByAgentIds
 #[derive(Debug, PartialEq)]
 pub enum StopDataCollectionByAgentIdsError {
@@ -2670,20 +2644,26 @@ impl StopDataCollectionByAgentIdsError {
 }
 impl fmt::Display for StopDataCollectionByAgentIdsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopDataCollectionByAgentIdsError {
-    fn description(&self) -> &str {
         match *self {
-            StopDataCollectionByAgentIdsError::AuthorizationError(ref cause) => cause,
-            StopDataCollectionByAgentIdsError::HomeRegionNotSet(ref cause) => cause,
-            StopDataCollectionByAgentIdsError::InvalidParameter(ref cause) => cause,
-            StopDataCollectionByAgentIdsError::InvalidParameterValue(ref cause) => cause,
-            StopDataCollectionByAgentIdsError::ServerInternalError(ref cause) => cause,
+            StopDataCollectionByAgentIdsError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDataCollectionByAgentIdsError::HomeRegionNotSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDataCollectionByAgentIdsError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDataCollectionByAgentIdsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDataCollectionByAgentIdsError::ServerInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StopDataCollectionByAgentIdsError {}
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {
@@ -2733,20 +2713,16 @@ impl UpdateApplicationError {
 }
 impl fmt::Display for UpdateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateApplicationError::AuthorizationError(ref cause) => cause,
-            UpdateApplicationError::HomeRegionNotSet(ref cause) => cause,
-            UpdateApplicationError::InvalidParameter(ref cause) => cause,
-            UpdateApplicationError::InvalidParameterValue(ref cause) => cause,
-            UpdateApplicationError::ServerInternalError(ref cause) => cause,
+            UpdateApplicationError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateApplicationError {}
 /// Trait representing the capabilities of the AWS Application Discovery Service API. AWS Application Discovery Service clients implement this trait.
 pub trait Discovery {
     /// <p>Associates one or more configuration items with an application.</p>

@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Deletes the specified report.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReportDefinitionRequest {
     #[serde(rename = "ReportName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -42,6 +43,7 @@ pub struct DeleteReportDefinitionResponse {
 
 /// <p>Requests a list of AWS Cost and Usage reports owned by the account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReportDefinitionsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -65,6 +67,7 @@ pub struct DescribeReportDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReportDefinitionRequest {
     #[serde(rename = "ReportDefinition")]
     pub report_definition: ReportDefinition,
@@ -78,6 +81,7 @@ pub struct ModifyReportDefinitionResponse {}
 
 /// <p>Creates a Cost and Usage Report.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutReportDefinitionRequest {
     /// <p>Represents the output of the PutReportDefinition operation. The content consists of the detailed metadata and data file information. </p>
     #[serde(rename = "ReportDefinition")]
@@ -148,16 +152,12 @@ impl DeleteReportDefinitionError {
 }
 impl fmt::Display for DeleteReportDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReportDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReportDefinitionError::InternalError(ref cause) => cause,
+            DeleteReportDefinitionError::InternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteReportDefinitionError {}
 /// Errors returned by DescribeReportDefinitions
 #[derive(Debug, PartialEq)]
 pub enum DescribeReportDefinitionsError {
@@ -183,16 +183,12 @@ impl DescribeReportDefinitionsError {
 }
 impl fmt::Display for DescribeReportDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReportDefinitionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReportDefinitionsError::InternalError(ref cause) => cause,
+            DescribeReportDefinitionsError::InternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeReportDefinitionsError {}
 /// Errors returned by ModifyReportDefinition
 #[derive(Debug, PartialEq)]
 pub enum ModifyReportDefinitionError {
@@ -218,16 +214,12 @@ impl ModifyReportDefinitionError {
 }
 impl fmt::Display for ModifyReportDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyReportDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyReportDefinitionError::InternalError(ref cause) => cause,
+            ModifyReportDefinitionError::InternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyReportDefinitionError {}
 /// Errors returned by PutReportDefinition
 #[derive(Debug, PartialEq)]
 pub enum PutReportDefinitionError {
@@ -265,18 +257,14 @@ impl PutReportDefinitionError {
 }
 impl fmt::Display for PutReportDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutReportDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            PutReportDefinitionError::DuplicateReportName(ref cause) => cause,
-            PutReportDefinitionError::InternalError(ref cause) => cause,
-            PutReportDefinitionError::ReportLimitReached(ref cause) => cause,
+            PutReportDefinitionError::DuplicateReportName(ref cause) => write!(f, "{}", cause),
+            PutReportDefinitionError::InternalError(ref cause) => write!(f, "{}", cause),
+            PutReportDefinitionError::ReportLimitReached(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutReportDefinitionError {}
 /// Trait representing the capabilities of the AWS Cost and Usage Report Service API. AWS Cost and Usage Report Service clients implement this trait.
 pub trait CostAndUsageReport {
     /// <p>Deletes the specified report.</p>

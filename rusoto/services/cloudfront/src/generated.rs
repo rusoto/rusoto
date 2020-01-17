@@ -37,6 +37,7 @@ use xml::EventWriter;
 
 /// <p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ActiveTrustedSigners {
     /// <p>Enabled is <code>true</code> if any of the AWS accounts listed in the <code>TrustedSigners</code> complex type for this RTMP distribution have active CloudFront key pairs. If not, <code>Enabled</code> is <code>false</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>
     pub enabled: bool,
@@ -112,6 +113,8 @@ impl AliasListSerializer {
 
 /// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Aliases {
     /// <p>A complex type that contains the CNAME aliases, if any, that you want to associate with this distribution.</p>
     pub items: Option<Vec<String>>,
@@ -170,6 +173,8 @@ impl AliasesSerializer {
 
 /// <p>A complex type that controls which HTTP methods CloudFront processes and forwards to your Amazon S3 bucket or your custom origin. There are three choices:</p> <ul> <li> <p>CloudFront forwards only <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront forwards only <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> <li> <p>CloudFront forwards <code>GET, HEAD, OPTIONS, PUT, PATCH, POST</code>, and <code>DELETE</code> requests.</p> </li> </ul> <p>If you pick the third choice, you may need to restrict access to your Amazon S3 bucket or to your custom origin so users can't perform operations that you don't want them to. For example, you might not want users to have permissions to delete objects from your origin.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllowedMethods {
     pub cached_methods: Option<CachedMethods>,
     /// <p>A complex type that contains the HTTP methods that you want CloudFront to process and forward to your origin.</p>
@@ -305,6 +310,8 @@ impl BooleanSerializer {
 
 /// <p>A complex type that describes how CloudFront processes requests.</p> <p>You must create at least as many cache behaviors (including the default cache behavior) as you have origins if you want CloudFront to distribute objects from all of the origins. Each cache behavior specifies the one origin from which you want CloudFront to get objects. If you have two origins and only the default cache behavior, the default cache behavior will cause CloudFront to get objects from one of the origins, but the other origin is never used.</p> <p>For the current limit on the number of cache behaviors that you can add to a distribution, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p> <p>If you don't want to specify any cache behaviors, include only an empty <code>CacheBehaviors</code> element. Don't include an empty <code>CacheBehavior</code> element, or CloudFront returns a <code>MalformedXML</code> error.</p> <p>To delete all cache behaviors in an existing distribution, update the distribution configuration and include only an empty <code>CacheBehaviors</code> element.</p> <p>To add, change, or remove one or more cache behaviors, update the distribution configuration and specify all of the cache behaviors that you want to include in the updated distribution.</p> <p>For more information about cache behaviors, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behaviors</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
     /// <p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify true; if not, specify false. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -546,6 +553,8 @@ impl CacheBehaviorListSerializer {
 
 /// <p>A complex type that contains zero or more <code>CacheBehavior</code> elements. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CacheBehaviors {
     /// <p>Optional: A complex type that contains cache behaviors for this distribution. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>
     pub items: Option<Vec<CacheBehavior>>,
@@ -604,6 +613,8 @@ impl CacheBehaviorsSerializer {
 
 /// <p>A complex type that controls whether CloudFront caches the response to requests using the specified HTTP methods. There are two choices:</p> <ul> <li> <p>CloudFront caches responses to <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront caches responses to <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> </ul> <p>If you pick the second choice for your Amazon S3 Origin, you may need to forward Access-Control-Request-Method, Access-Control-Request-Headers, and Origin headers for the responses to be cached correctly. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CachedMethods {
     /// <p>A complex type that contains the HTTP methods that you want CloudFront to cache responses to.</p>
     pub items: Vec<String>,
@@ -659,6 +670,7 @@ impl CachedMethodsSerializer {
 
 /// <p>CloudFront origin access identity.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CloudFrontOriginAccessIdentity {
     /// <p>The current configuration information for the identity. </p>
     pub cloud_front_origin_access_identity_config: Option<CloudFrontOriginAccessIdentityConfig>,
@@ -704,6 +716,8 @@ impl CloudFrontOriginAccessIdentityDeserializer {
 }
 /// <p>Origin access identity configuration. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/CloudFront/identity ID/config</code> resource. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudFrontOriginAccessIdentityConfig {
     /// <p>A unique value (for example, a date-time stamp) that ensures that the request can't be replayed.</p> <p>If the value of <code>CallerReference</code> is new (regardless of the content of the <code>CloudFrontOriginAccessIdentityConfig</code> object), a new origin access identity is created.</p> <p>If the <code>CallerReference</code> is a value already sent in a previous identity request, and the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is identical to the original request (ignoring white space), the response includes the same information returned to the original request. </p> <p>If the <code>CallerReference</code> is a value you already sent in a previous request to create an identity, but the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is different from the original request, CloudFront returns a <code>CloudFrontOriginAccessIdentityAlreadyExists</code> error. </p>
     pub caller_reference: String,
@@ -768,6 +782,7 @@ impl CloudFrontOriginAccessIdentityConfigSerializer {
 
 /// <p>Lists the origin access identities for CloudFront.Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/origin-access-identity/cloudfront</code> resource. The response includes a <code>CloudFrontOriginAccessIdentityList</code> element with zero or more <code>CloudFrontOriginAccessIdentitySummary</code> child elements. By default, your entire list of origin access identities is returned in one single page. If the list is long, you can paginate it using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CloudFrontOriginAccessIdentityList {
     /// <p>A flag that indicates whether more origin access identities remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more items in the list.</p>
     pub is_truncated: bool,
@@ -827,6 +842,7 @@ impl CloudFrontOriginAccessIdentityListDeserializer {
 }
 /// <p>Summary of the information about a CloudFront origin access identity.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CloudFrontOriginAccessIdentitySummary {
     /// <p>The comment for this origin access identity, as originally specified when created.</p>
     pub comment: String,
@@ -889,6 +905,8 @@ impl CloudFrontOriginAccessIdentitySummaryListDeserializer {
 }
 /// <p>A field-level encryption content type profile. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContentTypeProfile {
     /// <p>The content type for a field-level encryption content type-profile mapping. </p>
     pub content_type: String,
@@ -961,6 +979,8 @@ impl ContentTypeProfileSerializer {
 
 /// <p>The configuration for a field-level encryption content type-profile mapping. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContentTypeProfileConfig {
     /// <p>The configuration for a field-level encryption content type-profile. </p>
     pub content_type_profiles: Option<ContentTypeProfiles>,
@@ -1072,6 +1092,8 @@ impl ContentTypeProfileListSerializer {
 
 /// <p>Field-level encryption content type-profile. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContentTypeProfiles {
     /// <p>Items in a field-level encryption content type-profile mapping. </p>
     pub items: Option<Vec<ContentTypeProfile>>,
@@ -1168,6 +1190,8 @@ impl CookieNameListSerializer {
 
 /// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CookieNames {
     /// <p>A complex type that contains one <code>Name</code> element for each cookie that you want CloudFront to forward to the origin for this cache behavior.</p>
     pub items: Option<Vec<String>>,
@@ -1226,6 +1250,8 @@ impl CookieNamesSerializer {
 
 /// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CookiePreference {
     /// <p>Specifies which cookies to forward to the origin for this cache behavior: all, none, or the list of cookies specified in the <code>WhitelistedNames</code> complex type.</p> <p>Amazon S3 doesn't process cookies. When the cache behavior is forwarding requests to an Amazon S3 origin, specify none for the <code>Forward</code> element. </p>
     pub forward: String,
@@ -1285,6 +1311,7 @@ impl CookiePreferenceSerializer {
 
 /// <p>The request to create a new origin access identity.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFrontOriginAccessIdentityRequest {
     /// <p>The current configuration information for the identity.</p>
     pub cloud_front_origin_access_identity_config: CloudFrontOriginAccessIdentityConfig,
@@ -1292,6 +1319,7 @@ pub struct CreateCloudFrontOriginAccessIdentityRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateCloudFrontOriginAccessIdentityResult {
     /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
@@ -1321,6 +1349,7 @@ impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
 }
 /// <p>The request to create a new distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionRequest {
     /// <p>The distribution's configuration information.</p>
     pub distribution_config: DistributionConfig,
@@ -1328,6 +1357,7 @@ pub struct CreateDistributionRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDistributionResult {
     /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
@@ -1355,6 +1385,7 @@ impl CreateDistributionResultDeserializer {
 }
 /// <p>The request to create a new distribution with tags. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionWithTagsRequest {
     /// <p>The distribution's configuration information. </p>
     pub distribution_config_with_tags: DistributionConfigWithTags,
@@ -1362,6 +1393,7 @@ pub struct CreateDistributionWithTagsRequest {
 
 /// <p>The returned result of the corresponding request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDistributionWithTagsResult {
     /// <p>The distribution's information. </p>
     pub distribution: Option<Distribution>,
@@ -1388,12 +1420,14 @@ impl CreateDistributionWithTagsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFieldLevelEncryptionConfigRequest {
     /// <p>The request to create a new field-level encryption configuration.</p>
     pub field_level_encryption_config: FieldLevelEncryptionConfig,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateFieldLevelEncryptionConfigResult {
     /// <p>The current version of the field level encryption configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -1420,12 +1454,14 @@ impl CreateFieldLevelEncryptionConfigResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFieldLevelEncryptionProfileRequest {
     /// <p>The request to create a field-level encryption profile.</p>
     pub field_level_encryption_profile_config: FieldLevelEncryptionProfileConfig,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateFieldLevelEncryptionProfileResult {
     /// <p>The current version of the field level encryption profile. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -1455,6 +1491,7 @@ impl CreateFieldLevelEncryptionProfileResultDeserializer {
 }
 /// <p>The request to create an invalidation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInvalidationRequest {
     /// <p>The distribution's id.</p>
     pub distribution_id: String,
@@ -1464,6 +1501,7 @@ pub struct CreateInvalidationRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateInvalidationResult {
     /// <p>The invalidation's information.</p>
     pub invalidation: Option<Invalidation>,
@@ -1488,12 +1526,14 @@ impl CreateInvalidationResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePublicKeyRequest {
     /// <p>The request to add a public key to CloudFront.</p>
     pub public_key_config: PublicKeyConfig,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePublicKeyResult {
     /// <p>The current version of the public key. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -1518,6 +1558,7 @@ impl CreatePublicKeyResultDeserializer {
 }
 /// <p>The request to create a new streaming distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamingDistributionRequest {
     /// <p>The streaming distribution's configuration information.</p>
     pub streaming_distribution_config: StreamingDistributionConfig,
@@ -1525,6 +1566,7 @@ pub struct CreateStreamingDistributionRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStreamingDistributionResult {
     /// <p>The current version of the streaming distribution created.</p>
     pub e_tag: Option<String>,
@@ -1552,6 +1594,7 @@ impl CreateStreamingDistributionResultDeserializer {
 }
 /// <p>The request to create a new streaming distribution with tags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamingDistributionWithTagsRequest {
     /// <p> The streaming distribution's configuration information. </p>
     pub streaming_distribution_config_with_tags: StreamingDistributionConfigWithTags,
@@ -1559,6 +1602,7 @@ pub struct CreateStreamingDistributionWithTagsRequest {
 
 /// <p>The returned result of the corresponding request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStreamingDistributionWithTagsResult {
     /// <p>The current version of the distribution created.</p>
     pub e_tag: Option<String>,
@@ -1586,6 +1630,8 @@ impl CreateStreamingDistributionWithTagsResultDeserializer {
 }
 /// <p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer. </p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomErrorResponse {
     /// <p>The minimum amount of time, in seconds, that you want CloudFront to cache the HTTP status code specified in <code>ErrorCode</code>. When this time period has elapsed, CloudFront queries your origin to see whether the problem that caused the error has been resolved and the requested object is now available.</p> <p>If you don't want to specify a value, include an empty element, <code>&lt;ErrorCachingMinTTL&gt;</code>, in the XML document.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub error_caching_min_ttl: Option<i64>,
@@ -1717,6 +1763,8 @@ impl CustomErrorResponseListSerializer {
 
 /// <p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer.</p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomErrorResponses {
     /// <p>A complex type that contains a <code>CustomErrorResponse</code> element for each HTTP status code for which you want to specify a custom error page and/or a caching duration. </p>
     pub items: Option<Vec<CustomErrorResponse>>,
@@ -1775,6 +1823,8 @@ impl CustomErrorResponsesSerializer {
 
 /// <p>A complex type that contains the list of Custom Headers for each origin. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomHeaders {
     /// <p> <b>Optional</b>: A list that contains one <code>OriginCustomHeader</code> element for each custom header that you want CloudFront to forward to the origin. If Quantity is <code>0</code>, omit <code>Items</code>.</p>
     pub items: Option<Vec<OriginCustomHeader>>,
@@ -1833,6 +1883,8 @@ impl CustomHeadersSerializer {
 
 /// <p>A customer origin or an Amazon S3 bucket configured as a website endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomOriginConfig {
     /// <p>The HTTP port the custom origin listens on.</p>
     pub http_port: i64,
@@ -1951,6 +2003,8 @@ impl CustomOriginConfigSerializer {
 
 /// <p>A complex type that describes the default cache behavior if you don't specify a <code>CacheBehavior</code> element or if files don't match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefaultCacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
     /// <p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -2139,6 +2193,7 @@ impl DefaultCacheBehaviorSerializer {
 
 /// <p>Deletes a origin access identity.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCloudFrontOriginAccessIdentityRequest {
     /// <p>The origin access identity's ID.</p>
     pub id: String,
@@ -2148,6 +2203,7 @@ pub struct DeleteCloudFrontOriginAccessIdentityRequest {
 
 /// <p>This action deletes a web distribution. To delete a web distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete a web distribution using the CloudFront API:</b> </p> <ol> <li> <p>Disable the web distribution </p> </li> <li> <p>Submit a <code>GET Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution.</p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Distribution</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 6.</p> </li> <li> <p>Review the response to your <code>DELETE Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDistributionRequest {
     /// <p>The distribution ID. </p>
     pub id: String,
@@ -2156,6 +2212,7 @@ pub struct DeleteDistributionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFieldLevelEncryptionConfigRequest {
     /// <p>The ID of the configuration you want to delete from CloudFront.</p>
     pub id: String,
@@ -2164,6 +2221,7 @@ pub struct DeleteFieldLevelEncryptionConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFieldLevelEncryptionProfileRequest {
     /// <p>Request the ID of the profile you want to delete from CloudFront.</p>
     pub id: String,
@@ -2172,6 +2230,7 @@ pub struct DeleteFieldLevelEncryptionProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePublicKeyRequest {
     /// <p>The ID of the public key you want to remove from CloudFront.</p>
     pub id: String,
@@ -2181,6 +2240,7 @@ pub struct DeletePublicKeyRequest {
 
 /// <p>The request to delete a streaming distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamingDistributionRequest {
     /// <p>The distribution ID. </p>
     pub id: String,
@@ -2190,6 +2250,7 @@ pub struct DeleteStreamingDistributionRequest {
 
 /// <p>The distribution's information.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Distribution {
     /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
     pub arn: String,
@@ -2256,6 +2317,8 @@ impl DistributionDeserializer {
 }
 /// <p>A distribution configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DistributionConfig {
     /// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution.</p>
     pub aliases: Option<Aliases>,
@@ -2487,6 +2550,7 @@ impl DistributionConfigSerializer {
 
 /// <p>A distribution Configuration and a list of tags to be associated with the distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DistributionConfigWithTags {
     /// <p>A distribution configuration.</p>
     pub distribution_config: DistributionConfig,
@@ -2518,6 +2582,7 @@ impl DistributionConfigWithTagsSerializer {
 
 /// <p>A distribution list.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DistributionList {
     /// <p>A flag that indicates whether more distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list.</p>
     pub is_truncated: bool,
@@ -2570,6 +2635,7 @@ impl DistributionListDeserializer {
 }
 /// <p>A summary of the information about a CloudFront distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DistributionSummary {
     /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
     pub arn: String,
@@ -2718,6 +2784,8 @@ impl DistributionSummaryListDeserializer {
 }
 /// <p>Complex data type for field-level encryption profiles that includes all of the encryption entities. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EncryptionEntities {
     /// <p>An array of field patterns in a field-level encryption content type-profile mapping. </p>
     pub items: Option<Vec<EncryptionEntity>>,
@@ -2776,6 +2844,8 @@ impl EncryptionEntitiesSerializer {
 
 /// <p>Complex data type for field-level encryption profiles that includes the encryption key and field pattern specifications. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EncryptionEntity {
     /// <p>Field patterns in a field-level encryption content type profile specify the fields that you want to be encrypted. You can provide the full field name, or any beginning characters followed by a wildcard (*). You can't overlap field patterns. For example, you can't have both ABC* and AB*. Note that field patterns are case-sensitive. </p>
     pub field_patterns: FieldPatterns,
@@ -2915,6 +2985,7 @@ impl EventTypeSerializer {
 
 /// <p>A complex data type that includes the profile configurations and other options specified for field-level encryption. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryption {
     /// <p>A complex data type that includes the profile configurations specified for field-level encryption. </p>
     pub field_level_encryption_config: FieldLevelEncryptionConfig,
@@ -2955,6 +3026,8 @@ impl FieldLevelEncryptionDeserializer {
 }
 /// <p>A complex data type that includes the profile configurations specified for field-level encryption. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FieldLevelEncryptionConfig {
     /// <p>A unique number that ensures the request can't be replayed.</p>
     pub caller_reference: String,
@@ -3053,6 +3126,7 @@ impl FieldLevelEncryptionConfigSerializer {
 
 /// <p>List of field-level encrpytion configurations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionList {
     /// <p>An array of field-level encryption items.</p>
     pub items: Option<Vec<FieldLevelEncryptionSummary>>,
@@ -3102,6 +3176,7 @@ impl FieldLevelEncryptionListDeserializer {
 }
 /// <p>A complex data type for field-level encryption profiles.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionProfile {
     /// <p>A complex data type that includes the profile name and the encryption entities for the field-level encryption profile.</p>
     pub field_level_encryption_profile_config: FieldLevelEncryptionProfileConfig,
@@ -3146,6 +3221,8 @@ impl FieldLevelEncryptionProfileDeserializer {
 }
 /// <p>A complex data type of profiles for the field-level encryption.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FieldLevelEncryptionProfileConfig {
     /// <p>A unique number that ensures that the request can't be replayed.</p>
     pub caller_reference: String,
@@ -3236,6 +3313,7 @@ impl FieldLevelEncryptionProfileConfigSerializer {
 
 /// <p>List of field-level encryption profiles.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionProfileList {
     /// <p>The field-level encryption profile items.</p>
     pub items: Option<Vec<FieldLevelEncryptionProfileSummary>>,
@@ -3285,6 +3363,7 @@ impl FieldLevelEncryptionProfileListDeserializer {
 }
 /// <p>The field-level encryption profile summary.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionProfileSummary {
     /// <p>An optional comment for the field-level encryption profile summary.</p>
     pub comment: Option<String>,
@@ -3358,6 +3437,7 @@ impl FieldLevelEncryptionProfileSummaryListDeserializer {
 }
 /// <p>A summary of a field-level encryption item.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionSummary {
     /// <p>An optional comment about the field-level encryption item.</p>
     pub comment: Option<String>,
@@ -3474,6 +3554,8 @@ impl FieldPatternListSerializer {
 
 /// <p>A complex data type that includes the field patterns to match for field-level encryption.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FieldPatterns {
     /// <p>An array of the field-level encryption field patterns.</p>
     pub items: Option<Vec<String>>,
@@ -3564,6 +3646,8 @@ impl FormatSerializer {
 
 /// <p>A complex type that specifies how CloudFront handles query strings and cookies.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ForwardedValues {
     /// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub cookies: CookiePreference,
@@ -3638,6 +3722,8 @@ impl ForwardedValuesSerializer {
 
 /// <p>A complex type that controls the countries in which your content is distributed. CloudFront determines the location of your users using <code>MaxMind</code> GeoIP databases. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GeoRestriction {
     /// <p> A complex type that contains a <code>Location</code> element for each country in which you want CloudFront either to distribute your content (<code>whitelist</code>) or not distribute your content (<code>blacklist</code>).</p> <p>The <code>Location</code> element is a two-letter, uppercase country code for a country that you want to include in your <code>blacklist</code> or <code>whitelist</code>. Include one <code>Location</code> element for each country.</p> <p>CloudFront and <code>MaxMind</code> both use <code>ISO 3166</code> country codes. For the current list of countries and the corresponding codes, see <code>ISO 3166-1-alpha-2</code> code on the <i>International Organization for Standardization</i> website. You can also refer to the country list on the CloudFront console, which includes both country names and codes.</p>
     pub items: Option<Vec<String>>,
@@ -3740,6 +3826,7 @@ impl GeoRestrictionTypeSerializer {
 
 /// <p>The origin access identity's configuration information. For more information, see <a>CloudFrontOriginAccessIdentityConfigComplexType</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFrontOriginAccessIdentityConfigRequest {
     /// <p>The identity's ID. </p>
     pub id: String,
@@ -3747,6 +3834,7 @@ pub struct GetCloudFrontOriginAccessIdentityConfigRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCloudFrontOriginAccessIdentityConfigResult {
     /// <p>The origin access identity's configuration information. </p>
     pub cloud_front_origin_access_identity_config: Option<CloudFrontOriginAccessIdentityConfig>,
@@ -3774,6 +3862,7 @@ impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
 }
 /// <p>The request to get an origin access identity's information.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFrontOriginAccessIdentityRequest {
     /// <p>The identity's ID.</p>
     pub id: String,
@@ -3781,6 +3870,7 @@ pub struct GetCloudFrontOriginAccessIdentityRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCloudFrontOriginAccessIdentityResult {
     /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
@@ -3808,6 +3898,7 @@ impl GetCloudFrontOriginAccessIdentityResultDeserializer {
 }
 /// <p>The request to get a distribution configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionConfigRequest {
     /// <p>The distribution's ID.</p>
     pub id: String,
@@ -3815,6 +3906,7 @@ pub struct GetDistributionConfigRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetDistributionConfigResult {
     /// <p>The distribution's configuration information.</p>
     pub distribution_config: Option<DistributionConfig>,
@@ -3840,6 +3932,7 @@ impl GetDistributionConfigResultDeserializer {
 }
 /// <p>The request to get a distribution's information.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionRequest {
     /// <p>The distribution's ID.</p>
     pub id: String,
@@ -3847,6 +3940,7 @@ pub struct GetDistributionRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetDistributionResult {
     /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
@@ -3871,12 +3965,14 @@ impl GetDistributionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionConfigRequest {
     /// <p>Request the ID for the field-level encryption configuration information.</p>
     pub id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionConfigResult {
     /// <p>The current version of the field level encryption configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -3903,12 +3999,14 @@ impl GetFieldLevelEncryptionConfigResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionProfileConfigRequest {
     /// <p>Get the ID for the field-level encryption profile configuration information.</p>
     pub id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionProfileConfigResult {
     /// <p>The current version of the field-level encryption profile configuration result. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -3935,12 +4033,14 @@ impl GetFieldLevelEncryptionProfileConfigResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionProfileRequest {
     /// <p>Get the ID for the field-level encryption profile information.</p>
     pub id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionProfileResult {
     /// <p>The current version of the field level encryption profile. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -3967,12 +4067,14 @@ impl GetFieldLevelEncryptionProfileResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionRequest {
     /// <p>Request the ID for the field-level encryption configuration information.</p>
     pub id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionResult {
     /// <p>The current version of the field level encryption configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -3998,6 +4100,7 @@ impl GetFieldLevelEncryptionResultDeserializer {
 }
 /// <p>The request to get an invalidation's information. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvalidationRequest {
     /// <p>The distribution's ID.</p>
     pub distribution_id: String,
@@ -4007,6 +4110,7 @@ pub struct GetInvalidationRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetInvalidationResult {
     /// <p>The invalidation's information. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/InvalidationDatatype.html">Invalidation Complex Type</a>. </p>
     pub invalidation: Option<Invalidation>,
@@ -4029,12 +4133,14 @@ impl GetInvalidationResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicKeyConfigRequest {
     /// <p>Request the ID for the public key configuration.</p>
     pub id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicKeyConfigResult {
     /// <p>The current version of the public key configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -4059,12 +4165,14 @@ impl GetPublicKeyConfigResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicKeyRequest {
     /// <p>Request the ID for the public key.</p>
     pub id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicKeyResult {
     /// <p>The current version of the public key. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -4087,6 +4195,7 @@ impl GetPublicKeyResultDeserializer {
 }
 /// <p>To request to get a streaming distribution configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStreamingDistributionConfigRequest {
     /// <p>The streaming distribution's ID.</p>
     pub id: String,
@@ -4094,6 +4203,7 @@ pub struct GetStreamingDistributionConfigRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStreamingDistributionConfigResult {
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>. </p>
     pub e_tag: Option<String>,
@@ -4121,6 +4231,7 @@ impl GetStreamingDistributionConfigResultDeserializer {
 }
 /// <p>The request to get a streaming distribution's information.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStreamingDistributionRequest {
     /// <p>The streaming distribution's ID.</p>
     pub id: String,
@@ -4128,6 +4239,7 @@ pub struct GetStreamingDistributionRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStreamingDistributionResult {
     /// <p>The current version of the streaming distribution's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -4191,6 +4303,8 @@ impl HeaderListSerializer {
 
 /// <p>A complex type that specifies the request headers, if any, that you want CloudFront to base caching on for this cache behavior. </p> <p>For the headers that you specify, CloudFront caches separate versions of a specified object based on the header values in viewer requests. For example, suppose viewer requests for <code>logo.jpg</code> contain a custom <code>product</code> header that has a value of either <code>acme</code> or <code>apex</code>, and you configure CloudFront to cache your content based on values in the <code>product</code> header. CloudFront forwards the <code>product</code> header to the origin and caches the response from the origin once for each header value. For more information about caching based on header values, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html">How CloudFront Forwards and Caches Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Headers {
     /// <p>A list that contains one <code>Name</code> element for each header that you want CloudFront to use for caching in this cache behavior. If <code>Quantity</code> is <code>0</code>, omit <code>Items</code>.</p>
     pub items: Option<Vec<String>>,
@@ -4313,6 +4427,7 @@ impl IntegerSerializer {
 
 /// <p>An invalidation. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Invalidation {
     /// <p>The date and time the invalidation request was first made. </p>
     pub create_time: String,
@@ -4354,6 +4469,8 @@ impl InvalidationDeserializer {
 }
 /// <p>An invalidation batch.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvalidationBatch {
     /// <p>A value that you specify to uniquely identify an invalidation request. CloudFront uses the value to prevent you from accidentally resubmitting an identical request. Whenever you create a new invalidation request, you must specify a new value for <code>CallerReference</code> and change other values in the request as applicable. One way to ensure that the value of <code>CallerReference</code> is unique is to use a <code>timestamp</code>, for example, <code>20120301090000</code>.</p> <p>If you make a second invalidation request with the same value for <code>CallerReference</code>, and if the rest of the request is the same, CloudFront doesn't create a new invalidation request. Instead, CloudFront returns information about the invalidation request that you previously created with the same <code>CallerReference</code>.</p> <p>If <code>CallerReference</code> is a value you already sent in a previous invalidation batch request but the content of any <code>Path</code> is different from the original request, CloudFront returns an <code>InvalidationBatchAlreadyExists</code> error.</p>
     pub caller_reference: String,
@@ -4409,6 +4526,7 @@ impl InvalidationBatchSerializer {
 
 /// <p>The <code>InvalidationList</code> complex type describes the list of invalidation objects. For more information about invalidation, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html">Invalidating Objects (Web Distributions Only)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InvalidationList {
     /// <p>A flag that indicates whether more invalidation batch requests remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more invalidation batches in the list.</p>
     pub is_truncated: bool,
@@ -4461,6 +4579,7 @@ impl InvalidationListDeserializer {
 }
 /// <p>A summary of an invalidation request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InvalidationSummary {
     /// <p>The time that an invalidation request was created.</p>
     pub create_time: String,
@@ -4565,6 +4684,7 @@ impl KeyPairIdListDeserializer {
 }
 /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>. </p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct KeyPairIds {
     /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>
     pub items: Option<Vec<String>>,
@@ -4629,6 +4749,8 @@ impl LambdaFunctionARNSerializer {
 
 /// <p>A complex type that contains a Lambda function association.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaFunctionAssociation {
     /// <p><p>Specifies the event type that triggers a Lambda function invocation. You can specify the following values:</p> <ul> <li> <p> <code>viewer-request</code>: The function executes when CloudFront receives a request from a viewer and before it checks to see whether the requested object is in the edge cache. </p> </li> <li> <p> <code>origin-request</code>: The function executes only when CloudFront forwards a request to your origin. When the requested object is in the edge cache, the function doesn&#39;t execute.</p> </li> <li> <p> <code>origin-response</code>: The function executes after CloudFront receives a response from the origin and before it caches the object in the response. When the requested object is in the edge cache, the function doesn&#39;t execute.</p> </li> <li> <p> <code>viewer-response</code>: The function executes before CloudFront returns the requested object to the viewer. The function executes regardless of whether the object was already in the edge cache.</p> <p>If the origin returns an HTTP status code other than HTTP 200 (OK), the function doesn&#39;t execute.</p> </li> </ul></p>
     pub event_type: String,
@@ -4752,6 +4874,8 @@ impl LambdaFunctionAssociationListSerializer {
 
 /// <p>A complex type that specifies a list of Lambda functions associations for a cache behavior.</p> <p>If you want to invoke one or more Lambda functions triggered by requests that match the <code>PathPattern</code> of the cache behavior, specify the applicable values for <code>Quantity</code> and <code>Items</code>. Note that there can be up to 4 <code>LambdaFunctionAssociation</code> items in this list (one for each possible value of <code>EventType</code>) and each <code>EventType</code> can be associated with the Lambda function only once.</p> <p>If you don't want to invoke any Lambda functions for the requests that match <code>PathPattern</code>, specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaFunctionAssociations {
     /// <p> <b>Optional</b>: A complex type that contains <code>LambdaFunctionAssociation</code> items for this cache behavior. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>
     pub items: Option<Vec<LambdaFunctionAssociation>>,
@@ -4814,6 +4938,7 @@ impl LambdaFunctionAssociationsSerializer {
 
 /// <p>The request to list origin access identities. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCloudFrontOriginAccessIdentitiesRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of origin access identities. The results include identities in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last identity on that page).</p>
     pub marker: Option<String>,
@@ -4823,6 +4948,7 @@ pub struct ListCloudFrontOriginAccessIdentitiesRequest {
 
 /// <p>The returned result of the corresponding request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListCloudFrontOriginAccessIdentitiesResult {
     /// <p>The <code>CloudFrontOriginAccessIdentityList</code> type. </p>
     pub cloud_front_origin_access_identity_list: Option<CloudFrontOriginAccessIdentityList>,
@@ -4848,6 +4974,7 @@ impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
 }
 /// <p>The request to list distributions that are associated with a specified AWS WAF web ACL. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionsByWebACLIdRequest {
     /// <p>Use <code>Marker</code> and <code>MaxItems</code> to control pagination of results. If you have more than <code>MaxItems</code> distributions that satisfy the request, the response includes a <code>NextMarker</code> element. To get the next page of results, submit another request. For the value of <code>Marker</code>, specify the value of <code>NextMarker</code> from the last response. (For the first request, omit <code>Marker</code>.) </p>
     pub marker: Option<String>,
@@ -4859,6 +4986,7 @@ pub struct ListDistributionsByWebACLIdRequest {
 
 /// <p>The response to a request to list the distributions that are associated with a specified AWS WAF web ACL. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDistributionsByWebACLIdResult {
     /// <p>The <code>DistributionList</code> type. </p>
     pub distribution_list: Option<DistributionList>,
@@ -4882,6 +5010,7 @@ impl ListDistributionsByWebACLIdResultDeserializer {
 }
 /// <p>The request to list your distributions. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionsRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of distributions. The results include distributions in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last distribution on that page).</p>
     pub marker: Option<String>,
@@ -4891,6 +5020,7 @@ pub struct ListDistributionsRequest {
 
 /// <p>The returned result of the corresponding request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDistributionsResult {
     /// <p>The <code>DistributionList</code> type. </p>
     pub distribution_list: Option<DistributionList>,
@@ -4913,6 +5043,7 @@ impl ListDistributionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFieldLevelEncryptionConfigsRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of configurations. The results include configurations in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last configuration on that page). </p>
     pub marker: Option<String>,
@@ -4921,6 +5052,7 @@ pub struct ListFieldLevelEncryptionConfigsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListFieldLevelEncryptionConfigsResult {
     /// <p>Returns a list of all field-level encryption configurations that have been created in CloudFront for this account.</p>
     pub field_level_encryption_list: Option<FieldLevelEncryptionList>,
@@ -4943,6 +5075,7 @@ impl ListFieldLevelEncryptionConfigsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFieldLevelEncryptionProfilesRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of profiles. The results include profiles in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last profile on that page). </p>
     pub marker: Option<String>,
@@ -4951,6 +5084,7 @@ pub struct ListFieldLevelEncryptionProfilesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListFieldLevelEncryptionProfilesResult {
     /// <p>Returns a list of the field-level encryption profiles that have been created in CloudFront for this account.</p>
     pub field_level_encryption_profile_list: Option<FieldLevelEncryptionProfileList>,
@@ -4976,6 +5110,7 @@ impl ListFieldLevelEncryptionProfilesResultDeserializer {
 }
 /// <p>The request to list invalidations. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvalidationsRequest {
     /// <p>The distribution's ID.</p>
     pub distribution_id: String,
@@ -4987,6 +5122,7 @@ pub struct ListInvalidationsRequest {
 
 /// <p>The returned result of the corresponding request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListInvalidationsResult {
     /// <p>Information about invalidation batches. </p>
     pub invalidation_list: Option<InvalidationList>,
@@ -5009,6 +5145,7 @@ impl ListInvalidationsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPublicKeysRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of public keys. The results include public keys in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last public key on that page). </p>
     pub marker: Option<String>,
@@ -5017,6 +5154,7 @@ pub struct ListPublicKeysRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPublicKeysResult {
     /// <p>Returns a list of all public keys that have been added to CloudFront for this account.</p>
     pub public_key_list: Option<PublicKeyList>,
@@ -5040,6 +5178,7 @@ impl ListPublicKeysResultDeserializer {
 }
 /// <p>The request to list your streaming distributions. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamingDistributionsRequest {
     /// <p>The value that you provided for the <code>Marker</code> request parameter.</p>
     pub marker: Option<String>,
@@ -5049,6 +5188,7 @@ pub struct ListStreamingDistributionsRequest {
 
 /// <p>The returned result of the corresponding request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStreamingDistributionsResult {
     /// <p>The <code>StreamingDistributionList</code> type. </p>
     pub streaming_distribution_list: Option<StreamingDistributionList>,
@@ -5072,6 +5212,7 @@ impl ListStreamingDistributionsResultDeserializer {
 }
 /// <p> The request to list tags for a CloudFront resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p> An ARN of a CloudFront resource.</p>
     pub resource: String,
@@ -5079,6 +5220,7 @@ pub struct ListTagsForResourceRequest {
 
 /// <p> The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTagsForResourceResult {
     /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
     pub tags: Tags,
@@ -5137,6 +5279,8 @@ impl LocationListSerializer {
 
 /// <p>A complex type that controls whether access logs are written for the distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoggingConfig {
     /// <p>The Amazon S3 bucket to store the access logs in, for example, <code>myawslogbucket.s3.amazonaws.com</code>.</p>
     pub bucket: String,
@@ -5353,6 +5497,8 @@ impl MinimumProtocolVersionSerializer {
 
 /// <p>A complex type that describes the Amazon S3 bucket, HTTP server (for example, a web server), Amazon MediaStore, or other server from which CloudFront gets your files. This can also be an origin group, if you've created an origin group. You must specify at least one origin or origin group.</p> <p>For the current limit on the number of origins or origin groups that you can specify for a distribution, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Origin {
     /// <p>A complex type that contains names and values for the custom headers that you want.</p>
     pub custom_headers: Option<CustomHeaders>,
@@ -5455,6 +5601,8 @@ impl OriginSerializer {
 
 /// <p>A complex type that contains <code>HeaderName</code> and <code>HeaderValue</code> elements, if any, for this distribution. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginCustomHeader {
     /// <p>The name of a header that you want CloudFront to forward to your origin. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/forward-custom-headers.html">Forwarding Custom Headers to Your Origin (Web Distributions Only)</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p>
     pub header_name: String,
@@ -5555,6 +5703,8 @@ impl OriginCustomHeadersListSerializer {
 
 /// <p>An origin group includes two origins (a primary origin and a second origin to failover to) and a failover criteria that you specify. You create an origin group to support origin failover in CloudFront. When you create or update a distribution, you can specifiy the origin group instead of a single origin, and CloudFront will failover from the primary origin to the second origin under the failover conditions that you've chosen.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroup {
     /// <p>A complex type that contains information about the failover criteria for an origin group.</p>
     pub failover_criteria: OriginGroupFailoverCriteria,
@@ -5622,6 +5772,8 @@ impl OriginGroupSerializer {
 
 /// <p>A complex data type that includes information about the failover criteria for an origin group, including the status codes for which CloudFront will failover from the primary origin to the second origin.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroupFailoverCriteria {
     /// <p>The status codes that, when returned from the primary origin, will trigger CloudFront to failover to the second origin.</p>
     pub status_codes: StatusCodes,
@@ -5708,6 +5860,8 @@ impl OriginGroupListSerializer {
 
 /// <p>An origin in an origin group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroupMember {
     /// <p>The ID for an origin in an origin group.</p>
     pub origin_id: String,
@@ -5797,6 +5951,8 @@ impl OriginGroupMemberListSerializer {
 
 /// <p>A complex data type for the origins included in an origin group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroupMembers {
     /// <p>Items (origins) in an origin group.</p>
     pub items: Vec<OriginGroupMember>,
@@ -5854,6 +6010,8 @@ impl OriginGroupMembersSerializer {
 
 /// <p>A complex data type for the origin groups specified for a distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroups {
     /// <p>The items (origin groups) in a distribution.</p>
     pub items: Option<Vec<OriginGroup>>,
@@ -5982,6 +6140,8 @@ impl OriginProtocolPolicySerializer {
 
 /// <p>A complex type that contains information about the SSL/TLS protocols that CloudFront can use when establishing an HTTPS connection with your origin. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginSslProtocols {
     /// <p>A list that contains allowed SSL/TLS protocols for this distribution.</p>
     pub items: Vec<String>,
@@ -6037,6 +6197,8 @@ impl OriginSslProtocolsSerializer {
 
 /// <p>A complex type that contains information about origins and origin groups for this distribution. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Origins {
     /// <p>A complex type that contains origins or origin groups for this distribution.</p>
     pub items: Vec<Origin>,
@@ -6130,6 +6292,8 @@ impl PathListSerializer {
 
 /// <p>A complex type that contains information about the objects that you want to invalidate. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects">Specifying the Objects to Invalidate</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Paths {
     /// <p>A complex type that contains a list of the paths that you want to invalidate.</p>
     pub items: Option<Vec<String>>,
@@ -6217,6 +6381,7 @@ impl PriceClassSerializer {
 
 /// <p>A complex data type of public keys you add to CloudFront to use with features like field-level encryption.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKey {
     /// <p>A time you added a public key to CloudFront.</p>
     pub created_time: String,
@@ -6253,6 +6418,8 @@ impl PublicKeyDeserializer {
 }
 /// <p>Information about a public key you add to CloudFront to use with features like field-level encryption.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublicKeyConfig {
     /// <p>A unique number that ensures that the request can't be replayed.</p>
     pub caller_reference: String,
@@ -6337,6 +6504,7 @@ impl PublicKeyConfigSerializer {
 
 /// <p>A list of public keys you've added to CloudFront to use with features like field-level encryption.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKeyList {
     /// <p>An array of information about a public key you add to CloudFront to use with features like field-level encryption.</p>
     pub items: Option<Vec<PublicKeySummary>>,
@@ -6379,6 +6547,7 @@ impl PublicKeyListDeserializer {
 }
 /// <p>A complex data type for public key information. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKeySummary {
     /// <p> Comment for public key information summary. </p>
     pub comment: Option<String>,
@@ -6444,6 +6613,8 @@ impl PublicKeySummaryListDeserializer {
 }
 /// <p>Query argument-profile mapping for field-level encryption.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryArgProfile {
     /// <p>ID of profile to use for field-level encryption query argument-profile mapping</p>
     pub profile_id: String,
@@ -6503,6 +6674,8 @@ impl QueryArgProfileSerializer {
 
 /// <p>Configuration for query argument-profile mapping for field-level encryption.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryArgProfileConfig {
     /// <p>Flag to set if you want a request to be forwarded to the origin even if the profile specified by the field-level encryption query argument, fle-profile, is unknown.</p>
     pub forward_when_query_arg_profile_is_unknown: bool,
@@ -6609,6 +6782,8 @@ impl QueryArgProfileListSerializer {
 
 /// <p>Query argument-profile mapping for field-level encryption.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryArgProfiles {
     /// <p>Number of items for query argument-profile mapping for field-level encryption.</p>
     pub items: Option<Vec<QueryArgProfile>>,
@@ -6666,6 +6841,8 @@ impl QueryArgProfilesSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryStringCacheKeys {
     /// <p>(Optional) A list that contains the query string parameters that you want CloudFront to use as a basis for caching for this cache behavior. If <code>Quantity</code> is 0, you can omit <code>Items</code>. </p>
     pub items: Option<Vec<String>>,
@@ -6782,6 +6959,8 @@ impl ResourceARNSerializer {
 
 /// <p>A complex type that identifies ways in which you want to restrict distribution of your content.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Restrictions {
     pub geo_restriction: GeoRestriction,
 }
@@ -6825,6 +7004,8 @@ impl RestrictionsSerializer {
 
 /// <p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3Origin {
     /// <p>The DNS name of the Amazon S3 origin. </p>
     pub domain_name: String,
@@ -6885,6 +7066,8 @@ impl S3OriginSerializer {
 
 /// <p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3OriginConfig {
     /// <p>The CloudFront origin access identity to associate with the origin. Use an origin access identity to configure the origin so that viewers can <i>only</i> access objects in an Amazon S3 bucket through CloudFront. The format of the value is:</p> <p>origin-access-identity/cloudfront/<i>ID-of-origin-access-identity</i> </p> <p>where <code> <i>ID-of-origin-access-identity</i> </code> is the value that CloudFront returned in the <code>ID</code> element when you created the origin access identity.</p> <p>If you want viewers to be able to access objects using either the CloudFront URL or the Amazon S3 URL, specify an empty <code>OriginAccessIdentity</code> element.</p> <p>To delete the origin access identity from an existing distribution, update the distribution configuration and include an empty <code>OriginAccessIdentity</code> element.</p> <p>To replace the origin access identity, update the distribution configuration and specify the new origin access identity.</p> <p>For more information about the origin access identity, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_access_identity: String,
@@ -6966,6 +7149,7 @@ impl SSLSupportMethodSerializer {
 
 /// <p>A complex type that lists the AWS accounts that were included in the <code>TrustedSigners</code> complex type, as well as their active CloudFront key pair IDs, if any. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Signer {
     /// <p><p>An AWS account that is included in the <code>TrustedSigners</code> complex type for this RTMP distribution. Valid values include:</p> <ul> <li> <p> <code>self</code>, which is the AWS account used to create the distribution.</p> </li> <li> <p>An AWS account number.</p> </li> </ul></p>
     pub aws_account_number: Option<String>,
@@ -7120,6 +7304,8 @@ impl StatusCodeListSerializer {
 
 /// <p>A complex data type for the status codes that you specify that, when returned by a primary origin, trigger CloudFront to failover to a second origin.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StatusCodes {
     /// <p>The items (status codes) for an origin group.</p>
     pub items: Vec<i64>,
@@ -7175,6 +7361,7 @@ impl StatusCodesSerializer {
 
 /// <p>A streaming distribution. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StreamingDistribution {
     /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
     pub arn: String,
@@ -7240,6 +7427,8 @@ impl StreamingDistributionDeserializer {
 }
 /// <p>The RTMP distribution's configuration information.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamingDistributionConfig {
     /// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this streaming distribution. </p>
     pub aliases: Option<Aliases>,
@@ -7360,6 +7549,7 @@ impl StreamingDistributionConfigSerializer {
 
 /// <p>A streaming distribution Configuration and a list of tags to be associated with the streaming distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamingDistributionConfigWithTags {
     /// <p>A streaming distribution Configuration.</p>
     pub streaming_distribution_config: StreamingDistributionConfig,
@@ -7391,6 +7581,7 @@ impl StreamingDistributionConfigWithTagsSerializer {
 
 /// <p>A streaming distribution list. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StreamingDistributionList {
     /// <p>A flag that indicates whether more streaming distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list. </p>
     pub is_truncated: bool,
@@ -7450,6 +7641,7 @@ impl StreamingDistributionListDeserializer {
 }
 /// <p> A summary of the information for an Amazon CloudFront streaming distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StreamingDistributionSummary {
     /// <p> The ARN (Amazon Resource Name) for the streaming distribution. For example: <code>arn:aws:cloudfront::123456789012:streaming-distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
     pub arn: String,
@@ -7551,6 +7743,8 @@ impl StreamingDistributionSummaryListDeserializer {
 }
 /// <p>A complex type that controls whether access logs are written for this streaming distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamingLoggingConfig {
     /// <p>The Amazon S3 bucket to store the access logs in, for example, <code>myawslogbucket.s3.amazonaws.com</code>.</p>
     pub bucket: String,
@@ -7653,6 +7847,8 @@ impl StringSerializer {
 
 /// <p> A complex type that contains <code>Tag</code> key and <code>Tag</code> value.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p> A string that contains <code>Tag</code> key.</p> <p>The string length should be between 1 and 128 characters. Valid characters include <code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, space, and the special characters <code>_ - . : / = + @</code>.</p>
     pub key: String,
@@ -7763,6 +7959,7 @@ impl TagKeyListSerializer {
 
 /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagKeys {
     /// <p> A complex type that contains <code>Tag</code> key elements.</p>
     pub items: Option<Vec<String>>,
@@ -7827,6 +8024,7 @@ impl TagListSerializer {
 
 /// <p> The request to add tags to a CloudFront resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p> An ARN of a CloudFront resource.</p>
     pub resource: String,
@@ -7868,6 +8066,8 @@ impl TagValueSerializer {
 
 /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tags {
     /// <p> A complex type that contains <code>Tag</code> elements.</p>
     pub items: Option<Vec<Tag>>,
@@ -7923,6 +8123,8 @@ impl TimestampDeserializer {
 }
 /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p> <p>For more information about updating the distribution configuration, see <a>DistributionConfig</a> .</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TrustedSigners {
     /// <p>Specifies whether you want to require viewers to use signed URLs to access the files specified by <code>PathPattern</code> and <code>TargetOriginId</code>.</p>
     pub enabled: bool,
@@ -7992,6 +8194,7 @@ impl TrustedSignersSerializer {
 
 /// <p> The request to remove tags from a CloudFront resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p> An ARN of a CloudFront resource.</p>
     pub resource: String,
@@ -8001,6 +8204,7 @@ pub struct UntagResourceRequest {
 
 /// <p>The request to update an origin access identity.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCloudFrontOriginAccessIdentityRequest {
     /// <p>The identity's configuration information.</p>
     pub cloud_front_origin_access_identity_config: CloudFrontOriginAccessIdentityConfig,
@@ -8012,6 +8216,7 @@ pub struct UpdateCloudFrontOriginAccessIdentityRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateCloudFrontOriginAccessIdentityResult {
     /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
@@ -8039,6 +8244,7 @@ impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
 }
 /// <p>The request to update a distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDistributionRequest {
     /// <p>The distribution's configuration information.</p>
     pub distribution_config: DistributionConfig,
@@ -8050,6 +8256,7 @@ pub struct UpdateDistributionRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateDistributionResult {
     /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
@@ -8074,6 +8281,7 @@ impl UpdateDistributionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFieldLevelEncryptionConfigRequest {
     /// <p>Request to update a field-level encryption configuration. </p>
     pub field_level_encryption_config: FieldLevelEncryptionConfig,
@@ -8084,6 +8292,7 @@ pub struct UpdateFieldLevelEncryptionConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateFieldLevelEncryptionConfigResult {
     /// <p>The value of the <code>ETag</code> header that you received when updating the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -8108,6 +8317,7 @@ impl UpdateFieldLevelEncryptionConfigResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFieldLevelEncryptionProfileRequest {
     /// <p>Request to update a field-level encryption profile. </p>
     pub field_level_encryption_profile_config: FieldLevelEncryptionProfileConfig,
@@ -8118,6 +8328,7 @@ pub struct UpdateFieldLevelEncryptionProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateFieldLevelEncryptionProfileResult {
     /// <p>The result of the field-level encryption profile request. </p>
     pub e_tag: Option<String>,
@@ -8144,6 +8355,7 @@ impl UpdateFieldLevelEncryptionProfileResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePublicKeyRequest {
     /// <p>ID of the public key to be updated.</p>
     pub id: String,
@@ -8154,6 +8366,7 @@ pub struct UpdatePublicKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdatePublicKeyResult {
     /// <p>The current version of the update public key result. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -8176,6 +8389,7 @@ impl UpdatePublicKeyResultDeserializer {
 }
 /// <p>The request to update a streaming distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStreamingDistributionRequest {
     /// <p>The streaming distribution's id.</p>
     pub id: String,
@@ -8187,6 +8401,7 @@ pub struct UpdateStreamingDistributionRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateStreamingDistributionResult {
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -8212,6 +8427,8 @@ impl UpdateStreamingDistributionResultDeserializer {
 }
 /// <p>A complex type that specifies the following:</p> <ul> <li> <p>Whether you want viewers to use HTTP or HTTPS to request your objects.</p> </li> <li> <p>If you want viewers to use HTTPS, whether you're using an alternate domain name such as <code>example.com</code> or the CloudFront domain name for your distribution, such as <code>d111111abcdef8.cloudfront.net</code>.</p> </li> <li> <p>If you're using an alternate domain name, whether AWS Certificate Manager (ACM) provided the certificate, or you purchased a certificate from a third-party certificate authority and imported it into ACM or uploaded it to the IAM certificate store.</p> </li> </ul> <p>You must specify only one of the following values: </p> <ul> <li> <p> <a>ViewerCertificate$ACMCertificateArn</a> </p> </li> <li> <p> <a>ViewerCertificate$IAMCertificateId</a> </p> </li> <li> <p> <a>ViewerCertificate$CloudFrontDefaultCertificate</a> </p> </li> </ul> <p>Don't specify <code>false</code> for <code>CloudFrontDefaultCertificate</code>.</p> <p> <b>If you want viewers to use HTTP instead of HTTPS to request your objects</b>: Specify the following value:</p> <p> <code>&lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;</code> </p> <p>In addition, specify <code>allow-all</code> for <code>ViewerProtocolPolicy</code> for all of your cache behaviors.</p> <p> <b>If you want viewers to use HTTPS to request your objects</b>: Choose the type of certificate that you want to use based on whether you're using an alternate domain name for your objects or the CloudFront domain name:</p> <ul> <li> <p> <b>If you're using an alternate domain name, such as example.com</b>: Specify one of the following values, depending on whether ACM provided your certificate or you purchased your certificate from third-party certificate authority:</p> <ul> <li> <p> <code>&lt;ACMCertificateArn&gt;<i>ARN for ACM SSL/TLS certificate</i>&lt;ACMCertificateArn&gt;</code> where <code> <i>ARN for ACM SSL/TLS certificate</i> </code> is the ARN for the ACM SSL/TLS certificate that you want to use for this distribution.</p> </li> <li> <p> <code>&lt;IAMCertificateId&gt;<i>IAM certificate ID</i>&lt;IAMCertificateId&gt;</code> where <code> <i>IAM certificate ID</i> </code> is the ID that IAM returned when you added the certificate to the IAM certificate store.</p> </li> </ul> <p>If you specify <code>ACMCertificateArn</code> or <code>IAMCertificateId</code>, you must also specify a value for <code>SSLSupportMethod</code>.</p> <p>If you choose to use an ACM certificate or a certificate in the IAM certificate store, we recommend that you use only an alternate domain name in your object URLs (<code>https://example.com/logo.jpg</code>). If you use the domain name that is associated with your CloudFront distribution (such as <code>https://d111111abcdef8.cloudfront.net/logo.jpg</code>) and the viewer supports <code>SNI</code>, then CloudFront behaves normally. However, if the browser does not support SNI, the user's experience depends on the value that you choose for <code>SSLSupportMethod</code>:</p> <ul> <li> <p> <code>vip</code>: The viewer displays a warning because there is a mismatch between the CloudFront domain name and the domain name in your SSL/TLS certificate.</p> </li> <li> <p> <code>sni-only</code>: CloudFront drops the connection with the browser without returning the object.</p> </li> </ul> </li> <li> <p> <b>If you're using the CloudFront domain name for your distribution, such as <code>d111111abcdef8.cloudfront.net</code> </b>: Specify the following value:</p> <p> <code>&lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt; </code> </p> </li> </ul> <p>If you want viewers to use HTTPS, you must also specify one of the following values in your cache behaviors:</p> <ul> <li> <p> <code> &lt;ViewerProtocolPolicy&gt;https-only&lt;ViewerProtocolPolicy&gt;</code> </p> </li> <li> <p> <code>&lt;ViewerProtocolPolicy&gt;redirect-to-https&lt;ViewerProtocolPolicy&gt;</code> </p> </li> </ul> <p>You can also optionally require that CloudFront use HTTPS to communicate with your origin by specifying one of the following values for the applicable origins:</p> <ul> <li> <p> <code>&lt;OriginProtocolPolicy&gt;https-only&lt;OriginProtocolPolicy&gt; </code> </p> </li> <li> <p> <code>&lt;OriginProtocolPolicy&gt;match-viewer&lt;OriginProtocolPolicy&gt; </code> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS">Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ViewerCertificate {
     /// <p>For information about how and when to use <code>ACMCertificateArn</code>, see <a>ViewerCertificate</a>.</p>
     pub acm_certificate_arn: Option<String>,
@@ -8402,20 +8619,16 @@ impl CreateCloudFrontOriginAccessIdentityError {
 }
 impl fmt::Display for CreateCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCloudFrontOriginAccessIdentityError {
-    fn description(&self) -> &str {
         match *self {
-                            CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(ref cause) => cause,
-CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => cause,
-CreateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => cause,
-CreateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => cause,
-CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(ref cause) => cause
+                            CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+CreateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+CreateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => write!(f, "{}", cause),
+CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for CreateCloudFrontOriginAccessIdentityError {}
 /// Errors returned by CreateDistribution
 #[derive(Debug, PartialEq)]
 pub enum CreateDistributionError {
@@ -8534,59 +8747,55 @@ impl CreateDistributionError {
 }
 impl fmt::Display for CreateDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDistributionError {
-    fn description(&self) -> &str {
         match *self {
-                            CreateDistributionError::AccessDenied(ref cause) => cause,
-CreateDistributionError::CNAMEAlreadyExists(ref cause) => cause,
-CreateDistributionError::DistributionAlreadyExists(ref cause) => cause,
-CreateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(ref cause) => cause,
-CreateDistributionError::InconsistentQuantities(ref cause) => cause,
-CreateDistributionError::InvalidArgument(ref cause) => cause,
-CreateDistributionError::InvalidDefaultRootObject(ref cause) => cause,
-CreateDistributionError::InvalidErrorCode(ref cause) => cause,
-CreateDistributionError::InvalidForwardCookies(ref cause) => cause,
-CreateDistributionError::InvalidGeoRestrictionParameter(ref cause) => cause,
-CreateDistributionError::InvalidHeadersForS3Origin(ref cause) => cause,
-CreateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => cause,
-CreateDistributionError::InvalidLocationCode(ref cause) => cause,
-CreateDistributionError::InvalidMinimumProtocolVersion(ref cause) => cause,
-CreateDistributionError::InvalidOrigin(ref cause) => cause,
-CreateDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
-CreateDistributionError::InvalidOriginKeepaliveTimeout(ref cause) => cause,
-CreateDistributionError::InvalidOriginReadTimeout(ref cause) => cause,
-CreateDistributionError::InvalidProtocolSettings(ref cause) => cause,
-CreateDistributionError::InvalidQueryStringParameters(ref cause) => cause,
-CreateDistributionError::InvalidRelativePath(ref cause) => cause,
-CreateDistributionError::InvalidRequiredProtocol(ref cause) => cause,
-CreateDistributionError::InvalidResponseCode(ref cause) => cause,
-CreateDistributionError::InvalidTTLOrder(ref cause) => cause,
-CreateDistributionError::InvalidViewerCertificate(ref cause) => cause,
-CreateDistributionError::InvalidWebACLId(ref cause) => cause,
-CreateDistributionError::MissingBody(ref cause) => cause,
-CreateDistributionError::NoSuchFieldLevelEncryptionConfig(ref cause) => cause,
-CreateDistributionError::NoSuchOrigin(ref cause) => cause,
-CreateDistributionError::TooManyCacheBehaviors(ref cause) => cause,
-CreateDistributionError::TooManyCertificates(ref cause) => cause,
-CreateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => cause,
-CreateDistributionError::TooManyDistributionCNAMEs(ref cause) => cause,
-CreateDistributionError::TooManyDistributions(ref cause) => cause,
-CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => cause,
-CreateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,
-CreateDistributionError::TooManyHeadersInForwardedValues(ref cause) => cause,
-CreateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => cause,
-CreateDistributionError::TooManyOriginCustomHeaders(ref cause) => cause,
-CreateDistributionError::TooManyOriginGroupsPerDistribution(ref cause) => cause,
-CreateDistributionError::TooManyOrigins(ref cause) => cause,
-CreateDistributionError::TooManyQueryStringParameters(ref cause) => cause,
-CreateDistributionError::TooManyTrustedSigners(ref cause) => cause,
-CreateDistributionError::TrustedSignerDoesNotExist(ref cause) => cause
+                            CreateDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::CNAMEAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::DistributionAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidDefaultRootObject(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidErrorCode(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidForwardCookies(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidGeoRestrictionParameter(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidHeadersForS3Origin(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidLocationCode(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidMinimumProtocolVersion(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidOrigin(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidOriginAccessIdentity(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidOriginKeepaliveTimeout(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidOriginReadTimeout(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidProtocolSettings(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidQueryStringParameters(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidRelativePath(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidRequiredProtocol(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidResponseCode(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidTTLOrder(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidViewerCertificate(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidWebACLId(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::MissingBody(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::NoSuchOrigin(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyCacheBehaviors(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributionCNAMEs(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributions(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyHeadersInForwardedValues(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyOriginCustomHeaders(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyOriginGroupsPerDistribution(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyOrigins(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyQueryStringParameters(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyTrustedSigners(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TrustedSignerDoesNotExist(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for CreateDistributionError {}
 /// Errors returned by CreateDistributionWithTags
 #[derive(Debug, PartialEq)]
 pub enum CreateDistributionWithTagsError {
@@ -8709,60 +8918,56 @@ impl CreateDistributionWithTagsError {
 }
 impl fmt::Display for CreateDistributionWithTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDistributionWithTagsError {
-    fn description(&self) -> &str {
         match *self {
-                            CreateDistributionWithTagsError::AccessDenied(ref cause) => cause,
-CreateDistributionWithTagsError::CNAMEAlreadyExists(ref cause) => cause,
-CreateDistributionWithTagsError::DistributionAlreadyExists(ref cause) => cause,
-CreateDistributionWithTagsError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(ref cause) => cause,
-CreateDistributionWithTagsError::InconsistentQuantities(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidArgument(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidDefaultRootObject(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidErrorCode(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidForwardCookies(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidHeadersForS3Origin(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidLocationCode(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidOrigin(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidOriginReadTimeout(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidProtocolSettings(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidQueryStringParameters(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidRelativePath(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidRequiredProtocol(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidResponseCode(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidTTLOrder(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidTagging(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidViewerCertificate(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidWebACLId(ref cause) => cause,
-CreateDistributionWithTagsError::MissingBody(ref cause) => cause,
-CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(ref cause) => cause,
-CreateDistributionWithTagsError::NoSuchOrigin(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyCacheBehaviors(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyCertificates(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyDistributionCNAMEs(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyDistributions(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyOriginCustomHeaders(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyOrigins(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyQueryStringParameters(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyTrustedSigners(ref cause) => cause,
-CreateDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => cause
+                            CreateDistributionWithTagsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::CNAMEAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::DistributionAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidDefaultRootObject(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidErrorCode(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidForwardCookies(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidHeadersForS3Origin(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidLocationCode(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidOrigin(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidOriginReadTimeout(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidProtocolSettings(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidQueryStringParameters(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidRelativePath(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidRequiredProtocol(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidResponseCode(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidTTLOrder(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidTagging(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidViewerCertificate(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidWebACLId(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::MissingBody(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::NoSuchOrigin(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyCacheBehaviors(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributionCNAMEs(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributions(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyOriginCustomHeaders(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyOrigins(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyQueryStringParameters(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyTrustedSigners(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for CreateDistributionWithTagsError {}
 /// Errors returned by CreateFieldLevelEncryptionConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateFieldLevelEncryptionConfigError {
@@ -8811,23 +9016,19 @@ impl CreateFieldLevelEncryptionConfigError {
 }
 impl fmt::Display for CreateFieldLevelEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFieldLevelEncryptionConfigError {
-    fn description(&self) -> &str {
         match *self {
-                            CreateFieldLevelEncryptionConfigError::FieldLevelEncryptionConfigAlreadyExists(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::InconsistentQuantities(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::InvalidArgument(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionConfigs(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(ref cause) => cause
+                            CreateFieldLevelEncryptionConfigError::FieldLevelEncryptionConfigAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionConfigs(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for CreateFieldLevelEncryptionConfigError {}
 /// Errors returned by CreateFieldLevelEncryptionProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateFieldLevelEncryptionProfileError {
@@ -8876,23 +9077,19 @@ impl CreateFieldLevelEncryptionProfileError {
 }
 impl fmt::Display for CreateFieldLevelEncryptionProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFieldLevelEncryptionProfileError {
-    fn description(&self) -> &str {
         match *self {
-                            CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::InconsistentQuantities(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::InvalidArgument(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::NoSuchPublicKey(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionProfiles(ref cause) => cause
+                            CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::NoSuchPublicKey(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionProfiles(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for CreateFieldLevelEncryptionProfileError {}
 /// Errors returned by CreateInvalidation
 #[derive(Debug, PartialEq)]
 pub enum CreateInvalidationError {
@@ -8974,22 +9171,20 @@ impl CreateInvalidationError {
 }
 impl fmt::Display for CreateInvalidationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInvalidationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInvalidationError::AccessDenied(ref cause) => cause,
-            CreateInvalidationError::BatchTooLarge(ref cause) => cause,
-            CreateInvalidationError::InconsistentQuantities(ref cause) => cause,
-            CreateInvalidationError::InvalidArgument(ref cause) => cause,
-            CreateInvalidationError::MissingBody(ref cause) => cause,
-            CreateInvalidationError::NoSuchDistribution(ref cause) => cause,
-            CreateInvalidationError::TooManyInvalidationsInProgress(ref cause) => cause,
+            CreateInvalidationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateInvalidationError::BatchTooLarge(ref cause) => write!(f, "{}", cause),
+            CreateInvalidationError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+            CreateInvalidationError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateInvalidationError::MissingBody(ref cause) => write!(f, "{}", cause),
+            CreateInvalidationError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
+            CreateInvalidationError::TooManyInvalidationsInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateInvalidationError {}
 /// Errors returned by CreatePublicKey
 #[derive(Debug, PartialEq)]
 pub enum CreatePublicKeyError {
@@ -9041,18 +9236,14 @@ impl CreatePublicKeyError {
 }
 impl fmt::Display for CreatePublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePublicKeyError::InvalidArgument(ref cause) => cause,
-            CreatePublicKeyError::PublicKeyAlreadyExists(ref cause) => cause,
-            CreatePublicKeyError::TooManyPublicKeys(ref cause) => cause,
+            CreatePublicKeyError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreatePublicKeyError::PublicKeyAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreatePublicKeyError::TooManyPublicKeys(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePublicKeyError {}
 /// Errors returned by CreateStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamingDistributionError {
@@ -9185,31 +9376,39 @@ impl CreateStreamingDistributionError {
 }
 impl fmt::Display for CreateStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStreamingDistributionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStreamingDistributionError::AccessDenied(ref cause) => cause,
-            CreateStreamingDistributionError::CNAMEAlreadyExists(ref cause) => cause,
-            CreateStreamingDistributionError::InconsistentQuantities(ref cause) => cause,
-            CreateStreamingDistributionError::InvalidArgument(ref cause) => cause,
-            CreateStreamingDistributionError::InvalidOrigin(ref cause) => cause,
-            CreateStreamingDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
-            CreateStreamingDistributionError::MissingBody(ref cause) => cause,
+            CreateStreamingDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateStreamingDistributionError::CNAMEAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionError::InconsistentQuantities(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateStreamingDistributionError::InvalidOrigin(ref cause) => write!(f, "{}", cause),
+            CreateStreamingDistributionError::InvalidOriginAccessIdentity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionError::MissingBody(ref cause) => write!(f, "{}", cause),
             CreateStreamingDistributionError::StreamingDistributionAlreadyExists(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateStreamingDistributionError::TooManyStreamingDistributions(ref cause) => cause,
-            CreateStreamingDistributionError::TooManyTrustedSigners(ref cause) => cause,
-            CreateStreamingDistributionError::TrustedSignerDoesNotExist(ref cause) => cause,
+            CreateStreamingDistributionError::TooManyStreamingDistributions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionError::TooManyTrustedSigners(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionError::TrustedSignerDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateStreamingDistributionError {}
 /// Errors returned by CreateStreamingDistributionWithTags
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamingDistributionWithTagsError {
@@ -9268,36 +9467,50 @@ impl CreateStreamingDistributionWithTagsError {
 }
 impl fmt::Display for CreateStreamingDistributionWithTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStreamingDistributionWithTagsError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStreamingDistributionWithTagsError::AccessDenied(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::InconsistentQuantities(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::InvalidArgument(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::InvalidOrigin(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => {
-                cause
+            CreateStreamingDistributionWithTagsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
             }
-            CreateStreamingDistributionWithTagsError::InvalidTagging(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::MissingBody(ref cause) => cause,
+            CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::InconsistentQuantities(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::InvalidOrigin(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::InvalidTagging(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::MissingBody(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => cause,
+            CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateStreamingDistributionWithTagsError {}
 /// Errors returned by DeleteCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum DeleteCloudFrontOriginAccessIdentityError {
@@ -9340,24 +9553,26 @@ impl DeleteCloudFrontOriginAccessIdentityError {
 }
 impl fmt::Display for DeleteCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCloudFrontOriginAccessIdentityError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,
+            DeleteCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(
                 ref cause,
-            ) => cause,
-            DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
                 ref cause,
-            ) => cause,
-            DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteCloudFrontOriginAccessIdentityError {}
 /// Errors returned by DeleteDistribution
 #[derive(Debug, PartialEq)]
 pub enum DeleteDistributionError {
@@ -9423,20 +9638,16 @@ impl DeleteDistributionError {
 }
 impl fmt::Display for DeleteDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDistributionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDistributionError::AccessDenied(ref cause) => cause,
-            DeleteDistributionError::DistributionNotDisabled(ref cause) => cause,
-            DeleteDistributionError::InvalidIfMatchVersion(ref cause) => cause,
-            DeleteDistributionError::NoSuchDistribution(ref cause) => cause,
-            DeleteDistributionError::PreconditionFailed(ref cause) => cause,
+            DeleteDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::DistributionNotDisabled(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDistributionError {}
 /// Errors returned by DeleteFieldLevelEncryptionConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteFieldLevelEncryptionConfigError {
@@ -9514,24 +9725,26 @@ impl DeleteFieldLevelEncryptionConfigError {
 }
 impl fmt::Display for DeleteFieldLevelEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFieldLevelEncryptionConfigError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFieldLevelEncryptionConfigError::AccessDenied(ref cause) => cause,
+            DeleteFieldLevelEncryptionConfigError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteFieldLevelEncryptionConfigError::FieldLevelEncryptionConfigInUse(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DeleteFieldLevelEncryptionConfigError::InvalidIfMatchVersion(ref cause) => cause,
+            DeleteFieldLevelEncryptionConfigError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DeleteFieldLevelEncryptionConfigError::PreconditionFailed(ref cause) => cause,
+            DeleteFieldLevelEncryptionConfigError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteFieldLevelEncryptionConfigError {}
 /// Errors returned by DeleteFieldLevelEncryptionProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteFieldLevelEncryptionProfileError {
@@ -9605,24 +9818,26 @@ impl DeleteFieldLevelEncryptionProfileError {
 }
 impl fmt::Display for DeleteFieldLevelEncryptionProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFieldLevelEncryptionProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFieldLevelEncryptionProfileError::AccessDenied(ref cause) => cause,
-            DeleteFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileInUse(ref cause) => {
-                cause
+            DeleteFieldLevelEncryptionProfileError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
             }
-            DeleteFieldLevelEncryptionProfileError::InvalidIfMatchVersion(ref cause) => cause,
+            DeleteFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteFieldLevelEncryptionProfileError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(
                 ref cause,
-            ) => cause,
-            DeleteFieldLevelEncryptionProfileError::PreconditionFailed(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DeleteFieldLevelEncryptionProfileError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteFieldLevelEncryptionProfileError {}
 /// Errors returned by DeletePublicKey
 #[derive(Debug, PartialEq)]
 pub enum DeletePublicKeyError {
@@ -9688,20 +9903,16 @@ impl DeletePublicKeyError {
 }
 impl fmt::Display for DeletePublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePublicKeyError::AccessDenied(ref cause) => cause,
-            DeletePublicKeyError::InvalidIfMatchVersion(ref cause) => cause,
-            DeletePublicKeyError::NoSuchPublicKey(ref cause) => cause,
-            DeletePublicKeyError::PreconditionFailed(ref cause) => cause,
-            DeletePublicKeyError::PublicKeyInUse(ref cause) => cause,
+            DeletePublicKeyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeletePublicKeyError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            DeletePublicKeyError::NoSuchPublicKey(ref cause) => write!(f, "{}", cause),
+            DeletePublicKeyError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            DeletePublicKeyError::PublicKeyInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePublicKeyError {}
 /// Errors returned by DeleteStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum DeleteStreamingDistributionError {
@@ -9777,20 +9988,24 @@ impl DeleteStreamingDistributionError {
 }
 impl fmt::Display for DeleteStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStreamingDistributionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStreamingDistributionError::AccessDenied(ref cause) => cause,
-            DeleteStreamingDistributionError::InvalidIfMatchVersion(ref cause) => cause,
-            DeleteStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => cause,
-            DeleteStreamingDistributionError::PreconditionFailed(ref cause) => cause,
-            DeleteStreamingDistributionError::StreamingDistributionNotDisabled(ref cause) => cause,
+            DeleteStreamingDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteStreamingDistributionError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteStreamingDistributionError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteStreamingDistributionError::StreamingDistributionNotDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteStreamingDistributionError {}
 /// Errors returned by GetCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum GetCloudFrontOriginAccessIdentityError {
@@ -9827,19 +10042,17 @@ impl GetCloudFrontOriginAccessIdentityError {
 }
 impl fmt::Display for GetCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCloudFrontOriginAccessIdentityError {
-    fn description(&self) -> &str {
         match *self {
-            GetCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,
+            GetCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCloudFrontOriginAccessIdentityError {}
 /// Errors returned by GetCloudFrontOriginAccessIdentityConfig
 #[derive(Debug, PartialEq)]
 pub enum GetCloudFrontOriginAccessIdentityConfigError {
@@ -9876,19 +10089,17 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
 }
 impl fmt::Display for GetCloudFrontOriginAccessIdentityConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCloudFrontOriginAccessIdentityConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(ref cause) => cause,
+            GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCloudFrontOriginAccessIdentityConfigError {}
 /// Errors returned by GetDistribution
 #[derive(Debug, PartialEq)]
 pub enum GetDistributionError {
@@ -9933,17 +10144,13 @@ impl GetDistributionError {
 }
 impl fmt::Display for GetDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDistributionError {
-    fn description(&self) -> &str {
         match *self {
-            GetDistributionError::AccessDenied(ref cause) => cause,
-            GetDistributionError::NoSuchDistribution(ref cause) => cause,
+            GetDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDistributionError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDistributionError {}
 /// Errors returned by GetDistributionConfig
 #[derive(Debug, PartialEq)]
 pub enum GetDistributionConfigError {
@@ -9988,17 +10195,13 @@ impl GetDistributionConfigError {
 }
 impl fmt::Display for GetDistributionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDistributionConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetDistributionConfigError::AccessDenied(ref cause) => cause,
-            GetDistributionConfigError::NoSuchDistribution(ref cause) => cause,
+            GetDistributionConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDistributionConfigError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDistributionConfigError {}
 /// Errors returned by GetFieldLevelEncryption
 #[derive(Debug, PartialEq)]
 pub enum GetFieldLevelEncryptionError {
@@ -10045,17 +10248,15 @@ impl GetFieldLevelEncryptionError {
 }
 impl fmt::Display for GetFieldLevelEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFieldLevelEncryptionError {
-    fn description(&self) -> &str {
         match *self {
-            GetFieldLevelEncryptionError::AccessDenied(ref cause) => cause,
-            GetFieldLevelEncryptionError::NoSuchFieldLevelEncryptionConfig(ref cause) => cause,
+            GetFieldLevelEncryptionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetFieldLevelEncryptionError::NoSuchFieldLevelEncryptionConfig(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetFieldLevelEncryptionError {}
 /// Errors returned by GetFieldLevelEncryptionConfig
 #[derive(Debug, PartialEq)]
 pub enum GetFieldLevelEncryptionConfigError {
@@ -10104,19 +10305,15 @@ impl GetFieldLevelEncryptionConfigError {
 }
 impl fmt::Display for GetFieldLevelEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFieldLevelEncryptionConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetFieldLevelEncryptionConfigError::AccessDenied(ref cause) => cause,
+            GetFieldLevelEncryptionConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
             GetFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GetFieldLevelEncryptionConfigError {}
 /// Errors returned by GetFieldLevelEncryptionProfile
 #[derive(Debug, PartialEq)]
 pub enum GetFieldLevelEncryptionProfileError {
@@ -10165,19 +10362,15 @@ impl GetFieldLevelEncryptionProfileError {
 }
 impl fmt::Display for GetFieldLevelEncryptionProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFieldLevelEncryptionProfileError {
-    fn description(&self) -> &str {
         match *self {
-            GetFieldLevelEncryptionProfileError::AccessDenied(ref cause) => cause,
+            GetFieldLevelEncryptionProfileError::AccessDenied(ref cause) => write!(f, "{}", cause),
             GetFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GetFieldLevelEncryptionProfileError {}
 /// Errors returned by GetFieldLevelEncryptionProfileConfig
 #[derive(Debug, PartialEq)]
 pub enum GetFieldLevelEncryptionProfileConfigError {
@@ -10214,19 +10407,17 @@ impl GetFieldLevelEncryptionProfileConfigError {
 }
 impl fmt::Display for GetFieldLevelEncryptionProfileConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFieldLevelEncryptionProfileConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetFieldLevelEncryptionProfileConfigError::AccessDenied(ref cause) => cause,
+            GetFieldLevelEncryptionProfileConfigError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetFieldLevelEncryptionProfileConfigError::NoSuchFieldLevelEncryptionProfile(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFieldLevelEncryptionProfileConfigError {}
 /// Errors returned by GetInvalidation
 #[derive(Debug, PartialEq)]
 pub enum GetInvalidationError {
@@ -10278,18 +10469,14 @@ impl GetInvalidationError {
 }
 impl fmt::Display for GetInvalidationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInvalidationError {
-    fn description(&self) -> &str {
         match *self {
-            GetInvalidationError::AccessDenied(ref cause) => cause,
-            GetInvalidationError::NoSuchDistribution(ref cause) => cause,
-            GetInvalidationError::NoSuchInvalidation(ref cause) => cause,
+            GetInvalidationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInvalidationError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
+            GetInvalidationError::NoSuchInvalidation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInvalidationError {}
 /// Errors returned by GetPublicKey
 #[derive(Debug, PartialEq)]
 pub enum GetPublicKeyError {
@@ -10334,17 +10521,13 @@ impl GetPublicKeyError {
 }
 impl fmt::Display for GetPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            GetPublicKeyError::AccessDenied(ref cause) => cause,
-            GetPublicKeyError::NoSuchPublicKey(ref cause) => cause,
+            GetPublicKeyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyError::NoSuchPublicKey(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPublicKeyError {}
 /// Errors returned by GetPublicKeyConfig
 #[derive(Debug, PartialEq)]
 pub enum GetPublicKeyConfigError {
@@ -10389,17 +10572,13 @@ impl GetPublicKeyConfigError {
 }
 impl fmt::Display for GetPublicKeyConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPublicKeyConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetPublicKeyConfigError::AccessDenied(ref cause) => cause,
-            GetPublicKeyConfigError::NoSuchPublicKey(ref cause) => cause,
+            GetPublicKeyConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyConfigError::NoSuchPublicKey(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPublicKeyConfigError {}
 /// Errors returned by GetStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum GetStreamingDistributionError {
@@ -10446,17 +10625,15 @@ impl GetStreamingDistributionError {
 }
 impl fmt::Display for GetStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStreamingDistributionError {
-    fn description(&self) -> &str {
         match *self {
-            GetStreamingDistributionError::AccessDenied(ref cause) => cause,
-            GetStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => cause,
+            GetStreamingDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetStreamingDistributionError {}
 /// Errors returned by GetStreamingDistributionConfig
 #[derive(Debug, PartialEq)]
 pub enum GetStreamingDistributionConfigError {
@@ -10505,17 +10682,15 @@ impl GetStreamingDistributionConfigError {
 }
 impl fmt::Display for GetStreamingDistributionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStreamingDistributionConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetStreamingDistributionConfigError::AccessDenied(ref cause) => cause,
-            GetStreamingDistributionConfigError::NoSuchStreamingDistribution(ref cause) => cause,
+            GetStreamingDistributionConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetStreamingDistributionConfigError::NoSuchStreamingDistribution(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetStreamingDistributionConfigError {}
 /// Errors returned by ListCloudFrontOriginAccessIdentities
 #[derive(Debug, PartialEq)]
 pub enum ListCloudFrontOriginAccessIdentitiesError {
@@ -10557,16 +10732,14 @@ impl ListCloudFrontOriginAccessIdentitiesError {
 }
 impl fmt::Display for ListCloudFrontOriginAccessIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCloudFrontOriginAccessIdentitiesError {
-    fn description(&self) -> &str {
         match *self {
-            ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(ref cause) => cause,
+            ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListCloudFrontOriginAccessIdentitiesError {}
 /// Errors returned by ListDistributions
 #[derive(Debug, PartialEq)]
 pub enum ListDistributionsError {
@@ -10604,16 +10777,12 @@ impl ListDistributionsError {
 }
 impl fmt::Display for ListDistributionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDistributionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDistributionsError::InvalidArgument(ref cause) => cause,
+            ListDistributionsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDistributionsError {}
 /// Errors returned by ListDistributionsByWebACLId
 #[derive(Debug, PartialEq)]
 pub enum ListDistributionsByWebACLIdError {
@@ -10660,17 +10829,13 @@ impl ListDistributionsByWebACLIdError {
 }
 impl fmt::Display for ListDistributionsByWebACLIdError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDistributionsByWebACLIdError {
-    fn description(&self) -> &str {
         match *self {
-            ListDistributionsByWebACLIdError::InvalidArgument(ref cause) => cause,
-            ListDistributionsByWebACLIdError::InvalidWebACLId(ref cause) => cause,
+            ListDistributionsByWebACLIdError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListDistributionsByWebACLIdError::InvalidWebACLId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDistributionsByWebACLIdError {}
 /// Errors returned by ListFieldLevelEncryptionConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListFieldLevelEncryptionConfigsError {
@@ -10712,16 +10877,14 @@ impl ListFieldLevelEncryptionConfigsError {
 }
 impl fmt::Display for ListFieldLevelEncryptionConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFieldLevelEncryptionConfigsError {
-    fn description(&self) -> &str {
         match *self {
-            ListFieldLevelEncryptionConfigsError::InvalidArgument(ref cause) => cause,
+            ListFieldLevelEncryptionConfigsError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListFieldLevelEncryptionConfigsError {}
 /// Errors returned by ListFieldLevelEncryptionProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListFieldLevelEncryptionProfilesError {
@@ -10763,16 +10926,14 @@ impl ListFieldLevelEncryptionProfilesError {
 }
 impl fmt::Display for ListFieldLevelEncryptionProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFieldLevelEncryptionProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            ListFieldLevelEncryptionProfilesError::InvalidArgument(ref cause) => cause,
+            ListFieldLevelEncryptionProfilesError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListFieldLevelEncryptionProfilesError {}
 /// Errors returned by ListInvalidations
 #[derive(Debug, PartialEq)]
 pub enum ListInvalidationsError {
@@ -10824,18 +10985,14 @@ impl ListInvalidationsError {
 }
 impl fmt::Display for ListInvalidationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInvalidationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListInvalidationsError::AccessDenied(ref cause) => cause,
-            ListInvalidationsError::InvalidArgument(ref cause) => cause,
-            ListInvalidationsError::NoSuchDistribution(ref cause) => cause,
+            ListInvalidationsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListInvalidationsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListInvalidationsError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInvalidationsError {}
 /// Errors returned by ListPublicKeys
 #[derive(Debug, PartialEq)]
 pub enum ListPublicKeysError {
@@ -10873,16 +11030,12 @@ impl ListPublicKeysError {
 }
 impl fmt::Display for ListPublicKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPublicKeysError {
-    fn description(&self) -> &str {
         match *self {
-            ListPublicKeysError::InvalidArgument(ref cause) => cause,
+            ListPublicKeysError::InvalidArgument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPublicKeysError {}
 /// Errors returned by ListStreamingDistributions
 #[derive(Debug, PartialEq)]
 pub enum ListStreamingDistributionsError {
@@ -10922,16 +11075,12 @@ impl ListStreamingDistributionsError {
 }
 impl fmt::Display for ListStreamingDistributionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStreamingDistributionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStreamingDistributionsError::InvalidArgument(ref cause) => cause,
+            ListStreamingDistributionsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStreamingDistributionsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -10990,19 +11139,15 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::AccessDenied(ref cause) => cause,
-            ListTagsForResourceError::InvalidArgument(ref cause) => cause,
-            ListTagsForResourceError::InvalidTagging(ref cause) => cause,
-            ListTagsForResourceError::NoSuchResource(ref cause) => cause,
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidTagging(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NoSuchResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -11061,19 +11206,15 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AccessDenied(ref cause) => cause,
-            TagResourceError::InvalidArgument(ref cause) => cause,
-            TagResourceError::InvalidTagging(ref cause) => cause,
-            TagResourceError::NoSuchResource(ref cause) => cause,
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidTagging(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NoSuchResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -11132,19 +11273,15 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AccessDenied(ref cause) => cause,
-            UntagResourceError::InvalidArgument(ref cause) => cause,
-            UntagResourceError::InvalidTagging(ref cause) => cause,
-            UntagResourceError::NoSuchResource(ref cause) => cause,
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidTagging(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NoSuchResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum UpdateCloudFrontOriginAccessIdentityError {
@@ -11193,25 +11330,35 @@ impl UpdateCloudFrontOriginAccessIdentityError {
 }
 impl fmt::Display for UpdateCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCloudFrontOriginAccessIdentityError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(ref cause) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => cause,
+            UpdateCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => {
+                write!(f, "{}", cause)
+            }
             UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
                 ref cause,
-            ) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateCloudFrontOriginAccessIdentityError {}
 /// Errors returned by UpdateDistribution
 #[derive(Debug, PartialEq)]
 pub enum UpdateDistributionError {
@@ -11330,59 +11477,55 @@ impl UpdateDistributionError {
 }
 impl fmt::Display for UpdateDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDistributionError {
-    fn description(&self) -> &str {
         match *self {
-                            UpdateDistributionError::AccessDenied(ref cause) => cause,
-UpdateDistributionError::CNAMEAlreadyExists(ref cause) => cause,
-UpdateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(ref cause) => cause,
-UpdateDistributionError::IllegalUpdate(ref cause) => cause,
-UpdateDistributionError::InconsistentQuantities(ref cause) => cause,
-UpdateDistributionError::InvalidArgument(ref cause) => cause,
-UpdateDistributionError::InvalidDefaultRootObject(ref cause) => cause,
-UpdateDistributionError::InvalidErrorCode(ref cause) => cause,
-UpdateDistributionError::InvalidForwardCookies(ref cause) => cause,
-UpdateDistributionError::InvalidGeoRestrictionParameter(ref cause) => cause,
-UpdateDistributionError::InvalidHeadersForS3Origin(ref cause) => cause,
-UpdateDistributionError::InvalidIfMatchVersion(ref cause) => cause,
-UpdateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => cause,
-UpdateDistributionError::InvalidLocationCode(ref cause) => cause,
-UpdateDistributionError::InvalidMinimumProtocolVersion(ref cause) => cause,
-UpdateDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
-UpdateDistributionError::InvalidOriginKeepaliveTimeout(ref cause) => cause,
-UpdateDistributionError::InvalidOriginReadTimeout(ref cause) => cause,
-UpdateDistributionError::InvalidQueryStringParameters(ref cause) => cause,
-UpdateDistributionError::InvalidRelativePath(ref cause) => cause,
-UpdateDistributionError::InvalidRequiredProtocol(ref cause) => cause,
-UpdateDistributionError::InvalidResponseCode(ref cause) => cause,
-UpdateDistributionError::InvalidTTLOrder(ref cause) => cause,
-UpdateDistributionError::InvalidViewerCertificate(ref cause) => cause,
-UpdateDistributionError::InvalidWebACLId(ref cause) => cause,
-UpdateDistributionError::MissingBody(ref cause) => cause,
-UpdateDistributionError::NoSuchDistribution(ref cause) => cause,
-UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(ref cause) => cause,
-UpdateDistributionError::NoSuchOrigin(ref cause) => cause,
-UpdateDistributionError::PreconditionFailed(ref cause) => cause,
-UpdateDistributionError::TooManyCacheBehaviors(ref cause) => cause,
-UpdateDistributionError::TooManyCertificates(ref cause) => cause,
-UpdateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => cause,
-UpdateDistributionError::TooManyDistributionCNAMEs(ref cause) => cause,
-UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => cause,
-UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,
-UpdateDistributionError::TooManyHeadersInForwardedValues(ref cause) => cause,
-UpdateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => cause,
-UpdateDistributionError::TooManyOriginCustomHeaders(ref cause) => cause,
-UpdateDistributionError::TooManyOriginGroupsPerDistribution(ref cause) => cause,
-UpdateDistributionError::TooManyOrigins(ref cause) => cause,
-UpdateDistributionError::TooManyQueryStringParameters(ref cause) => cause,
-UpdateDistributionError::TooManyTrustedSigners(ref cause) => cause,
-UpdateDistributionError::TrustedSignerDoesNotExist(ref cause) => cause
+                            UpdateDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::CNAMEAlreadyExists(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::IllegalUpdate(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidDefaultRootObject(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidErrorCode(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidForwardCookies(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidGeoRestrictionParameter(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidHeadersForS3Origin(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidLocationCode(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidMinimumProtocolVersion(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidOriginAccessIdentity(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidOriginKeepaliveTimeout(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidOriginReadTimeout(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidQueryStringParameters(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidRelativePath(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidRequiredProtocol(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidResponseCode(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidTTLOrder(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidViewerCertificate(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidWebACLId(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::MissingBody(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::NoSuchOrigin(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyCacheBehaviors(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyDistributionCNAMEs(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyHeadersInForwardedValues(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyOriginCustomHeaders(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyOriginGroupsPerDistribution(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyOrigins(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyQueryStringParameters(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyTrustedSigners(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TrustedSignerDoesNotExist(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for UpdateDistributionError {}
 /// Errors returned by UpdateFieldLevelEncryptionConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateFieldLevelEncryptionConfigError {
@@ -11437,26 +11580,22 @@ impl UpdateFieldLevelEncryptionConfigError {
 }
 impl fmt::Display for UpdateFieldLevelEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFieldLevelEncryptionConfigError {
-    fn description(&self) -> &str {
         match *self {
-                            UpdateFieldLevelEncryptionConfigError::AccessDenied(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::IllegalUpdate(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::InconsistentQuantities(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::InvalidArgument(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::InvalidIfMatchVersion(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::PreconditionFailed(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(ref cause) => cause
+                            UpdateFieldLevelEncryptionConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::IllegalUpdate(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for UpdateFieldLevelEncryptionConfigError {}
 /// Errors returned by UpdateFieldLevelEncryptionProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateFieldLevelEncryptionProfileError {
@@ -11513,27 +11652,23 @@ impl UpdateFieldLevelEncryptionProfileError {
 }
 impl fmt::Display for UpdateFieldLevelEncryptionProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFieldLevelEncryptionProfileError {
-    fn description(&self) -> &str {
         match *self {
-                            UpdateFieldLevelEncryptionProfileError::AccessDenied(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::IllegalUpdate(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::InconsistentQuantities(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::InvalidArgument(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::InvalidIfMatchVersion(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::NoSuchPublicKey(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::PreconditionFailed(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(ref cause) => cause
+                            UpdateFieldLevelEncryptionProfileError::AccessDenied(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::IllegalUpdate(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::NoSuchPublicKey(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for UpdateFieldLevelEncryptionProfileError {}
 /// Errors returned by UpdatePublicKey
 #[derive(Debug, PartialEq)]
 pub enum UpdatePublicKeyError {
@@ -11615,22 +11750,20 @@ impl UpdatePublicKeyError {
 }
 impl fmt::Display for UpdatePublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePublicKeyError::AccessDenied(ref cause) => cause,
-            UpdatePublicKeyError::CannotChangeImmutablePublicKeyFields(ref cause) => cause,
-            UpdatePublicKeyError::IllegalUpdate(ref cause) => cause,
-            UpdatePublicKeyError::InvalidArgument(ref cause) => cause,
-            UpdatePublicKeyError::InvalidIfMatchVersion(ref cause) => cause,
-            UpdatePublicKeyError::NoSuchPublicKey(ref cause) => cause,
-            UpdatePublicKeyError::PreconditionFailed(ref cause) => cause,
+            UpdatePublicKeyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdatePublicKeyError::CannotChangeImmutablePublicKeyFields(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePublicKeyError::IllegalUpdate(ref cause) => write!(f, "{}", cause),
+            UpdatePublicKeyError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdatePublicKeyError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            UpdatePublicKeyError::NoSuchPublicKey(ref cause) => write!(f, "{}", cause),
+            UpdatePublicKeyError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePublicKeyError {}
 /// Errors returned by UpdateStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum UpdateStreamingDistributionError {
@@ -11772,30 +11905,42 @@ impl UpdateStreamingDistributionError {
 }
 impl fmt::Display for UpdateStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStreamingDistributionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStreamingDistributionError::AccessDenied(ref cause) => cause,
-            UpdateStreamingDistributionError::CNAMEAlreadyExists(ref cause) => cause,
-            UpdateStreamingDistributionError::IllegalUpdate(ref cause) => cause,
-            UpdateStreamingDistributionError::InconsistentQuantities(ref cause) => cause,
-            UpdateStreamingDistributionError::InvalidArgument(ref cause) => cause,
-            UpdateStreamingDistributionError::InvalidIfMatchVersion(ref cause) => cause,
-            UpdateStreamingDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
-            UpdateStreamingDistributionError::MissingBody(ref cause) => cause,
-            UpdateStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => cause,
-            UpdateStreamingDistributionError::PreconditionFailed(ref cause) => cause,
-            UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(ref cause) => {
-                cause
+            UpdateStreamingDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateStreamingDistributionError::CNAMEAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
             }
-            UpdateStreamingDistributionError::TooManyTrustedSigners(ref cause) => cause,
-            UpdateStreamingDistributionError::TrustedSignerDoesNotExist(ref cause) => cause,
+            UpdateStreamingDistributionError::IllegalUpdate(ref cause) => write!(f, "{}", cause),
+            UpdateStreamingDistributionError::InconsistentQuantities(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateStreamingDistributionError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::InvalidOriginAccessIdentity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::MissingBody(ref cause) => write!(f, "{}", cause),
+            UpdateStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::TooManyTrustedSigners(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::TrustedSignerDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateStreamingDistributionError {}
 /// Trait representing the capabilities of the CloudFront API. CloudFront clients implement this trait.
 pub trait CloudFront {
     /// <p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>

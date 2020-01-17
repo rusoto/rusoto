@@ -57,6 +57,7 @@ impl ActionNameListSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddPermissionRequest {
     /// <p>The AWS account number of the <a href="https://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P">principal</a> who is given permission. The principal must have an AWS account, but does not need to be signed up for Amazon SQS. For information about locating the AWS account identification, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-making-api-requests.html#sqs-api-request-authentication">Your AWS Identifiers</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>
     pub aws_account_ids: Vec<String>,
@@ -105,6 +106,7 @@ impl AttributeNameListSerializer {
 
 /// <p>Gives a detailed description of the result of an action on each entry in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BatchResultErrorEntry {
     /// <p>An error code representing why the action failed on this entry.</p>
     pub code: String,
@@ -228,6 +230,7 @@ impl BooleanDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChangeMessageVisibilityBatchRequest {
     /// <p>A list of receipt handles of the messages for which the visibility timeout must be changed.</p>
     pub entries: Vec<ChangeMessageVisibilityBatchRequestEntry>,
@@ -255,6 +258,7 @@ impl ChangeMessageVisibilityBatchRequestSerializer {
 
 /// <p>Encloses a receipt handle and an entry id for each message in <code> <a>ChangeMessageVisibilityBatch</a>.</code> </p> <important> <p>All of the following list parameters must be prefixed with <code>ChangeMessageVisibilityBatchRequestEntry.n</code>, where <code>n</code> is an integer value starting with <code>1</code>. For example, a parameter list for this action might look like this:</p> </important> <p> <code>&amp;ChangeMessageVisibilityBatchRequestEntry.1.Id=change_visibility_msg_2</code> </p> <p> <code>&amp;ChangeMessageVisibilityBatchRequestEntry.1.ReceiptHandle=your_receipt_handle</code> </p> <p> <code>&amp;ChangeMessageVisibilityBatchRequestEntry.1.VisibilityTimeout=45</code> </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChangeMessageVisibilityBatchRequestEntry {
     /// <p><p>An identifier for this particular receipt handle used to communicate the result.</p> <note> <p>The <code>Id</code>s of a batch request need to be unique within a request</p> </note></p>
     pub id: String,
@@ -301,6 +305,7 @@ impl ChangeMessageVisibilityBatchRequestEntryListSerializer {
 
 /// <p>For each message in the batch, the response contains a <code> <a>ChangeMessageVisibilityBatchResultEntry</a> </code> tag if the message succeeds or a <code> <a>BatchResultErrorEntry</a> </code> tag if the message fails.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ChangeMessageVisibilityBatchResult {
     /// <p>A list of <code> <a>BatchResultErrorEntry</a> </code> items.</p>
     pub failed: Vec<BatchResultErrorEntry>,
@@ -344,6 +349,7 @@ impl ChangeMessageVisibilityBatchResultDeserializer {
 }
 /// <p>Encloses the <code>Id</code> of an entry in <code> <a>ChangeMessageVisibilityBatch</a>.</code> </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ChangeMessageVisibilityBatchResultEntry {
     /// <p>Represents a message whose visibility timeout has been changed successfully.</p>
     pub id: String,
@@ -403,6 +409,7 @@ impl ChangeMessageVisibilityBatchResultEntryListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChangeMessageVisibilityRequest {
     /// <p>The URL of the Amazon SQS queue whose message's visibility is changed.</p> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_url: String,
@@ -435,6 +442,7 @@ impl ChangeMessageVisibilityRequestSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateQueueRequest {
     /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>CreateQueue</code> action uses:</p> <ul> <li> <p> <code>DelaySeconds</code> - The length of time, in seconds, for which the delivery of all messages in the queue is delayed. Valid values: An integer from 0 to 900 seconds (15 minutes). Default: 0. </p> </li> <li> <p> <code>MaximumMessageSize</code> - The limit of how many bytes a message can contain before Amazon SQS rejects it. Valid values: An integer from 1,024 bytes (1 KiB) to 262,144 bytes (256 KiB). Default: 262,144 (256 KiB). </p> </li> <li> <p> <code>MessageRetentionPeriod</code> - The length of time, in seconds, for which Amazon SQS retains a message. Valid values: An integer from 60 seconds (1 minute) to 1,209,600 seconds (14 days). Default: 345,600 (4 days). </p> </li> <li> <p> <code>Policy</code> - The queue&#39;s policy. A valid AWS policy. For more information about policy structure, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/PoliciesOverview.html">Overview of AWS IAM Policies</a> in the <i>Amazon IAM User Guide</i>. </p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> - The length of time, in seconds, for which a <code> <a>ReceiveMessage</a> </code> action waits for a message to arrive. Valid values: An integer from 0 to 20 (seconds). Default: 0. </p> </li> <li> <p> <code>RedrivePolicy</code> - The string that includes the parameters for the dead-letter queue functionality of the source queue. For more information about the redrive policy and dead-letter queues, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html">Using Amazon SQS Dead-Letter Queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>. </p> <ul> <li> <p> <code>deadLetterTargetArn</code> - The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages after the value of <code>maxReceiveCount</code> is exceeded.</p> </li> <li> <p> <code>maxReceiveCount</code> - The number of times a message is delivered to the source queue before being moved to the dead-letter queue. When the <code>ReceiveCount</code> for a message exceeds the <code>maxReceiveCount</code> for a queue, Amazon SQS moves the message to the dead-letter-queue.</p> </li> </ul> <note> <p>The dead-letter queue of a FIFO queue must also be a FIFO queue. Similarly, the dead-letter queue of a standard queue must also be a standard queue.</p> </note> </li> <li> <p> <code>VisibilityTimeout</code> - The visibility timeout for the queue, in seconds. Valid values: An integer from 0 to 43,200 (12 hours). Default: 30. For more information about the visibility timeout, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html">Visibility Timeout</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> - The ID of an AWS-managed customer master key (CMK) for Amazon SQS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-sse-key-terms">Key Terms</a>. While the alias of the AWS-managed CMK for Amazon SQS is always <code>alias/aws/sqs</code>, the alias of a custom CMK can, for example, be <code>alias/<i>MyAlias</i> </code>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>. </p> </li> <li> <p> <code>KmsDataKeyReusePeriodSeconds</code> - The length of time, in seconds, for which Amazon SQS can reuse a <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys">data key</a> to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours). Default: 300 (5 minutes). A shorter time period provides better security but results in more calls to KMS which might incur charges after Free Tier. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work">How Does the Data Key Reuse Period Work?</a>. </p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">FIFO (first-in-first-out) queues</a>:</p> <ul> <li> <p> <code>FifoQueue</code> - Designates a queue as FIFO. Valid values: <code>true</code>, <code>false</code>. If you don&#39;t specify the <code>FifoQueue</code> attribute, Amazon SQS creates a standard queue. You can provide this attribute only during queue creation. You can&#39;t change it for an existing queue. When you set this attribute, you must also provide the <code>MessageGroupId</code> for your messages explicitly.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-understanding-logic">FIFO Queue Logic</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </li> <li> <p> <code>ContentBasedDeduplication</code> - Enables content-based deduplication. Valid values: <code>true</code>, <code>false</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing">Exactly-Once Processing</a> in the <i>Amazon Simple Queue Service Developer Guide</i>. </p> <ul> <li> <p>Every message must have a unique <code>MessageDeduplicationId</code>,</p> <ul> <li> <p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p> </li> <li> <p>If you aren&#39;t able to provide a <code>MessageDeduplicationId</code> and you enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message). </p> </li> <li> <p>If you don&#39;t provide a <code>MessageDeduplicationId</code> and the queue doesn&#39;t have <code>ContentBasedDeduplication</code> set, the action fails with an error.</p> </li> <li> <p>If the queue has <code>ContentBasedDeduplication</code> set, your <code>MessageDeduplicationId</code> overrides the generated one.</p> </li> </ul> </li> <li> <p>When <code>ContentBasedDeduplication</code> is in effect, messages with identical content sent within the deduplication interval are treated as duplicates and only one copy of the message is delivered.</p> </li> <li> <p>If you send one message with <code>ContentBasedDeduplication</code> enabled and then another message with a <code>MessageDeduplicationId</code> that is the same as the one generated for the first <code>MessageDeduplicationId</code>, the two messages are treated as duplicates and only one copy of the message is delivered. </p> </li> </ul> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -469,6 +477,7 @@ impl CreateQueueRequestSerializer {
 
 /// <p>Returns the <code>QueueUrl</code> attribute of the created queue.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateQueueResult {
     /// <p>The URL of the created Amazon SQS queue.</p>
     pub queue_url: Option<String>,
@@ -494,6 +503,7 @@ impl CreateQueueResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMessageBatchRequest {
     /// <p>A list of receipt handles for the messages to be deleted.</p>
     pub entries: Vec<DeleteMessageBatchRequestEntry>,
@@ -521,6 +531,7 @@ impl DeleteMessageBatchRequestSerializer {
 
 /// <p>Encloses a receipt handle and an identifier for it.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMessageBatchRequestEntry {
     /// <p><p>An identifier for this particular receipt handle. This is used to communicate the result.</p> <note> <p>The <code>Id</code>s of a batch request need to be unique within a request</p> </note></p>
     pub id: String,
@@ -558,6 +569,7 @@ impl DeleteMessageBatchRequestEntryListSerializer {
 
 /// <p>For each message in the batch, the response contains a <code> <a>DeleteMessageBatchResultEntry</a> </code> tag if the message is deleted or a <code> <a>BatchResultErrorEntry</a> </code> tag if the message can't be deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteMessageBatchResult {
     /// <p>A list of <code> <a>BatchResultErrorEntry</a> </code> items.</p>
     pub failed: Vec<BatchResultErrorEntry>,
@@ -601,6 +613,7 @@ impl DeleteMessageBatchResultDeserializer {
 }
 /// <p>Encloses the <code>Id</code> of an entry in <code> <a>DeleteMessageBatch</a>.</code> </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteMessageBatchResultEntry {
     /// <p>Represents a successfully deleted message.</p>
     pub id: String,
@@ -659,6 +672,7 @@ impl DeleteMessageBatchResultEntryListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMessageRequest {
     /// <p>The URL of the Amazon SQS queue from which messages are deleted.</p> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_url: String,
@@ -685,6 +699,7 @@ impl DeleteMessageRequestSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQueueRequest {
     /// <p>The URL of the Amazon SQS queue to delete.</p> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_url: String,
@@ -705,6 +720,7 @@ impl DeleteQueueRequestSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueueAttributesRequest {
     /// <p><p>A list of attributes for which to retrieve information.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note> <p>The following attributes are supported:</p> <ul> <li> <p> <code>All</code> - Returns all values. </p> </li> <li> <p> <code>ApproximateNumberOfMessages</code> - Returns the approximate number of messages available for retrieval from the queue.</p> </li> <li> <p> <code>ApproximateNumberOfMessagesDelayed</code> - Returns the approximate number of messages in the queue that are delayed and not available for reading immediately. This can happen when the queue is configured as a delay queue or when a message has been sent with a delay parameter.</p> </li> <li> <p> <code>ApproximateNumberOfMessagesNotVisible</code> - Returns the approximate number of messages that are in flight. Messages are considered to be <i>in flight</i> if they have been sent to a client but have not yet been deleted or have not yet reached the end of their visibility window. </p> </li> <li> <p> <code>CreatedTimestamp</code> - Returns the time when the queue was created in seconds (<a href="http://en.wikipedia.org/wiki/Unix_time">epoch time</a>).</p> </li> <li> <p> <code>DelaySeconds</code> - Returns the default delay on the queue in seconds.</p> </li> <li> <p> <code>LastModifiedTimestamp</code> - Returns the time when the queue was last changed in seconds (<a href="http://en.wikipedia.org/wiki/Unix_time">epoch time</a>).</p> </li> <li> <p> <code>MaximumMessageSize</code> - Returns the limit of how many bytes a message can contain before Amazon SQS rejects it.</p> </li> <li> <p> <code>MessageRetentionPeriod</code> - Returns the length of time, in seconds, for which Amazon SQS retains a message.</p> </li> <li> <p> <code>Policy</code> - Returns the policy of the queue.</p> </li> <li> <p> <code>QueueArn</code> - Returns the Amazon resource name (ARN) of the queue.</p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> - Returns the length of time, in seconds, for which the <code>ReceiveMessage</code> action waits for a message to arrive. </p> </li> <li> <p> <code>RedrivePolicy</code> - Returns the string that includes the parameters for dead-letter queue functionality of the source queue. For more information about the redrive policy and dead-letter queues, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html">Using Amazon SQS Dead-Letter Queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>. </p> <ul> <li> <p> <code>deadLetterTargetArn</code> - The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages after the value of <code>maxReceiveCount</code> is exceeded.</p> </li> <li> <p> <code>maxReceiveCount</code> - The number of times a message is delivered to the source queue before being moved to the dead-letter queue. When the <code>ReceiveCount</code> for a message exceeds the <code>maxReceiveCount</code> for a queue, Amazon SQS moves the message to the dead-letter-queue.</p> </li> </ul> </li> <li> <p> <code>VisibilityTimeout</code> - Returns the visibility timeout for the queue. For more information about the visibility timeout, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html">Visibility Timeout</a> in the <i>Amazon Simple Queue Service Developer Guide</i>. </p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> - Returns the ID of an AWS-managed customer master key (CMK) for Amazon SQS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-sse-key-terms">Key Terms</a>. </p> </li> <li> <p> <code>KmsDataKeyReusePeriodSeconds</code> - Returns the length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work">How Does the Data Key Reuse Period Work?</a>. </p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">FIFO (first-in-first-out) queues</a>:</p> <ul> <li> <p> <code>FifoQueue</code> - Returns whether the queue is FIFO. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-understanding-logic">FIFO Queue Logic</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <note> <p>To determine whether a queue is <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">FIFO</a>, you can check whether <code>QueueName</code> ends with the <code>.fifo</code> suffix.</p> </note> </li> <li> <p> <code>ContentBasedDeduplication</code> - Returns whether content-based deduplication is enabled for the queue. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing">Exactly-Once Processing</a> in the <i>Amazon Simple Queue Service Developer Guide</i>. </p> </li> </ul></p>
     pub attribute_names: Option<Vec<String>>,
@@ -734,6 +750,7 @@ impl GetQueueAttributesRequestSerializer {
 
 /// <p>A list of returned queue attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetQueueAttributesResult {
     /// <p>A map of attributes to their respective values.</p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -766,6 +783,7 @@ impl GetQueueAttributesResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueueUrlRequest {
     /// <p>The name of the queue whose URL must be fetched. Maximum 80 characters. Valid values: alphanumeric characters, hyphens (<code>-</code>), and underscores (<code>_</code>).</p> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_name: String,
@@ -794,6 +812,7 @@ impl GetQueueUrlRequestSerializer {
 
 /// <p>For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-api-responses.html">Interpreting Responses</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetQueueUrlResult {
     /// <p>The URL of the queue.</p>
     pub queue_url: Option<String>,
@@ -819,6 +838,7 @@ impl GetQueueUrlResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeadLetterSourceQueuesRequest {
     /// <p>The URL of a dead-letter queue.</p> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_url: String,
@@ -839,6 +859,7 @@ impl ListDeadLetterSourceQueuesRequestSerializer {
 
 /// <p>A list of your dead letter source queues.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDeadLetterSourceQueuesResult {
     /// <p>A list of source queue URLs that have the <code>RedrivePolicy</code> queue attribute configured with a dead-letter queue.</p>
     pub queue_urls: Vec<String>,
@@ -868,6 +889,7 @@ impl ListDeadLetterSourceQueuesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueueTagsRequest {
     /// <p>The URL of the queue.</p>
     pub queue_url: String,
@@ -887,6 +909,7 @@ impl ListQueueTagsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListQueueTagsResult {
     /// <p>The list of all tags added to the specified queue.</p>
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -912,6 +935,7 @@ impl ListQueueTagsResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueuesRequest {
     /// <p>A string to use for filtering the list results. Only those queues whose name begins with the specified string are returned.</p> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_name_prefix: Option<String>,
@@ -934,6 +958,7 @@ impl ListQueuesRequestSerializer {
 
 /// <p>A list of your queues.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListQueuesResult {
     /// <p>A list of queue URLs, up to 1,000 entries.</p>
     pub queue_urls: Option<Vec<String>>,
@@ -961,6 +986,7 @@ impl ListQueuesResultDeserializer {
 }
 /// <p>An Amazon SQS message.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Message {
     /// <p>A map of the attributes requested in <code> <a>ReceiveMessage</a> </code> to their respective values. Supported attributes:</p> <ul> <li> <p> <code>ApproximateReceiveCount</code> </p> </li> <li> <p> <code>ApproximateFirstReceiveTimestamp</code> </p> </li> <li> <p> <code>MessageDeduplicationId</code> </p> </li> <li> <p> <code>MessageGroupId</code> </p> </li> <li> <p> <code>SenderId</code> </p> </li> <li> <p> <code>SentTimestamp</code> </p> </li> <li> <p> <code>SequenceNumber</code> </p> </li> </ul> <p> <code>ApproximateFirstReceiveTimestamp</code> and <code>SentTimestamp</code> are each returned as an integer representing the <a href="http://en.wikipedia.org/wiki/Unix_time">epoch time</a> in milliseconds.</p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -1039,6 +1065,8 @@ impl MessageAttributeNameListSerializer {
 
 /// <p>The user-specified message attribute value. For string data types, the <code>Value</code> attribute has the same restrictions on the content as the message body. For more information, see <code> <a>SendMessage</a>.</code> </p> <p> <code>Name</code>, <code>type</code>, <code>value</code> and the message body must not be empty or null. All parts of the message attribute, including <code>Name</code>, <code>Type</code>, and <code>Value</code>, are part of the message size restriction (256 KB or 262,144 bytes).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MessageAttributeValue {
     /// <p>Not implemented. Reserved for future use.</p>
     pub binary_list_values: Option<Vec<bytes::Bytes>>,
@@ -1244,6 +1272,7 @@ impl MessageSystemAttributeNameDeserializer {
 }
 /// <p>The user-specified message system attribute value. For string data types, the <code>Value</code> attribute has the same restrictions on the content as the message body. For more information, see <code> <a>SendMessage</a>.</code> </p> <p> <code>Name</code>, <code>type</code>, <code>value</code> and the message body must not be empty or null.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MessageSystemAttributeValue {
     /// <p>Not implemented. Reserved for future use.</p>
     pub binary_list_values: Option<Vec<bytes::Bytes>>,
@@ -1295,6 +1324,7 @@ impl MessageSystemAttributeValueSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurgeQueueRequest {
     /// <p>The URL of the queue from which the <code>PurgeQueue</code> action deletes messages.</p> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_url: String,
@@ -1390,6 +1420,7 @@ impl QueueUrlListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReceiveMessageRequest {
     /// <p><p>A list of attributes that need to be returned along with each message. These attributes include:</p> <ul> <li> <p> <code>All</code> - Returns all values.</p> </li> <li> <p> <code>ApproximateFirstReceiveTimestamp</code> - Returns the time the message was first received from the queue (<a href="http://en.wikipedia.org/wiki/Unix_time">epoch time</a> in milliseconds).</p> </li> <li> <p> <code>ApproximateReceiveCount</code> - Returns the number of times a message has been received from the queue but not deleted.</p> </li> <li> <p> <code>AWSTraceHeader</code> - Returns the AWS X-Ray trace header string. </p> </li> <li> <p> <code>SenderId</code> </p> <ul> <li> <p>For an IAM user, returns the IAM user ID, for example <code>ABCDEFGHI1JKLMNOPQ23R</code>.</p> </li> <li> <p>For an IAM role, returns the IAM role ID, for example <code>ABCDE1F2GH3I4JK5LMNOP:i-a123b456</code>.</p> </li> </ul> </li> <li> <p> <code>SentTimestamp</code> - Returns the time the message was sent to the queue (<a href="http://en.wikipedia.org/wiki/Unix_time">epoch time</a> in milliseconds).</p> </li> <li> <p> <code>MessageDeduplicationId</code> - Returns the value provided by the producer that calls the <code> <a>SendMessage</a> </code> action.</p> </li> <li> <p> <code>MessageGroupId</code> - Returns the value provided by the producer that calls the <code> <a>SendMessage</a> </code> action. Messages with the same <code>MessageGroupId</code> are returned in sequence.</p> </li> <li> <p> <code>SequenceNumber</code> - Returns the value provided by Amazon SQS.</p> </li> </ul></p>
     pub attribute_names: Option<Vec<String>>,
@@ -1454,6 +1485,7 @@ impl ReceiveMessageRequestSerializer {
 
 /// <p>A list of received messages.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReceiveMessageResult {
     /// <p>A list of messages.</p>
     pub messages: Option<Vec<Message>>,
@@ -1481,6 +1513,7 @@ impl ReceiveMessageResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemovePermissionRequest {
     /// <p>The identification of the permission to remove. This is the label added using the <code> <a>AddPermission</a> </code> action.</p>
     pub label: String,
@@ -1504,6 +1537,7 @@ impl RemovePermissionRequestSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendMessageBatchRequest {
     /// <p>A list of <code> <a>SendMessageBatchRequestEntry</a> </code> items.</p>
     pub entries: Vec<SendMessageBatchRequestEntry>,
@@ -1531,6 +1565,7 @@ impl SendMessageBatchRequestSerializer {
 
 /// <p>Contains the details of a single Amazon SQS message along with an <code>Id</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendMessageBatchRequestEntry {
     /// <p><p>The length of time, in seconds, for which a specific message is delayed. Valid values: 0 to 900. Maximum: 15 minutes. Messages with a positive <code>DelaySeconds</code> value become available for processing after the delay period is finished. If you don&#39;t specify a value, the default value for the queue is applied. </p> <note> <p>When you set <code>FifoQueue</code>, you can&#39;t set <code>DelaySeconds</code> per message. You can set this parameter only on a queue level.</p> </note></p>
     pub delay_seconds: Option<i64>,
@@ -1602,6 +1637,7 @@ impl SendMessageBatchRequestEntryListSerializer {
 
 /// <p>For each message in the batch, the response contains a <code> <a>SendMessageBatchResultEntry</a> </code> tag if the message succeeds or a <code> <a>BatchResultErrorEntry</a> </code> tag if the message fails.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SendMessageBatchResult {
     /// <p>A list of <code> <a>BatchResultErrorEntry</a> </code> items with error details about each message that can't be enqueued.</p>
     pub failed: Vec<BatchResultErrorEntry>,
@@ -1641,6 +1677,7 @@ impl SendMessageBatchResultDeserializer {
 }
 /// <p>Encloses a <code>MessageId</code> for a successfully-enqueued message in a <code> <a>SendMessageBatch</a>.</code> </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SendMessageBatchResultEntry {
     /// <p>An identifier for the message in this batch.</p>
     pub id: String,
@@ -1731,6 +1768,7 @@ impl SendMessageBatchResultEntryListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendMessageRequest {
     /// <p><p> The length of time, in seconds, for which to delay a specific message. Valid values: 0 to 900. Maximum: 15 minutes. Messages with a positive <code>DelaySeconds</code> value become available for processing after the delay period is finished. If you don&#39;t specify a value, the default value for the queue applies. </p> <note> <p>When you set <code>FifoQueue</code>, you can&#39;t set <code>DelaySeconds</code> per message. You can set this parameter only on a queue level.</p> </note></p>
     pub delay_seconds: Option<i64>,
@@ -1791,6 +1829,7 @@ impl SendMessageRequestSerializer {
 
 /// <p>The <code>MD5OfMessageBody</code> and <code>MessageId</code> elements.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SendMessageResult {
     /// <p>An MD5 digest of the non-URL-encoded message attribute string. You can use this attribute to verify that Amazon SQS received the message correctly. Amazon SQS URL-decodes the message before creating the MD5 digest. For information about MD5, see <a href="https://www.ietf.org/rfc/rfc1321.txt">RFC1321</a>.</p>
     pub md5_of_message_attributes: Option<String>,
@@ -1844,6 +1883,7 @@ impl SendMessageResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetQueueAttributesRequest {
     /// <p><p>A map of attributes to set.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetQueueAttributes</code> action uses:</p> <ul> <li> <p> <code>DelaySeconds</code> - The length of time, in seconds, for which the delivery of all messages in the queue is delayed. Valid values: An integer from 0 to 900 (15 minutes). Default: 0. </p> </li> <li> <p> <code>MaximumMessageSize</code> - The limit of how many bytes a message can contain before Amazon SQS rejects it. Valid values: An integer from 1,024 bytes (1 KiB) up to 262,144 bytes (256 KiB). Default: 262,144 (256 KiB). </p> </li> <li> <p> <code>MessageRetentionPeriod</code> - The length of time, in seconds, for which Amazon SQS retains a message. Valid values: An integer representing seconds, from 60 (1 minute) to 1,209,600 (14 days). Default: 345,600 (4 days). </p> </li> <li> <p> <code>Policy</code> - The queue&#39;s policy. A valid AWS policy. For more information about policy structure, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/PoliciesOverview.html">Overview of AWS IAM Policies</a> in the <i>Amazon IAM User Guide</i>. </p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> - The length of time, in seconds, for which a <code> <a>ReceiveMessage</a> </code> action waits for a message to arrive. Valid values: an integer from 0 to 20 (seconds). Default: 0. </p> </li> <li> <p> <code>RedrivePolicy</code> - The string that includes the parameters for the dead-letter queue functionality of the source queue. For more information about the redrive policy and dead-letter queues, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html">Using Amazon SQS Dead-Letter Queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>. </p> <ul> <li> <p> <code>deadLetterTargetArn</code> - The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages after the value of <code>maxReceiveCount</code> is exceeded.</p> </li> <li> <p> <code>maxReceiveCount</code> - The number of times a message is delivered to the source queue before being moved to the dead-letter queue. When the <code>ReceiveCount</code> for a message exceeds the <code>maxReceiveCount</code> for a queue, Amazon SQS moves the message to the dead-letter-queue.</p> </li> </ul> <note> <p>The dead-letter queue of a FIFO queue must also be a FIFO queue. Similarly, the dead-letter queue of a standard queue must also be a standard queue.</p> </note> </li> <li> <p> <code>VisibilityTimeout</code> - The visibility timeout for the queue, in seconds. Valid values: an integer from 0 to 43,200 (12 hours). Default: 30. For more information about the visibility timeout, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html">Visibility Timeout</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> - The ID of an AWS-managed customer master key (CMK) for Amazon SQS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-sse-key-terms">Key Terms</a>. While the alias of the AWS-managed CMK for Amazon SQS is always <code>alias/aws/sqs</code>, the alias of a custom CMK can, for example, be <code>alias/<i>MyAlias</i> </code>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>. </p> </li> <li> <p> <code>KmsDataKeyReusePeriodSeconds</code> - The length of time, in seconds, for which Amazon SQS can reuse a <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys">data key</a> to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours). Default: 300 (5 minutes). A shorter time period provides better security but results in more calls to KMS which might incur charges after Free Tier. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work">How Does the Data Key Reuse Period Work?</a>. </p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">FIFO (first-in-first-out) queues</a>:</p> <ul> <li> <p> <code>ContentBasedDeduplication</code> - Enables content-based deduplication. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing">Exactly-Once Processing</a> in the <i>Amazon Simple Queue Service Developer Guide</i>. </p> <ul> <li> <p>Every message must have a unique <code>MessageDeduplicationId</code>,</p> <ul> <li> <p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p> </li> <li> <p>If you aren&#39;t able to provide a <code>MessageDeduplicationId</code> and you enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message). </p> </li> <li> <p>If you don&#39;t provide a <code>MessageDeduplicationId</code> and the queue doesn&#39;t have <code>ContentBasedDeduplication</code> set, the action fails with an error.</p> </li> <li> <p>If the queue has <code>ContentBasedDeduplication</code> set, your <code>MessageDeduplicationId</code> overrides the generated one.</p> </li> </ul> </li> <li> <p>When <code>ContentBasedDeduplication</code> is in effect, messages with identical content sent within the deduplication interval are treated as duplicates and only one copy of the message is delivered.</p> </li> <li> <p>If you send one message with <code>ContentBasedDeduplication</code> enabled and then another message with a <code>MessageDeduplicationId</code> that is the same as the one generated for the first <code>MessageDeduplicationId</code>, the two messages are treated as duplicates and only one copy of the message is delivered. </p> </li> </ul> </li> </ul></p>
     pub attributes: ::std::collections::HashMap<String, String>,
@@ -1970,6 +2010,7 @@ impl TagMapSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagQueueRequest {
     /// <p>The URL of the queue.</p>
     pub queue_url: String,
@@ -2003,6 +2044,7 @@ impl TagValueDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagQueueRequest {
     /// <p>The URL of the queue.</p>
     pub queue_url: String,
@@ -2061,16 +2103,12 @@ impl AddPermissionError {
 }
 impl fmt::Display for AddPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddPermissionError {
-    fn description(&self) -> &str {
         match *self {
-            AddPermissionError::OverLimit(ref cause) => cause,
+            AddPermissionError::OverLimit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddPermissionError {}
 /// Errors returned by ChangeMessageVisibility
 #[derive(Debug, PartialEq)]
 pub enum ChangeMessageVisibilityError {
@@ -2117,17 +2155,15 @@ impl ChangeMessageVisibilityError {
 }
 impl fmt::Display for ChangeMessageVisibilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ChangeMessageVisibilityError {
-    fn description(&self) -> &str {
         match *self {
-            ChangeMessageVisibilityError::MessageNotInflight(ref cause) => cause,
-            ChangeMessageVisibilityError::ReceiptHandleIsInvalid(ref cause) => cause,
+            ChangeMessageVisibilityError::MessageNotInflight(ref cause) => write!(f, "{}", cause),
+            ChangeMessageVisibilityError::ReceiptHandleIsInvalid(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ChangeMessageVisibilityError {}
 /// Errors returned by ChangeMessageVisibilityBatch
 #[derive(Debug, PartialEq)]
 pub enum ChangeMessageVisibilityBatchError {
@@ -2196,19 +2232,23 @@ impl ChangeMessageVisibilityBatchError {
 }
 impl fmt::Display for ChangeMessageVisibilityBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ChangeMessageVisibilityBatchError {
-    fn description(&self) -> &str {
         match *self {
-            ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(ref cause) => cause,
-            ChangeMessageVisibilityBatchError::EmptyBatchRequest(ref cause) => cause,
-            ChangeMessageVisibilityBatchError::InvalidBatchEntryId(ref cause) => cause,
-            ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
+            ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ChangeMessageVisibilityBatchError::EmptyBatchRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ChangeMessageVisibilityBatchError::InvalidBatchEntryId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ChangeMessageVisibilityBatchError {}
 /// Errors returned by CreateQueue
 #[derive(Debug, PartialEq)]
 pub enum CreateQueueError {
@@ -2253,17 +2293,13 @@ impl CreateQueueError {
 }
 impl fmt::Display for CreateQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateQueueError {
-    fn description(&self) -> &str {
         match *self {
-            CreateQueueError::QueueDeletedRecently(ref cause) => cause,
-            CreateQueueError::QueueNameExists(ref cause) => cause,
+            CreateQueueError::QueueDeletedRecently(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::QueueNameExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateQueueError {}
 /// Errors returned by DeleteMessage
 #[derive(Debug, PartialEq)]
 pub enum DeleteMessageError {
@@ -2308,17 +2344,13 @@ impl DeleteMessageError {
 }
 impl fmt::Display for DeleteMessageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMessageError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMessageError::InvalidIdFormat(ref cause) => cause,
-            DeleteMessageError::ReceiptHandleIsInvalid(ref cause) => cause,
+            DeleteMessageError::InvalidIdFormat(ref cause) => write!(f, "{}", cause),
+            DeleteMessageError::ReceiptHandleIsInvalid(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMessageError {}
 /// Errors returned by DeleteMessageBatch
 #[derive(Debug, PartialEq)]
 pub enum DeleteMessageBatchError {
@@ -2379,19 +2411,17 @@ impl DeleteMessageBatchError {
 }
 impl fmt::Display for DeleteMessageBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMessageBatchError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMessageBatchError::BatchEntryIdsNotDistinct(ref cause) => cause,
-            DeleteMessageBatchError::EmptyBatchRequest(ref cause) => cause,
-            DeleteMessageBatchError::InvalidBatchEntryId(ref cause) => cause,
-            DeleteMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
+            DeleteMessageBatchError::BatchEntryIdsNotDistinct(ref cause) => write!(f, "{}", cause),
+            DeleteMessageBatchError::EmptyBatchRequest(ref cause) => write!(f, "{}", cause),
+            DeleteMessageBatchError::InvalidBatchEntryId(ref cause) => write!(f, "{}", cause),
+            DeleteMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteMessageBatchError {}
 /// Errors returned by DeleteQueue
 #[derive(Debug, PartialEq)]
 pub enum DeleteQueueError {}
@@ -2421,14 +2451,10 @@ impl DeleteQueueError {
 }
 impl fmt::Display for DeleteQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteQueueError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteQueueError {}
 /// Errors returned by GetQueueAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetQueueAttributesError {
@@ -2466,16 +2492,12 @@ impl GetQueueAttributesError {
 }
 impl fmt::Display for GetQueueAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQueueAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetQueueAttributesError::InvalidAttributeName(ref cause) => cause,
+            GetQueueAttributesError::InvalidAttributeName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetQueueAttributesError {}
 /// Errors returned by GetQueueUrl
 #[derive(Debug, PartialEq)]
 pub enum GetQueueUrlError {
@@ -2513,16 +2535,12 @@ impl GetQueueUrlError {
 }
 impl fmt::Display for GetQueueUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQueueUrlError {
-    fn description(&self) -> &str {
         match *self {
-            GetQueueUrlError::QueueDoesNotExist(ref cause) => cause,
+            GetQueueUrlError::QueueDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetQueueUrlError {}
 /// Errors returned by ListDeadLetterSourceQueues
 #[derive(Debug, PartialEq)]
 pub enum ListDeadLetterSourceQueuesError {
@@ -2564,16 +2582,12 @@ impl ListDeadLetterSourceQueuesError {
 }
 impl fmt::Display for ListDeadLetterSourceQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDeadLetterSourceQueuesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDeadLetterSourceQueuesError::QueueDoesNotExist(ref cause) => cause,
+            ListDeadLetterSourceQueuesError::QueueDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDeadLetterSourceQueuesError {}
 /// Errors returned by ListQueueTags
 #[derive(Debug, PartialEq)]
 pub enum ListQueueTagsError {}
@@ -2603,14 +2617,10 @@ impl ListQueueTagsError {
 }
 impl fmt::Display for ListQueueTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListQueueTagsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListQueueTagsError {}
 /// Errors returned by ListQueues
 #[derive(Debug, PartialEq)]
 pub enum ListQueuesError {}
@@ -2640,14 +2650,10 @@ impl ListQueuesError {
 }
 impl fmt::Display for ListQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListQueuesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListQueuesError {}
 /// Errors returned by PurgeQueue
 #[derive(Debug, PartialEq)]
 pub enum PurgeQueueError {
@@ -2692,17 +2698,13 @@ impl PurgeQueueError {
 }
 impl fmt::Display for PurgeQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PurgeQueueError {
-    fn description(&self) -> &str {
         match *self {
-            PurgeQueueError::PurgeQueueInProgress(ref cause) => cause,
-            PurgeQueueError::QueueDoesNotExist(ref cause) => cause,
+            PurgeQueueError::PurgeQueueInProgress(ref cause) => write!(f, "{}", cause),
+            PurgeQueueError::QueueDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PurgeQueueError {}
 /// Errors returned by ReceiveMessage
 #[derive(Debug, PartialEq)]
 pub enum ReceiveMessageError {
@@ -2740,16 +2742,12 @@ impl ReceiveMessageError {
 }
 impl fmt::Display for ReceiveMessageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReceiveMessageError {
-    fn description(&self) -> &str {
         match *self {
-            ReceiveMessageError::OverLimit(ref cause) => cause,
+            ReceiveMessageError::OverLimit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReceiveMessageError {}
 /// Errors returned by RemovePermission
 #[derive(Debug, PartialEq)]
 pub enum RemovePermissionError {}
@@ -2779,14 +2777,10 @@ impl RemovePermissionError {
 }
 impl fmt::Display for RemovePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemovePermissionError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for RemovePermissionError {}
 /// Errors returned by SendMessage
 #[derive(Debug, PartialEq)]
 pub enum SendMessageError {
@@ -2831,17 +2825,13 @@ impl SendMessageError {
 }
 impl fmt::Display for SendMessageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendMessageError {
-    fn description(&self) -> &str {
         match *self {
-            SendMessageError::InvalidMessageContents(ref cause) => cause,
-            SendMessageError::UnsupportedOperation(ref cause) => cause,
+            SendMessageError::InvalidMessageContents(ref cause) => write!(f, "{}", cause),
+            SendMessageError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendMessageError {}
 /// Errors returned by SendMessageBatch
 #[derive(Debug, PartialEq)]
 pub enum SendMessageBatchError {
@@ -2916,21 +2906,19 @@ impl SendMessageBatchError {
 }
 impl fmt::Display for SendMessageBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendMessageBatchError {
-    fn description(&self) -> &str {
         match *self {
-            SendMessageBatchError::BatchEntryIdsNotDistinct(ref cause) => cause,
-            SendMessageBatchError::BatchRequestTooLong(ref cause) => cause,
-            SendMessageBatchError::EmptyBatchRequest(ref cause) => cause,
-            SendMessageBatchError::InvalidBatchEntryId(ref cause) => cause,
-            SendMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
-            SendMessageBatchError::UnsupportedOperation(ref cause) => cause,
+            SendMessageBatchError::BatchEntryIdsNotDistinct(ref cause) => write!(f, "{}", cause),
+            SendMessageBatchError::BatchRequestTooLong(ref cause) => write!(f, "{}", cause),
+            SendMessageBatchError::EmptyBatchRequest(ref cause) => write!(f, "{}", cause),
+            SendMessageBatchError::InvalidBatchEntryId(ref cause) => write!(f, "{}", cause),
+            SendMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendMessageBatchError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendMessageBatchError {}
 /// Errors returned by SetQueueAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetQueueAttributesError {
@@ -2968,16 +2956,12 @@ impl SetQueueAttributesError {
 }
 impl fmt::Display for SetQueueAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetQueueAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetQueueAttributesError::InvalidAttributeName(ref cause) => cause,
+            SetQueueAttributesError::InvalidAttributeName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetQueueAttributesError {}
 /// Errors returned by TagQueue
 #[derive(Debug, PartialEq)]
 pub enum TagQueueError {}
@@ -3007,14 +2991,10 @@ impl TagQueueError {
 }
 impl fmt::Display for TagQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagQueueError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for TagQueueError {}
 /// Errors returned by UntagQueue
 #[derive(Debug, PartialEq)]
 pub enum UntagQueueError {}
@@ -3044,14 +3024,10 @@ impl UntagQueueError {
 }
 impl fmt::Display for UntagQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagQueueError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UntagQueueError {}
 /// Trait representing the capabilities of the Amazon SQS API. Amazon SQS clients implement this trait.
 pub trait Sqs {
     /// <p><p>Adds a permission to a queue for a specific <a href="https://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P">principal</a>. This allows sharing access to the queue.</p> <p>When you create a queue, you have full control access rights for the queue. Only you, the owner of the queue, can grant or deny permissions to the queue. For more information about these permissions, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-writing-an-sqs-policy.html#write-messages-to-shared-queue">Allow Developers to Write Messages to a Shared Queue</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <note> <ul> <li> <p> <code>AddPermission</code> generates a policy for you. You can use <code> <a>SetQueueAttributes</a> </code> to upload your policy. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-creating-custom-policies.html">Using Custom Policies with the Amazon SQS Access Policy Language</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </li> <li> <p>An Amazon SQS policy can have a maximum of 7 actions.</p> </li> <li> <p>To remove the ability to change queue permissions, you must deny permission to the <code>AddPermission</code>, <code>RemovePermission</code>, and <code>SetQueueAttributes</code> actions in your IAM policy.</p> </li> </ul> </note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=first</code> </p> <p> <code>&amp;Attribute.2=second</code> </p> <note> <p>Cross-account permissions don&#39;t apply to this action. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-customer-managed-policy-examples.html#grant-cross-account-permissions-to-role-and-user-name">Grant Cross-Account Permissions to a Role and a User Name</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </note></p>

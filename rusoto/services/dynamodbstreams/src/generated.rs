@@ -81,6 +81,7 @@ pub struct AttributeValue {
 
 /// <p>Represents the input of a <code>DescribeStream</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamInput {
     /// <p>The shard ID of the first item that this operation will evaluate. Use the value that was returned for <code>LastEvaluatedShardId</code> in the previous operation. </p>
     #[serde(rename = "ExclusiveStartShardId")]
@@ -107,6 +108,7 @@ pub struct DescribeStreamOutput {
 
 /// <p>Represents the input of a <code>GetRecords</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecordsInput {
     /// <p>The maximum number of records to return from the shard. The upper limit is 1000.</p>
     #[serde(rename = "Limit")]
@@ -133,6 +135,7 @@ pub struct GetRecordsOutput {
 
 /// <p>Represents the input of a <code>GetShardIterator</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetShardIteratorInput {
     /// <p>The sequence number of a stream record in the shard from which to start reading.</p>
     #[serde(rename = "SequenceNumber")]
@@ -187,6 +190,7 @@ pub struct KeySchemaElement {
 
 /// <p>Represents the input of a <code>ListStreams</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamsInput {
     /// <p>The ARN (Amazon Resource Name) of the first item that this operation will evaluate. Use the value that was returned for <code>LastEvaluatedStreamArn</code> in the previous operation. </p>
     #[serde(rename = "ExclusiveStartStreamArn")]
@@ -404,17 +408,13 @@ impl DescribeStreamError {
 }
 impl fmt::Display for DescribeStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStreamError::InternalServerError(ref cause) => cause,
-            DescribeStreamError::ResourceNotFound(ref cause) => cause,
+            DescribeStreamError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStreamError {}
 /// Errors returned by GetRecords
 #[derive(Debug, PartialEq)]
 pub enum GetRecordsError {
@@ -458,20 +458,16 @@ impl GetRecordsError {
 }
 impl fmt::Display for GetRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRecordsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRecordsError::ExpiredIterator(ref cause) => cause,
-            GetRecordsError::InternalServerError(ref cause) => cause,
-            GetRecordsError::LimitExceeded(ref cause) => cause,
-            GetRecordsError::ResourceNotFound(ref cause) => cause,
-            GetRecordsError::TrimmedDataAccess(ref cause) => cause,
+            GetRecordsError::ExpiredIterator(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::TrimmedDataAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRecordsError {}
 /// Errors returned by GetShardIterator
 #[derive(Debug, PartialEq)]
 pub enum GetShardIteratorError {
@@ -507,18 +503,14 @@ impl GetShardIteratorError {
 }
 impl fmt::Display for GetShardIteratorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetShardIteratorError {
-    fn description(&self) -> &str {
         match *self {
-            GetShardIteratorError::InternalServerError(ref cause) => cause,
-            GetShardIteratorError::ResourceNotFound(ref cause) => cause,
-            GetShardIteratorError::TrimmedDataAccess(ref cause) => cause,
+            GetShardIteratorError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetShardIteratorError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetShardIteratorError::TrimmedDataAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetShardIteratorError {}
 /// Errors returned by ListStreams
 #[derive(Debug, PartialEq)]
 pub enum ListStreamsError {
@@ -547,17 +539,13 @@ impl ListStreamsError {
 }
 impl fmt::Display for ListStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStreamsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStreamsError::InternalServerError(ref cause) => cause,
-            ListStreamsError::ResourceNotFound(ref cause) => cause,
+            ListStreamsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListStreamsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStreamsError {}
 /// Trait representing the capabilities of the Amazon DynamoDB Streams API. Amazon DynamoDB Streams clients implement this trait.
 pub trait DynamoDbStreams {
     /// <p>Returns information about a stream, including the current status of the stream, its Amazon Resource Name (ARN), the composition of its shards, and its corresponding DynamoDB table.</p> <note> <p>You can call <code>DescribeStream</code> at a maximum rate of 10 times per second.</p> </note> <p>Each shard in the stream has a <code>SequenceNumberRange</code> associated with it. If the <code>SequenceNumberRange</code> has a <code>StartingSequenceNumber</code> but no <code>EndingSequenceNumber</code>, then the shard is still open (able to receive more stream records). If both <code>StartingSequenceNumber</code> and <code>EndingSequenceNumber</code> are present, then that shard is closed and can no longer receive more data.</p>

@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHttpNamespaceRequest {
     /// <p>A unique string that identifies the request and that allows failed <code>CreateHttpNamespace</code> requests to be retried without the risk of executing the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp.</p>
     #[serde(rename = "CreatorRequestId")]
@@ -48,6 +49,7 @@ pub struct CreateHttpNamespaceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePrivateDnsNamespaceRequest {
     /// <p>A unique string that identifies the request and that allows failed <code>CreatePrivateDnsNamespace</code> requests to be retried without the risk of executing the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp.</p>
     #[serde(rename = "CreatorRequestId")]
@@ -75,6 +77,7 @@ pub struct CreatePrivateDnsNamespaceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePublicDnsNamespaceRequest {
     /// <p>A unique string that identifies the request and that allows failed <code>CreatePublicDnsNamespace</code> requests to be retried without the risk of executing the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp.</p>
     #[serde(rename = "CreatorRequestId")]
@@ -99,6 +102,7 @@ pub struct CreatePublicDnsNamespaceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServiceRequest {
     /// <p>A unique string that identifies the request and that allows failed <code>CreateService</code> requests to be retried without the risk of executing the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp.</p>
     #[serde(rename = "CreatorRequestId")]
@@ -139,6 +143,7 @@ pub struct CreateServiceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNamespaceRequest {
     /// <p>The ID of the namespace that you want to delete.</p>
     #[serde(rename = "Id")]
@@ -155,6 +160,7 @@ pub struct DeleteNamespaceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceRequest {
     /// <p>The ID of the service that you want to delete.</p>
     #[serde(rename = "Id")]
@@ -166,6 +172,7 @@ pub struct DeleteServiceRequest {
 pub struct DeleteServiceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterInstanceRequest {
     /// <p>The value that you specified for <code>Id</code> in the <a>RegisterInstance</a> request.</p>
     #[serde(rename = "InstanceId")]
@@ -185,6 +192,7 @@ pub struct DeregisterInstanceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DiscoverInstancesRequest {
     /// <p>The health status of the instances that you want to discover.</p>
     #[serde(rename = "HealthStatus")]
@@ -229,6 +237,7 @@ pub struct DnsConfig {
 
 /// <p>A complex type that contains information about changes to the Route 53 DNS records that AWS Cloud Map creates when you register an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DnsConfigChange {
     /// <p>An array that contains one <code>DnsRecord</code> object for each Route 53 record that you want AWS Cloud Map to create when you register an instance.</p>
     #[serde(rename = "DnsRecords")]
@@ -257,6 +266,7 @@ pub struct DnsRecord {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceRequest {
     /// <p>The ID of the instance that you want to get information about.</p>
     #[serde(rename = "InstanceId")]
@@ -276,6 +286,7 @@ pub struct GetInstanceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstancesHealthStatusRequest {
     /// <p><p>An array that contains the IDs of all the instances that you want to get the health status for.</p> <p>If you omit <code>Instances</code>, AWS Cloud Map returns the health status for all the instances that are associated with the specified service.</p> <note> <p>To get the IDs for the instances that you&#39;ve registered by using a specified service, submit a <a>ListInstances</a> request.</p> </note></p>
     #[serde(rename = "Instances")]
@@ -308,6 +319,7 @@ pub struct GetInstancesHealthStatusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNamespaceRequest {
     /// <p>The ID of the namespace that you want to get information about.</p>
     #[serde(rename = "Id")]
@@ -324,6 +336,7 @@ pub struct GetNamespaceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationRequest {
     /// <p>The ID of the operation that you want to get more information about.</p>
     #[serde(rename = "OperationId")]
@@ -340,6 +353,7 @@ pub struct GetOperationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceRequest {
     /// <p>The ID of the service that you want to get settings for.</p>
     #[serde(rename = "Id")]
@@ -448,6 +462,7 @@ pub struct InstanceSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstancesRequest {
     /// <p>The maximum number of instances that you want AWS Cloud Map to return in the response to a <code>ListInstances</code> request. If you don't specify a value for <code>MaxResults</code>, AWS Cloud Map returns up to 100 instances.</p>
     #[serde(rename = "MaxResults")]
@@ -476,6 +491,7 @@ pub struct ListInstancesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNamespacesRequest {
     /// <p>A complex type that contains specifications for the namespaces that you want to list.</p> <p>If you specify more than one filter, a namespace must match all filters to be returned by <code>ListNamespaces</code>.</p>
     #[serde(rename = "Filters")]
@@ -505,6 +521,7 @@ pub struct ListNamespacesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOperationsRequest {
     /// <p>A complex type that contains specifications for the operations that you want to list, for example, operations that you started between a specified start date and end date.</p> <p>If you specify more than one filter, an operation must match all filters to be returned by <code>ListOperations</code>.</p>
     #[serde(rename = "Filters")]
@@ -534,6 +551,7 @@ pub struct ListOperationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServicesRequest {
     /// <p>A complex type that contains specifications for the namespaces that you want to list services for. </p> <p>If you specify more than one filter, an operation must match all filters to be returned by <code>ListServices</code>.</p>
     #[serde(rename = "Filters")]
@@ -606,6 +624,7 @@ pub struct Namespace {
 
 /// <p>A complex type that identifies the namespaces that you want to list. You can choose to list public or private namespaces.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NamespaceFilter {
     /// <p><p>The operator that you want to use to determine whether <code>ListNamespaces</code> returns a namespace. Valid values for <code>condition</code> include:</p> <ul> <li> <p> <code>EQ</code>: When you specify <code>EQ</code> for the condition, you can choose to list only public namespaces or private namespaces, but not both. <code>EQ</code> is the default condition and can be omitted.</p> </li> <li> <p> <code>IN</code>: When you specify <code>IN</code> for the condition, you can choose to list public namespaces, private namespaces, or both. </p> </li> <li> <p> <code>BETWEEN</code>: Not applicable</p> </li> </ul></p>
     #[serde(rename = "Condition")]
@@ -710,6 +729,7 @@ pub struct Operation {
 
 /// <p>A complex type that lets you select the operations that you want to list.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OperationFilter {
     /// <p><p>The operator that you want to use to determine whether an operation matches the specified value. Valid values for condition include:</p> <ul> <li> <p> <code>EQ</code>: When you specify <code>EQ</code> for the condition, you can specify only one value. <code>EQ</code> is supported for <code>NAMESPACE<em>ID</code>, <code>SERVICE</em>ID</code>, <code>STATUS</code>, and <code>TYPE</code>. <code>EQ</code> is the default condition and can be omitted.</p> </li> <li> <p> <code>IN</code>: When you specify <code>IN</code> for the condition, you can specify a list of one or more values. <code>IN</code> is supported for <code>STATUS</code> and <code>TYPE</code>. An operation must match one of the specified values to be returned in the response.</p> </li> <li> <p> <code>BETWEEN</code>: Specify a start date and an end date in Unix date/time format and Coordinated Universal Time (UTC). The start date must be the first value. <code>BETWEEN</code> is supported for <code>UPDATE_DATE</code>. </p> </li> </ul></p>
     #[serde(rename = "Condition")]
@@ -738,6 +758,7 @@ pub struct OperationSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterInstanceRequest {
     /// <p>A string map that contains the following information for the service that you specify in <code>ServiceId</code>:</p> <ul> <li> <p>The attributes that apply to the records that are defined in the service. </p> </li> <li> <p>For each attribute, the applicable value.</p> </li> </ul> <p>Supported attribute keys include the following:</p> <p> <b>AWS_ALIAS_DNS_NAME</b> </p> <p> <b/> </p> <p>If you want AWS Cloud Map to create an Amazon Route 53 alias record that routes traffic to an Elastic Load Balancing load balancer, specify the DNS name that is associated with the load balancer. For information about how to get the DNS name, see "DNSName" in the topic <a href="http://docs.aws.amazon.com/Route53/latest/APIReference/API_AliasTarget.html">AliasTarget</a> in the <i>Route 53 API Reference</i>.</p> <p>Note the following:</p> <ul> <li> <p>The configuration for the service that is specified by <code>ServiceId</code> must include settings for an A record, an AAAA record, or both.</p> </li> <li> <p>In the service that is specified by <code>ServiceId</code>, the value of <code>RoutingPolicy</code> must be <code>WEIGHTED</code>.</p> </li> <li> <p>If the service that is specified by <code>ServiceId</code> includes <code>HealthCheckConfig</code> settings, AWS Cloud Map will create the Route 53 health check, but it won't associate the health check with the alias record.</p> </li> <li> <p>Auto naming currently doesn't support creating alias records that route traffic to AWS resources other than ELB load balancers.</p> </li> <li> <p>If you specify a value for <code>AWS_ALIAS_DNS_NAME</code>, don't specify values for any of the <code>AWS_INSTANCE</code> attributes.</p> </li> </ul> <p> <b>AWS_INIT_HEALTH_STATUS</b> </p> <p>If the service configuration includes <code>HealthCheckCustomConfig</code>, you can optionally use <code>AWS_INIT_HEALTH_STATUS</code> to specify the initial status of the custom health check, <code>HEALTHY</code> or <code>UNHEALTHY</code>. If you don't specify a value for <code>AWS_INIT_HEALTH_STATUS</code>, the initial status is <code>HEALTHY</code>.</p> <p> <b>AWS_INSTANCE_CNAME</b> </p> <p>If the service configuration includes a CNAME record, the domain name that you want Route 53 to return in response to DNS queries, for example, <code>example.com</code>.</p> <p>This value is required if the service specified by <code>ServiceId</code> includes settings for an CNAME record.</p> <p> <b>AWS_INSTANCE_IPV4</b> </p> <p>If the service configuration includes an A record, the IPv4 address that you want Route 53 to return in response to DNS queries, for example, <code>192.0.2.44</code>.</p> <p>This value is required if the service specified by <code>ServiceId</code> includes settings for an A record. If the service includes settings for an SRV record, you must specify a value for <code>AWS_INSTANCE_IPV4</code>, <code>AWS_INSTANCE_IPV6</code>, or both.</p> <p> <b>AWS_INSTANCE_IPV6</b> </p> <p>If the service configuration includes an AAAA record, the IPv6 address that you want Route 53 to return in response to DNS queries, for example, <code>2001:0db8:85a3:0000:0000:abcd:0001:2345</code>.</p> <p>This value is required if the service specified by <code>ServiceId</code> includes settings for an AAAA record. If the service includes settings for an SRV record, you must specify a value for <code>AWS_INSTANCE_IPV4</code>, <code>AWS_INSTANCE_IPV6</code>, or both.</p> <p> <b>AWS_INSTANCE_PORT</b> </p> <p>If the service includes an SRV record, the value that you want Route 53 to return for the port.</p> <p>If the service includes <code>HealthCheckConfig</code>, the port on the endpoint that you want Route 53 to send requests to. </p> <p>This value is required if you specified settings for an SRV record when you created the service.</p> <p> <b>Custom attributes</b> </p> <p>You can add up to 30 custom attributes. For each key-value pair, the maximum length of the attribute name is 255 characters, and the maximum length of the attribute value is 1,024 characters. </p>
     #[serde(rename = "Attributes")]
@@ -815,6 +836,7 @@ pub struct Service {
 
 /// <p>A complex type that contains changes to an existing service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ServiceChange {
     /// <p>A description for the service.</p>
     #[serde(rename = "Description")]
@@ -830,6 +852,7 @@ pub struct ServiceChange {
 
 /// <p>A complex type that lets you specify the namespaces that you want to list services for.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ServiceFilter {
     /// <p><p>The operator that you want to use to determine whether a service is returned by <code>ListServices</code>. Valid values for <code>Condition</code> include the following:</p> <ul> <li> <p> <code>EQ</code>: When you specify <code>EQ</code>, specify one namespace ID for <code>Values</code>. <code>EQ</code> is the default condition and can be omitted.</p> </li> <li> <p> <code>IN</code>: When you specify <code>IN</code>, specify a list of the IDs for the namespaces that you want <code>ListServices</code> to return a list of services for.</p> </li> <li> <p> <code>BETWEEN</code>: Not applicable.</p> </li> </ul></p>
     #[serde(rename = "Condition")]
@@ -883,6 +906,7 @@ pub struct ServiceSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstanceCustomHealthStatusRequest {
     /// <p>The ID of the instance that you want to change the health status for.</p>
     #[serde(rename = "InstanceId")]
@@ -896,6 +920,7 @@ pub struct UpdateInstanceCustomHealthStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceRequest {
     /// <p>The ID of the service that you want to update.</p>
     #[serde(rename = "Id")]
@@ -958,19 +983,15 @@ impl CreateHttpNamespaceError {
 }
 impl fmt::Display for CreateHttpNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHttpNamespaceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHttpNamespaceError::DuplicateRequest(ref cause) => cause,
-            CreateHttpNamespaceError::InvalidInput(ref cause) => cause,
-            CreateHttpNamespaceError::NamespaceAlreadyExists(ref cause) => cause,
-            CreateHttpNamespaceError::ResourceLimitExceeded(ref cause) => cause,
+            CreateHttpNamespaceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            CreateHttpNamespaceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateHttpNamespaceError::NamespaceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateHttpNamespaceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHttpNamespaceError {}
 /// Errors returned by CreatePrivateDnsNamespace
 #[derive(Debug, PartialEq)]
 pub enum CreatePrivateDnsNamespaceError {
@@ -1017,19 +1038,19 @@ impl CreatePrivateDnsNamespaceError {
 }
 impl fmt::Display for CreatePrivateDnsNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePrivateDnsNamespaceError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePrivateDnsNamespaceError::DuplicateRequest(ref cause) => cause,
-            CreatePrivateDnsNamespaceError::InvalidInput(ref cause) => cause,
-            CreatePrivateDnsNamespaceError::NamespaceAlreadyExists(ref cause) => cause,
-            CreatePrivateDnsNamespaceError::ResourceLimitExceeded(ref cause) => cause,
+            CreatePrivateDnsNamespaceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            CreatePrivateDnsNamespaceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreatePrivateDnsNamespaceError::NamespaceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePrivateDnsNamespaceError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreatePrivateDnsNamespaceError {}
 /// Errors returned by CreatePublicDnsNamespace
 #[derive(Debug, PartialEq)]
 pub enum CreatePublicDnsNamespaceError {
@@ -1076,19 +1097,19 @@ impl CreatePublicDnsNamespaceError {
 }
 impl fmt::Display for CreatePublicDnsNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePublicDnsNamespaceError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePublicDnsNamespaceError::DuplicateRequest(ref cause) => cause,
-            CreatePublicDnsNamespaceError::InvalidInput(ref cause) => cause,
-            CreatePublicDnsNamespaceError::NamespaceAlreadyExists(ref cause) => cause,
-            CreatePublicDnsNamespaceError::ResourceLimitExceeded(ref cause) => cause,
+            CreatePublicDnsNamespaceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            CreatePublicDnsNamespaceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreatePublicDnsNamespaceError::NamespaceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePublicDnsNamespaceError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreatePublicDnsNamespaceError {}
 /// Errors returned by CreateService
 #[derive(Debug, PartialEq)]
 pub enum CreateServiceError {
@@ -1127,19 +1148,15 @@ impl CreateServiceError {
 }
 impl fmt::Display for CreateServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateServiceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateServiceError::InvalidInput(ref cause) => cause,
-            CreateServiceError::NamespaceNotFound(ref cause) => cause,
-            CreateServiceError::ResourceLimitExceeded(ref cause) => cause,
-            CreateServiceError::ServiceAlreadyExists(ref cause) => cause,
+            CreateServiceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::NamespaceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::ServiceAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateServiceError {}
 /// Errors returned by DeleteNamespace
 #[derive(Debug, PartialEq)]
 pub enum DeleteNamespaceError {
@@ -1178,19 +1195,15 @@ impl DeleteNamespaceError {
 }
 impl fmt::Display for DeleteNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNamespaceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteNamespaceError::DuplicateRequest(ref cause) => cause,
-            DeleteNamespaceError::InvalidInput(ref cause) => cause,
-            DeleteNamespaceError::NamespaceNotFound(ref cause) => cause,
-            DeleteNamespaceError::ResourceInUse(ref cause) => cause,
+            DeleteNamespaceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            DeleteNamespaceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteNamespaceError::NamespaceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteNamespaceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteNamespaceError {}
 /// Errors returned by DeleteService
 #[derive(Debug, PartialEq)]
 pub enum DeleteServiceError {
@@ -1224,18 +1237,14 @@ impl DeleteServiceError {
 }
 impl fmt::Display for DeleteServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServiceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServiceError::InvalidInput(ref cause) => cause,
-            DeleteServiceError::ResourceInUse(ref cause) => cause,
-            DeleteServiceError::ServiceNotFound(ref cause) => cause,
+            DeleteServiceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteServiceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteServiceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServiceError {}
 /// Errors returned by DeregisterInstance
 #[derive(Debug, PartialEq)]
 pub enum DeregisterInstanceError {
@@ -1279,20 +1288,16 @@ impl DeregisterInstanceError {
 }
 impl fmt::Display for DeregisterInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterInstanceError::DuplicateRequest(ref cause) => cause,
-            DeregisterInstanceError::InstanceNotFound(ref cause) => cause,
-            DeregisterInstanceError::InvalidInput(ref cause) => cause,
-            DeregisterInstanceError::ResourceInUse(ref cause) => cause,
-            DeregisterInstanceError::ServiceNotFound(ref cause) => cause,
+            DeregisterInstanceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            DeregisterInstanceError::InstanceNotFound(ref cause) => write!(f, "{}", cause),
+            DeregisterInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeregisterInstanceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeregisterInstanceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterInstanceError {}
 /// Errors returned by DiscoverInstances
 #[derive(Debug, PartialEq)]
 pub enum DiscoverInstancesError {
@@ -1326,18 +1331,14 @@ impl DiscoverInstancesError {
 }
 impl fmt::Display for DiscoverInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DiscoverInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DiscoverInstancesError::InvalidInput(ref cause) => cause,
-            DiscoverInstancesError::NamespaceNotFound(ref cause) => cause,
-            DiscoverInstancesError::ServiceNotFound(ref cause) => cause,
+            DiscoverInstancesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DiscoverInstancesError::NamespaceNotFound(ref cause) => write!(f, "{}", cause),
+            DiscoverInstancesError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DiscoverInstancesError {}
 /// Errors returned by GetInstance
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceError {
@@ -1371,18 +1372,14 @@ impl GetInstanceError {
 }
 impl fmt::Display for GetInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceError::InstanceNotFound(ref cause) => cause,
-            GetInstanceError::InvalidInput(ref cause) => cause,
-            GetInstanceError::ServiceNotFound(ref cause) => cause,
+            GetInstanceError::InstanceNotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceError {}
 /// Errors returned by GetInstancesHealthStatus
 #[derive(Debug, PartialEq)]
 pub enum GetInstancesHealthStatusError {
@@ -1422,18 +1419,14 @@ impl GetInstancesHealthStatusError {
 }
 impl fmt::Display for GetInstancesHealthStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstancesHealthStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstancesHealthStatusError::InstanceNotFound(ref cause) => cause,
-            GetInstancesHealthStatusError::InvalidInput(ref cause) => cause,
-            GetInstancesHealthStatusError::ServiceNotFound(ref cause) => cause,
+            GetInstancesHealthStatusError::InstanceNotFound(ref cause) => write!(f, "{}", cause),
+            GetInstancesHealthStatusError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstancesHealthStatusError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstancesHealthStatusError {}
 /// Errors returned by GetNamespace
 #[derive(Debug, PartialEq)]
 pub enum GetNamespaceError {
@@ -1462,17 +1455,13 @@ impl GetNamespaceError {
 }
 impl fmt::Display for GetNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetNamespaceError {
-    fn description(&self) -> &str {
         match *self {
-            GetNamespaceError::InvalidInput(ref cause) => cause,
-            GetNamespaceError::NamespaceNotFound(ref cause) => cause,
+            GetNamespaceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetNamespaceError::NamespaceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetNamespaceError {}
 /// Errors returned by GetOperation
 #[derive(Debug, PartialEq)]
 pub enum GetOperationError {
@@ -1501,17 +1490,13 @@ impl GetOperationError {
 }
 impl fmt::Display for GetOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOperationError {
-    fn description(&self) -> &str {
         match *self {
-            GetOperationError::InvalidInput(ref cause) => cause,
-            GetOperationError::OperationNotFound(ref cause) => cause,
+            GetOperationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetOperationError::OperationNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOperationError {}
 /// Errors returned by GetService
 #[derive(Debug, PartialEq)]
 pub enum GetServiceError {
@@ -1540,17 +1525,13 @@ impl GetServiceError {
 }
 impl fmt::Display for GetServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServiceError {
-    fn description(&self) -> &str {
         match *self {
-            GetServiceError::InvalidInput(ref cause) => cause,
-            GetServiceError::ServiceNotFound(ref cause) => cause,
+            GetServiceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetServiceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetServiceError {}
 /// Errors returned by ListInstances
 #[derive(Debug, PartialEq)]
 pub enum ListInstancesError {
@@ -1579,17 +1560,13 @@ impl ListInstancesError {
 }
 impl fmt::Display for ListInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstancesError::InvalidInput(ref cause) => cause,
-            ListInstancesError::ServiceNotFound(ref cause) => cause,
+            ListInstancesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListInstancesError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstancesError {}
 /// Errors returned by ListNamespaces
 #[derive(Debug, PartialEq)]
 pub enum ListNamespacesError {
@@ -1613,16 +1590,12 @@ impl ListNamespacesError {
 }
 impl fmt::Display for ListNamespacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListNamespacesError {
-    fn description(&self) -> &str {
         match *self {
-            ListNamespacesError::InvalidInput(ref cause) => cause,
+            ListNamespacesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListNamespacesError {}
 /// Errors returned by ListOperations
 #[derive(Debug, PartialEq)]
 pub enum ListOperationsError {
@@ -1646,16 +1619,12 @@ impl ListOperationsError {
 }
 impl fmt::Display for ListOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOperationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListOperationsError::InvalidInput(ref cause) => cause,
+            ListOperationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOperationsError {}
 /// Errors returned by ListServices
 #[derive(Debug, PartialEq)]
 pub enum ListServicesError {
@@ -1679,16 +1648,12 @@ impl ListServicesError {
 }
 impl fmt::Display for ListServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListServicesError {
-    fn description(&self) -> &str {
         match *self {
-            ListServicesError::InvalidInput(ref cause) => cause,
+            ListServicesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListServicesError {}
 /// Errors returned by RegisterInstance
 #[derive(Debug, PartialEq)]
 pub enum RegisterInstanceError {
@@ -1734,20 +1699,16 @@ impl RegisterInstanceError {
 }
 impl fmt::Display for RegisterInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterInstanceError::DuplicateRequest(ref cause) => cause,
-            RegisterInstanceError::InvalidInput(ref cause) => cause,
-            RegisterInstanceError::ResourceInUse(ref cause) => cause,
-            RegisterInstanceError::ResourceLimitExceeded(ref cause) => cause,
-            RegisterInstanceError::ServiceNotFound(ref cause) => cause,
+            RegisterInstanceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            RegisterInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RegisterInstanceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            RegisterInstanceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            RegisterInstanceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterInstanceError {}
 /// Errors returned by UpdateInstanceCustomHealthStatus
 #[derive(Debug, PartialEq)]
 pub enum UpdateInstanceCustomHealthStatusError {
@@ -1796,19 +1757,23 @@ impl UpdateInstanceCustomHealthStatusError {
 }
 impl fmt::Display for UpdateInstanceCustomHealthStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateInstanceCustomHealthStatusError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateInstanceCustomHealthStatusError::CustomHealthNotFound(ref cause) => cause,
-            UpdateInstanceCustomHealthStatusError::InstanceNotFound(ref cause) => cause,
-            UpdateInstanceCustomHealthStatusError::InvalidInput(ref cause) => cause,
-            UpdateInstanceCustomHealthStatusError::ServiceNotFound(ref cause) => cause,
+            UpdateInstanceCustomHealthStatusError::CustomHealthNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateInstanceCustomHealthStatusError::InstanceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateInstanceCustomHealthStatusError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateInstanceCustomHealthStatusError::ServiceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateInstanceCustomHealthStatusError {}
 /// Errors returned by UpdateService
 #[derive(Debug, PartialEq)]
 pub enum UpdateServiceError {
@@ -1842,18 +1807,14 @@ impl UpdateServiceError {
 }
 impl fmt::Display for UpdateServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServiceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServiceError::DuplicateRequest(ref cause) => cause,
-            UpdateServiceError::InvalidInput(ref cause) => cause,
-            UpdateServiceError::ServiceNotFound(ref cause) => cause,
+            UpdateServiceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            UpdateServiceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateServiceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServiceError {}
 /// Trait representing the capabilities of the ServiceDiscovery API. ServiceDiscovery clients implement this trait.
 pub trait ServiceDiscovery {
     /// <p>Creates an HTTP namespace. Service instances that you register using an HTTP namespace can be discovered using a <code>DiscoverInstances</code> request but can't be discovered using DNS. </p> <p>For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>

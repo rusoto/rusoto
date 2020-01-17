@@ -48,6 +48,7 @@ pub struct ConsumedLicenseSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLicenseConfigurationRequest {
     /// <p>Description of the license configuration.</p>
     #[serde(rename = "Description")]
@@ -91,6 +92,7 @@ pub struct CreateLicenseConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLicenseConfigurationRequest {
     /// <p>ID of the license configuration.</p>
     #[serde(rename = "LicenseConfigurationArn")]
@@ -103,6 +105,7 @@ pub struct DeleteLicenseConfigurationResponse {}
 
 /// <p>A filter name and value pair that is used to return more specific results from a describe operation. Filters can be used to match a set of resources by specific criteria, such as tags, attributes, or IDs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>Name of the filter. Filter names are case-sensitive.</p>
     #[serde(rename = "Name")]
@@ -115,6 +118,7 @@ pub struct Filter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLicenseConfigurationRequest {
     /// <p>Amazon Resource Name (ARN) of the license configuration.</p>
     #[serde(rename = "LicenseConfigurationArn")]
@@ -191,6 +195,7 @@ pub struct GetLicenseConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceSettingsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -220,6 +225,7 @@ pub struct GetServiceSettingsResponse {
 
 /// <p>An inventory filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryFilter {
     /// <p>Condition of the filter.</p>
     #[serde(rename = "Condition")]
@@ -398,6 +404,7 @@ pub struct LicenseSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociationsForLicenseConfigurationRequest {
     /// <p>Amazon Resource Name (ARN) of a license configuration.</p>
     #[serde(rename = "LicenseConfigurationArn")]
@@ -426,6 +433,7 @@ pub struct ListAssociationsForLicenseConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFailuresForLicenseConfigurationOperationsRequest {
     /// <p>Amazon Resource Name of the license configuration.</p>
     #[serde(rename = "LicenseConfigurationArn")]
@@ -454,6 +462,7 @@ pub struct ListFailuresForLicenseConfigurationOperationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLicenseConfigurationsRequest {
     /// <p><p>Filters to scope the results. The following filters and logical operators are supported:</p> <ul> <li> <p> <code>licenseCountingType</code> - The dimension on which licenses are counted (vCPU). Logical operators are <code>EQUALS</code> | <code>NOT<em>EQUALS</code>.</p> </li> <li> <p> <code>enforceLicenseCount</code> - A Boolean value that indicates whether hard license enforcement is used. Logical operators are <code>EQUALS</code> | <code>NOT</em>EQUALS</code>.</p> </li> <li> <p> <code>usagelimitExceeded</code> - A Boolean value that indicates whether the available licenses have been exceeded. Logical operators are <code>EQUALS</code> | <code>NOT_EQUALS</code>.</p> </li> </ul></p>
     #[serde(rename = "Filters")]
@@ -487,6 +496,7 @@ pub struct ListLicenseConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLicenseSpecificationsForResourceRequest {
     /// <p>Maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -515,6 +525,7 @@ pub struct ListLicenseSpecificationsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceInventoryRequest {
     /// <p><p>Filters to scope the results. The following filters and logical operators are supported:</p> <ul> <li> <p> <code>account<em>id</code> - The ID of the AWS account that owns the resource. Logical operators are <code>EQUALS</code> | <code>NOT</em>EQUALS</code>.</p> </li> <li> <p> <code>application<em>name</code> - The name of the application. Logical operators are <code>EQUALS</code> | <code>BEGINS</em>WITH</code>.</p> </li> <li> <p> <code>license<em>included</code> - The type of license included. Logical operators are <code>EQUALS</code> | <code>NOT</em>EQUALS</code>. Possible values are <code>sql-server-enterprise</code> | <code>sql-server-standard</code> | <code>sql-server-web</code> | <code>windows-server-datacenter</code>.</p> </li> <li> <p> <code>platform</code> - The platform of the resource. Logical operators are <code>EQUALS</code> | <code>BEGINS<em>WITH</code>.</p> </li> <li> <p> <code>resource</em>id</code> - The ID of the resource. Logical operators are <code>EQUALS</code> | <code>NOT_EQUALS</code>.</p> </li> </ul></p>
     #[serde(rename = "Filters")]
@@ -544,6 +555,7 @@ pub struct ListResourceInventoryResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>Amazon Resource Name (ARN) of the license configuration.</p>
     #[serde(rename = "ResourceArn")]
@@ -560,6 +572,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsageForLicenseConfigurationRequest {
     /// <p><p>Filters to scope the results. The following filters and logical operators are supported:</p> <ul> <li> <p> <code>resourceArn</code> - The ARN of the license configuration resource. Logical operators are <code>EQUALS</code> | <code>NOT<em>EQUALS</code>.</p> </li> <li> <p> <code>resourceType</code> - The resource type (EC2</em>INSTANCE | EC2<em>HOST | EC2</em>AMI | SYSTEMS<em>MANAGER</em>MANAGED<em>INSTANCE). Logical operators are <code>EQUALS</code> | <code>NOT</em>EQUALS</code>.</p> </li> <li> <p> <code>resourceAccount</code> - The ID of the account that owns the resource. Logical operators are <code>EQUALS</code> | <code>NOT_EQUALS</code>.</p> </li> </ul></p>
     #[serde(rename = "Filters")]
@@ -696,6 +709,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>Amazon Resource Name (ARN) of the license configuration.</p>
     #[serde(rename = "ResourceArn")]
@@ -710,6 +724,7 @@ pub struct TagResourceRequest {
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>Amazon Resource Name (ARN) of the license configuration.</p>
     #[serde(rename = "ResourceArn")]
@@ -724,6 +739,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLicenseConfigurationRequest {
     /// <p>New description of the license configuration.</p>
     #[serde(rename = "Description")]
@@ -763,6 +779,7 @@ pub struct UpdateLicenseConfigurationRequest {
 pub struct UpdateLicenseConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLicenseSpecificationsForResourceRequest {
     /// <p>ARNs of the license configurations to add.</p>
     #[serde(rename = "AddLicenseSpecifications")]
@@ -782,6 +799,7 @@ pub struct UpdateLicenseSpecificationsForResourceRequest {
 pub struct UpdateLicenseSpecificationsForResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceSettingsRequest {
     /// <p>Activates cross-account discovery.</p>
     #[serde(rename = "EnableCrossAccountsDiscovery")]
@@ -867,21 +885,21 @@ impl CreateLicenseConfigurationError {
 }
 impl fmt::Display for CreateLicenseConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLicenseConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLicenseConfigurationError::AccessDenied(ref cause) => cause,
-            CreateLicenseConfigurationError::Authorization(ref cause) => cause,
-            CreateLicenseConfigurationError::InvalidParameterValue(ref cause) => cause,
-            CreateLicenseConfigurationError::RateLimitExceeded(ref cause) => cause,
-            CreateLicenseConfigurationError::ResourceLimitExceeded(ref cause) => cause,
-            CreateLicenseConfigurationError::ServerInternal(ref cause) => cause,
+            CreateLicenseConfigurationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateLicenseConfigurationError::Authorization(ref cause) => write!(f, "{}", cause),
+            CreateLicenseConfigurationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLicenseConfigurationError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateLicenseConfigurationError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLicenseConfigurationError::ServerInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLicenseConfigurationError {}
 /// Errors returned by DeleteLicenseConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteLicenseConfigurationError {
@@ -937,20 +955,18 @@ impl DeleteLicenseConfigurationError {
 }
 impl fmt::Display for DeleteLicenseConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLicenseConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLicenseConfigurationError::AccessDenied(ref cause) => cause,
-            DeleteLicenseConfigurationError::Authorization(ref cause) => cause,
-            DeleteLicenseConfigurationError::InvalidParameterValue(ref cause) => cause,
-            DeleteLicenseConfigurationError::RateLimitExceeded(ref cause) => cause,
-            DeleteLicenseConfigurationError::ServerInternal(ref cause) => cause,
+            DeleteLicenseConfigurationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteLicenseConfigurationError::Authorization(ref cause) => write!(f, "{}", cause),
+            DeleteLicenseConfigurationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLicenseConfigurationError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteLicenseConfigurationError::ServerInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLicenseConfigurationError {}
 /// Errors returned by GetLicenseConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetLicenseConfigurationError {
@@ -1004,20 +1020,18 @@ impl GetLicenseConfigurationError {
 }
 impl fmt::Display for GetLicenseConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLicenseConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetLicenseConfigurationError::AccessDenied(ref cause) => cause,
-            GetLicenseConfigurationError::Authorization(ref cause) => cause,
-            GetLicenseConfigurationError::InvalidParameterValue(ref cause) => cause,
-            GetLicenseConfigurationError::RateLimitExceeded(ref cause) => cause,
-            GetLicenseConfigurationError::ServerInternal(ref cause) => cause,
+            GetLicenseConfigurationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetLicenseConfigurationError::Authorization(ref cause) => write!(f, "{}", cause),
+            GetLicenseConfigurationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLicenseConfigurationError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetLicenseConfigurationError::ServerInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLicenseConfigurationError {}
 /// Errors returned by GetServiceSettings
 #[derive(Debug, PartialEq)]
 pub enum GetServiceSettingsError {
@@ -1058,19 +1072,15 @@ impl GetServiceSettingsError {
 }
 impl fmt::Display for GetServiceSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServiceSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            GetServiceSettingsError::AccessDenied(ref cause) => cause,
-            GetServiceSettingsError::Authorization(ref cause) => cause,
-            GetServiceSettingsError::RateLimitExceeded(ref cause) => cause,
-            GetServiceSettingsError::ServerInternal(ref cause) => cause,
+            GetServiceSettingsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetServiceSettingsError::Authorization(ref cause) => write!(f, "{}", cause),
+            GetServiceSettingsError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetServiceSettingsError::ServerInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetServiceSettingsError {}
 /// Errors returned by ListAssociationsForLicenseConfiguration
 #[derive(Debug, PartialEq)]
 pub enum ListAssociationsForLicenseConfigurationError {
@@ -1135,21 +1145,29 @@ impl ListAssociationsForLicenseConfigurationError {
 }
 impl fmt::Display for ListAssociationsForLicenseConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAssociationsForLicenseConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            ListAssociationsForLicenseConfigurationError::AccessDenied(ref cause) => cause,
-            ListAssociationsForLicenseConfigurationError::Authorization(ref cause) => cause,
-            ListAssociationsForLicenseConfigurationError::FilterLimitExceeded(ref cause) => cause,
-            ListAssociationsForLicenseConfigurationError::InvalidParameterValue(ref cause) => cause,
-            ListAssociationsForLicenseConfigurationError::RateLimitExceeded(ref cause) => cause,
-            ListAssociationsForLicenseConfigurationError::ServerInternal(ref cause) => cause,
+            ListAssociationsForLicenseConfigurationError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAssociationsForLicenseConfigurationError::Authorization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAssociationsForLicenseConfigurationError::FilterLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAssociationsForLicenseConfigurationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAssociationsForLicenseConfigurationError::RateLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAssociationsForLicenseConfigurationError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListAssociationsForLicenseConfigurationError {}
 /// Errors returned by ListFailuresForLicenseConfigurationOperations
 #[derive(Debug, PartialEq)]
 pub enum ListFailuresForLicenseConfigurationOperationsError {
@@ -1209,24 +1227,26 @@ impl ListFailuresForLicenseConfigurationOperationsError {
 }
 impl fmt::Display for ListFailuresForLicenseConfigurationOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFailuresForLicenseConfigurationOperationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListFailuresForLicenseConfigurationOperationsError::AccessDenied(ref cause) => cause,
-            ListFailuresForLicenseConfigurationOperationsError::Authorization(ref cause) => cause,
+            ListFailuresForLicenseConfigurationOperationsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListFailuresForLicenseConfigurationOperationsError::Authorization(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ListFailuresForLicenseConfigurationOperationsError::InvalidParameterValue(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             ListFailuresForLicenseConfigurationOperationsError::RateLimitExceeded(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            ListFailuresForLicenseConfigurationOperationsError::ServerInternal(ref cause) => cause,
+            ListFailuresForLicenseConfigurationOperationsError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListFailuresForLicenseConfigurationOperationsError {}
 /// Errors returned by ListLicenseConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListLicenseConfigurationsError {
@@ -1287,21 +1307,21 @@ impl ListLicenseConfigurationsError {
 }
 impl fmt::Display for ListLicenseConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLicenseConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListLicenseConfigurationsError::AccessDenied(ref cause) => cause,
-            ListLicenseConfigurationsError::Authorization(ref cause) => cause,
-            ListLicenseConfigurationsError::FilterLimitExceeded(ref cause) => cause,
-            ListLicenseConfigurationsError::InvalidParameterValue(ref cause) => cause,
-            ListLicenseConfigurationsError::RateLimitExceeded(ref cause) => cause,
-            ListLicenseConfigurationsError::ServerInternal(ref cause) => cause,
+            ListLicenseConfigurationsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListLicenseConfigurationsError::Authorization(ref cause) => write!(f, "{}", cause),
+            ListLicenseConfigurationsError::FilterLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLicenseConfigurationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLicenseConfigurationsError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListLicenseConfigurationsError::ServerInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListLicenseConfigurationsError {}
 /// Errors returned by ListLicenseSpecificationsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListLicenseSpecificationsForResourceError {
@@ -1357,20 +1377,26 @@ impl ListLicenseSpecificationsForResourceError {
 }
 impl fmt::Display for ListLicenseSpecificationsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLicenseSpecificationsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListLicenseSpecificationsForResourceError::AccessDenied(ref cause) => cause,
-            ListLicenseSpecificationsForResourceError::Authorization(ref cause) => cause,
-            ListLicenseSpecificationsForResourceError::InvalidParameterValue(ref cause) => cause,
-            ListLicenseSpecificationsForResourceError::RateLimitExceeded(ref cause) => cause,
-            ListLicenseSpecificationsForResourceError::ServerInternal(ref cause) => cause,
+            ListLicenseSpecificationsForResourceError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLicenseSpecificationsForResourceError::Authorization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLicenseSpecificationsForResourceError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLicenseSpecificationsForResourceError::RateLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLicenseSpecificationsForResourceError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListLicenseSpecificationsForResourceError {}
 /// Errors returned by ListResourceInventory
 #[derive(Debug, PartialEq)]
 pub enum ListResourceInventoryError {
@@ -1434,22 +1460,18 @@ impl ListResourceInventoryError {
 }
 impl fmt::Display for ListResourceInventoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourceInventoryError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourceInventoryError::AccessDenied(ref cause) => cause,
-            ListResourceInventoryError::Authorization(ref cause) => cause,
-            ListResourceInventoryError::FailedDependency(ref cause) => cause,
-            ListResourceInventoryError::FilterLimitExceeded(ref cause) => cause,
-            ListResourceInventoryError::InvalidParameterValue(ref cause) => cause,
-            ListResourceInventoryError::RateLimitExceeded(ref cause) => cause,
-            ListResourceInventoryError::ServerInternal(ref cause) => cause,
+            ListResourceInventoryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListResourceInventoryError::Authorization(ref cause) => write!(f, "{}", cause),
+            ListResourceInventoryError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            ListResourceInventoryError::FilterLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListResourceInventoryError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListResourceInventoryError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListResourceInventoryError::ServerInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResourceInventoryError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1497,20 +1519,16 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::AccessDenied(ref cause) => cause,
-            ListTagsForResourceError::Authorization(ref cause) => cause,
-            ListTagsForResourceError::InvalidParameterValue(ref cause) => cause,
-            ListTagsForResourceError::RateLimitExceeded(ref cause) => cause,
-            ListTagsForResourceError::ServerInternal(ref cause) => cause,
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Authorization(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ServerInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListUsageForLicenseConfiguration
 #[derive(Debug, PartialEq)]
 pub enum ListUsageForLicenseConfigurationError {
@@ -1573,21 +1591,29 @@ impl ListUsageForLicenseConfigurationError {
 }
 impl fmt::Display for ListUsageForLicenseConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUsageForLicenseConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            ListUsageForLicenseConfigurationError::AccessDenied(ref cause) => cause,
-            ListUsageForLicenseConfigurationError::Authorization(ref cause) => cause,
-            ListUsageForLicenseConfigurationError::FilterLimitExceeded(ref cause) => cause,
-            ListUsageForLicenseConfigurationError::InvalidParameterValue(ref cause) => cause,
-            ListUsageForLicenseConfigurationError::RateLimitExceeded(ref cause) => cause,
-            ListUsageForLicenseConfigurationError::ServerInternal(ref cause) => cause,
+            ListUsageForLicenseConfigurationError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListUsageForLicenseConfigurationError::Authorization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListUsageForLicenseConfigurationError::FilterLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListUsageForLicenseConfigurationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListUsageForLicenseConfigurationError::RateLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListUsageForLicenseConfigurationError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListUsageForLicenseConfigurationError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1631,20 +1657,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AccessDenied(ref cause) => cause,
-            TagResourceError::Authorization(ref cause) => cause,
-            TagResourceError::InvalidParameterValue(ref cause) => cause,
-            TagResourceError::RateLimitExceeded(ref cause) => cause,
-            TagResourceError::ServerInternal(ref cause) => cause,
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Authorization(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            TagResourceError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ServerInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1688,20 +1710,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AccessDenied(ref cause) => cause,
-            UntagResourceError::Authorization(ref cause) => cause,
-            UntagResourceError::InvalidParameterValue(ref cause) => cause,
-            UntagResourceError::RateLimitExceeded(ref cause) => cause,
-            UntagResourceError::ServerInternal(ref cause) => cause,
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Authorization(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ServerInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateLicenseConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateLicenseConfigurationError {
@@ -1757,20 +1775,18 @@ impl UpdateLicenseConfigurationError {
 }
 impl fmt::Display for UpdateLicenseConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateLicenseConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateLicenseConfigurationError::AccessDenied(ref cause) => cause,
-            UpdateLicenseConfigurationError::Authorization(ref cause) => cause,
-            UpdateLicenseConfigurationError::InvalidParameterValue(ref cause) => cause,
-            UpdateLicenseConfigurationError::RateLimitExceeded(ref cause) => cause,
-            UpdateLicenseConfigurationError::ServerInternal(ref cause) => cause,
+            UpdateLicenseConfigurationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateLicenseConfigurationError::Authorization(ref cause) => write!(f, "{}", cause),
+            UpdateLicenseConfigurationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseConfigurationError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateLicenseConfigurationError::ServerInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateLicenseConfigurationError {}
 /// Errors returned by UpdateLicenseSpecificationsForResource
 #[derive(Debug, PartialEq)]
 pub enum UpdateLicenseSpecificationsForResourceError {
@@ -1840,22 +1856,32 @@ impl UpdateLicenseSpecificationsForResourceError {
 }
 impl fmt::Display for UpdateLicenseSpecificationsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateLicenseSpecificationsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateLicenseSpecificationsForResourceError::AccessDenied(ref cause) => cause,
-            UpdateLicenseSpecificationsForResourceError::Authorization(ref cause) => cause,
-            UpdateLicenseSpecificationsForResourceError::InvalidParameterValue(ref cause) => cause,
-            UpdateLicenseSpecificationsForResourceError::InvalidResourceState(ref cause) => cause,
-            UpdateLicenseSpecificationsForResourceError::LicenseUsage(ref cause) => cause,
-            UpdateLicenseSpecificationsForResourceError::RateLimitExceeded(ref cause) => cause,
-            UpdateLicenseSpecificationsForResourceError::ServerInternal(ref cause) => cause,
+            UpdateLicenseSpecificationsForResourceError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseSpecificationsForResourceError::Authorization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseSpecificationsForResourceError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseSpecificationsForResourceError::InvalidResourceState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseSpecificationsForResourceError::LicenseUsage(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseSpecificationsForResourceError::RateLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseSpecificationsForResourceError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateLicenseSpecificationsForResourceError {}
 /// Errors returned by UpdateServiceSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateServiceSettingsError {
@@ -1905,20 +1931,16 @@ impl UpdateServiceSettingsError {
 }
 impl fmt::Display for UpdateServiceSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServiceSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServiceSettingsError::AccessDenied(ref cause) => cause,
-            UpdateServiceSettingsError::Authorization(ref cause) => cause,
-            UpdateServiceSettingsError::InvalidParameterValue(ref cause) => cause,
-            UpdateServiceSettingsError::RateLimitExceeded(ref cause) => cause,
-            UpdateServiceSettingsError::ServerInternal(ref cause) => cause,
+            UpdateServiceSettingsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateServiceSettingsError::Authorization(ref cause) => write!(f, "{}", cause),
+            UpdateServiceSettingsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateServiceSettingsError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateServiceSettingsError::ServerInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServiceSettingsError {}
 /// Trait representing the capabilities of the AWS License Manager API. AWS License Manager clients implement this trait.
 pub trait LicenseManager {
     /// <p>Creates a license configuration.</p> <p>A license configuration is an abstraction of a customer license agreement that can be consumed and enforced by License Manager. Components include specifications for the license type (licensing by instance, socket, CPU, or vCPU), allowed tenancy (shared tenancy, Dedicated Instance, Dedicated Host, or all of these), host affinity (how long a VM must be associated with a host), and the number of licenses purchased and used.</p>

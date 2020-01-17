@@ -93,6 +93,7 @@ pub struct BackupFailureDetails {
 
 /// <p>The request object for the <code>CreateBackup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupRequest {
     /// <p>(Optional) A string of up to 64 ASCII characters that Amazon FSx uses to ensure idempotent creation. This string is automatically filled on your behalf when you use the AWS Command Line Interface (AWS CLI) or an AWS SDK.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -119,6 +120,7 @@ pub struct CreateBackupResponse {
 
 /// <p>The request object for the <code>CreateFileSystemFromBackup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFileSystemFromBackupRequest {
     #[serde(rename = "BackupId")]
     pub backup_id: String,
@@ -155,6 +157,7 @@ pub struct CreateFileSystemFromBackupResponse {
 
 /// <p>The Lustre configuration for the file system being created. This value is required if <code>FileSystemType</code> is set to <code>LUSTRE</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFileSystemLustreConfiguration {
     /// <p>(Optional) The path in Amazon S3 where the root of your Amazon FSx file system is exported. The path must use the same Amazon S3 bucket as specified in ImportPath. You can provide an optional prefix to which new and changed data is to be exported from your Amazon FSx for Lustre file system. If an <code>ExportPath</code> value is not provided, Amazon FSx sets a default export path, <code>s3://import-bucket/FSxLustre[creation-timestamp]</code>. The timestamp is in UTC format, for example <code>s3://import-bucket/FSxLustre20181105T222312Z</code>.</p> <p>The Amazon S3 export bucket must be the same as the import bucket specified by <code>ImportPath</code>. If you only specify a bucket name, such as <code>s3://import-bucket</code>, you get a 1:1 mapping of file system objects to S3 bucket objects. This mapping means that the input data in S3 is overwritten on export. If you provide a custom prefix in the export path, such as <code>s3://import-bucket/[custom-optional-prefix]</code>, Amazon FSx exports the contents of your file system to that export prefix in the Amazon S3 bucket.</p>
     #[serde(rename = "ExportPath")]
@@ -176,6 +179,7 @@ pub struct CreateFileSystemLustreConfiguration {
 
 /// <p>The request object used to create a new Amazon FSx file system.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFileSystemRequest {
     /// <p>(Optional) A string of up to 64 ASCII characters that Amazon FSx uses to ensure idempotent creation. This string is automatically filled on your behalf when you use the AWS Command Line Interface (AWS CLI) or an AWS SDK.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -222,6 +226,7 @@ pub struct CreateFileSystemResponse {
 
 /// <p>The configuration object for the Microsoft Windows file system used in <code>CreateFileSystem</code> and <code>CreateFileSystemFromBackup</code> operations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFileSystemWindowsConfiguration {
     /// <p>The ID for an existing AWS Managed Microsoft Active Directory (AD) instance that the file system should join when it's created.</p>
     #[serde(rename = "ActiveDirectoryId")]
@@ -280,6 +285,7 @@ pub struct DataRepositoryConfiguration {
 
 /// <p>The request object for <code>DeleteBackup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupRequest {
     /// <p>The ID of the backup you want to delete.</p>
     #[serde(rename = "BackupId")]
@@ -306,6 +312,7 @@ pub struct DeleteBackupResponse {
 
 /// <p>The request object for <code>DeleteFileSystem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileSystemRequest {
     /// <p>(Optional) A string of up to 64 ASCII characters that Amazon FSx uses to ensure idempotent deletion. This is automatically filled on your behalf when using the AWS CLI or SDK.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -338,6 +345,7 @@ pub struct DeleteFileSystemResponse {
 
 /// <p>The configuration object for the Microsoft Windows file system used in the <code>DeleteFileSystem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileSystemWindowsConfiguration {
     /// <p>A set of tags for your final backup.</p>
     #[serde(rename = "FinalBackupTags")]
@@ -365,6 +373,7 @@ pub struct DeleteFileSystemWindowsResponse {
 
 /// <p>The request object for <code>DescribeBackups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBackupsRequest {
     /// <p>(Optional) IDs of the backups you want to retrieve (String). This overrides any filters. If any IDs are not found, BackupNotFound will be thrown.</p>
     #[serde(rename = "BackupIds")]
@@ -400,6 +409,7 @@ pub struct DescribeBackupsResponse {
 
 /// <p>The request object for <code>DescribeFileSystems</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFileSystemsRequest {
     /// <p>(Optional) IDs of the file systems whose descriptions you want to retrieve (String).</p>
     #[serde(rename = "FileSystemIds")]
@@ -509,6 +519,7 @@ pub struct FileSystemFailureDetails {
 
 /// <p>A filter used to restrict the results of describe calls. You can use multiple filters to return results that meet all applied filter requirements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>The name for this filter.</p>
     #[serde(rename = "Name")]
@@ -522,6 +533,7 @@ pub struct Filter {
 
 /// <p>The request object for <code>ListTagsForResource</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>(Optional) Maximum number of tags to return in the response (integer). This parameter value must be greater than 0. The number of items that Amazon FSx returns is the minimum of the <code>MaxResults</code> parameter specified in the request and the service's internal maximum number of items per page.</p>
     #[serde(rename = "MaxResults")]
@@ -591,6 +603,7 @@ pub struct SelfManagedActiveDirectoryAttributes {
 
 /// <p>The configuration that Amazon FSx uses to join the Windows File Server instance to your self-managed (including on-premises) Microsoft Active Directory (AD) directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelfManagedActiveDirectoryConfiguration {
     /// <p><p>A list of up to two IP addresses of DNS servers or domain controllers in the self-managed AD directory. The IP addresses need to be either in the same VPC CIDR range as the one in which your Amazon FSx file system is being created, or in the private IP version 4 (Iv4) address ranges, as specified in <a href="http://www.faqs.org/rfcs/rfc1918.html">RFC 1918</a>:</p> <ul> <li> <p>10.0.0.0 - 10.255.255.255 (10/8 prefix)</p> </li> <li> <p>172.16.0.0 - 172.31.255.255 (172.16/12 prefix)</p> </li> <li> <p>192.168.0.0 - 192.168.255.255 (192.168/16 prefix)</p> </li> </ul></p>
     #[serde(rename = "DnsIps")]
@@ -616,6 +629,7 @@ pub struct SelfManagedActiveDirectoryConfiguration {
 
 /// <p>The configuration that Amazon FSx uses to join the Windows File Server instance to the self-managed Microsoft Active Directory (AD) directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelfManagedActiveDirectoryConfigurationUpdates {
     /// <p>A list of up to two IP addresses of DNS servers or domain controllers in the self-managed AD directory.</p>
     #[serde(rename = "DnsIps")]
@@ -646,6 +660,7 @@ pub struct Tag {
 
 /// <p>The request object for the <code>TagResource</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the Amazon FSx resource that you want to tag.</p>
     #[serde(rename = "ResourceARN")]
@@ -662,6 +677,7 @@ pub struct TagResourceResponse {}
 
 /// <p>The request object for <code>UntagResource</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the Amazon FSx resource to untag.</p>
     #[serde(rename = "ResourceARN")]
@@ -678,6 +694,7 @@ pub struct UntagResourceResponse {}
 
 /// <p>The configuration object for Amazon FSx for Lustre file systems used in the <code>UpdateFileSystem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFileSystemLustreConfiguration {
     /// <p>The preferred time to perform weekly maintenance, in the UTC time zone.</p>
     #[serde(rename = "WeeklyMaintenanceStartTime")]
@@ -687,6 +704,7 @@ pub struct UpdateFileSystemLustreConfiguration {
 
 /// <p>The request object for the <code>UpdateFileSystem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFileSystemRequest {
     /// <p>(Optional) A string of up to 64 ASCII characters that Amazon FSx uses to ensure idempotent updates. This string is automatically filled on your behalf when you use the AWS Command Line Interface (AWS CLI) or an AWS SDK.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -715,6 +733,7 @@ pub struct UpdateFileSystemResponse {
 
 /// <p>Updates the Microsoft Windows configuration for an existing Amazon FSx for Windows File Server file system. Amazon FSx overwrites existing properties with non-null values provided in the request. If you don't specify a non-null value for a property, that property is not updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFileSystemWindowsConfiguration {
     /// <p>The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 35 days.</p>
     #[serde(rename = "AutomaticBackupRetentionDays")]
@@ -843,22 +862,18 @@ impl CreateBackupError {
 }
 impl fmt::Display for CreateBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBackupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBackupError::BackupInProgress(ref cause) => cause,
-            CreateBackupError::BadRequest(ref cause) => cause,
-            CreateBackupError::FileSystemNotFound(ref cause) => cause,
-            CreateBackupError::IncompatibleParameterError(ref cause) => cause,
-            CreateBackupError::InternalServerError(ref cause) => cause,
-            CreateBackupError::ServiceLimitExceeded(ref cause) => cause,
-            CreateBackupError::UnsupportedOperation(ref cause) => cause,
+            CreateBackupError::BackupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::ServiceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBackupError {}
 /// Errors returned by CreateFileSystem
 #[derive(Debug, PartialEq)]
 pub enum CreateFileSystemError {
@@ -934,24 +949,22 @@ impl CreateFileSystemError {
 }
 impl fmt::Display for CreateFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFileSystemError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFileSystemError::ActiveDirectoryError(ref cause) => cause,
-            CreateFileSystemError::BadRequest(ref cause) => cause,
-            CreateFileSystemError::IncompatibleParameterError(ref cause) => cause,
-            CreateFileSystemError::InternalServerError(ref cause) => cause,
-            CreateFileSystemError::InvalidExportPath(ref cause) => cause,
-            CreateFileSystemError::InvalidImportPath(ref cause) => cause,
-            CreateFileSystemError::InvalidNetworkSettings(ref cause) => cause,
-            CreateFileSystemError::MissingFileSystemConfiguration(ref cause) => cause,
-            CreateFileSystemError::ServiceLimitExceeded(ref cause) => cause,
+            CreateFileSystemError::ActiveDirectoryError(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InvalidExportPath(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InvalidImportPath(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InvalidNetworkSettings(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::MissingFileSystemConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemError::ServiceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFileSystemError {}
 /// Errors returned by CreateFileSystemFromBackup
 #[derive(Debug, PartialEq)]
 pub enum CreateFileSystemFromBackupError {
@@ -1028,23 +1041,31 @@ impl CreateFileSystemFromBackupError {
 }
 impl fmt::Display for CreateFileSystemFromBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFileSystemFromBackupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFileSystemFromBackupError::ActiveDirectoryError(ref cause) => cause,
-            CreateFileSystemFromBackupError::BackupNotFound(ref cause) => cause,
-            CreateFileSystemFromBackupError::BadRequest(ref cause) => cause,
-            CreateFileSystemFromBackupError::IncompatibleParameterError(ref cause) => cause,
-            CreateFileSystemFromBackupError::InternalServerError(ref cause) => cause,
-            CreateFileSystemFromBackupError::InvalidNetworkSettings(ref cause) => cause,
-            CreateFileSystemFromBackupError::MissingFileSystemConfiguration(ref cause) => cause,
-            CreateFileSystemFromBackupError::ServiceLimitExceeded(ref cause) => cause,
+            CreateFileSystemFromBackupError::ActiveDirectoryError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemFromBackupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemFromBackupError::IncompatibleParameterError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::InvalidNetworkSettings(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::MissingFileSystemConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::ServiceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateFileSystemFromBackupError {}
 /// Errors returned by DeleteBackup
 #[derive(Debug, PartialEq)]
 pub enum DeleteBackupError {
@@ -1095,21 +1116,17 @@ impl DeleteBackupError {
 }
 impl fmt::Display for DeleteBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBackupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBackupError::BackupInProgress(ref cause) => cause,
-            DeleteBackupError::BackupNotFound(ref cause) => cause,
-            DeleteBackupError::BackupRestoring(ref cause) => cause,
-            DeleteBackupError::BadRequest(ref cause) => cause,
-            DeleteBackupError::IncompatibleParameterError(ref cause) => cause,
-            DeleteBackupError::InternalServerError(ref cause) => cause,
+            DeleteBackupError::BackupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::BackupRestoring(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBackupError {}
 /// Errors returned by DeleteFileSystem
 #[derive(Debug, PartialEq)]
 pub enum DeleteFileSystemError {
@@ -1159,20 +1176,16 @@ impl DeleteFileSystemError {
 }
 impl fmt::Display for DeleteFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFileSystemError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFileSystemError::BadRequest(ref cause) => cause,
-            DeleteFileSystemError::FileSystemNotFound(ref cause) => cause,
-            DeleteFileSystemError::IncompatibleParameterError(ref cause) => cause,
-            DeleteFileSystemError::InternalServerError(ref cause) => cause,
-            DeleteFileSystemError::ServiceLimitExceeded(ref cause) => cause,
+            DeleteFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::ServiceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFileSystemError {}
 /// Errors returned by DescribeBackups
 #[derive(Debug, PartialEq)]
 pub enum DescribeBackupsError {
@@ -1211,19 +1224,15 @@ impl DescribeBackupsError {
 }
 impl fmt::Display for DescribeBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBackupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBackupsError::BackupNotFound(ref cause) => cause,
-            DescribeBackupsError::BadRequest(ref cause) => cause,
-            DescribeBackupsError::FileSystemNotFound(ref cause) => cause,
-            DescribeBackupsError::InternalServerError(ref cause) => cause,
+            DescribeBackupsError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBackupsError {}
 /// Errors returned by DescribeFileSystems
 #[derive(Debug, PartialEq)]
 pub enum DescribeFileSystemsError {
@@ -1261,18 +1270,14 @@ impl DescribeFileSystemsError {
 }
 impl fmt::Display for DescribeFileSystemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFileSystemsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFileSystemsError::BadRequest(ref cause) => cause,
-            DescribeFileSystemsError::FileSystemNotFound(ref cause) => cause,
-            DescribeFileSystemsError::InternalServerError(ref cause) => cause,
+            DescribeFileSystemsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeFileSystemsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFileSystemsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFileSystemsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1324,20 +1329,18 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
-            ListTagsForResourceError::InternalServerError(ref cause) => cause,
-            ListTagsForResourceError::NotServiceResourceError(ref cause) => cause,
-            ListTagsForResourceError::ResourceDoesNotSupportTagging(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotServiceResourceError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceDoesNotSupportTagging(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1381,20 +1384,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
-            TagResourceError::InternalServerError(ref cause) => cause,
-            TagResourceError::NotServiceResourceError(ref cause) => cause,
-            TagResourceError::ResourceDoesNotSupportTagging(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotServiceResourceError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceDoesNotSupportTagging(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1442,20 +1441,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
-            UntagResourceError::InternalServerError(ref cause) => cause,
-            UntagResourceError::NotServiceResourceError(ref cause) => cause,
-            UntagResourceError::ResourceDoesNotSupportTagging(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotServiceResourceError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceDoesNotSupportTagging(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateFileSystem
 #[derive(Debug, PartialEq)]
 pub enum UpdateFileSystemError {
@@ -1512,21 +1507,19 @@ impl UpdateFileSystemError {
 }
 impl fmt::Display for UpdateFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFileSystemError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFileSystemError::BadRequest(ref cause) => cause,
-            UpdateFileSystemError::FileSystemNotFound(ref cause) => cause,
-            UpdateFileSystemError::IncompatibleParameterError(ref cause) => cause,
-            UpdateFileSystemError::InternalServerError(ref cause) => cause,
-            UpdateFileSystemError::MissingFileSystemConfiguration(ref cause) => cause,
-            UpdateFileSystemError::UnsupportedOperation(ref cause) => cause,
+            UpdateFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::MissingFileSystemConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFileSystemError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFileSystemError {}
 /// Trait representing the capabilities of the Amazon FSx API. Amazon FSx clients implement this trait.
 pub trait Fsx {
     /// <p><p>Creates a backup of an existing Amazon FSx for Windows File Server file system. Creating regular backups for your file system is a best practice that complements the replication that Amazon FSx for Windows File Server performs for your file system. It also enables you to restore from user modification of data.</p> <p>If a backup with the specified client request token exists, and the parameters match, this operation returns the description of the existing backup. If a backup specified client request token exists, and the parameters don&#39;t match, this operation returns <code>IncompatibleParameterError</code>. If a backup with the specified client request token doesn&#39;t exist, <code>CreateBackup</code> does the following: </p> <ul> <li> <p>Creates a new Amazon FSx backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the backup.</p> </li> </ul> <p>By using the idempotent operation, you can retry a <code>CreateBackup</code> operation without the risk of creating an extra backup. This approach can be useful when an initial call fails in a way that makes it unclear whether a backup was created. If you use the same client request token and the initial call created a backup, the operation returns a successful result because all the parameters are the same.</p> <p>The <code>CreateFileSystem</code> operation returns while the backup&#39;s lifecycle state is still <code>CREATING</code>. You can check the file system creation status by calling the <a>DescribeBackups</a> operation, which returns the backup state along with other information.</p> <note> <p/> </note></p>

@@ -58,6 +58,7 @@ pub struct BatchPutMessageErrorEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchPutMessageRequest {
     /// <p>The name of the channel where the messages are sent.</p>
     #[serde(rename = "channelName")]
@@ -77,6 +78,7 @@ pub struct BatchPutMessageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelPipelineReprocessingRequest {
     /// <p>The name of pipeline for which data reprocessing is canceled.</p>
     #[serde(rename = "pipelineName")]
@@ -221,6 +223,7 @@ pub struct ContainerDatasetAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelRequest {
     /// <p>The name of the channel.</p>
     #[serde(rename = "channelName")]
@@ -257,6 +260,7 @@ pub struct CreateChannelResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetContentRequest {
     /// <p>The name of the data set.</p>
     #[serde(rename = "datasetName")]
@@ -273,6 +277,7 @@ pub struct CreateDatasetContentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetRequest {
     /// <p>A list of actions that create the data set contents.</p>
     #[serde(rename = "actions")]
@@ -320,6 +325,7 @@ pub struct CreateDatasetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatastoreRequest {
     /// <p>The name of the data store.</p>
     #[serde(rename = "datastoreName")]
@@ -356,6 +362,7 @@ pub struct CreateDatastoreResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePipelineRequest {
     /// <p>A list of "PipelineActivity" objects. Activities perform transformations on your messages, such as removing, renaming or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p> <p>The list can be 2-25 <b>PipelineActivity</b> objects and must contain both a <code>channel</code> and a <code>datastore</code> activity. Each entry in the list must contain only one activity, for example:</p> <p> <code>pipelineActivities = [ { "channel": { ... } }, { "lambda": { ... } }, ... ]</code> </p>
     #[serde(rename = "pipelineActivities")]
@@ -764,6 +771,7 @@ pub struct DatastoreSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelRequest {
     /// <p>The name of the channel to delete.</p>
     #[serde(rename = "channelName")]
@@ -771,6 +779,7 @@ pub struct DeleteChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetContentRequest {
     /// <p>The name of the data set whose content is deleted.</p>
     #[serde(rename = "datasetName")]
@@ -782,6 +791,7 @@ pub struct DeleteDatasetContentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetRequest {
     /// <p>The name of the data set to delete.</p>
     #[serde(rename = "datasetName")]
@@ -789,6 +799,7 @@ pub struct DeleteDatasetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatastoreRequest {
     /// <p>The name of the data store to delete.</p>
     #[serde(rename = "datastoreName")]
@@ -796,6 +807,7 @@ pub struct DeleteDatastoreRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePipelineRequest {
     /// <p>The name of the pipeline to delete.</p>
     #[serde(rename = "pipelineName")]
@@ -814,6 +826,7 @@ pub struct DeltaTime {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelRequest {
     /// <p>The name of the channel whose information is retrieved.</p>
     #[serde(rename = "channelName")]
@@ -838,6 +851,7 @@ pub struct DescribeChannelResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetRequest {
     /// <p>The name of the data set whose information is retrieved.</p>
     #[serde(rename = "datasetName")]
@@ -854,6 +868,7 @@ pub struct DescribeDatasetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatastoreRequest {
     /// <p>The name of the data store</p>
     #[serde(rename = "datastoreName")]
@@ -878,6 +893,7 @@ pub struct DescribeDatastoreResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoggingOptionsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -890,6 +906,7 @@ pub struct DescribeLoggingOptionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePipelineRequest {
     /// <p>The name of the pipeline whose information is retrieved.</p>
     #[serde(rename = "pipelineName")]
@@ -977,6 +994,7 @@ pub struct FilterActivity {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDatasetContentRequest {
     /// <p>The name of the data set whose contents are retrieved.</p>
     #[serde(rename = "datasetName")]
@@ -1045,6 +1063,7 @@ pub struct LambdaActivity {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelsRequest {
     /// <p>The maximum number of results to return in this request.</p> <p>The default value is 100.</p>
     #[serde(rename = "maxResults")]
@@ -1070,6 +1089,7 @@ pub struct ListChannelsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetContentsRequest {
     /// <p>The name of the data set whose contents information you want to list.</p>
     #[serde(rename = "datasetName")]
@@ -1106,6 +1126,7 @@ pub struct ListDatasetContentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetsRequest {
     /// <p>The maximum number of results to return in this request.</p> <p>The default value is 100.</p>
     #[serde(rename = "maxResults")]
@@ -1131,6 +1152,7 @@ pub struct ListDatasetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatastoresRequest {
     /// <p>The maximum number of results to return in this request.</p> <p>The default value is 100.</p>
     #[serde(rename = "maxResults")]
@@ -1156,6 +1178,7 @@ pub struct ListDatastoresResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelinesRequest {
     /// <p>The maximum number of results to return in this request.</p> <p>The default value is 100.</p>
     #[serde(rename = "maxResults")]
@@ -1181,6 +1204,7 @@ pub struct ListPipelinesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the resource whose tags you want to list.</p>
     #[serde(rename = "resourceArn")]
@@ -1230,6 +1254,7 @@ pub struct MathActivity {
 
 /// <p>Information about a message.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Message {
     /// <p>The ID you wish to assign to the message. Each "messageId" must be unique within each batch sent.</p>
     #[serde(rename = "messageId")]
@@ -1350,6 +1375,7 @@ pub struct PipelineSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLoggingOptionsRequest {
     /// <p>The new values of the AWS IoT Analytics logging options.</p>
     #[serde(rename = "loggingOptions")]
@@ -1423,6 +1449,7 @@ pub struct RetentionPeriod {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunPipelineActivityRequest {
     /// <p>The sample message payloads on which the pipeline activity is run.</p>
     #[serde(rename = "payloads")]
@@ -1474,6 +1501,7 @@ pub struct S3DestinationConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SampleChannelDataRequest {
     /// <p>The name of the channel whose message samples are retrieved.</p>
     #[serde(rename = "channelName")]
@@ -1561,6 +1589,7 @@ pub struct SqlQueryDatasetAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPipelineReprocessingRequest {
     /// <p>The end time (exclusive) of raw message data that is reprocessed.</p>
     #[serde(rename = "endTime")]
@@ -1596,6 +1625,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource whose tags you want to modify.</p>
     #[serde(rename = "resourceArn")]
@@ -1618,6 +1648,7 @@ pub struct TriggeringDataset {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource whose tags you want to remove.</p>
     #[serde(rename = "resourceArn")]
@@ -1632,6 +1663,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelRequest {
     /// <p>The name of the channel to be updated.</p>
     #[serde(rename = "channelName")]
@@ -1647,6 +1679,7 @@ pub struct UpdateChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDatasetRequest {
     /// <p>A list of "DatasetAction" objects.</p>
     #[serde(rename = "actions")]
@@ -1673,6 +1706,7 @@ pub struct UpdateDatasetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDatastoreRequest {
     /// <p>The name of the data store to be updated.</p>
     #[serde(rename = "datastoreName")]
@@ -1688,6 +1722,7 @@ pub struct UpdateDatastoreRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineRequest {
     /// <p>A list of "PipelineActivity" objects. Activities perform transformations on your messages, such as removing, renaming or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p> <p>The list can be 2-25 <b>PipelineActivity</b> objects and must contain both a <code>channel</code> and a <code>datastore</code> activity. Each entry in the list must contain only one activity, for example:</p> <p> <code>pipelineActivities = [ { "channel": { ... } }, { "lambda": { ... } }, ... ]</code> </p>
     #[serde(rename = "pipelineActivities")]
@@ -1777,20 +1812,16 @@ impl BatchPutMessageError {
 }
 impl fmt::Display for BatchPutMessageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchPutMessageError {
-    fn description(&self) -> &str {
         match *self {
-            BatchPutMessageError::InternalFailure(ref cause) => cause,
-            BatchPutMessageError::InvalidRequest(ref cause) => cause,
-            BatchPutMessageError::ResourceNotFound(ref cause) => cause,
-            BatchPutMessageError::ServiceUnavailable(ref cause) => cause,
-            BatchPutMessageError::Throttling(ref cause) => cause,
+            BatchPutMessageError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            BatchPutMessageError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            BatchPutMessageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            BatchPutMessageError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            BatchPutMessageError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchPutMessageError {}
 /// Errors returned by CancelPipelineReprocessing
 #[derive(Debug, PartialEq)]
 pub enum CancelPipelineReprocessingError {
@@ -1846,20 +1877,18 @@ impl CancelPipelineReprocessingError {
 }
 impl fmt::Display for CancelPipelineReprocessingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelPipelineReprocessingError {
-    fn description(&self) -> &str {
         match *self {
-            CancelPipelineReprocessingError::InternalFailure(ref cause) => cause,
-            CancelPipelineReprocessingError::InvalidRequest(ref cause) => cause,
-            CancelPipelineReprocessingError::ResourceNotFound(ref cause) => cause,
-            CancelPipelineReprocessingError::ServiceUnavailable(ref cause) => cause,
-            CancelPipelineReprocessingError::Throttling(ref cause) => cause,
+            CancelPipelineReprocessingError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CancelPipelineReprocessingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CancelPipelineReprocessingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CancelPipelineReprocessingError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CancelPipelineReprocessingError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelPipelineReprocessingError {}
 /// Errors returned by CreateChannel
 #[derive(Debug, PartialEq)]
 pub enum CreateChannelError {
@@ -1908,21 +1937,17 @@ impl CreateChannelError {
 }
 impl fmt::Display for CreateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateChannelError {
-    fn description(&self) -> &str {
         match *self {
-            CreateChannelError::InternalFailure(ref cause) => cause,
-            CreateChannelError::InvalidRequest(ref cause) => cause,
-            CreateChannelError::LimitExceeded(ref cause) => cause,
-            CreateChannelError::ResourceAlreadyExists(ref cause) => cause,
-            CreateChannelError::ServiceUnavailable(ref cause) => cause,
-            CreateChannelError::Throttling(ref cause) => cause,
+            CreateChannelError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateChannelError {}
 /// Errors returned by CreateDataset
 #[derive(Debug, PartialEq)]
 pub enum CreateDatasetError {
@@ -1971,21 +1996,17 @@ impl CreateDatasetError {
 }
 impl fmt::Display for CreateDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDatasetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDatasetError::InternalFailure(ref cause) => cause,
-            CreateDatasetError::InvalidRequest(ref cause) => cause,
-            CreateDatasetError::LimitExceeded(ref cause) => cause,
-            CreateDatasetError::ResourceAlreadyExists(ref cause) => cause,
-            CreateDatasetError::ServiceUnavailable(ref cause) => cause,
-            CreateDatasetError::Throttling(ref cause) => cause,
+            CreateDatasetError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateDatasetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateDatasetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDatasetError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateDatasetError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateDatasetError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDatasetError {}
 /// Errors returned by CreateDatasetContent
 #[derive(Debug, PartialEq)]
 pub enum CreateDatasetContentError {
@@ -2035,20 +2056,16 @@ impl CreateDatasetContentError {
 }
 impl fmt::Display for CreateDatasetContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDatasetContentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDatasetContentError::InternalFailure(ref cause) => cause,
-            CreateDatasetContentError::InvalidRequest(ref cause) => cause,
-            CreateDatasetContentError::ResourceNotFound(ref cause) => cause,
-            CreateDatasetContentError::ServiceUnavailable(ref cause) => cause,
-            CreateDatasetContentError::Throttling(ref cause) => cause,
+            CreateDatasetContentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateDatasetContentError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateDatasetContentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateDatasetContentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateDatasetContentError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDatasetContentError {}
 /// Errors returned by CreateDatastore
 #[derive(Debug, PartialEq)]
 pub enum CreateDatastoreError {
@@ -2099,21 +2116,17 @@ impl CreateDatastoreError {
 }
 impl fmt::Display for CreateDatastoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDatastoreError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDatastoreError::InternalFailure(ref cause) => cause,
-            CreateDatastoreError::InvalidRequest(ref cause) => cause,
-            CreateDatastoreError::LimitExceeded(ref cause) => cause,
-            CreateDatastoreError::ResourceAlreadyExists(ref cause) => cause,
-            CreateDatastoreError::ServiceUnavailable(ref cause) => cause,
-            CreateDatastoreError::Throttling(ref cause) => cause,
+            CreateDatastoreError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateDatastoreError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateDatastoreError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDatastoreError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateDatastoreError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateDatastoreError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDatastoreError {}
 /// Errors returned by CreatePipeline
 #[derive(Debug, PartialEq)]
 pub enum CreatePipelineError {
@@ -2164,21 +2177,17 @@ impl CreatePipelineError {
 }
 impl fmt::Display for CreatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePipelineError::InternalFailure(ref cause) => cause,
-            CreatePipelineError::InvalidRequest(ref cause) => cause,
-            CreatePipelineError::LimitExceeded(ref cause) => cause,
-            CreatePipelineError::ResourceAlreadyExists(ref cause) => cause,
-            CreatePipelineError::ServiceUnavailable(ref cause) => cause,
-            CreatePipelineError::Throttling(ref cause) => cause,
+            CreatePipelineError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePipelineError {}
 /// Errors returned by DeleteChannel
 #[derive(Debug, PartialEq)]
 pub enum DeleteChannelError {
@@ -2222,20 +2231,16 @@ impl DeleteChannelError {
 }
 impl fmt::Display for DeleteChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteChannelError::InternalFailure(ref cause) => cause,
-            DeleteChannelError::InvalidRequest(ref cause) => cause,
-            DeleteChannelError::ResourceNotFound(ref cause) => cause,
-            DeleteChannelError::ServiceUnavailable(ref cause) => cause,
-            DeleteChannelError::Throttling(ref cause) => cause,
+            DeleteChannelError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteChannelError {}
 /// Errors returned by DeleteDataset
 #[derive(Debug, PartialEq)]
 pub enum DeleteDatasetError {
@@ -2279,20 +2284,16 @@ impl DeleteDatasetError {
 }
 impl fmt::Display for DeleteDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDatasetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDatasetError::InternalFailure(ref cause) => cause,
-            DeleteDatasetError::InvalidRequest(ref cause) => cause,
-            DeleteDatasetError::ResourceNotFound(ref cause) => cause,
-            DeleteDatasetError::ServiceUnavailable(ref cause) => cause,
-            DeleteDatasetError::Throttling(ref cause) => cause,
+            DeleteDatasetError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDatasetError {}
 /// Errors returned by DeleteDatasetContent
 #[derive(Debug, PartialEq)]
 pub enum DeleteDatasetContentError {
@@ -2342,20 +2343,16 @@ impl DeleteDatasetContentError {
 }
 impl fmt::Display for DeleteDatasetContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDatasetContentError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDatasetContentError::InternalFailure(ref cause) => cause,
-            DeleteDatasetContentError::InvalidRequest(ref cause) => cause,
-            DeleteDatasetContentError::ResourceNotFound(ref cause) => cause,
-            DeleteDatasetContentError::ServiceUnavailable(ref cause) => cause,
-            DeleteDatasetContentError::Throttling(ref cause) => cause,
+            DeleteDatasetContentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetContentError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetContentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetContentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetContentError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDatasetContentError {}
 /// Errors returned by DeleteDatastore
 #[derive(Debug, PartialEq)]
 pub enum DeleteDatastoreError {
@@ -2399,20 +2396,16 @@ impl DeleteDatastoreError {
 }
 impl fmt::Display for DeleteDatastoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDatastoreError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDatastoreError::InternalFailure(ref cause) => cause,
-            DeleteDatastoreError::InvalidRequest(ref cause) => cause,
-            DeleteDatastoreError::ResourceNotFound(ref cause) => cause,
-            DeleteDatastoreError::ServiceUnavailable(ref cause) => cause,
-            DeleteDatastoreError::Throttling(ref cause) => cause,
+            DeleteDatastoreError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDatastoreError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDatastoreError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDatastoreError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteDatastoreError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDatastoreError {}
 /// Errors returned by DeletePipeline
 #[derive(Debug, PartialEq)]
 pub enum DeletePipelineError {
@@ -2456,20 +2449,16 @@ impl DeletePipelineError {
 }
 impl fmt::Display for DeletePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePipelineError::InternalFailure(ref cause) => cause,
-            DeletePipelineError::InvalidRequest(ref cause) => cause,
-            DeletePipelineError::ResourceNotFound(ref cause) => cause,
-            DeletePipelineError::ServiceUnavailable(ref cause) => cause,
-            DeletePipelineError::Throttling(ref cause) => cause,
+            DeletePipelineError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeletePipelineError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeletePipelineError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeletePipelineError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeletePipelineError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePipelineError {}
 /// Errors returned by DescribeChannel
 #[derive(Debug, PartialEq)]
 pub enum DescribeChannelError {
@@ -2513,20 +2502,16 @@ impl DescribeChannelError {
 }
 impl fmt::Display for DescribeChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeChannelError::InternalFailure(ref cause) => cause,
-            DescribeChannelError::InvalidRequest(ref cause) => cause,
-            DescribeChannelError::ResourceNotFound(ref cause) => cause,
-            DescribeChannelError::ServiceUnavailable(ref cause) => cause,
-            DescribeChannelError::Throttling(ref cause) => cause,
+            DescribeChannelError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeChannelError {}
 /// Errors returned by DescribeDataset
 #[derive(Debug, PartialEq)]
 pub enum DescribeDatasetError {
@@ -2570,20 +2555,16 @@ impl DescribeDatasetError {
 }
 impl fmt::Display for DescribeDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDatasetError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDatasetError::InternalFailure(ref cause) => cause,
-            DescribeDatasetError::InvalidRequest(ref cause) => cause,
-            DescribeDatasetError::ResourceNotFound(ref cause) => cause,
-            DescribeDatasetError::ServiceUnavailable(ref cause) => cause,
-            DescribeDatasetError::Throttling(ref cause) => cause,
+            DescribeDatasetError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeDatasetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeDatasetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeDatasetError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeDatasetError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDatasetError {}
 /// Errors returned by DescribeDatastore
 #[derive(Debug, PartialEq)]
 pub enum DescribeDatastoreError {
@@ -2629,20 +2610,16 @@ impl DescribeDatastoreError {
 }
 impl fmt::Display for DescribeDatastoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDatastoreError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDatastoreError::InternalFailure(ref cause) => cause,
-            DescribeDatastoreError::InvalidRequest(ref cause) => cause,
-            DescribeDatastoreError::ResourceNotFound(ref cause) => cause,
-            DescribeDatastoreError::ServiceUnavailable(ref cause) => cause,
-            DescribeDatastoreError::Throttling(ref cause) => cause,
+            DescribeDatastoreError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeDatastoreError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeDatastoreError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeDatastoreError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeDatastoreError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDatastoreError {}
 /// Errors returned by DescribeLoggingOptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoggingOptionsError {
@@ -2694,20 +2671,16 @@ impl DescribeLoggingOptionsError {
 }
 impl fmt::Display for DescribeLoggingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoggingOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoggingOptionsError::InternalFailure(ref cause) => cause,
-            DescribeLoggingOptionsError::InvalidRequest(ref cause) => cause,
-            DescribeLoggingOptionsError::ResourceNotFound(ref cause) => cause,
-            DescribeLoggingOptionsError::ServiceUnavailable(ref cause) => cause,
-            DescribeLoggingOptionsError::Throttling(ref cause) => cause,
+            DescribeLoggingOptionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeLoggingOptionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeLoggingOptionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeLoggingOptionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeLoggingOptionsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLoggingOptionsError {}
 /// Errors returned by DescribePipeline
 #[derive(Debug, PartialEq)]
 pub enum DescribePipelineError {
@@ -2751,20 +2724,16 @@ impl DescribePipelineError {
 }
 impl fmt::Display for DescribePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePipelineError::InternalFailure(ref cause) => cause,
-            DescribePipelineError::InvalidRequest(ref cause) => cause,
-            DescribePipelineError::ResourceNotFound(ref cause) => cause,
-            DescribePipelineError::ServiceUnavailable(ref cause) => cause,
-            DescribePipelineError::Throttling(ref cause) => cause,
+            DescribePipelineError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribePipelineError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribePipelineError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribePipelineError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribePipelineError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribePipelineError {}
 /// Errors returned by GetDatasetContent
 #[derive(Debug, PartialEq)]
 pub enum GetDatasetContentError {
@@ -2810,20 +2779,16 @@ impl GetDatasetContentError {
 }
 impl fmt::Display for GetDatasetContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDatasetContentError {
-    fn description(&self) -> &str {
         match *self {
-            GetDatasetContentError::InternalFailure(ref cause) => cause,
-            GetDatasetContentError::InvalidRequest(ref cause) => cause,
-            GetDatasetContentError::ResourceNotFound(ref cause) => cause,
-            GetDatasetContentError::ServiceUnavailable(ref cause) => cause,
-            GetDatasetContentError::Throttling(ref cause) => cause,
+            GetDatasetContentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetDatasetContentError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetDatasetContentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetDatasetContentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetDatasetContentError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDatasetContentError {}
 /// Errors returned by ListChannels
 #[derive(Debug, PartialEq)]
 pub enum ListChannelsError {
@@ -2862,19 +2827,15 @@ impl ListChannelsError {
 }
 impl fmt::Display for ListChannelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListChannelsError {
-    fn description(&self) -> &str {
         match *self {
-            ListChannelsError::InternalFailure(ref cause) => cause,
-            ListChannelsError::InvalidRequest(ref cause) => cause,
-            ListChannelsError::ServiceUnavailable(ref cause) => cause,
-            ListChannelsError::Throttling(ref cause) => cause,
+            ListChannelsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListChannelsError {}
 /// Errors returned by ListDatasetContents
 #[derive(Debug, PartialEq)]
 pub enum ListDatasetContentsError {
@@ -2922,20 +2883,16 @@ impl ListDatasetContentsError {
 }
 impl fmt::Display for ListDatasetContentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDatasetContentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDatasetContentsError::InternalFailure(ref cause) => cause,
-            ListDatasetContentsError::InvalidRequest(ref cause) => cause,
-            ListDatasetContentsError::ResourceNotFound(ref cause) => cause,
-            ListDatasetContentsError::ServiceUnavailable(ref cause) => cause,
-            ListDatasetContentsError::Throttling(ref cause) => cause,
+            ListDatasetContentsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListDatasetContentsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListDatasetContentsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListDatasetContentsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListDatasetContentsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDatasetContentsError {}
 /// Errors returned by ListDatasets
 #[derive(Debug, PartialEq)]
 pub enum ListDatasetsError {
@@ -2974,19 +2931,15 @@ impl ListDatasetsError {
 }
 impl fmt::Display for ListDatasetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDatasetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDatasetsError::InternalFailure(ref cause) => cause,
-            ListDatasetsError::InvalidRequest(ref cause) => cause,
-            ListDatasetsError::ServiceUnavailable(ref cause) => cause,
-            ListDatasetsError::Throttling(ref cause) => cause,
+            ListDatasetsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListDatasetsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListDatasetsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListDatasetsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDatasetsError {}
 /// Errors returned by ListDatastores
 #[derive(Debug, PartialEq)]
 pub enum ListDatastoresError {
@@ -3025,19 +2978,15 @@ impl ListDatastoresError {
 }
 impl fmt::Display for ListDatastoresError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDatastoresError {
-    fn description(&self) -> &str {
         match *self {
-            ListDatastoresError::InternalFailure(ref cause) => cause,
-            ListDatastoresError::InvalidRequest(ref cause) => cause,
-            ListDatastoresError::ServiceUnavailable(ref cause) => cause,
-            ListDatastoresError::Throttling(ref cause) => cause,
+            ListDatastoresError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListDatastoresError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListDatastoresError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListDatastoresError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDatastoresError {}
 /// Errors returned by ListPipelines
 #[derive(Debug, PartialEq)]
 pub enum ListPipelinesError {
@@ -3076,19 +3025,15 @@ impl ListPipelinesError {
 }
 impl fmt::Display for ListPipelinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPipelinesError {
-    fn description(&self) -> &str {
         match *self {
-            ListPipelinesError::InternalFailure(ref cause) => cause,
-            ListPipelinesError::InvalidRequest(ref cause) => cause,
-            ListPipelinesError::ServiceUnavailable(ref cause) => cause,
-            ListPipelinesError::Throttling(ref cause) => cause,
+            ListPipelinesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListPipelinesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListPipelinesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListPipelinesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPipelinesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -3141,21 +3086,17 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalFailure(ref cause) => cause,
-            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
-            ListTagsForResourceError::LimitExceeded(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
-            ListTagsForResourceError::ServiceUnavailable(ref cause) => cause,
-            ListTagsForResourceError::Throttling(ref cause) => cause,
+            ListTagsForResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutLoggingOptions
 #[derive(Debug, PartialEq)]
 pub enum PutLoggingOptionsError {
@@ -3196,19 +3137,15 @@ impl PutLoggingOptionsError {
 }
 impl fmt::Display for PutLoggingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutLoggingOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            PutLoggingOptionsError::InternalFailure(ref cause) => cause,
-            PutLoggingOptionsError::InvalidRequest(ref cause) => cause,
-            PutLoggingOptionsError::ServiceUnavailable(ref cause) => cause,
-            PutLoggingOptionsError::Throttling(ref cause) => cause,
+            PutLoggingOptionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            PutLoggingOptionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            PutLoggingOptionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            PutLoggingOptionsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutLoggingOptionsError {}
 /// Errors returned by RunPipelineActivity
 #[derive(Debug, PartialEq)]
 pub enum RunPipelineActivityError {
@@ -3249,19 +3186,15 @@ impl RunPipelineActivityError {
 }
 impl fmt::Display for RunPipelineActivityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RunPipelineActivityError {
-    fn description(&self) -> &str {
         match *self {
-            RunPipelineActivityError::InternalFailure(ref cause) => cause,
-            RunPipelineActivityError::InvalidRequest(ref cause) => cause,
-            RunPipelineActivityError::ServiceUnavailable(ref cause) => cause,
-            RunPipelineActivityError::Throttling(ref cause) => cause,
+            RunPipelineActivityError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            RunPipelineActivityError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RunPipelineActivityError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RunPipelineActivityError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RunPipelineActivityError {}
 /// Errors returned by SampleChannelData
 #[derive(Debug, PartialEq)]
 pub enum SampleChannelDataError {
@@ -3307,20 +3240,16 @@ impl SampleChannelDataError {
 }
 impl fmt::Display for SampleChannelDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SampleChannelDataError {
-    fn description(&self) -> &str {
         match *self {
-            SampleChannelDataError::InternalFailure(ref cause) => cause,
-            SampleChannelDataError::InvalidRequest(ref cause) => cause,
-            SampleChannelDataError::ResourceNotFound(ref cause) => cause,
-            SampleChannelDataError::ServiceUnavailable(ref cause) => cause,
-            SampleChannelDataError::Throttling(ref cause) => cause,
+            SampleChannelDataError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            SampleChannelDataError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SampleChannelDataError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SampleChannelDataError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            SampleChannelDataError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SampleChannelDataError {}
 /// Errors returned by StartPipelineReprocessing
 #[derive(Debug, PartialEq)]
 pub enum StartPipelineReprocessingError {
@@ -3381,21 +3310,19 @@ impl StartPipelineReprocessingError {
 }
 impl fmt::Display for StartPipelineReprocessingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartPipelineReprocessingError {
-    fn description(&self) -> &str {
         match *self {
-            StartPipelineReprocessingError::InternalFailure(ref cause) => cause,
-            StartPipelineReprocessingError::InvalidRequest(ref cause) => cause,
-            StartPipelineReprocessingError::ResourceAlreadyExists(ref cause) => cause,
-            StartPipelineReprocessingError::ResourceNotFound(ref cause) => cause,
-            StartPipelineReprocessingError::ServiceUnavailable(ref cause) => cause,
-            StartPipelineReprocessingError::Throttling(ref cause) => cause,
+            StartPipelineReprocessingError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StartPipelineReprocessingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartPipelineReprocessingError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartPipelineReprocessingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartPipelineReprocessingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            StartPipelineReprocessingError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartPipelineReprocessingError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -3444,21 +3371,17 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InternalFailure(ref cause) => cause,
-            TagResourceError::InvalidRequest(ref cause) => cause,
-            TagResourceError::LimitExceeded(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::ServiceUnavailable(ref cause) => cause,
-            TagResourceError::Throttling(ref cause) => cause,
+            TagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -3507,21 +3430,17 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InternalFailure(ref cause) => cause,
-            UntagResourceError::InvalidRequest(ref cause) => cause,
-            UntagResourceError::LimitExceeded(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::ServiceUnavailable(ref cause) => cause,
-            UntagResourceError::Throttling(ref cause) => cause,
+            UntagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateChannel
 #[derive(Debug, PartialEq)]
 pub enum UpdateChannelError {
@@ -3565,20 +3484,16 @@ impl UpdateChannelError {
 }
 impl fmt::Display for UpdateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateChannelError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateChannelError::InternalFailure(ref cause) => cause,
-            UpdateChannelError::InvalidRequest(ref cause) => cause,
-            UpdateChannelError::ResourceNotFound(ref cause) => cause,
-            UpdateChannelError::ServiceUnavailable(ref cause) => cause,
-            UpdateChannelError::Throttling(ref cause) => cause,
+            UpdateChannelError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateChannelError {}
 /// Errors returned by UpdateDataset
 #[derive(Debug, PartialEq)]
 pub enum UpdateDatasetError {
@@ -3622,20 +3537,16 @@ impl UpdateDatasetError {
 }
 impl fmt::Display for UpdateDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDatasetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDatasetError::InternalFailure(ref cause) => cause,
-            UpdateDatasetError::InvalidRequest(ref cause) => cause,
-            UpdateDatasetError::ResourceNotFound(ref cause) => cause,
-            UpdateDatasetError::ServiceUnavailable(ref cause) => cause,
-            UpdateDatasetError::Throttling(ref cause) => cause,
+            UpdateDatasetError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateDatasetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDatasetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDatasetError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateDatasetError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDatasetError {}
 /// Errors returned by UpdateDatastore
 #[derive(Debug, PartialEq)]
 pub enum UpdateDatastoreError {
@@ -3679,20 +3590,16 @@ impl UpdateDatastoreError {
 }
 impl fmt::Display for UpdateDatastoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDatastoreError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDatastoreError::InternalFailure(ref cause) => cause,
-            UpdateDatastoreError::InvalidRequest(ref cause) => cause,
-            UpdateDatastoreError::ResourceNotFound(ref cause) => cause,
-            UpdateDatastoreError::ServiceUnavailable(ref cause) => cause,
-            UpdateDatastoreError::Throttling(ref cause) => cause,
+            UpdateDatastoreError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateDatastoreError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDatastoreError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDatastoreError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateDatastoreError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDatastoreError {}
 /// Errors returned by UpdatePipeline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePipelineError {
@@ -3741,21 +3648,17 @@ impl UpdatePipelineError {
 }
 impl fmt::Display for UpdatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePipelineError::InternalFailure(ref cause) => cause,
-            UpdatePipelineError::InvalidRequest(ref cause) => cause,
-            UpdatePipelineError::LimitExceeded(ref cause) => cause,
-            UpdatePipelineError::ResourceNotFound(ref cause) => cause,
-            UpdatePipelineError::ServiceUnavailable(ref cause) => cause,
-            UpdatePipelineError::Throttling(ref cause) => cause,
+            UpdatePipelineError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePipelineError {}
 /// Trait representing the capabilities of the AWS IoT Analytics API. AWS IoT Analytics clients implement this trait.
 pub trait IotAnalytics {
     /// <p>Sends messages to a channel.</p>

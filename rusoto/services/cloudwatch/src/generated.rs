@@ -68,6 +68,7 @@ impl AlarmDescriptionDeserializer {
 }
 /// <p>Represents the history of a specific alarm.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AlarmHistoryItem {
     /// <p>The descriptive name for the alarm.</p>
     pub alarm_name: Option<String>,
@@ -160,6 +161,7 @@ impl AlarmNamesSerializer {
 
 /// <p>An anomaly detection model associated with a particular CloudWatch metric and statistic. You can use the model to display a band of expected normal values when the metric is graphed.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AnomalyDetector {
     /// <p>The configuration specifies details about how the anomaly detection model is to be trained, including time ranges to exclude from use for training the model, and the time zone to use for the metric.</p>
     pub configuration: Option<AnomalyDetectorConfiguration>,
@@ -212,6 +214,8 @@ impl AnomalyDetectorDeserializer {
 }
 /// <p>The configuration specifies details about how the anomaly detection model is to be trained, including time ranges to exclude from use for training the model and the time zone to use for the metric.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnomalyDetectorConfiguration {
     /// <p>An array of time ranges to exclude from use when the anomaly detection model is trained. Use this to make sure that events that could cause unusual values for the metric, such as deployments, aren't used when CloudWatch creates the model.</p>
     pub excluded_time_ranges: Option<Vec<Range>>,
@@ -414,6 +418,7 @@ impl DashboardEntriesDeserializer {
 }
 /// <p>Represents a specific dashboard.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DashboardEntry {
     /// <p>The Amazon Resource Name (ARN) of the dashboard.</p>
     pub dashboard_arn: Option<String>,
@@ -486,6 +491,7 @@ impl DashboardNamesSerializer {
 
 /// <p>An error or warning for the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DashboardValidationMessage {
     /// <p>The data path related to the message.</p>
     pub data_path: Option<String>,
@@ -550,6 +556,7 @@ impl DataPathDeserializer {
 }
 /// <p>Encapsulates the statistical data that CloudWatch computes from metric data.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Datapoint {
     /// <p>The average of the metric values that correspond to the data point.</p>
     pub average: Option<f64>,
@@ -694,6 +701,7 @@ impl DatapointsToAlarmDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAlarmsInput {
     /// <p>The alarms to be deleted.</p>
     pub alarm_names: Vec<String>,
@@ -717,6 +725,7 @@ impl DeleteAlarmsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAnomalyDetectorInput {
     /// <p>The metric dimensions associated with the anomaly detection model to delete.</p>
     pub dimensions: Option<Vec<Dimension>>,
@@ -751,6 +760,7 @@ impl DeleteAnomalyDetectorInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteAnomalyDetectorOutput {}
 
 struct DeleteAnomalyDetectorOutputDeserializer;
@@ -770,6 +780,7 @@ impl DeleteAnomalyDetectorOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDashboardsInput {
     /// <p>The dashboards to be deleted. This parameter is required.</p>
     pub dashboard_names: Vec<String>,
@@ -793,6 +804,7 @@ impl DeleteDashboardsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDashboardsOutput {}
 
 struct DeleteDashboardsOutputDeserializer;
@@ -812,6 +824,7 @@ impl DeleteDashboardsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInsightRulesInput {
     /// <p>An array of the rule names to delete. If you need to find out the names of your rules, use <a>DescribeInsightRules</a>.</p>
     pub rule_names: Vec<String>,
@@ -835,6 +848,7 @@ impl DeleteInsightRulesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteInsightRulesOutput {
     /// <p>An array listing the rules that could not be deleted. You cannot delete built-in rules.</p>
     pub failures: Option<Vec<PartialFailure>>,
@@ -865,6 +879,7 @@ impl DeleteInsightRulesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAlarmHistoryInput {
     /// <p>The name of the alarm.</p>
     pub alarm_name: Option<String>,
@@ -911,6 +926,7 @@ impl DescribeAlarmHistoryInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAlarmHistoryOutput {
     /// <p>The alarm histories, in JSON format.</p>
     pub alarm_history_items: Option<Vec<AlarmHistoryItem>>,
@@ -947,6 +963,7 @@ impl DescribeAlarmHistoryOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAlarmsForMetricInput {
     /// <p>The dimensions associated with the metric. If the metric has any associated dimensions, you must specify them in order for the call to succeed.</p>
     pub dimensions: Option<Vec<Dimension>>,
@@ -998,6 +1015,7 @@ impl DescribeAlarmsForMetricInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAlarmsForMetricOutput {
     /// <p>The information for each alarm with the specified metric.</p>
     pub metric_alarms: Option<Vec<MetricAlarm>>,
@@ -1028,6 +1046,7 @@ impl DescribeAlarmsForMetricOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAlarmsInput {
     /// <p>The action name prefix.</p>
     pub action_prefix: Option<String>,
@@ -1078,6 +1097,7 @@ impl DescribeAlarmsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAlarmsOutput {
     /// <p>The information for the specified alarms.</p>
     pub metric_alarms: Option<Vec<MetricAlarm>>,
@@ -1109,6 +1129,7 @@ impl DescribeAlarmsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAnomalyDetectorsInput {
     /// <p>Limits the results to only the anomaly detection models that are associated with the specified metric dimensions. If there are multiple metrics that have these dimensions and have anomaly detection models associated, they're all returned.</p>
     pub dimensions: Option<Vec<Dimension>>,
@@ -1154,6 +1175,7 @@ impl DescribeAnomalyDetectorsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAnomalyDetectorsOutput {
     /// <p>The list of anomaly detection models returned by the operation.</p>
     pub anomaly_detectors: Option<Vec<AnomalyDetector>>,
@@ -1190,6 +1212,7 @@ impl DescribeAnomalyDetectorsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInsightRulesInput {
     /// <p>This parameter is not currently used. Reserved for future use. If it is used in the future, the maximum value may be different.</p>
     pub max_results: Option<i64>,
@@ -1216,6 +1239,7 @@ impl DescribeInsightRulesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeInsightRulesOutput {
     /// <p>The rules returned by the operation.</p>
     pub insight_rules: Option<Vec<InsightRule>>,
@@ -1253,6 +1277,8 @@ impl DescribeInsightRulesOutputDeserializer {
 }
 /// <p>Expands the identity of a metric.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Dimension {
     /// <p>The name of the dimension.</p>
     pub name: String,
@@ -1298,6 +1324,7 @@ impl DimensionSerializer {
 
 /// <p>Represents filters for a dimension.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DimensionFilter {
     /// <p>The dimension name to be matched.</p>
     pub name: String,
@@ -1384,6 +1411,7 @@ impl DimensionsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableAlarmActionsInput {
     /// <p>The names of the alarms.</p>
     pub alarm_names: Vec<String>,
@@ -1407,6 +1435,7 @@ impl DisableAlarmActionsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableInsightRulesInput {
     /// <p>An array of the rule names to disable. If you need to find out the names of your rules, use <a>DescribeInsightRules</a>.</p>
     pub rule_names: Vec<String>,
@@ -1430,6 +1459,7 @@ impl DisableInsightRulesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisableInsightRulesOutput {
     /// <p>An array listing the rules that could not be disabled. You cannot disable built-in rules.</p>
     pub failures: Option<Vec<PartialFailure>>,
@@ -1460,6 +1490,7 @@ impl DisableInsightRulesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableAlarmActionsInput {
     /// <p>The names of the alarms.</p>
     pub alarm_names: Vec<String>,
@@ -1483,6 +1514,7 @@ impl EnableAlarmActionsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableInsightRulesInput {
     /// <p>An array of the rule names to enable. If you need to find out the names of your rules, use <a>DescribeInsightRules</a>.</p>
     pub rule_names: Vec<String>,
@@ -1506,6 +1538,7 @@ impl EnableInsightRulesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnableInsightRulesOutput {
     /// <p>An array listing the rules that could not be enabled. You cannot disable or enable built-in rules.</p>
     pub failures: Option<Vec<PartialFailure>>,
@@ -1625,6 +1658,7 @@ impl FailureResourceDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDashboardInput {
     /// <p>The name of the dashboard to be described.</p>
     pub dashboard_name: String,
@@ -1647,6 +1681,7 @@ impl GetDashboardInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetDashboardOutput {
     /// <p>The Amazon Resource Name (ARN) of the dashboard.</p>
     pub dashboard_arn: Option<String>,
@@ -1690,6 +1725,7 @@ impl GetDashboardOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInsightRuleReportInput {
     /// <p>The end time of the data to use in the report. When used in a raw HTTP Query API, it is formatted as <code>yyyy-MM-dd'T'HH:mm:ss</code>. For example, <code>2019-07-01T23:59:59</code>.</p>
     pub end_time: String,
@@ -1740,6 +1776,7 @@ impl GetInsightRuleReportInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetInsightRuleReportOutput {
     /// <p>The sum of the values from all individual contributors that match the rule.</p>
     pub aggregate_value: Option<f64>,
@@ -1820,6 +1857,7 @@ impl GetInsightRuleReportOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMetricDataInput {
     /// <p>The time stamp indicating the latest data to be returned.</p> <p>The value specified is exclusive; results include data points up to the specified time stamp.</p> <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>EndTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>EndTime</code>.</p>
     pub end_time: String,
@@ -1864,6 +1902,7 @@ impl GetMetricDataInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetMetricDataOutput {
     /// <p>Contains a message about this <code>GetMetricData</code> operation, if the operation results in such a message. An example of a message that may be returned is <code>Maximum number of allowed metrics exceeded</code>. If there is a message, as much of the operation as possible is still executed.</p> <p>A message appears here only if it is related to the global <code>GetMetricData</code> operation. Any message about a specific metric returned by the operation appears in the <code>MetricDataResult</code> object returned for that metric.</p>
     pub messages: Option<Vec<MessageData>>,
@@ -1902,6 +1941,7 @@ impl GetMetricDataOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMetricStatisticsInput {
     /// <p>The dimensions. If the metric contains multiple dimensions, you must include a value for each dimension. CloudWatch treats each unique combination of dimensions as a separate metric. If a specific combination of dimensions was not published, you can't retrieve statistics for it. You must specify the same dimensions that were used when the metrics were created. For an example, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#dimension-combinations">Dimension Combinations</a> in the <i>Amazon CloudWatch User Guide</i>. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     pub dimensions: Option<Vec<Dimension>>,
@@ -1965,6 +2005,7 @@ impl GetMetricStatisticsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetMetricStatisticsOutput {
     /// <p>The data points for the specified metric.</p>
     pub datapoints: Option<Vec<Datapoint>>,
@@ -2000,6 +2041,7 @@ impl GetMetricStatisticsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMetricWidgetImageInput {
     /// <p>A JSON string that defines the bitmap graph to be retrieved. The string includes the metrics to include in the graph, statistics, annotations, title, axis limits, and so on. You can include only one <code>MetricWidget</code> parameter in each <code>GetMetricWidgetImage</code> call.</p> <p>For more information about the syntax of <code>MetricWidget</code> see <a>CloudWatch-Metric-Widget-Structure</a>.</p> <p>If any metric on the graph could not load all the requested data points, an orange triangle with an exclamation point appears next to the graph legend.</p>
     pub metric_widget: String,
@@ -2024,6 +2066,7 @@ impl GetMetricWidgetImageInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetMetricWidgetImageOutput {
     /// <p>The image of the graph, in the output format specified.</p>
     pub metric_widget_image: Option<bytes::Bytes>,
@@ -2089,6 +2132,7 @@ impl HistorySummaryDeserializer {
 }
 /// <p>This structure contains the definition for a Contributor Insights rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InsightRule {
     /// <p>The definition of the rule, as a JSON object. The definition contains the keywords used to define contributors, the value to aggregate on if this rule returns a sum instead of a count, and the filters. For details on the valid syntax, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights-RuleSyntax.html">Contributor Insights Rule Syntax</a>.</p>
     pub definition: String,
@@ -2141,6 +2185,7 @@ impl InsightRuleAggregationStatisticDeserializer {
 }
 /// <p>One of the unique contributors found by a Contributor Insights rule. If the rule contains multiple keys, then a unique contributor is a unique combination of values from all the keys in the rule.</p> <p>If the rule contains a single key, then each unique contributor is each unique value for this key.</p> <p>For more information, see <a>GetInsightRuleReport</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InsightRuleContributor {
     /// <p>An approximation of the aggregate value that comes from this contributor.</p>
     pub approximate_aggregate_value: f64,
@@ -2188,6 +2233,7 @@ impl InsightRuleContributorDeserializer {
 }
 /// <p>One data point related to one contributor.</p> <p>For more information, see <a>GetInsightRuleReport</a> and <a>InsightRuleContributor</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InsightRuleContributorDatapoint {
     /// <p>The approximate value that this contributor added during this timestamp.</p>
     pub approximate_value: f64,
@@ -2334,6 +2380,7 @@ impl InsightRuleDefinitionDeserializer {
 }
 /// <p>One data point from the metric time series returned in a Contributor Insights rule report.</p> <p>For more information, see <a>GetInsightRuleReport</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InsightRuleMetricDatapoint {
     /// <p>The average value from all contributors during the time period represented by that data point.</p> <p>This statistic is returned only if you included it in the <code>Metrics</code> array in your request.</p>
     pub average: Option<f64>,
@@ -2542,6 +2589,7 @@ impl LastModifiedDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDashboardsInput {
     /// <p>If you specify this parameter, only the dashboards with names starting with the specified string are listed. The maximum length is 255, and valid characters are A-Z, a-z, 0-9, ".", "-", and "_". </p>
     pub dashboard_name_prefix: Option<String>,
@@ -2571,6 +2619,7 @@ impl ListDashboardsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDashboardsOutput {
     /// <p>The list of matching dashboards.</p>
     pub dashboard_entries: Option<Vec<DashboardEntry>>,
@@ -2602,6 +2651,7 @@ impl ListDashboardsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMetricsInput {
     /// <p>The dimensions to filter against.</p>
     pub dimensions: Option<Vec<DimensionFilter>>,
@@ -2642,6 +2692,7 @@ impl ListMetricsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListMetricsOutput {
     /// <p>The metrics.</p>
     pub metrics: Option<Vec<Metric>>,
@@ -2673,6 +2724,7 @@ impl ListMetricsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>The ARN of the CloudWatch resource that you want to view tags for. For more information on ARN format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-cloudwatch">Example ARNs</a> in the <i>Amazon Web Services General Reference</i>.</p>
     pub resource_arn: String,
@@ -2692,6 +2744,7 @@ impl ListTagsForResourceInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTagsForResourceOutput {
     /// <p>The list of tag keys and values associated with the resource you specified.</p>
     pub tags: Option<Vec<Tag>>,
@@ -2734,6 +2787,7 @@ impl MessageDeserializer {
 }
 /// <p>A message returned by the <code>GetMetricData</code>API, including a code and a description.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct MessageData {
     /// <p>The error code or status code associated with the message.</p>
     pub code: Option<String>,
@@ -2786,6 +2840,8 @@ impl MessageDataValueDeserializer {
 }
 /// <p>Represents a specific metric.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Metric {
     /// <p>The dimensions for the metric.</p>
     pub dimensions: Option<Vec<Dimension>>,
@@ -2847,6 +2903,7 @@ impl MetricSerializer {
 
 /// <p>Represents an alarm.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct MetricAlarm {
     /// <p>Indicates whether actions should be executed during any changes to the alarm state.</p>
     pub actions_enabled: Option<bool>,
@@ -3111,6 +3168,8 @@ impl MetricDataQueriesSerializer {
 
 /// <p>This structure is used in both <code>GetMetricData</code> and <code>PutMetricAlarm</code>. The supported use of this structure is different for those two operations.</p> <p>When used in <code>GetMetricData</code>, it indicates the metric data to return, and whether this call is just retrieving a batch set of data for one metric, or is performing a math expression on metric data. A single <code>GetMetricData</code> call can include up to 100 <code>MetricDataQuery</code> structures.</p> <p>When used in <code>PutMetricAlarm</code>, it enables you to create an alarm based on a metric math expression. Each <code>MetricDataQuery</code> in the array specifies either a metric to retrieve, or a math expression to be performed on retrieved metrics. A single <code>PutMetricAlarm</code> call can include up to 20 <code>MetricDataQuery</code> structures in the array. The 20 structures can include as many as 10 structures that contain a <code>MetricStat</code> parameter to retrieve a metric, and as many as 10 structures that contain the <code>Expression</code> parameter to perform a math expression. Of those <code>Expression</code> structures, one must have <code>True</code> as the value for <code>ReturnData</code>. The result of this expression is the value the alarm watches.</p> <p>Any expression used in a <code>PutMetricAlarm</code> operation must return a single time series. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Some of the parameters of this structure also have different uses whether you are using this structure in a <code>GetMetricData</code> operation or a <code>PutMetricAlarm</code> operation. These differences are explained in the following parameter list.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MetricDataQuery {
     /// <p>The math expression to be performed on the returned data, if this object is performing a math expression. This expression can use the <code>Id</code> of the other metrics to refer to those metrics, and can also use the <code>Id</code> of other expressions to use the result of those expressions. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Within each MetricDataQuery object, you must specify either <code>Expression</code> or <code>MetricStat</code> but not both.</p>
     pub expression: Option<String>,
@@ -3199,6 +3258,7 @@ impl MetricDataQuerySerializer {
 
 /// <p>A <code>GetMetricData</code> call returns an array of <code>MetricDataResult</code> structures. Each of these structures includes the data points for that metric, along with the timestamps of those data points and other identifying information.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct MetricDataResult {
     /// <p>The short name you specified to represent this metric.</p>
     pub id: Option<String>,
@@ -3290,6 +3350,7 @@ impl MetricDataResultsDeserializer {
 }
 /// <p>Encapsulates the information sent to either create a metric or add new values to be aggregated into an existing metric.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MetricDatum {
     /// <p>Array of numbers that is used along with the <code>Values</code> array. Each number in the <code>Count</code> array is the number of times the corresponding value in the <code>Values</code> array occurred during the period. </p> <p>If you omit the <code>Counts</code> array, the default of 1 is used as the value for each count. If you include a <code>Counts</code> array, it must include the same amount of values as the <code>Values</code> array.</p>
     pub counts: Option<Vec<f64>>,
@@ -3402,6 +3463,8 @@ impl MetricNameDeserializer {
 }
 /// <p>This structure defines the metric to be returned, along with the statistics, period, and units.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MetricStat {
     /// <p>The metric to return, including the metric name, namespace, and dimensions.</p>
     pub metric: Metric,
@@ -3514,6 +3577,7 @@ impl NextTokenDeserializer {
 }
 /// <p>This array is empty if the API operation was successful for all the rules specified in the request. If the operation could not process one of the rules, the following data is returned for each of those rules.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PartialFailure {
     /// <p>The type of error.</p>
     pub exception_type: Option<String>,
@@ -3574,6 +3638,7 @@ impl PeriodDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAnomalyDetectorInput {
     /// <p>The configuration specifies details about how the anomaly detection model is to be trained, including time ranges to exclude when training and updating the model. You can specify as many as 10 time ranges.</p> <p>The configuration can also include the time zone to use for the metric.</p> <p>You can in</p>
     pub configuration: Option<AnomalyDetectorConfiguration>,
@@ -3617,6 +3682,7 @@ impl PutAnomalyDetectorInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutAnomalyDetectorOutput {}
 
 struct PutAnomalyDetectorOutputDeserializer;
@@ -3636,6 +3702,7 @@ impl PutAnomalyDetectorOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDashboardInput {
     /// <p>The detailed information about the dashboard in JSON format, including the widgets to include and their location on the dashboard. This parameter is required.</p> <p>For more information about the syntax, see <a>CloudWatch-Dashboard-Body-Structure</a>.</p>
     pub dashboard_body: String,
@@ -3664,6 +3731,7 @@ impl PutDashboardInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutDashboardOutput {
     /// <p>If the input for <code>PutDashboard</code> was correct and the dashboard was successfully created or modified, this result is empty.</p> <p>If this result includes only warning messages, then the input was valid enough for the dashboard to be created or modified, but some elements of the dashboard may not render.</p> <p>If this result includes error messages, the input was not valid and the operation failed.</p>
     pub dashboard_validation_messages: Option<Vec<DashboardValidationMessage>>,
@@ -3693,6 +3761,7 @@ impl PutDashboardOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutInsightRuleInput {
     /// <p>The definition of the rule, as a JSON object. For details on the valid syntax, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights-RuleSyntax.html">Contributor Insights Rule Syntax</a>.</p>
     pub rule_definition: String,
@@ -3723,6 +3792,7 @@ impl PutInsightRuleInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutInsightRuleOutput {}
 
 struct PutInsightRuleOutputDeserializer;
@@ -3742,6 +3812,7 @@ impl PutInsightRuleOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMetricAlarmInput {
     /// <p>Indicates whether actions should be executed during any changes to the alarm state. The default is <code>TRUE</code>.</p>
     pub actions_enabled: Option<bool>,
@@ -3891,6 +3962,7 @@ impl PutMetricAlarmInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMetricDataInput {
     /// <p>The data for the metric. The array can include no more than 20 metrics per call.</p>
     pub metric_data: Vec<MetricDatum>,
@@ -3918,6 +3990,8 @@ impl PutMetricDataInputSerializer {
 
 /// <p>Specifies one range of days or times to exclude from use for training an anomaly detection model.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Range {
     /// <p>The end time of the range to exclude. The format is <code>yyyy-MM-dd'T'HH:mm:ss</code>. For example, <code>2019-07-01T23:59:59</code>.</p>
     pub end_time: String,
@@ -4010,6 +4084,7 @@ impl ReturnDataDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetAlarmStateInput {
     /// <p>The name for the alarm. This name must be unique within the AWS account. The maximum length is 255 characters.</p>
     pub alarm_name: String,
@@ -4118,6 +4193,7 @@ impl StatisticDeserializer {
 }
 /// <p>Represents a set of statistics that describes a specific metric. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StatisticSet {
     /// <p>The maximum value of the sample set.</p>
     pub maximum: f64,
@@ -4169,6 +4245,8 @@ impl StatusCodeDeserializer {
 }
 /// <p>A key-value pair associated with a CloudWatch resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>A string that you can use to assign a value. The combination of tag keys and values can help you organize and categorize your resources.</p>
     pub key: String,
@@ -4262,6 +4340,7 @@ impl TagListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The ARN of the CloudWatch alarm that you're adding tags to. The ARN format is <code>arn:aws:cloudwatch:<i>Region</i>:<i>account-id</i>:alarm:<i>alarm-name</i> </code> </p>
     pub resource_arn: String,
@@ -4284,6 +4363,7 @@ impl TagResourceInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagResourceOutput {}
 
 struct TagResourceOutputDeserializer;
@@ -4364,6 +4444,7 @@ impl TreatMissingDataDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>The ARN of the CloudWatch resource that you're removing tags from. For more information on ARN format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-cloudwatch">Example ARNs</a> in the <i>Amazon Web Services General Reference</i>.</p>
     pub resource_arn: String,
@@ -4386,6 +4467,7 @@ impl UntagResourceInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UntagResourceOutput {}
 
 struct UntagResourceOutputDeserializer;
@@ -4453,16 +4535,12 @@ impl DeleteAlarmsError {
 }
 impl fmt::Display for DeleteAlarmsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAlarmsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAlarmsError::ResourceNotFound(ref cause) => cause,
+            DeleteAlarmsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAlarmsError {}
 /// Errors returned by DeleteAnomalyDetector
 #[derive(Debug, PartialEq)]
 pub enum DeleteAnomalyDetectorError {
@@ -4523,19 +4601,17 @@ impl DeleteAnomalyDetectorError {
 }
 impl fmt::Display for DeleteAnomalyDetectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAnomalyDetectorError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAnomalyDetectorError::InternalServiceFault(ref cause) => cause,
-            DeleteAnomalyDetectorError::InvalidParameterValue(ref cause) => cause,
-            DeleteAnomalyDetectorError::MissingRequiredParameter(ref cause) => cause,
-            DeleteAnomalyDetectorError::ResourceNotFound(ref cause) => cause,
+            DeleteAnomalyDetectorError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            DeleteAnomalyDetectorError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteAnomalyDetectorError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAnomalyDetectorError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAnomalyDetectorError {}
 /// Errors returned by DeleteDashboards
 #[derive(Debug, PartialEq)]
 pub enum DeleteDashboardsError {
@@ -4587,18 +4663,14 @@ impl DeleteDashboardsError {
 }
 impl fmt::Display for DeleteDashboardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDashboardsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDashboardsError::DashboardNotFoundError(ref cause) => cause,
-            DeleteDashboardsError::InternalServiceFault(ref cause) => cause,
-            DeleteDashboardsError::InvalidParameterValue(ref cause) => cause,
+            DeleteDashboardsError::DashboardNotFoundError(ref cause) => write!(f, "{}", cause),
+            DeleteDashboardsError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            DeleteDashboardsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDashboardsError {}
 /// Errors returned by DeleteInsightRules
 #[derive(Debug, PartialEq)]
 pub enum DeleteInsightRulesError {
@@ -4643,17 +4715,13 @@ impl DeleteInsightRulesError {
 }
 impl fmt::Display for DeleteInsightRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInsightRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInsightRulesError::InvalidParameterValue(ref cause) => cause,
-            DeleteInsightRulesError::MissingRequiredParameter(ref cause) => cause,
+            DeleteInsightRulesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteInsightRulesError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInsightRulesError {}
 /// Errors returned by DescribeAlarmHistory
 #[derive(Debug, PartialEq)]
 pub enum DescribeAlarmHistoryError {
@@ -4691,16 +4759,12 @@ impl DescribeAlarmHistoryError {
 }
 impl fmt::Display for DescribeAlarmHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAlarmHistoryError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAlarmHistoryError::InvalidNextToken(ref cause) => cause,
+            DescribeAlarmHistoryError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAlarmHistoryError {}
 /// Errors returned by DescribeAlarms
 #[derive(Debug, PartialEq)]
 pub enum DescribeAlarmsError {
@@ -4738,16 +4802,12 @@ impl DescribeAlarmsError {
 }
 impl fmt::Display for DescribeAlarmsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAlarmsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAlarmsError::InvalidNextToken(ref cause) => cause,
+            DescribeAlarmsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAlarmsError {}
 /// Errors returned by DescribeAlarmsForMetric
 #[derive(Debug, PartialEq)]
 pub enum DescribeAlarmsForMetricError {}
@@ -4777,14 +4837,10 @@ impl DescribeAlarmsForMetricError {
 }
 impl fmt::Display for DescribeAlarmsForMetricError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAlarmsForMetricError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAlarmsForMetricError {}
 /// Errors returned by DescribeAnomalyDetectors
 #[derive(Debug, PartialEq)]
 pub enum DescribeAnomalyDetectorsError {
@@ -4840,18 +4896,18 @@ impl DescribeAnomalyDetectorsError {
 }
 impl fmt::Display for DescribeAnomalyDetectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAnomalyDetectorsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAnomalyDetectorsError::InternalServiceFault(ref cause) => cause,
-            DescribeAnomalyDetectorsError::InvalidNextToken(ref cause) => cause,
-            DescribeAnomalyDetectorsError::InvalidParameterValue(ref cause) => cause,
+            DescribeAnomalyDetectorsError::InternalServiceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAnomalyDetectorsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeAnomalyDetectorsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAnomalyDetectorsError {}
 /// Errors returned by DescribeInsightRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeInsightRulesError {
@@ -4889,16 +4945,12 @@ impl DescribeInsightRulesError {
 }
 impl fmt::Display for DescribeInsightRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInsightRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInsightRulesError::InvalidNextToken(ref cause) => cause,
+            DescribeInsightRulesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInsightRulesError {}
 /// Errors returned by DisableAlarmActions
 #[derive(Debug, PartialEq)]
 pub enum DisableAlarmActionsError {}
@@ -4928,14 +4980,10 @@ impl DisableAlarmActionsError {
 }
 impl fmt::Display for DisableAlarmActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableAlarmActionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DisableAlarmActionsError {}
 /// Errors returned by DisableInsightRules
 #[derive(Debug, PartialEq)]
 pub enum DisableInsightRulesError {
@@ -4982,17 +5030,13 @@ impl DisableInsightRulesError {
 }
 impl fmt::Display for DisableInsightRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableInsightRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DisableInsightRulesError::InvalidParameterValue(ref cause) => cause,
-            DisableInsightRulesError::MissingRequiredParameter(ref cause) => cause,
+            DisableInsightRulesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DisableInsightRulesError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableInsightRulesError {}
 /// Errors returned by EnableAlarmActions
 #[derive(Debug, PartialEq)]
 pub enum EnableAlarmActionsError {}
@@ -5022,14 +5066,10 @@ impl EnableAlarmActionsError {
 }
 impl fmt::Display for EnableAlarmActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableAlarmActionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for EnableAlarmActionsError {}
 /// Errors returned by EnableInsightRules
 #[derive(Debug, PartialEq)]
 pub enum EnableInsightRulesError {
@@ -5081,18 +5121,14 @@ impl EnableInsightRulesError {
 }
 impl fmt::Display for EnableInsightRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableInsightRulesError {
-    fn description(&self) -> &str {
         match *self {
-            EnableInsightRulesError::InvalidParameterValue(ref cause) => cause,
-            EnableInsightRulesError::LimitExceeded(ref cause) => cause,
-            EnableInsightRulesError::MissingRequiredParameter(ref cause) => cause,
+            EnableInsightRulesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            EnableInsightRulesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            EnableInsightRulesError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableInsightRulesError {}
 /// Errors returned by GetDashboard
 #[derive(Debug, PartialEq)]
 pub enum GetDashboardError {
@@ -5144,18 +5180,14 @@ impl GetDashboardError {
 }
 impl fmt::Display for GetDashboardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDashboardError {
-    fn description(&self) -> &str {
         match *self {
-            GetDashboardError::DashboardNotFoundError(ref cause) => cause,
-            GetDashboardError::InternalServiceFault(ref cause) => cause,
-            GetDashboardError::InvalidParameterValue(ref cause) => cause,
+            GetDashboardError::DashboardNotFoundError(ref cause) => write!(f, "{}", cause),
+            GetDashboardError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            GetDashboardError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDashboardError {}
 /// Errors returned by GetInsightRuleReport
 #[derive(Debug, PartialEq)]
 pub enum GetInsightRuleReportError {
@@ -5209,18 +5241,16 @@ impl GetInsightRuleReportError {
 }
 impl fmt::Display for GetInsightRuleReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInsightRuleReportError {
-    fn description(&self) -> &str {
         match *self {
-            GetInsightRuleReportError::InvalidParameterValue(ref cause) => cause,
-            GetInsightRuleReportError::MissingRequiredParameter(ref cause) => cause,
-            GetInsightRuleReportError::ResourceNotFound(ref cause) => cause,
+            GetInsightRuleReportError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetInsightRuleReportError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetInsightRuleReportError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInsightRuleReportError {}
 /// Errors returned by GetMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetMetricDataError {
@@ -5258,16 +5288,12 @@ impl GetMetricDataError {
 }
 impl fmt::Display for GetMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMetricDataError {
-    fn description(&self) -> &str {
         match *self {
-            GetMetricDataError::InvalidNextToken(ref cause) => cause,
+            GetMetricDataError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMetricDataError {}
 /// Errors returned by GetMetricStatistics
 #[derive(Debug, PartialEq)]
 pub enum GetMetricStatisticsError {
@@ -5330,19 +5356,17 @@ impl GetMetricStatisticsError {
 }
 impl fmt::Display for GetMetricStatisticsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMetricStatisticsError {
-    fn description(&self) -> &str {
         match *self {
-            GetMetricStatisticsError::InternalServiceFault(ref cause) => cause,
-            GetMetricStatisticsError::InvalidParameterCombination(ref cause) => cause,
-            GetMetricStatisticsError::InvalidParameterValue(ref cause) => cause,
-            GetMetricStatisticsError::MissingRequiredParameter(ref cause) => cause,
+            GetMetricStatisticsError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            GetMetricStatisticsError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMetricStatisticsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetMetricStatisticsError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMetricStatisticsError {}
 /// Errors returned by GetMetricWidgetImage
 #[derive(Debug, PartialEq)]
 pub enum GetMetricWidgetImageError {}
@@ -5372,14 +5396,10 @@ impl GetMetricWidgetImageError {
 }
 impl fmt::Display for GetMetricWidgetImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMetricWidgetImageError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetMetricWidgetImageError {}
 /// Errors returned by ListDashboards
 #[derive(Debug, PartialEq)]
 pub enum ListDashboardsError {
@@ -5424,17 +5444,13 @@ impl ListDashboardsError {
 }
 impl fmt::Display for ListDashboardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDashboardsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDashboardsError::InternalServiceFault(ref cause) => cause,
-            ListDashboardsError::InvalidParameterValue(ref cause) => cause,
+            ListDashboardsError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            ListDashboardsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDashboardsError {}
 /// Errors returned by ListMetrics
 #[derive(Debug, PartialEq)]
 pub enum ListMetricsError {
@@ -5479,17 +5495,13 @@ impl ListMetricsError {
 }
 impl fmt::Display for ListMetricsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMetricsError {
-    fn description(&self) -> &str {
         match *self {
-            ListMetricsError::InternalServiceFault(ref cause) => cause,
-            ListMetricsError::InvalidParameterValue(ref cause) => cause,
+            ListMetricsError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            ListMetricsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMetricsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -5541,18 +5553,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalServiceFault(ref cause) => cause,
-            ListTagsForResourceError::InvalidParameterValue(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutAnomalyDetector
 #[derive(Debug, PartialEq)]
 pub enum PutAnomalyDetectorError {
@@ -5611,19 +5619,15 @@ impl PutAnomalyDetectorError {
 }
 impl fmt::Display for PutAnomalyDetectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAnomalyDetectorError {
-    fn description(&self) -> &str {
         match *self {
-            PutAnomalyDetectorError::InternalServiceFault(ref cause) => cause,
-            PutAnomalyDetectorError::InvalidParameterValue(ref cause) => cause,
-            PutAnomalyDetectorError::LimitExceeded(ref cause) => cause,
-            PutAnomalyDetectorError::MissingRequiredParameter(ref cause) => cause,
+            PutAnomalyDetectorError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            PutAnomalyDetectorError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutAnomalyDetectorError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutAnomalyDetectorError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutAnomalyDetectorError {}
 /// Errors returned by PutDashboard
 #[derive(Debug, PartialEq)]
 pub enum PutDashboardError {
@@ -5668,17 +5672,13 @@ impl PutDashboardError {
 }
 impl fmt::Display for PutDashboardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutDashboardError {
-    fn description(&self) -> &str {
         match *self {
-            PutDashboardError::DashboardInvalidInputError(ref cause) => cause,
-            PutDashboardError::InternalServiceFault(ref cause) => cause,
+            PutDashboardError::DashboardInvalidInputError(ref cause) => write!(f, "{}", cause),
+            PutDashboardError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutDashboardError {}
 /// Errors returned by PutInsightRule
 #[derive(Debug, PartialEq)]
 pub enum PutInsightRuleError {
@@ -5730,18 +5730,14 @@ impl PutInsightRuleError {
 }
 impl fmt::Display for PutInsightRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutInsightRuleError {
-    fn description(&self) -> &str {
         match *self {
-            PutInsightRuleError::InvalidParameterValue(ref cause) => cause,
-            PutInsightRuleError::LimitExceeded(ref cause) => cause,
-            PutInsightRuleError::MissingRequiredParameter(ref cause) => cause,
+            PutInsightRuleError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutInsightRuleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutInsightRuleError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutInsightRuleError {}
 /// Errors returned by PutMetricAlarm
 #[derive(Debug, PartialEq)]
 pub enum PutMetricAlarmError {
@@ -5779,16 +5775,12 @@ impl PutMetricAlarmError {
 }
 impl fmt::Display for PutMetricAlarmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutMetricAlarmError {
-    fn description(&self) -> &str {
         match *self {
-            PutMetricAlarmError::LimitExceededFault(ref cause) => cause,
+            PutMetricAlarmError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutMetricAlarmError {}
 /// Errors returned by PutMetricData
 #[derive(Debug, PartialEq)]
 pub enum PutMetricDataError {
@@ -5847,19 +5839,15 @@ impl PutMetricDataError {
 }
 impl fmt::Display for PutMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutMetricDataError {
-    fn description(&self) -> &str {
         match *self {
-            PutMetricDataError::InternalServiceFault(ref cause) => cause,
-            PutMetricDataError::InvalidParameterCombination(ref cause) => cause,
-            PutMetricDataError::InvalidParameterValue(ref cause) => cause,
-            PutMetricDataError::MissingRequiredParameter(ref cause) => cause,
+            PutMetricDataError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            PutMetricDataError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            PutMetricDataError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutMetricDataError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutMetricDataError {}
 /// Errors returned by SetAlarmState
 #[derive(Debug, PartialEq)]
 pub enum SetAlarmStateError {
@@ -5904,17 +5892,13 @@ impl SetAlarmStateError {
 }
 impl fmt::Display for SetAlarmStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetAlarmStateError {
-    fn description(&self) -> &str {
         match *self {
-            SetAlarmStateError::InvalidFormatFault(ref cause) => cause,
-            SetAlarmStateError::ResourceNotFound(ref cause) => cause,
+            SetAlarmStateError::InvalidFormatFault(ref cause) => write!(f, "{}", cause),
+            SetAlarmStateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetAlarmStateError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -5973,19 +5957,15 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ConcurrentModification(ref cause) => cause,
-            TagResourceError::InternalServiceFault(ref cause) => cause,
-            TagResourceError::InvalidParameterValue(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -6044,19 +6024,15 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ConcurrentModification(ref cause) => cause,
-            UntagResourceError::InternalServiceFault(ref cause) => cause,
-            UntagResourceError::InvalidParameterValue(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the CloudWatch API. CloudWatch clients implement this trait.
 pub trait CloudWatch {
     /// <p>Deletes the specified alarms. You can delete up to 50 alarms in one operation. In the event of an error, no alarms are deleted.</p>

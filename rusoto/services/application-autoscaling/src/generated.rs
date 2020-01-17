@@ -58,6 +58,7 @@ pub struct CustomizedMetricSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScalingPolicyRequest {
     /// <p>The name of the scaling policy.</p>
     #[serde(rename = "PolicyName")]
@@ -78,6 +79,7 @@ pub struct DeleteScalingPolicyRequest {
 pub struct DeleteScalingPolicyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScheduledActionRequest {
     /// <p><p>The identifier of the resource associated with the scheduled action. This string consists of the resource type and unique identifier.</p> <ul> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot Fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot Fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>EMR cluster - The resource type is <code>instancegroup</code> and the unique identifier is the cluster ID and instance group ID. Example: <code>instancegroup/j-2EEZNYKUA1NTV/ig-1791Y4E1L8YI0</code>.</p> </li> <li> <p>AppStream 2.0 fleet - The resource type is <code>fleet</code> and the unique identifier is the fleet name. Example: <code>fleet/sample-fleet</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the table name. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the index name. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> <li> <p>Amazon SageMaker endpoint variant - The resource type is <code>variant</code> and the unique identifier is the resource ID. Example: <code>endpoint/my-end-point/variant/KMeansClustering</code>.</p> </li> <li> <p>Custom resources are not supported with a resource type. This parameter must specify the <code>OutputValue</code> from the CloudFormation template stack used to access the resources. The unique identifier is defined by the service provider. More information is available in our <a href="https://github.com/aws/aws-auto-scaling-custom-resource">GitHub repository</a>.</p> </li> <li> <p>Amazon Comprehend document classification endpoint - The resource type and unique identifier are specified using the endpoint ARN. Example: <code>arn:aws:comprehend:us-west-2:123456789012:document-classifier-endpoint/EXAMPLE</code>.</p> </li> <li> <p>Lambda provisioned concurrency - The resource type is <code>function</code> and the unique identifier is the function name with a function version or alias name suffix that is not <code>$LATEST</code>. Example: <code>function:my-function:prod</code> or <code>function:my-function:1</code>.</p> </li> </ul></p>
     #[serde(rename = "ResourceId")]
@@ -98,6 +100,7 @@ pub struct DeleteScheduledActionRequest {
 pub struct DeleteScheduledActionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterScalableTargetRequest {
     /// <p><p>The identifier of the resource associated with the scalable target. This string consists of the resource type and unique identifier.</p> <ul> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot Fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot Fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>EMR cluster - The resource type is <code>instancegroup</code> and the unique identifier is the cluster ID and instance group ID. Example: <code>instancegroup/j-2EEZNYKUA1NTV/ig-1791Y4E1L8YI0</code>.</p> </li> <li> <p>AppStream 2.0 fleet - The resource type is <code>fleet</code> and the unique identifier is the fleet name. Example: <code>fleet/sample-fleet</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the table name. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the index name. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> <li> <p>Amazon SageMaker endpoint variant - The resource type is <code>variant</code> and the unique identifier is the resource ID. Example: <code>endpoint/my-end-point/variant/KMeansClustering</code>.</p> </li> <li> <p>Custom resources are not supported with a resource type. This parameter must specify the <code>OutputValue</code> from the CloudFormation template stack used to access the resources. The unique identifier is defined by the service provider. More information is available in our <a href="https://github.com/aws/aws-auto-scaling-custom-resource">GitHub repository</a>.</p> </li> <li> <p>Amazon Comprehend document classification endpoint - The resource type and unique identifier are specified using the endpoint ARN. Example: <code>arn:aws:comprehend:us-west-2:123456789012:document-classifier-endpoint/EXAMPLE</code>.</p> </li> <li> <p>Lambda provisioned concurrency - The resource type is <code>function</code> and the unique identifier is the function name with a function version or alias name suffix that is not <code>$LATEST</code>. Example: <code>function:my-function:prod</code> or <code>function:my-function:1</code>.</p> </li> </ul></p>
     #[serde(rename = "ResourceId")]
@@ -115,6 +118,7 @@ pub struct DeregisterScalableTargetRequest {
 pub struct DeregisterScalableTargetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalableTargetsRequest {
     /// <p>The maximum number of scalable targets. This value can be between 1 and 50. The default value is 50.</p> <p>If this parameter is used, the operation returns up to <code>MaxResults</code> results at a time, along with a <code>NextToken</code> value. To get the next set of results, include the <code>NextToken</code> value in a subsequent call. If this parameter is not used, the operation returns up to 50 results and a <code>NextToken</code> value, if applicable.</p>
     #[serde(rename = "MaxResults")]
@@ -151,6 +155,7 @@ pub struct DescribeScalableTargetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingActivitiesRequest {
     /// <p>The maximum number of scalable targets. This value can be between 1 and 50. The default value is 50.</p> <p>If this parameter is used, the operation returns up to <code>MaxResults</code> results at a time, along with a <code>NextToken</code> value. To get the next set of results, include the <code>NextToken</code> value in a subsequent call. If this parameter is not used, the operation returns up to 50 results and a <code>NextToken</code> value, if applicable.</p>
     #[serde(rename = "MaxResults")]
@@ -187,6 +192,7 @@ pub struct DescribeScalingActivitiesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingPoliciesRequest {
     /// <p>The maximum number of scalable targets. This value can be between 1 and 50. The default value is 50.</p> <p>If this parameter is used, the operation returns up to <code>MaxResults</code> results at a time, along with a <code>NextToken</code> value. To get the next set of results, include the <code>NextToken</code> value in a subsequent call. If this parameter is not used, the operation returns up to 50 results and a <code>NextToken</code> value, if applicable.</p>
     #[serde(rename = "MaxResults")]
@@ -227,6 +233,7 @@ pub struct DescribeScalingPoliciesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScheduledActionsRequest {
     /// <p>The maximum number of scheduled action results. This value can be between 1 and 50. The default value is 50.</p> <p>If this parameter is used, the operation returns up to <code>MaxResults</code> results at a time, along with a <code>NextToken</code> value. To get the next set of results, include the <code>NextToken</code> value in a subsequent call. If this parameter is not used, the operation returns up to 50 results and a <code>NextToken</code> value, if applicable.</p>
     #[serde(rename = "MaxResults")]
@@ -290,6 +297,7 @@ pub struct PredefinedMetricSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutScalingPolicyRequest {
     /// <p>The name of the scaling policy.</p>
     #[serde(rename = "PolicyName")]
@@ -331,6 +339,7 @@ pub struct PutScalingPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutScheduledActionRequest {
     /// <p>The date and time for the scheduled action to end.</p>
     #[serde(rename = "EndTime")]
@@ -367,6 +376,7 @@ pub struct PutScheduledActionRequest {
 pub struct PutScheduledActionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterScalableTargetRequest {
     /// <p>The maximum value to scale to in response to a scale-out event. <code>MaxCapacity</code> is required to register a scalable target.</p>
     #[serde(rename = "MaxCapacity")]
@@ -685,18 +695,14 @@ impl DeleteScalingPolicyError {
 }
 impl fmt::Display for DeleteScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteScalingPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteScalingPolicyError::ConcurrentUpdate(ref cause) => cause,
-            DeleteScalingPolicyError::InternalService(ref cause) => cause,
-            DeleteScalingPolicyError::ObjectNotFound(ref cause) => cause,
+            DeleteScalingPolicyError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DeleteScalingPolicyError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteScalingPolicyError::ObjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteScalingPolicyError {}
 /// Errors returned by DeleteScheduledAction
 #[derive(Debug, PartialEq)]
 pub enum DeleteScheduledActionError {
@@ -736,18 +742,14 @@ impl DeleteScheduledActionError {
 }
 impl fmt::Display for DeleteScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteScheduledActionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteScheduledActionError::ConcurrentUpdate(ref cause) => cause,
-            DeleteScheduledActionError::InternalService(ref cause) => cause,
-            DeleteScheduledActionError::ObjectNotFound(ref cause) => cause,
+            DeleteScheduledActionError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DeleteScheduledActionError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteScheduledActionError::ObjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteScheduledActionError {}
 /// Errors returned by DeregisterScalableTarget
 #[derive(Debug, PartialEq)]
 pub enum DeregisterScalableTargetError {
@@ -787,18 +789,14 @@ impl DeregisterScalableTargetError {
 }
 impl fmt::Display for DeregisterScalableTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterScalableTargetError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterScalableTargetError::ConcurrentUpdate(ref cause) => cause,
-            DeregisterScalableTargetError::InternalService(ref cause) => cause,
-            DeregisterScalableTargetError::ObjectNotFound(ref cause) => cause,
+            DeregisterScalableTargetError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DeregisterScalableTargetError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeregisterScalableTargetError::ObjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterScalableTargetError {}
 /// Errors returned by DescribeScalableTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalableTargetsError {
@@ -838,18 +836,14 @@ impl DescribeScalableTargetsError {
 }
 impl fmt::Display for DescribeScalableTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScalableTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScalableTargetsError::ConcurrentUpdate(ref cause) => cause,
-            DescribeScalableTargetsError::InternalService(ref cause) => cause,
-            DescribeScalableTargetsError::InvalidNextToken(ref cause) => cause,
+            DescribeScalableTargetsError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DescribeScalableTargetsError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeScalableTargetsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScalableTargetsError {}
 /// Errors returned by DescribeScalingActivities
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingActivitiesError {
@@ -889,18 +883,14 @@ impl DescribeScalingActivitiesError {
 }
 impl fmt::Display for DescribeScalingActivitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScalingActivitiesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScalingActivitiesError::ConcurrentUpdate(ref cause) => cause,
-            DescribeScalingActivitiesError::InternalService(ref cause) => cause,
-            DescribeScalingActivitiesError::InvalidNextToken(ref cause) => cause,
+            DescribeScalingActivitiesError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DescribeScalingActivitiesError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeScalingActivitiesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScalingActivitiesError {}
 /// Errors returned by DescribeScalingPolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingPoliciesError {
@@ -947,19 +937,15 @@ impl DescribeScalingPoliciesError {
 }
 impl fmt::Display for DescribeScalingPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScalingPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScalingPoliciesError::ConcurrentUpdate(ref cause) => cause,
-            DescribeScalingPoliciesError::FailedResourceAccess(ref cause) => cause,
-            DescribeScalingPoliciesError::InternalService(ref cause) => cause,
-            DescribeScalingPoliciesError::InvalidNextToken(ref cause) => cause,
+            DescribeScalingPoliciesError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DescribeScalingPoliciesError::FailedResourceAccess(ref cause) => write!(f, "{}", cause),
+            DescribeScalingPoliciesError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeScalingPoliciesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScalingPoliciesError {}
 /// Errors returned by DescribeScheduledActions
 #[derive(Debug, PartialEq)]
 pub enum DescribeScheduledActionsError {
@@ -999,18 +985,14 @@ impl DescribeScheduledActionsError {
 }
 impl fmt::Display for DescribeScheduledActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScheduledActionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScheduledActionsError::ConcurrentUpdate(ref cause) => cause,
-            DescribeScheduledActionsError::InternalService(ref cause) => cause,
-            DescribeScheduledActionsError::InvalidNextToken(ref cause) => cause,
+            DescribeScheduledActionsError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DescribeScheduledActionsError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeScheduledActionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScheduledActionsError {}
 /// Errors returned by PutScalingPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutScalingPolicyError {
@@ -1056,20 +1038,16 @@ impl PutScalingPolicyError {
 }
 impl fmt::Display for PutScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutScalingPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutScalingPolicyError::ConcurrentUpdate(ref cause) => cause,
-            PutScalingPolicyError::FailedResourceAccess(ref cause) => cause,
-            PutScalingPolicyError::InternalService(ref cause) => cause,
-            PutScalingPolicyError::LimitExceeded(ref cause) => cause,
-            PutScalingPolicyError::ObjectNotFound(ref cause) => cause,
+            PutScalingPolicyError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::FailedResourceAccess(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::InternalService(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::ObjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutScalingPolicyError {}
 /// Errors returned by PutScheduledAction
 #[derive(Debug, PartialEq)]
 pub enum PutScheduledActionError {
@@ -1108,19 +1086,15 @@ impl PutScheduledActionError {
 }
 impl fmt::Display for PutScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutScheduledActionError {
-    fn description(&self) -> &str {
         match *self {
-            PutScheduledActionError::ConcurrentUpdate(ref cause) => cause,
-            PutScheduledActionError::InternalService(ref cause) => cause,
-            PutScheduledActionError::LimitExceeded(ref cause) => cause,
-            PutScheduledActionError::ObjectNotFound(ref cause) => cause,
+            PutScheduledActionError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            PutScheduledActionError::InternalService(ref cause) => write!(f, "{}", cause),
+            PutScheduledActionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutScheduledActionError::ObjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutScheduledActionError {}
 /// Errors returned by RegisterScalableTarget
 #[derive(Debug, PartialEq)]
 pub enum RegisterScalableTargetError {
@@ -1160,18 +1134,14 @@ impl RegisterScalableTargetError {
 }
 impl fmt::Display for RegisterScalableTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterScalableTargetError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterScalableTargetError::ConcurrentUpdate(ref cause) => cause,
-            RegisterScalableTargetError::InternalService(ref cause) => cause,
-            RegisterScalableTargetError::LimitExceeded(ref cause) => cause,
+            RegisterScalableTargetError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            RegisterScalableTargetError::InternalService(ref cause) => write!(f, "{}", cause),
+            RegisterScalableTargetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterScalableTargetError {}
 /// Trait representing the capabilities of the Application Auto Scaling API. Application Auto Scaling clients implement this trait.
 pub trait ApplicationAutoScaling {
     /// <p>Deletes the specified scaling policy for an Application Auto Scaling scalable target.</p> <p>Deleting a step scaling policy deletes the underlying alarm action, but does not delete the CloudWatch alarm associated with the scaling policy, even if it no longer has an associated action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-step-scaling-policies.html#delete-step-scaling-policy">Delete a Step Scaling Policy</a> and <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-target-tracking.html#delete-target-tracking-policy">Delete a Target Tracking Scaling Policy</a> in the <i>Application Auto Scaling User Guide</i>.</p> <p>To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>.</p>

@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddAttributesToFindingsRequest {
     /// <p>The array of attributes that you want to assign to specified findings.</p>
     #[serde(rename = "attributes")]
@@ -52,6 +53,7 @@ pub struct AgentAlreadyRunningAssessment {
 
 /// <p>Contains information about an Amazon Inspector agent. This data type is used as a request parameter in the <a>ListAssessmentRunAgents</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AgentFilter {
     /// <p>The detailed health state of the agent. Values can be set to <b>IDLE</b>, <b>RUNNING</b>, <b>SHUTDOWN</b>, <b>UNHEALTHY</b>, <b>THROTTLED</b>, and <b>UNKNOWN</b>. </p>
     #[serde(rename = "agentHealthCodes")]
@@ -182,6 +184,7 @@ pub struct AssessmentRunAgent {
 
 /// <p>Used as the request parameter in the <a>ListAssessmentRuns</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssessmentRunFilter {
     /// <p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>completedAt</b> property of the <a>AssessmentRun</a> data type.</p>
     #[serde(rename = "completionTimeRange")]
@@ -276,6 +279,7 @@ pub struct AssessmentTarget {
 
 /// <p>Used as the request parameter in the <a>ListAssessmentTargets</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssessmentTargetFilter {
     /// <p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTargetName</b> property of the <a>AssessmentTarget</a> data type.</p>
     #[serde(rename = "assessmentTargetNamePattern")]
@@ -319,6 +323,7 @@ pub struct AssessmentTemplate {
 
 /// <p>Used as the request parameter in the <a>ListAssessmentTemplates</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssessmentTemplateFilter {
     /// <p>For a record to match a filter, the value specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>durationInSeconds</b> property of the <a>AssessmentTemplate</a> data type.</p>
     #[serde(rename = "durationRange")]
@@ -384,6 +389,7 @@ pub struct Attribute {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssessmentTargetRequest {
     /// <p>The user-defined name that identifies the assessment target that you want to create. The name must be unique within the AWS account.</p>
     #[serde(rename = "assessmentTargetName")]
@@ -403,6 +409,7 @@ pub struct CreateAssessmentTargetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssessmentTemplateRequest {
     /// <p>The ARN that specifies the assessment target for which you want to create the assessment template.</p>
     #[serde(rename = "assessmentTargetArn")]
@@ -431,6 +438,7 @@ pub struct CreateAssessmentTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateExclusionsPreviewRequest {
     /// <p>The ARN that specifies the assessment template for which you want to create an exclusions preview.</p>
     #[serde(rename = "assessmentTemplateArn")]
@@ -446,6 +454,7 @@ pub struct CreateExclusionsPreviewResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceGroupRequest {
     /// <p>A collection of keys and an array of possible values, '[{"key":"key1","values":["Value1","Value2"]},{"key":"Key2","values":["Value3"]}]'.</p> <p>For example,'[{"key":"Name","values":["TestEC2Instance"]}]'.</p>
     #[serde(rename = "resourceGroupTags")]
@@ -461,6 +470,7 @@ pub struct CreateResourceGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssessmentRunRequest {
     /// <p>The ARN that specifies the assessment run that you want to delete.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -468,6 +478,7 @@ pub struct DeleteAssessmentRunRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssessmentTargetRequest {
     /// <p>The ARN that specifies the assessment target that you want to delete.</p>
     #[serde(rename = "assessmentTargetArn")]
@@ -475,6 +486,7 @@ pub struct DeleteAssessmentTargetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssessmentTemplateRequest {
     /// <p>The ARN that specifies the assessment template that you want to delete.</p>
     #[serde(rename = "assessmentTemplateArn")]
@@ -482,6 +494,7 @@ pub struct DeleteAssessmentTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssessmentRunsRequest {
     /// <p>The ARN that specifies the assessment run that you want to describe.</p>
     #[serde(rename = "assessmentRunArns")]
@@ -500,6 +513,7 @@ pub struct DescribeAssessmentRunsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssessmentTargetsRequest {
     /// <p>The ARNs that specifies the assessment targets that you want to describe.</p>
     #[serde(rename = "assessmentTargetArns")]
@@ -518,6 +532,7 @@ pub struct DescribeAssessmentTargetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssessmentTemplatesRequest {
     #[serde(rename = "assessmentTemplateArns")]
     pub assessment_template_arns: Vec<String>,
@@ -549,6 +564,7 @@ pub struct DescribeCrossAccountAccessRoleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExclusionsRequest {
     /// <p>The list of ARNs that specify the exclusions that you want to describe.</p>
     #[serde(rename = "exclusionArns")]
@@ -571,6 +587,7 @@ pub struct DescribeExclusionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFindingsRequest {
     /// <p>The ARN that specifies the finding that you want to describe.</p>
     #[serde(rename = "findingArns")]
@@ -593,6 +610,7 @@ pub struct DescribeFindingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourceGroupsRequest {
     /// <p>The ARN that specifies the resource group that you want to describe.</p>
     #[serde(rename = "resourceGroupArns")]
@@ -611,6 +629,7 @@ pub struct DescribeResourceGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRulesPackagesRequest {
     /// <p>The locale that you want to translate a rules package description into.</p>
     #[serde(rename = "locale")]
@@ -634,6 +653,7 @@ pub struct DescribeRulesPackagesResponse {
 
 /// <p>This data type is used in the <a>AssessmentTemplateFilter</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DurationRange {
     /// <p>The maximum value of the duration range. Must be less than or equal to 604800 seconds (1 week).</p>
     #[serde(rename = "maxSeconds")]
@@ -791,6 +811,7 @@ pub struct Finding {
 
 /// <p>This data type is used as a request parameter in the <a>ListFindings</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FindingFilter {
     /// <p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>agentId</b> property of the <a>Finding</a> data type.</p>
     #[serde(rename = "agentIds")]
@@ -827,6 +848,7 @@ pub struct FindingFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssessmentReportRequest {
     /// <p>The ARN that specifies the assessment run for which you want to generate a report.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -852,6 +874,7 @@ pub struct GetAssessmentReportResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExclusionsPreviewRequest {
     /// <p>The ARN that specifies the assessment template for which the exclusions preview was requested.</p>
     #[serde(rename = "assessmentTemplateArn")]
@@ -890,6 +913,7 @@ pub struct GetExclusionsPreviewResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTelemetryMetadataRequest {
     /// <p>The ARN that specifies the assessment run that has the telemetry data that you want to obtain.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -922,6 +946,7 @@ pub struct InspectorServiceAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentRunAgentsRequest {
     /// <p>The ARN that specifies the assessment run whose agents you want to list.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -953,6 +978,7 @@ pub struct ListAssessmentRunAgentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentRunsRequest {
     /// <p>The ARNs that specify the assessment templates whose assessment runs you want to list.</p>
     #[serde(rename = "assessmentTemplateArns")]
@@ -985,6 +1011,7 @@ pub struct ListAssessmentRunsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentTargetsRequest {
     /// <p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>
     #[serde(rename = "filter")]
@@ -1013,6 +1040,7 @@ pub struct ListAssessmentTargetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentTemplatesRequest {
     /// <p>A list of ARNs that specifies the assessment targets whose assessment templates you want to list.</p>
     #[serde(rename = "assessmentTargetArns")]
@@ -1045,6 +1073,7 @@ pub struct ListAssessmentTemplatesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventSubscriptionsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
     #[serde(rename = "maxResults")]
@@ -1073,6 +1102,7 @@ pub struct ListEventSubscriptionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListExclusionsRequest {
     /// <p>The ARN of the assessment run that generated the exclusions that you want to list.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -1100,6 +1130,7 @@ pub struct ListExclusionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFindingsRequest {
     /// <p>The ARNs of the assessment runs that generate the findings that you want to list.</p>
     #[serde(rename = "assessmentRunArns")]
@@ -1132,6 +1163,7 @@ pub struct ListFindingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRulesPackagesRequest {
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
     #[serde(rename = "maxResults")]
@@ -1156,6 +1188,7 @@ pub struct ListRulesPackagesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN that specifies the assessment template whose tags you want to list.</p>
     #[serde(rename = "resourceArn")]
@@ -1217,6 +1250,7 @@ pub struct NetworkInterface {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PreviewAgentsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
     #[serde(rename = "maxResults")]
@@ -1258,6 +1292,7 @@ pub struct PrivateIp {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCrossAccountAccessRoleRequest {
     /// <p>The ARN of the IAM role that grants Amazon Inspector access to AWS Services needed to perform security assessments. </p>
     #[serde(rename = "roleArn")]
@@ -1265,6 +1300,7 @@ pub struct RegisterCrossAccountAccessRoleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveAttributesFromFindingsRequest {
     /// <p>The array of attribute keys that you want to remove from specified findings.</p>
     #[serde(rename = "attributeKeys")]
@@ -1360,6 +1396,7 @@ pub struct SecurityGroup {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTagsForResourceRequest {
     /// <p>The ARN of the assessment template that you want to set tags to.</p>
     #[serde(rename = "resourceArn")]
@@ -1371,6 +1408,7 @@ pub struct SetTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAssessmentRunRequest {
     /// <p>You can specify the name for the assessment run. The name must be unique for the assessment template whose ARN is used to start the assessment run.</p>
     #[serde(rename = "assessmentRunName")]
@@ -1390,6 +1428,7 @@ pub struct StartAssessmentRunResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAssessmentRunRequest {
     /// <p>The ARN of the assessment run that you want to stop.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -1401,6 +1440,7 @@ pub struct StopAssessmentRunRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubscribeToEventRequest {
     /// <p>The event for which you want to receive SNS notifications.</p>
     #[serde(rename = "event")]
@@ -1458,6 +1498,7 @@ pub struct TelemetryMetadata {
 
 /// <p>This data type is used in the <a>AssessmentRunFilter</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TimestampRange {
     /// <p>The minimum value of the timestamp range.</p>
     #[serde(rename = "beginDate")]
@@ -1470,6 +1511,7 @@ pub struct TimestampRange {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnsubscribeFromEventRequest {
     /// <p>The event for which you want to stop receiving SNS notifications.</p>
     #[serde(rename = "event")]
@@ -1483,6 +1525,7 @@ pub struct UnsubscribeFromEventRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssessmentTargetRequest {
     /// <p>The ARN of the assessment target that you want to update.</p>
     #[serde(rename = "assessmentTargetArn")]
@@ -1547,20 +1590,18 @@ impl AddAttributesToFindingsError {
 }
 impl fmt::Display for AddAttributesToFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddAttributesToFindingsError {
-    fn description(&self) -> &str {
         match *self {
-            AddAttributesToFindingsError::AccessDenied(ref cause) => cause,
-            AddAttributesToFindingsError::Internal(ref cause) => cause,
-            AddAttributesToFindingsError::InvalidInput(ref cause) => cause,
-            AddAttributesToFindingsError::NoSuchEntity(ref cause) => cause,
-            AddAttributesToFindingsError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            AddAttributesToFindingsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AddAttributesToFindingsError::Internal(ref cause) => write!(f, "{}", cause),
+            AddAttributesToFindingsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AddAttributesToFindingsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            AddAttributesToFindingsError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AddAttributesToFindingsError {}
 /// Errors returned by CreateAssessmentTarget
 #[derive(Debug, PartialEq)]
 pub enum CreateAssessmentTargetError {
@@ -1620,22 +1661,22 @@ impl CreateAssessmentTargetError {
 }
 impl fmt::Display for CreateAssessmentTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAssessmentTargetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAssessmentTargetError::AccessDenied(ref cause) => cause,
-            CreateAssessmentTargetError::Internal(ref cause) => cause,
-            CreateAssessmentTargetError::InvalidCrossAccountRole(ref cause) => cause,
-            CreateAssessmentTargetError::InvalidInput(ref cause) => cause,
-            CreateAssessmentTargetError::LimitExceeded(ref cause) => cause,
-            CreateAssessmentTargetError::NoSuchEntity(ref cause) => cause,
-            CreateAssessmentTargetError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            CreateAssessmentTargetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateAssessmentTargetError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateAssessmentTargetError::InvalidCrossAccountRole(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAssessmentTargetError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateAssessmentTargetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAssessmentTargetError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateAssessmentTargetError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateAssessmentTargetError {}
 /// Errors returned by CreateAssessmentTemplate
 #[derive(Debug, PartialEq)]
 pub enum CreateAssessmentTemplateError {
@@ -1694,21 +1735,19 @@ impl CreateAssessmentTemplateError {
 }
 impl fmt::Display for CreateAssessmentTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAssessmentTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAssessmentTemplateError::AccessDenied(ref cause) => cause,
-            CreateAssessmentTemplateError::Internal(ref cause) => cause,
-            CreateAssessmentTemplateError::InvalidInput(ref cause) => cause,
-            CreateAssessmentTemplateError::LimitExceeded(ref cause) => cause,
-            CreateAssessmentTemplateError::NoSuchEntity(ref cause) => cause,
-            CreateAssessmentTemplateError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            CreateAssessmentTemplateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateAssessmentTemplateError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateAssessmentTemplateError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateAssessmentTemplateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAssessmentTemplateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateAssessmentTemplateError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateAssessmentTemplateError {}
 /// Errors returned by CreateExclusionsPreview
 #[derive(Debug, PartialEq)]
 pub enum CreateExclusionsPreviewError {
@@ -1767,21 +1806,21 @@ impl CreateExclusionsPreviewError {
 }
 impl fmt::Display for CreateExclusionsPreviewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateExclusionsPreviewError {
-    fn description(&self) -> &str {
         match *self {
-            CreateExclusionsPreviewError::AccessDenied(ref cause) => cause,
-            CreateExclusionsPreviewError::Internal(ref cause) => cause,
-            CreateExclusionsPreviewError::InvalidInput(ref cause) => cause,
-            CreateExclusionsPreviewError::NoSuchEntity(ref cause) => cause,
-            CreateExclusionsPreviewError::PreviewGenerationInProgress(ref cause) => cause,
-            CreateExclusionsPreviewError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            CreateExclusionsPreviewError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateExclusionsPreviewError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateExclusionsPreviewError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateExclusionsPreviewError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateExclusionsPreviewError::PreviewGenerationInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateExclusionsPreviewError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateExclusionsPreviewError {}
 /// Errors returned by CreateResourceGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceGroupError {
@@ -1827,20 +1866,18 @@ impl CreateResourceGroupError {
 }
 impl fmt::Display for CreateResourceGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateResourceGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateResourceGroupError::AccessDenied(ref cause) => cause,
-            CreateResourceGroupError::Internal(ref cause) => cause,
-            CreateResourceGroupError::InvalidInput(ref cause) => cause,
-            CreateResourceGroupError::LimitExceeded(ref cause) => cause,
-            CreateResourceGroupError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            CreateResourceGroupError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateResourceGroupError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateResourceGroupError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateResourceGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateResourceGroupError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateResourceGroupError {}
 /// Errors returned by DeleteAssessmentRun
 #[derive(Debug, PartialEq)]
 pub enum DeleteAssessmentRunError {
@@ -1893,21 +1930,19 @@ impl DeleteAssessmentRunError {
 }
 impl fmt::Display for DeleteAssessmentRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAssessmentRunError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAssessmentRunError::AccessDenied(ref cause) => cause,
-            DeleteAssessmentRunError::AssessmentRunInProgress(ref cause) => cause,
-            DeleteAssessmentRunError::Internal(ref cause) => cause,
-            DeleteAssessmentRunError::InvalidInput(ref cause) => cause,
-            DeleteAssessmentRunError::NoSuchEntity(ref cause) => cause,
-            DeleteAssessmentRunError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            DeleteAssessmentRunError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentRunError::AssessmentRunInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentRunError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentRunError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentRunError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteAssessmentRunError {}
 /// Errors returned by DeleteAssessmentTarget
 #[derive(Debug, PartialEq)]
 pub enum DeleteAssessmentTargetError {
@@ -1960,21 +1995,21 @@ impl DeleteAssessmentTargetError {
 }
 impl fmt::Display for DeleteAssessmentTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAssessmentTargetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAssessmentTargetError::AccessDenied(ref cause) => cause,
-            DeleteAssessmentTargetError::AssessmentRunInProgress(ref cause) => cause,
-            DeleteAssessmentTargetError::Internal(ref cause) => cause,
-            DeleteAssessmentTargetError::InvalidInput(ref cause) => cause,
-            DeleteAssessmentTargetError::NoSuchEntity(ref cause) => cause,
-            DeleteAssessmentTargetError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            DeleteAssessmentTargetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentTargetError::AssessmentRunInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAssessmentTargetError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentTargetError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentTargetError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentTargetError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteAssessmentTargetError {}
 /// Errors returned by DeleteAssessmentTemplate
 #[derive(Debug, PartialEq)]
 pub enum DeleteAssessmentTemplateError {
@@ -2033,21 +2068,21 @@ impl DeleteAssessmentTemplateError {
 }
 impl fmt::Display for DeleteAssessmentTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAssessmentTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAssessmentTemplateError::AccessDenied(ref cause) => cause,
-            DeleteAssessmentTemplateError::AssessmentRunInProgress(ref cause) => cause,
-            DeleteAssessmentTemplateError::Internal(ref cause) => cause,
-            DeleteAssessmentTemplateError::InvalidInput(ref cause) => cause,
-            DeleteAssessmentTemplateError::NoSuchEntity(ref cause) => cause,
-            DeleteAssessmentTemplateError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            DeleteAssessmentTemplateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentTemplateError::AssessmentRunInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAssessmentTemplateError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentTemplateError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentTemplateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteAssessmentTemplateError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteAssessmentTemplateError {}
 /// Errors returned by DescribeAssessmentRuns
 #[derive(Debug, PartialEq)]
 pub enum DescribeAssessmentRunsError {
@@ -2076,17 +2111,13 @@ impl DescribeAssessmentRunsError {
 }
 impl fmt::Display for DescribeAssessmentRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAssessmentRunsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAssessmentRunsError::Internal(ref cause) => cause,
-            DescribeAssessmentRunsError::InvalidInput(ref cause) => cause,
+            DescribeAssessmentRunsError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeAssessmentRunsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAssessmentRunsError {}
 /// Errors returned by DescribeAssessmentTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeAssessmentTargetsError {
@@ -2117,17 +2148,13 @@ impl DescribeAssessmentTargetsError {
 }
 impl fmt::Display for DescribeAssessmentTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAssessmentTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAssessmentTargetsError::Internal(ref cause) => cause,
-            DescribeAssessmentTargetsError::InvalidInput(ref cause) => cause,
+            DescribeAssessmentTargetsError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeAssessmentTargetsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAssessmentTargetsError {}
 /// Errors returned by DescribeAssessmentTemplates
 #[derive(Debug, PartialEq)]
 pub enum DescribeAssessmentTemplatesError {
@@ -2162,17 +2189,13 @@ impl DescribeAssessmentTemplatesError {
 }
 impl fmt::Display for DescribeAssessmentTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAssessmentTemplatesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAssessmentTemplatesError::Internal(ref cause) => cause,
-            DescribeAssessmentTemplatesError::InvalidInput(ref cause) => cause,
+            DescribeAssessmentTemplatesError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeAssessmentTemplatesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAssessmentTemplatesError {}
 /// Errors returned by DescribeCrossAccountAccessRole
 #[derive(Debug, PartialEq)]
 pub enum DescribeCrossAccountAccessRoleError {
@@ -2200,16 +2223,12 @@ impl DescribeCrossAccountAccessRoleError {
 }
 impl fmt::Display for DescribeCrossAccountAccessRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCrossAccountAccessRoleError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCrossAccountAccessRoleError::Internal(ref cause) => cause,
+            DescribeCrossAccountAccessRoleError::Internal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCrossAccountAccessRoleError {}
 /// Errors returned by DescribeExclusions
 #[derive(Debug, PartialEq)]
 pub enum DescribeExclusionsError {
@@ -2238,17 +2257,13 @@ impl DescribeExclusionsError {
 }
 impl fmt::Display for DescribeExclusionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeExclusionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeExclusionsError::Internal(ref cause) => cause,
-            DescribeExclusionsError::InvalidInput(ref cause) => cause,
+            DescribeExclusionsError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeExclusionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeExclusionsError {}
 /// Errors returned by DescribeFindings
 #[derive(Debug, PartialEq)]
 pub enum DescribeFindingsError {
@@ -2277,17 +2292,13 @@ impl DescribeFindingsError {
 }
 impl fmt::Display for DescribeFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFindingsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFindingsError::Internal(ref cause) => cause,
-            DescribeFindingsError::InvalidInput(ref cause) => cause,
+            DescribeFindingsError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeFindingsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFindingsError {}
 /// Errors returned by DescribeResourceGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeResourceGroupsError {
@@ -2316,17 +2327,13 @@ impl DescribeResourceGroupsError {
 }
 impl fmt::Display for DescribeResourceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeResourceGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeResourceGroupsError::Internal(ref cause) => cause,
-            DescribeResourceGroupsError::InvalidInput(ref cause) => cause,
+            DescribeResourceGroupsError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeResourceGroupsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeResourceGroupsError {}
 /// Errors returned by DescribeRulesPackages
 #[derive(Debug, PartialEq)]
 pub enum DescribeRulesPackagesError {
@@ -2355,17 +2362,13 @@ impl DescribeRulesPackagesError {
 }
 impl fmt::Display for DescribeRulesPackagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRulesPackagesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRulesPackagesError::Internal(ref cause) => cause,
-            DescribeRulesPackagesError::InvalidInput(ref cause) => cause,
+            DescribeRulesPackagesError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeRulesPackagesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeRulesPackagesError {}
 /// Errors returned by GetAssessmentReport
 #[derive(Debug, PartialEq)]
 pub enum GetAssessmentReportError {
@@ -2425,22 +2428,20 @@ impl GetAssessmentReportError {
 }
 impl fmt::Display for GetAssessmentReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAssessmentReportError {
-    fn description(&self) -> &str {
         match *self {
-            GetAssessmentReportError::AccessDenied(ref cause) => cause,
-            GetAssessmentReportError::AssessmentRunInProgress(ref cause) => cause,
-            GetAssessmentReportError::Internal(ref cause) => cause,
-            GetAssessmentReportError::InvalidInput(ref cause) => cause,
-            GetAssessmentReportError::NoSuchEntity(ref cause) => cause,
-            GetAssessmentReportError::ServiceTemporarilyUnavailable(ref cause) => cause,
-            GetAssessmentReportError::UnsupportedFeature(ref cause) => cause,
+            GetAssessmentReportError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetAssessmentReportError::AssessmentRunInProgress(ref cause) => write!(f, "{}", cause),
+            GetAssessmentReportError::Internal(ref cause) => write!(f, "{}", cause),
+            GetAssessmentReportError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetAssessmentReportError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetAssessmentReportError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAssessmentReportError::UnsupportedFeature(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAssessmentReportError {}
 /// Errors returned by GetExclusionsPreview
 #[derive(Debug, PartialEq)]
 pub enum GetExclusionsPreviewError {
@@ -2479,19 +2480,15 @@ impl GetExclusionsPreviewError {
 }
 impl fmt::Display for GetExclusionsPreviewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetExclusionsPreviewError {
-    fn description(&self) -> &str {
         match *self {
-            GetExclusionsPreviewError::AccessDenied(ref cause) => cause,
-            GetExclusionsPreviewError::Internal(ref cause) => cause,
-            GetExclusionsPreviewError::InvalidInput(ref cause) => cause,
-            GetExclusionsPreviewError::NoSuchEntity(ref cause) => cause,
+            GetExclusionsPreviewError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetExclusionsPreviewError::Internal(ref cause) => write!(f, "{}", cause),
+            GetExclusionsPreviewError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetExclusionsPreviewError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetExclusionsPreviewError {}
 /// Errors returned by GetTelemetryMetadata
 #[derive(Debug, PartialEq)]
 pub enum GetTelemetryMetadataError {
@@ -2530,19 +2527,15 @@ impl GetTelemetryMetadataError {
 }
 impl fmt::Display for GetTelemetryMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTelemetryMetadataError {
-    fn description(&self) -> &str {
         match *self {
-            GetTelemetryMetadataError::AccessDenied(ref cause) => cause,
-            GetTelemetryMetadataError::Internal(ref cause) => cause,
-            GetTelemetryMetadataError::InvalidInput(ref cause) => cause,
-            GetTelemetryMetadataError::NoSuchEntity(ref cause) => cause,
+            GetTelemetryMetadataError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetTelemetryMetadataError::Internal(ref cause) => write!(f, "{}", cause),
+            GetTelemetryMetadataError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetTelemetryMetadataError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTelemetryMetadataError {}
 /// Errors returned by ListAssessmentRunAgents
 #[derive(Debug, PartialEq)]
 pub enum ListAssessmentRunAgentsError {
@@ -2587,19 +2580,15 @@ impl ListAssessmentRunAgentsError {
 }
 impl fmt::Display for ListAssessmentRunAgentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAssessmentRunAgentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAssessmentRunAgentsError::AccessDenied(ref cause) => cause,
-            ListAssessmentRunAgentsError::Internal(ref cause) => cause,
-            ListAssessmentRunAgentsError::InvalidInput(ref cause) => cause,
-            ListAssessmentRunAgentsError::NoSuchEntity(ref cause) => cause,
+            ListAssessmentRunAgentsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListAssessmentRunAgentsError::Internal(ref cause) => write!(f, "{}", cause),
+            ListAssessmentRunAgentsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListAssessmentRunAgentsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAssessmentRunAgentsError {}
 /// Errors returned by ListAssessmentRuns
 #[derive(Debug, PartialEq)]
 pub enum ListAssessmentRunsError {
@@ -2638,19 +2627,15 @@ impl ListAssessmentRunsError {
 }
 impl fmt::Display for ListAssessmentRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAssessmentRunsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAssessmentRunsError::AccessDenied(ref cause) => cause,
-            ListAssessmentRunsError::Internal(ref cause) => cause,
-            ListAssessmentRunsError::InvalidInput(ref cause) => cause,
-            ListAssessmentRunsError::NoSuchEntity(ref cause) => cause,
+            ListAssessmentRunsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListAssessmentRunsError::Internal(ref cause) => write!(f, "{}", cause),
+            ListAssessmentRunsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListAssessmentRunsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAssessmentRunsError {}
 /// Errors returned by ListAssessmentTargets
 #[derive(Debug, PartialEq)]
 pub enum ListAssessmentTargetsError {
@@ -2684,18 +2669,14 @@ impl ListAssessmentTargetsError {
 }
 impl fmt::Display for ListAssessmentTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAssessmentTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAssessmentTargetsError::AccessDenied(ref cause) => cause,
-            ListAssessmentTargetsError::Internal(ref cause) => cause,
-            ListAssessmentTargetsError::InvalidInput(ref cause) => cause,
+            ListAssessmentTargetsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListAssessmentTargetsError::Internal(ref cause) => write!(f, "{}", cause),
+            ListAssessmentTargetsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAssessmentTargetsError {}
 /// Errors returned by ListAssessmentTemplates
 #[derive(Debug, PartialEq)]
 pub enum ListAssessmentTemplatesError {
@@ -2740,19 +2721,15 @@ impl ListAssessmentTemplatesError {
 }
 impl fmt::Display for ListAssessmentTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAssessmentTemplatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAssessmentTemplatesError::AccessDenied(ref cause) => cause,
-            ListAssessmentTemplatesError::Internal(ref cause) => cause,
-            ListAssessmentTemplatesError::InvalidInput(ref cause) => cause,
-            ListAssessmentTemplatesError::NoSuchEntity(ref cause) => cause,
+            ListAssessmentTemplatesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListAssessmentTemplatesError::Internal(ref cause) => write!(f, "{}", cause),
+            ListAssessmentTemplatesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListAssessmentTemplatesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAssessmentTemplatesError {}
 /// Errors returned by ListEventSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum ListEventSubscriptionsError {
@@ -2791,19 +2768,15 @@ impl ListEventSubscriptionsError {
 }
 impl fmt::Display for ListEventSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEventSubscriptionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListEventSubscriptionsError::AccessDenied(ref cause) => cause,
-            ListEventSubscriptionsError::Internal(ref cause) => cause,
-            ListEventSubscriptionsError::InvalidInput(ref cause) => cause,
-            ListEventSubscriptionsError::NoSuchEntity(ref cause) => cause,
+            ListEventSubscriptionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListEventSubscriptionsError::Internal(ref cause) => write!(f, "{}", cause),
+            ListEventSubscriptionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListEventSubscriptionsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEventSubscriptionsError {}
 /// Errors returned by ListExclusions
 #[derive(Debug, PartialEq)]
 pub enum ListExclusionsError {
@@ -2842,19 +2815,15 @@ impl ListExclusionsError {
 }
 impl fmt::Display for ListExclusionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListExclusionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListExclusionsError::AccessDenied(ref cause) => cause,
-            ListExclusionsError::Internal(ref cause) => cause,
-            ListExclusionsError::InvalidInput(ref cause) => cause,
-            ListExclusionsError::NoSuchEntity(ref cause) => cause,
+            ListExclusionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListExclusionsError::Internal(ref cause) => write!(f, "{}", cause),
+            ListExclusionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListExclusionsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListExclusionsError {}
 /// Errors returned by ListFindings
 #[derive(Debug, PartialEq)]
 pub enum ListFindingsError {
@@ -2893,19 +2862,15 @@ impl ListFindingsError {
 }
 impl fmt::Display for ListFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFindingsError {
-    fn description(&self) -> &str {
         match *self {
-            ListFindingsError::AccessDenied(ref cause) => cause,
-            ListFindingsError::Internal(ref cause) => cause,
-            ListFindingsError::InvalidInput(ref cause) => cause,
-            ListFindingsError::NoSuchEntity(ref cause) => cause,
+            ListFindingsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListFindingsError::Internal(ref cause) => write!(f, "{}", cause),
+            ListFindingsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListFindingsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFindingsError {}
 /// Errors returned by ListRulesPackages
 #[derive(Debug, PartialEq)]
 pub enum ListRulesPackagesError {
@@ -2939,18 +2904,14 @@ impl ListRulesPackagesError {
 }
 impl fmt::Display for ListRulesPackagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRulesPackagesError {
-    fn description(&self) -> &str {
         match *self {
-            ListRulesPackagesError::AccessDenied(ref cause) => cause,
-            ListRulesPackagesError::Internal(ref cause) => cause,
-            ListRulesPackagesError::InvalidInput(ref cause) => cause,
+            ListRulesPackagesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListRulesPackagesError::Internal(ref cause) => write!(f, "{}", cause),
+            ListRulesPackagesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRulesPackagesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2989,19 +2950,15 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::AccessDenied(ref cause) => cause,
-            ListTagsForResourceError::Internal(ref cause) => cause,
-            ListTagsForResourceError::InvalidInput(ref cause) => cause,
-            ListTagsForResourceError::NoSuchEntity(ref cause) => cause,
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Internal(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PreviewAgents
 #[derive(Debug, PartialEq)]
 pub enum PreviewAgentsError {
@@ -3047,20 +3004,16 @@ impl PreviewAgentsError {
 }
 impl fmt::Display for PreviewAgentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PreviewAgentsError {
-    fn description(&self) -> &str {
         match *self {
-            PreviewAgentsError::AccessDenied(ref cause) => cause,
-            PreviewAgentsError::Internal(ref cause) => cause,
-            PreviewAgentsError::InvalidCrossAccountRole(ref cause) => cause,
-            PreviewAgentsError::InvalidInput(ref cause) => cause,
-            PreviewAgentsError::NoSuchEntity(ref cause) => cause,
+            PreviewAgentsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PreviewAgentsError::Internal(ref cause) => write!(f, "{}", cause),
+            PreviewAgentsError::InvalidCrossAccountRole(ref cause) => write!(f, "{}", cause),
+            PreviewAgentsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PreviewAgentsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PreviewAgentsError {}
 /// Errors returned by RegisterCrossAccountAccessRole
 #[derive(Debug, PartialEq)]
 pub enum RegisterCrossAccountAccessRoleError {
@@ -3116,20 +3069,20 @@ impl RegisterCrossAccountAccessRoleError {
 }
 impl fmt::Display for RegisterCrossAccountAccessRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterCrossAccountAccessRoleError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterCrossAccountAccessRoleError::AccessDenied(ref cause) => cause,
-            RegisterCrossAccountAccessRoleError::Internal(ref cause) => cause,
-            RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(ref cause) => cause,
-            RegisterCrossAccountAccessRoleError::InvalidInput(ref cause) => cause,
-            RegisterCrossAccountAccessRoleError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            RegisterCrossAccountAccessRoleError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RegisterCrossAccountAccessRoleError::Internal(ref cause) => write!(f, "{}", cause),
+            RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterCrossAccountAccessRoleError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RegisterCrossAccountAccessRoleError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RegisterCrossAccountAccessRoleError {}
 /// Errors returned by RemoveAttributesFromFindings
 #[derive(Debug, PartialEq)]
 pub enum RemoveAttributesFromFindingsError {
@@ -3185,20 +3138,18 @@ impl RemoveAttributesFromFindingsError {
 }
 impl fmt::Display for RemoveAttributesFromFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveAttributesFromFindingsError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveAttributesFromFindingsError::AccessDenied(ref cause) => cause,
-            RemoveAttributesFromFindingsError::Internal(ref cause) => cause,
-            RemoveAttributesFromFindingsError::InvalidInput(ref cause) => cause,
-            RemoveAttributesFromFindingsError::NoSuchEntity(ref cause) => cause,
-            RemoveAttributesFromFindingsError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            RemoveAttributesFromFindingsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RemoveAttributesFromFindingsError::Internal(ref cause) => write!(f, "{}", cause),
+            RemoveAttributesFromFindingsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RemoveAttributesFromFindingsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            RemoveAttributesFromFindingsError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveAttributesFromFindingsError {}
 /// Errors returned by SetTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum SetTagsForResourceError {
@@ -3244,20 +3195,18 @@ impl SetTagsForResourceError {
 }
 impl fmt::Display for SetTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            SetTagsForResourceError::AccessDenied(ref cause) => cause,
-            SetTagsForResourceError::Internal(ref cause) => cause,
-            SetTagsForResourceError::InvalidInput(ref cause) => cause,
-            SetTagsForResourceError::NoSuchEntity(ref cause) => cause,
-            SetTagsForResourceError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            SetTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            SetTagsForResourceError::Internal(ref cause) => write!(f, "{}", cause),
+            SetTagsForResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            SetTagsForResourceError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            SetTagsForResourceError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetTagsForResourceError {}
 /// Errors returned by StartAssessmentRun
 #[derive(Debug, PartialEq)]
 pub enum StartAssessmentRunError {
@@ -3322,23 +3271,23 @@ impl StartAssessmentRunError {
 }
 impl fmt::Display for StartAssessmentRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartAssessmentRunError {
-    fn description(&self) -> &str {
         match *self {
-            StartAssessmentRunError::AccessDenied(ref cause) => cause,
-            StartAssessmentRunError::AgentsAlreadyRunningAssessment(ref cause) => cause,
-            StartAssessmentRunError::Internal(ref cause) => cause,
-            StartAssessmentRunError::InvalidCrossAccountRole(ref cause) => cause,
-            StartAssessmentRunError::InvalidInput(ref cause) => cause,
-            StartAssessmentRunError::LimitExceeded(ref cause) => cause,
-            StartAssessmentRunError::NoSuchEntity(ref cause) => cause,
-            StartAssessmentRunError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            StartAssessmentRunError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartAssessmentRunError::AgentsAlreadyRunningAssessment(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAssessmentRunError::Internal(ref cause) => write!(f, "{}", cause),
+            StartAssessmentRunError::InvalidCrossAccountRole(ref cause) => write!(f, "{}", cause),
+            StartAssessmentRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartAssessmentRunError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartAssessmentRunError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            StartAssessmentRunError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartAssessmentRunError {}
 /// Errors returned by StopAssessmentRun
 #[derive(Debug, PartialEq)]
 pub enum StopAssessmentRunError {
@@ -3384,20 +3333,18 @@ impl StopAssessmentRunError {
 }
 impl fmt::Display for StopAssessmentRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopAssessmentRunError {
-    fn description(&self) -> &str {
         match *self {
-            StopAssessmentRunError::AccessDenied(ref cause) => cause,
-            StopAssessmentRunError::Internal(ref cause) => cause,
-            StopAssessmentRunError::InvalidInput(ref cause) => cause,
-            StopAssessmentRunError::NoSuchEntity(ref cause) => cause,
-            StopAssessmentRunError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            StopAssessmentRunError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StopAssessmentRunError::Internal(ref cause) => write!(f, "{}", cause),
+            StopAssessmentRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StopAssessmentRunError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            StopAssessmentRunError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StopAssessmentRunError {}
 /// Errors returned by SubscribeToEvent
 #[derive(Debug, PartialEq)]
 pub enum SubscribeToEventError {
@@ -3448,21 +3395,19 @@ impl SubscribeToEventError {
 }
 impl fmt::Display for SubscribeToEventError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SubscribeToEventError {
-    fn description(&self) -> &str {
         match *self {
-            SubscribeToEventError::AccessDenied(ref cause) => cause,
-            SubscribeToEventError::Internal(ref cause) => cause,
-            SubscribeToEventError::InvalidInput(ref cause) => cause,
-            SubscribeToEventError::LimitExceeded(ref cause) => cause,
-            SubscribeToEventError::NoSuchEntity(ref cause) => cause,
-            SubscribeToEventError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            SubscribeToEventError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            SubscribeToEventError::Internal(ref cause) => write!(f, "{}", cause),
+            SubscribeToEventError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            SubscribeToEventError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            SubscribeToEventError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            SubscribeToEventError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SubscribeToEventError {}
 /// Errors returned by UnsubscribeFromEvent
 #[derive(Debug, PartialEq)]
 pub enum UnsubscribeFromEventError {
@@ -3508,20 +3453,18 @@ impl UnsubscribeFromEventError {
 }
 impl fmt::Display for UnsubscribeFromEventError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UnsubscribeFromEventError {
-    fn description(&self) -> &str {
         match *self {
-            UnsubscribeFromEventError::AccessDenied(ref cause) => cause,
-            UnsubscribeFromEventError::Internal(ref cause) => cause,
-            UnsubscribeFromEventError::InvalidInput(ref cause) => cause,
-            UnsubscribeFromEventError::NoSuchEntity(ref cause) => cause,
-            UnsubscribeFromEventError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            UnsubscribeFromEventError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UnsubscribeFromEventError::Internal(ref cause) => write!(f, "{}", cause),
+            UnsubscribeFromEventError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UnsubscribeFromEventError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UnsubscribeFromEventError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UnsubscribeFromEventError {}
 /// Errors returned by UpdateAssessmentTarget
 #[derive(Debug, PartialEq)]
 pub enum UpdateAssessmentTargetError {
@@ -3567,20 +3510,18 @@ impl UpdateAssessmentTargetError {
 }
 impl fmt::Display for UpdateAssessmentTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAssessmentTargetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAssessmentTargetError::AccessDenied(ref cause) => cause,
-            UpdateAssessmentTargetError::Internal(ref cause) => cause,
-            UpdateAssessmentTargetError::InvalidInput(ref cause) => cause,
-            UpdateAssessmentTargetError::NoSuchEntity(ref cause) => cause,
-            UpdateAssessmentTargetError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            UpdateAssessmentTargetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateAssessmentTargetError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateAssessmentTargetError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateAssessmentTargetError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateAssessmentTargetError::ServiceTemporarilyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateAssessmentTargetError {}
 /// Trait representing the capabilities of the Amazon Inspector API. Amazon Inspector clients implement this trait.
 pub trait Inspector {
     /// <p>Assigns attributes (key and value pairs) to the findings that are specified by the ARNs of the findings.</p>

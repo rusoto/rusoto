@@ -173,6 +173,7 @@ pub struct CostTypes {
 
 /// <p> Request of CreateBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget.</p>
     #[serde(rename = "AccountId")]
@@ -193,6 +194,7 @@ pub struct CreateBudgetResponse {}
 
 /// <p> Request of CreateNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to create a notification for.</p>
     #[serde(rename = "AccountId")]
@@ -215,6 +217,7 @@ pub struct CreateNotificationResponse {}
 
 /// <p> Request of CreateSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriberRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to create a subscriber for.</p>
     #[serde(rename = "AccountId")]
@@ -237,6 +240,7 @@ pub struct CreateSubscriberResponse {}
 
 /// <p> Request of DeleteBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to delete.</p>
     #[serde(rename = "AccountId")]
@@ -253,6 +257,7 @@ pub struct DeleteBudgetResponse {}
 
 /// <p> Request of DeleteNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose notification you want to delete.</p>
     #[serde(rename = "AccountId")]
@@ -272,6 +277,7 @@ pub struct DeleteNotificationResponse {}
 
 /// <p> Request of DeleteSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriberRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose subscriber you want to delete.</p>
     #[serde(rename = "AccountId")]
@@ -293,6 +299,7 @@ pub struct DeleteSubscriberRequest {
 pub struct DeleteSubscriberResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetPerformanceHistoryRequest {
     #[serde(rename = "AccountId")]
     pub account_id: String,
@@ -324,6 +331,7 @@ pub struct DescribeBudgetPerformanceHistoryResponse {
 
 /// <p> Request of DescribeBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want a description of.</p>
     #[serde(rename = "AccountId")]
@@ -345,6 +353,7 @@ pub struct DescribeBudgetResponse {
 
 /// <p> Request of DescribeBudgets </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetsRequest {
     /// <p>The <code>accountId</code> that is associated with the budgets that you want descriptions of.</p>
     #[serde(rename = "AccountId")]
@@ -375,6 +384,7 @@ pub struct DescribeBudgetsResponse {
 
 /// <p> Request of DescribeNotificationsForBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotificationsForBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose notifications you want descriptions of.</p>
     #[serde(rename = "AccountId")]
@@ -408,6 +418,7 @@ pub struct DescribeNotificationsForBudgetResponse {
 
 /// <p> Request of DescribeSubscribersForNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscribersForNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose subscribers you want descriptions of.</p>
     #[serde(rename = "AccountId")]
@@ -466,6 +477,7 @@ pub struct Notification {
 
 /// <p>A notification with subscribers. A notification can have one SNS subscriber and up to 10 email subscribers, for a total of 11 subscribers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotificationWithSubscribers {
     /// <p>The notification that is associated with a budget.</p>
     #[serde(rename = "Notification")]
@@ -512,6 +524,7 @@ pub struct TimePeriod {
 
 /// <p> Request of UpdateBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to update.</p>
     #[serde(rename = "AccountId")]
@@ -528,6 +541,7 @@ pub struct UpdateBudgetResponse {}
 
 /// <p> Request of UpdateNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose notification you want to update.</p>
     #[serde(rename = "AccountId")]
@@ -550,6 +564,7 @@ pub struct UpdateNotificationResponse {}
 
 /// <p> Request of UpdateSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubscriberRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose subscriber you want to update.</p>
     #[serde(rename = "AccountId")]
@@ -616,20 +631,16 @@ impl CreateBudgetError {
 }
 impl fmt::Display for CreateBudgetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBudgetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBudgetError::AccessDenied(ref cause) => cause,
-            CreateBudgetError::CreationLimitExceeded(ref cause) => cause,
-            CreateBudgetError::DuplicateRecord(ref cause) => cause,
-            CreateBudgetError::InternalError(ref cause) => cause,
-            CreateBudgetError::InvalidParameter(ref cause) => cause,
+            CreateBudgetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateBudgetError::CreationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateBudgetError::DuplicateRecord(ref cause) => write!(f, "{}", cause),
+            CreateBudgetError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateBudgetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBudgetError {}
 /// Errors returned by CreateNotification
 #[derive(Debug, PartialEq)]
 pub enum CreateNotificationError {
@@ -680,21 +691,17 @@ impl CreateNotificationError {
 }
 impl fmt::Display for CreateNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateNotificationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateNotificationError::AccessDenied(ref cause) => cause,
-            CreateNotificationError::CreationLimitExceeded(ref cause) => cause,
-            CreateNotificationError::DuplicateRecord(ref cause) => cause,
-            CreateNotificationError::InternalError(ref cause) => cause,
-            CreateNotificationError::InvalidParameter(ref cause) => cause,
-            CreateNotificationError::NotFound(ref cause) => cause,
+            CreateNotificationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateNotificationError::CreationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateNotificationError::DuplicateRecord(ref cause) => write!(f, "{}", cause),
+            CreateNotificationError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateNotificationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateNotificationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateNotificationError {}
 /// Errors returned by CreateSubscriber
 #[derive(Debug, PartialEq)]
 pub enum CreateSubscriberError {
@@ -745,21 +752,17 @@ impl CreateSubscriberError {
 }
 impl fmt::Display for CreateSubscriberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSubscriberError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSubscriberError::AccessDenied(ref cause) => cause,
-            CreateSubscriberError::CreationLimitExceeded(ref cause) => cause,
-            CreateSubscriberError::DuplicateRecord(ref cause) => cause,
-            CreateSubscriberError::InternalError(ref cause) => cause,
-            CreateSubscriberError::InvalidParameter(ref cause) => cause,
-            CreateSubscriberError::NotFound(ref cause) => cause,
+            CreateSubscriberError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateSubscriberError::CreationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateSubscriberError::DuplicateRecord(ref cause) => write!(f, "{}", cause),
+            CreateSubscriberError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateSubscriberError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateSubscriberError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSubscriberError {}
 /// Errors returned by DeleteBudget
 #[derive(Debug, PartialEq)]
 pub enum DeleteBudgetError {
@@ -798,19 +801,15 @@ impl DeleteBudgetError {
 }
 impl fmt::Display for DeleteBudgetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBudgetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBudgetError::AccessDenied(ref cause) => cause,
-            DeleteBudgetError::InternalError(ref cause) => cause,
-            DeleteBudgetError::InvalidParameter(ref cause) => cause,
-            DeleteBudgetError::NotFound(ref cause) => cause,
+            DeleteBudgetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteBudgetError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteBudgetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteBudgetError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBudgetError {}
 /// Errors returned by DeleteNotification
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotificationError {
@@ -849,19 +848,15 @@ impl DeleteNotificationError {
 }
 impl fmt::Display for DeleteNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNotificationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteNotificationError::AccessDenied(ref cause) => cause,
-            DeleteNotificationError::InternalError(ref cause) => cause,
-            DeleteNotificationError::InvalidParameter(ref cause) => cause,
-            DeleteNotificationError::NotFound(ref cause) => cause,
+            DeleteNotificationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteNotificationError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteNotificationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteNotificationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteNotificationError {}
 /// Errors returned by DeleteSubscriber
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubscriberError {
@@ -900,19 +895,15 @@ impl DeleteSubscriberError {
 }
 impl fmt::Display for DeleteSubscriberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSubscriberError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSubscriberError::AccessDenied(ref cause) => cause,
-            DeleteSubscriberError::InternalError(ref cause) => cause,
-            DeleteSubscriberError::InvalidParameter(ref cause) => cause,
-            DeleteSubscriberError::NotFound(ref cause) => cause,
+            DeleteSubscriberError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteSubscriberError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteSubscriberError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteSubscriberError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSubscriberError {}
 /// Errors returned by DescribeBudget
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetError {
@@ -951,19 +942,15 @@ impl DescribeBudgetError {
 }
 impl fmt::Display for DescribeBudgetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBudgetError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBudgetError::AccessDenied(ref cause) => cause,
-            DescribeBudgetError::InternalError(ref cause) => cause,
-            DescribeBudgetError::InvalidParameter(ref cause) => cause,
-            DescribeBudgetError::NotFound(ref cause) => cause,
+            DescribeBudgetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeBudgetError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeBudgetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeBudgetError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBudgetError {}
 /// Errors returned by DescribeBudgetPerformanceHistory
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetPerformanceHistoryError {
@@ -1026,21 +1013,27 @@ impl DescribeBudgetPerformanceHistoryError {
 }
 impl fmt::Display for DescribeBudgetPerformanceHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBudgetPerformanceHistoryError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBudgetPerformanceHistoryError::AccessDenied(ref cause) => cause,
-            DescribeBudgetPerformanceHistoryError::ExpiredNextToken(ref cause) => cause,
-            DescribeBudgetPerformanceHistoryError::InternalError(ref cause) => cause,
-            DescribeBudgetPerformanceHistoryError::InvalidNextToken(ref cause) => cause,
-            DescribeBudgetPerformanceHistoryError::InvalidParameter(ref cause) => cause,
-            DescribeBudgetPerformanceHistoryError::NotFound(ref cause) => cause,
+            DescribeBudgetPerformanceHistoryError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeBudgetPerformanceHistoryError::ExpiredNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeBudgetPerformanceHistoryError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeBudgetPerformanceHistoryError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeBudgetPerformanceHistoryError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeBudgetPerformanceHistoryError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBudgetPerformanceHistoryError {}
 /// Errors returned by DescribeBudgets
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetsError {
@@ -1089,21 +1082,17 @@ impl DescribeBudgetsError {
 }
 impl fmt::Display for DescribeBudgetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBudgetsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBudgetsError::AccessDenied(ref cause) => cause,
-            DescribeBudgetsError::ExpiredNextToken(ref cause) => cause,
-            DescribeBudgetsError::InternalError(ref cause) => cause,
-            DescribeBudgetsError::InvalidNextToken(ref cause) => cause,
-            DescribeBudgetsError::InvalidParameter(ref cause) => cause,
-            DescribeBudgetsError::NotFound(ref cause) => cause,
+            DescribeBudgetsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeBudgetsError::ExpiredNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeBudgetsError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeBudgetsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeBudgetsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeBudgetsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBudgetsError {}
 /// Errors returned by DescribeNotificationsForBudget
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotificationsForBudgetError {
@@ -1166,21 +1155,23 @@ impl DescribeNotificationsForBudgetError {
 }
 impl fmt::Display for DescribeNotificationsForBudgetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeNotificationsForBudgetError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeNotificationsForBudgetError::AccessDenied(ref cause) => cause,
-            DescribeNotificationsForBudgetError::ExpiredNextToken(ref cause) => cause,
-            DescribeNotificationsForBudgetError::InternalError(ref cause) => cause,
-            DescribeNotificationsForBudgetError::InvalidNextToken(ref cause) => cause,
-            DescribeNotificationsForBudgetError::InvalidParameter(ref cause) => cause,
-            DescribeNotificationsForBudgetError::NotFound(ref cause) => cause,
+            DescribeNotificationsForBudgetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeNotificationsForBudgetError::ExpiredNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeNotificationsForBudgetError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeNotificationsForBudgetError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeNotificationsForBudgetError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeNotificationsForBudgetError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeNotificationsForBudgetError {}
 /// Errors returned by DescribeSubscribersForNotification
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscribersForNotificationError {
@@ -1243,21 +1234,27 @@ impl DescribeSubscribersForNotificationError {
 }
 impl fmt::Display for DescribeSubscribersForNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSubscribersForNotificationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSubscribersForNotificationError::AccessDenied(ref cause) => cause,
-            DescribeSubscribersForNotificationError::ExpiredNextToken(ref cause) => cause,
-            DescribeSubscribersForNotificationError::InternalError(ref cause) => cause,
-            DescribeSubscribersForNotificationError::InvalidNextToken(ref cause) => cause,
-            DescribeSubscribersForNotificationError::InvalidParameter(ref cause) => cause,
-            DescribeSubscribersForNotificationError::NotFound(ref cause) => cause,
+            DescribeSubscribersForNotificationError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeSubscribersForNotificationError::ExpiredNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeSubscribersForNotificationError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeSubscribersForNotificationError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeSubscribersForNotificationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeSubscribersForNotificationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSubscribersForNotificationError {}
 /// Errors returned by UpdateBudget
 #[derive(Debug, PartialEq)]
 pub enum UpdateBudgetError {
@@ -1296,19 +1293,15 @@ impl UpdateBudgetError {
 }
 impl fmt::Display for UpdateBudgetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBudgetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBudgetError::AccessDenied(ref cause) => cause,
-            UpdateBudgetError::InternalError(ref cause) => cause,
-            UpdateBudgetError::InvalidParameter(ref cause) => cause,
-            UpdateBudgetError::NotFound(ref cause) => cause,
+            UpdateBudgetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateBudgetError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateBudgetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateBudgetError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBudgetError {}
 /// Errors returned by UpdateNotification
 #[derive(Debug, PartialEq)]
 pub enum UpdateNotificationError {
@@ -1352,20 +1345,16 @@ impl UpdateNotificationError {
 }
 impl fmt::Display for UpdateNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNotificationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNotificationError::AccessDenied(ref cause) => cause,
-            UpdateNotificationError::DuplicateRecord(ref cause) => cause,
-            UpdateNotificationError::InternalError(ref cause) => cause,
-            UpdateNotificationError::InvalidParameter(ref cause) => cause,
-            UpdateNotificationError::NotFound(ref cause) => cause,
+            UpdateNotificationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateNotificationError::DuplicateRecord(ref cause) => write!(f, "{}", cause),
+            UpdateNotificationError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateNotificationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateNotificationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateNotificationError {}
 /// Errors returned by UpdateSubscriber
 #[derive(Debug, PartialEq)]
 pub enum UpdateSubscriberError {
@@ -1409,20 +1398,16 @@ impl UpdateSubscriberError {
 }
 impl fmt::Display for UpdateSubscriberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSubscriberError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSubscriberError::AccessDenied(ref cause) => cause,
-            UpdateSubscriberError::DuplicateRecord(ref cause) => cause,
-            UpdateSubscriberError::InternalError(ref cause) => cause,
-            UpdateSubscriberError::InvalidParameter(ref cause) => cause,
-            UpdateSubscriberError::NotFound(ref cause) => cause,
+            UpdateSubscriberError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateSubscriberError::DuplicateRecord(ref cause) => write!(f, "{}", cause),
+            UpdateSubscriberError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateSubscriberError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateSubscriberError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSubscriberError {}
 /// Trait representing the capabilities of the AWSBudgets API. AWSBudgets clients implement this trait.
 pub trait Budgets {
     /// <p><p>Creates a budget and, if included, notifications and subscribers. </p> <important> <p>Only one of <code>BudgetLimit</code> or <code>PlannedBudgetLimits</code> can be present in the syntax at one time. Use the syntax that matches your case. The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_CreateBudget.html#API_CreateBudget_Examples">Examples</a> section. </p> </important></p>

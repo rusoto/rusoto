@@ -35,6 +35,8 @@ use xml::EventReader;
 
 /// <p>Information about the <code>AccessLog</code> attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccessLog {
     /// <p>The interval for publishing the access logs. You can specify an interval of either 5 minutes or 60 minutes.</p> <p>Default: 60 minutes</p>
     pub emit_interval: Option<i64>,
@@ -162,6 +164,7 @@ impl AccessPointPortDeserializer {
 }
 /// <p>Contains the parameters for EnableAvailabilityZonesForLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddAvailabilityZonesInput {
     /// <p>The Availability Zones. These must be in the same region as the load balancer.</p>
     pub availability_zones: Vec<String>,
@@ -192,6 +195,7 @@ impl AddAvailabilityZonesInputSerializer {
 
 /// <p>Contains the output of EnableAvailabilityZonesForLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AddAvailabilityZonesOutput {
     /// <p>The updated list of Availability Zones for the load balancer.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -223,6 +227,7 @@ impl AddAvailabilityZonesOutputDeserializer {
 }
 /// <p>Contains the parameters for AddTags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
     /// <p>The name of the load balancer. You can specify one load balancer only.</p>
     pub load_balancer_names: Vec<String>,
@@ -250,6 +255,7 @@ impl AddTagsInputSerializer {
 
 /// <p>Contains the output of AddTags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AddTagsOutput {}
 
 struct AddTagsOutputDeserializer;
@@ -270,6 +276,8 @@ impl AddTagsOutputDeserializer {
 }
 /// <p>This data type is reserved.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdditionalAttribute {
     /// <p>This parameter is reserved.</p>
     pub key: Option<String>,
@@ -395,6 +403,7 @@ impl AppCookieStickinessPoliciesDeserializer {
 }
 /// <p>Information about a policy for application-controlled session stickiness.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AppCookieStickinessPolicy {
     /// <p>The name of the application cookie used for stickiness.</p>
     pub cookie_name: Option<String>,
@@ -431,6 +440,7 @@ impl AppCookieStickinessPolicyDeserializer {
 }
 /// <p>Contains the parameters for ApplySecurityGroupsToLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplySecurityGroupsToLoadBalancerInput {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
@@ -461,6 +471,7 @@ impl ApplySecurityGroupsToLoadBalancerInputSerializer {
 
 /// <p>Contains the output of ApplySecurityGroupsToLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplySecurityGroupsToLoadBalancerOutput {
     /// <p>The IDs of the security groups associated with the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
@@ -492,6 +503,7 @@ impl ApplySecurityGroupsToLoadBalancerOutputDeserializer {
 }
 /// <p>Contains the parameters for AttachLoaBalancerToSubnets.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachLoadBalancerToSubnetsInput {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
@@ -518,6 +530,7 @@ impl AttachLoadBalancerToSubnetsInputSerializer {
 
 /// <p>Contains the output of AttachLoadBalancerToSubnets.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AttachLoadBalancerToSubnetsOutput {
     /// <p>The IDs of the subnets attached to the load balancer.</p>
     pub subnets: Option<Vec<String>>,
@@ -622,6 +635,7 @@ impl AvailabilityZonesSerializer {
 
 /// <p>Information about the configuration of an EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BackendServerDescription {
     /// <p>The port on which the EC2 instance is listening.</p>
     pub instance_port: Option<i64>,
@@ -691,6 +705,7 @@ impl CardinalityDeserializer {
 }
 /// <p>Contains the parameters for ConfigureHealthCheck.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigureHealthCheckInput {
     /// <p>The configuration information.</p>
     pub health_check: HealthCheck,
@@ -721,6 +736,7 @@ impl ConfigureHealthCheckInputSerializer {
 
 /// <p>Contains the output of ConfigureHealthCheck.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfigureHealthCheckOutput {
     /// <p>The updated health check.</p>
     pub health_check: Option<HealthCheck>,
@@ -751,6 +767,8 @@ impl ConfigureHealthCheckOutputDeserializer {
 }
 /// <p>Information about the <code>ConnectionDraining</code> attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConnectionDraining {
     /// <p>Specifies whether connection draining is enabled for the load balancer.</p>
     pub enabled: bool,
@@ -823,6 +841,8 @@ impl ConnectionDrainingTimeoutDeserializer {
 }
 /// <p>Information about the <code>ConnectionSettings</code> attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConnectionSettings {
     /// <p>The time, in seconds, that the connection is allowed to be idle (no data has been sent over the connection) before it is closed by the load balancer.</p>
     pub idle_timeout: i64,
@@ -884,6 +904,7 @@ impl CookieNameDeserializer {
 }
 /// <p>Contains the parameters for CreateLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccessPointInput {
     /// <p>One or more Availability Zones from the same region as the load balancer.</p> <p>You must specify at least one Availability Zone.</p> <p>You can add more Availability Zones after you create the load balancer using <a>EnableAvailabilityZonesForLoadBalancer</a>.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -947,6 +968,7 @@ impl CreateAccessPointInputSerializer {
 
 /// <p>Contains the output for CreateLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateAccessPointOutput {
     /// <p>The DNS name of the load balancer.</p>
     pub dns_name: Option<String>,
@@ -976,6 +998,7 @@ impl CreateAccessPointOutputDeserializer {
 }
 /// <p>Contains the parameters for CreateAppCookieStickinessPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppCookieStickinessPolicyInput {
     /// <p>The name of the application cookie used for stickiness.</p>
     pub cookie_name: String,
@@ -1005,6 +1028,7 @@ impl CreateAppCookieStickinessPolicyInputSerializer {
 
 /// <p>Contains the output for CreateAppCookieStickinessPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateAppCookieStickinessPolicyOutput {}
 
 struct CreateAppCookieStickinessPolicyOutputDeserializer;
@@ -1025,6 +1049,7 @@ impl CreateAppCookieStickinessPolicyOutputDeserializer {
 }
 /// <p>Contains the parameters for CreateLBCookieStickinessPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLBCookieStickinessPolicyInput {
     /// <p>The time period, in seconds, after which the cookie should be considered stale. If you do not specify this parameter, the default value is 0, which indicates that the sticky session should last for the duration of the browser session.</p>
     pub cookie_expiration_period: Option<i64>,
@@ -1059,6 +1084,7 @@ impl CreateLBCookieStickinessPolicyInputSerializer {
 
 /// <p>Contains the output for CreateLBCookieStickinessPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateLBCookieStickinessPolicyOutput {}
 
 struct CreateLBCookieStickinessPolicyOutputDeserializer;
@@ -1079,6 +1105,7 @@ impl CreateLBCookieStickinessPolicyOutputDeserializer {
 }
 /// <p>Contains the parameters for CreateLoadBalancerListeners.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerListenerInput {
     /// <p>The listeners.</p>
     pub listeners: Vec<Listener>,
@@ -1109,6 +1136,7 @@ impl CreateLoadBalancerListenerInputSerializer {
 
 /// <p>Contains the parameters for CreateLoadBalancerListener.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateLoadBalancerListenerOutput {}
 
 struct CreateLoadBalancerListenerOutputDeserializer;
@@ -1129,6 +1157,7 @@ impl CreateLoadBalancerListenerOutputDeserializer {
 }
 /// <p>Contains the parameters for CreateLoadBalancerPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerPolicyInput {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
@@ -1170,6 +1199,7 @@ impl CreateLoadBalancerPolicyInputSerializer {
 
 /// <p>Contains the output of CreateLoadBalancerPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateLoadBalancerPolicyOutput {}
 
 struct CreateLoadBalancerPolicyOutputDeserializer;
@@ -1201,6 +1231,8 @@ impl CreatedTimeDeserializer {
 }
 /// <p>Information about the <code>CrossZoneLoadBalancing</code> attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CrossZoneLoadBalancing {
     /// <p>Specifies whether cross-zone load balancing is enabled for the load balancer.</p>
     pub enabled: bool,
@@ -1274,6 +1306,7 @@ impl DefaultValueDeserializer {
 }
 /// <p>Contains the parameters for DeleteLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccessPointInput {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
@@ -1297,6 +1330,7 @@ impl DeleteAccessPointInputSerializer {
 
 /// <p>Contains the output of DeleteLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteAccessPointOutput {}
 
 struct DeleteAccessPointOutputDeserializer;
@@ -1317,6 +1351,7 @@ impl DeleteAccessPointOutputDeserializer {
 }
 /// <p>Contains the parameters for DeleteLoadBalancerListeners.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoadBalancerListenerInput {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
@@ -1347,6 +1382,7 @@ impl DeleteLoadBalancerListenerInputSerializer {
 
 /// <p>Contains the output of DeleteLoadBalancerListeners.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteLoadBalancerListenerOutput {}
 
 struct DeleteLoadBalancerListenerOutputDeserializer;
@@ -1367,6 +1403,7 @@ impl DeleteLoadBalancerListenerOutputDeserializer {
 }
 /// <p>Contains the parameters for DeleteLoadBalancerPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoadBalancerPolicyInput {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
@@ -1393,6 +1430,7 @@ impl DeleteLoadBalancerPolicyInputSerializer {
 
 /// <p>Contains the output of DeleteLoadBalancerPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteLoadBalancerPolicyOutput {}
 
 struct DeleteLoadBalancerPolicyOutputDeserializer;
@@ -1413,6 +1451,7 @@ impl DeleteLoadBalancerPolicyOutputDeserializer {
 }
 /// <p>Contains the parameters for DeregisterInstancesFromLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterEndPointsInput {
     /// <p>The IDs of the instances.</p>
     pub instances: Vec<Instance>,
@@ -1443,6 +1482,7 @@ impl DeregisterEndPointsInputSerializer {
 
 /// <p>Contains the output of DeregisterInstancesFromLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeregisterEndPointsOutput {
     /// <p>The remaining instances registered with the load balancer.</p>
     pub instances: Option<Vec<Instance>>,
@@ -1474,6 +1514,7 @@ impl DeregisterEndPointsOutputDeserializer {
 }
 /// <p>Contains the parameters for DescribeLoadBalancers.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccessPointsInput {
     /// <p>The names of the load balancers.</p>
     pub load_balancer_names: Option<Vec<String>>,
@@ -1510,6 +1551,7 @@ impl DescribeAccessPointsInputSerializer {
 
 /// <p>Contains the parameters for DescribeLoadBalancers.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccessPointsOutput {
     /// <p>Information about the load balancers.</p>
     pub load_balancer_descriptions: Option<Vec<LoadBalancerDescription>>,
@@ -1549,6 +1591,7 @@ impl DescribeAccessPointsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountLimitsInput {
     /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
     pub marker: Option<String>,
@@ -1575,6 +1618,7 @@ impl DescribeAccountLimitsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccountLimitsOutput {
     /// <p>Information about the limits.</p>
     pub limits: Option<Vec<Limit>>,
@@ -1612,6 +1656,7 @@ impl DescribeAccountLimitsOutputDeserializer {
 }
 /// <p>Contains the parameters for DescribeInstanceHealth.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndPointStateInput {
     /// <p>The IDs of the instances.</p>
     pub instances: Option<Vec<Instance>>,
@@ -1644,6 +1689,7 @@ impl DescribeEndPointStateInputSerializer {
 
 /// <p>Contains the output for DescribeInstanceHealth.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEndPointStateOutput {
     /// <p>Information about the health of the instances.</p>
     pub instance_states: Option<Vec<InstanceState>>,
@@ -1675,6 +1721,7 @@ impl DescribeEndPointStateOutputDeserializer {
 }
 /// <p>Contains the parameters for DescribeLoadBalancerAttributes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBalancerAttributesInput {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
@@ -1698,6 +1745,7 @@ impl DescribeLoadBalancerAttributesInputSerializer {
 
 /// <p>Contains the output of DescribeLoadBalancerAttributes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLoadBalancerAttributesOutput {
     /// <p>Information about the load balancer attributes.</p>
     pub load_balancer_attributes: Option<LoadBalancerAttributes>,
@@ -1731,6 +1779,7 @@ impl DescribeLoadBalancerAttributesOutputDeserializer {
 }
 /// <p>Contains the parameters for DescribeLoadBalancerPolicies.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBalancerPoliciesInput {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: Option<String>,
@@ -1762,6 +1811,7 @@ impl DescribeLoadBalancerPoliciesInputSerializer {
 
 /// <p>Contains the output of DescribeLoadBalancerPolicies.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLoadBalancerPoliciesOutput {
     /// <p>Information about the policies.</p>
     pub policy_descriptions: Option<Vec<PolicyDescription>>,
@@ -1796,6 +1846,7 @@ impl DescribeLoadBalancerPoliciesOutputDeserializer {
 }
 /// <p>Contains the parameters for DescribeLoadBalancerPolicyTypes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBalancerPolicyTypesInput {
     /// <p>The names of the policy types. If no names are specified, describes all policy types defined by Elastic Load Balancing.</p>
     pub policy_type_names: Option<Vec<String>>,
@@ -1822,6 +1873,7 @@ impl DescribeLoadBalancerPolicyTypesInputSerializer {
 
 /// <p>Contains the output of DescribeLoadBalancerPolicyTypes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLoadBalancerPolicyTypesOutput {
     /// <p>Information about the policy types.</p>
     pub policy_type_descriptions: Option<Vec<PolicyTypeDescription>>,
@@ -1856,6 +1908,7 @@ impl DescribeLoadBalancerPolicyTypesOutputDeserializer {
 }
 /// <p>Contains the parameters for DescribeTags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsInput {
     /// <p>The names of the load balancers.</p>
     pub load_balancer_names: Vec<String>,
@@ -1880,6 +1933,7 @@ impl DescribeTagsInputSerializer {
 
 /// <p>Contains the output for DescribeTags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTagsOutput {
     /// <p>Information about the tags.</p>
     pub tag_descriptions: Option<Vec<TagDescription>>,
@@ -1918,6 +1972,7 @@ impl DescriptionDeserializer {
 }
 /// <p>Contains the parameters for DetachLoadBalancerFromSubnets.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachLoadBalancerFromSubnetsInput {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
@@ -1944,6 +1999,7 @@ impl DetachLoadBalancerFromSubnetsInputSerializer {
 
 /// <p>Contains the output of DetachLoadBalancerFromSubnets.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetachLoadBalancerFromSubnetsOutput {
     /// <p>The IDs of the remaining subnets for the load balancer.</p>
     pub subnets: Option<Vec<String>>,
@@ -1975,6 +2031,8 @@ impl DetachLoadBalancerFromSubnetsOutputDeserializer {
 }
 /// <p>Information about a health check.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HealthCheck {
     /// <p>The number of consecutive health checks successes required before moving the instance to the <code>Healthy</code> state.</p>
     pub healthy_threshold: i64,
@@ -2101,6 +2159,8 @@ impl IdleTimeoutDeserializer {
 }
 /// <p>The ID of an EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Instance {
     /// <p>The instance ID.</p>
     pub instance_id: Option<String>,
@@ -2165,6 +2225,7 @@ impl InstancePortDeserializer {
 }
 /// <p>Information about the state of an EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceState {
     /// <p><p>A description of the instance state. This string can contain one or more of the following messages.</p> <ul> <li> <p> <code>N/A</code> </p> </li> <li> <p> <code>A transient error occurred. Please try again later.</code> </p> </li> <li> <p> <code>Instance has failed at least the UnhealthyThreshold number of health checks consecutively.</code> </p> </li> <li> <p> <code>Instance has not passed the configured HealthyThreshold number of health checks consecutively.</code> </p> </li> <li> <p> <code>Instance registration is still in progress.</code> </p> </li> <li> <p> <code>Instance is in the EC2 Availability Zone for which LoadBalancer is not configured to route traffic to.</code> </p> </li> <li> <p> <code>Instance is not currently registered with the LoadBalancer.</code> </p> </li> <li> <p> <code>Instance deregistration currently in progress.</code> </p> </li> <li> <p> <code>Disable Availability Zone is currently in progress.</code> </p> </li> <li> <p> <code>Instance is in pending state.</code> </p> </li> <li> <p> <code>Instance is in stopped state.</code> </p> </li> <li> <p> <code>Instance is in terminated state.</code> </p> </li> </ul></p>
     pub description: Option<String>,
@@ -2273,6 +2334,7 @@ impl LBCookieStickinessPoliciesDeserializer {
 }
 /// <p>Information about a policy for duration-based session stickiness.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LBCookieStickinessPolicy {
     /// <p>The time period, in seconds, after which the cookie should be considered stale. If this parameter is not specified, the stickiness session lasts for the duration of the browser session.</p>
     pub cookie_expiration_period: Option<i64>,
@@ -2312,6 +2374,7 @@ impl LBCookieStickinessPolicyDeserializer {
 }
 /// <p>Information about an Elastic Load Balancing resource limit for your AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Limit {
     /// <p>The maximum value of the limit.</p>
     pub max: Option<String>,
@@ -2356,6 +2419,8 @@ impl LimitsDeserializer {
 }
 /// <p>Information about a listener.</p> <p>For information about the protocols and the ports supported by Elastic Load Balancing, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Listener {
     /// <p>The port on which the instance is listening.</p>
     pub instance_port: i64,
@@ -2434,6 +2499,7 @@ impl ListenerSerializer {
 
 /// <p>The policies enabled for a listener.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListenerDescription {
     /// <p>The listener.</p>
     pub listener: Option<Listener>,
@@ -2497,6 +2563,8 @@ impl ListenersSerializer {
 
 /// <p>The attributes for a load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoadBalancerAttributes {
     /// <p>If enabled, the load balancer captures detailed information of all requests and delivers the information to the Amazon S3 bucket that you specify.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-access-logs.html">Enable Access Logs</a> in the <i>Classic Load Balancers Guide</i>.</p>
     pub access_log: Option<AccessLog>,
@@ -2605,6 +2673,7 @@ impl LoadBalancerAttributesSerializer {
 
 /// <p>Information about a load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoadBalancerDescription {
     /// <p>The Availability Zones for the load balancer.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -2819,6 +2888,7 @@ impl MaxDeserializer {
 }
 /// <p>Contains the parameters for ModifyLoadBalancerAttributes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyLoadBalancerAttributesInput {
     /// <p>The attributes for the load balancer.</p>
     pub load_balancer_attributes: LoadBalancerAttributes,
@@ -2849,6 +2919,7 @@ impl ModifyLoadBalancerAttributesInputSerializer {
 
 /// <p>Contains the output of ModifyLoadBalancerAttributes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyLoadBalancerAttributesOutput {
     /// <p>Information about the load balancer attributes.</p>
     pub load_balancer_attributes: Option<LoadBalancerAttributes>,
@@ -2901,6 +2972,7 @@ impl NameDeserializer {
 }
 /// <p>The policies for a load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Policies {
     /// <p>The stickiness policies created using <a>CreateAppCookieStickinessPolicy</a>.</p>
     pub app_cookie_stickiness_policies: Option<Vec<AppCookieStickinessPolicy>>,
@@ -2948,6 +3020,7 @@ impl PoliciesDeserializer {
 }
 /// <p>Information about a policy attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PolicyAttribute {
     /// <p>The name of the attribute.</p>
     pub attribute_name: Option<String>,
@@ -2975,6 +3048,7 @@ impl PolicyAttributeSerializer {
 
 /// <p>Information about a policy attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyAttributeDescription {
     /// <p>The name of the attribute.</p>
     pub attribute_name: Option<String>,
@@ -3034,6 +3108,7 @@ impl PolicyAttributeDescriptionsDeserializer {
 }
 /// <p>Information about a policy attribute type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyAttributeTypeDescription {
     /// <p>The name of the attribute.</p>
     pub attribute_name: Option<String>,
@@ -3125,6 +3200,7 @@ impl PolicyAttributesSerializer {
 
 /// <p>Information about a policy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyDescription {
     /// <p>The policy attributes.</p>
     pub policy_attribute_descriptions: Option<Vec<PolicyAttributeDescription>>,
@@ -3226,6 +3302,7 @@ impl PolicyNamesSerializer {
 
 /// <p>Information about a policy type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyTypeDescription {
     /// <p>A description of the policy type.</p>
     pub description: Option<String>,
@@ -3345,6 +3422,7 @@ impl ReasonCodeDeserializer {
 }
 /// <p>Contains the parameters for RegisterInstancesWithLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterEndPointsInput {
     /// <p>The IDs of the instances.</p>
     pub instances: Vec<Instance>,
@@ -3375,6 +3453,7 @@ impl RegisterEndPointsInputSerializer {
 
 /// <p>Contains the output of RegisterInstancesWithLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RegisterEndPointsOutput {
     /// <p>The updated list of instances for the load balancer.</p>
     pub instances: Option<Vec<Instance>>,
@@ -3406,6 +3485,7 @@ impl RegisterEndPointsOutputDeserializer {
 }
 /// <p>Contains the parameters for DisableAvailabilityZonesForLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveAvailabilityZonesInput {
     /// <p>The Availability Zones.</p>
     pub availability_zones: Vec<String>,
@@ -3436,6 +3516,7 @@ impl RemoveAvailabilityZonesInputSerializer {
 
 /// <p>Contains the output for DisableAvailabilityZonesForLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveAvailabilityZonesOutput {
     /// <p>The remaining Availability Zones for the load balancer.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -3467,6 +3548,7 @@ impl RemoveAvailabilityZonesOutputDeserializer {
 }
 /// <p>Contains the parameters for RemoveTags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsInput {
     /// <p>The name of the load balancer. You can specify a maximum of one load balancer name.</p>
     pub load_balancer_names: Vec<String>,
@@ -3494,6 +3576,7 @@ impl RemoveTagsInputSerializer {
 
 /// <p>Contains the output of RemoveTags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveTagsOutput {}
 
 struct RemoveTagsOutputDeserializer;
@@ -3598,6 +3681,7 @@ impl SecurityGroupsSerializer {
 
 /// <p>Contains the parameters for SetLoadBalancerListenerSSLCertificate.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLoadBalancerListenerSSLCertificateInput {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
@@ -3637,6 +3721,7 @@ impl SetLoadBalancerListenerSSLCertificateInputSerializer {
 
 /// <p>Contains the output of SetLoadBalancerListenerSSLCertificate.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetLoadBalancerListenerSSLCertificateOutput {}
 
 struct SetLoadBalancerListenerSSLCertificateOutputDeserializer;
@@ -3657,6 +3742,7 @@ impl SetLoadBalancerListenerSSLCertificateOutputDeserializer {
 }
 /// <p>Contains the parameters for SetLoadBalancerPoliciesForBackendServer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLoadBalancerPoliciesForBackendServerInput {
     /// <p>The port number associated with the EC2 instance.</p>
     pub instance_port: i64,
@@ -3694,6 +3780,7 @@ impl SetLoadBalancerPoliciesForBackendServerInputSerializer {
 
 /// <p>Contains the output of SetLoadBalancerPoliciesForBackendServer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetLoadBalancerPoliciesForBackendServerOutput {}
 
 struct SetLoadBalancerPoliciesForBackendServerOutputDeserializer;
@@ -3714,6 +3801,7 @@ impl SetLoadBalancerPoliciesForBackendServerOutputDeserializer {
 }
 /// <p>Contains the parameters for SetLoadBalancePoliciesOfListener.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLoadBalancerPoliciesOfListenerInput {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
@@ -3750,6 +3838,7 @@ impl SetLoadBalancerPoliciesOfListenerInputSerializer {
 
 /// <p>Contains the output of SetLoadBalancePoliciesOfListener.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetLoadBalancerPoliciesOfListenerOutput {}
 
 struct SetLoadBalancerPoliciesOfListenerOutputDeserializer;
@@ -3770,6 +3859,7 @@ impl SetLoadBalancerPoliciesOfListenerOutputDeserializer {
 }
 /// <p>Information about a source security group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SourceSecurityGroup {
     /// <p>The name of the security group.</p>
     pub group_name: Option<String>,
@@ -3857,6 +3947,8 @@ impl SubnetsSerializer {
 
 /// <p>Information about a tag.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>The key of the tag.</p>
     pub key: String,
@@ -3901,6 +3993,7 @@ impl TagSerializer {
 
 /// <p>The tags associated with a load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagDescription {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: Option<String>,
@@ -3976,6 +4069,7 @@ impl TagKeyListSerializer {
 
 /// <p>The key of a tag.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagKeyOnly {
     /// <p>The name of the key.</p>
     pub key: Option<String>,
@@ -4109,18 +4203,14 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsError::AccessPointNotFound(ref cause) => cause,
-            AddTagsError::DuplicateTagKeys(ref cause) => cause,
-            AddTagsError::TooManyTags(ref cause) => cause,
+            AddTagsError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            AddTagsError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            AddTagsError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsError {}
 /// Errors returned by ApplySecurityGroupsToLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum ApplySecurityGroupsToLoadBalancerError {
@@ -4180,18 +4270,20 @@ impl ApplySecurityGroupsToLoadBalancerError {
 }
 impl fmt::Display for ApplySecurityGroupsToLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ApplySecurityGroupsToLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(ref cause) => cause,
-            ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,
-            ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
+            ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ApplySecurityGroupsToLoadBalancerError {}
 /// Errors returned by AttachLoadBalancerToSubnets
 #[derive(Debug, PartialEq)]
 pub enum AttachLoadBalancerToSubnetsError {
@@ -4256,19 +4348,19 @@ impl AttachLoadBalancerToSubnetsError {
 }
 impl fmt::Display for AttachLoadBalancerToSubnetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachLoadBalancerToSubnetsError {
-    fn description(&self) -> &str {
         match *self {
-            AttachLoadBalancerToSubnetsError::AccessPointNotFound(ref cause) => cause,
-            AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(ref cause) => cause,
-            AttachLoadBalancerToSubnetsError::InvalidSubnet(ref cause) => cause,
-            AttachLoadBalancerToSubnetsError::SubnetNotFound(ref cause) => cause,
+            AttachLoadBalancerToSubnetsError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerToSubnetsError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            AttachLoadBalancerToSubnetsError::SubnetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachLoadBalancerToSubnetsError {}
 /// Errors returned by ConfigureHealthCheck
 #[derive(Debug, PartialEq)]
 pub enum ConfigureHealthCheckError {
@@ -4306,16 +4398,12 @@ impl ConfigureHealthCheckError {
 }
 impl fmt::Display for ConfigureHealthCheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfigureHealthCheckError {
-    fn description(&self) -> &str {
         match *self {
-            ConfigureHealthCheckError::AccessPointNotFound(ref cause) => cause,
+            ConfigureHealthCheckError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ConfigureHealthCheckError {}
 /// Errors returned by CreateAppCookieStickinessPolicy
 #[derive(Debug, PartialEq)]
 pub enum CreateAppCookieStickinessPolicyError {
@@ -4384,19 +4472,23 @@ impl CreateAppCookieStickinessPolicyError {
 }
 impl fmt::Display for CreateAppCookieStickinessPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAppCookieStickinessPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAppCookieStickinessPolicyError::AccessPointNotFound(ref cause) => cause,
-            CreateAppCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => cause,
-            CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateAppCookieStickinessPolicyError::TooManyPolicies(ref cause) => cause,
+            CreateAppCookieStickinessPolicyError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAppCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAppCookieStickinessPolicyError::TooManyPolicies(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateAppCookieStickinessPolicyError {}
 /// Errors returned by CreateLBCookieStickinessPolicy
 #[derive(Debug, PartialEq)]
 pub enum CreateLBCookieStickinessPolicyError {
@@ -4465,19 +4557,23 @@ impl CreateLBCookieStickinessPolicyError {
 }
 impl fmt::Display for CreateLBCookieStickinessPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLBCookieStickinessPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLBCookieStickinessPolicyError::AccessPointNotFound(ref cause) => cause,
-            CreateLBCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => cause,
-            CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateLBCookieStickinessPolicyError::TooManyPolicies(ref cause) => cause,
+            CreateLBCookieStickinessPolicyError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLBCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLBCookieStickinessPolicyError::TooManyPolicies(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateLBCookieStickinessPolicyError {}
 /// Errors returned by CreateLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerError {
@@ -4594,27 +4690,25 @@ impl CreateLoadBalancerError {
 }
 impl fmt::Display for CreateLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoadBalancerError::CertificateNotFound(ref cause) => cause,
-            CreateLoadBalancerError::DuplicateAccessPointName(ref cause) => cause,
-            CreateLoadBalancerError::DuplicateTagKeys(ref cause) => cause,
-            CreateLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateLoadBalancerError::InvalidScheme(ref cause) => cause,
-            CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
-            CreateLoadBalancerError::InvalidSubnet(ref cause) => cause,
-            CreateLoadBalancerError::OperationNotPermitted(ref cause) => cause,
-            CreateLoadBalancerError::SubnetNotFound(ref cause) => cause,
-            CreateLoadBalancerError::TooManyAccessPoints(ref cause) => cause,
-            CreateLoadBalancerError::TooManyTags(ref cause) => cause,
-            CreateLoadBalancerError::UnsupportedProtocol(ref cause) => cause,
+            CreateLoadBalancerError::CertificateNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::DuplicateAccessPointName(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerError::InvalidScheme(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::SubnetNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::TooManyAccessPoints(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::TooManyTags(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLoadBalancerError {}
 /// Errors returned by CreateLoadBalancerListeners
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerListenersError {
@@ -4692,20 +4786,26 @@ impl CreateLoadBalancerListenersError {
 }
 impl fmt::Display for CreateLoadBalancerListenersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoadBalancerListenersError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoadBalancerListenersError::AccessPointNotFound(ref cause) => cause,
-            CreateLoadBalancerListenersError::CertificateNotFound(ref cause) => cause,
-            CreateLoadBalancerListenersError::DuplicateListener(ref cause) => cause,
-            CreateLoadBalancerListenersError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateLoadBalancerListenersError::UnsupportedProtocol(ref cause) => cause,
+            CreateLoadBalancerListenersError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerListenersError::CertificateNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerListenersError::DuplicateListener(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerListenersError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerListenersError::UnsupportedProtocol(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateLoadBalancerListenersError {}
 /// Errors returned by CreateLoadBalancerPolicy
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerPolicyError {
@@ -4777,20 +4877,18 @@ impl CreateLoadBalancerPolicyError {
 }
 impl fmt::Display for CreateLoadBalancerPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoadBalancerPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoadBalancerPolicyError::AccessPointNotFound(ref cause) => cause,
-            CreateLoadBalancerPolicyError::DuplicatePolicyName(ref cause) => cause,
-            CreateLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateLoadBalancerPolicyError::PolicyTypeNotFound(ref cause) => cause,
-            CreateLoadBalancerPolicyError::TooManyPolicies(ref cause) => cause,
+            CreateLoadBalancerPolicyError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerPolicyError::DuplicatePolicyName(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerPolicyError::PolicyTypeNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerPolicyError::TooManyPolicies(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLoadBalancerPolicyError {}
 /// Errors returned by DeleteLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerError {}
@@ -4820,14 +4918,10 @@ impl DeleteLoadBalancerError {
 }
 impl fmt::Display for DeleteLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteLoadBalancerError {}
 /// Errors returned by DeleteLoadBalancerListeners
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerListenersError {
@@ -4869,16 +4963,14 @@ impl DeleteLoadBalancerListenersError {
 }
 impl fmt::Display for DeleteLoadBalancerListenersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoadBalancerListenersError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoadBalancerListenersError::AccessPointNotFound(ref cause) => cause,
+            DeleteLoadBalancerListenersError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteLoadBalancerListenersError {}
 /// Errors returned by DeleteLoadBalancerPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerPolicyError {
@@ -4927,17 +5019,15 @@ impl DeleteLoadBalancerPolicyError {
 }
 impl fmt::Display for DeleteLoadBalancerPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoadBalancerPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoadBalancerPolicyError::AccessPointNotFound(ref cause) => cause,
-            DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => cause,
+            DeleteLoadBalancerPolicyError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteLoadBalancerPolicyError {}
 /// Errors returned by DeregisterInstancesFromLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DeregisterInstancesFromLoadBalancerError {
@@ -4988,17 +5078,17 @@ impl DeregisterInstancesFromLoadBalancerError {
 }
 impl fmt::Display for DeregisterInstancesFromLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterInstancesFromLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(ref cause) => cause,
-            DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(ref cause) => cause,
+            DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeregisterInstancesFromLoadBalancerError {}
 /// Errors returned by DescribeAccountLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountLimitsError {}
@@ -5028,14 +5118,10 @@ impl DescribeAccountLimitsError {
 }
 impl fmt::Display for DescribeAccountLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountLimitsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAccountLimitsError {}
 /// Errors returned by DescribeInstanceHealth
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstanceHealthError {
@@ -5080,17 +5166,13 @@ impl DescribeInstanceHealthError {
 }
 impl fmt::Display for DescribeInstanceHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInstanceHealthError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInstanceHealthError::AccessPointNotFound(ref cause) => cause,
-            DescribeInstanceHealthError::InvalidEndPoint(ref cause) => cause,
+            DescribeInstanceHealthError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeInstanceHealthError::InvalidEndPoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInstanceHealthError {}
 /// Errors returned by DescribeLoadBalancerAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerAttributesError {
@@ -5141,17 +5223,17 @@ impl DescribeLoadBalancerAttributesError {
 }
 impl fmt::Display for DescribeLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancerAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancerAttributesError::AccessPointNotFound(ref cause) => cause,
-            DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => cause,
+            DescribeLoadBalancerAttributesError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLoadBalancerAttributesError {}
 /// Errors returned by DescribeLoadBalancerPolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerPoliciesError {
@@ -5200,17 +5282,15 @@ impl DescribeLoadBalancerPoliciesError {
 }
 impl fmt::Display for DescribeLoadBalancerPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancerPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancerPoliciesError::AccessPointNotFound(ref cause) => cause,
-            DescribeLoadBalancerPoliciesError::PolicyNotFound(ref cause) => cause,
+            DescribeLoadBalancerPoliciesError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeLoadBalancerPoliciesError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLoadBalancerPoliciesError {}
 /// Errors returned by DescribeLoadBalancerPolicyTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerPolicyTypesError {
@@ -5252,16 +5332,14 @@ impl DescribeLoadBalancerPolicyTypesError {
 }
 impl fmt::Display for DescribeLoadBalancerPolicyTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancerPolicyTypesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(ref cause) => cause,
+            DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLoadBalancerPolicyTypesError {}
 /// Errors returned by DescribeLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancersError {
@@ -5306,17 +5384,13 @@ impl DescribeLoadBalancersError {
 }
 impl fmt::Display for DescribeLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancersError::AccessPointNotFound(ref cause) => cause,
-            DescribeLoadBalancersError::DependencyThrottle(ref cause) => cause,
+            DescribeLoadBalancersError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeLoadBalancersError::DependencyThrottle(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLoadBalancersError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
@@ -5354,16 +5428,12 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::AccessPointNotFound(ref cause) => cause,
+            DescribeTagsError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by DetachLoadBalancerFromSubnets
 #[derive(Debug, PartialEq)]
 pub enum DetachLoadBalancerFromSubnetsError {
@@ -5414,17 +5484,17 @@ impl DetachLoadBalancerFromSubnetsError {
 }
 impl fmt::Display for DetachLoadBalancerFromSubnetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachLoadBalancerFromSubnetsError {
-    fn description(&self) -> &str {
         match *self {
-            DetachLoadBalancerFromSubnetsError::AccessPointNotFound(ref cause) => cause,
-            DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(ref cause) => cause,
+            DetachLoadBalancerFromSubnetsError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DetachLoadBalancerFromSubnetsError {}
 /// Errors returned by DisableAvailabilityZonesForLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DisableAvailabilityZonesForLoadBalancerError {
@@ -5473,19 +5543,17 @@ impl DisableAvailabilityZonesForLoadBalancerError {
 }
 impl fmt::Display for DisableAvailabilityZonesForLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableAvailabilityZonesForLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => cause,
+            DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableAvailabilityZonesForLoadBalancerError {}
 /// Errors returned by EnableAvailabilityZonesForLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum EnableAvailabilityZonesForLoadBalancerError {
@@ -5527,16 +5595,14 @@ impl EnableAvailabilityZonesForLoadBalancerError {
 }
 impl fmt::Display for EnableAvailabilityZonesForLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableAvailabilityZonesForLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => cause,
+            EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for EnableAvailabilityZonesForLoadBalancerError {}
 /// Errors returned by ModifyLoadBalancerAttributes
 #[derive(Debug, PartialEq)]
 pub enum ModifyLoadBalancerAttributesError {
@@ -5596,18 +5662,20 @@ impl ModifyLoadBalancerAttributesError {
 }
 impl fmt::Display for ModifyLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyLoadBalancerAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyLoadBalancerAttributesError::AccessPointNotFound(ref cause) => cause,
-            ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(ref cause) => cause,
-            ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => cause,
+            ModifyLoadBalancerAttributesError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyLoadBalancerAttributesError {}
 /// Errors returned by RegisterInstancesWithLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum RegisterInstancesWithLoadBalancerError {
@@ -5658,17 +5726,17 @@ impl RegisterInstancesWithLoadBalancerError {
 }
 impl fmt::Display for RegisterInstancesWithLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterInstancesWithLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterInstancesWithLoadBalancerError::AccessPointNotFound(ref cause) => cause,
-            RegisterInstancesWithLoadBalancerError::InvalidEndPoint(ref cause) => cause,
+            RegisterInstancesWithLoadBalancerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterInstancesWithLoadBalancerError::InvalidEndPoint(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RegisterInstancesWithLoadBalancerError {}
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
@@ -5706,16 +5774,12 @@ impl RemoveTagsError {
 }
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsError::AccessPointNotFound(ref cause) => cause,
+            RemoveTagsError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsError {}
 /// Errors returned by SetLoadBalancerListenerSSLCertificate
 #[derive(Debug, PartialEq)]
 pub enum SetLoadBalancerListenerSSLCertificateError {
@@ -5793,22 +5857,26 @@ impl SetLoadBalancerListenerSSLCertificateError {
 }
 impl fmt::Display for SetLoadBalancerListenerSSLCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetLoadBalancerListenerSSLCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(ref cause) => cause,
-            SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(ref cause) => cause,
-            SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(ref cause) => {
-                cause
+            SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
             }
-            SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(ref cause) => cause,
-            SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(ref cause) => cause,
+            SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetLoadBalancerListenerSSLCertificateError {}
 /// Errors returned by SetLoadBalancerPoliciesForBackendServer
 #[derive(Debug, PartialEq)]
 pub enum SetLoadBalancerPoliciesForBackendServerError {
@@ -5866,20 +5934,20 @@ impl SetLoadBalancerPoliciesForBackendServerError {
 }
 impl fmt::Display for SetLoadBalancerPoliciesForBackendServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetLoadBalancerPoliciesForBackendServerError {
-    fn description(&self) -> &str {
         match *self {
-            SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(ref cause) => cause,
+            SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
             SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(
                 ref cause,
-            ) => cause,
-            SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetLoadBalancerPoliciesForBackendServerError {}
 /// Errors returned by SetLoadBalancerPoliciesOfListener
 #[derive(Debug, PartialEq)]
 pub enum SetLoadBalancerPoliciesOfListenerError {
@@ -5948,19 +6016,23 @@ impl SetLoadBalancerPoliciesOfListenerError {
 }
 impl fmt::Display for SetLoadBalancerPoliciesOfListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetLoadBalancerPoliciesOfListenerError {
-    fn description(&self) -> &str {
         match *self {
-            SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(ref cause) => cause,
-            SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(ref cause) => cause,
-            SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(ref cause) => cause,
-            SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(ref cause) => cause,
+            SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetLoadBalancerPoliciesOfListenerError {}
 /// Trait representing the capabilities of the Elastic Load Balancing API. Elastic Load Balancing clients implement this trait.
 pub trait Elb {
     /// <p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>

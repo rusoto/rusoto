@@ -35,6 +35,7 @@ use xml::EventReader;
 
 /// <p>Represents the input to <a>AddTagsToResource</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceMessage {
     /// <p>The Amazon DocumentDB resource that the tags are added to. This value is an Amazon Resource Name (ARN).</p>
     pub resource_name: String,
@@ -69,6 +70,7 @@ impl ApplyMethodDeserializer {
 }
 /// <p>Represents the input to <a>ApplyPendingMaintenanceAction</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplyPendingMaintenanceActionMessage {
     /// <p>The pending maintenance action to apply to this resource.</p> <p>Valid values: <code>system-update</code>, <code>db-upgrade</code> </p>
     pub apply_action: String,
@@ -97,6 +99,7 @@ impl ApplyPendingMaintenanceActionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplyPendingMaintenanceActionResult {
     pub resource_pending_maintenance_actions: Option<ResourcePendingMaintenanceActions>,
 }
@@ -158,6 +161,7 @@ impl AttributeValueListSerializer {
 
 /// <p>Information about an Availability Zone.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AvailabilityZone {
     /// <p>The name of the Availability Zone.</p>
     pub name: Option<String>,
@@ -254,6 +258,7 @@ impl BooleanOptionalDeserializer {
 }
 /// <p>A certificate authority (CA) certificate for an AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Certificate {
     /// <p>The Amazon Resource Name (ARN) for the certificate.</p> <p>Example: <code>arn:aws:rds:us-east-1::cert:rds-ca-2019</code> </p>
     pub certificate_arn: Option<String>,
@@ -325,6 +330,7 @@ impl CertificateListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CertificateMessage {
     /// <p>A list of certificates for this AWS account.</p>
     pub certificates: Option<Vec<Certificate>>,
@@ -357,6 +363,7 @@ impl CertificateMessageDeserializer {
 }
 /// <p>The configuration setting for the log types to be enabled for export to Amazon CloudWatch Logs for a specific DB instance or DB cluster.</p> <p>The <code>EnableLogTypes</code> and <code>DisableLogTypes</code> arrays determine which logs are exported (or not exported) to CloudWatch Logs. The values within these arrays depend on the DB engine that is being used.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudwatchLogsExportConfiguration {
     /// <p>The list of log types to disable.</p>
     pub disable_log_types: Option<Vec<String>>,
@@ -392,6 +399,7 @@ impl CloudwatchLogsExportConfigurationSerializer {
 
 /// <p>Represents the input to <a>CopyDBClusterParameterGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBClusterParameterGroupMessage {
     /// <p><p>The identifier or Amazon Resource Name (ARN) for the source DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB cluster parameter group.</p> </li> <li> <p>If the source DB cluster parameter group is in the same AWS Region as the copy, specify a valid DB parameter group identifier; for example, <code>my-db-cluster-param-group</code>, or a valid ARN.</p> </li> <li> <p>If the source DB parameter group is in a different AWS Region than the copy, specify a valid DB cluster parameter group ARN; for example, <code>arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1</code>.</p> </li> </ul></p>
     pub source_db_cluster_parameter_group_identifier: String,
@@ -431,6 +439,7 @@ impl CopyDBClusterParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBClusterParameterGroupResult {
     pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
 }
@@ -463,6 +472,7 @@ impl CopyDBClusterParameterGroupResultDeserializer {
 }
 /// <p>Represents the input to <a>CopyDBClusterSnapshot</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBClusterSnapshotMessage {
     /// <p>Set to <code>true</code> to copy all tags from the source DB cluster snapshot to the target DB cluster snapshot, and otherwise <code>false</code>. The default is <code>false</code>.</p>
     pub copy_tags: Option<bool>,
@@ -511,6 +521,7 @@ impl CopyDBClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBClusterSnapshotResult {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
@@ -542,6 +553,7 @@ impl CopyDBClusterSnapshotResultDeserializer {
 }
 /// <p>Represents the input to <a>CreateDBCluster</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterMessage {
     /// <p>A list of Amazon EC2 Availability Zones that instances in the DB cluster can be created in.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -674,6 +686,7 @@ impl CreateDBClusterMessageSerializer {
 
 /// <p>Represents the input of <a>CreateDBClusterParameterGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterParameterGroupMessage {
     /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing <code>DBClusterParameterGroup</code>.</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
     pub db_cluster_parameter_group_name: String,
@@ -710,6 +723,7 @@ impl CreateDBClusterParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterParameterGroupResult {
     pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
 }
@@ -741,6 +755,7 @@ impl CreateDBClusterParameterGroupResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -765,6 +780,7 @@ impl CreateDBClusterResultDeserializer {
 }
 /// <p>Represents the input of <a>CreateDBClusterSnapshot</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterSnapshotMessage {
     /// <p>The identifier of the DB cluster to create a snapshot for. This parameter is not case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBCluster</code>.</p> </li> </ul> <p>Example: <code>my-cluster</code> </p>
     pub db_cluster_identifier: String,
@@ -798,6 +814,7 @@ impl CreateDBClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterSnapshotResult {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
@@ -829,6 +846,7 @@ impl CreateDBClusterSnapshotResultDeserializer {
 }
 /// <p>Represents the input to <a>CreateDBInstance</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBInstanceMessage {
     /// <p>Indicates that minor engine upgrades are applied automatically to the DB instance during the maintenance window.</p> <p>Default: <code>true</code> </p>
     pub auto_minor_version_upgrade: Option<bool>,
@@ -897,6 +915,7 @@ impl CreateDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -922,6 +941,7 @@ impl CreateDBInstanceResultDeserializer {
 }
 /// <p>Represents the input to <a>CreateDBSubnetGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBSubnetGroupMessage {
     /// <p>The description for the DB subnet group.</p>
     pub db_subnet_group_description: String,
@@ -962,6 +982,7 @@ impl CreateDBSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBSubnetGroupResult {
     pub db_subnet_group: Option<DBSubnetGroup>,
 }
@@ -993,6 +1014,7 @@ impl CreateDBSubnetGroupResultDeserializer {
 }
 /// <p>Detailed information about a DB cluster. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBCluster {
     /// <p>Provides a list of the AWS Identity and Access Management (IAM) roles that are associated with the DB cluster. IAM roles that are associated with a DB cluster grant permission for the DB cluster to access other AWS services on your behalf.</p>
     pub associated_roles: Option<Vec<DBClusterRole>>,
@@ -1227,6 +1249,7 @@ impl DBClusterListDeserializer {
 }
 /// <p>Contains information about an instance that is part of a DB cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterMember {
     /// <p>Specifies the status of the DB cluster parameter group for this member of the DB cluster.</p>
     pub db_cluster_parameter_group_status: Option<String>,
@@ -1297,6 +1320,7 @@ impl DBClusterMemberListDeserializer {
 }
 /// <p>Represents the output of <a>DescribeDBClusters</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterMessage {
     /// <p>A list of DB clusters.</p>
     pub db_clusters: Option<Vec<DBCluster>>,
@@ -1329,6 +1353,7 @@ impl DBClusterMessageDeserializer {
 }
 /// <p>Detailed information about a DB cluster parameter group. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB cluster parameter group.</p>
     pub db_cluster_parameter_group_arn: Option<String>,
@@ -1382,6 +1407,7 @@ impl DBClusterParameterGroupDeserializer {
 }
 /// <p>Represents the output of <a>DBClusterParameterGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupDetails {
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
@@ -1438,6 +1464,7 @@ impl DBClusterParameterGroupListDeserializer {
 }
 /// <p>Contains the name of a DB cluster parameter group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupNameMessage {
     /// <p><p>The name of a DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be from 1 to 255 letters or numbers.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
     pub db_cluster_parameter_group_name: Option<String>,
@@ -1469,6 +1496,7 @@ impl DBClusterParameterGroupNameMessageDeserializer {
 }
 /// <p>Represents the output of <a>DBClusterParameterGroups</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupsMessage {
     /// <p>A list of DB cluster parameter groups.</p>
     pub db_cluster_parameter_groups: Option<Vec<DBClusterParameterGroup>>,
@@ -1508,6 +1536,7 @@ impl DBClusterParameterGroupsMessageDeserializer {
 }
 /// <p>Describes an AWS Identity and Access Management (IAM) role that is associated with a DB cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterRole {
     /// <p>The Amazon Resource Name (ARN) of the IAM role that is associated with the DB cluster.</p>
     pub role_arn: Option<String>,
@@ -1558,6 +1587,7 @@ impl DBClusterRolesDeserializer {
 }
 /// <p>Detailed information about a DB cluster snapshot. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterSnapshot {
     /// <p>Provides the list of Amazon EC2 Availability Zones that instances in the DB cluster snapshot can be restored in.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -1686,6 +1716,7 @@ impl DBClusterSnapshotDeserializer {
 }
 /// <p>Contains the name and values of a manual DB cluster snapshot attribute.</p> <p>Manual DB cluster snapshot attributes are used to authorize other AWS accounts to restore a manual DB cluster snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterSnapshotAttribute {
     /// <p>The name of the manual DB cluster snapshot attribute.</p> <p>The attribute named <code>restore</code> refers to the list of AWS accounts that have permission to copy or restore the manual DB cluster snapshot.</p>
     pub attribute_name: Option<String>,
@@ -1743,6 +1774,7 @@ impl DBClusterSnapshotAttributeListDeserializer {
 }
 /// <p>Detailed information about the attributes that are associated with a DB cluster snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterSnapshotAttributesResult {
     /// <p>The list of attributes and values for the DB cluster snapshot.</p>
     pub db_cluster_snapshot_attributes: Option<Vec<DBClusterSnapshotAttribute>>,
@@ -1805,6 +1837,7 @@ impl DBClusterSnapshotListDeserializer {
 }
 /// <p>Represents the output of <a>DescribeDBClusterSnapshots</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterSnapshotMessage {
     /// <p>Provides a list of DB cluster snapshots.</p>
     pub db_cluster_snapshots: Option<Vec<DBClusterSnapshot>>,
@@ -1844,6 +1877,7 @@ impl DBClusterSnapshotMessageDeserializer {
 }
 /// <p> Detailed information about a DB engine version. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBEngineVersion {
     /// <p>The description of the database engine.</p>
     pub db_engine_description: Option<String>,
@@ -1945,6 +1979,7 @@ impl DBEngineVersionListDeserializer {
 }
 /// <p>Represents the output of <a>DescribeDBEngineVersions</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBEngineVersionMessage {
     /// <p>Detailed information about one or more DB engine versions.</p>
     pub db_engine_versions: Option<Vec<DBEngineVersion>>,
@@ -1977,6 +2012,7 @@ impl DBEngineVersionMessageDeserializer {
 }
 /// <p>Detailed information about a DB instance. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBInstance {
     /// <p>Indicates that minor version patches are applied automatically.</p>
     pub auto_minor_version_upgrade: Option<bool>,
@@ -2203,6 +2239,7 @@ impl DBInstanceListDeserializer {
 }
 /// <p>Represents the output of <a>DescribeDBInstances</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBInstanceMessage {
     /// <p>Detailed information about one or more DB instances. </p>
     pub db_instances: Option<Vec<DBInstance>>,
@@ -2235,6 +2272,7 @@ impl DBInstanceMessageDeserializer {
 }
 /// <p>Provides a list of status information for a DB instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBInstanceStatusInfo {
     /// <p>Details of the error if there is an error for the instance. If the instance is not in an error state, this value is blank.</p>
     pub message: Option<String>,
@@ -2295,6 +2333,7 @@ impl DBInstanceStatusInfoListDeserializer {
 }
 /// <p>Detailed information about a DB subnet group. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBSubnetGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB subnet group.</p>
     pub db_subnet_group_arn: Option<String>,
@@ -2353,6 +2392,7 @@ impl DBSubnetGroupDeserializer {
 }
 /// <p>Represents the output of <a>DescribeDBSubnetGroups</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBSubnetGroupMessage {
     /// <p>Detailed information about one or more DB subnet groups.</p>
     pub db_subnet_groups: Option<Vec<DBSubnetGroup>>,
@@ -2405,6 +2445,7 @@ impl DBSubnetGroupsDeserializer {
 }
 /// <p>Represents the input to <a>DeleteDBCluster</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterMessage {
     /// <p><p>The DB cluster identifier for the DB cluster to be deleted. This parameter isn&#39;t case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match an existing <code>DBClusterIdentifier</code>.</p> </li> </ul></p>
     pub db_cluster_identifier: String,
@@ -2441,6 +2482,7 @@ impl DeleteDBClusterMessageSerializer {
 
 /// <p>Represents the input to <a>DeleteDBClusterParameterGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterParameterGroupMessage {
     /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB cluster parameter group.</p> </li> <li> <p>You can&#39;t delete a default DB cluster parameter group.</p> </li> <li> <p>Cannot be associated with any DB clusters.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: String,
@@ -2463,6 +2505,7 @@ impl DeleteDBClusterParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -2487,6 +2530,7 @@ impl DeleteDBClusterResultDeserializer {
 }
 /// <p>Represents the input to <a>DeleteDBClusterSnapshot</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterSnapshotMessage {
     /// <p>The identifier of the DB cluster snapshot to delete.</p> <p>Constraints: Must be the name of an existing DB cluster snapshot in the <code>available</code> state.</p>
     pub db_cluster_snapshot_identifier: String,
@@ -2509,6 +2553,7 @@ impl DeleteDBClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBClusterSnapshotResult {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
@@ -2540,6 +2585,7 @@ impl DeleteDBClusterSnapshotResultDeserializer {
 }
 /// <p>Represents the input to <a>DeleteDBInstance</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBInstanceMessage {
     /// <p><p>The DB instance identifier for the DB instance to be deleted. This parameter isn&#39;t case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DB instance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
@@ -2562,6 +2608,7 @@ impl DeleteDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -2587,6 +2634,7 @@ impl DeleteDBInstanceResultDeserializer {
 }
 /// <p>Represents the input to <a>DeleteDBSubnetGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBSubnetGroupMessage {
     /// <p>The name of the database subnet group to delete.</p> <note> <p>You can't delete the default subnet group.</p> </note> <p>Constraints:</p> <p>Must match the name of an existing <code>DBSubnetGroup</code>. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: String,
@@ -2609,6 +2657,7 @@ impl DeleteDBSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificatesMessage {
     /// <p><p>The user-supplied certificate identifier. If this parameter is specified, information for only the specified certificate is returned. If this parameter is omitted, a list of up to <code>MaxRecords</code> certificates is returned. This parameter is not case sensitive.</p> <p>Constraints</p> <ul> <li> <p>Must match an existing <code>CertificateIdentifier</code>.</p> </li> </ul></p>
     pub certificate_identifier: Option<String>,
@@ -2653,6 +2702,7 @@ impl DescribeCertificatesMessageSerializer {
 
 /// <p>Represents the input to <a>DescribeDBClusterParameterGroups</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterParameterGroupsMessage {
     /// <p><p>The name of a specific DB cluster parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If provided, must match the name of an existing <code>DBClusterParameterGroup</code>.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: Option<String>,
@@ -2697,6 +2747,7 @@ impl DescribeDBClusterParameterGroupsMessageSerializer {
 
 /// <p>Represents the input to <a>DescribeDBClusterParameters</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterParametersMessage {
     /// <p><p>The name of a specific DB cluster parameter group to return parameter details for.</p> <p>Constraints:</p> <ul> <li> <p>If provided, must match the name of an existing <code>DBClusterParameterGroup</code>.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: String,
@@ -2744,6 +2795,7 @@ impl DescribeDBClusterParametersMessageSerializer {
 
 /// <p>Represents the input to <a>DescribeDBClusterSnapshotAttributes</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterSnapshotAttributesMessage {
     /// <p>The identifier for the DB cluster snapshot to describe the attributes for.</p>
     pub db_cluster_snapshot_identifier: String,
@@ -2770,6 +2822,7 @@ impl DescribeDBClusterSnapshotAttributesMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDBClusterSnapshotAttributesResult {
     pub db_cluster_snapshot_attributes_result: Option<DBClusterSnapshotAttributesResult>,
 }
@@ -2802,6 +2855,7 @@ impl DescribeDBClusterSnapshotAttributesResultDeserializer {
 }
 /// <p>Represents the input to <a>DescribeDBClusterSnapshots</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterSnapshotsMessage {
     /// <p><p>The ID of the DB cluster to retrieve the list of DB cluster snapshots for. This parameter can&#39;t be used with the <code>DBClusterSnapshotIdentifier</code> parameter. This parameter is not case sensitive. </p> <p>Constraints:</p> <ul> <li> <p>If provided, must match the identifier of an existing <code>DBCluster</code>.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
@@ -2869,6 +2923,7 @@ impl DescribeDBClusterSnapshotsMessageSerializer {
 
 /// <p>Represents the input to <a>DescribeDBClusters</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClustersMessage {
     /// <p><p>The user-provided DB cluster identifier. If this parameter is specified, information from only the specific DB cluster is returned. This parameter isn&#39;t case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If provided, must match an existing <code>DBClusterIdentifier</code>.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
@@ -2913,6 +2968,7 @@ impl DescribeDBClustersMessageSerializer {
 
 /// <p>Represents the input to <a>DescribeDBEngineVersions</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBEngineVersionsMessage {
     /// <p><p>The name of a specific DB parameter group family to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If provided, must match an existing <code>DBParameterGroupFamily</code>.</p> </li> </ul></p>
     pub db_parameter_group_family: Option<String>,
@@ -2988,6 +3044,7 @@ impl DescribeDBEngineVersionsMessageSerializer {
 
 /// <p>Represents the input to <a>DescribeDBInstances</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBInstancesMessage {
     /// <p><p>The user-provided instance identifier. If this parameter is specified, information from only the specific DB instance is returned. This parameter isn&#39;t case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If provided, must match the identifier of an existing <code>DBInstance</code>.</p> </li> </ul></p>
     pub db_instance_identifier: Option<String>,
@@ -3032,6 +3089,7 @@ impl DescribeDBInstancesMessageSerializer {
 
 /// <p>Represents the input to <a>DescribeDBSubnetGroups</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBSubnetGroupsMessage {
     /// <p>The name of the DB subnet group to return details for.</p>
     pub db_subnet_group_name: Option<String>,
@@ -3073,6 +3131,7 @@ impl DescribeDBSubnetGroupsMessageSerializer {
 
 /// <p>Represents the input to <a>DescribeEngineDefaultClusterParameters</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEngineDefaultClusterParametersMessage {
     /// <p>The name of the DB cluster parameter group family to return the engine parameter information for.</p>
     pub db_parameter_group_family: String,
@@ -3118,6 +3177,7 @@ impl DescribeEngineDefaultClusterParametersMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEngineDefaultClusterParametersResult {
     pub engine_defaults: Option<EngineDefaults>,
 }
@@ -3149,6 +3209,7 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
 }
 /// <p>Represents the input to <a>DescribeEventCategories</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventCategoriesMessage {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
@@ -3180,6 +3241,7 @@ impl DescribeEventCategoriesMessageSerializer {
 
 /// <p>Represents the input to <a>DescribeEvents</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
     /// <p>The number of minutes to retrieve events for.</p> <p>Default: 60</p>
     pub duration: Option<i64>,
@@ -3250,6 +3312,7 @@ impl DescribeEventsMessageSerializer {
 
 /// <p>Represents the input to <a>DescribeOrderableDBInstanceOptions</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrderableDBInstanceOptionsMessage {
     /// <p>The DB instance class filter value. Specify this parameter to show only the available offerings that match the specified DB instance class.</p>
     pub db_instance_class: Option<String>,
@@ -3309,6 +3372,7 @@ impl DescribeOrderableDBInstanceOptionsMessageSerializer {
 
 /// <p>Represents the input to <a>DescribePendingMaintenanceActions</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePendingMaintenanceActionsMessage {
     /// <p><p>A filter that specifies one or more resources to return pending maintenance actions for.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list includes only pending maintenance actions for the DB clusters identified by these ARNs.</p> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and DB instance ARNs. The results list includes only pending maintenance actions for the DB instances identified by these ARNs.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
@@ -3350,6 +3414,7 @@ impl DescribePendingMaintenanceActionsMessageSerializer {
 
 /// <p>Network information for accessing a DB cluster or DB instance. Client programs must specify a valid endpoint to access these Amazon DocumentDB resources.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Endpoint {
     /// <p>Specifies the DNS address of the DB instance.</p>
     pub address: Option<String>,
@@ -3386,6 +3451,7 @@ impl EndpointDeserializer {
 }
 /// <p>Contains the result of a successful invocation of the <code>DescribeEngineDefaultClusterParameters</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EngineDefaults {
     /// <p>The name of the DB cluster parameter group family to return the engine parameter information for.</p>
     pub db_parameter_group_family: Option<String>,
@@ -3426,6 +3492,7 @@ impl EngineDefaultsDeserializer {
 }
 /// <p>Detailed information about an event.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Event {
     /// <p>Specifies the date and time of the event.</p>
     pub date: Option<String>,
@@ -3506,6 +3573,7 @@ impl EventCategoriesListSerializer {
 
 /// <p>An event source type, accompanied by one or more event category names.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventCategoriesMap {
     /// <p>The event categories for the specified source type.</p>
     pub event_categories: Option<Vec<String>>,
@@ -3558,6 +3626,7 @@ impl EventCategoriesMapListDeserializer {
 }
 /// <p>Represents the output of <a>DescribeEventCategories</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventCategoriesMessage {
     /// <p>A list of event category maps.</p>
     pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
@@ -3605,6 +3674,7 @@ impl EventListDeserializer {
 }
 /// <p>Represents the output of <a>DescribeEvents</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventsMessage {
     /// <p>Detailed information about one or more events. </p>
     pub events: Option<Vec<Event>>,
@@ -3637,6 +3707,7 @@ impl EventsMessageDeserializer {
 }
 /// <p>Represents the input to <a>FailoverDBCluster</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FailoverDBClusterMessage {
     /// <p><p>A DB cluster identifier to force a failover for. This parameter is not case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBCluster</code>.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
@@ -3669,6 +3740,7 @@ impl FailoverDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FailoverDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -3698,6 +3770,7 @@ impl FailoverDBClusterResultDeserializer {
 }
 /// <p>A named set of filter values, used to return a more specific list of results. You can use a filter to match a set of resources by specific criteria, such as IDs.</p> <p>Wildcards are not supported in filters.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>The name of the filter. Filter names are case sensitive.</p>
     pub name: String,
@@ -3781,6 +3854,7 @@ impl KeyListSerializer {
 
 /// <p>Represents the input to <a>ListTagsForResource</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceMessage {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
@@ -3839,6 +3913,7 @@ impl LogTypeListSerializer {
 
 /// <p>Represents the input to <a>ModifyDBCluster</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterMessage {
     /// <p>A value that specifies whether the changes in this request and any pending changes are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB cluster. If this parameter is set to <code>false</code>, changes to the DB cluster are applied during the next maintenance window.</p> <p>The <code>ApplyImmediately</code> parameter affects only the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values. If you set this parameter value to <code>false</code>, the changes to the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values are applied during the next maintenance window. All other changes are applied immediately, regardless of the value of the <code>ApplyImmediately</code> parameter.</p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
@@ -3945,6 +4020,7 @@ impl ModifyDBClusterMessageSerializer {
 
 /// <p>Represents the input to <a>ModifyDBClusterParameterGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterParameterGroupMessage {
     /// <p>The name of the DB cluster parameter group to modify.</p>
     pub db_cluster_parameter_group_name: String,
@@ -3974,6 +4050,7 @@ impl ModifyDBClusterParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -3998,6 +4075,7 @@ impl ModifyDBClusterResultDeserializer {
 }
 /// <p>Represents the input to <a>ModifyDBClusterSnapshotAttribute</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterSnapshotAttributeMessage {
     /// <p>The name of the DB cluster snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB cluster snapshot, set this value to <code>restore</code>.</p>
     pub attribute_name: String,
@@ -4044,6 +4122,7 @@ impl ModifyDBClusterSnapshotAttributeMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBClusterSnapshotAttributeResult {
     pub db_cluster_snapshot_attributes_result: Option<DBClusterSnapshotAttributesResult>,
 }
@@ -4076,6 +4155,7 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
 }
 /// <p>Represents the input to <a>ModifyDBInstance</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBInstanceMessage {
     /// <p>Specifies whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB instance. </p> <p> If this parameter is set to <code>false</code>, changes to the DB instance are applied during the next maintenance window. Some parameter changes can cause an outage and are applied on the next reboot.</p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
@@ -4145,6 +4225,7 @@ impl ModifyDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -4170,6 +4251,7 @@ impl ModifyDBInstanceResultDeserializer {
 }
 /// <p>Represents the input to <a>ModifyDBSubnetGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBSubnetGroupMessage {
     /// <p>The description for the DB subnet group.</p>
     pub db_subnet_group_description: Option<String>,
@@ -4207,6 +4289,7 @@ impl ModifyDBSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBSubnetGroupResult {
     pub db_subnet_group: Option<DBSubnetGroup>,
 }
@@ -4238,6 +4321,7 @@ impl ModifyDBSubnetGroupResultDeserializer {
 }
 /// <p>The options that are available for a DB instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OrderableDBInstanceOption {
     /// <p>A list of Availability Zones for a DB instance.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
@@ -4320,6 +4404,7 @@ impl OrderableDBInstanceOptionsListDeserializer {
 }
 /// <p>Represents the output of <a>DescribeOrderableDBInstanceOptions</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OrderableDBInstanceOptionsMessage {
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
@@ -4359,6 +4444,8 @@ impl OrderableDBInstanceOptionsMessageDeserializer {
 }
 /// <p>Detailed information about an individual parameter.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Parameter {
     /// <p>Specifies the valid range of values for the parameter.</p>
     pub allowed_values: Option<String>,
@@ -4512,6 +4599,7 @@ impl ParametersListSerializer {
 
 /// <p>A list of the log types whose configuration is still pending. These log types are in the process of being activated or deactivated.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingCloudwatchLogsExports {
     /// <p>Log types that are in the process of being enabled. After they are enabled, these log types are exported to Amazon CloudWatch Logs.</p>
     pub log_types_to_disable: Option<Vec<String>>,
@@ -4550,6 +4638,7 @@ impl PendingCloudwatchLogsExportsDeserializer {
 }
 /// <p>Provides information about a pending maintenance action for a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingMaintenanceAction {
     /// <p>The type of pending maintenance action that is available for the resource.</p>
     pub action: Option<String>,
@@ -4651,6 +4740,7 @@ impl PendingMaintenanceActionsDeserializer {
 }
 /// <p>Represents the output of <a>DescribePendingMaintenanceActions</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingMaintenanceActionsMessage {
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
@@ -4690,6 +4780,7 @@ impl PendingMaintenanceActionsMessageDeserializer {
 }
 /// <p> One or more modified settings for a DB instance. These modified settings have been requested, but haven't been applied yet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingModifiedValues {
     /// <p> Contains the new <code>AllocatedStorage</code> size for the DB instance that will be applied or is currently being applied. </p>
     pub allocated_storage: Option<i64>,
@@ -4804,6 +4895,7 @@ impl PendingModifiedValuesDeserializer {
 }
 /// <p>Represents the input to <a>RebootDBInstance</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootDBInstanceMessage {
     /// <p><p>The DB instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBInstance</code>.</p> </li> </ul></p>
     pub db_instance_identifier: String,
@@ -4831,6 +4923,7 @@ impl RebootDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RebootDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -4856,6 +4949,7 @@ impl RebootDBInstanceResultDeserializer {
 }
 /// <p>Represents the input to <a>RemoveTagsFromResource</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceMessage {
     /// <p>The Amazon DocumentDB resource that the tags are removed from. This value is an Amazon Resource Name (ARN).</p>
     pub resource_name: String,
@@ -4879,6 +4973,7 @@ impl RemoveTagsFromResourceMessageSerializer {
 
 /// <p>Represents the input to <a>ResetDBClusterParameterGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetDBClusterParameterGroupMessage {
     /// <p>The name of the DB cluster parameter group to reset.</p>
     pub db_cluster_parameter_group_name: String,
@@ -4916,6 +5011,7 @@ impl ResetDBClusterParameterGroupMessageSerializer {
 
 /// <p>Represents the output of <a>ApplyPendingMaintenanceAction</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourcePendingMaintenanceActions {
     /// <p>A list that provides details about the pending maintenance actions for the resource.</p>
     pub pending_maintenance_action_details: Option<Vec<PendingMaintenanceAction>>,
@@ -4958,6 +5054,7 @@ impl ResourcePendingMaintenanceActionsDeserializer {
 }
 /// <p>Represents the input to <a>RestoreDBClusterFromSnapshot</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBClusterFromSnapshotMessage {
     /// <p>Provides the list of Amazon EC2 Availability Zones that instances in the restored DB cluster can be created in.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -5046,6 +5143,7 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBClusterFromSnapshotResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -5075,6 +5173,7 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
 }
 /// <p>Represents the input to <a>RestoreDBClusterToPointInTime</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBClusterToPointInTimeMessage {
     /// <p><p>The name of the new DB cluster to be created.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub db_cluster_identifier: String,
@@ -5159,6 +5258,7 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBClusterToPointInTimeResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -5198,6 +5298,7 @@ impl SourceTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDBClusterMessage {
     /// <p>The identifier of the cluster to restart. Example: <code>docdb-2019-05-28-15-24-52</code> </p>
     pub db_cluster_identifier: String,
@@ -5220,6 +5321,7 @@ impl StartDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StartDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -5243,6 +5345,7 @@ impl StartDBClusterResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDBClusterMessage {
     /// <p>The identifier of the cluster to stop. Example: <code>docdb-2019-05-28-15-24-52</code> </p>
     pub db_cluster_identifier: String,
@@ -5265,6 +5368,7 @@ impl StopDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StopDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -5300,6 +5404,7 @@ impl StringDeserializer {
 }
 /// <p> Detailed information about a subnet. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Subnet {
     /// <p>Specifies the Availability Zone for the subnet.</p>
     pub subnet_availability_zone: Option<AvailabilityZone>,
@@ -5377,6 +5482,8 @@ impl TStampDeserializer {
 }
 /// <p>Metadata assigned to an Amazon DocumentDB resource consisting of a key-value pair.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>The required name of the tag. The string value can be from 1 to 128 Unicode characters in length and can't be prefixed with "aws:" or "rds:". The string can contain only the set of Unicode letters, digits, white space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
     pub key: Option<String>,
@@ -5452,6 +5559,7 @@ impl TagListSerializer {
 
 /// <p>Represents the output of <a>ListTagsForResource</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagListMessage {
     /// <p>A list of one or more tags.</p>
     pub tag_list: Option<Vec<Tag>>,
@@ -5479,6 +5587,7 @@ impl TagListMessageDeserializer {
 }
 /// <p>The version of the database engine that a DB instance can be upgraded to.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpgradeTarget {
     /// <p>A value that indicates whether the target version is applied to any source DB instances that have <code>AutoMinorVersionUpgrade</code> set to <code>true</code>.</p>
     pub auto_upgrade: Option<bool>,
@@ -5561,6 +5670,7 @@ impl VpcSecurityGroupIdListSerializer {
 
 /// <p>Used as a response element for queries on virtual private cloud (VPC) security group membership.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcSecurityGroupMembership {
     /// <p>The status of the VPC security group.</p>
     pub status: Option<String>,
@@ -5667,18 +5777,14 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToResourceError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToResourceError::DBClusterNotFoundFault(ref cause) => cause,
-            AddTagsToResourceError::DBInstanceNotFoundFault(ref cause) => cause,
-            AddTagsToResourceError::DBSnapshotNotFoundFault(ref cause) => cause,
+            AddTagsToResourceError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::DBSnapshotNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsToResourceError {}
 /// Errors returned by ApplyPendingMaintenanceAction
 #[derive(Debug, PartialEq)]
 pub enum ApplyPendingMaintenanceActionError {
@@ -5738,18 +5844,20 @@ impl ApplyPendingMaintenanceActionError {
 }
 impl fmt::Display for ApplyPendingMaintenanceActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ApplyPendingMaintenanceActionError {
-    fn description(&self) -> &str {
         match *self {
-            ApplyPendingMaintenanceActionError::InvalidDBClusterStateFault(ref cause) => cause,
-            ApplyPendingMaintenanceActionError::InvalidDBInstanceStateFault(ref cause) => cause,
-            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => cause,
+            ApplyPendingMaintenanceActionError::InvalidDBClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ApplyPendingMaintenanceActionError::InvalidDBInstanceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ApplyPendingMaintenanceActionError {}
 /// Errors returned by CopyDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum CopyDBClusterParameterGroupError {
@@ -5809,22 +5917,20 @@ impl CopyDBClusterParameterGroupError {
 }
 impl fmt::Display for CopyDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CopyDBClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
             CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+            CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for CopyDBClusterParameterGroupError {}
 /// Errors returned by CopyDBClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CopyDBClusterSnapshotError {
@@ -5909,21 +6015,29 @@ impl CopyDBClusterSnapshotError {
 }
 impl fmt::Display for CopyDBClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CopyDBClusterSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(ref cause) => cause,
-            CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
-            CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
-            CopyDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => cause,
-            CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
+            CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CopyDBClusterSnapshotError {}
 /// Errors returned by CreateDBCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateDBClusterError {
@@ -6067,30 +6181,34 @@ impl CreateDBClusterError {
 }
 impl fmt::Display for CreateDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDBClusterError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDBClusterError::DBClusterAlreadyExistsFault(ref cause) => cause,
-            CreateDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
-            CreateDBClusterError::DBClusterParameterGroupNotFoundFault(ref cause) => cause,
-            CreateDBClusterError::DBClusterQuotaExceededFault(ref cause) => cause,
-            CreateDBClusterError::DBInstanceNotFoundFault(ref cause) => cause,
-            CreateDBClusterError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
-            CreateDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => cause,
-            CreateDBClusterError::InsufficientStorageClusterCapacityFault(ref cause) => cause,
-            CreateDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            CreateDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
-            CreateDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => cause,
-            CreateDBClusterError::InvalidSubnet(ref cause) => cause,
-            CreateDBClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            CreateDBClusterError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            CreateDBClusterError::StorageQuotaExceededFault(ref cause) => cause,
+            CreateDBClusterError::DBClusterAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::DBClusterParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterError::DBClusterQuotaExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::InsufficientStorageClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::InvalidVPCNetworkStateFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::StorageQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDBClusterError {}
 /// Errors returned by CreateDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateDBClusterParameterGroupError {
@@ -6141,21 +6259,17 @@ impl CreateDBClusterParameterGroupError {
 }
 impl fmt::Display for CreateDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDBClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
             CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for CreateDBClusterParameterGroupError {}
 /// Errors returned by CreateDBClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateDBClusterSnapshotError {
@@ -6231,20 +6345,26 @@ impl CreateDBClusterSnapshotError {
 }
 impl fmt::Display for CreateDBClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDBClusterSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDBClusterSnapshotError::DBClusterNotFoundFault(ref cause) => cause,
-            CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(ref cause) => cause,
-            CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
-            CreateDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => cause,
-            CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
+            CreateDBClusterSnapshotError::DBClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateDBClusterSnapshotError {}
 /// Errors returned by CreateDBInstance
 #[derive(Debug, PartialEq)]
 pub enum CreateDBInstanceError {
@@ -6394,30 +6514,38 @@ impl CreateDBInstanceError {
 }
 impl fmt::Display for CreateDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDBInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDBInstanceError::AuthorizationNotFoundFault(ref cause) => cause,
-            CreateDBInstanceError::DBClusterNotFoundFault(ref cause) => cause,
-            CreateDBInstanceError::DBInstanceAlreadyExistsFault(ref cause) => cause,
-            CreateDBInstanceError::DBParameterGroupNotFoundFault(ref cause) => cause,
-            CreateDBInstanceError::DBSecurityGroupNotFoundFault(ref cause) => cause,
-            CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
-            CreateDBInstanceError::DBSubnetGroupNotFoundFault(ref cause) => cause,
-            CreateDBInstanceError::InstanceQuotaExceededFault(ref cause) => cause,
-            CreateDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => cause,
-            CreateDBInstanceError::InvalidDBClusterStateFault(ref cause) => cause,
-            CreateDBInstanceError::InvalidSubnet(ref cause) => cause,
-            CreateDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            CreateDBInstanceError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            CreateDBInstanceError::StorageQuotaExceededFault(ref cause) => cause,
-            CreateDBInstanceError::StorageTypeNotSupportedFault(ref cause) => cause,
+            CreateDBInstanceError::AuthorizationNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::DBInstanceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBInstanceError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBInstanceError::DBSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBInstanceError::DBSubnetGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::InstanceQuotaExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBInstanceError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::StorageQuotaExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::StorageTypeNotSupportedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateDBInstanceError {}
 /// Errors returned by CreateDBSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateDBSubnetGroupError {
@@ -6491,20 +6619,24 @@ impl CreateDBSubnetGroupError {
 }
 impl fmt::Display for CreateDBSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDBSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(ref cause) => cause,
-            CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
-            CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(ref cause) => cause,
-            CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => cause,
-            CreateDBSubnetGroupError::InvalidSubnet(ref cause) => cause,
+            CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDBSubnetGroupError {}
 /// Errors returned by DeleteDBCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBClusterError {
@@ -6574,20 +6706,20 @@ impl DeleteDBClusterError {
 }
 impl fmt::Display for DeleteDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDBClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
-            DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(ref cause) => cause,
-            DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
-            DeleteDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            DeleteDBClusterError::SnapshotQuotaExceededFault(ref cause) => cause,
+            DeleteDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteDBClusterError::SnapshotQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDBClusterError {}
 /// Errors returned by DeleteDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBClusterParameterGroupError {
@@ -6638,19 +6770,17 @@ impl DeleteDBClusterParameterGroupError {
 }
 impl fmt::Display for DeleteDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDBClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+            DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DeleteDBClusterParameterGroupError {}
 /// Errors returned by DeleteDBClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBClusterSnapshotError {
@@ -6699,17 +6829,17 @@ impl DeleteDBClusterSnapshotError {
 }
 impl fmt::Display for DeleteDBClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDBClusterSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
-            DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
+            DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteDBClusterSnapshotError {}
 /// Errors returned by DeleteDBInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBInstanceError {
@@ -6779,20 +6909,18 @@ impl DeleteDBInstanceError {
 }
 impl fmt::Display for DeleteDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDBInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,
-            DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(ref cause) => cause,
-            DeleteDBInstanceError::InvalidDBClusterStateFault(ref cause) => cause,
-            DeleteDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
-            DeleteDBInstanceError::SnapshotQuotaExceededFault(ref cause) => cause,
+            DeleteDBInstanceError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBInstanceError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteDBInstanceError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteDBInstanceError::SnapshotQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDBInstanceError {}
 /// Errors returned by DeleteDBSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBSubnetGroupError {
@@ -6850,18 +6978,20 @@ impl DeleteDBSubnetGroupError {
 }
 impl fmt::Display for DeleteDBSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDBSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => cause,
-            DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(ref cause) => cause,
-            DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(ref cause) => cause,
+            DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteDBSubnetGroupError {}
 /// Errors returned by DescribeCertificates
 #[derive(Debug, PartialEq)]
 pub enum DescribeCertificatesError {
@@ -6901,16 +7031,14 @@ impl DescribeCertificatesError {
 }
 impl fmt::Display for DescribeCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCertificatesError::CertificateNotFoundFault(ref cause) => cause,
+            DescribeCertificatesError::CertificateNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCertificatesError {}
 /// Errors returned by DescribeDBClusterParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterParameterGroupsError {
@@ -6952,18 +7080,14 @@ impl DescribeDBClusterParameterGroupsError {
 }
 impl fmt::Display for DescribeDBClusterParameterGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBClusterParameterGroupsError {
-    fn description(&self) -> &str {
         match *self {
             DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeDBClusterParameterGroupsError {}
 /// Errors returned by DescribeDBClusterParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterParametersError {
@@ -7005,16 +7129,14 @@ impl DescribeDBClusterParametersError {
 }
 impl fmt::Display for DescribeDBClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBClusterParametersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(ref cause) => cause,
+            DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDBClusterParametersError {}
 /// Errors returned by DescribeDBClusterSnapshotAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterSnapshotAttributesError {
@@ -7054,18 +7176,14 @@ impl DescribeDBClusterSnapshotAttributesError {
 }
 impl fmt::Display for DescribeDBClusterSnapshotAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBClusterSnapshotAttributesError {
-    fn description(&self) -> &str {
         match *self {
             DescribeDBClusterSnapshotAttributesError::DBClusterSnapshotNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeDBClusterSnapshotAttributesError {}
 /// Errors returned by DescribeDBClusterSnapshots
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterSnapshotsError {
@@ -7107,16 +7225,14 @@ impl DescribeDBClusterSnapshotsError {
 }
 impl fmt::Display for DescribeDBClusterSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBClusterSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
+            DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDBClusterSnapshotsError {}
 /// Errors returned by DescribeDBClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClustersError {
@@ -7154,16 +7270,12 @@ impl DescribeDBClustersError {
 }
 impl fmt::Display for DescribeDBClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBClustersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDBClustersError::DBClusterNotFoundFault(ref cause) => cause,
+            DescribeDBClustersError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDBClustersError {}
 /// Errors returned by DescribeDBEngineVersions
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBEngineVersionsError {}
@@ -7193,14 +7305,10 @@ impl DescribeDBEngineVersionsError {
 }
 impl fmt::Display for DescribeDBEngineVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBEngineVersionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeDBEngineVersionsError {}
 /// Errors returned by DescribeDBInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBInstancesError {
@@ -7238,16 +7346,12 @@ impl DescribeDBInstancesError {
 }
 impl fmt::Display for DescribeDBInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDBInstancesError::DBInstanceNotFoundFault(ref cause) => cause,
+            DescribeDBInstancesError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDBInstancesError {}
 /// Errors returned by DescribeDBSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBSubnetGroupsError {
@@ -7287,16 +7391,14 @@ impl DescribeDBSubnetGroupsError {
 }
 impl fmt::Display for DescribeDBSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBSubnetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+            DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDBSubnetGroupsError {}
 /// Errors returned by DescribeEngineDefaultClusterParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeEngineDefaultClusterParametersError {}
@@ -7328,14 +7430,10 @@ impl DescribeEngineDefaultClusterParametersError {
 }
 impl fmt::Display for DescribeEngineDefaultClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEngineDefaultClusterParametersError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEngineDefaultClusterParametersError {}
 /// Errors returned by DescribeEventCategories
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventCategoriesError {}
@@ -7365,14 +7463,10 @@ impl DescribeEventCategoriesError {
 }
 impl fmt::Display for DescribeEventCategoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventCategoriesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEventCategoriesError {}
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {}
@@ -7402,14 +7496,10 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEventsError {}
 /// Errors returned by DescribeOrderableDBInstanceOptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrderableDBInstanceOptionsError {}
@@ -7441,14 +7531,10 @@ impl DescribeOrderableDBInstanceOptionsError {
 }
 impl fmt::Display for DescribeOrderableDBInstanceOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrderableDBInstanceOptionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeOrderableDBInstanceOptionsError {}
 /// Errors returned by DescribePendingMaintenanceActions
 #[derive(Debug, PartialEq)]
 pub enum DescribePendingMaintenanceActionsError {
@@ -7490,16 +7576,14 @@ impl DescribePendingMaintenanceActionsError {
 }
 impl fmt::Display for DescribePendingMaintenanceActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePendingMaintenanceActionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribePendingMaintenanceActionsError {}
 /// Errors returned by FailoverDBCluster
 #[derive(Debug, PartialEq)]
 pub enum FailoverDBClusterError {
@@ -7555,18 +7639,16 @@ impl FailoverDBClusterError {
 }
 impl fmt::Display for FailoverDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for FailoverDBClusterError {
-    fn description(&self) -> &str {
         match *self {
-            FailoverDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
-            FailoverDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            FailoverDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
+            FailoverDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            FailoverDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            FailoverDBClusterError::InvalidDBInstanceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for FailoverDBClusterError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -7618,18 +7700,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::DBClusterNotFoundFault(ref cause) => cause,
-            ListTagsForResourceError::DBInstanceNotFoundFault(ref cause) => cause,
-            ListTagsForResourceError::DBSnapshotNotFoundFault(ref cause) => cause,
+            ListTagsForResourceError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::DBSnapshotNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ModifyDBCluster
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBClusterError {
@@ -7743,26 +7821,28 @@ impl ModifyDBClusterError {
 }
 impl fmt::Display for ModifyDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyDBClusterError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyDBClusterError::DBClusterAlreadyExistsFault(ref cause) => cause,
-            ModifyDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
-            ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(ref cause) => cause,
-            ModifyDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => cause,
-            ModifyDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            ModifyDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
-            ModifyDBClusterError::InvalidDBSecurityGroupStateFault(ref cause) => cause,
-            ModifyDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => cause,
-            ModifyDBClusterError::InvalidSubnet(ref cause) => cause,
-            ModifyDBClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            ModifyDBClusterError::StorageQuotaExceededFault(ref cause) => cause,
+            ModifyDBClusterError::DBClusterAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::InvalidDBSecurityGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBClusterError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::InvalidVPCNetworkStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::StorageQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyDBClusterError {}
 /// Errors returned by ModifyDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBClusterParameterGroupError {
@@ -7813,19 +7893,17 @@ impl ModifyDBClusterParameterGroupError {
 }
 impl fmt::Display for ModifyDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyDBClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+            ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ModifyDBClusterParameterGroupError {}
 /// Errors returned by ModifyDBClusterSnapshotAttribute
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBClusterSnapshotAttributeError {
@@ -7883,24 +7961,20 @@ impl ModifyDBClusterSnapshotAttributeError {
 }
 impl fmt::Display for ModifyDBClusterSnapshotAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyDBClusterSnapshotAttributeError {
-    fn description(&self) -> &str {
         match *self {
             ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             ModifyDBClusterSnapshotAttributeError::InvalidDBClusterSnapshotStateFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ModifyDBClusterSnapshotAttributeError {}
 /// Errors returned by ModifyDBInstance
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBInstanceError {
@@ -8040,28 +8114,38 @@ impl ModifyDBInstanceError {
 }
 impl fmt::Display for ModifyDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyDBInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyDBInstanceError::AuthorizationNotFoundFault(ref cause) => cause,
-            ModifyDBInstanceError::CertificateNotFoundFault(ref cause) => cause,
-            ModifyDBInstanceError::DBInstanceAlreadyExistsFault(ref cause) => cause,
-            ModifyDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,
-            ModifyDBInstanceError::DBParameterGroupNotFoundFault(ref cause) => cause,
-            ModifyDBInstanceError::DBSecurityGroupNotFoundFault(ref cause) => cause,
-            ModifyDBInstanceError::DBUpgradeDependencyFailureFault(ref cause) => cause,
-            ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => cause,
-            ModifyDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
-            ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(ref cause) => cause,
-            ModifyDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            ModifyDBInstanceError::StorageQuotaExceededFault(ref cause) => cause,
-            ModifyDBInstanceError::StorageTypeNotSupportedFault(ref cause) => cause,
+            ModifyDBInstanceError::AuthorizationNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::CertificateNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::DBInstanceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBInstanceError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBInstanceError::DBSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBInstanceError::DBUpgradeDependencyFailureFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBInstanceError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::StorageQuotaExceededFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::StorageTypeNotSupportedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyDBInstanceError {}
 /// Errors returned by ModifyDBSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBSubnetGroupError {
@@ -8133,20 +8217,22 @@ impl ModifyDBSubnetGroupError {
 }
 impl fmt::Display for ModifyDBSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyDBSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
-            ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => cause,
-            ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => cause,
-            ModifyDBSubnetGroupError::InvalidSubnet(ref cause) => cause,
-            ModifyDBSubnetGroupError::SubnetAlreadyInUse(ref cause) => cause,
+            ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            ModifyDBSubnetGroupError::SubnetAlreadyInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyDBSubnetGroupError {}
 /// Errors returned by RebootDBInstance
 #[derive(Debug, PartialEq)]
 pub enum RebootDBInstanceError {
@@ -8193,17 +8279,13 @@ impl RebootDBInstanceError {
 }
 impl fmt::Display for RebootDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootDBInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RebootDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,
-            RebootDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
+            RebootDBInstanceError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            RebootDBInstanceError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RebootDBInstanceError {}
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
@@ -8261,18 +8343,20 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromResourceError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromResourceError::DBClusterNotFoundFault(ref cause) => cause,
-            RemoveTagsFromResourceError::DBInstanceNotFoundFault(ref cause) => cause,
-            RemoveTagsFromResourceError::DBSnapshotNotFoundFault(ref cause) => cause,
+            RemoveTagsFromResourceError::DBClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveTagsFromResourceError::DBInstanceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveTagsFromResourceError::DBSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveTagsFromResourceError {}
 /// Errors returned by ResetDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ResetDBClusterParameterGroupError {
@@ -8323,19 +8407,17 @@ impl ResetDBClusterParameterGroupError {
 }
 impl fmt::Display for ResetDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetDBClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+            ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ResetDBClusterParameterGroupError {}
 /// Errors returned by RestoreDBClusterFromSnapshot
 #[derive(Debug, PartialEq)]
 pub enum RestoreDBClusterFromSnapshotError {
@@ -8490,35 +8572,51 @@ impl RestoreDBClusterFromSnapshotError {
 }
 impl fmt::Display for RestoreDBClusterFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreDBClusterFromSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+            RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RestoreDBClusterFromSnapshotError::InsufficientDBClusterCapacityFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             RestoreDBClusterFromSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::InvalidRestoreFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::InvalidSubnet(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(ref cause) => cause,
+            RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::InvalidRestoreFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RestoreDBClusterFromSnapshotError {}
 /// Errors returned by RestoreDBClusterToPointInTime
 #[derive(Debug, PartialEq)]
 pub enum RestoreDBClusterToPointInTimeError {
@@ -8682,36 +8780,54 @@ impl RestoreDBClusterToPointInTimeError {
 }
 impl fmt::Display for RestoreDBClusterToPointInTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreDBClusterToPointInTimeError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+            RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RestoreDBClusterToPointInTimeError::InsufficientDBClusterCapacityFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             RestoreDBClusterToPointInTimeError::InvalidDBClusterSnapshotStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            RestoreDBClusterToPointInTimeError::InvalidDBClusterStateFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::InvalidRestoreFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::InvalidSubnet(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(ref cause) => cause,
+            RestoreDBClusterToPointInTimeError::InvalidDBClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::InvalidRestoreFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RestoreDBClusterToPointInTimeError {}
 /// Errors returned by StartDBCluster
 #[derive(Debug, PartialEq)]
 pub enum StartDBClusterError {
@@ -8763,18 +8879,14 @@ impl StartDBClusterError {
 }
 impl fmt::Display for StartDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDBClusterError {
-    fn description(&self) -> &str {
         match *self {
-            StartDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
-            StartDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            StartDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
+            StartDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            StartDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            StartDBClusterError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartDBClusterError {}
 /// Errors returned by StopDBCluster
 #[derive(Debug, PartialEq)]
 pub enum StopDBClusterError {
@@ -8826,18 +8938,14 @@ impl StopDBClusterError {
 }
 impl fmt::Display for StopDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopDBClusterError {
-    fn description(&self) -> &str {
         match *self {
-            StopDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
-            StopDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            StopDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
+            StopDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            StopDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            StopDBClusterError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopDBClusterError {}
 /// Trait representing the capabilities of the Amazon DocDB API. Amazon DocDB clients implement this trait.
 pub trait Docdb {
     /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources. or in a <code>Condition</code> statement in an AWS Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>

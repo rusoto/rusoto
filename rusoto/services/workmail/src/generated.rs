@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDelegateToResourceRequest {
     /// <p>The member (user or group) to associate to the resource.</p>
     #[serde(rename = "EntityId")]
@@ -41,6 +42,7 @@ pub struct AssociateDelegateToResourceRequest {
 pub struct AssociateDelegateToResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateMemberToGroupRequest {
     /// <p>The group to which the member (user or group) is associated.</p>
     #[serde(rename = "GroupId")]
@@ -75,6 +77,7 @@ pub struct BookingOptions {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAliasRequest {
     /// <p>The alias to add to the member set.</p>
     #[serde(rename = "Alias")]
@@ -92,6 +95,7 @@ pub struct CreateAliasRequest {
 pub struct CreateAliasResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
     /// <p>The name of the group.</p>
     #[serde(rename = "Name")]
@@ -111,6 +115,7 @@ pub struct CreateGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceRequest {
     /// <p>The name of the new resource.</p>
     #[serde(rename = "Name")]
@@ -133,6 +138,7 @@ pub struct CreateResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p>The display name for the new user.</p>
     #[serde(rename = "DisplayName")]
@@ -170,6 +176,7 @@ pub struct Delegate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAliasRequest {
     /// <p>The aliases to be removed from the user's set of aliases. Duplicate entries in the list are collapsed into single entries (the list is transformed into a set).</p>
     #[serde(rename = "Alias")]
@@ -187,6 +194,7 @@ pub struct DeleteAliasRequest {
 pub struct DeleteAliasResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
     /// <p>The identifier of the group to be deleted.</p>
     #[serde(rename = "GroupId")]
@@ -201,6 +209,7 @@ pub struct DeleteGroupRequest {
 pub struct DeleteGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMailboxPermissionsRequest {
     /// <p>The identifier of the member (user or group)that owns the mailbox.</p>
     #[serde(rename = "EntityId")]
@@ -218,6 +227,7 @@ pub struct DeleteMailboxPermissionsRequest {
 pub struct DeleteMailboxPermissionsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceRequest {
     /// <p>The identifier associated with the organization from which the resource is deleted.</p>
     #[serde(rename = "OrganizationId")]
@@ -232,6 +242,7 @@ pub struct DeleteResourceRequest {
 pub struct DeleteResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>The organization that contains the user to be deleted.</p>
     #[serde(rename = "OrganizationId")]
@@ -246,6 +257,7 @@ pub struct DeleteUserRequest {
 pub struct DeleteUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterFromWorkMailRequest {
     /// <p>The identifier for the member (user or group) to be updated.</p>
     #[serde(rename = "EntityId")]
@@ -260,6 +272,7 @@ pub struct DeregisterFromWorkMailRequest {
 pub struct DeregisterFromWorkMailResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGroupRequest {
     /// <p>The identifier for the group to be described.</p>
     #[serde(rename = "GroupId")]
@@ -299,6 +312,7 @@ pub struct DescribeGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationRequest {
     /// <p>The identifier for the organization to be described.</p>
     #[serde(rename = "OrganizationId")]
@@ -343,6 +357,7 @@ pub struct DescribeOrganizationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourceRequest {
     /// <p>The identifier associated with the organization for which the resource is described.</p>
     #[serde(rename = "OrganizationId")]
@@ -390,6 +405,7 @@ pub struct DescribeResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
     /// <p>The identifier for the organization under which the user exists.</p>
     #[serde(rename = "OrganizationId")]
@@ -437,6 +453,7 @@ pub struct DescribeUserResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDelegateFromResourceRequest {
     /// <p>The identifier for the member (user, group) to be removed from the resource's delegates.</p>
     #[serde(rename = "EntityId")]
@@ -454,6 +471,7 @@ pub struct DisassociateDelegateFromResourceRequest {
 pub struct DisassociateDelegateFromResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMemberFromGroupRequest {
     /// <p>The identifier for the group from which members are removed.</p>
     #[serde(rename = "GroupId")]
@@ -471,6 +489,7 @@ pub struct DisassociateMemberFromGroupRequest {
 pub struct DisassociateMemberFromGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMailboxDetailsRequest {
     /// <p>The identifier for the organization that contains the user whose mailbox details are being requested.</p>
     #[serde(rename = "OrganizationId")]
@@ -524,6 +543,7 @@ pub struct Group {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAliasesRequest {
     /// <p>The identifier for the entity for which to list the aliases.</p>
     #[serde(rename = "EntityId")]
@@ -555,6 +575,7 @@ pub struct ListAliasesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupMembersRequest {
     /// <p>The identifier for the group to which the members (users or groups) are associated.</p>
     #[serde(rename = "GroupId")]
@@ -586,6 +607,7 @@ pub struct ListGroupMembersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -614,6 +636,7 @@ pub struct ListGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMailboxPermissionsRequest {
     /// <p>The identifier of the user, group, or resource for which to list mailbox permissions.</p>
     #[serde(rename = "EntityId")]
@@ -645,6 +668,7 @@ pub struct ListMailboxPermissionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOrganizationsRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -670,6 +694,7 @@ pub struct ListOrganizationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceDelegatesRequest {
     /// <p>The number of maximum results in a page.</p>
     #[serde(rename = "MaxResults")]
@@ -701,6 +726,7 @@ pub struct ListResourceDelegatesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -729,6 +755,7 @@ pub struct ListResourcesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -824,6 +851,7 @@ pub struct Permission {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMailboxPermissionsRequest {
     /// <p>The identifier of the user, group, or resource for which to update mailbox permissions.</p>
     #[serde(rename = "EntityId")]
@@ -844,6 +872,7 @@ pub struct PutMailboxPermissionsRequest {
 pub struct PutMailboxPermissionsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterToWorkMailRequest {
     /// <p>The email for the user, group, or resource to be updated.</p>
     #[serde(rename = "Email")]
@@ -861,6 +890,7 @@ pub struct RegisterToWorkMailRequest {
 pub struct RegisterToWorkMailResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetPasswordRequest {
     /// <p>The identifier of the organization that contains the user for which the password is reset.</p>
     #[serde(rename = "OrganizationId")]
@@ -912,6 +942,7 @@ pub struct Resource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMailboxQuotaRequest {
     /// <p>The updated mailbox quota, in MB, for the specified user.</p>
     #[serde(rename = "MailboxQuota")]
@@ -929,6 +960,7 @@ pub struct UpdateMailboxQuotaRequest {
 pub struct UpdateMailboxQuotaResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePrimaryEmailAddressRequest {
     /// <p>The value of the email to be updated as primary.</p>
     #[serde(rename = "Email")]
@@ -946,6 +978,7 @@ pub struct UpdatePrimaryEmailAddressRequest {
 pub struct UpdatePrimaryEmailAddressResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceRequest {
     /// <p>The resource's booking options to be updated.</p>
     #[serde(rename = "BookingOptions")]
@@ -1060,20 +1093,20 @@ impl AssociateDelegateToResourceError {
 }
 impl fmt::Display for AssociateDelegateToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateDelegateToResourceError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateDelegateToResourceError::EntityNotFound(ref cause) => cause,
-            AssociateDelegateToResourceError::EntityState(ref cause) => cause,
-            AssociateDelegateToResourceError::InvalidParameter(ref cause) => cause,
-            AssociateDelegateToResourceError::OrganizationNotFound(ref cause) => cause,
-            AssociateDelegateToResourceError::OrganizationState(ref cause) => cause,
+            AssociateDelegateToResourceError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateDelegateToResourceError::EntityState(ref cause) => write!(f, "{}", cause),
+            AssociateDelegateToResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AssociateDelegateToResourceError::OrganizationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateDelegateToResourceError::OrganizationState(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateDelegateToResourceError {}
 /// Errors returned by AssociateMemberToGroup
 #[derive(Debug, PartialEq)]
 pub enum AssociateMemberToGroupError {
@@ -1146,23 +1179,21 @@ impl AssociateMemberToGroupError {
 }
 impl fmt::Display for AssociateMemberToGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateMemberToGroupError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateMemberToGroupError::DirectoryServiceAuthenticationFailed(ref cause) => cause,
-            AssociateMemberToGroupError::DirectoryUnavailable(ref cause) => cause,
-            AssociateMemberToGroupError::EntityNotFound(ref cause) => cause,
-            AssociateMemberToGroupError::EntityState(ref cause) => cause,
-            AssociateMemberToGroupError::InvalidParameter(ref cause) => cause,
-            AssociateMemberToGroupError::OrganizationNotFound(ref cause) => cause,
-            AssociateMemberToGroupError::OrganizationState(ref cause) => cause,
-            AssociateMemberToGroupError::UnsupportedOperation(ref cause) => cause,
+            AssociateMemberToGroupError::DirectoryServiceAuthenticationFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateMemberToGroupError::DirectoryUnavailable(ref cause) => write!(f, "{}", cause),
+            AssociateMemberToGroupError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateMemberToGroupError::EntityState(ref cause) => write!(f, "{}", cause),
+            AssociateMemberToGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AssociateMemberToGroupError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateMemberToGroupError::OrganizationState(ref cause) => write!(f, "{}", cause),
+            AssociateMemberToGroupError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateMemberToGroupError {}
 /// Errors returned by CreateAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAliasError {
@@ -1221,23 +1252,19 @@ impl CreateAliasError {
 }
 impl fmt::Display for CreateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAliasError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAliasError::EmailAddressInUse(ref cause) => cause,
-            CreateAliasError::EntityNotFound(ref cause) => cause,
-            CreateAliasError::EntityState(ref cause) => cause,
-            CreateAliasError::InvalidParameter(ref cause) => cause,
-            CreateAliasError::MailDomainNotFound(ref cause) => cause,
-            CreateAliasError::MailDomainState(ref cause) => cause,
-            CreateAliasError::OrganizationNotFound(ref cause) => cause,
-            CreateAliasError::OrganizationState(ref cause) => cause,
+            CreateAliasError::EmailAddressInUse(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::EntityState(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::MailDomainNotFound(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::MailDomainState(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAliasError {}
 /// Errors returned by CreateGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupError {
@@ -1298,23 +1325,21 @@ impl CreateGroupError {
 }
 impl fmt::Display for CreateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGroupError::DirectoryServiceAuthenticationFailed(ref cause) => cause,
-            CreateGroupError::DirectoryUnavailable(ref cause) => cause,
-            CreateGroupError::InvalidParameter(ref cause) => cause,
-            CreateGroupError::NameAvailability(ref cause) => cause,
-            CreateGroupError::OrganizationNotFound(ref cause) => cause,
-            CreateGroupError::OrganizationState(ref cause) => cause,
-            CreateGroupError::ReservedName(ref cause) => cause,
-            CreateGroupError::UnsupportedOperation(ref cause) => cause,
+            CreateGroupError::DirectoryServiceAuthenticationFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateGroupError::DirectoryUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::NameAvailability(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::OrganizationState(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::ReservedName(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGroupError {}
 /// Errors returned by CreateResource
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceError {
@@ -1370,22 +1395,20 @@ impl CreateResourceError {
 }
 impl fmt::Display for CreateResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateResourceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateResourceError::DirectoryServiceAuthenticationFailed(ref cause) => cause,
-            CreateResourceError::DirectoryUnavailable(ref cause) => cause,
-            CreateResourceError::InvalidParameter(ref cause) => cause,
-            CreateResourceError::NameAvailability(ref cause) => cause,
-            CreateResourceError::OrganizationNotFound(ref cause) => cause,
-            CreateResourceError::OrganizationState(ref cause) => cause,
-            CreateResourceError::ReservedName(ref cause) => cause,
+            CreateResourceError::DirectoryServiceAuthenticationFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateResourceError::DirectoryUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateResourceError::NameAvailability(ref cause) => write!(f, "{}", cause),
+            CreateResourceError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            CreateResourceError::OrganizationState(ref cause) => write!(f, "{}", cause),
+            CreateResourceError::ReservedName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateResourceError {}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
@@ -1451,24 +1474,22 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserError::DirectoryServiceAuthenticationFailed(ref cause) => cause,
-            CreateUserError::DirectoryUnavailable(ref cause) => cause,
-            CreateUserError::InvalidParameter(ref cause) => cause,
-            CreateUserError::InvalidPassword(ref cause) => cause,
-            CreateUserError::NameAvailability(ref cause) => cause,
-            CreateUserError::OrganizationNotFound(ref cause) => cause,
-            CreateUserError::OrganizationState(ref cause) => cause,
-            CreateUserError::ReservedName(ref cause) => cause,
-            CreateUserError::UnsupportedOperation(ref cause) => cause,
+            CreateUserError::DirectoryServiceAuthenticationFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUserError::DirectoryUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateUserError::InvalidPassword(ref cause) => write!(f, "{}", cause),
+            CreateUserError::NameAvailability(ref cause) => write!(f, "{}", cause),
+            CreateUserError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            CreateUserError::OrganizationState(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ReservedName(ref cause) => write!(f, "{}", cause),
+            CreateUserError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserError {}
 /// Errors returned by DeleteAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAliasError {
@@ -1512,20 +1533,16 @@ impl DeleteAliasError {
 }
 impl fmt::Display for DeleteAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAliasError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAliasError::EntityNotFound(ref cause) => cause,
-            DeleteAliasError::EntityState(ref cause) => cause,
-            DeleteAliasError::InvalidParameter(ref cause) => cause,
-            DeleteAliasError::OrganizationNotFound(ref cause) => cause,
-            DeleteAliasError::OrganizationState(ref cause) => cause,
+            DeleteAliasError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::EntityState(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAliasError {}
 /// Errors returned by DeleteGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupError {
@@ -1581,22 +1598,20 @@ impl DeleteGroupError {
 }
 impl fmt::Display for DeleteGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGroupError::DirectoryServiceAuthenticationFailed(ref cause) => cause,
-            DeleteGroupError::DirectoryUnavailable(ref cause) => cause,
-            DeleteGroupError::EntityState(ref cause) => cause,
-            DeleteGroupError::InvalidParameter(ref cause) => cause,
-            DeleteGroupError::OrganizationNotFound(ref cause) => cause,
-            DeleteGroupError::OrganizationState(ref cause) => cause,
-            DeleteGroupError::UnsupportedOperation(ref cause) => cause,
+            DeleteGroupError::DirectoryServiceAuthenticationFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteGroupError::DirectoryUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::EntityState(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::OrganizationState(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGroupError {}
 /// Errors returned by DeleteMailboxPermissions
 #[derive(Debug, PartialEq)]
 pub enum DeleteMailboxPermissionsError {
@@ -1650,20 +1665,18 @@ impl DeleteMailboxPermissionsError {
 }
 impl fmt::Display for DeleteMailboxPermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMailboxPermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMailboxPermissionsError::EntityNotFound(ref cause) => cause,
-            DeleteMailboxPermissionsError::EntityState(ref cause) => cause,
-            DeleteMailboxPermissionsError::InvalidParameter(ref cause) => cause,
-            DeleteMailboxPermissionsError::OrganizationNotFound(ref cause) => cause,
-            DeleteMailboxPermissionsError::OrganizationState(ref cause) => cause,
+            DeleteMailboxPermissionsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteMailboxPermissionsError::EntityState(ref cause) => write!(f, "{}", cause),
+            DeleteMailboxPermissionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteMailboxPermissionsError::OrganizationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteMailboxPermissionsError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMailboxPermissionsError {}
 /// Errors returned by DeleteResource
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceError {
@@ -1702,19 +1715,15 @@ impl DeleteResourceError {
 }
 impl fmt::Display for DeleteResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteResourceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteResourceError::EntityState(ref cause) => cause,
-            DeleteResourceError::InvalidParameter(ref cause) => cause,
-            DeleteResourceError::OrganizationNotFound(ref cause) => cause,
-            DeleteResourceError::OrganizationState(ref cause) => cause,
+            DeleteResourceError::EntityState(ref cause) => write!(f, "{}", cause),
+            DeleteResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteResourceError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteResourceError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteResourceError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -1770,22 +1779,20 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserError::DirectoryServiceAuthenticationFailed(ref cause) => cause,
-            DeleteUserError::DirectoryUnavailable(ref cause) => cause,
-            DeleteUserError::EntityState(ref cause) => cause,
-            DeleteUserError::InvalidParameter(ref cause) => cause,
-            DeleteUserError::OrganizationNotFound(ref cause) => cause,
-            DeleteUserError::OrganizationState(ref cause) => cause,
-            DeleteUserError::UnsupportedOperation(ref cause) => cause,
+            DeleteUserError::DirectoryServiceAuthenticationFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteUserError::DirectoryUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::EntityState(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::OrganizationState(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserError {}
 /// Errors returned by DeregisterFromWorkMail
 #[derive(Debug, PartialEq)]
 pub enum DeregisterFromWorkMailError {
@@ -1837,20 +1844,16 @@ impl DeregisterFromWorkMailError {
 }
 impl fmt::Display for DeregisterFromWorkMailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterFromWorkMailError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterFromWorkMailError::EntityNotFound(ref cause) => cause,
-            DeregisterFromWorkMailError::EntityState(ref cause) => cause,
-            DeregisterFromWorkMailError::InvalidParameter(ref cause) => cause,
-            DeregisterFromWorkMailError::OrganizationNotFound(ref cause) => cause,
-            DeregisterFromWorkMailError::OrganizationState(ref cause) => cause,
+            DeregisterFromWorkMailError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeregisterFromWorkMailError::EntityState(ref cause) => write!(f, "{}", cause),
+            DeregisterFromWorkMailError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeregisterFromWorkMailError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            DeregisterFromWorkMailError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterFromWorkMailError {}
 /// Errors returned by DescribeGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeGroupError {
@@ -1889,19 +1892,15 @@ impl DescribeGroupError {
 }
 impl fmt::Display for DescribeGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeGroupError::EntityNotFound(ref cause) => cause,
-            DescribeGroupError::InvalidParameter(ref cause) => cause,
-            DescribeGroupError::OrganizationNotFound(ref cause) => cause,
-            DescribeGroupError::OrganizationState(ref cause) => cause,
+            DescribeGroupError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeGroupError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeGroupError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeGroupError {}
 /// Errors returned by DescribeOrganization
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrganizationError {
@@ -1934,17 +1933,13 @@ impl DescribeOrganizationError {
 }
 impl fmt::Display for DescribeOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrganizationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOrganizationError::InvalidParameter(ref cause) => cause,
-            DescribeOrganizationError::OrganizationNotFound(ref cause) => cause,
+            DescribeOrganizationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeOrganizationError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeOrganizationError {}
 /// Errors returned by DescribeResource
 #[derive(Debug, PartialEq)]
 pub enum DescribeResourceError {
@@ -1985,19 +1980,15 @@ impl DescribeResourceError {
 }
 impl fmt::Display for DescribeResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeResourceError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeResourceError::EntityNotFound(ref cause) => cause,
-            DescribeResourceError::InvalidParameter(ref cause) => cause,
-            DescribeResourceError::OrganizationNotFound(ref cause) => cause,
-            DescribeResourceError::OrganizationState(ref cause) => cause,
+            DescribeResourceError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeResourceError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeResourceError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeResourceError {}
 /// Errors returned by DescribeUser
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserError {
@@ -2036,19 +2027,15 @@ impl DescribeUserError {
 }
 impl fmt::Display for DescribeUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserError::EntityNotFound(ref cause) => cause,
-            DescribeUserError::InvalidParameter(ref cause) => cause,
-            DescribeUserError::OrganizationNotFound(ref cause) => cause,
-            DescribeUserError::OrganizationState(ref cause) => cause,
+            DescribeUserError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserError {}
 /// Errors returned by DisassociateDelegateFromResource
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDelegateFromResourceError {
@@ -2104,20 +2091,24 @@ impl DisassociateDelegateFromResourceError {
 }
 impl fmt::Display for DisassociateDelegateFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateDelegateFromResourceError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateDelegateFromResourceError::EntityNotFound(ref cause) => cause,
-            DisassociateDelegateFromResourceError::EntityState(ref cause) => cause,
-            DisassociateDelegateFromResourceError::InvalidParameter(ref cause) => cause,
-            DisassociateDelegateFromResourceError::OrganizationNotFound(ref cause) => cause,
-            DisassociateDelegateFromResourceError::OrganizationState(ref cause) => cause,
+            DisassociateDelegateFromResourceError::EntityNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDelegateFromResourceError::EntityState(ref cause) => write!(f, "{}", cause),
+            DisassociateDelegateFromResourceError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDelegateFromResourceError::OrganizationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDelegateFromResourceError::OrganizationState(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateDelegateFromResourceError {}
 /// Errors returned by DisassociateMemberFromGroup
 #[derive(Debug, PartialEq)]
 pub enum DisassociateMemberFromGroupError {
@@ -2196,25 +2187,29 @@ impl DisassociateMemberFromGroupError {
 }
 impl fmt::Display for DisassociateMemberFromGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateMemberFromGroupError {
-    fn description(&self) -> &str {
         match *self {
             DisassociateMemberFromGroupError::DirectoryServiceAuthenticationFailed(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DisassociateMemberFromGroupError::DirectoryUnavailable(ref cause) => cause,
-            DisassociateMemberFromGroupError::EntityNotFound(ref cause) => cause,
-            DisassociateMemberFromGroupError::EntityState(ref cause) => cause,
-            DisassociateMemberFromGroupError::InvalidParameter(ref cause) => cause,
-            DisassociateMemberFromGroupError::OrganizationNotFound(ref cause) => cause,
-            DisassociateMemberFromGroupError::OrganizationState(ref cause) => cause,
-            DisassociateMemberFromGroupError::UnsupportedOperation(ref cause) => cause,
+            DisassociateMemberFromGroupError::DirectoryUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateMemberFromGroupError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DisassociateMemberFromGroupError::EntityState(ref cause) => write!(f, "{}", cause),
+            DisassociateMemberFromGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DisassociateMemberFromGroupError::OrganizationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateMemberFromGroupError::OrganizationState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateMemberFromGroupError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateMemberFromGroupError {}
 /// Errors returned by GetMailboxDetails
 #[derive(Debug, PartialEq)]
 pub enum GetMailboxDetailsError {
@@ -2250,18 +2245,14 @@ impl GetMailboxDetailsError {
 }
 impl fmt::Display for GetMailboxDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMailboxDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetMailboxDetailsError::EntityNotFound(ref cause) => cause,
-            GetMailboxDetailsError::OrganizationNotFound(ref cause) => cause,
-            GetMailboxDetailsError::OrganizationState(ref cause) => cause,
+            GetMailboxDetailsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetMailboxDetailsError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            GetMailboxDetailsError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMailboxDetailsError {}
 /// Errors returned by ListAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAliasesError {
@@ -2305,20 +2296,16 @@ impl ListAliasesError {
 }
 impl fmt::Display for ListAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAliasesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAliasesError::EntityNotFound(ref cause) => cause,
-            ListAliasesError::EntityState(ref cause) => cause,
-            ListAliasesError::InvalidParameter(ref cause) => cause,
-            ListAliasesError::OrganizationNotFound(ref cause) => cause,
-            ListAliasesError::OrganizationState(ref cause) => cause,
+            ListAliasesError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::EntityState(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAliasesError {}
 /// Errors returned by ListGroupMembers
 #[derive(Debug, PartialEq)]
 pub enum ListGroupMembersError {
@@ -2364,20 +2351,16 @@ impl ListGroupMembersError {
 }
 impl fmt::Display for ListGroupMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGroupMembersError {
-    fn description(&self) -> &str {
         match *self {
-            ListGroupMembersError::EntityNotFound(ref cause) => cause,
-            ListGroupMembersError::EntityState(ref cause) => cause,
-            ListGroupMembersError::InvalidParameter(ref cause) => cause,
-            ListGroupMembersError::OrganizationNotFound(ref cause) => cause,
-            ListGroupMembersError::OrganizationState(ref cause) => cause,
+            ListGroupMembersError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ListGroupMembersError::EntityState(ref cause) => write!(f, "{}", cause),
+            ListGroupMembersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListGroupMembersError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            ListGroupMembersError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGroupMembersError {}
 /// Errors returned by ListGroups
 #[derive(Debug, PartialEq)]
 pub enum ListGroupsError {
@@ -2416,19 +2399,15 @@ impl ListGroupsError {
 }
 impl fmt::Display for ListGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListGroupsError::EntityNotFound(ref cause) => cause,
-            ListGroupsError::InvalidParameter(ref cause) => cause,
-            ListGroupsError::OrganizationNotFound(ref cause) => cause,
-            ListGroupsError::OrganizationState(ref cause) => cause,
+            ListGroupsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ListGroupsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListGroupsError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            ListGroupsError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGroupsError {}
 /// Errors returned by ListMailboxPermissions
 #[derive(Debug, PartialEq)]
 pub enum ListMailboxPermissionsError {
@@ -2475,19 +2454,15 @@ impl ListMailboxPermissionsError {
 }
 impl fmt::Display for ListMailboxPermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMailboxPermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListMailboxPermissionsError::EntityNotFound(ref cause) => cause,
-            ListMailboxPermissionsError::InvalidParameter(ref cause) => cause,
-            ListMailboxPermissionsError::OrganizationNotFound(ref cause) => cause,
-            ListMailboxPermissionsError::OrganizationState(ref cause) => cause,
+            ListMailboxPermissionsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ListMailboxPermissionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListMailboxPermissionsError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            ListMailboxPermissionsError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMailboxPermissionsError {}
 /// Errors returned by ListOrganizations
 #[derive(Debug, PartialEq)]
 pub enum ListOrganizationsError {
@@ -2511,16 +2486,12 @@ impl ListOrganizationsError {
 }
 impl fmt::Display for ListOrganizationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOrganizationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListOrganizationsError::InvalidParameter(ref cause) => cause,
+            ListOrganizationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOrganizationsError {}
 /// Errors returned by ListResourceDelegates
 #[derive(Debug, PartialEq)]
 pub enum ListResourceDelegatesError {
@@ -2572,20 +2543,16 @@ impl ListResourceDelegatesError {
 }
 impl fmt::Display for ListResourceDelegatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourceDelegatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourceDelegatesError::EntityNotFound(ref cause) => cause,
-            ListResourceDelegatesError::EntityState(ref cause) => cause,
-            ListResourceDelegatesError::InvalidParameter(ref cause) => cause,
-            ListResourceDelegatesError::OrganizationNotFound(ref cause) => cause,
-            ListResourceDelegatesError::OrganizationState(ref cause) => cause,
+            ListResourceDelegatesError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ListResourceDelegatesError::EntityState(ref cause) => write!(f, "{}", cause),
+            ListResourceDelegatesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListResourceDelegatesError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            ListResourceDelegatesError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResourceDelegatesError {}
 /// Errors returned by ListResources
 #[derive(Debug, PartialEq)]
 pub enum ListResourcesError {
@@ -2619,18 +2586,14 @@ impl ListResourcesError {
 }
 impl fmt::Display for ListResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourcesError::InvalidParameter(ref cause) => cause,
-            ListResourcesError::OrganizationNotFound(ref cause) => cause,
-            ListResourcesError::OrganizationState(ref cause) => cause,
+            ListResourcesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListResourcesError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            ListResourcesError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResourcesError {}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
@@ -2664,18 +2627,14 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUsersError {
-    fn description(&self) -> &str {
         match *self {
-            ListUsersError::InvalidParameter(ref cause) => cause,
-            ListUsersError::OrganizationNotFound(ref cause) => cause,
-            ListUsersError::OrganizationState(ref cause) => cause,
+            ListUsersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListUsersError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            ListUsersError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUsersError {}
 /// Errors returned by PutMailboxPermissions
 #[derive(Debug, PartialEq)]
 pub enum PutMailboxPermissionsError {
@@ -2727,20 +2686,16 @@ impl PutMailboxPermissionsError {
 }
 impl fmt::Display for PutMailboxPermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutMailboxPermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            PutMailboxPermissionsError::EntityNotFound(ref cause) => cause,
-            PutMailboxPermissionsError::EntityState(ref cause) => cause,
-            PutMailboxPermissionsError::InvalidParameter(ref cause) => cause,
-            PutMailboxPermissionsError::OrganizationNotFound(ref cause) => cause,
-            PutMailboxPermissionsError::OrganizationState(ref cause) => cause,
+            PutMailboxPermissionsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            PutMailboxPermissionsError::EntityState(ref cause) => write!(f, "{}", cause),
+            PutMailboxPermissionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutMailboxPermissionsError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            PutMailboxPermissionsError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutMailboxPermissionsError {}
 /// Errors returned by RegisterToWorkMail
 #[derive(Debug, PartialEq)]
 pub enum RegisterToWorkMailError {
@@ -2828,26 +2783,24 @@ impl RegisterToWorkMailError {
 }
 impl fmt::Display for RegisterToWorkMailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterToWorkMailError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterToWorkMailError::DirectoryServiceAuthenticationFailed(ref cause) => cause,
-            RegisterToWorkMailError::DirectoryUnavailable(ref cause) => cause,
-            RegisterToWorkMailError::EmailAddressInUse(ref cause) => cause,
-            RegisterToWorkMailError::EntityAlreadyRegistered(ref cause) => cause,
-            RegisterToWorkMailError::EntityNotFound(ref cause) => cause,
-            RegisterToWorkMailError::EntityState(ref cause) => cause,
-            RegisterToWorkMailError::InvalidParameter(ref cause) => cause,
-            RegisterToWorkMailError::MailDomainNotFound(ref cause) => cause,
-            RegisterToWorkMailError::MailDomainState(ref cause) => cause,
-            RegisterToWorkMailError::OrganizationNotFound(ref cause) => cause,
-            RegisterToWorkMailError::OrganizationState(ref cause) => cause,
+            RegisterToWorkMailError::DirectoryServiceAuthenticationFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterToWorkMailError::DirectoryUnavailable(ref cause) => write!(f, "{}", cause),
+            RegisterToWorkMailError::EmailAddressInUse(ref cause) => write!(f, "{}", cause),
+            RegisterToWorkMailError::EntityAlreadyRegistered(ref cause) => write!(f, "{}", cause),
+            RegisterToWorkMailError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            RegisterToWorkMailError::EntityState(ref cause) => write!(f, "{}", cause),
+            RegisterToWorkMailError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            RegisterToWorkMailError::MailDomainNotFound(ref cause) => write!(f, "{}", cause),
+            RegisterToWorkMailError::MailDomainState(ref cause) => write!(f, "{}", cause),
+            RegisterToWorkMailError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            RegisterToWorkMailError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterToWorkMailError {}
 /// Errors returned by ResetPassword
 #[derive(Debug, PartialEq)]
 pub enum ResetPasswordError {
@@ -2913,24 +2866,22 @@ impl ResetPasswordError {
 }
 impl fmt::Display for ResetPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetPasswordError {
-    fn description(&self) -> &str {
         match *self {
-            ResetPasswordError::DirectoryServiceAuthenticationFailed(ref cause) => cause,
-            ResetPasswordError::DirectoryUnavailable(ref cause) => cause,
-            ResetPasswordError::EntityNotFound(ref cause) => cause,
-            ResetPasswordError::EntityState(ref cause) => cause,
-            ResetPasswordError::InvalidParameter(ref cause) => cause,
-            ResetPasswordError::InvalidPassword(ref cause) => cause,
-            ResetPasswordError::OrganizationNotFound(ref cause) => cause,
-            ResetPasswordError::OrganizationState(ref cause) => cause,
-            ResetPasswordError::UnsupportedOperation(ref cause) => cause,
+            ResetPasswordError::DirectoryServiceAuthenticationFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResetPasswordError::DirectoryUnavailable(ref cause) => write!(f, "{}", cause),
+            ResetPasswordError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ResetPasswordError::EntityState(ref cause) => write!(f, "{}", cause),
+            ResetPasswordError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ResetPasswordError::InvalidPassword(ref cause) => write!(f, "{}", cause),
+            ResetPasswordError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            ResetPasswordError::OrganizationState(ref cause) => write!(f, "{}", cause),
+            ResetPasswordError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResetPasswordError {}
 /// Errors returned by UpdateMailboxQuota
 #[derive(Debug, PartialEq)]
 pub enum UpdateMailboxQuotaError {
@@ -2978,20 +2929,16 @@ impl UpdateMailboxQuotaError {
 }
 impl fmt::Display for UpdateMailboxQuotaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMailboxQuotaError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMailboxQuotaError::EntityNotFound(ref cause) => cause,
-            UpdateMailboxQuotaError::EntityState(ref cause) => cause,
-            UpdateMailboxQuotaError::InvalidParameter(ref cause) => cause,
-            UpdateMailboxQuotaError::OrganizationNotFound(ref cause) => cause,
-            UpdateMailboxQuotaError::OrganizationState(ref cause) => cause,
+            UpdateMailboxQuotaError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateMailboxQuotaError::EntityState(ref cause) => write!(f, "{}", cause),
+            UpdateMailboxQuotaError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateMailboxQuotaError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateMailboxQuotaError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateMailboxQuotaError {}
 /// Errors returned by UpdatePrimaryEmailAddress
 #[derive(Debug, PartialEq)]
 pub enum UpdatePrimaryEmailAddressError {
@@ -3089,28 +3036,30 @@ impl UpdatePrimaryEmailAddressError {
 }
 impl fmt::Display for UpdatePrimaryEmailAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePrimaryEmailAddressError {
-    fn description(&self) -> &str {
         match *self {
             UpdatePrimaryEmailAddressError::DirectoryServiceAuthenticationFailed(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            UpdatePrimaryEmailAddressError::DirectoryUnavailable(ref cause) => cause,
-            UpdatePrimaryEmailAddressError::EmailAddressInUse(ref cause) => cause,
-            UpdatePrimaryEmailAddressError::EntityNotFound(ref cause) => cause,
-            UpdatePrimaryEmailAddressError::EntityState(ref cause) => cause,
-            UpdatePrimaryEmailAddressError::InvalidParameter(ref cause) => cause,
-            UpdatePrimaryEmailAddressError::MailDomainNotFound(ref cause) => cause,
-            UpdatePrimaryEmailAddressError::MailDomainState(ref cause) => cause,
-            UpdatePrimaryEmailAddressError::OrganizationNotFound(ref cause) => cause,
-            UpdatePrimaryEmailAddressError::OrganizationState(ref cause) => cause,
-            UpdatePrimaryEmailAddressError::UnsupportedOperation(ref cause) => cause,
+            UpdatePrimaryEmailAddressError::DirectoryUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePrimaryEmailAddressError::EmailAddressInUse(ref cause) => write!(f, "{}", cause),
+            UpdatePrimaryEmailAddressError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdatePrimaryEmailAddressError::EntityState(ref cause) => write!(f, "{}", cause),
+            UpdatePrimaryEmailAddressError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdatePrimaryEmailAddressError::MailDomainNotFound(ref cause) => write!(f, "{}", cause),
+            UpdatePrimaryEmailAddressError::MailDomainState(ref cause) => write!(f, "{}", cause),
+            UpdatePrimaryEmailAddressError::OrganizationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePrimaryEmailAddressError::OrganizationState(ref cause) => write!(f, "{}", cause),
+            UpdatePrimaryEmailAddressError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdatePrimaryEmailAddressError {}
 /// Errors returned by UpdateResource
 #[derive(Debug, PartialEq)]
 pub enum UpdateResourceError {
@@ -3179,25 +3128,21 @@ impl UpdateResourceError {
 }
 impl fmt::Display for UpdateResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateResourceError::DirectoryUnavailable(ref cause) => cause,
-            UpdateResourceError::EmailAddressInUse(ref cause) => cause,
-            UpdateResourceError::EntityNotFound(ref cause) => cause,
-            UpdateResourceError::EntityState(ref cause) => cause,
-            UpdateResourceError::InvalidConfiguration(ref cause) => cause,
-            UpdateResourceError::MailDomainNotFound(ref cause) => cause,
-            UpdateResourceError::MailDomainState(ref cause) => cause,
-            UpdateResourceError::NameAvailability(ref cause) => cause,
-            UpdateResourceError::OrganizationNotFound(ref cause) => cause,
-            UpdateResourceError::OrganizationState(ref cause) => cause,
+            UpdateResourceError::DirectoryUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::EmailAddressInUse(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::EntityState(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::InvalidConfiguration(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::MailDomainNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::MailDomainState(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::NameAvailability(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::OrganizationState(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateResourceError {}
 /// Trait representing the capabilities of the Amazon WorkMail API. Amazon WorkMail clients implement this trait.
 pub trait Workmail {
     /// <p>Adds a member (user or group) to the resource's set of delegates.</p>

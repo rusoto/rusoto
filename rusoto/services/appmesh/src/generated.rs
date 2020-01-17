@@ -76,6 +76,7 @@ pub struct Backend {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeshInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -107,6 +108,7 @@ pub struct CreateMeshOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -143,6 +145,7 @@ pub struct CreateRouteOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualNodeInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -176,6 +179,7 @@ pub struct CreateVirtualNodeOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualRouterInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -209,6 +213,7 @@ pub struct CreateVirtualRouterOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualServiceInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -242,6 +247,7 @@ pub struct CreateVirtualServiceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMeshInput {
     /// <p>The name of the service mesh to delete.</p>
     #[serde(rename = "meshName")]
@@ -257,6 +263,7 @@ pub struct DeleteMeshOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteInput {
     /// <p>The name of the service mesh to delete the route in.</p>
     #[serde(rename = "meshName")]
@@ -278,6 +285,7 @@ pub struct DeleteRouteOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualNodeInput {
     /// <p>The name of the service mesh to delete the virtual node in.</p>
     #[serde(rename = "meshName")]
@@ -296,6 +304,7 @@ pub struct DeleteVirtualNodeOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualRouterInput {
     /// <p>The name of the service mesh to delete the virtual router in.</p>
     #[serde(rename = "meshName")]
@@ -314,6 +323,7 @@ pub struct DeleteVirtualRouterOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualServiceInput {
     /// <p>The name of the service mesh to delete the virtual service in.</p>
     #[serde(rename = "meshName")]
@@ -332,6 +342,7 @@ pub struct DeleteVirtualServiceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMeshInput {
     /// <p>The name of the service mesh to describe.</p>
     #[serde(rename = "meshName")]
@@ -347,6 +358,7 @@ pub struct DescribeMeshOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRouteInput {
     /// <p>The name of the service mesh that the route resides in.</p>
     #[serde(rename = "meshName")]
@@ -368,6 +380,7 @@ pub struct DescribeRouteOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualNodeInput {
     /// <p>The name of the service mesh that the virtual node resides in.</p>
     #[serde(rename = "meshName")]
@@ -386,6 +399,7 @@ pub struct DescribeVirtualNodeOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualRouterInput {
     /// <p>The name of the service mesh that the virtual router resides in.</p>
     #[serde(rename = "meshName")]
@@ -404,6 +418,7 @@ pub struct DescribeVirtualRouterOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualServiceInput {
     /// <p>The name of the service mesh that the virtual service resides in.</p>
     #[serde(rename = "meshName")]
@@ -767,6 +782,7 @@ pub struct HttpRouteMatch {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMeshesInput {
     /// <p>The maximum number of results returned by <code>ListMeshes</code> in paginated output.
     /// When you use this parameter, <code>ListMeshes</code> returns only <code>limit</code>
@@ -810,6 +826,7 @@ pub struct ListMeshesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoutesInput {
     /// <p>The maximum number of results returned by <code>ListRoutes</code> in paginated output.
     /// When you use this parameter, <code>ListRoutes</code> returns only <code>limit</code>
@@ -853,6 +870,7 @@ pub struct ListRoutesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>The maximum number of tag results returned by <code>ListTagsForResource</code> in
     /// paginated output. When this parameter is used, <code>ListTagsForResource</code> returns
@@ -893,6 +911,7 @@ pub struct ListTagsForResourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualNodesInput {
     /// <p>The maximum number of results returned by <code>ListVirtualNodes</code> in paginated
     /// output. When you use this parameter, <code>ListVirtualNodes</code> returns only
@@ -933,6 +952,7 @@ pub struct ListVirtualNodesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualRoutersInput {
     /// <p>The maximum number of results returned by <code>ListVirtualRouters</code> in paginated
     /// output. When you use this parameter, <code>ListVirtualRouters</code> returns only
@@ -973,6 +993,7 @@ pub struct ListVirtualRoutersOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualServicesInput {
     /// <p>The maximum number of results returned by <code>ListVirtualServices</code> in paginated
     /// output. When you use this parameter, <code>ListVirtualServices</code> returns only
@@ -1234,6 +1255,7 @@ pub struct TagRef {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to add tags to.</p>
     #[serde(rename = "resourceArn")]
@@ -1266,6 +1288,7 @@ pub struct TcpRouteAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to delete tags from.</p>
     #[serde(rename = "resourceArn")]
@@ -1280,6 +1303,7 @@ pub struct UntagResourceInput {
 pub struct UntagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMeshInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -1303,6 +1327,7 @@ pub struct UpdateMeshOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRouteInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -1332,6 +1357,7 @@ pub struct UpdateRouteOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualNodeInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -1358,6 +1384,7 @@ pub struct UpdateVirtualNodeOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualRouterInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -1384,6 +1411,7 @@ pub struct UpdateVirtualRouterOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualServiceInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -1708,23 +1736,19 @@ impl CreateMeshError {
 }
 impl fmt::Display for CreateMeshError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMeshError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMeshError::BadRequest(ref cause) => cause,
-            CreateMeshError::Conflict(ref cause) => cause,
-            CreateMeshError::Forbidden(ref cause) => cause,
-            CreateMeshError::InternalServerError(ref cause) => cause,
-            CreateMeshError::LimitExceeded(ref cause) => cause,
-            CreateMeshError::NotFound(ref cause) => cause,
-            CreateMeshError::ServiceUnavailable(ref cause) => cause,
-            CreateMeshError::TooManyRequests(ref cause) => cause,
+            CreateMeshError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateMeshError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateMeshError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateMeshError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateMeshError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateMeshError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateMeshError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateMeshError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateMeshError {}
 /// Errors returned by CreateRoute
 #[derive(Debug, PartialEq)]
 pub enum CreateRouteError {
@@ -1788,23 +1812,19 @@ impl CreateRouteError {
 }
 impl fmt::Display for CreateRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRouteError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRouteError::BadRequest(ref cause) => cause,
-            CreateRouteError::Conflict(ref cause) => cause,
-            CreateRouteError::Forbidden(ref cause) => cause,
-            CreateRouteError::InternalServerError(ref cause) => cause,
-            CreateRouteError::LimitExceeded(ref cause) => cause,
-            CreateRouteError::NotFound(ref cause) => cause,
-            CreateRouteError::ServiceUnavailable(ref cause) => cause,
-            CreateRouteError::TooManyRequests(ref cause) => cause,
+            CreateRouteError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateRouteError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateRouteError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateRouteError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateRouteError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRouteError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateRouteError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateRouteError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRouteError {}
 /// Errors returned by CreateVirtualNode
 #[derive(Debug, PartialEq)]
 pub enum CreateVirtualNodeError {
@@ -1872,23 +1892,19 @@ impl CreateVirtualNodeError {
 }
 impl fmt::Display for CreateVirtualNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVirtualNodeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVirtualNodeError::BadRequest(ref cause) => cause,
-            CreateVirtualNodeError::Conflict(ref cause) => cause,
-            CreateVirtualNodeError::Forbidden(ref cause) => cause,
-            CreateVirtualNodeError::InternalServerError(ref cause) => cause,
-            CreateVirtualNodeError::LimitExceeded(ref cause) => cause,
-            CreateVirtualNodeError::NotFound(ref cause) => cause,
-            CreateVirtualNodeError::ServiceUnavailable(ref cause) => cause,
-            CreateVirtualNodeError::TooManyRequests(ref cause) => cause,
+            CreateVirtualNodeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateVirtualNodeError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateVirtualNodeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateVirtualNodeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateVirtualNodeError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateVirtualNodeError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateVirtualNodeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateVirtualNodeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVirtualNodeError {}
 /// Errors returned by CreateVirtualRouter
 #[derive(Debug, PartialEq)]
 pub enum CreateVirtualRouterError {
@@ -1956,23 +1972,19 @@ impl CreateVirtualRouterError {
 }
 impl fmt::Display for CreateVirtualRouterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVirtualRouterError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVirtualRouterError::BadRequest(ref cause) => cause,
-            CreateVirtualRouterError::Conflict(ref cause) => cause,
-            CreateVirtualRouterError::Forbidden(ref cause) => cause,
-            CreateVirtualRouterError::InternalServerError(ref cause) => cause,
-            CreateVirtualRouterError::LimitExceeded(ref cause) => cause,
-            CreateVirtualRouterError::NotFound(ref cause) => cause,
-            CreateVirtualRouterError::ServiceUnavailable(ref cause) => cause,
-            CreateVirtualRouterError::TooManyRequests(ref cause) => cause,
+            CreateVirtualRouterError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateVirtualRouterError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateVirtualRouterError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateVirtualRouterError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateVirtualRouterError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateVirtualRouterError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateVirtualRouterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateVirtualRouterError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVirtualRouterError {}
 /// Errors returned by CreateVirtualService
 #[derive(Debug, PartialEq)]
 pub enum CreateVirtualServiceError {
@@ -2042,23 +2054,19 @@ impl CreateVirtualServiceError {
 }
 impl fmt::Display for CreateVirtualServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVirtualServiceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVirtualServiceError::BadRequest(ref cause) => cause,
-            CreateVirtualServiceError::Conflict(ref cause) => cause,
-            CreateVirtualServiceError::Forbidden(ref cause) => cause,
-            CreateVirtualServiceError::InternalServerError(ref cause) => cause,
-            CreateVirtualServiceError::LimitExceeded(ref cause) => cause,
-            CreateVirtualServiceError::NotFound(ref cause) => cause,
-            CreateVirtualServiceError::ServiceUnavailable(ref cause) => cause,
-            CreateVirtualServiceError::TooManyRequests(ref cause) => cause,
+            CreateVirtualServiceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateVirtualServiceError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateVirtualServiceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateVirtualServiceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateVirtualServiceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateVirtualServiceError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateVirtualServiceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateVirtualServiceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVirtualServiceError {}
 /// Errors returned by DeleteMesh
 #[derive(Debug, PartialEq)]
 pub enum DeleteMeshError {
@@ -2116,22 +2124,18 @@ impl DeleteMeshError {
 }
 impl fmt::Display for DeleteMeshError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMeshError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMeshError::BadRequest(ref cause) => cause,
-            DeleteMeshError::Forbidden(ref cause) => cause,
-            DeleteMeshError::InternalServerError(ref cause) => cause,
-            DeleteMeshError::NotFound(ref cause) => cause,
-            DeleteMeshError::ResourceInUse(ref cause) => cause,
-            DeleteMeshError::ServiceUnavailable(ref cause) => cause,
-            DeleteMeshError::TooManyRequests(ref cause) => cause,
+            DeleteMeshError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteMeshError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteMeshError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteMeshError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteMeshError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteMeshError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteMeshError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMeshError {}
 /// Errors returned by DeleteRoute
 #[derive(Debug, PartialEq)]
 pub enum DeleteRouteError {
@@ -2189,22 +2193,18 @@ impl DeleteRouteError {
 }
 impl fmt::Display for DeleteRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRouteError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRouteError::BadRequest(ref cause) => cause,
-            DeleteRouteError::Forbidden(ref cause) => cause,
-            DeleteRouteError::InternalServerError(ref cause) => cause,
-            DeleteRouteError::NotFound(ref cause) => cause,
-            DeleteRouteError::ResourceInUse(ref cause) => cause,
-            DeleteRouteError::ServiceUnavailable(ref cause) => cause,
-            DeleteRouteError::TooManyRequests(ref cause) => cause,
+            DeleteRouteError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteRouteError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteRouteError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteRouteError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRouteError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteRouteError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteRouteError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRouteError {}
 /// Errors returned by DeleteVirtualNode
 #[derive(Debug, PartialEq)]
 pub enum DeleteVirtualNodeError {
@@ -2266,22 +2266,18 @@ impl DeleteVirtualNodeError {
 }
 impl fmt::Display for DeleteVirtualNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVirtualNodeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVirtualNodeError::BadRequest(ref cause) => cause,
-            DeleteVirtualNodeError::Forbidden(ref cause) => cause,
-            DeleteVirtualNodeError::InternalServerError(ref cause) => cause,
-            DeleteVirtualNodeError::NotFound(ref cause) => cause,
-            DeleteVirtualNodeError::ResourceInUse(ref cause) => cause,
-            DeleteVirtualNodeError::ServiceUnavailable(ref cause) => cause,
-            DeleteVirtualNodeError::TooManyRequests(ref cause) => cause,
+            DeleteVirtualNodeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualNodeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualNodeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualNodeError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualNodeError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualNodeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualNodeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVirtualNodeError {}
 /// Errors returned by DeleteVirtualRouter
 #[derive(Debug, PartialEq)]
 pub enum DeleteVirtualRouterError {
@@ -2343,22 +2339,18 @@ impl DeleteVirtualRouterError {
 }
 impl fmt::Display for DeleteVirtualRouterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVirtualRouterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVirtualRouterError::BadRequest(ref cause) => cause,
-            DeleteVirtualRouterError::Forbidden(ref cause) => cause,
-            DeleteVirtualRouterError::InternalServerError(ref cause) => cause,
-            DeleteVirtualRouterError::NotFound(ref cause) => cause,
-            DeleteVirtualRouterError::ResourceInUse(ref cause) => cause,
-            DeleteVirtualRouterError::ServiceUnavailable(ref cause) => cause,
-            DeleteVirtualRouterError::TooManyRequests(ref cause) => cause,
+            DeleteVirtualRouterError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualRouterError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualRouterError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualRouterError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualRouterError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualRouterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualRouterError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVirtualRouterError {}
 /// Errors returned by DeleteVirtualService
 #[derive(Debug, PartialEq)]
 pub enum DeleteVirtualServiceError {
@@ -2416,21 +2408,17 @@ impl DeleteVirtualServiceError {
 }
 impl fmt::Display for DeleteVirtualServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVirtualServiceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVirtualServiceError::BadRequest(ref cause) => cause,
-            DeleteVirtualServiceError::Forbidden(ref cause) => cause,
-            DeleteVirtualServiceError::InternalServerError(ref cause) => cause,
-            DeleteVirtualServiceError::NotFound(ref cause) => cause,
-            DeleteVirtualServiceError::ServiceUnavailable(ref cause) => cause,
-            DeleteVirtualServiceError::TooManyRequests(ref cause) => cause,
+            DeleteVirtualServiceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualServiceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualServiceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualServiceError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualServiceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualServiceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVirtualServiceError {}
 /// Errors returned by DescribeMesh
 #[derive(Debug, PartialEq)]
 pub enum DescribeMeshError {
@@ -2482,21 +2470,17 @@ impl DescribeMeshError {
 }
 impl fmt::Display for DescribeMeshError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMeshError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMeshError::BadRequest(ref cause) => cause,
-            DescribeMeshError::Forbidden(ref cause) => cause,
-            DescribeMeshError::InternalServerError(ref cause) => cause,
-            DescribeMeshError::NotFound(ref cause) => cause,
-            DescribeMeshError::ServiceUnavailable(ref cause) => cause,
-            DescribeMeshError::TooManyRequests(ref cause) => cause,
+            DescribeMeshError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeMeshError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeMeshError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeMeshError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeMeshError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeMeshError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeMeshError {}
 /// Errors returned by DescribeRoute
 #[derive(Debug, PartialEq)]
 pub enum DescribeRouteError {
@@ -2548,21 +2532,17 @@ impl DescribeRouteError {
 }
 impl fmt::Display for DescribeRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRouteError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRouteError::BadRequest(ref cause) => cause,
-            DescribeRouteError::Forbidden(ref cause) => cause,
-            DescribeRouteError::InternalServerError(ref cause) => cause,
-            DescribeRouteError::NotFound(ref cause) => cause,
-            DescribeRouteError::ServiceUnavailable(ref cause) => cause,
-            DescribeRouteError::TooManyRequests(ref cause) => cause,
+            DescribeRouteError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeRouteError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeRouteError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeRouteError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeRouteError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeRouteError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeRouteError {}
 /// Errors returned by DescribeVirtualNode
 #[derive(Debug, PartialEq)]
 pub enum DescribeVirtualNodeError {
@@ -2618,21 +2598,17 @@ impl DescribeVirtualNodeError {
 }
 impl fmt::Display for DescribeVirtualNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeVirtualNodeError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeVirtualNodeError::BadRequest(ref cause) => cause,
-            DescribeVirtualNodeError::Forbidden(ref cause) => cause,
-            DescribeVirtualNodeError::InternalServerError(ref cause) => cause,
-            DescribeVirtualNodeError::NotFound(ref cause) => cause,
-            DescribeVirtualNodeError::ServiceUnavailable(ref cause) => cause,
-            DescribeVirtualNodeError::TooManyRequests(ref cause) => cause,
+            DescribeVirtualNodeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualNodeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualNodeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualNodeError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualNodeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualNodeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeVirtualNodeError {}
 /// Errors returned by DescribeVirtualRouter
 #[derive(Debug, PartialEq)]
 pub enum DescribeVirtualRouterError {
@@ -2690,21 +2666,17 @@ impl DescribeVirtualRouterError {
 }
 impl fmt::Display for DescribeVirtualRouterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeVirtualRouterError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeVirtualRouterError::BadRequest(ref cause) => cause,
-            DescribeVirtualRouterError::Forbidden(ref cause) => cause,
-            DescribeVirtualRouterError::InternalServerError(ref cause) => cause,
-            DescribeVirtualRouterError::NotFound(ref cause) => cause,
-            DescribeVirtualRouterError::ServiceUnavailable(ref cause) => cause,
-            DescribeVirtualRouterError::TooManyRequests(ref cause) => cause,
+            DescribeVirtualRouterError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualRouterError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualRouterError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualRouterError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualRouterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualRouterError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeVirtualRouterError {}
 /// Errors returned by DescribeVirtualService
 #[derive(Debug, PartialEq)]
 pub enum DescribeVirtualServiceError {
@@ -2762,21 +2734,17 @@ impl DescribeVirtualServiceError {
 }
 impl fmt::Display for DescribeVirtualServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeVirtualServiceError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeVirtualServiceError::BadRequest(ref cause) => cause,
-            DescribeVirtualServiceError::Forbidden(ref cause) => cause,
-            DescribeVirtualServiceError::InternalServerError(ref cause) => cause,
-            DescribeVirtualServiceError::NotFound(ref cause) => cause,
-            DescribeVirtualServiceError::ServiceUnavailable(ref cause) => cause,
-            DescribeVirtualServiceError::TooManyRequests(ref cause) => cause,
+            DescribeVirtualServiceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualServiceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualServiceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualServiceError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualServiceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualServiceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeVirtualServiceError {}
 /// Errors returned by ListMeshes
 #[derive(Debug, PartialEq)]
 pub enum ListMeshesError {
@@ -2828,21 +2796,17 @@ impl ListMeshesError {
 }
 impl fmt::Display for ListMeshesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMeshesError {
-    fn description(&self) -> &str {
         match *self {
-            ListMeshesError::BadRequest(ref cause) => cause,
-            ListMeshesError::Forbidden(ref cause) => cause,
-            ListMeshesError::InternalServerError(ref cause) => cause,
-            ListMeshesError::NotFound(ref cause) => cause,
-            ListMeshesError::ServiceUnavailable(ref cause) => cause,
-            ListMeshesError::TooManyRequests(ref cause) => cause,
+            ListMeshesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListMeshesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListMeshesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListMeshesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListMeshesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListMeshesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMeshesError {}
 /// Errors returned by ListRoutes
 #[derive(Debug, PartialEq)]
 pub enum ListRoutesError {
@@ -2894,21 +2858,17 @@ impl ListRoutesError {
 }
 impl fmt::Display for ListRoutesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRoutesError {
-    fn description(&self) -> &str {
         match *self {
-            ListRoutesError::BadRequest(ref cause) => cause,
-            ListRoutesError::Forbidden(ref cause) => cause,
-            ListRoutesError::InternalServerError(ref cause) => cause,
-            ListRoutesError::NotFound(ref cause) => cause,
-            ListRoutesError::ServiceUnavailable(ref cause) => cause,
-            ListRoutesError::TooManyRequests(ref cause) => cause,
+            ListRoutesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListRoutesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListRoutesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListRoutesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListRoutesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListRoutesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRoutesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2964,21 +2924,17 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
-            ListTagsForResourceError::Forbidden(ref cause) => cause,
-            ListTagsForResourceError::InternalServerError(ref cause) => cause,
-            ListTagsForResourceError::NotFound(ref cause) => cause,
-            ListTagsForResourceError::ServiceUnavailable(ref cause) => cause,
-            ListTagsForResourceError::TooManyRequests(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListVirtualNodes
 #[derive(Debug, PartialEq)]
 pub enum ListVirtualNodesError {
@@ -3032,21 +2988,17 @@ impl ListVirtualNodesError {
 }
 impl fmt::Display for ListVirtualNodesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVirtualNodesError {
-    fn description(&self) -> &str {
         match *self {
-            ListVirtualNodesError::BadRequest(ref cause) => cause,
-            ListVirtualNodesError::Forbidden(ref cause) => cause,
-            ListVirtualNodesError::InternalServerError(ref cause) => cause,
-            ListVirtualNodesError::NotFound(ref cause) => cause,
-            ListVirtualNodesError::ServiceUnavailable(ref cause) => cause,
-            ListVirtualNodesError::TooManyRequests(ref cause) => cause,
+            ListVirtualNodesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListVirtualNodesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListVirtualNodesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListVirtualNodesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListVirtualNodesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListVirtualNodesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVirtualNodesError {}
 /// Errors returned by ListVirtualRouters
 #[derive(Debug, PartialEq)]
 pub enum ListVirtualRoutersError {
@@ -3102,21 +3054,17 @@ impl ListVirtualRoutersError {
 }
 impl fmt::Display for ListVirtualRoutersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVirtualRoutersError {
-    fn description(&self) -> &str {
         match *self {
-            ListVirtualRoutersError::BadRequest(ref cause) => cause,
-            ListVirtualRoutersError::Forbidden(ref cause) => cause,
-            ListVirtualRoutersError::InternalServerError(ref cause) => cause,
-            ListVirtualRoutersError::NotFound(ref cause) => cause,
-            ListVirtualRoutersError::ServiceUnavailable(ref cause) => cause,
-            ListVirtualRoutersError::TooManyRequests(ref cause) => cause,
+            ListVirtualRoutersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListVirtualRoutersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListVirtualRoutersError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListVirtualRoutersError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListVirtualRoutersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListVirtualRoutersError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVirtualRoutersError {}
 /// Errors returned by ListVirtualServices
 #[derive(Debug, PartialEq)]
 pub enum ListVirtualServicesError {
@@ -3172,21 +3120,17 @@ impl ListVirtualServicesError {
 }
 impl fmt::Display for ListVirtualServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVirtualServicesError {
-    fn description(&self) -> &str {
         match *self {
-            ListVirtualServicesError::BadRequest(ref cause) => cause,
-            ListVirtualServicesError::Forbidden(ref cause) => cause,
-            ListVirtualServicesError::InternalServerError(ref cause) => cause,
-            ListVirtualServicesError::NotFound(ref cause) => cause,
-            ListVirtualServicesError::ServiceUnavailable(ref cause) => cause,
-            ListVirtualServicesError::TooManyRequests(ref cause) => cause,
+            ListVirtualServicesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListVirtualServicesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListVirtualServicesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListVirtualServicesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListVirtualServicesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListVirtualServicesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVirtualServicesError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -3245,22 +3189,18 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
-            TagResourceError::Forbidden(ref cause) => cause,
-            TagResourceError::InternalServerError(ref cause) => cause,
-            TagResourceError::NotFound(ref cause) => cause,
-            TagResourceError::ServiceUnavailable(ref cause) => cause,
-            TagResourceError::TooManyRequests(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -3312,21 +3252,17 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
-            UntagResourceError::Forbidden(ref cause) => cause,
-            UntagResourceError::InternalServerError(ref cause) => cause,
-            UntagResourceError::NotFound(ref cause) => cause,
-            UntagResourceError::ServiceUnavailable(ref cause) => cause,
-            UntagResourceError::TooManyRequests(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateMesh
 #[derive(Debug, PartialEq)]
 pub enum UpdateMeshError {
@@ -3384,22 +3320,18 @@ impl UpdateMeshError {
 }
 impl fmt::Display for UpdateMeshError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMeshError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMeshError::BadRequest(ref cause) => cause,
-            UpdateMeshError::Conflict(ref cause) => cause,
-            UpdateMeshError::Forbidden(ref cause) => cause,
-            UpdateMeshError::InternalServerError(ref cause) => cause,
-            UpdateMeshError::NotFound(ref cause) => cause,
-            UpdateMeshError::ServiceUnavailable(ref cause) => cause,
-            UpdateMeshError::TooManyRequests(ref cause) => cause,
+            UpdateMeshError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateMeshError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateMeshError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateMeshError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateMeshError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateMeshError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateMeshError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateMeshError {}
 /// Errors returned by UpdateRoute
 #[derive(Debug, PartialEq)]
 pub enum UpdateRouteError {
@@ -3463,23 +3395,19 @@ impl UpdateRouteError {
 }
 impl fmt::Display for UpdateRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRouteError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRouteError::BadRequest(ref cause) => cause,
-            UpdateRouteError::Conflict(ref cause) => cause,
-            UpdateRouteError::Forbidden(ref cause) => cause,
-            UpdateRouteError::InternalServerError(ref cause) => cause,
-            UpdateRouteError::LimitExceeded(ref cause) => cause,
-            UpdateRouteError::NotFound(ref cause) => cause,
-            UpdateRouteError::ServiceUnavailable(ref cause) => cause,
-            UpdateRouteError::TooManyRequests(ref cause) => cause,
+            UpdateRouteError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateRouteError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateRouteError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateRouteError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateRouteError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateRouteError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRouteError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateRouteError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRouteError {}
 /// Errors returned by UpdateVirtualNode
 #[derive(Debug, PartialEq)]
 pub enum UpdateVirtualNodeError {
@@ -3547,23 +3475,19 @@ impl UpdateVirtualNodeError {
 }
 impl fmt::Display for UpdateVirtualNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVirtualNodeError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVirtualNodeError::BadRequest(ref cause) => cause,
-            UpdateVirtualNodeError::Conflict(ref cause) => cause,
-            UpdateVirtualNodeError::Forbidden(ref cause) => cause,
-            UpdateVirtualNodeError::InternalServerError(ref cause) => cause,
-            UpdateVirtualNodeError::LimitExceeded(ref cause) => cause,
-            UpdateVirtualNodeError::NotFound(ref cause) => cause,
-            UpdateVirtualNodeError::ServiceUnavailable(ref cause) => cause,
-            UpdateVirtualNodeError::TooManyRequests(ref cause) => cause,
+            UpdateVirtualNodeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualNodeError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualNodeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualNodeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualNodeError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualNodeError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualNodeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualNodeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateVirtualNodeError {}
 /// Errors returned by UpdateVirtualRouter
 #[derive(Debug, PartialEq)]
 pub enum UpdateVirtualRouterError {
@@ -3631,23 +3555,19 @@ impl UpdateVirtualRouterError {
 }
 impl fmt::Display for UpdateVirtualRouterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVirtualRouterError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVirtualRouterError::BadRequest(ref cause) => cause,
-            UpdateVirtualRouterError::Conflict(ref cause) => cause,
-            UpdateVirtualRouterError::Forbidden(ref cause) => cause,
-            UpdateVirtualRouterError::InternalServerError(ref cause) => cause,
-            UpdateVirtualRouterError::LimitExceeded(ref cause) => cause,
-            UpdateVirtualRouterError::NotFound(ref cause) => cause,
-            UpdateVirtualRouterError::ServiceUnavailable(ref cause) => cause,
-            UpdateVirtualRouterError::TooManyRequests(ref cause) => cause,
+            UpdateVirtualRouterError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualRouterError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualRouterError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualRouterError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualRouterError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualRouterError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualRouterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualRouterError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateVirtualRouterError {}
 /// Errors returned by UpdateVirtualService
 #[derive(Debug, PartialEq)]
 pub enum UpdateVirtualServiceError {
@@ -3717,23 +3637,19 @@ impl UpdateVirtualServiceError {
 }
 impl fmt::Display for UpdateVirtualServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVirtualServiceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVirtualServiceError::BadRequest(ref cause) => cause,
-            UpdateVirtualServiceError::Conflict(ref cause) => cause,
-            UpdateVirtualServiceError::Forbidden(ref cause) => cause,
-            UpdateVirtualServiceError::InternalServerError(ref cause) => cause,
-            UpdateVirtualServiceError::LimitExceeded(ref cause) => cause,
-            UpdateVirtualServiceError::NotFound(ref cause) => cause,
-            UpdateVirtualServiceError::ServiceUnavailable(ref cause) => cause,
-            UpdateVirtualServiceError::TooManyRequests(ref cause) => cause,
+            UpdateVirtualServiceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualServiceError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualServiceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualServiceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualServiceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualServiceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualServiceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualServiceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateVirtualServiceError {}
 /// Trait representing the capabilities of the AWS App Mesh API. AWS App Mesh clients implement this trait.
 pub trait AppMesh {
     /// <p>Creates a service mesh. A service mesh is a logical boundary for network traffic between

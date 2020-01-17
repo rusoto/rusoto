@@ -50,6 +50,7 @@ pub struct ArrayValue {
 
 /// <p>The request parameters represent the input of a SQL statement over an array of data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchExecuteStatementRequest {
     /// <p>The name of the database.</p>
     #[serde(rename = "database")]
@@ -90,6 +91,7 @@ pub struct BatchExecuteStatementResponse {
 
 /// <p>The request parameters represent the input of a request to start a SQL transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BeginTransactionRequest {
     /// <p>The name of the database.</p>
     #[serde(rename = "database")]
@@ -181,6 +183,7 @@ pub struct ColumnMetadata {
 
 /// <p>The request parameters represent the input of a commit transaction request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CommitTransactionRequest {
     /// <p>The Amazon Resource Name (ARN) of the Aurora Serverless DB cluster.</p>
     #[serde(rename = "resourceArn")]
@@ -205,6 +208,7 @@ pub struct CommitTransactionResponse {
 
 /// <p>The request parameters represent the input of a request to run one or more SQL statements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteSqlRequest {
     /// <p>The Amazon Resource Name (ARN) of the secret that enables access to the DB cluster.</p>
     #[serde(rename = "awsSecretStoreArn")]
@@ -237,6 +241,7 @@ pub struct ExecuteSqlResponse {
 
 /// <p>The request parameters represent the input of a request to run a SQL statement against a database.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteStatementRequest {
     /// <p><p>A value that indicates whether to continue running the statement after the call times out. By default, the statement stops running when the call times out.</p> <important> <p>For DDL statements, we recommend continuing to run the statement after the call times out. When a DDL statement terminates before it is finished running, it can result in errors and possibly corrupted data structures.</p> </important></p>
     #[serde(rename = "continueAfterTimeout")]
@@ -377,6 +382,7 @@ pub struct ResultSetMetadata {
 
 /// <p>Options that control how the result set is returned.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResultSetOptions {
     /// <p><p>A value that indicates how a field of <code>DECIMAL</code> type is represented in the response. The value of <code>STRING</code>, the default, specifies that it is converted to a String value. The value of <code>DOUBLE<em>OR</em>LONG</code> specifies that it is converted to a Long value if its scale is 0, or to a Double value otherwise.</p> <important> <p>Conversion to Double or Long can result in roundoff errors due to precision loss. We recommend converting to String, especially when working with currency values.</p> </important></p>
     #[serde(rename = "decimalReturnType")]
@@ -386,6 +392,7 @@ pub struct ResultSetOptions {
 
 /// <p>The request parameters represent the input of a request to perform a rollback of a transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackTransactionRequest {
     /// <p>The Amazon Resource Name (ARN) of the Aurora Serverless DB cluster.</p>
     #[serde(rename = "resourceArn")]
@@ -410,6 +417,7 @@ pub struct RollbackTransactionResponse {
 
 /// <p>A parameter used in a SQL statement.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SqlParameter {
     /// <p>The name of the parameter.</p>
     #[serde(rename = "name")]
@@ -559,20 +567,18 @@ impl BatchExecuteStatementError {
 }
 impl fmt::Display for BatchExecuteStatementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchExecuteStatementError {
-    fn description(&self) -> &str {
         match *self {
-            BatchExecuteStatementError::BadRequest(ref cause) => cause,
-            BatchExecuteStatementError::Forbidden(ref cause) => cause,
-            BatchExecuteStatementError::InternalServerError(ref cause) => cause,
-            BatchExecuteStatementError::ServiceUnavailableError(ref cause) => cause,
-            BatchExecuteStatementError::StatementTimeout(ref cause) => cause,
+            BatchExecuteStatementError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchExecuteStatementError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchExecuteStatementError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            BatchExecuteStatementError::ServiceUnavailableError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchExecuteStatementError::StatementTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchExecuteStatementError {}
 /// Errors returned by BeginTransaction
 #[derive(Debug, PartialEq)]
 pub enum BeginTransactionError {
@@ -620,20 +626,16 @@ impl BeginTransactionError {
 }
 impl fmt::Display for BeginTransactionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BeginTransactionError {
-    fn description(&self) -> &str {
         match *self {
-            BeginTransactionError::BadRequest(ref cause) => cause,
-            BeginTransactionError::Forbidden(ref cause) => cause,
-            BeginTransactionError::InternalServerError(ref cause) => cause,
-            BeginTransactionError::ServiceUnavailableError(ref cause) => cause,
-            BeginTransactionError::StatementTimeout(ref cause) => cause,
+            BeginTransactionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BeginTransactionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BeginTransactionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            BeginTransactionError::ServiceUnavailableError(ref cause) => write!(f, "{}", cause),
+            BeginTransactionError::StatementTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BeginTransactionError {}
 /// Errors returned by CommitTransaction
 #[derive(Debug, PartialEq)]
 pub enum CommitTransactionError {
@@ -686,21 +688,17 @@ impl CommitTransactionError {
 }
 impl fmt::Display for CommitTransactionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CommitTransactionError {
-    fn description(&self) -> &str {
         match *self {
-            CommitTransactionError::BadRequest(ref cause) => cause,
-            CommitTransactionError::Forbidden(ref cause) => cause,
-            CommitTransactionError::InternalServerError(ref cause) => cause,
-            CommitTransactionError::NotFound(ref cause) => cause,
-            CommitTransactionError::ServiceUnavailableError(ref cause) => cause,
-            CommitTransactionError::StatementTimeout(ref cause) => cause,
+            CommitTransactionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CommitTransactionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CommitTransactionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CommitTransactionError::NotFound(ref cause) => write!(f, "{}", cause),
+            CommitTransactionError::ServiceUnavailableError(ref cause) => write!(f, "{}", cause),
+            CommitTransactionError::StatementTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CommitTransactionError {}
 /// Errors returned by ExecuteSql
 #[derive(Debug, PartialEq)]
 pub enum ExecuteSqlError {
@@ -739,19 +737,15 @@ impl ExecuteSqlError {
 }
 impl fmt::Display for ExecuteSqlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExecuteSqlError {
-    fn description(&self) -> &str {
         match *self {
-            ExecuteSqlError::BadRequest(ref cause) => cause,
-            ExecuteSqlError::Forbidden(ref cause) => cause,
-            ExecuteSqlError::InternalServerError(ref cause) => cause,
-            ExecuteSqlError::ServiceUnavailableError(ref cause) => cause,
+            ExecuteSqlError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ExecuteSqlError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ExecuteSqlError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ExecuteSqlError::ServiceUnavailableError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExecuteSqlError {}
 /// Errors returned by ExecuteStatement
 #[derive(Debug, PartialEq)]
 pub enum ExecuteStatementError {
@@ -799,20 +793,16 @@ impl ExecuteStatementError {
 }
 impl fmt::Display for ExecuteStatementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExecuteStatementError {
-    fn description(&self) -> &str {
         match *self {
-            ExecuteStatementError::BadRequest(ref cause) => cause,
-            ExecuteStatementError::Forbidden(ref cause) => cause,
-            ExecuteStatementError::InternalServerError(ref cause) => cause,
-            ExecuteStatementError::ServiceUnavailableError(ref cause) => cause,
-            ExecuteStatementError::StatementTimeout(ref cause) => cause,
+            ExecuteStatementError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::ServiceUnavailableError(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::StatementTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExecuteStatementError {}
 /// Errors returned by RollbackTransaction
 #[derive(Debug, PartialEq)]
 pub enum RollbackTransactionError {
@@ -867,21 +857,17 @@ impl RollbackTransactionError {
 }
 impl fmt::Display for RollbackTransactionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RollbackTransactionError {
-    fn description(&self) -> &str {
         match *self {
-            RollbackTransactionError::BadRequest(ref cause) => cause,
-            RollbackTransactionError::Forbidden(ref cause) => cause,
-            RollbackTransactionError::InternalServerError(ref cause) => cause,
-            RollbackTransactionError::NotFound(ref cause) => cause,
-            RollbackTransactionError::ServiceUnavailableError(ref cause) => cause,
-            RollbackTransactionError::StatementTimeout(ref cause) => cause,
+            RollbackTransactionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RollbackTransactionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RollbackTransactionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RollbackTransactionError::NotFound(ref cause) => write!(f, "{}", cause),
+            RollbackTransactionError::ServiceUnavailableError(ref cause) => write!(f, "{}", cause),
+            RollbackTransactionError::StatementTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RollbackTransactionError {}
 /// Trait representing the capabilities of the AWS RDS DataService API. AWS RDS DataService clients implement this trait.
 pub trait RdsData {
     /// <p><p>Runs a batch SQL statement over an array of data.</p> <p>You can run bulk update and insert operations for multiple records using a DML statement with different parameter sets. Bulk operations can provide a significant performance improvement over individual insert and update operations.</p> <important> <p>If a call isn&#39;t part of a transaction because it doesn&#39;t include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important></p>

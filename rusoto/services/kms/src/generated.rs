@@ -42,6 +42,7 @@ pub struct AliasListEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelKeyDeletionRequest {
     /// <p>The unique identifier for the customer master key (CMK) for which to cancel deletion.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -58,6 +59,7 @@ pub struct CancelKeyDeletionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConnectCustomKeyStoreRequest {
     /// <p>Enter the key store ID of the custom key store that you want to connect. To find the ID of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p>
     #[serde(rename = "CustomKeyStoreId")]
@@ -69,6 +71,7 @@ pub struct ConnectCustomKeyStoreRequest {
 pub struct ConnectCustomKeyStoreResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAliasRequest {
     /// <p>Specifies the alias name. This value must begin with <code>alias/</code> followed by a name, such as <code>alias/ExampleAlias</code>. The alias name cannot begin with <code>alias/aws/</code>. The <code>alias/aws/</code> prefix is reserved for AWS managed CMKs.</p>
     #[serde(rename = "AliasName")]
@@ -79,6 +82,7 @@ pub struct CreateAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomKeyStoreRequest {
     /// <p>Identifies the AWS CloudHSM cluster for the custom key store. Enter the cluster ID of any active AWS CloudHSM cluster that is not already associated with a custom key store. To find the cluster ID, use the <a href="https://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_DescribeClusters.html">DescribeClusters</a> operation.</p>
     #[serde(rename = "CloudHsmClusterId")]
@@ -104,6 +108,7 @@ pub struct CreateCustomKeyStoreResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGrantRequest {
     /// <p>Allows a cryptographic operation only when the encryption context matches or includes the encryption context specified in this structure. For more information about encryption context, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context">Encryption Context</a> in the <i> <i>AWS Key Management Service Developer Guide</i> </i>.</p>
     #[serde(rename = "Constraints")]
@@ -146,6 +151,7 @@ pub struct CreateGrantResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateKeyRequest {
     /// <p>A flag to indicate whether to bypass the key policy lockout safety check.</p> <important> <p>Setting this value to true increases the risk that the CMK becomes unmanageable. Do not set this value to true indiscriminately.</p> <p>For more information, refer to the scenario in the <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam">Default Key Policy</a> section in the <i> <i>AWS Key Management Service Developer Guide</i> </i>.</p> </important> <p>Use this parameter only when you include a policy in the request and you intend to prevent the principal that is making the request from making a subsequent <a>PutKeyPolicy</a> request on the CMK.</p> <p>The default value is false.</p>
     #[serde(rename = "BypassPolicyLockoutSafetyCheck")]
@@ -225,6 +231,7 @@ pub struct CustomKeyStoresListEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecryptRequest {
     /// <p>Ciphertext to be decrypted. The blob includes metadata.</p>
     #[serde(rename = "CiphertextBlob")]
@@ -275,6 +282,7 @@ pub struct DecryptResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAliasRequest {
     /// <p>The alias to be deleted. The alias name must begin with <code>alias/</code> followed by the alias name, such as <code>alias/ExampleAlias</code>.</p>
     #[serde(rename = "AliasName")]
@@ -282,6 +290,7 @@ pub struct DeleteAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomKeyStoreRequest {
     /// <p>Enter the ID of the custom key store you want to delete. To find the ID of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p>
     #[serde(rename = "CustomKeyStoreId")]
@@ -293,6 +302,7 @@ pub struct DeleteCustomKeyStoreRequest {
 pub struct DeleteCustomKeyStoreResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImportedKeyMaterialRequest {
     /// <p>Identifies the CMK from which you are deleting imported key material. The <code>Origin</code> of the CMK must be <code>EXTERNAL</code>.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -300,6 +310,7 @@ pub struct DeleteImportedKeyMaterialRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCustomKeyStoresRequest {
     /// <p>Gets only information about the specified custom key store. Enter the key store ID.</p> <p>By default, this operation gets information about all custom key stores in the account and region. To limit the output to a particular custom key store, you can use either the <code>CustomKeyStoreId</code> or <code>CustomKeyStoreName</code> parameter, but not both.</p>
     #[serde(rename = "CustomKeyStoreId")]
@@ -337,6 +348,7 @@ pub struct DescribeCustomKeyStoresResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeKeyRequest {
     /// <p>A list of grant tokens.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "GrantTokens")]
@@ -357,6 +369,7 @@ pub struct DescribeKeyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableKeyRequest {
     /// <p>A unique identifier for the customer master key (CMK).</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -364,6 +377,7 @@ pub struct DisableKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableKeyRotationRequest {
     /// <p>Identifies a symmetric customer master key (CMK). You cannot enable automatic rotation of <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html#asymmetric-cmks">asymmetric CMKs</a>, CMKs with <a href="https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">imported key material</a>, or CMKs in a <a href="https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">custom key store</a>.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -371,6 +385,7 @@ pub struct DisableKeyRotationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisconnectCustomKeyStoreRequest {
     /// <p>Enter the ID of the custom key store you want to disconnect. To find the ID of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p>
     #[serde(rename = "CustomKeyStoreId")]
@@ -382,6 +397,7 @@ pub struct DisconnectCustomKeyStoreRequest {
 pub struct DisconnectCustomKeyStoreResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableKeyRequest {
     /// <p>A unique identifier for the customer master key (CMK).</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -389,6 +405,7 @@ pub struct EnableKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableKeyRotationRequest {
     /// <p>Identifies a symmetric customer master key (CMK). You cannot enable automatic rotation of asymmetric CMKs, CMKs with imported key material, or CMKs in a <a href="https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">custom key store</a>.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -396,6 +413,7 @@ pub struct EnableKeyRotationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EncryptRequest {
     /// <p>Specifies the encryption algorithm that AWS KMS will use to encrypt the plaintext message. The algorithm must be compatible with the CMK that you specify.</p> <p>This parameter is required only for asymmetric CMKs. The default value, <code>SYMMETRIC_DEFAULT</code>, is the algorithm used for symmetric CMKs. If you are using an asymmetric CMK, we recommend RSAES_OAEP_SHA_256.</p>
     #[serde(rename = "EncryptionAlgorithm")]
@@ -445,6 +463,7 @@ pub struct EncryptResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateDataKeyPairRequest {
     /// <p>Specifies the encryption context that will be used when encrypting the private key in the data key pair.</p> <p>An <i>encryption context</i> is a collection of non-secret key-value pairs that represents additional authenticated data. When you use an encryption context to encrypt data, you must specify the same (an exact case-sensitive match) encryption context to decrypt the data. An encryption context is optional when encrypting with a symmetric CMK, but it is highly recommended.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "EncryptionContext")]
@@ -503,6 +522,7 @@ pub struct GenerateDataKeyPairResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateDataKeyPairWithoutPlaintextRequest {
     /// <p>Specifies the encryption context that will be used when encrypting the private key in the data key pair.</p> <p>An <i>encryption context</i> is a collection of non-secret key-value pairs that represents additional authenticated data. When you use an encryption context to encrypt data, you must specify the same (an exact case-sensitive match) encryption context to decrypt the data. An encryption context is optional when encrypting with a symmetric CMK, but it is highly recommended.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "EncryptionContext")]
@@ -552,6 +572,7 @@ pub struct GenerateDataKeyPairWithoutPlaintextResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateDataKeyRequest {
     /// <p>Specifies the encryption context that will be used when encrypting the data key.</p> <p>An <i>encryption context</i> is a collection of non-secret key-value pairs that represents additional authenticated data. When you use an encryption context to encrypt data, you must specify the same (an exact case-sensitive match) encryption context to decrypt the data. An encryption context is optional when encrypting with a symmetric CMK, but it is highly recommended.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "EncryptionContext")]
@@ -602,6 +623,7 @@ pub struct GenerateDataKeyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateDataKeyWithoutPlaintextRequest {
     /// <p>Specifies the encryption context that will be used when encrypting the data key.</p> <p>An <i>encryption context</i> is a collection of non-secret key-value pairs that represents additional authenticated data. When you use an encryption context to encrypt data, you must specify the same (an exact case-sensitive match) encryption context to decrypt the data. An encryption context is optional when encrypting with a symmetric CMK, but it is highly recommended.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "EncryptionContext")]
@@ -643,6 +665,7 @@ pub struct GenerateDataKeyWithoutPlaintextResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateRandomRequest {
     /// <p>Generates the random byte string in the AWS CloudHSM cluster that is associated with the specified <a href="https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">custom key store</a>. To find the ID of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p>
     #[serde(rename = "CustomKeyStoreId")]
@@ -669,6 +692,7 @@ pub struct GenerateRandomResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyPolicyRequest {
     /// <p>A unique identifier for the customer master key (CMK).</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -688,6 +712,7 @@ pub struct GetKeyPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyRotationStatusRequest {
     /// <p>A unique identifier for the customer master key (CMK).</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK. To specify a CMK in a different AWS account, you must use the key ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -704,6 +729,7 @@ pub struct GetKeyRotationStatusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetParametersForImportRequest {
     /// <p>The identifier of the symmetric CMK into which you will import key material. The <code>Origin</code> of the CMK must be <code>EXTERNAL</code>.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -748,6 +774,7 @@ pub struct GetParametersForImportResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicKeyRequest {
     /// <p>A list of grant tokens.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "GrantTokens")]
@@ -848,6 +875,7 @@ pub struct GrantListEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportKeyMaterialRequest {
     /// <p>The encrypted key material to import. The key material must be encrypted with the public wrapping key that <a>GetParametersForImport</a> returned, using the wrapping algorithm that you specified in the same <code>GetParametersForImport</code> request.</p>
     #[serde(rename = "EncryptedKeyMaterial")]
@@ -974,6 +1002,7 @@ pub struct KeyMetadata {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAliasesRequest {
     /// <p>Lists only aliases that refer to the specified CMK. The value of this parameter can be the ID or Amazon Resource Name (ARN) of a CMK in the caller's account and region. You cannot use an alias name or alias ARN in this value.</p> <p>This parameter is optional. If you omit it, <code>ListAliases</code> returns all aliases in the account and region.</p>
     #[serde(rename = "KeyId")]
@@ -1007,6 +1036,7 @@ pub struct ListAliasesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGrantsRequest {
     /// <p>A unique identifier for the customer master key (CMK).</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK. To specify a CMK in a different AWS account, you must use the key ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -1039,6 +1069,7 @@ pub struct ListGrantsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListKeyPoliciesRequest {
     /// <p>A unique identifier for the customer master key (CMK).</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -1071,6 +1102,7 @@ pub struct ListKeyPoliciesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListKeysRequest {
     /// <p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 1000, inclusive. If you do not include a value, it defaults to 100.</p>
     #[serde(rename = "Limit")]
@@ -1100,6 +1132,7 @@ pub struct ListKeysResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceTagsRequest {
     /// <p>A unique identifier for the customer master key (CMK).</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -1132,6 +1165,7 @@ pub struct ListResourceTagsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRetirableGrantsRequest {
     /// <p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>
     #[serde(rename = "Limit")]
@@ -1147,6 +1181,7 @@ pub struct ListRetirableGrantsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutKeyPolicyRequest {
     /// <p>A flag to indicate whether to bypass the key policy lockout safety check.</p> <important> <p>Setting this value to true increases the risk that the CMK becomes unmanageable. Do not set this value to true indiscriminately.</p> <p>For more information, refer to the scenario in the <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </important> <p>Use this parameter only when you intend to prevent the principal that is making the request from making a subsequent <code>PutKeyPolicy</code> request on the CMK.</p> <p>The default value is false.</p>
     #[serde(rename = "BypassPolicyLockoutSafetyCheck")]
@@ -1164,6 +1199,7 @@ pub struct PutKeyPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReEncryptRequest {
     /// <p>Ciphertext of the data to reencrypt.</p>
     #[serde(rename = "CiphertextBlob")]
@@ -1233,6 +1269,7 @@ pub struct ReEncryptResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetireGrantRequest {
     /// <p><p>Unique identifier of the grant to retire. The grant ID is returned in the response to a <code>CreateGrant</code> operation.</p> <ul> <li> <p>Grant ID Example - 0123456789012345678901234567890123456789012345678901234567890123</p> </li> </ul></p>
     #[serde(rename = "GrantId")]
@@ -1249,6 +1286,7 @@ pub struct RetireGrantRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeGrantRequest {
     /// <p>Identifier of the grant to be revoked.</p>
     #[serde(rename = "GrantId")]
@@ -1259,6 +1297,7 @@ pub struct RevokeGrantRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleKeyDeletionRequest {
     /// <p>The unique identifier of the customer master key (CMK) to delete.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -1283,6 +1322,7 @@ pub struct ScheduleKeyDeletionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SignRequest {
     /// <p>A list of grant tokens.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "GrantTokens")]
@@ -1342,6 +1382,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>A unique identifier for the CMK you are tagging.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -1352,6 +1393,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>A unique identifier for the CMK from which you are removing tags.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -1362,6 +1404,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAliasRequest {
     /// <p>Identifies the alias that is changing its CMK. This value must begin with <code>alias/</code> followed by the alias name, such as <code>alias/ExampleAlias</code>. You cannot use UpdateAlias to change the alias name.</p>
     #[serde(rename = "AliasName")]
@@ -1372,6 +1415,7 @@ pub struct UpdateAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCustomKeyStoreRequest {
     /// <p>Associates the custom key store with a related AWS CloudHSM cluster. </p> <p>Enter the cluster ID of the cluster that you used to create the custom key store or a cluster that shares a backup history and has the same cluster certificate as the original cluster. You cannot use this parameter to associate a custom key store with an unrelated cluster. In addition, the replacement cluster must <a href="https://docs.aws.amazon.com/kms/latest/developerguide/create-keystore.html#before-keystore">fulfill the requirements</a> for a cluster associated with a custom key store. To view the cluster certificate of a cluster, use the <a href="https://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_DescribeClusters.html">DescribeClusters</a> operation.</p>
     #[serde(rename = "CloudHsmClusterId")]
@@ -1395,6 +1439,7 @@ pub struct UpdateCustomKeyStoreRequest {
 pub struct UpdateCustomKeyStoreResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateKeyDescriptionRequest {
     /// <p>New description for the CMK.</p>
     #[serde(rename = "Description")]
@@ -1405,6 +1450,7 @@ pub struct UpdateKeyDescriptionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VerifyRequest {
     /// <p>A list of grant tokens.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "GrantTokens")]
@@ -1498,20 +1544,16 @@ impl CancelKeyDeletionError {
 }
 impl fmt::Display for CancelKeyDeletionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelKeyDeletionError {
-    fn description(&self) -> &str {
         match *self {
-            CancelKeyDeletionError::DependencyTimeout(ref cause) => cause,
-            CancelKeyDeletionError::InvalidArn(ref cause) => cause,
-            CancelKeyDeletionError::KMSInternal(ref cause) => cause,
-            CancelKeyDeletionError::KMSInvalidState(ref cause) => cause,
-            CancelKeyDeletionError::NotFound(ref cause) => cause,
+            CancelKeyDeletionError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            CancelKeyDeletionError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            CancelKeyDeletionError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            CancelKeyDeletionError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            CancelKeyDeletionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelKeyDeletionError {}
 /// Errors returned by ConnectCustomKeyStore
 #[derive(Debug, PartialEq)]
 pub enum ConnectCustomKeyStoreError {
@@ -1563,20 +1605,22 @@ impl ConnectCustomKeyStoreError {
 }
 impl fmt::Display for ConnectCustomKeyStoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConnectCustomKeyStoreError {
-    fn description(&self) -> &str {
         match *self {
-            ConnectCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(ref cause) => cause,
-            ConnectCustomKeyStoreError::CloudHsmClusterNotActive(ref cause) => cause,
-            ConnectCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => cause,
-            ConnectCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => cause,
-            ConnectCustomKeyStoreError::KMSInternal(ref cause) => cause,
+            ConnectCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ConnectCustomKeyStoreError::CloudHsmClusterNotActive(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ConnectCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ConnectCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => write!(f, "{}", cause),
+            ConnectCustomKeyStoreError::KMSInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ConnectCustomKeyStoreError {}
 /// Errors returned by CreateAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAliasError {
@@ -1630,22 +1674,18 @@ impl CreateAliasError {
 }
 impl fmt::Display for CreateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAliasError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAliasError::AlreadyExists(ref cause) => cause,
-            CreateAliasError::DependencyTimeout(ref cause) => cause,
-            CreateAliasError::InvalidAliasName(ref cause) => cause,
-            CreateAliasError::KMSInternal(ref cause) => cause,
-            CreateAliasError::KMSInvalidState(ref cause) => cause,
-            CreateAliasError::LimitExceeded(ref cause) => cause,
-            CreateAliasError::NotFound(ref cause) => cause,
+            CreateAliasError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::InvalidAliasName(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAliasError {}
 /// Errors returned by CreateCustomKeyStore
 #[derive(Debug, PartialEq)]
 pub enum CreateCustomKeyStoreError {
@@ -1711,22 +1751,22 @@ impl CreateCustomKeyStoreError {
 }
 impl fmt::Display for CreateCustomKeyStoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCustomKeyStoreError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCustomKeyStoreError::CloudHsmClusterInUse(ref cause) => cause,
-            CreateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(ref cause) => cause,
-            CreateCustomKeyStoreError::CloudHsmClusterNotActive(ref cause) => cause,
-            CreateCustomKeyStoreError::CloudHsmClusterNotFound(ref cause) => cause,
-            CreateCustomKeyStoreError::CustomKeyStoreNameInUse(ref cause) => cause,
-            CreateCustomKeyStoreError::IncorrectTrustAnchor(ref cause) => cause,
-            CreateCustomKeyStoreError::KMSInternal(ref cause) => cause,
+            CreateCustomKeyStoreError::CloudHsmClusterInUse(ref cause) => write!(f, "{}", cause),
+            CreateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomKeyStoreError::CloudHsmClusterNotActive(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomKeyStoreError::CloudHsmClusterNotFound(ref cause) => write!(f, "{}", cause),
+            CreateCustomKeyStoreError::CustomKeyStoreNameInUse(ref cause) => write!(f, "{}", cause),
+            CreateCustomKeyStoreError::IncorrectTrustAnchor(ref cause) => write!(f, "{}", cause),
+            CreateCustomKeyStoreError::KMSInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCustomKeyStoreError {}
 /// Errors returned by CreateGrant
 #[derive(Debug, PartialEq)]
 pub enum CreateGrantError {
@@ -1785,23 +1825,19 @@ impl CreateGrantError {
 }
 impl fmt::Display for CreateGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGrantError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGrantError::DependencyTimeout(ref cause) => cause,
-            CreateGrantError::Disabled(ref cause) => cause,
-            CreateGrantError::InvalidArn(ref cause) => cause,
-            CreateGrantError::InvalidGrantToken(ref cause) => cause,
-            CreateGrantError::KMSInternal(ref cause) => cause,
-            CreateGrantError::KMSInvalidState(ref cause) => cause,
-            CreateGrantError::LimitExceeded(ref cause) => cause,
-            CreateGrantError::NotFound(ref cause) => cause,
+            CreateGrantError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            CreateGrantError::Disabled(ref cause) => write!(f, "{}", cause),
+            CreateGrantError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            CreateGrantError::InvalidGrantToken(ref cause) => write!(f, "{}", cause),
+            CreateGrantError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            CreateGrantError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            CreateGrantError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateGrantError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGrantError {}
 /// Errors returned by CreateKey
 #[derive(Debug, PartialEq)]
 pub enum CreateKeyError {
@@ -1872,25 +1908,23 @@ impl CreateKeyError {
 }
 impl fmt::Display for CreateKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateKeyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateKeyError::CloudHsmClusterInvalidConfiguration(ref cause) => cause,
-            CreateKeyError::CustomKeyStoreInvalidState(ref cause) => cause,
-            CreateKeyError::CustomKeyStoreNotFound(ref cause) => cause,
-            CreateKeyError::DependencyTimeout(ref cause) => cause,
-            CreateKeyError::InvalidArn(ref cause) => cause,
-            CreateKeyError::KMSInternal(ref cause) => cause,
-            CreateKeyError::LimitExceeded(ref cause) => cause,
-            CreateKeyError::MalformedPolicyDocument(ref cause) => cause,
-            CreateKeyError::Tag(ref cause) => cause,
-            CreateKeyError::UnsupportedOperation(ref cause) => cause,
+            CreateKeyError::CloudHsmClusterInvalidConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateKeyError::CustomKeyStoreInvalidState(ref cause) => write!(f, "{}", cause),
+            CreateKeyError::CustomKeyStoreNotFound(ref cause) => write!(f, "{}", cause),
+            CreateKeyError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            CreateKeyError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            CreateKeyError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            CreateKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateKeyError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            CreateKeyError::Tag(ref cause) => write!(f, "{}", cause),
+            CreateKeyError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateKeyError {}
 /// Errors returned by Decrypt
 #[derive(Debug, PartialEq)]
 pub enum DecryptError {
@@ -1959,25 +1993,21 @@ impl DecryptError {
 }
 impl fmt::Display for DecryptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DecryptError {
-    fn description(&self) -> &str {
         match *self {
-            DecryptError::DependencyTimeout(ref cause) => cause,
-            DecryptError::Disabled(ref cause) => cause,
-            DecryptError::IncorrectKey(ref cause) => cause,
-            DecryptError::InvalidCiphertext(ref cause) => cause,
-            DecryptError::InvalidGrantToken(ref cause) => cause,
-            DecryptError::InvalidKeyUsage(ref cause) => cause,
-            DecryptError::KMSInternal(ref cause) => cause,
-            DecryptError::KMSInvalidState(ref cause) => cause,
-            DecryptError::KeyUnavailable(ref cause) => cause,
-            DecryptError::NotFound(ref cause) => cause,
+            DecryptError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            DecryptError::Disabled(ref cause) => write!(f, "{}", cause),
+            DecryptError::IncorrectKey(ref cause) => write!(f, "{}", cause),
+            DecryptError::InvalidCiphertext(ref cause) => write!(f, "{}", cause),
+            DecryptError::InvalidGrantToken(ref cause) => write!(f, "{}", cause),
+            DecryptError::InvalidKeyUsage(ref cause) => write!(f, "{}", cause),
+            DecryptError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            DecryptError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            DecryptError::KeyUnavailable(ref cause) => write!(f, "{}", cause),
+            DecryptError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DecryptError {}
 /// Errors returned by DeleteAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAliasError {
@@ -2016,19 +2046,15 @@ impl DeleteAliasError {
 }
 impl fmt::Display for DeleteAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAliasError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAliasError::DependencyTimeout(ref cause) => cause,
-            DeleteAliasError::KMSInternal(ref cause) => cause,
-            DeleteAliasError::KMSInvalidState(ref cause) => cause,
-            DeleteAliasError::NotFound(ref cause) => cause,
+            DeleteAliasError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAliasError {}
 /// Errors returned by DeleteCustomKeyStore
 #[derive(Debug, PartialEq)]
 pub enum DeleteCustomKeyStoreError {
@@ -2073,19 +2099,17 @@ impl DeleteCustomKeyStoreError {
 }
 impl fmt::Display for DeleteCustomKeyStoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCustomKeyStoreError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCustomKeyStoreError::CustomKeyStoreHasCMKs(ref cause) => cause,
-            DeleteCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => cause,
-            DeleteCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => cause,
-            DeleteCustomKeyStoreError::KMSInternal(ref cause) => cause,
+            DeleteCustomKeyStoreError::CustomKeyStoreHasCMKs(ref cause) => write!(f, "{}", cause),
+            DeleteCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteCustomKeyStoreError::KMSInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCustomKeyStoreError {}
 /// Errors returned by DeleteImportedKeyMaterial
 #[derive(Debug, PartialEq)]
 pub enum DeleteImportedKeyMaterialError {
@@ -2144,21 +2168,19 @@ impl DeleteImportedKeyMaterialError {
 }
 impl fmt::Display for DeleteImportedKeyMaterialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteImportedKeyMaterialError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteImportedKeyMaterialError::DependencyTimeout(ref cause) => cause,
-            DeleteImportedKeyMaterialError::InvalidArn(ref cause) => cause,
-            DeleteImportedKeyMaterialError::KMSInternal(ref cause) => cause,
-            DeleteImportedKeyMaterialError::KMSInvalidState(ref cause) => cause,
-            DeleteImportedKeyMaterialError::NotFound(ref cause) => cause,
-            DeleteImportedKeyMaterialError::UnsupportedOperation(ref cause) => cause,
+            DeleteImportedKeyMaterialError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            DeleteImportedKeyMaterialError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DeleteImportedKeyMaterialError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            DeleteImportedKeyMaterialError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            DeleteImportedKeyMaterialError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteImportedKeyMaterialError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteImportedKeyMaterialError {}
 /// Errors returned by DescribeCustomKeyStores
 #[derive(Debug, PartialEq)]
 pub enum DescribeCustomKeyStoresError {
@@ -2189,17 +2211,15 @@ impl DescribeCustomKeyStoresError {
 }
 impl fmt::Display for DescribeCustomKeyStoresError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCustomKeyStoresError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCustomKeyStoresError::CustomKeyStoreNotFound(ref cause) => cause,
-            DescribeCustomKeyStoresError::KMSInternal(ref cause) => cause,
+            DescribeCustomKeyStoresError::CustomKeyStoreNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCustomKeyStoresError::KMSInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCustomKeyStoresError {}
 /// Errors returned by DescribeKey
 #[derive(Debug, PartialEq)]
 pub enum DescribeKeyError {
@@ -2238,19 +2258,15 @@ impl DescribeKeyError {
 }
 impl fmt::Display for DescribeKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeKeyError::DependencyTimeout(ref cause) => cause,
-            DescribeKeyError::InvalidArn(ref cause) => cause,
-            DescribeKeyError::KMSInternal(ref cause) => cause,
-            DescribeKeyError::NotFound(ref cause) => cause,
+            DescribeKeyError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            DescribeKeyError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DescribeKeyError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            DescribeKeyError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeKeyError {}
 /// Errors returned by DisableKey
 #[derive(Debug, PartialEq)]
 pub enum DisableKeyError {
@@ -2294,20 +2310,16 @@ impl DisableKeyError {
 }
 impl fmt::Display for DisableKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DisableKeyError::DependencyTimeout(ref cause) => cause,
-            DisableKeyError::InvalidArn(ref cause) => cause,
-            DisableKeyError::KMSInternal(ref cause) => cause,
-            DisableKeyError::KMSInvalidState(ref cause) => cause,
-            DisableKeyError::NotFound(ref cause) => cause,
+            DisableKeyError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            DisableKeyError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DisableKeyError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            DisableKeyError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            DisableKeyError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableKeyError {}
 /// Errors returned by DisableKeyRotation
 #[derive(Debug, PartialEq)]
 pub enum DisableKeyRotationError {
@@ -2365,22 +2377,18 @@ impl DisableKeyRotationError {
 }
 impl fmt::Display for DisableKeyRotationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableKeyRotationError {
-    fn description(&self) -> &str {
         match *self {
-            DisableKeyRotationError::DependencyTimeout(ref cause) => cause,
-            DisableKeyRotationError::Disabled(ref cause) => cause,
-            DisableKeyRotationError::InvalidArn(ref cause) => cause,
-            DisableKeyRotationError::KMSInternal(ref cause) => cause,
-            DisableKeyRotationError::KMSInvalidState(ref cause) => cause,
-            DisableKeyRotationError::NotFound(ref cause) => cause,
-            DisableKeyRotationError::UnsupportedOperation(ref cause) => cause,
+            DisableKeyRotationError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            DisableKeyRotationError::Disabled(ref cause) => write!(f, "{}", cause),
+            DisableKeyRotationError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DisableKeyRotationError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            DisableKeyRotationError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            DisableKeyRotationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DisableKeyRotationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableKeyRotationError {}
 /// Errors returned by DisconnectCustomKeyStore
 #[derive(Debug, PartialEq)]
 pub enum DisconnectCustomKeyStoreError {
@@ -2420,18 +2428,18 @@ impl DisconnectCustomKeyStoreError {
 }
 impl fmt::Display for DisconnectCustomKeyStoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisconnectCustomKeyStoreError {
-    fn description(&self) -> &str {
         match *self {
-            DisconnectCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => cause,
-            DisconnectCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => cause,
-            DisconnectCustomKeyStoreError::KMSInternal(ref cause) => cause,
+            DisconnectCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisconnectCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisconnectCustomKeyStoreError::KMSInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisconnectCustomKeyStoreError {}
 /// Errors returned by EnableKey
 #[derive(Debug, PartialEq)]
 pub enum EnableKeyError {
@@ -2480,21 +2488,17 @@ impl EnableKeyError {
 }
 impl fmt::Display for EnableKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableKeyError {
-    fn description(&self) -> &str {
         match *self {
-            EnableKeyError::DependencyTimeout(ref cause) => cause,
-            EnableKeyError::InvalidArn(ref cause) => cause,
-            EnableKeyError::KMSInternal(ref cause) => cause,
-            EnableKeyError::KMSInvalidState(ref cause) => cause,
-            EnableKeyError::LimitExceeded(ref cause) => cause,
-            EnableKeyError::NotFound(ref cause) => cause,
+            EnableKeyError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            EnableKeyError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            EnableKeyError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            EnableKeyError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            EnableKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            EnableKeyError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableKeyError {}
 /// Errors returned by EnableKeyRotation
 #[derive(Debug, PartialEq)]
 pub enum EnableKeyRotationError {
@@ -2550,22 +2554,18 @@ impl EnableKeyRotationError {
 }
 impl fmt::Display for EnableKeyRotationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableKeyRotationError {
-    fn description(&self) -> &str {
         match *self {
-            EnableKeyRotationError::DependencyTimeout(ref cause) => cause,
-            EnableKeyRotationError::Disabled(ref cause) => cause,
-            EnableKeyRotationError::InvalidArn(ref cause) => cause,
-            EnableKeyRotationError::KMSInternal(ref cause) => cause,
-            EnableKeyRotationError::KMSInvalidState(ref cause) => cause,
-            EnableKeyRotationError::NotFound(ref cause) => cause,
-            EnableKeyRotationError::UnsupportedOperation(ref cause) => cause,
+            EnableKeyRotationError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            EnableKeyRotationError::Disabled(ref cause) => write!(f, "{}", cause),
+            EnableKeyRotationError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            EnableKeyRotationError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            EnableKeyRotationError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            EnableKeyRotationError::NotFound(ref cause) => write!(f, "{}", cause),
+            EnableKeyRotationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableKeyRotationError {}
 /// Errors returned by Encrypt
 #[derive(Debug, PartialEq)]
 pub enum EncryptError {
@@ -2624,23 +2624,19 @@ impl EncryptError {
 }
 impl fmt::Display for EncryptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EncryptError {
-    fn description(&self) -> &str {
         match *self {
-            EncryptError::DependencyTimeout(ref cause) => cause,
-            EncryptError::Disabled(ref cause) => cause,
-            EncryptError::InvalidGrantToken(ref cause) => cause,
-            EncryptError::InvalidKeyUsage(ref cause) => cause,
-            EncryptError::KMSInternal(ref cause) => cause,
-            EncryptError::KMSInvalidState(ref cause) => cause,
-            EncryptError::KeyUnavailable(ref cause) => cause,
-            EncryptError::NotFound(ref cause) => cause,
+            EncryptError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            EncryptError::Disabled(ref cause) => write!(f, "{}", cause),
+            EncryptError::InvalidGrantToken(ref cause) => write!(f, "{}", cause),
+            EncryptError::InvalidKeyUsage(ref cause) => write!(f, "{}", cause),
+            EncryptError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            EncryptError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            EncryptError::KeyUnavailable(ref cause) => write!(f, "{}", cause),
+            EncryptError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EncryptError {}
 /// Errors returned by GenerateDataKey
 #[derive(Debug, PartialEq)]
 pub enum GenerateDataKeyError {
@@ -2699,23 +2695,19 @@ impl GenerateDataKeyError {
 }
 impl fmt::Display for GenerateDataKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateDataKeyError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateDataKeyError::DependencyTimeout(ref cause) => cause,
-            GenerateDataKeyError::Disabled(ref cause) => cause,
-            GenerateDataKeyError::InvalidGrantToken(ref cause) => cause,
-            GenerateDataKeyError::InvalidKeyUsage(ref cause) => cause,
-            GenerateDataKeyError::KMSInternal(ref cause) => cause,
-            GenerateDataKeyError::KMSInvalidState(ref cause) => cause,
-            GenerateDataKeyError::KeyUnavailable(ref cause) => cause,
-            GenerateDataKeyError::NotFound(ref cause) => cause,
+            GenerateDataKeyError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyError::Disabled(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyError::InvalidGrantToken(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyError::InvalidKeyUsage(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyError::KeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GenerateDataKeyError {}
 /// Errors returned by GenerateDataKeyPair
 #[derive(Debug, PartialEq)]
 pub enum GenerateDataKeyPairError {
@@ -2778,23 +2770,19 @@ impl GenerateDataKeyPairError {
 }
 impl fmt::Display for GenerateDataKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateDataKeyPairError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateDataKeyPairError::DependencyTimeout(ref cause) => cause,
-            GenerateDataKeyPairError::Disabled(ref cause) => cause,
-            GenerateDataKeyPairError::InvalidGrantToken(ref cause) => cause,
-            GenerateDataKeyPairError::InvalidKeyUsage(ref cause) => cause,
-            GenerateDataKeyPairError::KMSInternal(ref cause) => cause,
-            GenerateDataKeyPairError::KMSInvalidState(ref cause) => cause,
-            GenerateDataKeyPairError::KeyUnavailable(ref cause) => cause,
-            GenerateDataKeyPairError::NotFound(ref cause) => cause,
+            GenerateDataKeyPairError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyPairError::Disabled(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyPairError::InvalidGrantToken(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyPairError::InvalidKeyUsage(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyPairError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyPairError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyPairError::KeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyPairError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GenerateDataKeyPairError {}
 /// Errors returned by GenerateDataKeyPairWithoutPlaintext
 #[derive(Debug, PartialEq)]
 pub enum GenerateDataKeyPairWithoutPlaintextError {
@@ -2871,23 +2859,31 @@ impl GenerateDataKeyPairWithoutPlaintextError {
 }
 impl fmt::Display for GenerateDataKeyPairWithoutPlaintextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateDataKeyPairWithoutPlaintextError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateDataKeyPairWithoutPlaintextError::DependencyTimeout(ref cause) => cause,
-            GenerateDataKeyPairWithoutPlaintextError::Disabled(ref cause) => cause,
-            GenerateDataKeyPairWithoutPlaintextError::InvalidGrantToken(ref cause) => cause,
-            GenerateDataKeyPairWithoutPlaintextError::InvalidKeyUsage(ref cause) => cause,
-            GenerateDataKeyPairWithoutPlaintextError::KMSInternal(ref cause) => cause,
-            GenerateDataKeyPairWithoutPlaintextError::KMSInvalidState(ref cause) => cause,
-            GenerateDataKeyPairWithoutPlaintextError::KeyUnavailable(ref cause) => cause,
-            GenerateDataKeyPairWithoutPlaintextError::NotFound(ref cause) => cause,
+            GenerateDataKeyPairWithoutPlaintextError::DependencyTimeout(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateDataKeyPairWithoutPlaintextError::Disabled(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyPairWithoutPlaintextError::InvalidGrantToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateDataKeyPairWithoutPlaintextError::InvalidKeyUsage(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateDataKeyPairWithoutPlaintextError::KMSInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateDataKeyPairWithoutPlaintextError::KMSInvalidState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateDataKeyPairWithoutPlaintextError::KeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateDataKeyPairWithoutPlaintextError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GenerateDataKeyPairWithoutPlaintextError {}
 /// Errors returned by GenerateDataKeyWithoutPlaintext
 #[derive(Debug, PartialEq)]
 pub enum GenerateDataKeyWithoutPlaintextError {
@@ -2964,23 +2960,29 @@ impl GenerateDataKeyWithoutPlaintextError {
 }
 impl fmt::Display for GenerateDataKeyWithoutPlaintextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateDataKeyWithoutPlaintextError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateDataKeyWithoutPlaintextError::DependencyTimeout(ref cause) => cause,
-            GenerateDataKeyWithoutPlaintextError::Disabled(ref cause) => cause,
-            GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(ref cause) => cause,
-            GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(ref cause) => cause,
-            GenerateDataKeyWithoutPlaintextError::KMSInternal(ref cause) => cause,
-            GenerateDataKeyWithoutPlaintextError::KMSInvalidState(ref cause) => cause,
-            GenerateDataKeyWithoutPlaintextError::KeyUnavailable(ref cause) => cause,
-            GenerateDataKeyWithoutPlaintextError::NotFound(ref cause) => cause,
+            GenerateDataKeyWithoutPlaintextError::DependencyTimeout(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateDataKeyWithoutPlaintextError::Disabled(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateDataKeyWithoutPlaintextError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            GenerateDataKeyWithoutPlaintextError::KMSInvalidState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateDataKeyWithoutPlaintextError::KeyUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateDataKeyWithoutPlaintextError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GenerateDataKeyWithoutPlaintextError {}
 /// Errors returned by GenerateRandom
 #[derive(Debug, PartialEq)]
 pub enum GenerateRandomError {
@@ -3023,19 +3025,15 @@ impl GenerateRandomError {
 }
 impl fmt::Display for GenerateRandomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateRandomError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateRandomError::CustomKeyStoreInvalidState(ref cause) => cause,
-            GenerateRandomError::CustomKeyStoreNotFound(ref cause) => cause,
-            GenerateRandomError::DependencyTimeout(ref cause) => cause,
-            GenerateRandomError::KMSInternal(ref cause) => cause,
+            GenerateRandomError::CustomKeyStoreInvalidState(ref cause) => write!(f, "{}", cause),
+            GenerateRandomError::CustomKeyStoreNotFound(ref cause) => write!(f, "{}", cause),
+            GenerateRandomError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            GenerateRandomError::KMSInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GenerateRandomError {}
 /// Errors returned by GetKeyPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetKeyPolicyError {
@@ -3079,20 +3077,16 @@ impl GetKeyPolicyError {
 }
 impl fmt::Display for GetKeyPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetKeyPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetKeyPolicyError::DependencyTimeout(ref cause) => cause,
-            GetKeyPolicyError::InvalidArn(ref cause) => cause,
-            GetKeyPolicyError::KMSInternal(ref cause) => cause,
-            GetKeyPolicyError::KMSInvalidState(ref cause) => cause,
-            GetKeyPolicyError::NotFound(ref cause) => cause,
+            GetKeyPolicyError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            GetKeyPolicyError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetKeyPolicyError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            GetKeyPolicyError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            GetKeyPolicyError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetKeyPolicyError {}
 /// Errors returned by GetKeyRotationStatus
 #[derive(Debug, PartialEq)]
 pub enum GetKeyRotationStatusError {
@@ -3147,21 +3141,17 @@ impl GetKeyRotationStatusError {
 }
 impl fmt::Display for GetKeyRotationStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetKeyRotationStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetKeyRotationStatusError::DependencyTimeout(ref cause) => cause,
-            GetKeyRotationStatusError::InvalidArn(ref cause) => cause,
-            GetKeyRotationStatusError::KMSInternal(ref cause) => cause,
-            GetKeyRotationStatusError::KMSInvalidState(ref cause) => cause,
-            GetKeyRotationStatusError::NotFound(ref cause) => cause,
-            GetKeyRotationStatusError::UnsupportedOperation(ref cause) => cause,
+            GetKeyRotationStatusError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            GetKeyRotationStatusError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetKeyRotationStatusError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            GetKeyRotationStatusError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            GetKeyRotationStatusError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetKeyRotationStatusError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetKeyRotationStatusError {}
 /// Errors returned by GetParametersForImport
 #[derive(Debug, PartialEq)]
 pub enum GetParametersForImportError {
@@ -3216,21 +3206,17 @@ impl GetParametersForImportError {
 }
 impl fmt::Display for GetParametersForImportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetParametersForImportError {
-    fn description(&self) -> &str {
         match *self {
-            GetParametersForImportError::DependencyTimeout(ref cause) => cause,
-            GetParametersForImportError::InvalidArn(ref cause) => cause,
-            GetParametersForImportError::KMSInternal(ref cause) => cause,
-            GetParametersForImportError::KMSInvalidState(ref cause) => cause,
-            GetParametersForImportError::NotFound(ref cause) => cause,
-            GetParametersForImportError::UnsupportedOperation(ref cause) => cause,
+            GetParametersForImportError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            GetParametersForImportError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetParametersForImportError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            GetParametersForImportError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            GetParametersForImportError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetParametersForImportError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetParametersForImportError {}
 /// Errors returned by GetPublicKey
 #[derive(Debug, PartialEq)]
 pub enum GetPublicKeyError {
@@ -3299,25 +3285,21 @@ impl GetPublicKeyError {
 }
 impl fmt::Display for GetPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            GetPublicKeyError::DependencyTimeout(ref cause) => cause,
-            GetPublicKeyError::Disabled(ref cause) => cause,
-            GetPublicKeyError::InvalidArn(ref cause) => cause,
-            GetPublicKeyError::InvalidGrantToken(ref cause) => cause,
-            GetPublicKeyError::InvalidKeyUsage(ref cause) => cause,
-            GetPublicKeyError::KMSInternal(ref cause) => cause,
-            GetPublicKeyError::KMSInvalidState(ref cause) => cause,
-            GetPublicKeyError::KeyUnavailable(ref cause) => cause,
-            GetPublicKeyError::NotFound(ref cause) => cause,
-            GetPublicKeyError::UnsupportedOperation(ref cause) => cause,
+            GetPublicKeyError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyError::Disabled(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyError::InvalidGrantToken(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyError::InvalidKeyUsage(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyError::KeyUnavailable(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPublicKeyError {}
 /// Errors returned by ImportKeyMaterial
 #[derive(Debug, PartialEq)]
 pub enum ImportKeyMaterialError {
@@ -3394,25 +3376,21 @@ impl ImportKeyMaterialError {
 }
 impl fmt::Display for ImportKeyMaterialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportKeyMaterialError {
-    fn description(&self) -> &str {
         match *self {
-            ImportKeyMaterialError::DependencyTimeout(ref cause) => cause,
-            ImportKeyMaterialError::ExpiredImportToken(ref cause) => cause,
-            ImportKeyMaterialError::IncorrectKeyMaterial(ref cause) => cause,
-            ImportKeyMaterialError::InvalidArn(ref cause) => cause,
-            ImportKeyMaterialError::InvalidCiphertext(ref cause) => cause,
-            ImportKeyMaterialError::InvalidImportToken(ref cause) => cause,
-            ImportKeyMaterialError::KMSInternal(ref cause) => cause,
-            ImportKeyMaterialError::KMSInvalidState(ref cause) => cause,
-            ImportKeyMaterialError::NotFound(ref cause) => cause,
-            ImportKeyMaterialError::UnsupportedOperation(ref cause) => cause,
+            ImportKeyMaterialError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            ImportKeyMaterialError::ExpiredImportToken(ref cause) => write!(f, "{}", cause),
+            ImportKeyMaterialError::IncorrectKeyMaterial(ref cause) => write!(f, "{}", cause),
+            ImportKeyMaterialError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ImportKeyMaterialError::InvalidCiphertext(ref cause) => write!(f, "{}", cause),
+            ImportKeyMaterialError::InvalidImportToken(ref cause) => write!(f, "{}", cause),
+            ImportKeyMaterialError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            ImportKeyMaterialError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            ImportKeyMaterialError::NotFound(ref cause) => write!(f, "{}", cause),
+            ImportKeyMaterialError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportKeyMaterialError {}
 /// Errors returned by ListAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAliasesError {
@@ -3456,20 +3434,16 @@ impl ListAliasesError {
 }
 impl fmt::Display for ListAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAliasesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAliasesError::DependencyTimeout(ref cause) => cause,
-            ListAliasesError::InvalidArn(ref cause) => cause,
-            ListAliasesError::InvalidMarker(ref cause) => cause,
-            ListAliasesError::KMSInternal(ref cause) => cause,
-            ListAliasesError::NotFound(ref cause) => cause,
+            ListAliasesError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::InvalidMarker(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAliasesError {}
 /// Errors returned by ListGrants
 #[derive(Debug, PartialEq)]
 pub enum ListGrantsError {
@@ -3518,21 +3492,17 @@ impl ListGrantsError {
 }
 impl fmt::Display for ListGrantsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGrantsError {
-    fn description(&self) -> &str {
         match *self {
-            ListGrantsError::DependencyTimeout(ref cause) => cause,
-            ListGrantsError::InvalidArn(ref cause) => cause,
-            ListGrantsError::InvalidMarker(ref cause) => cause,
-            ListGrantsError::KMSInternal(ref cause) => cause,
-            ListGrantsError::KMSInvalidState(ref cause) => cause,
-            ListGrantsError::NotFound(ref cause) => cause,
+            ListGrantsError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            ListGrantsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListGrantsError::InvalidMarker(ref cause) => write!(f, "{}", cause),
+            ListGrantsError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            ListGrantsError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            ListGrantsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGrantsError {}
 /// Errors returned by ListKeyPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListKeyPoliciesError {
@@ -3576,20 +3546,16 @@ impl ListKeyPoliciesError {
 }
 impl fmt::Display for ListKeyPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListKeyPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListKeyPoliciesError::DependencyTimeout(ref cause) => cause,
-            ListKeyPoliciesError::InvalidArn(ref cause) => cause,
-            ListKeyPoliciesError::KMSInternal(ref cause) => cause,
-            ListKeyPoliciesError::KMSInvalidState(ref cause) => cause,
-            ListKeyPoliciesError::NotFound(ref cause) => cause,
+            ListKeyPoliciesError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            ListKeyPoliciesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListKeyPoliciesError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            ListKeyPoliciesError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            ListKeyPoliciesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListKeyPoliciesError {}
 /// Errors returned by ListKeys
 #[derive(Debug, PartialEq)]
 pub enum ListKeysError {
@@ -3623,18 +3589,14 @@ impl ListKeysError {
 }
 impl fmt::Display for ListKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListKeysError {
-    fn description(&self) -> &str {
         match *self {
-            ListKeysError::DependencyTimeout(ref cause) => cause,
-            ListKeysError::InvalidMarker(ref cause) => cause,
-            ListKeysError::KMSInternal(ref cause) => cause,
+            ListKeysError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            ListKeysError::InvalidMarker(ref cause) => write!(f, "{}", cause),
+            ListKeysError::KMSInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListKeysError {}
 /// Errors returned by ListResourceTags
 #[derive(Debug, PartialEq)]
 pub enum ListResourceTagsError {
@@ -3673,19 +3635,15 @@ impl ListResourceTagsError {
 }
 impl fmt::Display for ListResourceTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourceTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourceTagsError::InvalidArn(ref cause) => cause,
-            ListResourceTagsError::InvalidMarker(ref cause) => cause,
-            ListResourceTagsError::KMSInternal(ref cause) => cause,
-            ListResourceTagsError::NotFound(ref cause) => cause,
+            ListResourceTagsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListResourceTagsError::InvalidMarker(ref cause) => write!(f, "{}", cause),
+            ListResourceTagsError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            ListResourceTagsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResourceTagsError {}
 /// Errors returned by ListRetirableGrants
 #[derive(Debug, PartialEq)]
 pub enum ListRetirableGrantsError {
@@ -3731,20 +3689,16 @@ impl ListRetirableGrantsError {
 }
 impl fmt::Display for ListRetirableGrantsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRetirableGrantsError {
-    fn description(&self) -> &str {
         match *self {
-            ListRetirableGrantsError::DependencyTimeout(ref cause) => cause,
-            ListRetirableGrantsError::InvalidArn(ref cause) => cause,
-            ListRetirableGrantsError::InvalidMarker(ref cause) => cause,
-            ListRetirableGrantsError::KMSInternal(ref cause) => cause,
-            ListRetirableGrantsError::NotFound(ref cause) => cause,
+            ListRetirableGrantsError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            ListRetirableGrantsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListRetirableGrantsError::InvalidMarker(ref cause) => write!(f, "{}", cause),
+            ListRetirableGrantsError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            ListRetirableGrantsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRetirableGrantsError {}
 /// Errors returned by PutKeyPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutKeyPolicyError {
@@ -3805,23 +3759,19 @@ impl PutKeyPolicyError {
 }
 impl fmt::Display for PutKeyPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutKeyPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutKeyPolicyError::DependencyTimeout(ref cause) => cause,
-            PutKeyPolicyError::InvalidArn(ref cause) => cause,
-            PutKeyPolicyError::KMSInternal(ref cause) => cause,
-            PutKeyPolicyError::KMSInvalidState(ref cause) => cause,
-            PutKeyPolicyError::LimitExceeded(ref cause) => cause,
-            PutKeyPolicyError::MalformedPolicyDocument(ref cause) => cause,
-            PutKeyPolicyError::NotFound(ref cause) => cause,
-            PutKeyPolicyError::UnsupportedOperation(ref cause) => cause,
+            PutKeyPolicyError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            PutKeyPolicyError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            PutKeyPolicyError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            PutKeyPolicyError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            PutKeyPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutKeyPolicyError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            PutKeyPolicyError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutKeyPolicyError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutKeyPolicyError {}
 /// Errors returned by ReEncrypt
 #[derive(Debug, PartialEq)]
 pub enum ReEncryptError {
@@ -3890,25 +3840,21 @@ impl ReEncryptError {
 }
 impl fmt::Display for ReEncryptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReEncryptError {
-    fn description(&self) -> &str {
         match *self {
-            ReEncryptError::DependencyTimeout(ref cause) => cause,
-            ReEncryptError::Disabled(ref cause) => cause,
-            ReEncryptError::IncorrectKey(ref cause) => cause,
-            ReEncryptError::InvalidCiphertext(ref cause) => cause,
-            ReEncryptError::InvalidGrantToken(ref cause) => cause,
-            ReEncryptError::InvalidKeyUsage(ref cause) => cause,
-            ReEncryptError::KMSInternal(ref cause) => cause,
-            ReEncryptError::KMSInvalidState(ref cause) => cause,
-            ReEncryptError::KeyUnavailable(ref cause) => cause,
-            ReEncryptError::NotFound(ref cause) => cause,
+            ReEncryptError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            ReEncryptError::Disabled(ref cause) => write!(f, "{}", cause),
+            ReEncryptError::IncorrectKey(ref cause) => write!(f, "{}", cause),
+            ReEncryptError::InvalidCiphertext(ref cause) => write!(f, "{}", cause),
+            ReEncryptError::InvalidGrantToken(ref cause) => write!(f, "{}", cause),
+            ReEncryptError::InvalidKeyUsage(ref cause) => write!(f, "{}", cause),
+            ReEncryptError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            ReEncryptError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            ReEncryptError::KeyUnavailable(ref cause) => write!(f, "{}", cause),
+            ReEncryptError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReEncryptError {}
 /// Errors returned by RetireGrant
 #[derive(Debug, PartialEq)]
 pub enum RetireGrantError {
@@ -3962,22 +3908,18 @@ impl RetireGrantError {
 }
 impl fmt::Display for RetireGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RetireGrantError {
-    fn description(&self) -> &str {
         match *self {
-            RetireGrantError::DependencyTimeout(ref cause) => cause,
-            RetireGrantError::InvalidArn(ref cause) => cause,
-            RetireGrantError::InvalidGrantId(ref cause) => cause,
-            RetireGrantError::InvalidGrantToken(ref cause) => cause,
-            RetireGrantError::KMSInternal(ref cause) => cause,
-            RetireGrantError::KMSInvalidState(ref cause) => cause,
-            RetireGrantError::NotFound(ref cause) => cause,
+            RetireGrantError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            RetireGrantError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            RetireGrantError::InvalidGrantId(ref cause) => write!(f, "{}", cause),
+            RetireGrantError::InvalidGrantToken(ref cause) => write!(f, "{}", cause),
+            RetireGrantError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            RetireGrantError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            RetireGrantError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RetireGrantError {}
 /// Errors returned by RevokeGrant
 #[derive(Debug, PartialEq)]
 pub enum RevokeGrantError {
@@ -4026,21 +3968,17 @@ impl RevokeGrantError {
 }
 impl fmt::Display for RevokeGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RevokeGrantError {
-    fn description(&self) -> &str {
         match *self {
-            RevokeGrantError::DependencyTimeout(ref cause) => cause,
-            RevokeGrantError::InvalidArn(ref cause) => cause,
-            RevokeGrantError::InvalidGrantId(ref cause) => cause,
-            RevokeGrantError::KMSInternal(ref cause) => cause,
-            RevokeGrantError::KMSInvalidState(ref cause) => cause,
-            RevokeGrantError::NotFound(ref cause) => cause,
+            RevokeGrantError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            RevokeGrantError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            RevokeGrantError::InvalidGrantId(ref cause) => write!(f, "{}", cause),
+            RevokeGrantError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            RevokeGrantError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            RevokeGrantError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RevokeGrantError {}
 /// Errors returned by ScheduleKeyDeletion
 #[derive(Debug, PartialEq)]
 pub enum ScheduleKeyDeletionError {
@@ -4086,20 +4024,16 @@ impl ScheduleKeyDeletionError {
 }
 impl fmt::Display for ScheduleKeyDeletionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ScheduleKeyDeletionError {
-    fn description(&self) -> &str {
         match *self {
-            ScheduleKeyDeletionError::DependencyTimeout(ref cause) => cause,
-            ScheduleKeyDeletionError::InvalidArn(ref cause) => cause,
-            ScheduleKeyDeletionError::KMSInternal(ref cause) => cause,
-            ScheduleKeyDeletionError::KMSInvalidState(ref cause) => cause,
-            ScheduleKeyDeletionError::NotFound(ref cause) => cause,
+            ScheduleKeyDeletionError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            ScheduleKeyDeletionError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ScheduleKeyDeletionError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            ScheduleKeyDeletionError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            ScheduleKeyDeletionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ScheduleKeyDeletionError {}
 /// Errors returned by Sign
 #[derive(Debug, PartialEq)]
 pub enum SignError {
@@ -4149,22 +4083,18 @@ impl SignError {
 }
 impl fmt::Display for SignError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SignError {
-    fn description(&self) -> &str {
         match *self {
-            SignError::DependencyTimeout(ref cause) => cause,
-            SignError::Disabled(ref cause) => cause,
-            SignError::InvalidGrantToken(ref cause) => cause,
-            SignError::InvalidKeyUsage(ref cause) => cause,
-            SignError::KMSInternal(ref cause) => cause,
-            SignError::KeyUnavailable(ref cause) => cause,
-            SignError::NotFound(ref cause) => cause,
+            SignError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            SignError::Disabled(ref cause) => write!(f, "{}", cause),
+            SignError::InvalidGrantToken(ref cause) => write!(f, "{}", cause),
+            SignError::InvalidKeyUsage(ref cause) => write!(f, "{}", cause),
+            SignError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            SignError::KeyUnavailable(ref cause) => write!(f, "{}", cause),
+            SignError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SignError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -4211,21 +4141,17 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InvalidArn(ref cause) => cause,
-            TagResourceError::KMSInternal(ref cause) => cause,
-            TagResourceError::KMSInvalidState(ref cause) => cause,
-            TagResourceError::LimitExceeded(ref cause) => cause,
-            TagResourceError::NotFound(ref cause) => cause,
-            TagResourceError::Tag(ref cause) => cause,
+            TagResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            TagResourceError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            TagResourceError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            TagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Tag(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -4267,20 +4193,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InvalidArn(ref cause) => cause,
-            UntagResourceError::KMSInternal(ref cause) => cause,
-            UntagResourceError::KMSInvalidState(ref cause) => cause,
-            UntagResourceError::NotFound(ref cause) => cause,
-            UntagResourceError::Tag(ref cause) => cause,
+            UntagResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Tag(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateAlias
 #[derive(Debug, PartialEq)]
 pub enum UpdateAliasError {
@@ -4319,19 +4241,15 @@ impl UpdateAliasError {
 }
 impl fmt::Display for UpdateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAliasError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAliasError::DependencyTimeout(ref cause) => cause,
-            UpdateAliasError::KMSInternal(ref cause) => cause,
-            UpdateAliasError::KMSInvalidState(ref cause) => cause,
-            UpdateAliasError::NotFound(ref cause) => cause,
+            UpdateAliasError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateAliasError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            UpdateAliasError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            UpdateAliasError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAliasError {}
 /// Errors returned by UpdateCustomKeyStore
 #[derive(Debug, PartialEq)]
 pub enum UpdateCustomKeyStoreError {
@@ -4404,23 +4322,27 @@ impl UpdateCustomKeyStoreError {
 }
 impl fmt::Display for UpdateCustomKeyStoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCustomKeyStoreError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(ref cause) => cause,
-            UpdateCustomKeyStoreError::CloudHsmClusterNotActive(ref cause) => cause,
-            UpdateCustomKeyStoreError::CloudHsmClusterNotFound(ref cause) => cause,
-            UpdateCustomKeyStoreError::CloudHsmClusterNotRelated(ref cause) => cause,
-            UpdateCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => cause,
-            UpdateCustomKeyStoreError::CustomKeyStoreNameInUse(ref cause) => cause,
-            UpdateCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => cause,
-            UpdateCustomKeyStoreError::KMSInternal(ref cause) => cause,
+            UpdateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCustomKeyStoreError::CloudHsmClusterNotActive(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCustomKeyStoreError::CloudHsmClusterNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateCustomKeyStoreError::CloudHsmClusterNotRelated(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCustomKeyStoreError::CustomKeyStoreNameInUse(ref cause) => write!(f, "{}", cause),
+            UpdateCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateCustomKeyStoreError::KMSInternal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateCustomKeyStoreError {}
 /// Errors returned by UpdateKeyDescription
 #[derive(Debug, PartialEq)]
 pub enum UpdateKeyDescriptionError {
@@ -4468,20 +4390,16 @@ impl UpdateKeyDescriptionError {
 }
 impl fmt::Display for UpdateKeyDescriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateKeyDescriptionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateKeyDescriptionError::DependencyTimeout(ref cause) => cause,
-            UpdateKeyDescriptionError::InvalidArn(ref cause) => cause,
-            UpdateKeyDescriptionError::KMSInternal(ref cause) => cause,
-            UpdateKeyDescriptionError::KMSInvalidState(ref cause) => cause,
-            UpdateKeyDescriptionError::NotFound(ref cause) => cause,
+            UpdateKeyDescriptionError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateKeyDescriptionError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UpdateKeyDescriptionError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            UpdateKeyDescriptionError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            UpdateKeyDescriptionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateKeyDescriptionError {}
 /// Errors returned by Verify
 #[derive(Debug, PartialEq)]
 pub enum VerifyError {
@@ -4531,22 +4449,18 @@ impl VerifyError {
 }
 impl fmt::Display for VerifyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for VerifyError {
-    fn description(&self) -> &str {
         match *self {
-            VerifyError::DependencyTimeout(ref cause) => cause,
-            VerifyError::Disabled(ref cause) => cause,
-            VerifyError::InvalidGrantToken(ref cause) => cause,
-            VerifyError::InvalidKeyUsage(ref cause) => cause,
-            VerifyError::KMSInternal(ref cause) => cause,
-            VerifyError::KeyUnavailable(ref cause) => cause,
-            VerifyError::NotFound(ref cause) => cause,
+            VerifyError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            VerifyError::Disabled(ref cause) => write!(f, "{}", cause),
+            VerifyError::InvalidGrantToken(ref cause) => write!(f, "{}", cause),
+            VerifyError::InvalidKeyUsage(ref cause) => write!(f, "{}", cause),
+            VerifyError::KMSInternal(ref cause) => write!(f, "{}", cause),
+            VerifyError::KeyUnavailable(ref cause) => write!(f, "{}", cause),
+            VerifyError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for VerifyError {}
 /// Trait representing the capabilities of the KMS API. KMS clients implement this trait.
 pub trait Kms {
     /// <p>Cancels the deletion of a customer master key (CMK). When this operation succeeds, the key state of the CMK is <code>Disabled</code>. To enable the CMK, use <a>EnableKey</a>. You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about scheduling and canceling deletion of a CMK, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The CMK that you use for this operation must be in a compatible key state. For details, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>

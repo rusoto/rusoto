@@ -47,6 +47,7 @@ pub struct AddOn {
 
 /// <p><p>Describes a request to enable, modify, or disable an add-on for an Amazon Lightsail resource.</p> <note> <p>An additional cost may be associated with enabling add-ons. For more information, see the <a href="https://aws.amazon.com/lightsail/pricing/">Lightsail pricing page</a>.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddOnRequest {
     /// <p>The add-on type.</p>
     #[serde(rename = "addOnType")]
@@ -58,6 +59,7 @@ pub struct AddOnRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateStaticIpRequest {
     /// <p>The name of the static IP address.</p>
     #[serde(rename = "staticIpName")]
@@ -74,6 +76,7 @@ pub struct AllocateStaticIpResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachDiskRequest {
     /// <p>The unique Lightsail disk name (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
@@ -96,6 +99,7 @@ pub struct AttachDiskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachInstancesToLoadBalancerRequest {
     /// <p>An array of strings representing the instance name(s) you want to attach to your load balancer.</p> <p>An instance must be <code>running</code> before you can attach it to your load balancer.</p> <p>There are no additional limits on the number of instances you can attach to your load balancer, aside from the limit of Lightsail instances you can create in your account (20).</p>
     #[serde(rename = "instanceNames")]
@@ -115,6 +119,7 @@ pub struct AttachInstancesToLoadBalancerResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachLoadBalancerTlsCertificateRequest {
     /// <p>The name of your SSL/TLS certificate.</p>
     #[serde(rename = "certificateName")]
@@ -134,6 +139,7 @@ pub struct AttachLoadBalancerTlsCertificateResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachStaticIpRequest {
     /// <p>The instance name to which you want to attach the static IP address.</p>
     #[serde(rename = "instanceName")]
@@ -168,6 +174,7 @@ pub struct AttachedDisk {
 
 /// <p><p>Describes a request to enable or modify the automatic snapshot add-on for an Amazon Lightsail instance or disk.</p> <p>When you modify the automatic snapshot time for a resource, it is typically effective immediately except under the following conditions:</p> <ul> <li> <p>If an automatic snapshot has been created for the current day, and you change the snapshot time to a later time of day, then the new snapshot time will be effective the following day. This ensures that two snapshots are not created for the current day.</p> </li> <li> <p>If an automatic snapshot has not yet been created for the current day, and you change the snapshot time to an earlier time of day, then the new snapshot time will be effective the following day and a snapshot is automatically created at the previously set time for the current day. This ensures that a snapshot is created for the current day.</p> </li> <li> <p>If an automatic snapshot has not yet been created for the current day, and you change the snapshot time to a time that is within 30 minutes from your current time, then the new snapshot time will be effective the following day and a snapshot is automatically created at the previously set time for the current day. This ensures that a snapshot is created for the current day, because 30 minutes is required between your current time and the new snapshot time that you specify.</p> </li> <li> <p>If an automatic snapshot is scheduled to be created within 30 minutes from your current time and you change the snapshot time, then the new snapshot time will be effective the following day and a snapshot is automatically created at the previously set time for the current day. This ensures that a snapshot is created for the current day, because 30 minutes is required between your current time and the new snapshot time that you specify.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AutoSnapshotAddOnRequest {
     /// <p><p>The daily time when an automatic snapshot will be created.</p> <p>Constraints:</p> <ul> <li> <p>Must be in <code>HH:00</code> format, and in an hourly increment.</p> </li> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>The snapshot will be automatically created between the time specified and up to 45 minutes after.</p> </li> </ul></p>
     #[serde(rename = "snapshotTimeOfDay")]
@@ -316,6 +323,7 @@ pub struct Bundle {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloseInstancePublicPortsRequest {
     /// <p>The name of the instance on which you're attempting to close the public ports.</p>
     #[serde(rename = "instanceName")]
@@ -391,6 +399,7 @@ pub struct CloudFormationStackRecordSourceInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopySnapshotRequest {
     /// <p><p>The date of the automatic snapshot to copy for the new manual snapshot.</p> <p>Use the <code>get auto snapshots</code> operation to identify the dates of the available automatic snapshots.</p> <p>Constraints:</p> <ul> <li> <p>Must be specified in <code>YYYY-MM-DD</code> format.</p> </li> <li> <p>This parameter cannot be defined together with the <code>use latest restorable auto snapshot</code> parameter. The <code>restore date</code> and <code>use latest restorable auto snapshot</code> parameters are mutually exclusive.</p> </li> </ul> <note> <p>Define this parameter only when copying an automatic snapshot as a manual snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
     #[serde(rename = "restoreDate")]
@@ -426,6 +435,7 @@ pub struct CopySnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFormationStackRequest {
     /// <p>An array of parameters that will be used to create the new Amazon EC2 instance. You can only pass one instance entry at a time in this array. You will get an invalid parameter error if you pass more than one instance entry in this array.</p>
     #[serde(rename = "instances")]
@@ -442,6 +452,7 @@ pub struct CreateCloudFormationStackResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiskFromSnapshotRequest {
     /// <p>An array of objects that represent the add-ons to enable for the new disk.</p>
     #[serde(rename = "addOns")]
@@ -488,6 +499,7 @@ pub struct CreateDiskFromSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiskRequest {
     /// <p>An array of objects that represent the add-ons to enable for the new disk.</p>
     #[serde(rename = "addOns")]
@@ -518,6 +530,7 @@ pub struct CreateDiskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiskSnapshotRequest {
     /// <p><p>The unique name of the source disk (e.g., <code>Disk-Virginia-1</code>).</p> <note> <p>This parameter cannot be defined together with the <code>instance name</code> parameter. The <code>disk name</code> and <code>instance name</code> parameters are mutually exclusive.</p> </note></p>
     #[serde(rename = "diskName")]
@@ -546,6 +559,7 @@ pub struct CreateDiskSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainEntryRequest {
     /// <p>An array of key-value pairs containing information about the domain entry request.</p>
     #[serde(rename = "domainEntry")]
@@ -565,6 +579,7 @@ pub struct CreateDomainEntryResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainRequest {
     /// <p><p>The domain name to manage (e.g., <code>example.com</code>).</p> <note> <p>You cannot register a new domain name using Lightsail. You must register a domain name using Amazon Route 53 or another domain name registrar. If you have already registered your domain, you can enter its name in this parameter to manage the DNS records for that domain.</p> </note></p>
     #[serde(rename = "domainName")]
@@ -585,6 +600,7 @@ pub struct CreateDomainResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceSnapshotRequest {
     /// <p>The Lightsail instance on which to base your snapshot.</p>
     #[serde(rename = "instanceName")]
@@ -608,6 +624,7 @@ pub struct CreateInstanceSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstancesFromSnapshotRequest {
     /// <p>An array of objects representing the add-ons to enable for the new instance.</p>
     #[serde(rename = "addOns")]
@@ -666,6 +683,7 @@ pub struct CreateInstancesFromSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstancesRequest {
     /// <p>An array of objects representing the add-ons to enable for the new instance.</p>
     #[serde(rename = "addOns")]
@@ -707,6 +725,7 @@ pub struct CreateInstancesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateKeyPairRequest {
     /// <p>The name for your new key pair.</p>
     #[serde(rename = "keyPairName")]
@@ -739,6 +758,7 @@ pub struct CreateKeyPairResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerRequest {
     /// <p>The optional alternative domains and subdomains to use with your SSL/TLS certificate (e.g., <code>www.example.com</code>, <code>example.com</code>, <code>m.example.com</code>, <code>blog.example.com</code>).</p>
     #[serde(rename = "certificateAlternativeNames")]
@@ -778,6 +798,7 @@ pub struct CreateLoadBalancerResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerTlsCertificateRequest {
     /// <p>An array of strings listing alternative domains and subdomains for your SSL/TLS certificate. Lightsail will de-dupe the names for you. You can have a maximum of 9 alternative names (in addition to the 1 primary domain). We do not support wildcards (e.g., <code>*.example.com</code>).</p>
     #[serde(rename = "certificateAlternativeNames")]
@@ -808,6 +829,7 @@ pub struct CreateLoadBalancerTlsCertificateResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRelationalDatabaseFromSnapshotRequest {
     /// <p>The Availability Zone in which to create your new database. Use the <code>us-east-2a</code> case-sensitive format.</p> <p>You can get a list of Availability Zones by using the <code>get regions</code> operation. Be sure to add the <code>include relational database Availability Zones</code> parameter to your request.</p>
     #[serde(rename = "availabilityZone")]
@@ -856,6 +878,7 @@ pub struct CreateRelationalDatabaseFromSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRelationalDatabaseRequest {
     /// <p>The Availability Zone in which to create your new database. Use the <code>us-east-2a</code> case-sensitive format.</p> <p>You can get a list of Availability Zones by using the <code>get regions</code> operation. Be sure to add the <code>include relational database Availability Zones</code> parameter to your request.</p>
     #[serde(rename = "availabilityZone")]
@@ -908,6 +931,7 @@ pub struct CreateRelationalDatabaseResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRelationalDatabaseSnapshotRequest {
     /// <p>The name of the database on which to base your new snapshot.</p>
     #[serde(rename = "relationalDatabaseName")]
@@ -931,6 +955,7 @@ pub struct CreateRelationalDatabaseSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAutoSnapshotRequest {
     /// <p>The date of the automatic snapshot to delete in <code>YYYY-MM-DD</code> format.</p> <p>Use the <code>get auto snapshots</code> operation to get the available automatic snapshots for a resource.</p>
     #[serde(rename = "date")]
@@ -950,6 +975,7 @@ pub struct DeleteAutoSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDiskRequest {
     /// <p>The unique name of the disk you want to delete (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
@@ -970,6 +996,7 @@ pub struct DeleteDiskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDiskSnapshotRequest {
     /// <p>The name of the disk snapshot you want to delete (e.g., <code>my-disk-snapshot</code>).</p>
     #[serde(rename = "diskSnapshotName")]
@@ -986,6 +1013,7 @@ pub struct DeleteDiskSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainEntryRequest {
     /// <p>An array of key-value pairs containing information about your domain entries.</p>
     #[serde(rename = "domainEntry")]
@@ -1005,6 +1033,7 @@ pub struct DeleteDomainEntryResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainRequest {
     /// <p>The specific domain name to delete.</p>
     #[serde(rename = "domainName")]
@@ -1021,6 +1050,7 @@ pub struct DeleteDomainResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceRequest {
     /// <p>A Boolean value to indicate whether to delete the enabled add-ons for the disk.</p>
     #[serde(rename = "forceDeleteAddOns")]
@@ -1041,6 +1071,7 @@ pub struct DeleteInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceSnapshotRequest {
     /// <p>The name of the snapshot to delete.</p>
     #[serde(rename = "instanceSnapshotName")]
@@ -1057,6 +1088,7 @@ pub struct DeleteInstanceSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteKeyPairRequest {
     /// <p>The name of the key pair to delete.</p>
     #[serde(rename = "keyPairName")]
@@ -1073,6 +1105,7 @@ pub struct DeleteKeyPairResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteKnownHostKeysRequest {
     /// <p>The name of the instance for which you want to reset the host key or certificate.</p>
     #[serde(rename = "instanceName")]
@@ -1089,6 +1122,7 @@ pub struct DeleteKnownHostKeysResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoadBalancerRequest {
     /// <p>The name of the load balancer you want to delete.</p>
     #[serde(rename = "loadBalancerName")]
@@ -1105,6 +1139,7 @@ pub struct DeleteLoadBalancerResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoadBalancerTlsCertificateRequest {
     /// <p>The SSL/TLS certificate name.</p>
     #[serde(rename = "certificateName")]
@@ -1128,6 +1163,7 @@ pub struct DeleteLoadBalancerTlsCertificateResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRelationalDatabaseRequest {
     /// <p><p>The name of the database snapshot created if <code>skip final snapshot</code> is <code>false</code>, which is the default value for that parameter.</p> <note> <p>Specifying this parameter and also specifying the <code>skip final snapshot</code> parameter to <code>true</code> results in an error.</p> </note> <p>Constraints:</p> <ul> <li> <p>Must contain from 2 to 255 alphanumeric characters, or hyphens.</p> </li> <li> <p>The first and last character must be a letter or number.</p> </li> </ul></p>
     #[serde(rename = "finalRelationalDatabaseSnapshotName")]
@@ -1152,6 +1188,7 @@ pub struct DeleteRelationalDatabaseResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRelationalDatabaseSnapshotRequest {
     /// <p>The name of the database snapshot that you are deleting.</p>
     #[serde(rename = "relationalDatabaseSnapshotName")]
@@ -1182,6 +1219,7 @@ pub struct DestinationInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachDiskRequest {
     /// <p>The unique name of the disk you want to detach from your instance (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
@@ -1198,6 +1236,7 @@ pub struct DetachDiskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachInstancesFromLoadBalancerRequest {
     /// <p>An array of strings containing the names of the instances you want to detach from the load balancer.</p>
     #[serde(rename = "instanceNames")]
@@ -1217,6 +1256,7 @@ pub struct DetachInstancesFromLoadBalancerResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachStaticIpRequest {
     /// <p>The name of the static IP to detach from the instance.</p>
     #[serde(rename = "staticIpName")]
@@ -1233,6 +1273,7 @@ pub struct DetachStaticIpResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableAddOnRequest {
     /// <p>The add-on type to disable.</p>
     #[serde(rename = "addOnType")]
@@ -1341,6 +1382,7 @@ pub struct DiskInfo {
 
 /// <p>Describes a block storage disk mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DiskMap {
     /// <p>The new disk name (e.g., <code>my-new-disk</code>).</p>
     #[serde(rename = "newDiskName")]
@@ -1492,6 +1534,7 @@ pub struct DomainEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DownloadDefaultKeyPairRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1508,6 +1551,7 @@ pub struct DownloadDefaultKeyPairResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableAddOnRequest {
     /// <p>An array of strings representing the add-on to enable or modify.</p>
     #[serde(rename = "addOnRequest")]
@@ -1603,6 +1647,7 @@ pub struct ExportSnapshotRecordSourceInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportSnapshotRequest {
     /// <p>The name of the instance or disk snapshot to be exported to Amazon EC2.</p>
     #[serde(rename = "sourceSnapshotName")]
@@ -1619,6 +1664,7 @@ pub struct ExportSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetActiveNamesRequest {
     /// <p>A token used for paginating results from your get active names request.</p>
     #[serde(rename = "pageToken")]
@@ -1640,6 +1686,7 @@ pub struct GetActiveNamesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAutoSnapshotsRequest {
     /// <p>The name of the source resource from which to get automatic snapshot information.</p>
     #[serde(rename = "resourceName")]
@@ -1664,6 +1711,7 @@ pub struct GetAutoSnapshotsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlueprintsRequest {
     /// <p>A Boolean value indicating whether to include inactive results in your request.</p>
     #[serde(rename = "includeInactive")]
@@ -1689,6 +1737,7 @@ pub struct GetBlueprintsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBundlesRequest {
     /// <p>A Boolean value that indicates whether to include inactive bundle results in your request.</p>
     #[serde(rename = "includeInactive")]
@@ -1714,6 +1763,7 @@ pub struct GetBundlesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFormationStackRecordsRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get cloud formation stack records</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -1735,6 +1785,7 @@ pub struct GetCloudFormationStackRecordsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiskRequest {
     /// <p>The name of the disk (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
@@ -1751,6 +1802,7 @@ pub struct GetDiskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiskSnapshotRequest {
     /// <p>The name of the disk snapshot (e.g., <code>my-disk-snapshot</code>).</p>
     #[serde(rename = "diskSnapshotName")]
@@ -1767,6 +1819,7 @@ pub struct GetDiskSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiskSnapshotsRequest {
     /// <p>A token used for advancing to the next page of results from your GetDiskSnapshots request.</p>
     #[serde(rename = "pageToken")]
@@ -1788,6 +1841,7 @@ pub struct GetDiskSnapshotsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDisksRequest {
     /// <p>A token used for advancing to the next page of results from your GetDisks request.</p>
     #[serde(rename = "pageToken")]
@@ -1809,6 +1863,7 @@ pub struct GetDisksResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainRequest {
     /// <p>The domain name for which your want to return information about.</p>
     #[serde(rename = "domainName")]
@@ -1825,6 +1880,7 @@ pub struct GetDomainResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainsRequest {
     /// <p>A token used for advancing to the next page of results from your get domains request.</p>
     #[serde(rename = "pageToken")]
@@ -1846,6 +1902,7 @@ pub struct GetDomainsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExportSnapshotRecordsRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get export snapshot records</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -1867,6 +1924,7 @@ pub struct GetExportSnapshotRecordsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceAccessDetailsRequest {
     /// <p>The name of the instance to access.</p>
     #[serde(rename = "instanceName")]
@@ -1887,6 +1945,7 @@ pub struct GetInstanceAccessDetailsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceMetricDataRequest {
     /// <p>The end time of the time period.</p>
     #[serde(rename = "endTime")]
@@ -1925,6 +1984,7 @@ pub struct GetInstanceMetricDataResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstancePortStatesRequest {
     /// <p>The name of the instance.</p>
     #[serde(rename = "instanceName")]
@@ -1941,6 +2001,7 @@ pub struct GetInstancePortStatesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceRequest {
     /// <p>The name of the instance.</p>
     #[serde(rename = "instanceName")]
@@ -1957,6 +2018,7 @@ pub struct GetInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceSnapshotRequest {
     /// <p>The name of the snapshot for which you are requesting information.</p>
     #[serde(rename = "instanceSnapshotName")]
@@ -1973,6 +2035,7 @@ pub struct GetInstanceSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceSnapshotsRequest {
     /// <p>A token used for advancing to the next page of results from your get instance snapshots request.</p>
     #[serde(rename = "pageToken")]
@@ -1994,6 +2057,7 @@ pub struct GetInstanceSnapshotsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceStateRequest {
     /// <p>The name of the instance to get state information about.</p>
     #[serde(rename = "instanceName")]
@@ -2010,6 +2074,7 @@ pub struct GetInstanceStateResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstancesRequest {
     /// <p>A token used for advancing to the next page of results from your get instances request.</p>
     #[serde(rename = "pageToken")]
@@ -2031,6 +2096,7 @@ pub struct GetInstancesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyPairRequest {
     /// <p>The name of the key pair for which you are requesting information.</p>
     #[serde(rename = "keyPairName")]
@@ -2047,6 +2113,7 @@ pub struct GetKeyPairResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyPairsRequest {
     /// <p>A token used for advancing to the next page of results from your get key pairs request.</p>
     #[serde(rename = "pageToken")]
@@ -2068,6 +2135,7 @@ pub struct GetKeyPairsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancerMetricDataRequest {
     /// <p>The end time of the period.</p>
     #[serde(rename = "endTime")]
@@ -2106,6 +2174,7 @@ pub struct GetLoadBalancerMetricDataResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancerRequest {
     /// <p>The name of the load balancer.</p>
     #[serde(rename = "loadBalancerName")]
@@ -2122,6 +2191,7 @@ pub struct GetLoadBalancerResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancerTlsCertificatesRequest {
     /// <p>The name of the load balancer you associated with your SSL/TLS certificate.</p>
     #[serde(rename = "loadBalancerName")]
@@ -2138,6 +2208,7 @@ pub struct GetLoadBalancerTlsCertificatesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancersRequest {
     /// <p>A token used for paginating the results from your GetLoadBalancers request.</p>
     #[serde(rename = "pageToken")]
@@ -2159,6 +2230,7 @@ pub struct GetLoadBalancersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationRequest {
     /// <p>A GUID used to identify the operation.</p>
     #[serde(rename = "operationId")]
@@ -2175,6 +2247,7 @@ pub struct GetOperationResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationsForResourceRequest {
     /// <p>A token used for advancing to the next page of results from your get operations for resource request.</p>
     #[serde(rename = "pageToken")]
@@ -2199,6 +2272,7 @@ pub struct GetOperationsForResourceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationsRequest {
     /// <p>A token used for advancing to the next page of results from your get operations request.</p>
     #[serde(rename = "pageToken")]
@@ -2220,6 +2294,7 @@ pub struct GetOperationsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegionsRequest {
     /// <p>A Boolean value indicating whether to also include Availability Zones in your get regions request. Availability Zones are indicated with a letter: e.g., <code>us-east-2a</code>.</p>
     #[serde(rename = "includeAvailabilityZones")]
@@ -2241,6 +2316,7 @@ pub struct GetRegionsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseBlueprintsRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get relational database blueprints</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -2262,6 +2338,7 @@ pub struct GetRelationalDatabaseBlueprintsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseBundlesRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get relational database bundles</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -2283,6 +2360,7 @@ pub struct GetRelationalDatabaseBundlesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseEventsRequest {
     /// <p>The number of minutes in the past from which to retrieve events. For example, to get all events from the past 2 hours, enter 120.</p> <p>Default: <code>60</code> </p> <p>The minimum is 1 and the maximum is 14 days (20160 minutes).</p>
     #[serde(rename = "durationInMinutes")]
@@ -2311,6 +2389,7 @@ pub struct GetRelationalDatabaseEventsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseLogEventsRequest {
     /// <p><p>The end of the time interval from which to get log events.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use an end time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the end time.</p> </li> </ul></p>
     #[serde(rename = "endTime")]
@@ -2354,6 +2433,7 @@ pub struct GetRelationalDatabaseLogEventsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseLogStreamsRequest {
     /// <p>The name of your database for which to get log streams.</p>
     #[serde(rename = "relationalDatabaseName")]
@@ -2370,6 +2450,7 @@ pub struct GetRelationalDatabaseLogStreamsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseMasterUserPasswordRequest {
     /// <p>The password version to return.</p> <p>Specifying <code>CURRENT</code> or <code>PREVIOUS</code> returns the current or previous passwords respectively. Specifying <code>PENDING</code> returns the newest version of the password that will rotate to <code>CURRENT</code>. After the <code>PENDING</code> password rotates to <code>CURRENT</code>, the <code>PENDING</code> password is no longer available.</p> <p>Default: <code>CURRENT</code> </p>
     #[serde(rename = "passwordVersion")]
@@ -2394,6 +2475,7 @@ pub struct GetRelationalDatabaseMasterUserPasswordResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseMetricDataRequest {
     /// <p><p>The end of the time interval from which to get metric data.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use an end time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the end time.</p> </li> </ul></p>
     #[serde(rename = "endTime")]
@@ -2432,6 +2514,7 @@ pub struct GetRelationalDatabaseMetricDataResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseParametersRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get relational database parameters</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -2456,6 +2539,7 @@ pub struct GetRelationalDatabaseParametersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseRequest {
     /// <p>The name of the database that you are looking up.</p>
     #[serde(rename = "relationalDatabaseName")]
@@ -2472,6 +2556,7 @@ pub struct GetRelationalDatabaseResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseSnapshotRequest {
     /// <p>The name of the database snapshot for which to get information.</p>
     #[serde(rename = "relationalDatabaseSnapshotName")]
@@ -2488,6 +2573,7 @@ pub struct GetRelationalDatabaseSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseSnapshotsRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get relational database snapshots</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -2509,6 +2595,7 @@ pub struct GetRelationalDatabaseSnapshotsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabasesRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get relational database</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -2530,6 +2617,7 @@ pub struct GetRelationalDatabasesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStaticIpRequest {
     /// <p>The name of the static IP in Lightsail.</p>
     #[serde(rename = "staticIpName")]
@@ -2546,6 +2634,7 @@ pub struct GetStaticIpResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStaticIpsRequest {
     /// <p>A token used for advancing to the next page of results from your get static IPs request.</p>
     #[serde(rename = "pageToken")]
@@ -2601,6 +2690,7 @@ pub struct HostKeyAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportKeyPairRequest {
     /// <p>The name of the key pair for which you want to import the public key.</p>
     #[serde(rename = "keyPairName")]
@@ -2753,6 +2843,7 @@ pub struct InstanceAccessDetails {
 
 /// <p>Describes the Amazon Elastic Compute Cloud instance and related resources to be created using the <code>create cloud formation stack</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceEntry {
     /// <p>The Availability Zone for the new Amazon EC2 instance.</p>
     #[serde(rename = "availabilityZone")]
@@ -2981,6 +3072,7 @@ pub struct InstanceState {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IsVpcPeeredRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3333,6 +3425,7 @@ pub struct MonthlyTransfer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OpenInstancePublicPortsRequest {
     /// <p>The name of the instance for which you want to open the public ports.</p>
     #[serde(rename = "instanceName")]
@@ -3420,6 +3513,7 @@ pub struct PasswordData {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PeerVpcRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3469,6 +3563,7 @@ pub struct PendingModifiedRelationalDatabaseValues {
 
 /// <p>Describes information about the ports on your virtual private server (or <i>instance</i>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PortInfo {
     /// <p>The first port in the range.</p>
     #[serde(rename = "fromPort")]
@@ -3485,6 +3580,7 @@ pub struct PortInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutInstancePublicPortsRequest {
     /// <p>The Lightsail instance name of the public port(s) you are setting.</p>
     #[serde(rename = "instanceName")]
@@ -3504,6 +3600,7 @@ pub struct PutInstancePublicPortsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootInstanceRequest {
     /// <p>The name of the instance to reboot.</p>
     #[serde(rename = "instanceName")]
@@ -3520,6 +3617,7 @@ pub struct RebootInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootRelationalDatabaseRequest {
     /// <p>The name of your database to reboot.</p>
     #[serde(rename = "relationalDatabaseName")]
@@ -3901,6 +3999,7 @@ pub struct RelationalDatabaseSnapshot {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReleaseStaticIpRequest {
     /// <p>The name of the static IP to delete.</p>
     #[serde(rename = "staticIpName")]
@@ -3931,6 +4030,7 @@ pub struct ResourceLocation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartInstanceRequest {
     /// <p>The name of the instance (a virtual private server) to start.</p>
     #[serde(rename = "instanceName")]
@@ -3947,6 +4047,7 @@ pub struct StartInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartRelationalDatabaseRequest {
     /// <p>The name of your database to start.</p>
     #[serde(rename = "relationalDatabaseName")]
@@ -4005,6 +4106,7 @@ pub struct StaticIp {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopInstanceRequest {
     /// <p><p>When set to <code>True</code>, forces a Lightsail instance that is stuck in a <code>stopping</code> state to stop.</p> <important> <p>Only use the <code>force</code> parameter if your instance is stuck in the <code>stopping</code> state. In any other state, your instance should stop normally without adding this parameter to your API request.</p> </important></p>
     #[serde(rename = "force")]
@@ -4025,6 +4127,7 @@ pub struct StopInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRelationalDatabaseRequest {
     /// <p>The name of your database to stop.</p>
     #[serde(rename = "relationalDatabaseName")]
@@ -4058,6 +4161,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource to which you want to add a tag.</p>
     #[serde(rename = "resourceArn")]
@@ -4081,6 +4185,7 @@ pub struct TagResourceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnpeerVpcRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -4093,6 +4198,7 @@ pub struct UnpeerVpcResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource from which you want to remove a tag.</p>
     #[serde(rename = "resourceArn")]
@@ -4116,6 +4222,7 @@ pub struct UntagResourceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainEntryRequest {
     /// <p>An array of key-value pairs containing information about the domain entry.</p>
     #[serde(rename = "domainEntry")]
@@ -4135,6 +4242,7 @@ pub struct UpdateDomainEntryResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLoadBalancerAttributeRequest {
     /// <p>The name of the attribute you want to update. Valid values are below.</p>
     #[serde(rename = "attributeName")]
@@ -4157,6 +4265,7 @@ pub struct UpdateLoadBalancerAttributeResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRelationalDatabaseParametersRequest {
     /// <p>The database parameters to update.</p>
     #[serde(rename = "parameters")]
@@ -4176,6 +4285,7 @@ pub struct UpdateRelationalDatabaseParametersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRelationalDatabaseRequest {
     /// <p>When <code>true</code>, applies changes immediately. When <code>false</code>, applies changes during the preferred maintenance window. Some changes may cause an outage.</p> <p>Default: <code>false</code> </p>
     #[serde(rename = "applyImmediately")]
@@ -4278,22 +4388,18 @@ impl AllocateStaticIpError {
 }
 impl fmt::Display for AllocateStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AllocateStaticIpError {
-    fn description(&self) -> &str {
         match *self {
-            AllocateStaticIpError::AccessDenied(ref cause) => cause,
-            AllocateStaticIpError::AccountSetupInProgress(ref cause) => cause,
-            AllocateStaticIpError::InvalidInput(ref cause) => cause,
-            AllocateStaticIpError::NotFound(ref cause) => cause,
-            AllocateStaticIpError::OperationFailure(ref cause) => cause,
-            AllocateStaticIpError::Service(ref cause) => cause,
-            AllocateStaticIpError::Unauthenticated(ref cause) => cause,
+            AllocateStaticIpError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AllocateStaticIpError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            AllocateStaticIpError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AllocateStaticIpError::NotFound(ref cause) => write!(f, "{}", cause),
+            AllocateStaticIpError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            AllocateStaticIpError::Service(ref cause) => write!(f, "{}", cause),
+            AllocateStaticIpError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AllocateStaticIpError {}
 /// Errors returned by AttachDisk
 #[derive(Debug, PartialEq)]
 pub enum AttachDiskError {
@@ -4347,22 +4453,18 @@ impl AttachDiskError {
 }
 impl fmt::Display for AttachDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachDiskError {
-    fn description(&self) -> &str {
         match *self {
-            AttachDiskError::AccessDenied(ref cause) => cause,
-            AttachDiskError::AccountSetupInProgress(ref cause) => cause,
-            AttachDiskError::InvalidInput(ref cause) => cause,
-            AttachDiskError::NotFound(ref cause) => cause,
-            AttachDiskError::OperationFailure(ref cause) => cause,
-            AttachDiskError::Service(ref cause) => cause,
-            AttachDiskError::Unauthenticated(ref cause) => cause,
+            AttachDiskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AttachDiskError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            AttachDiskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachDiskError::NotFound(ref cause) => write!(f, "{}", cause),
+            AttachDiskError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            AttachDiskError::Service(ref cause) => write!(f, "{}", cause),
+            AttachDiskError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachDiskError {}
 /// Errors returned by AttachInstancesToLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum AttachInstancesToLoadBalancerError {
@@ -4432,22 +4534,24 @@ impl AttachInstancesToLoadBalancerError {
 }
 impl fmt::Display for AttachInstancesToLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachInstancesToLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            AttachInstancesToLoadBalancerError::AccessDenied(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::InvalidInput(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::NotFound(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::OperationFailure(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::Service(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::Unauthenticated(ref cause) => cause,
+            AttachInstancesToLoadBalancerError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AttachInstancesToLoadBalancerError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachInstancesToLoadBalancerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachInstancesToLoadBalancerError::NotFound(ref cause) => write!(f, "{}", cause),
+            AttachInstancesToLoadBalancerError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachInstancesToLoadBalancerError::Service(ref cause) => write!(f, "{}", cause),
+            AttachInstancesToLoadBalancerError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AttachInstancesToLoadBalancerError {}
 /// Errors returned by AttachLoadBalancerTlsCertificate
 #[derive(Debug, PartialEq)]
 pub enum AttachLoadBalancerTlsCertificateError {
@@ -4517,22 +4621,28 @@ impl AttachLoadBalancerTlsCertificateError {
 }
 impl fmt::Display for AttachLoadBalancerTlsCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachLoadBalancerTlsCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            AttachLoadBalancerTlsCertificateError::AccessDenied(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::InvalidInput(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::NotFound(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::OperationFailure(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::Service(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => cause,
+            AttachLoadBalancerTlsCertificateError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerTlsCertificateError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerTlsCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            AttachLoadBalancerTlsCertificateError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerTlsCertificateError::Service(ref cause) => write!(f, "{}", cause),
+            AttachLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AttachLoadBalancerTlsCertificateError {}
 /// Errors returned by AttachStaticIp
 #[derive(Debug, PartialEq)]
 pub enum AttachStaticIpError {
@@ -4588,22 +4698,18 @@ impl AttachStaticIpError {
 }
 impl fmt::Display for AttachStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachStaticIpError {
-    fn description(&self) -> &str {
         match *self {
-            AttachStaticIpError::AccessDenied(ref cause) => cause,
-            AttachStaticIpError::AccountSetupInProgress(ref cause) => cause,
-            AttachStaticIpError::InvalidInput(ref cause) => cause,
-            AttachStaticIpError::NotFound(ref cause) => cause,
-            AttachStaticIpError::OperationFailure(ref cause) => cause,
-            AttachStaticIpError::Service(ref cause) => cause,
-            AttachStaticIpError::Unauthenticated(ref cause) => cause,
+            AttachStaticIpError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AttachStaticIpError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            AttachStaticIpError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachStaticIpError::NotFound(ref cause) => write!(f, "{}", cause),
+            AttachStaticIpError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            AttachStaticIpError::Service(ref cause) => write!(f, "{}", cause),
+            AttachStaticIpError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachStaticIpError {}
 /// Errors returned by CloseInstancePublicPorts
 #[derive(Debug, PartialEq)]
 pub enum CloseInstancePublicPortsError {
@@ -4667,22 +4773,20 @@ impl CloseInstancePublicPortsError {
 }
 impl fmt::Display for CloseInstancePublicPortsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CloseInstancePublicPortsError {
-    fn description(&self) -> &str {
         match *self {
-            CloseInstancePublicPortsError::AccessDenied(ref cause) => cause,
-            CloseInstancePublicPortsError::AccountSetupInProgress(ref cause) => cause,
-            CloseInstancePublicPortsError::InvalidInput(ref cause) => cause,
-            CloseInstancePublicPortsError::NotFound(ref cause) => cause,
-            CloseInstancePublicPortsError::OperationFailure(ref cause) => cause,
-            CloseInstancePublicPortsError::Service(ref cause) => cause,
-            CloseInstancePublicPortsError::Unauthenticated(ref cause) => cause,
+            CloseInstancePublicPortsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CloseInstancePublicPortsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CloseInstancePublicPortsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CloseInstancePublicPortsError::NotFound(ref cause) => write!(f, "{}", cause),
+            CloseInstancePublicPortsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CloseInstancePublicPortsError::Service(ref cause) => write!(f, "{}", cause),
+            CloseInstancePublicPortsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CloseInstancePublicPortsError {}
 /// Errors returned by CopySnapshot
 #[derive(Debug, PartialEq)]
 pub enum CopySnapshotError {
@@ -4736,22 +4840,18 @@ impl CopySnapshotError {
 }
 impl fmt::Display for CopySnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CopySnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CopySnapshotError::AccessDenied(ref cause) => cause,
-            CopySnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CopySnapshotError::InvalidInput(ref cause) => cause,
-            CopySnapshotError::NotFound(ref cause) => cause,
-            CopySnapshotError::OperationFailure(ref cause) => cause,
-            CopySnapshotError::Service(ref cause) => cause,
-            CopySnapshotError::Unauthenticated(ref cause) => cause,
+            CopySnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CopySnapshotError {}
 /// Errors returned by CreateCloudFormationStack
 #[derive(Debug, PartialEq)]
 pub enum CreateCloudFormationStackError {
@@ -4815,22 +4915,20 @@ impl CreateCloudFormationStackError {
 }
 impl fmt::Display for CreateCloudFormationStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCloudFormationStackError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCloudFormationStackError::AccessDenied(ref cause) => cause,
-            CreateCloudFormationStackError::AccountSetupInProgress(ref cause) => cause,
-            CreateCloudFormationStackError::InvalidInput(ref cause) => cause,
-            CreateCloudFormationStackError::NotFound(ref cause) => cause,
-            CreateCloudFormationStackError::OperationFailure(ref cause) => cause,
-            CreateCloudFormationStackError::Service(ref cause) => cause,
-            CreateCloudFormationStackError::Unauthenticated(ref cause) => cause,
+            CreateCloudFormationStackError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationStackError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCloudFormationStackError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationStackError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationStackError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationStackError::Service(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationStackError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCloudFormationStackError {}
 /// Errors returned by CreateDisk
 #[derive(Debug, PartialEq)]
 pub enum CreateDiskError {
@@ -4884,22 +4982,18 @@ impl CreateDiskError {
 }
 impl fmt::Display for CreateDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDiskError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDiskError::AccessDenied(ref cause) => cause,
-            CreateDiskError::AccountSetupInProgress(ref cause) => cause,
-            CreateDiskError::InvalidInput(ref cause) => cause,
-            CreateDiskError::NotFound(ref cause) => cause,
-            CreateDiskError::OperationFailure(ref cause) => cause,
-            CreateDiskError::Service(ref cause) => cause,
-            CreateDiskError::Unauthenticated(ref cause) => cause,
+            CreateDiskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDiskError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateDiskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDiskError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDiskError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateDiskError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDiskError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDiskError {}
 /// Errors returned by CreateDiskFromSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateDiskFromSnapshotError {
@@ -4959,22 +5053,20 @@ impl CreateDiskFromSnapshotError {
 }
 impl fmt::Display for CreateDiskFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDiskFromSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDiskFromSnapshotError::AccessDenied(ref cause) => cause,
-            CreateDiskFromSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CreateDiskFromSnapshotError::InvalidInput(ref cause) => cause,
-            CreateDiskFromSnapshotError::NotFound(ref cause) => cause,
-            CreateDiskFromSnapshotError::OperationFailure(ref cause) => cause,
-            CreateDiskFromSnapshotError::Service(ref cause) => cause,
-            CreateDiskFromSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateDiskFromSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDiskFromSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDiskFromSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDiskFromSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDiskFromSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateDiskFromSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDiskFromSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDiskFromSnapshotError {}
 /// Errors returned by CreateDiskSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateDiskSnapshotError {
@@ -5030,22 +5122,18 @@ impl CreateDiskSnapshotError {
 }
 impl fmt::Display for CreateDiskSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDiskSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDiskSnapshotError::AccessDenied(ref cause) => cause,
-            CreateDiskSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CreateDiskSnapshotError::InvalidInput(ref cause) => cause,
-            CreateDiskSnapshotError::NotFound(ref cause) => cause,
-            CreateDiskSnapshotError::OperationFailure(ref cause) => cause,
-            CreateDiskSnapshotError::Service(ref cause) => cause,
-            CreateDiskSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateDiskSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDiskSnapshotError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateDiskSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDiskSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDiskSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateDiskSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDiskSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDiskSnapshotError {}
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
@@ -5099,22 +5187,18 @@ impl CreateDomainError {
 }
 impl fmt::Display for CreateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDomainError::AccessDenied(ref cause) => cause,
-            CreateDomainError::AccountSetupInProgress(ref cause) => cause,
-            CreateDomainError::InvalidInput(ref cause) => cause,
-            CreateDomainError::NotFound(ref cause) => cause,
-            CreateDomainError::OperationFailure(ref cause) => cause,
-            CreateDomainError::Service(ref cause) => cause,
-            CreateDomainError::Unauthenticated(ref cause) => cause,
+            CreateDomainError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDomainError {}
 /// Errors returned by CreateDomainEntry
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainEntryError {
@@ -5170,22 +5254,18 @@ impl CreateDomainEntryError {
 }
 impl fmt::Display for CreateDomainEntryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainEntryError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDomainEntryError::AccessDenied(ref cause) => cause,
-            CreateDomainEntryError::AccountSetupInProgress(ref cause) => cause,
-            CreateDomainEntryError::InvalidInput(ref cause) => cause,
-            CreateDomainEntryError::NotFound(ref cause) => cause,
-            CreateDomainEntryError::OperationFailure(ref cause) => cause,
-            CreateDomainEntryError::Service(ref cause) => cause,
-            CreateDomainEntryError::Unauthenticated(ref cause) => cause,
+            CreateDomainEntryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDomainEntryError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateDomainEntryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDomainEntryError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDomainEntryError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateDomainEntryError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDomainEntryError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDomainEntryError {}
 /// Errors returned by CreateInstanceSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateInstanceSnapshotError {
@@ -5245,22 +5325,20 @@ impl CreateInstanceSnapshotError {
 }
 impl fmt::Display for CreateInstanceSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInstanceSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInstanceSnapshotError::AccessDenied(ref cause) => cause,
-            CreateInstanceSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CreateInstanceSnapshotError::InvalidInput(ref cause) => cause,
-            CreateInstanceSnapshotError::NotFound(ref cause) => cause,
-            CreateInstanceSnapshotError::OperationFailure(ref cause) => cause,
-            CreateInstanceSnapshotError::Service(ref cause) => cause,
-            CreateInstanceSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateInstanceSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateInstanceSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateInstanceSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateInstanceSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateInstanceSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateInstanceSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CreateInstanceSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInstanceSnapshotError {}
 /// Errors returned by CreateInstances
 #[derive(Debug, PartialEq)]
 pub enum CreateInstancesError {
@@ -5316,22 +5394,18 @@ impl CreateInstancesError {
 }
 impl fmt::Display for CreateInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInstancesError::AccessDenied(ref cause) => cause,
-            CreateInstancesError::AccountSetupInProgress(ref cause) => cause,
-            CreateInstancesError::InvalidInput(ref cause) => cause,
-            CreateInstancesError::NotFound(ref cause) => cause,
-            CreateInstancesError::OperationFailure(ref cause) => cause,
-            CreateInstancesError::Service(ref cause) => cause,
-            CreateInstancesError::Unauthenticated(ref cause) => cause,
+            CreateInstancesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateInstancesError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateInstancesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateInstancesError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateInstancesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateInstancesError::Service(ref cause) => write!(f, "{}", cause),
+            CreateInstancesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInstancesError {}
 /// Errors returned by CreateInstancesFromSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateInstancesFromSnapshotError {
@@ -5399,22 +5473,20 @@ impl CreateInstancesFromSnapshotError {
 }
 impl fmt::Display for CreateInstancesFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInstancesFromSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInstancesFromSnapshotError::AccessDenied(ref cause) => cause,
-            CreateInstancesFromSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CreateInstancesFromSnapshotError::InvalidInput(ref cause) => cause,
-            CreateInstancesFromSnapshotError::NotFound(ref cause) => cause,
-            CreateInstancesFromSnapshotError::OperationFailure(ref cause) => cause,
-            CreateInstancesFromSnapshotError::Service(ref cause) => cause,
-            CreateInstancesFromSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateInstancesFromSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateInstancesFromSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateInstancesFromSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateInstancesFromSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateInstancesFromSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateInstancesFromSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CreateInstancesFromSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInstancesFromSnapshotError {}
 /// Errors returned by CreateKeyPair
 #[derive(Debug, PartialEq)]
 pub enum CreateKeyPairError {
@@ -5470,22 +5542,18 @@ impl CreateKeyPairError {
 }
 impl fmt::Display for CreateKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateKeyPairError {
-    fn description(&self) -> &str {
         match *self {
-            CreateKeyPairError::AccessDenied(ref cause) => cause,
-            CreateKeyPairError::AccountSetupInProgress(ref cause) => cause,
-            CreateKeyPairError::InvalidInput(ref cause) => cause,
-            CreateKeyPairError::NotFound(ref cause) => cause,
-            CreateKeyPairError::OperationFailure(ref cause) => cause,
-            CreateKeyPairError::Service(ref cause) => cause,
-            CreateKeyPairError::Unauthenticated(ref cause) => cause,
+            CreateKeyPairError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateKeyPairError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateKeyPairError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateKeyPairError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateKeyPairError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateKeyPairError::Service(ref cause) => write!(f, "{}", cause),
+            CreateKeyPairError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateKeyPairError {}
 /// Errors returned by CreateLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerError {
@@ -5541,22 +5609,18 @@ impl CreateLoadBalancerError {
 }
 impl fmt::Display for CreateLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoadBalancerError::AccessDenied(ref cause) => cause,
-            CreateLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
-            CreateLoadBalancerError::InvalidInput(ref cause) => cause,
-            CreateLoadBalancerError::NotFound(ref cause) => cause,
-            CreateLoadBalancerError::OperationFailure(ref cause) => cause,
-            CreateLoadBalancerError::Service(ref cause) => cause,
-            CreateLoadBalancerError::Unauthenticated(ref cause) => cause,
+            CreateLoadBalancerError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::Service(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLoadBalancerError {}
 /// Errors returned by CreateLoadBalancerTlsCertificate
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerTlsCertificateError {
@@ -5626,22 +5690,28 @@ impl CreateLoadBalancerTlsCertificateError {
 }
 impl fmt::Display for CreateLoadBalancerTlsCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoadBalancerTlsCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoadBalancerTlsCertificateError::AccessDenied(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::InvalidInput(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::NotFound(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::OperationFailure(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::Service(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => cause,
+            CreateLoadBalancerTlsCertificateError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerTlsCertificateError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerTlsCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerTlsCertificateError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerTlsCertificateError::Service(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateLoadBalancerTlsCertificateError {}
 /// Errors returned by CreateRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum CreateRelationalDatabaseError {
@@ -5705,22 +5775,20 @@ impl CreateRelationalDatabaseError {
 }
 impl fmt::Display for CreateRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            CreateRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            CreateRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            CreateRelationalDatabaseError::NotFound(ref cause) => cause,
-            CreateRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            CreateRelationalDatabaseError::Service(ref cause) => cause,
-            CreateRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            CreateRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRelationalDatabaseError {}
 /// Errors returned by CreateRelationalDatabaseFromSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateRelationalDatabaseFromSnapshotError {
@@ -5790,22 +5858,30 @@ impl CreateRelationalDatabaseFromSnapshotError {
 }
 impl fmt::Display for CreateRelationalDatabaseFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRelationalDatabaseFromSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRelationalDatabaseFromSnapshotError::AccessDenied(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::InvalidInput(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::NotFound(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::OperationFailure(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::Service(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateRelationalDatabaseFromSnapshotError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseFromSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseFromSnapshotError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseFromSnapshotError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseFromSnapshotError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseFromSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseFromSnapshotError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateRelationalDatabaseFromSnapshotError {}
 /// Errors returned by CreateRelationalDatabaseSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateRelationalDatabaseSnapshotError {
@@ -5875,22 +5951,28 @@ impl CreateRelationalDatabaseSnapshotError {
 }
 impl fmt::Display for CreateRelationalDatabaseSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRelationalDatabaseSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRelationalDatabaseSnapshotError::AccessDenied(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::InvalidInput(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::NotFound(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::OperationFailure(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::Service(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateRelationalDatabaseSnapshotError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseSnapshotError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseSnapshotError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateRelationalDatabaseSnapshotError {}
 /// Errors returned by DeleteAutoSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteAutoSnapshotError {
@@ -5939,21 +6021,17 @@ impl DeleteAutoSnapshotError {
 }
 impl fmt::Display for DeleteAutoSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAutoSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAutoSnapshotError::AccessDenied(ref cause) => cause,
-            DeleteAutoSnapshotError::InvalidInput(ref cause) => cause,
-            DeleteAutoSnapshotError::NotFound(ref cause) => cause,
-            DeleteAutoSnapshotError::OperationFailure(ref cause) => cause,
-            DeleteAutoSnapshotError::Service(ref cause) => cause,
-            DeleteAutoSnapshotError::Unauthenticated(ref cause) => cause,
+            DeleteAutoSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteAutoSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteAutoSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAutoSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAutoSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteAutoSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAutoSnapshotError {}
 /// Errors returned by DeleteDisk
 #[derive(Debug, PartialEq)]
 pub enum DeleteDiskError {
@@ -6007,22 +6085,18 @@ impl DeleteDiskError {
 }
 impl fmt::Display for DeleteDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDiskError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDiskError::AccessDenied(ref cause) => cause,
-            DeleteDiskError::AccountSetupInProgress(ref cause) => cause,
-            DeleteDiskError::InvalidInput(ref cause) => cause,
-            DeleteDiskError::NotFound(ref cause) => cause,
-            DeleteDiskError::OperationFailure(ref cause) => cause,
-            DeleteDiskError::Service(ref cause) => cause,
-            DeleteDiskError::Unauthenticated(ref cause) => cause,
+            DeleteDiskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDiskError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteDiskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDiskError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDiskError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDiskError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteDiskError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDiskError {}
 /// Errors returned by DeleteDiskSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteDiskSnapshotError {
@@ -6078,22 +6152,18 @@ impl DeleteDiskSnapshotError {
 }
 impl fmt::Display for DeleteDiskSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDiskSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDiskSnapshotError::AccessDenied(ref cause) => cause,
-            DeleteDiskSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            DeleteDiskSnapshotError::InvalidInput(ref cause) => cause,
-            DeleteDiskSnapshotError::NotFound(ref cause) => cause,
-            DeleteDiskSnapshotError::OperationFailure(ref cause) => cause,
-            DeleteDiskSnapshotError::Service(ref cause) => cause,
-            DeleteDiskSnapshotError::Unauthenticated(ref cause) => cause,
+            DeleteDiskSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDiskSnapshotError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteDiskSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDiskSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDiskSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDiskSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteDiskSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDiskSnapshotError {}
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
@@ -6147,22 +6217,18 @@ impl DeleteDomainError {
 }
 impl fmt::Display for DeleteDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDomainError::AccessDenied(ref cause) => cause,
-            DeleteDomainError::AccountSetupInProgress(ref cause) => cause,
-            DeleteDomainError::InvalidInput(ref cause) => cause,
-            DeleteDomainError::NotFound(ref cause) => cause,
-            DeleteDomainError::OperationFailure(ref cause) => cause,
-            DeleteDomainError::Service(ref cause) => cause,
-            DeleteDomainError::Unauthenticated(ref cause) => cause,
+            DeleteDomainError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDomainError {}
 /// Errors returned by DeleteDomainEntry
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainEntryError {
@@ -6218,22 +6284,18 @@ impl DeleteDomainEntryError {
 }
 impl fmt::Display for DeleteDomainEntryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainEntryError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDomainEntryError::AccessDenied(ref cause) => cause,
-            DeleteDomainEntryError::AccountSetupInProgress(ref cause) => cause,
-            DeleteDomainEntryError::InvalidInput(ref cause) => cause,
-            DeleteDomainEntryError::NotFound(ref cause) => cause,
-            DeleteDomainEntryError::OperationFailure(ref cause) => cause,
-            DeleteDomainEntryError::Service(ref cause) => cause,
-            DeleteDomainEntryError::Unauthenticated(ref cause) => cause,
+            DeleteDomainEntryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDomainEntryError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteDomainEntryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDomainEntryError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDomainEntryError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDomainEntryError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteDomainEntryError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDomainEntryError {}
 /// Errors returned by DeleteInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteInstanceError {
@@ -6289,22 +6351,18 @@ impl DeleteInstanceError {
 }
 impl fmt::Display for DeleteInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInstanceError::AccessDenied(ref cause) => cause,
-            DeleteInstanceError::AccountSetupInProgress(ref cause) => cause,
-            DeleteInstanceError::InvalidInput(ref cause) => cause,
-            DeleteInstanceError::NotFound(ref cause) => cause,
-            DeleteInstanceError::OperationFailure(ref cause) => cause,
-            DeleteInstanceError::Service(ref cause) => cause,
-            DeleteInstanceError::Unauthenticated(ref cause) => cause,
+            DeleteInstanceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInstanceError {}
 /// Errors returned by DeleteInstanceSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteInstanceSnapshotError {
@@ -6364,22 +6422,20 @@ impl DeleteInstanceSnapshotError {
 }
 impl fmt::Display for DeleteInstanceSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInstanceSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInstanceSnapshotError::AccessDenied(ref cause) => cause,
-            DeleteInstanceSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            DeleteInstanceSnapshotError::InvalidInput(ref cause) => cause,
-            DeleteInstanceSnapshotError::NotFound(ref cause) => cause,
-            DeleteInstanceSnapshotError::OperationFailure(ref cause) => cause,
-            DeleteInstanceSnapshotError::Service(ref cause) => cause,
-            DeleteInstanceSnapshotError::Unauthenticated(ref cause) => cause,
+            DeleteInstanceSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteInstanceSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInstanceSnapshotError {}
 /// Errors returned by DeleteKeyPair
 #[derive(Debug, PartialEq)]
 pub enum DeleteKeyPairError {
@@ -6435,22 +6491,18 @@ impl DeleteKeyPairError {
 }
 impl fmt::Display for DeleteKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteKeyPairError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteKeyPairError::AccessDenied(ref cause) => cause,
-            DeleteKeyPairError::AccountSetupInProgress(ref cause) => cause,
-            DeleteKeyPairError::InvalidInput(ref cause) => cause,
-            DeleteKeyPairError::NotFound(ref cause) => cause,
-            DeleteKeyPairError::OperationFailure(ref cause) => cause,
-            DeleteKeyPairError::Service(ref cause) => cause,
-            DeleteKeyPairError::Unauthenticated(ref cause) => cause,
+            DeleteKeyPairError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteKeyPairError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteKeyPairError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteKeyPairError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteKeyPairError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteKeyPairError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteKeyPairError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteKeyPairError {}
 /// Errors returned by DeleteKnownHostKeys
 #[derive(Debug, PartialEq)]
 pub enum DeleteKnownHostKeysError {
@@ -6508,22 +6560,18 @@ impl DeleteKnownHostKeysError {
 }
 impl fmt::Display for DeleteKnownHostKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteKnownHostKeysError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteKnownHostKeysError::AccessDenied(ref cause) => cause,
-            DeleteKnownHostKeysError::AccountSetupInProgress(ref cause) => cause,
-            DeleteKnownHostKeysError::InvalidInput(ref cause) => cause,
-            DeleteKnownHostKeysError::NotFound(ref cause) => cause,
-            DeleteKnownHostKeysError::OperationFailure(ref cause) => cause,
-            DeleteKnownHostKeysError::Service(ref cause) => cause,
-            DeleteKnownHostKeysError::Unauthenticated(ref cause) => cause,
+            DeleteKnownHostKeysError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteKnownHostKeysError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteKnownHostKeysError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteKnownHostKeysError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteKnownHostKeysError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteKnownHostKeysError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteKnownHostKeysError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteKnownHostKeysError {}
 /// Errors returned by DeleteLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerError {
@@ -6579,22 +6627,18 @@ impl DeleteLoadBalancerError {
 }
 impl fmt::Display for DeleteLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoadBalancerError::AccessDenied(ref cause) => cause,
-            DeleteLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
-            DeleteLoadBalancerError::InvalidInput(ref cause) => cause,
-            DeleteLoadBalancerError::NotFound(ref cause) => cause,
-            DeleteLoadBalancerError::OperationFailure(ref cause) => cause,
-            DeleteLoadBalancerError::Service(ref cause) => cause,
-            DeleteLoadBalancerError::Unauthenticated(ref cause) => cause,
+            DeleteLoadBalancerError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLoadBalancerError {}
 /// Errors returned by DeleteLoadBalancerTlsCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerTlsCertificateError {
@@ -6664,22 +6708,28 @@ impl DeleteLoadBalancerTlsCertificateError {
 }
 impl fmt::Display for DeleteLoadBalancerTlsCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoadBalancerTlsCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoadBalancerTlsCertificateError::AccessDenied(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::InvalidInput(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::NotFound(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::OperationFailure(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::Service(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => cause,
+            DeleteLoadBalancerTlsCertificateError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLoadBalancerTlsCertificateError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLoadBalancerTlsCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerTlsCertificateError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLoadBalancerTlsCertificateError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteLoadBalancerTlsCertificateError {}
 /// Errors returned by DeleteRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum DeleteRelationalDatabaseError {
@@ -6743,22 +6793,20 @@ impl DeleteRelationalDatabaseError {
 }
 impl fmt::Display for DeleteRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            DeleteRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            DeleteRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            DeleteRelationalDatabaseError::NotFound(ref cause) => cause,
-            DeleteRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            DeleteRelationalDatabaseError::Service(ref cause) => cause,
-            DeleteRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            DeleteRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRelationalDatabaseError {}
 /// Errors returned by DeleteRelationalDatabaseSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteRelationalDatabaseSnapshotError {
@@ -6828,22 +6876,28 @@ impl DeleteRelationalDatabaseSnapshotError {
 }
 impl fmt::Display for DeleteRelationalDatabaseSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRelationalDatabaseSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRelationalDatabaseSnapshotError::AccessDenied(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::InvalidInput(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::NotFound(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::OperationFailure(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::Service(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => cause,
+            DeleteRelationalDatabaseSnapshotError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRelationalDatabaseSnapshotError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRelationalDatabaseSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseSnapshotError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRelationalDatabaseSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteRelationalDatabaseSnapshotError {}
 /// Errors returned by DetachDisk
 #[derive(Debug, PartialEq)]
 pub enum DetachDiskError {
@@ -6897,22 +6951,18 @@ impl DetachDiskError {
 }
 impl fmt::Display for DetachDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachDiskError {
-    fn description(&self) -> &str {
         match *self {
-            DetachDiskError::AccessDenied(ref cause) => cause,
-            DetachDiskError::AccountSetupInProgress(ref cause) => cause,
-            DetachDiskError::InvalidInput(ref cause) => cause,
-            DetachDiskError::NotFound(ref cause) => cause,
-            DetachDiskError::OperationFailure(ref cause) => cause,
-            DetachDiskError::Service(ref cause) => cause,
-            DetachDiskError::Unauthenticated(ref cause) => cause,
+            DetachDiskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetachDiskError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DetachDiskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachDiskError::NotFound(ref cause) => write!(f, "{}", cause),
+            DetachDiskError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DetachDiskError::Service(ref cause) => write!(f, "{}", cause),
+            DetachDiskError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachDiskError {}
 /// Errors returned by DetachInstancesFromLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DetachInstancesFromLoadBalancerError {
@@ -6982,22 +7032,24 @@ impl DetachInstancesFromLoadBalancerError {
 }
 impl fmt::Display for DetachInstancesFromLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachInstancesFromLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            DetachInstancesFromLoadBalancerError::AccessDenied(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::InvalidInput(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::NotFound(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::OperationFailure(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::Service(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::Unauthenticated(ref cause) => cause,
+            DetachInstancesFromLoadBalancerError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetachInstancesFromLoadBalancerError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetachInstancesFromLoadBalancerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachInstancesFromLoadBalancerError::NotFound(ref cause) => write!(f, "{}", cause),
+            DetachInstancesFromLoadBalancerError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetachInstancesFromLoadBalancerError::Service(ref cause) => write!(f, "{}", cause),
+            DetachInstancesFromLoadBalancerError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DetachInstancesFromLoadBalancerError {}
 /// Errors returned by DetachStaticIp
 #[derive(Debug, PartialEq)]
 pub enum DetachStaticIpError {
@@ -7053,22 +7105,18 @@ impl DetachStaticIpError {
 }
 impl fmt::Display for DetachStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachStaticIpError {
-    fn description(&self) -> &str {
         match *self {
-            DetachStaticIpError::AccessDenied(ref cause) => cause,
-            DetachStaticIpError::AccountSetupInProgress(ref cause) => cause,
-            DetachStaticIpError::InvalidInput(ref cause) => cause,
-            DetachStaticIpError::NotFound(ref cause) => cause,
-            DetachStaticIpError::OperationFailure(ref cause) => cause,
-            DetachStaticIpError::Service(ref cause) => cause,
-            DetachStaticIpError::Unauthenticated(ref cause) => cause,
+            DetachStaticIpError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetachStaticIpError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DetachStaticIpError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachStaticIpError::NotFound(ref cause) => write!(f, "{}", cause),
+            DetachStaticIpError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DetachStaticIpError::Service(ref cause) => write!(f, "{}", cause),
+            DetachStaticIpError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachStaticIpError {}
 /// Errors returned by DisableAddOn
 #[derive(Debug, PartialEq)]
 pub enum DisableAddOnError {
@@ -7117,21 +7165,17 @@ impl DisableAddOnError {
 }
 impl fmt::Display for DisableAddOnError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableAddOnError {
-    fn description(&self) -> &str {
         match *self {
-            DisableAddOnError::AccessDenied(ref cause) => cause,
-            DisableAddOnError::InvalidInput(ref cause) => cause,
-            DisableAddOnError::NotFound(ref cause) => cause,
-            DisableAddOnError::OperationFailure(ref cause) => cause,
-            DisableAddOnError::Service(ref cause) => cause,
-            DisableAddOnError::Unauthenticated(ref cause) => cause,
+            DisableAddOnError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisableAddOnError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisableAddOnError::NotFound(ref cause) => write!(f, "{}", cause),
+            DisableAddOnError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DisableAddOnError::Service(ref cause) => write!(f, "{}", cause),
+            DisableAddOnError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableAddOnError {}
 /// Errors returned by DownloadDefaultKeyPair
 #[derive(Debug, PartialEq)]
 pub enum DownloadDefaultKeyPairError {
@@ -7191,22 +7235,20 @@ impl DownloadDefaultKeyPairError {
 }
 impl fmt::Display for DownloadDefaultKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DownloadDefaultKeyPairError {
-    fn description(&self) -> &str {
         match *self {
-            DownloadDefaultKeyPairError::AccessDenied(ref cause) => cause,
-            DownloadDefaultKeyPairError::AccountSetupInProgress(ref cause) => cause,
-            DownloadDefaultKeyPairError::InvalidInput(ref cause) => cause,
-            DownloadDefaultKeyPairError::NotFound(ref cause) => cause,
-            DownloadDefaultKeyPairError::OperationFailure(ref cause) => cause,
-            DownloadDefaultKeyPairError::Service(ref cause) => cause,
-            DownloadDefaultKeyPairError::Unauthenticated(ref cause) => cause,
+            DownloadDefaultKeyPairError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DownloadDefaultKeyPairError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DownloadDefaultKeyPairError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DownloadDefaultKeyPairError::NotFound(ref cause) => write!(f, "{}", cause),
+            DownloadDefaultKeyPairError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DownloadDefaultKeyPairError::Service(ref cause) => write!(f, "{}", cause),
+            DownloadDefaultKeyPairError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DownloadDefaultKeyPairError {}
 /// Errors returned by EnableAddOn
 #[derive(Debug, PartialEq)]
 pub enum EnableAddOnError {
@@ -7255,21 +7297,17 @@ impl EnableAddOnError {
 }
 impl fmt::Display for EnableAddOnError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableAddOnError {
-    fn description(&self) -> &str {
         match *self {
-            EnableAddOnError::AccessDenied(ref cause) => cause,
-            EnableAddOnError::InvalidInput(ref cause) => cause,
-            EnableAddOnError::NotFound(ref cause) => cause,
-            EnableAddOnError::OperationFailure(ref cause) => cause,
-            EnableAddOnError::Service(ref cause) => cause,
-            EnableAddOnError::Unauthenticated(ref cause) => cause,
+            EnableAddOnError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            EnableAddOnError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            EnableAddOnError::NotFound(ref cause) => write!(f, "{}", cause),
+            EnableAddOnError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            EnableAddOnError::Service(ref cause) => write!(f, "{}", cause),
+            EnableAddOnError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableAddOnError {}
 /// Errors returned by ExportSnapshot
 #[derive(Debug, PartialEq)]
 pub enum ExportSnapshotError {
@@ -7325,22 +7363,18 @@ impl ExportSnapshotError {
 }
 impl fmt::Display for ExportSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExportSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            ExportSnapshotError::AccessDenied(ref cause) => cause,
-            ExportSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            ExportSnapshotError::InvalidInput(ref cause) => cause,
-            ExportSnapshotError::NotFound(ref cause) => cause,
-            ExportSnapshotError::OperationFailure(ref cause) => cause,
-            ExportSnapshotError::Service(ref cause) => cause,
-            ExportSnapshotError::Unauthenticated(ref cause) => cause,
+            ExportSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ExportSnapshotError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            ExportSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ExportSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            ExportSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            ExportSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            ExportSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExportSnapshotError {}
 /// Errors returned by GetActiveNames
 #[derive(Debug, PartialEq)]
 pub enum GetActiveNamesError {
@@ -7396,22 +7430,18 @@ impl GetActiveNamesError {
 }
 impl fmt::Display for GetActiveNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetActiveNamesError {
-    fn description(&self) -> &str {
         match *self {
-            GetActiveNamesError::AccessDenied(ref cause) => cause,
-            GetActiveNamesError::AccountSetupInProgress(ref cause) => cause,
-            GetActiveNamesError::InvalidInput(ref cause) => cause,
-            GetActiveNamesError::NotFound(ref cause) => cause,
-            GetActiveNamesError::OperationFailure(ref cause) => cause,
-            GetActiveNamesError::Service(ref cause) => cause,
-            GetActiveNamesError::Unauthenticated(ref cause) => cause,
+            GetActiveNamesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetActiveNamesError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetActiveNamesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetActiveNamesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetActiveNamesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetActiveNamesError::Service(ref cause) => write!(f, "{}", cause),
+            GetActiveNamesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetActiveNamesError {}
 /// Errors returned by GetAutoSnapshots
 #[derive(Debug, PartialEq)]
 pub enum GetAutoSnapshotsError {
@@ -7460,21 +7490,17 @@ impl GetAutoSnapshotsError {
 }
 impl fmt::Display for GetAutoSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAutoSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
-            GetAutoSnapshotsError::AccessDenied(ref cause) => cause,
-            GetAutoSnapshotsError::InvalidInput(ref cause) => cause,
-            GetAutoSnapshotsError::NotFound(ref cause) => cause,
-            GetAutoSnapshotsError::OperationFailure(ref cause) => cause,
-            GetAutoSnapshotsError::Service(ref cause) => cause,
-            GetAutoSnapshotsError::Unauthenticated(ref cause) => cause,
+            GetAutoSnapshotsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetAutoSnapshotsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetAutoSnapshotsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAutoSnapshotsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetAutoSnapshotsError::Service(ref cause) => write!(f, "{}", cause),
+            GetAutoSnapshotsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAutoSnapshotsError {}
 /// Errors returned by GetBlueprints
 #[derive(Debug, PartialEq)]
 pub enum GetBlueprintsError {
@@ -7530,22 +7556,18 @@ impl GetBlueprintsError {
 }
 impl fmt::Display for GetBlueprintsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBlueprintsError {
-    fn description(&self) -> &str {
         match *self {
-            GetBlueprintsError::AccessDenied(ref cause) => cause,
-            GetBlueprintsError::AccountSetupInProgress(ref cause) => cause,
-            GetBlueprintsError::InvalidInput(ref cause) => cause,
-            GetBlueprintsError::NotFound(ref cause) => cause,
-            GetBlueprintsError::OperationFailure(ref cause) => cause,
-            GetBlueprintsError::Service(ref cause) => cause,
-            GetBlueprintsError::Unauthenticated(ref cause) => cause,
+            GetBlueprintsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetBlueprintsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetBlueprintsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetBlueprintsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetBlueprintsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetBlueprintsError::Service(ref cause) => write!(f, "{}", cause),
+            GetBlueprintsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBlueprintsError {}
 /// Errors returned by GetBundles
 #[derive(Debug, PartialEq)]
 pub enum GetBundlesError {
@@ -7599,22 +7621,18 @@ impl GetBundlesError {
 }
 impl fmt::Display for GetBundlesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBundlesError {
-    fn description(&self) -> &str {
         match *self {
-            GetBundlesError::AccessDenied(ref cause) => cause,
-            GetBundlesError::AccountSetupInProgress(ref cause) => cause,
-            GetBundlesError::InvalidInput(ref cause) => cause,
-            GetBundlesError::NotFound(ref cause) => cause,
-            GetBundlesError::OperationFailure(ref cause) => cause,
-            GetBundlesError::Service(ref cause) => cause,
-            GetBundlesError::Unauthenticated(ref cause) => cause,
+            GetBundlesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetBundlesError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetBundlesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetBundlesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetBundlesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetBundlesError::Service(ref cause) => write!(f, "{}", cause),
+            GetBundlesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBundlesError {}
 /// Errors returned by GetCloudFormationStackRecords
 #[derive(Debug, PartialEq)]
 pub enum GetCloudFormationStackRecordsError {
@@ -7684,22 +7702,24 @@ impl GetCloudFormationStackRecordsError {
 }
 impl fmt::Display for GetCloudFormationStackRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCloudFormationStackRecordsError {
-    fn description(&self) -> &str {
         match *self {
-            GetCloudFormationStackRecordsError::AccessDenied(ref cause) => cause,
-            GetCloudFormationStackRecordsError::AccountSetupInProgress(ref cause) => cause,
-            GetCloudFormationStackRecordsError::InvalidInput(ref cause) => cause,
-            GetCloudFormationStackRecordsError::NotFound(ref cause) => cause,
-            GetCloudFormationStackRecordsError::OperationFailure(ref cause) => cause,
-            GetCloudFormationStackRecordsError::Service(ref cause) => cause,
-            GetCloudFormationStackRecordsError::Unauthenticated(ref cause) => cause,
+            GetCloudFormationStackRecordsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetCloudFormationStackRecordsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCloudFormationStackRecordsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetCloudFormationStackRecordsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetCloudFormationStackRecordsError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCloudFormationStackRecordsError::Service(ref cause) => write!(f, "{}", cause),
+            GetCloudFormationStackRecordsError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetCloudFormationStackRecordsError {}
 /// Errors returned by GetDisk
 #[derive(Debug, PartialEq)]
 pub enum GetDiskError {
@@ -7751,22 +7771,18 @@ impl GetDiskError {
 }
 impl fmt::Display for GetDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDiskError {
-    fn description(&self) -> &str {
         match *self {
-            GetDiskError::AccessDenied(ref cause) => cause,
-            GetDiskError::AccountSetupInProgress(ref cause) => cause,
-            GetDiskError::InvalidInput(ref cause) => cause,
-            GetDiskError::NotFound(ref cause) => cause,
-            GetDiskError::OperationFailure(ref cause) => cause,
-            GetDiskError::Service(ref cause) => cause,
-            GetDiskError::Unauthenticated(ref cause) => cause,
+            GetDiskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDiskError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetDiskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDiskError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDiskError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDiskError::Service(ref cause) => write!(f, "{}", cause),
+            GetDiskError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDiskError {}
 /// Errors returned by GetDiskSnapshot
 #[derive(Debug, PartialEq)]
 pub enum GetDiskSnapshotError {
@@ -7822,22 +7838,18 @@ impl GetDiskSnapshotError {
 }
 impl fmt::Display for GetDiskSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDiskSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            GetDiskSnapshotError::AccessDenied(ref cause) => cause,
-            GetDiskSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            GetDiskSnapshotError::InvalidInput(ref cause) => cause,
-            GetDiskSnapshotError::NotFound(ref cause) => cause,
-            GetDiskSnapshotError::OperationFailure(ref cause) => cause,
-            GetDiskSnapshotError::Service(ref cause) => cause,
-            GetDiskSnapshotError::Unauthenticated(ref cause) => cause,
+            GetDiskSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDiskSnapshotError {}
 /// Errors returned by GetDiskSnapshots
 #[derive(Debug, PartialEq)]
 pub enum GetDiskSnapshotsError {
@@ -7893,22 +7905,18 @@ impl GetDiskSnapshotsError {
 }
 impl fmt::Display for GetDiskSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDiskSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
-            GetDiskSnapshotsError::AccessDenied(ref cause) => cause,
-            GetDiskSnapshotsError::AccountSetupInProgress(ref cause) => cause,
-            GetDiskSnapshotsError::InvalidInput(ref cause) => cause,
-            GetDiskSnapshotsError::NotFound(ref cause) => cause,
-            GetDiskSnapshotsError::OperationFailure(ref cause) => cause,
-            GetDiskSnapshotsError::Service(ref cause) => cause,
-            GetDiskSnapshotsError::Unauthenticated(ref cause) => cause,
+            GetDiskSnapshotsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotsError::Service(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDiskSnapshotsError {}
 /// Errors returned by GetDisks
 #[derive(Debug, PartialEq)]
 pub enum GetDisksError {
@@ -7960,22 +7968,18 @@ impl GetDisksError {
 }
 impl fmt::Display for GetDisksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDisksError {
-    fn description(&self) -> &str {
         match *self {
-            GetDisksError::AccessDenied(ref cause) => cause,
-            GetDisksError::AccountSetupInProgress(ref cause) => cause,
-            GetDisksError::InvalidInput(ref cause) => cause,
-            GetDisksError::NotFound(ref cause) => cause,
-            GetDisksError::OperationFailure(ref cause) => cause,
-            GetDisksError::Service(ref cause) => cause,
-            GetDisksError::Unauthenticated(ref cause) => cause,
+            GetDisksError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDisksError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetDisksError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDisksError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDisksError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDisksError::Service(ref cause) => write!(f, "{}", cause),
+            GetDisksError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDisksError {}
 /// Errors returned by GetDomain
 #[derive(Debug, PartialEq)]
 pub enum GetDomainError {
@@ -8029,22 +8033,18 @@ impl GetDomainError {
 }
 impl fmt::Display for GetDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDomainError {
-    fn description(&self) -> &str {
         match *self {
-            GetDomainError::AccessDenied(ref cause) => cause,
-            GetDomainError::AccountSetupInProgress(ref cause) => cause,
-            GetDomainError::InvalidInput(ref cause) => cause,
-            GetDomainError::NotFound(ref cause) => cause,
-            GetDomainError::OperationFailure(ref cause) => cause,
-            GetDomainError::Service(ref cause) => cause,
-            GetDomainError::Unauthenticated(ref cause) => cause,
+            GetDomainError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDomainError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetDomainError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDomainError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDomainError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDomainError::Service(ref cause) => write!(f, "{}", cause),
+            GetDomainError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDomainError {}
 /// Errors returned by GetDomains
 #[derive(Debug, PartialEq)]
 pub enum GetDomainsError {
@@ -8098,22 +8098,18 @@ impl GetDomainsError {
 }
 impl fmt::Display for GetDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDomainsError {
-    fn description(&self) -> &str {
         match *self {
-            GetDomainsError::AccessDenied(ref cause) => cause,
-            GetDomainsError::AccountSetupInProgress(ref cause) => cause,
-            GetDomainsError::InvalidInput(ref cause) => cause,
-            GetDomainsError::NotFound(ref cause) => cause,
-            GetDomainsError::OperationFailure(ref cause) => cause,
-            GetDomainsError::Service(ref cause) => cause,
-            GetDomainsError::Unauthenticated(ref cause) => cause,
+            GetDomainsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDomainsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetDomainsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDomainsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDomainsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDomainsError::Service(ref cause) => write!(f, "{}", cause),
+            GetDomainsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDomainsError {}
 /// Errors returned by GetExportSnapshotRecords
 #[derive(Debug, PartialEq)]
 pub enum GetExportSnapshotRecordsError {
@@ -8177,22 +8173,20 @@ impl GetExportSnapshotRecordsError {
 }
 impl fmt::Display for GetExportSnapshotRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetExportSnapshotRecordsError {
-    fn description(&self) -> &str {
         match *self {
-            GetExportSnapshotRecordsError::AccessDenied(ref cause) => cause,
-            GetExportSnapshotRecordsError::AccountSetupInProgress(ref cause) => cause,
-            GetExportSnapshotRecordsError::InvalidInput(ref cause) => cause,
-            GetExportSnapshotRecordsError::NotFound(ref cause) => cause,
-            GetExportSnapshotRecordsError::OperationFailure(ref cause) => cause,
-            GetExportSnapshotRecordsError::Service(ref cause) => cause,
-            GetExportSnapshotRecordsError::Unauthenticated(ref cause) => cause,
+            GetExportSnapshotRecordsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetExportSnapshotRecordsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetExportSnapshotRecordsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetExportSnapshotRecordsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetExportSnapshotRecordsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetExportSnapshotRecordsError::Service(ref cause) => write!(f, "{}", cause),
+            GetExportSnapshotRecordsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetExportSnapshotRecordsError {}
 /// Errors returned by GetInstance
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceError {
@@ -8246,22 +8240,18 @@ impl GetInstanceError {
 }
 impl fmt::Display for GetInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceError::AccessDenied(ref cause) => cause,
-            GetInstanceError::AccountSetupInProgress(ref cause) => cause,
-            GetInstanceError::InvalidInput(ref cause) => cause,
-            GetInstanceError::NotFound(ref cause) => cause,
-            GetInstanceError::OperationFailure(ref cause) => cause,
-            GetInstanceError::Service(ref cause) => cause,
-            GetInstanceError::Unauthenticated(ref cause) => cause,
+            GetInstanceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceError {}
 /// Errors returned by GetInstanceAccessDetails
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceAccessDetailsError {
@@ -8325,22 +8315,20 @@ impl GetInstanceAccessDetailsError {
 }
 impl fmt::Display for GetInstanceAccessDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceAccessDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceAccessDetailsError::AccessDenied(ref cause) => cause,
-            GetInstanceAccessDetailsError::AccountSetupInProgress(ref cause) => cause,
-            GetInstanceAccessDetailsError::InvalidInput(ref cause) => cause,
-            GetInstanceAccessDetailsError::NotFound(ref cause) => cause,
-            GetInstanceAccessDetailsError::OperationFailure(ref cause) => cause,
-            GetInstanceAccessDetailsError::Service(ref cause) => cause,
-            GetInstanceAccessDetailsError::Unauthenticated(ref cause) => cause,
+            GetInstanceAccessDetailsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessDetailsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetInstanceAccessDetailsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessDetailsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessDetailsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessDetailsError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessDetailsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceAccessDetailsError {}
 /// Errors returned by GetInstanceMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceMetricDataError {
@@ -8400,22 +8388,18 @@ impl GetInstanceMetricDataError {
 }
 impl fmt::Display for GetInstanceMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceMetricDataError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceMetricDataError::AccessDenied(ref cause) => cause,
-            GetInstanceMetricDataError::AccountSetupInProgress(ref cause) => cause,
-            GetInstanceMetricDataError::InvalidInput(ref cause) => cause,
-            GetInstanceMetricDataError::NotFound(ref cause) => cause,
-            GetInstanceMetricDataError::OperationFailure(ref cause) => cause,
-            GetInstanceMetricDataError::Service(ref cause) => cause,
-            GetInstanceMetricDataError::Unauthenticated(ref cause) => cause,
+            GetInstanceMetricDataError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstanceMetricDataError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstanceMetricDataError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceMetricDataError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceMetricDataError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstanceMetricDataError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstanceMetricDataError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceMetricDataError {}
 /// Errors returned by GetInstancePortStates
 #[derive(Debug, PartialEq)]
 pub enum GetInstancePortStatesError {
@@ -8475,22 +8459,18 @@ impl GetInstancePortStatesError {
 }
 impl fmt::Display for GetInstancePortStatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstancePortStatesError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstancePortStatesError::AccessDenied(ref cause) => cause,
-            GetInstancePortStatesError::AccountSetupInProgress(ref cause) => cause,
-            GetInstancePortStatesError::InvalidInput(ref cause) => cause,
-            GetInstancePortStatesError::NotFound(ref cause) => cause,
-            GetInstancePortStatesError::OperationFailure(ref cause) => cause,
-            GetInstancePortStatesError::Service(ref cause) => cause,
-            GetInstancePortStatesError::Unauthenticated(ref cause) => cause,
+            GetInstancePortStatesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstancePortStatesError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstancePortStatesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstancePortStatesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstancePortStatesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstancePortStatesError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstancePortStatesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstancePortStatesError {}
 /// Errors returned by GetInstanceSnapshot
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceSnapshotError {
@@ -8548,22 +8528,18 @@ impl GetInstanceSnapshotError {
 }
 impl fmt::Display for GetInstanceSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceSnapshotError::AccessDenied(ref cause) => cause,
-            GetInstanceSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            GetInstanceSnapshotError::InvalidInput(ref cause) => cause,
-            GetInstanceSnapshotError::NotFound(ref cause) => cause,
-            GetInstanceSnapshotError::OperationFailure(ref cause) => cause,
-            GetInstanceSnapshotError::Service(ref cause) => cause,
-            GetInstanceSnapshotError::Unauthenticated(ref cause) => cause,
+            GetInstanceSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceSnapshotError {}
 /// Errors returned by GetInstanceSnapshots
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceSnapshotsError {
@@ -8623,22 +8599,18 @@ impl GetInstanceSnapshotsError {
 }
 impl fmt::Display for GetInstanceSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceSnapshotsError::AccessDenied(ref cause) => cause,
-            GetInstanceSnapshotsError::AccountSetupInProgress(ref cause) => cause,
-            GetInstanceSnapshotsError::InvalidInput(ref cause) => cause,
-            GetInstanceSnapshotsError::NotFound(ref cause) => cause,
-            GetInstanceSnapshotsError::OperationFailure(ref cause) => cause,
-            GetInstanceSnapshotsError::Service(ref cause) => cause,
-            GetInstanceSnapshotsError::Unauthenticated(ref cause) => cause,
+            GetInstanceSnapshotsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotsError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceSnapshotsError {}
 /// Errors returned by GetInstanceState
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceStateError {
@@ -8694,22 +8666,18 @@ impl GetInstanceStateError {
 }
 impl fmt::Display for GetInstanceStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceStateError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceStateError::AccessDenied(ref cause) => cause,
-            GetInstanceStateError::AccountSetupInProgress(ref cause) => cause,
-            GetInstanceStateError::InvalidInput(ref cause) => cause,
-            GetInstanceStateError::NotFound(ref cause) => cause,
-            GetInstanceStateError::OperationFailure(ref cause) => cause,
-            GetInstanceStateError::Service(ref cause) => cause,
-            GetInstanceStateError::Unauthenticated(ref cause) => cause,
+            GetInstanceStateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstanceStateError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstanceStateError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceStateError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceStateError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstanceStateError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstanceStateError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceStateError {}
 /// Errors returned by GetInstances
 #[derive(Debug, PartialEq)]
 pub enum GetInstancesError {
@@ -8763,22 +8731,18 @@ impl GetInstancesError {
 }
 impl fmt::Display for GetInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstancesError::AccessDenied(ref cause) => cause,
-            GetInstancesError::AccountSetupInProgress(ref cause) => cause,
-            GetInstancesError::InvalidInput(ref cause) => cause,
-            GetInstancesError::NotFound(ref cause) => cause,
-            GetInstancesError::OperationFailure(ref cause) => cause,
-            GetInstancesError::Service(ref cause) => cause,
-            GetInstancesError::Unauthenticated(ref cause) => cause,
+            GetInstancesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstancesError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstancesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstancesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstancesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstancesError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstancesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstancesError {}
 /// Errors returned by GetKeyPair
 #[derive(Debug, PartialEq)]
 pub enum GetKeyPairError {
@@ -8832,22 +8796,18 @@ impl GetKeyPairError {
 }
 impl fmt::Display for GetKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetKeyPairError {
-    fn description(&self) -> &str {
         match *self {
-            GetKeyPairError::AccessDenied(ref cause) => cause,
-            GetKeyPairError::AccountSetupInProgress(ref cause) => cause,
-            GetKeyPairError::InvalidInput(ref cause) => cause,
-            GetKeyPairError::NotFound(ref cause) => cause,
-            GetKeyPairError::OperationFailure(ref cause) => cause,
-            GetKeyPairError::Service(ref cause) => cause,
-            GetKeyPairError::Unauthenticated(ref cause) => cause,
+            GetKeyPairError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetKeyPairError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetKeyPairError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetKeyPairError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetKeyPairError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetKeyPairError::Service(ref cause) => write!(f, "{}", cause),
+            GetKeyPairError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetKeyPairError {}
 /// Errors returned by GetKeyPairs
 #[derive(Debug, PartialEq)]
 pub enum GetKeyPairsError {
@@ -8901,22 +8861,18 @@ impl GetKeyPairsError {
 }
 impl fmt::Display for GetKeyPairsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetKeyPairsError {
-    fn description(&self) -> &str {
         match *self {
-            GetKeyPairsError::AccessDenied(ref cause) => cause,
-            GetKeyPairsError::AccountSetupInProgress(ref cause) => cause,
-            GetKeyPairsError::InvalidInput(ref cause) => cause,
-            GetKeyPairsError::NotFound(ref cause) => cause,
-            GetKeyPairsError::OperationFailure(ref cause) => cause,
-            GetKeyPairsError::Service(ref cause) => cause,
-            GetKeyPairsError::Unauthenticated(ref cause) => cause,
+            GetKeyPairsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetKeyPairsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetKeyPairsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetKeyPairsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetKeyPairsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetKeyPairsError::Service(ref cause) => write!(f, "{}", cause),
+            GetKeyPairsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetKeyPairsError {}
 /// Errors returned by GetLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum GetLoadBalancerError {
@@ -8972,22 +8928,18 @@ impl GetLoadBalancerError {
 }
 impl fmt::Display for GetLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoadBalancerError::AccessDenied(ref cause) => cause,
-            GetLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
-            GetLoadBalancerError::InvalidInput(ref cause) => cause,
-            GetLoadBalancerError::NotFound(ref cause) => cause,
-            GetLoadBalancerError::OperationFailure(ref cause) => cause,
-            GetLoadBalancerError::Service(ref cause) => cause,
-            GetLoadBalancerError::Unauthenticated(ref cause) => cause,
+            GetLoadBalancerError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerError::Service(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLoadBalancerError {}
 /// Errors returned by GetLoadBalancerMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetLoadBalancerMetricDataError {
@@ -9051,22 +9003,20 @@ impl GetLoadBalancerMetricDataError {
 }
 impl fmt::Display for GetLoadBalancerMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoadBalancerMetricDataError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoadBalancerMetricDataError::AccessDenied(ref cause) => cause,
-            GetLoadBalancerMetricDataError::AccountSetupInProgress(ref cause) => cause,
-            GetLoadBalancerMetricDataError::InvalidInput(ref cause) => cause,
-            GetLoadBalancerMetricDataError::NotFound(ref cause) => cause,
-            GetLoadBalancerMetricDataError::OperationFailure(ref cause) => cause,
-            GetLoadBalancerMetricDataError::Service(ref cause) => cause,
-            GetLoadBalancerMetricDataError::Unauthenticated(ref cause) => cause,
+            GetLoadBalancerMetricDataError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerMetricDataError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLoadBalancerMetricDataError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerMetricDataError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerMetricDataError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerMetricDataError::Service(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerMetricDataError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLoadBalancerMetricDataError {}
 /// Errors returned by GetLoadBalancerTlsCertificates
 #[derive(Debug, PartialEq)]
 pub enum GetLoadBalancerTlsCertificatesError {
@@ -9136,22 +9086,24 @@ impl GetLoadBalancerTlsCertificatesError {
 }
 impl fmt::Display for GetLoadBalancerTlsCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoadBalancerTlsCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoadBalancerTlsCertificatesError::AccessDenied(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::AccountSetupInProgress(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::InvalidInput(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::NotFound(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::OperationFailure(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::Service(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::Unauthenticated(ref cause) => cause,
+            GetLoadBalancerTlsCertificatesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerTlsCertificatesError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLoadBalancerTlsCertificatesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerTlsCertificatesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerTlsCertificatesError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLoadBalancerTlsCertificatesError::Service(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerTlsCertificatesError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetLoadBalancerTlsCertificatesError {}
 /// Errors returned by GetLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum GetLoadBalancersError {
@@ -9207,22 +9159,18 @@ impl GetLoadBalancersError {
 }
 impl fmt::Display for GetLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoadBalancersError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoadBalancersError::AccessDenied(ref cause) => cause,
-            GetLoadBalancersError::AccountSetupInProgress(ref cause) => cause,
-            GetLoadBalancersError::InvalidInput(ref cause) => cause,
-            GetLoadBalancersError::NotFound(ref cause) => cause,
-            GetLoadBalancersError::OperationFailure(ref cause) => cause,
-            GetLoadBalancersError::Service(ref cause) => cause,
-            GetLoadBalancersError::Unauthenticated(ref cause) => cause,
+            GetLoadBalancersError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancersError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancersError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancersError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancersError::Service(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancersError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLoadBalancersError {}
 /// Errors returned by GetOperation
 #[derive(Debug, PartialEq)]
 pub enum GetOperationError {
@@ -9276,22 +9224,18 @@ impl GetOperationError {
 }
 impl fmt::Display for GetOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOperationError {
-    fn description(&self) -> &str {
         match *self {
-            GetOperationError::AccessDenied(ref cause) => cause,
-            GetOperationError::AccountSetupInProgress(ref cause) => cause,
-            GetOperationError::InvalidInput(ref cause) => cause,
-            GetOperationError::NotFound(ref cause) => cause,
-            GetOperationError::OperationFailure(ref cause) => cause,
-            GetOperationError::Service(ref cause) => cause,
-            GetOperationError::Unauthenticated(ref cause) => cause,
+            GetOperationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetOperationError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetOperationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetOperationError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetOperationError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetOperationError::Service(ref cause) => write!(f, "{}", cause),
+            GetOperationError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOperationError {}
 /// Errors returned by GetOperations
 #[derive(Debug, PartialEq)]
 pub enum GetOperationsError {
@@ -9347,22 +9291,18 @@ impl GetOperationsError {
 }
 impl fmt::Display for GetOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOperationsError {
-    fn description(&self) -> &str {
         match *self {
-            GetOperationsError::AccessDenied(ref cause) => cause,
-            GetOperationsError::AccountSetupInProgress(ref cause) => cause,
-            GetOperationsError::InvalidInput(ref cause) => cause,
-            GetOperationsError::NotFound(ref cause) => cause,
-            GetOperationsError::OperationFailure(ref cause) => cause,
-            GetOperationsError::Service(ref cause) => cause,
-            GetOperationsError::Unauthenticated(ref cause) => cause,
+            GetOperationsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetOperationsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetOperationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetOperationsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetOperationsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetOperationsError::Service(ref cause) => write!(f, "{}", cause),
+            GetOperationsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOperationsError {}
 /// Errors returned by GetOperationsForResource
 #[derive(Debug, PartialEq)]
 pub enum GetOperationsForResourceError {
@@ -9426,22 +9366,20 @@ impl GetOperationsForResourceError {
 }
 impl fmt::Display for GetOperationsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOperationsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            GetOperationsForResourceError::AccessDenied(ref cause) => cause,
-            GetOperationsForResourceError::AccountSetupInProgress(ref cause) => cause,
-            GetOperationsForResourceError::InvalidInput(ref cause) => cause,
-            GetOperationsForResourceError::NotFound(ref cause) => cause,
-            GetOperationsForResourceError::OperationFailure(ref cause) => cause,
-            GetOperationsForResourceError::Service(ref cause) => cause,
-            GetOperationsForResourceError::Unauthenticated(ref cause) => cause,
+            GetOperationsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetOperationsForResourceError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetOperationsForResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetOperationsForResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetOperationsForResourceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetOperationsForResourceError::Service(ref cause) => write!(f, "{}", cause),
+            GetOperationsForResourceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOperationsForResourceError {}
 /// Errors returned by GetRegions
 #[derive(Debug, PartialEq)]
 pub enum GetRegionsError {
@@ -9495,22 +9433,18 @@ impl GetRegionsError {
 }
 impl fmt::Display for GetRegionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRegionsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRegionsError::AccessDenied(ref cause) => cause,
-            GetRegionsError::AccountSetupInProgress(ref cause) => cause,
-            GetRegionsError::InvalidInput(ref cause) => cause,
-            GetRegionsError::NotFound(ref cause) => cause,
-            GetRegionsError::OperationFailure(ref cause) => cause,
-            GetRegionsError::Service(ref cause) => cause,
-            GetRegionsError::Unauthenticated(ref cause) => cause,
+            GetRegionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRegionsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetRegionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRegionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRegionsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetRegionsError::Service(ref cause) => write!(f, "{}", cause),
+            GetRegionsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRegionsError {}
 /// Errors returned by GetRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseError {
@@ -9570,22 +9504,18 @@ impl GetRelationalDatabaseError {
 }
 impl fmt::Display for GetRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseError::Service(ref cause) => cause,
-            GetRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRelationalDatabaseError {}
 /// Errors returned by GetRelationalDatabaseBlueprints
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseBlueprintsError {
@@ -9655,22 +9585,24 @@ impl GetRelationalDatabaseBlueprintsError {
 }
 impl fmt::Display for GetRelationalDatabaseBlueprintsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseBlueprintsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseBlueprintsError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::Service(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseBlueprintsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBlueprintsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseBlueprintsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBlueprintsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBlueprintsError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseBlueprintsError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBlueprintsError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseBlueprintsError {}
 /// Errors returned by GetRelationalDatabaseBundles
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseBundlesError {
@@ -9740,22 +9672,22 @@ impl GetRelationalDatabaseBundlesError {
 }
 impl fmt::Display for GetRelationalDatabaseBundlesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseBundlesError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseBundlesError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::Service(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseBundlesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBundlesError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseBundlesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBundlesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBundlesError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseBundlesError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBundlesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRelationalDatabaseBundlesError {}
 /// Errors returned by GetRelationalDatabaseEvents
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseEventsError {
@@ -9823,22 +9755,20 @@ impl GetRelationalDatabaseEventsError {
 }
 impl fmt::Display for GetRelationalDatabaseEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseEventsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseEventsError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseEventsError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseEventsError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseEventsError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseEventsError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseEventsError::Service(ref cause) => cause,
-            GetRelationalDatabaseEventsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseEventsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseEventsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseEventsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseEventsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseEventsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseEventsError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseEventsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRelationalDatabaseEventsError {}
 /// Errors returned by GetRelationalDatabaseLogEvents
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseLogEventsError {
@@ -9908,22 +9838,24 @@ impl GetRelationalDatabaseLogEventsError {
 }
 impl fmt::Display for GetRelationalDatabaseLogEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseLogEventsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseLogEventsError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::Service(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseLogEventsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogEventsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseLogEventsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogEventsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogEventsError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseLogEventsError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogEventsError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseLogEventsError {}
 /// Errors returned by GetRelationalDatabaseLogStreams
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseLogStreamsError {
@@ -9993,22 +9925,24 @@ impl GetRelationalDatabaseLogStreamsError {
 }
 impl fmt::Display for GetRelationalDatabaseLogStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseLogStreamsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseLogStreamsError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::Service(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseLogStreamsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogStreamsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseLogStreamsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogStreamsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogStreamsError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseLogStreamsError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogStreamsError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseLogStreamsError {}
 /// Errors returned by GetRelationalDatabaseMasterUserPassword
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseMasterUserPasswordError {
@@ -10080,24 +10014,32 @@ impl GetRelationalDatabaseMasterUserPasswordError {
 }
 impl fmt::Display for GetRelationalDatabaseMasterUserPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseMasterUserPasswordError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseMasterUserPasswordError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::AccountSetupInProgress(ref cause) => {
-                cause
+            GetRelationalDatabaseMasterUserPasswordError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
             }
-            GetRelationalDatabaseMasterUserPasswordError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::Service(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseMasterUserPasswordError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMasterUserPasswordError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMasterUserPasswordError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMasterUserPasswordError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMasterUserPasswordError::Service(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMasterUserPasswordError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseMasterUserPasswordError {}
 /// Errors returned by GetRelationalDatabaseMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseMetricDataError {
@@ -10167,22 +10109,24 @@ impl GetRelationalDatabaseMetricDataError {
 }
 impl fmt::Display for GetRelationalDatabaseMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseMetricDataError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseMetricDataError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::Service(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseMetricDataError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseMetricDataError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMetricDataError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseMetricDataError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseMetricDataError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMetricDataError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseMetricDataError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseMetricDataError {}
 /// Errors returned by GetRelationalDatabaseParameters
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseParametersError {
@@ -10252,22 +10196,24 @@ impl GetRelationalDatabaseParametersError {
 }
 impl fmt::Display for GetRelationalDatabaseParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseParametersError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseParametersError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseParametersError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseParametersError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseParametersError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseParametersError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseParametersError::Service(ref cause) => cause,
-            GetRelationalDatabaseParametersError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseParametersError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseParametersError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseParametersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseParametersError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseParametersError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseParametersError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseParametersError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseParametersError {}
 /// Errors returned by GetRelationalDatabaseSnapshot
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseSnapshotError {
@@ -10337,22 +10283,24 @@ impl GetRelationalDatabaseSnapshotError {
 }
 impl fmt::Display for GetRelationalDatabaseSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseSnapshotError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::Service(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseSnapshotError {}
 /// Errors returned by GetRelationalDatabaseSnapshots
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseSnapshotsError {
@@ -10422,22 +10370,24 @@ impl GetRelationalDatabaseSnapshotsError {
 }
 impl fmt::Display for GetRelationalDatabaseSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseSnapshotsError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::Service(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseSnapshotsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseSnapshotsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotsError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseSnapshotsError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotsError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseSnapshotsError {}
 /// Errors returned by GetRelationalDatabases
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabasesError {
@@ -10497,22 +10447,20 @@ impl GetRelationalDatabasesError {
 }
 impl fmt::Display for GetRelationalDatabasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabasesError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabasesError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabasesError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabasesError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabasesError::NotFound(ref cause) => cause,
-            GetRelationalDatabasesError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabasesError::Service(ref cause) => cause,
-            GetRelationalDatabasesError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabasesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabasesError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabasesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabasesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabasesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabasesError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabasesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRelationalDatabasesError {}
 /// Errors returned by GetStaticIp
 #[derive(Debug, PartialEq)]
 pub enum GetStaticIpError {
@@ -10566,22 +10514,18 @@ impl GetStaticIpError {
 }
 impl fmt::Display for GetStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStaticIpError {
-    fn description(&self) -> &str {
         match *self {
-            GetStaticIpError::AccessDenied(ref cause) => cause,
-            GetStaticIpError::AccountSetupInProgress(ref cause) => cause,
-            GetStaticIpError::InvalidInput(ref cause) => cause,
-            GetStaticIpError::NotFound(ref cause) => cause,
-            GetStaticIpError::OperationFailure(ref cause) => cause,
-            GetStaticIpError::Service(ref cause) => cause,
-            GetStaticIpError::Unauthenticated(ref cause) => cause,
+            GetStaticIpError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetStaticIpError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetStaticIpError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetStaticIpError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetStaticIpError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetStaticIpError::Service(ref cause) => write!(f, "{}", cause),
+            GetStaticIpError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetStaticIpError {}
 /// Errors returned by GetStaticIps
 #[derive(Debug, PartialEq)]
 pub enum GetStaticIpsError {
@@ -10635,22 +10579,18 @@ impl GetStaticIpsError {
 }
 impl fmt::Display for GetStaticIpsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStaticIpsError {
-    fn description(&self) -> &str {
         match *self {
-            GetStaticIpsError::AccessDenied(ref cause) => cause,
-            GetStaticIpsError::AccountSetupInProgress(ref cause) => cause,
-            GetStaticIpsError::InvalidInput(ref cause) => cause,
-            GetStaticIpsError::NotFound(ref cause) => cause,
-            GetStaticIpsError::OperationFailure(ref cause) => cause,
-            GetStaticIpsError::Service(ref cause) => cause,
-            GetStaticIpsError::Unauthenticated(ref cause) => cause,
+            GetStaticIpsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetStaticIpsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetStaticIpsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetStaticIpsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetStaticIpsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetStaticIpsError::Service(ref cause) => write!(f, "{}", cause),
+            GetStaticIpsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetStaticIpsError {}
 /// Errors returned by ImportKeyPair
 #[derive(Debug, PartialEq)]
 pub enum ImportKeyPairError {
@@ -10706,22 +10646,18 @@ impl ImportKeyPairError {
 }
 impl fmt::Display for ImportKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportKeyPairError {
-    fn description(&self) -> &str {
         match *self {
-            ImportKeyPairError::AccessDenied(ref cause) => cause,
-            ImportKeyPairError::AccountSetupInProgress(ref cause) => cause,
-            ImportKeyPairError::InvalidInput(ref cause) => cause,
-            ImportKeyPairError::NotFound(ref cause) => cause,
-            ImportKeyPairError::OperationFailure(ref cause) => cause,
-            ImportKeyPairError::Service(ref cause) => cause,
-            ImportKeyPairError::Unauthenticated(ref cause) => cause,
+            ImportKeyPairError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ImportKeyPairError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            ImportKeyPairError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ImportKeyPairError::NotFound(ref cause) => write!(f, "{}", cause),
+            ImportKeyPairError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            ImportKeyPairError::Service(ref cause) => write!(f, "{}", cause),
+            ImportKeyPairError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportKeyPairError {}
 /// Errors returned by IsVpcPeered
 #[derive(Debug, PartialEq)]
 pub enum IsVpcPeeredError {
@@ -10775,22 +10711,18 @@ impl IsVpcPeeredError {
 }
 impl fmt::Display for IsVpcPeeredError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for IsVpcPeeredError {
-    fn description(&self) -> &str {
         match *self {
-            IsVpcPeeredError::AccessDenied(ref cause) => cause,
-            IsVpcPeeredError::AccountSetupInProgress(ref cause) => cause,
-            IsVpcPeeredError::InvalidInput(ref cause) => cause,
-            IsVpcPeeredError::NotFound(ref cause) => cause,
-            IsVpcPeeredError::OperationFailure(ref cause) => cause,
-            IsVpcPeeredError::Service(ref cause) => cause,
-            IsVpcPeeredError::Unauthenticated(ref cause) => cause,
+            IsVpcPeeredError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            IsVpcPeeredError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            IsVpcPeeredError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            IsVpcPeeredError::NotFound(ref cause) => write!(f, "{}", cause),
+            IsVpcPeeredError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            IsVpcPeeredError::Service(ref cause) => write!(f, "{}", cause),
+            IsVpcPeeredError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for IsVpcPeeredError {}
 /// Errors returned by OpenInstancePublicPorts
 #[derive(Debug, PartialEq)]
 pub enum OpenInstancePublicPortsError {
@@ -10854,22 +10786,20 @@ impl OpenInstancePublicPortsError {
 }
 impl fmt::Display for OpenInstancePublicPortsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for OpenInstancePublicPortsError {
-    fn description(&self) -> &str {
         match *self {
-            OpenInstancePublicPortsError::AccessDenied(ref cause) => cause,
-            OpenInstancePublicPortsError::AccountSetupInProgress(ref cause) => cause,
-            OpenInstancePublicPortsError::InvalidInput(ref cause) => cause,
-            OpenInstancePublicPortsError::NotFound(ref cause) => cause,
-            OpenInstancePublicPortsError::OperationFailure(ref cause) => cause,
-            OpenInstancePublicPortsError::Service(ref cause) => cause,
-            OpenInstancePublicPortsError::Unauthenticated(ref cause) => cause,
+            OpenInstancePublicPortsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            OpenInstancePublicPortsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OpenInstancePublicPortsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            OpenInstancePublicPortsError::NotFound(ref cause) => write!(f, "{}", cause),
+            OpenInstancePublicPortsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            OpenInstancePublicPortsError::Service(ref cause) => write!(f, "{}", cause),
+            OpenInstancePublicPortsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for OpenInstancePublicPortsError {}
 /// Errors returned by PeerVpc
 #[derive(Debug, PartialEq)]
 pub enum PeerVpcError {
@@ -10921,22 +10851,18 @@ impl PeerVpcError {
 }
 impl fmt::Display for PeerVpcError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PeerVpcError {
-    fn description(&self) -> &str {
         match *self {
-            PeerVpcError::AccessDenied(ref cause) => cause,
-            PeerVpcError::AccountSetupInProgress(ref cause) => cause,
-            PeerVpcError::InvalidInput(ref cause) => cause,
-            PeerVpcError::NotFound(ref cause) => cause,
-            PeerVpcError::OperationFailure(ref cause) => cause,
-            PeerVpcError::Service(ref cause) => cause,
-            PeerVpcError::Unauthenticated(ref cause) => cause,
+            PeerVpcError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PeerVpcError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            PeerVpcError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PeerVpcError::NotFound(ref cause) => write!(f, "{}", cause),
+            PeerVpcError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            PeerVpcError::Service(ref cause) => write!(f, "{}", cause),
+            PeerVpcError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PeerVpcError {}
 /// Errors returned by PutInstancePublicPorts
 #[derive(Debug, PartialEq)]
 pub enum PutInstancePublicPortsError {
@@ -10996,22 +10922,20 @@ impl PutInstancePublicPortsError {
 }
 impl fmt::Display for PutInstancePublicPortsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutInstancePublicPortsError {
-    fn description(&self) -> &str {
         match *self {
-            PutInstancePublicPortsError::AccessDenied(ref cause) => cause,
-            PutInstancePublicPortsError::AccountSetupInProgress(ref cause) => cause,
-            PutInstancePublicPortsError::InvalidInput(ref cause) => cause,
-            PutInstancePublicPortsError::NotFound(ref cause) => cause,
-            PutInstancePublicPortsError::OperationFailure(ref cause) => cause,
-            PutInstancePublicPortsError::Service(ref cause) => cause,
-            PutInstancePublicPortsError::Unauthenticated(ref cause) => cause,
+            PutInstancePublicPortsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PutInstancePublicPortsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutInstancePublicPortsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutInstancePublicPortsError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutInstancePublicPortsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            PutInstancePublicPortsError::Service(ref cause) => write!(f, "{}", cause),
+            PutInstancePublicPortsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutInstancePublicPortsError {}
 /// Errors returned by RebootInstance
 #[derive(Debug, PartialEq)]
 pub enum RebootInstanceError {
@@ -11067,22 +10991,18 @@ impl RebootInstanceError {
 }
 impl fmt::Display for RebootInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RebootInstanceError::AccessDenied(ref cause) => cause,
-            RebootInstanceError::AccountSetupInProgress(ref cause) => cause,
-            RebootInstanceError::InvalidInput(ref cause) => cause,
-            RebootInstanceError::NotFound(ref cause) => cause,
-            RebootInstanceError::OperationFailure(ref cause) => cause,
-            RebootInstanceError::Service(ref cause) => cause,
-            RebootInstanceError::Unauthenticated(ref cause) => cause,
+            RebootInstanceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RebootInstanceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            RebootInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RebootInstanceError::NotFound(ref cause) => write!(f, "{}", cause),
+            RebootInstanceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            RebootInstanceError::Service(ref cause) => write!(f, "{}", cause),
+            RebootInstanceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RebootInstanceError {}
 /// Errors returned by RebootRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum RebootRelationalDatabaseError {
@@ -11146,22 +11066,20 @@ impl RebootRelationalDatabaseError {
 }
 impl fmt::Display for RebootRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            RebootRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            RebootRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            RebootRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            RebootRelationalDatabaseError::NotFound(ref cause) => cause,
-            RebootRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            RebootRelationalDatabaseError::Service(ref cause) => cause,
-            RebootRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            RebootRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RebootRelationalDatabaseError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RebootRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RebootRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            RebootRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            RebootRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            RebootRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RebootRelationalDatabaseError {}
 /// Errors returned by ReleaseStaticIp
 #[derive(Debug, PartialEq)]
 pub enum ReleaseStaticIpError {
@@ -11217,22 +11135,18 @@ impl ReleaseStaticIpError {
 }
 impl fmt::Display for ReleaseStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReleaseStaticIpError {
-    fn description(&self) -> &str {
         match *self {
-            ReleaseStaticIpError::AccessDenied(ref cause) => cause,
-            ReleaseStaticIpError::AccountSetupInProgress(ref cause) => cause,
-            ReleaseStaticIpError::InvalidInput(ref cause) => cause,
-            ReleaseStaticIpError::NotFound(ref cause) => cause,
-            ReleaseStaticIpError::OperationFailure(ref cause) => cause,
-            ReleaseStaticIpError::Service(ref cause) => cause,
-            ReleaseStaticIpError::Unauthenticated(ref cause) => cause,
+            ReleaseStaticIpError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ReleaseStaticIpError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            ReleaseStaticIpError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ReleaseStaticIpError::NotFound(ref cause) => write!(f, "{}", cause),
+            ReleaseStaticIpError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            ReleaseStaticIpError::Service(ref cause) => write!(f, "{}", cause),
+            ReleaseStaticIpError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReleaseStaticIpError {}
 /// Errors returned by StartInstance
 #[derive(Debug, PartialEq)]
 pub enum StartInstanceError {
@@ -11288,22 +11202,18 @@ impl StartInstanceError {
 }
 impl fmt::Display for StartInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            StartInstanceError::AccessDenied(ref cause) => cause,
-            StartInstanceError::AccountSetupInProgress(ref cause) => cause,
-            StartInstanceError::InvalidInput(ref cause) => cause,
-            StartInstanceError::NotFound(ref cause) => cause,
-            StartInstanceError::OperationFailure(ref cause) => cause,
-            StartInstanceError::Service(ref cause) => cause,
-            StartInstanceError::Unauthenticated(ref cause) => cause,
+            StartInstanceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartInstanceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            StartInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartInstanceError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartInstanceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            StartInstanceError::Service(ref cause) => write!(f, "{}", cause),
+            StartInstanceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartInstanceError {}
 /// Errors returned by StartRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum StartRelationalDatabaseError {
@@ -11367,22 +11277,20 @@ impl StartRelationalDatabaseError {
 }
 impl fmt::Display for StartRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            StartRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            StartRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            StartRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            StartRelationalDatabaseError::NotFound(ref cause) => cause,
-            StartRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            StartRelationalDatabaseError::Service(ref cause) => cause,
-            StartRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            StartRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartRelationalDatabaseError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            StartRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            StartRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartRelationalDatabaseError {}
 /// Errors returned by StopInstance
 #[derive(Debug, PartialEq)]
 pub enum StopInstanceError {
@@ -11436,22 +11344,18 @@ impl StopInstanceError {
 }
 impl fmt::Display for StopInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            StopInstanceError::AccessDenied(ref cause) => cause,
-            StopInstanceError::AccountSetupInProgress(ref cause) => cause,
-            StopInstanceError::InvalidInput(ref cause) => cause,
-            StopInstanceError::NotFound(ref cause) => cause,
-            StopInstanceError::OperationFailure(ref cause) => cause,
-            StopInstanceError::Service(ref cause) => cause,
-            StopInstanceError::Unauthenticated(ref cause) => cause,
+            StopInstanceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StopInstanceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            StopInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StopInstanceError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopInstanceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            StopInstanceError::Service(ref cause) => write!(f, "{}", cause),
+            StopInstanceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopInstanceError {}
 /// Errors returned by StopRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum StopRelationalDatabaseError {
@@ -11511,22 +11415,20 @@ impl StopRelationalDatabaseError {
 }
 impl fmt::Display for StopRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            StopRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            StopRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            StopRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            StopRelationalDatabaseError::NotFound(ref cause) => cause,
-            StopRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            StopRelationalDatabaseError::Service(ref cause) => cause,
-            StopRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            StopRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StopRelationalDatabaseError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StopRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            StopRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            StopRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopRelationalDatabaseError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -11580,22 +11482,18 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AccessDenied(ref cause) => cause,
-            TagResourceError::AccountSetupInProgress(ref cause) => cause,
-            TagResourceError::InvalidInput(ref cause) => cause,
-            TagResourceError::NotFound(ref cause) => cause,
-            TagResourceError::OperationFailure(ref cause) => cause,
-            TagResourceError::Service(ref cause) => cause,
-            TagResourceError::Unauthenticated(ref cause) => cause,
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Service(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UnpeerVpc
 #[derive(Debug, PartialEq)]
 pub enum UnpeerVpcError {
@@ -11649,22 +11547,18 @@ impl UnpeerVpcError {
 }
 impl fmt::Display for UnpeerVpcError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UnpeerVpcError {
-    fn description(&self) -> &str {
         match *self {
-            UnpeerVpcError::AccessDenied(ref cause) => cause,
-            UnpeerVpcError::AccountSetupInProgress(ref cause) => cause,
-            UnpeerVpcError::InvalidInput(ref cause) => cause,
-            UnpeerVpcError::NotFound(ref cause) => cause,
-            UnpeerVpcError::OperationFailure(ref cause) => cause,
-            UnpeerVpcError::Service(ref cause) => cause,
-            UnpeerVpcError::Unauthenticated(ref cause) => cause,
+            UnpeerVpcError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UnpeerVpcError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            UnpeerVpcError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UnpeerVpcError::NotFound(ref cause) => write!(f, "{}", cause),
+            UnpeerVpcError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            UnpeerVpcError::Service(ref cause) => write!(f, "{}", cause),
+            UnpeerVpcError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UnpeerVpcError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -11720,22 +11614,18 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AccessDenied(ref cause) => cause,
-            UntagResourceError::AccountSetupInProgress(ref cause) => cause,
-            UntagResourceError::InvalidInput(ref cause) => cause,
-            UntagResourceError::NotFound(ref cause) => cause,
-            UntagResourceError::OperationFailure(ref cause) => cause,
-            UntagResourceError::Service(ref cause) => cause,
-            UntagResourceError::Unauthenticated(ref cause) => cause,
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Service(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateDomainEntry
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainEntryError {
@@ -11791,22 +11681,18 @@ impl UpdateDomainEntryError {
 }
 impl fmt::Display for UpdateDomainEntryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainEntryError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDomainEntryError::AccessDenied(ref cause) => cause,
-            UpdateDomainEntryError::AccountSetupInProgress(ref cause) => cause,
-            UpdateDomainEntryError::InvalidInput(ref cause) => cause,
-            UpdateDomainEntryError::NotFound(ref cause) => cause,
-            UpdateDomainEntryError::OperationFailure(ref cause) => cause,
-            UpdateDomainEntryError::Service(ref cause) => cause,
-            UpdateDomainEntryError::Unauthenticated(ref cause) => cause,
+            UpdateDomainEntryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEntryError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEntryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEntryError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEntryError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEntryError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEntryError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDomainEntryError {}
 /// Errors returned by UpdateLoadBalancerAttribute
 #[derive(Debug, PartialEq)]
 pub enum UpdateLoadBalancerAttributeError {
@@ -11874,22 +11760,20 @@ impl UpdateLoadBalancerAttributeError {
 }
 impl fmt::Display for UpdateLoadBalancerAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateLoadBalancerAttributeError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateLoadBalancerAttributeError::AccessDenied(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::AccountSetupInProgress(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::InvalidInput(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::NotFound(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::OperationFailure(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::Service(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::Unauthenticated(ref cause) => cause,
+            UpdateLoadBalancerAttributeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateLoadBalancerAttributeError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLoadBalancerAttributeError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateLoadBalancerAttributeError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateLoadBalancerAttributeError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            UpdateLoadBalancerAttributeError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateLoadBalancerAttributeError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateLoadBalancerAttributeError {}
 /// Errors returned by UpdateRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum UpdateRelationalDatabaseError {
@@ -11953,22 +11837,20 @@ impl UpdateRelationalDatabaseError {
 }
 impl fmt::Display for UpdateRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            UpdateRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            UpdateRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            UpdateRelationalDatabaseError::NotFound(ref cause) => cause,
-            UpdateRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            UpdateRelationalDatabaseError::Service(ref cause) => cause,
-            UpdateRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            UpdateRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRelationalDatabaseError {}
 /// Errors returned by UpdateRelationalDatabaseParameters
 #[derive(Debug, PartialEq)]
 pub enum UpdateRelationalDatabaseParametersError {
@@ -12038,22 +11920,28 @@ impl UpdateRelationalDatabaseParametersError {
 }
 impl fmt::Display for UpdateRelationalDatabaseParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRelationalDatabaseParametersError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRelationalDatabaseParametersError::AccessDenied(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::AccountSetupInProgress(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::InvalidInput(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::NotFound(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::OperationFailure(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::Service(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::Unauthenticated(ref cause) => cause,
+            UpdateRelationalDatabaseParametersError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRelationalDatabaseParametersError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRelationalDatabaseParametersError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRelationalDatabaseParametersError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseParametersError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRelationalDatabaseParametersError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseParametersError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateRelationalDatabaseParametersError {}
 /// Trait representing the capabilities of the Amazon Lightsail API. Amazon Lightsail clients implement this trait.
 pub trait Lightsail {
     /// <p>Allocates a static IP address.</p>

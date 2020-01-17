@@ -8,7 +8,7 @@ extern crate time;
 use std::thread;
 use std::time::Duration;
 
-use time::get_time;
+use time::Time;
 
 use rusoto::{AwsResult, ChainProvider, Region, ProvideAwsCredentials};
 use rusoto::dynamodb::{
@@ -43,7 +43,7 @@ fn main() {
         }
     }
 
-    let table_name = &format!("test_table_{}", get_time().sec);
+    let table_name = &format!("test_table_{}", Time::now().second());
 
     match dynamo_create_table_test(&mut dynamodb, &table_name) {
         Ok(_) => {

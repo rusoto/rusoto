@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to tag.</p>
     #[serde(rename = "ResourceArn")]
@@ -199,6 +200,7 @@ pub struct AppSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTrialComponentRequest {
     /// <p>The name of the component to associated with the trial.</p>
     #[serde(rename = "TrialComponentName")]
@@ -688,6 +690,7 @@ pub struct ContinuousParameterRangeSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAlgorithmInput {
     /// <p>A description of the algorithm.</p>
     #[serde(rename = "AlgorithmDescription")]
@@ -722,6 +725,7 @@ pub struct CreateAlgorithmOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
     /// <p>The name of the app.</p>
     #[serde(rename = "AppName")]
@@ -755,6 +759,7 @@ pub struct CreateAppResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAutoMLJobRequest {
     /// <p>Contains CompletionCriteria and SecurityConfig.</p>
     #[serde(rename = "AutoMLJobConfig")]
@@ -799,6 +804,7 @@ pub struct CreateAutoMLJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCodeRepositoryInput {
     /// <p>The name of the Git repository. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
     #[serde(rename = "CodeRepositoryName")]
@@ -817,6 +823,7 @@ pub struct CreateCodeRepositoryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCompilationJobRequest {
     /// <p>A name for the model compilation job. The name must be unique within the AWS Region and within your AWS account. </p>
     #[serde(rename = "CompilationJobName")]
@@ -844,6 +851,7 @@ pub struct CreateCompilationJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainRequest {
     /// <p>The mode of authentication that member use to access the domain.</p>
     #[serde(rename = "AuthMode")]
@@ -884,6 +892,7 @@ pub struct CreateDomainResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointConfigInput {
     #[serde(rename = "DataCaptureConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -913,6 +922,7 @@ pub struct CreateEndpointConfigOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointInput {
     /// <p>The name of an endpoint configuration. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">CreateEndpointConfig</a>. </p>
     #[serde(rename = "EndpointConfigName")]
@@ -935,6 +945,7 @@ pub struct CreateEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateExperimentRequest {
     /// <p>The description of the experiment.</p>
     #[serde(rename = "Description")]
@@ -963,6 +974,7 @@ pub struct CreateExperimentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFlowDefinitionRequest {
     /// <p>The name of your flow definition.</p>
     #[serde(rename = "FlowDefinitionName")]
@@ -995,6 +1007,7 @@ pub struct CreateFlowDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHumanTaskUiRequest {
     /// <p>The name of the user interface you are creating.</p>
     #[serde(rename = "HumanTaskUiName")]
@@ -1016,6 +1029,7 @@ pub struct CreateHumanTaskUiResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHyperParameterTuningJobRequest {
     /// <p>The <a>HyperParameterTuningJobConfig</a> object that describes the tuning job, including the search strategy, the objective metric used to evaluate training jobs, ranges of parameters to search, and resource limits for the tuning job. For more information, see <a>automatic-model-tuning</a> </p>
     #[serde(rename = "HyperParameterTuningJobConfig")]
@@ -1050,6 +1064,7 @@ pub struct CreateHyperParameterTuningJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLabelingJobRequest {
     /// <p>Configures the labeling task and how it is presented to workers; including, but not limited to price, keywords, and batch size (task count).</p>
     #[serde(rename = "HumanTaskConfig")]
@@ -1096,6 +1111,7 @@ pub struct CreateLabelingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelInput {
     /// <p>Specifies the containers in the inference pipeline.</p>
     #[serde(rename = "Containers")]
@@ -1134,6 +1150,7 @@ pub struct CreateModelOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelPackageInput {
     /// <p>Whether to certify the model package for listing on AWS Marketplace.</p>
     #[serde(rename = "CertifyForMarketplace")]
@@ -1169,6 +1186,7 @@ pub struct CreateModelPackageOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMonitoringScheduleRequest {
     /// <p>The configuration object that specifies the monitoring schedule and defines the monitoring job.</p>
     #[serde(rename = "MonitoringScheduleConfig")]
@@ -1191,6 +1209,7 @@ pub struct CreateMonitoringScheduleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotebookInstanceInput {
     /// <p>A list of Elastic Inference (EI) instance types to associate with this notebook instance. Currently, only one instance type can be associated with a notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
@@ -1248,6 +1267,7 @@ pub struct CreateNotebookInstanceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotebookInstanceLifecycleConfigInput {
     /// <p>The name of the lifecycle configuration.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigName")]
@@ -1281,6 +1301,7 @@ pub struct CreateNotebookInstanceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePresignedDomainUrlRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -1304,6 +1325,7 @@ pub struct CreatePresignedDomainUrlResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePresignedNotebookInstanceUrlInput {
     /// <p>The name of the notebook instance.</p>
     #[serde(rename = "NotebookInstanceName")]
@@ -1324,6 +1346,7 @@ pub struct CreatePresignedNotebookInstanceUrlOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProcessingJobRequest {
     /// <p>Configures the processing job to run a specified Docker container image.</p>
     #[serde(rename = "AppSpecification")]
@@ -1375,6 +1398,7 @@ pub struct CreateProcessingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrainingJobRequest {
     /// <p>The registry path of the Docker image that contains the training algorithm and algorithm-specific metadata, including the input mode. For more information about algorithms provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. For information about providing your own algorithms, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms.html">Using Your Own Algorithms with Amazon SageMaker</a>. </p>
     #[serde(rename = "AlgorithmSpecification")]
@@ -1450,6 +1474,7 @@ pub struct CreateTrainingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTransformJobRequest {
     /// <p>Specifies the number of records to include in a mini-batch for an HTTP inference request. A <i>record</i> <i/> is a single unit of input data that inference can be made on. For example, a single line in a CSV file is a record. </p> <p>To enable the batch strategy, you must set the <code>SplitType</code> property of the <a>DataProcessing</a> object to <code>Line</code>, <code>RecordIO</code>, or <code>TFRecord</code>.</p> <p>To use only one record when making an HTTP invocation request to a container, set <code>BatchStrategy</code> to <code>SingleRecord</code> and <code>SplitType</code> to <code>Line</code>.</p> <p>To fit as many records in a mini-batch as can fit within the <code>MaxPayloadInMB</code> limit, set <code>BatchStrategy</code> to <code>MultiRecord</code> and <code>SplitType</code> to <code>Line</code>.</p>
     #[serde(rename = "BatchStrategy")]
@@ -1504,6 +1529,7 @@ pub struct CreateTransformJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrialComponentRequest {
     /// <p>The name of the component as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>TrialComponentName</code> is displayed.</p>
     #[serde(rename = "DisplayName")]
@@ -1552,6 +1578,7 @@ pub struct CreateTrialComponentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrialRequest {
     /// <p>The name of the trial as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>TrialName</code> is displayed.</p>
     #[serde(rename = "DisplayName")]
@@ -1579,6 +1606,7 @@ pub struct CreateTrialResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserProfileRequest {
     /// <p>The ID of the associated Domain.</p>
     #[serde(rename = "DomainId")]
@@ -1614,6 +1642,7 @@ pub struct CreateUserProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkteamRequest {
     /// <p>A description of the work team.</p>
     #[serde(rename = "Description")]
@@ -1798,6 +1827,7 @@ pub struct DebugRuleEvaluationStatus {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAlgorithmInput {
     /// <p>The name of the algorithm to delete.</p>
     #[serde(rename = "AlgorithmName")]
@@ -1805,6 +1835,7 @@ pub struct DeleteAlgorithmInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
     /// <p>The name of the app.</p>
     #[serde(rename = "AppName")]
@@ -1821,6 +1852,7 @@ pub struct DeleteAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCodeRepositoryInput {
     /// <p>The name of the Git repository to delete.</p>
     #[serde(rename = "CodeRepositoryName")]
@@ -1828,6 +1860,7 @@ pub struct DeleteCodeRepositoryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -1839,6 +1872,7 @@ pub struct DeleteDomainRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointConfigInput {
     /// <p>The name of the endpoint configuration that you want to delete.</p>
     #[serde(rename = "EndpointConfigName")]
@@ -1846,6 +1880,7 @@ pub struct DeleteEndpointConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointInput {
     /// <p>The name of the endpoint that you want to delete.</p>
     #[serde(rename = "EndpointName")]
@@ -1853,6 +1888,7 @@ pub struct DeleteEndpointInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteExperimentRequest {
     /// <p>The name of the experiment to delete.</p>
     #[serde(rename = "ExperimentName")]
@@ -1869,6 +1905,7 @@ pub struct DeleteExperimentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFlowDefinitionRequest {
     /// <p>The name of the flow definition you are deleting.</p>
     #[serde(rename = "FlowDefinitionName")]
@@ -1880,6 +1917,7 @@ pub struct DeleteFlowDefinitionRequest {
 pub struct DeleteFlowDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelInput {
     /// <p>The name of the model to delete.</p>
     #[serde(rename = "ModelName")]
@@ -1887,6 +1925,7 @@ pub struct DeleteModelInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelPackageInput {
     /// <p>The name of the model package. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
     #[serde(rename = "ModelPackageName")]
@@ -1894,6 +1933,7 @@ pub struct DeleteModelPackageInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMonitoringScheduleRequest {
     /// <p>The name of the monitoring schedule to delete.</p>
     #[serde(rename = "MonitoringScheduleName")]
@@ -1901,6 +1941,7 @@ pub struct DeleteMonitoringScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotebookInstanceInput {
     /// <p>The name of the Amazon SageMaker notebook instance to delete.</p>
     #[serde(rename = "NotebookInstanceName")]
@@ -1908,6 +1949,7 @@ pub struct DeleteNotebookInstanceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotebookInstanceLifecycleConfigInput {
     /// <p>The name of the lifecycle configuration to delete.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigName")]
@@ -1915,6 +1957,7 @@ pub struct DeleteNotebookInstanceLifecycleConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsInput {
     /// <p>The Amazon Resource Name (ARN) of the resource whose tags you want to delete.</p>
     #[serde(rename = "ResourceArn")]
@@ -1929,6 +1972,7 @@ pub struct DeleteTagsInput {
 pub struct DeleteTagsOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrialComponentRequest {
     /// <p>The name of the component to delete.</p>
     #[serde(rename = "TrialComponentName")]
@@ -1945,6 +1989,7 @@ pub struct DeleteTrialComponentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrialRequest {
     /// <p>The name of the trial to delete.</p>
     #[serde(rename = "TrialName")]
@@ -1961,6 +2006,7 @@ pub struct DeleteTrialResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserProfileRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -1971,6 +2017,7 @@ pub struct DeleteUserProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkteamRequest {
     /// <p>The name of the work team to delete.</p>
     #[serde(rename = "WorkteamName")]
@@ -2004,6 +2051,7 @@ pub struct DeployedImage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAlgorithmInput {
     /// <p>The name of the algorithm to describe.</p>
     #[serde(rename = "AlgorithmName")]
@@ -2054,6 +2102,7 @@ pub struct DescribeAlgorithmOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppRequest {
     /// <p>The name of the app.</p>
     #[serde(rename = "AppName")]
@@ -2119,6 +2168,7 @@ pub struct DescribeAppResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAutoMLJobRequest {
     /// <p>Request information about a job using that job's unique name.</p>
     #[serde(rename = "AutoMLJobName")]
@@ -2194,6 +2244,7 @@ pub struct DescribeAutoMLJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCodeRepositoryInput {
     /// <p>The name of the Git repository to describe.</p>
     #[serde(rename = "CodeRepositoryName")]
@@ -2222,6 +2273,7 @@ pub struct DescribeCodeRepositoryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCompilationJobRequest {
     /// <p>The name of the model compilation job that you want information about.</p>
     #[serde(rename = "CompilationJobName")]
@@ -2275,6 +2327,7 @@ pub struct DescribeCompilationJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -2347,6 +2400,7 @@ pub struct DescribeDomainResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointConfigInput {
     /// <p>The name of the endpoint configuration.</p>
     #[serde(rename = "EndpointConfigName")]
@@ -2378,6 +2432,7 @@ pub struct DescribeEndpointConfigOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointInput {
     /// <p>The name of the endpoint.</p>
     #[serde(rename = "EndpointName")]
@@ -2419,6 +2474,7 @@ pub struct DescribeEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExperimentRequest {
     /// <p>The name of the experiment to describe.</p>
     #[serde(rename = "ExperimentName")]
@@ -2467,6 +2523,7 @@ pub struct DescribeExperimentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFlowDefinitionRequest {
     /// <p>The name of the flow definition.</p>
     #[serde(rename = "FlowDefinitionName")]
@@ -2508,6 +2565,7 @@ pub struct DescribeFlowDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHumanTaskUiRequest {
     /// <p>The name of the human task user interface you want information about.</p>
     #[serde(rename = "HumanTaskUiName")]
@@ -2531,6 +2589,7 @@ pub struct DescribeHumanTaskUiResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHyperParameterTuningJobRequest {
     /// <p>The name of the tuning job to describe.</p>
     #[serde(rename = "HyperParameterTuningJobName")]
@@ -2596,6 +2655,7 @@ pub struct DescribeHyperParameterTuningJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLabelingJobRequest {
     /// <p>The name of the labeling job to return information for.</p>
     #[serde(rename = "LabelingJobName")]
@@ -2669,6 +2729,7 @@ pub struct DescribeLabelingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelInput {
     /// <p>The name of the model.</p>
     #[serde(rename = "ModelName")]
@@ -2709,6 +2770,7 @@ pub struct DescribeModelOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelPackageInput {
     /// <p>The name of the model package to describe.</p>
     #[serde(rename = "ModelPackageName")]
@@ -2756,6 +2818,7 @@ pub struct DescribeModelPackageOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMonitoringScheduleRequest {
     /// <p>Name of a previously created monitoring schedule.</p>
     #[serde(rename = "MonitoringScheduleName")]
@@ -2798,6 +2861,7 @@ pub struct DescribeMonitoringScheduleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotebookInstanceInput {
     /// <p>The name of the notebook instance that you want information about.</p>
     #[serde(rename = "NotebookInstanceName")]
@@ -2805,6 +2869,7 @@ pub struct DescribeNotebookInstanceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotebookInstanceLifecycleConfigInput {
     /// <p>The name of the lifecycle configuration to describe.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigName")]
@@ -2926,6 +2991,7 @@ pub struct DescribeNotebookInstanceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProcessingJobRequest {
     /// <p>The name of the processing job. The name must be unique within an AWS Region in the AWS account.</p>
     #[serde(rename = "ProcessingJobName")]
@@ -3016,6 +3082,7 @@ pub struct DescribeProcessingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscribedWorkteamRequest {
     /// <p>The Amazon Resource Name (ARN) of the subscribed work team to describe.</p>
     #[serde(rename = "WorkteamArn")]
@@ -3031,6 +3098,7 @@ pub struct DescribeSubscribedWorkteamResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrainingJobRequest {
     /// <p>The name of the training job.</p>
     #[serde(rename = "TrainingJobName")]
@@ -3166,6 +3234,7 @@ pub struct DescribeTrainingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTransformJobRequest {
     /// <p>The name of the transform job that you want to view details of.</p>
     #[serde(rename = "TransformJobName")]
@@ -3245,6 +3314,7 @@ pub struct DescribeTransformJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrialComponentRequest {
     /// <p>The name of the trial component to describe.</p>
     #[serde(rename = "TrialComponentName")]
@@ -3317,6 +3387,7 @@ pub struct DescribeTrialComponentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrialRequest {
     /// <p>The name of the trial to describe.</p>
     #[serde(rename = "TrialName")]
@@ -3365,6 +3436,7 @@ pub struct DescribeTrialResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserProfileRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -3424,6 +3496,7 @@ pub struct DescribeUserProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkteamRequest {
     /// <p>The name of the work team to return a description of.</p>
     #[serde(rename = "WorkteamName")]
@@ -3440,6 +3513,7 @@ pub struct DescribeWorkteamResponse {
 
 /// <p>Specifies weight and capacity values for a production variant.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DesiredWeightAndCapacity {
     /// <p>The variant's capacity.</p>
     #[serde(rename = "DesiredInstanceCount")]
@@ -3455,6 +3529,7 @@ pub struct DesiredWeightAndCapacity {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateTrialComponentRequest {
     /// <p>The name of the component to disassociate from the trial.</p>
     #[serde(rename = "TrialComponentName")]
@@ -3687,6 +3762,7 @@ pub struct FileSystemDataSource {
 
 /// <p><p>A conditional statement for a search expression that includes a resource property, a Boolean operator, and a value.</p> <p>If you don&#39;t specify an <code>Operator</code> and a <code>Value</code>, the filter searches for only the specified property. For example, defining a <code>Filter</code> for the <code>FailureReason</code> for the <code>TrainingJob</code> <code>Resource</code> searches for training job objects that have a value in the <code>FailureReason</code> field.</p> <p>If you specify a <code>Value</code>, but not an <code>Operator</code>, Amazon SageMaker uses the equals operator as the default.</p> <p>In search, there are several property types:</p> <dl> <dt>Metrics</dt> <dd> <p>To define a metric filter, enter a value using the form <code>&quot;Metrics.&lt;name&gt;&quot;</code>, where <code>&lt;name&gt;</code> is a metric name. For example, the following filter searches for training jobs with an <code>&quot;accuracy&quot;</code> metric greater than <code>&quot;0.9&quot;</code>:</p> <p> <code>{</code> </p> <p> <code>&quot;Name&quot;: &quot;Metrics.accuracy&quot;,</code> </p> <p> <code>&quot;Operator&quot;: &quot;GREATER<em>THAN&quot;,</code> </p> <p> <code>&quot;Value&quot;: &quot;0.9&quot;</code> </p> <p> <code>}</code> </p> </dd> <dt>HyperParameters</dt> <dd> <p>To define a hyperparameter filter, enter a value with the form <code>&quot;HyperParameters.&lt;name&gt;&quot;</code>. Decimal hyperparameter values are treated as a decimal in a comparison if the specified <code>Value</code> is also a decimal value. If the specified <code>Value</code> is an integer, the decimal hyperparameter values are treated as integers. For example, the following filter is satisfied by training jobs with a <code>&quot;learning</em>rate&quot;</code> hyperparameter that is less than <code>&quot;0.5&quot;</code>:</p> <p> <code> {</code> </p> <p> <code> &quot;Name&quot;: &quot;HyperParameters.learning<em>rate&quot;,</code> </p> <p> <code> &quot;Operator&quot;: &quot;LESS</em>THAN&quot;,</code> </p> <p> <code> &quot;Value&quot;: &quot;0.5&quot;</code> </p> <p> <code> }</code> </p> </dd> <dt>Tags</dt> <dd> <p>To define a tag filter, enter a value with the form <code>&quot;Tags.&lt;key&gt;&quot;</code>.</p> </dd> </dl></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>A property name. For example, <code>TrainingJobName</code>. For the list of valid property names returned in a search result for each supported resource, see <a>TrainingJob</a> properties. You must specify a valid property name for the resource.</p>
     #[serde(rename = "Name")]
@@ -3768,6 +3844,7 @@ pub struct FlowDefinitionSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSearchSuggestionsRequest {
     /// <p>The name of the Amazon SageMaker resource to Search for. The only valid <code>Resource</code> value is <code>TrainingJob</code>.</p>
     #[serde(rename = "Resource")]
@@ -3805,6 +3882,7 @@ pub struct GitConfig {
 
 /// <p>Specifies configuration details for a Git repository when the repository is updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GitConfigForUpdate {
     /// <p>The Amazon Resource Name (ARN) of the AWS Secrets Manager secret that contains the credentials used to access the git repository. The secret must have a staging label of <code>AWSCURRENT</code> and must be in the following format:</p> <p> <code>{"username": <i>UserName</i>, "password": <i>Password</i>}</code> </p>
     #[serde(rename = "SecretArn")]
@@ -4479,6 +4557,7 @@ pub struct LabelingJobSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAlgorithmsInput {
     /// <p>A filter that returns only algorithms created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4523,6 +4602,7 @@ pub struct ListAlgorithmsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppsRequest {
     /// <p>A parameter to search for the domain ID.</p>
     #[serde(rename = "DomainIdEquals")]
@@ -4564,6 +4644,7 @@ pub struct ListAppsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAutoMLJobsRequest {
     /// <p>Request a list of jobs, using a filter for time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4620,6 +4701,7 @@ pub struct ListAutoMLJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCandidatesForAutoMLJobRequest {
     /// <p>List the Candidates created for the job by providing the job's name.</p>
     #[serde(rename = "AutoMLJobName")]
@@ -4663,6 +4745,7 @@ pub struct ListCandidatesForAutoMLJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCodeRepositoriesInput {
     /// <p>A filter that returns only Git repositories that were created after the specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4715,6 +4798,7 @@ pub struct ListCodeRepositoriesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCompilationJobsRequest {
     /// <p>A filter that returns the model compilation jobs that were created after a specified time. </p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4771,6 +4855,7 @@ pub struct ListCompilationJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsRequest {
     /// <p>Returns a list up to a specified limit.</p>
     #[serde(rename = "MaxResults")]
@@ -4796,6 +4881,7 @@ pub struct ListDomainsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointConfigsInput {
     /// <p>A filter that returns only endpoint configurations with a creation time greater than or equal to the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4840,6 +4926,7 @@ pub struct ListEndpointConfigsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointsInput {
     /// <p>A filter that returns only endpoints with a creation time greater than or equal to the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4896,6 +4983,7 @@ pub struct ListEndpointsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListExperimentsRequest {
     /// <p>A filter that returns only experiments created after the specified time.</p>
     #[serde(rename = "CreatedAfter")]
@@ -4937,6 +5025,7 @@ pub struct ListExperimentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFlowDefinitionsRequest {
     /// <p>A filter that returns only flow definitions with a creation time greater than or equal to the specified timestamp.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4973,6 +5062,7 @@ pub struct ListFlowDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHumanTaskUisRequest {
     /// <p>A filter that returns only human task user interfaces with a creation time greater than or equal to the specified timestamp.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5009,6 +5099,7 @@ pub struct ListHumanTaskUisResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHyperParameterTuningJobsRequest {
     /// <p>A filter that returns only tuning jobs that were created after the specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5065,6 +5156,7 @@ pub struct ListHyperParameterTuningJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLabelingJobsForWorkteamRequest {
     /// <p>A filter that returns only labeling jobs created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5112,6 +5204,7 @@ pub struct ListLabelingJobsForWorkteamResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLabelingJobsRequest {
     /// <p>A filter that returns only labeling jobs created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5169,6 +5262,7 @@ pub struct ListLabelingJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListModelPackagesInput {
     /// <p>A filter that returns only model packages created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5213,6 +5307,7 @@ pub struct ListModelPackagesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListModelsInput {
     /// <p>A filter that returns only models with a creation time greater than or equal to the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5257,6 +5352,7 @@ pub struct ListModelsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMonitoringExecutionsRequest {
     /// <p>A filter that returns only jobs created after a specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5325,6 +5421,7 @@ pub struct ListMonitoringExecutionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMonitoringSchedulesRequest {
     /// <p>A filter that returns only monitoring schedules created after a specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5385,6 +5482,7 @@ pub struct ListMonitoringSchedulesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNotebookInstanceLifecycleConfigsInput {
     /// <p>A filter that returns only lifecycle configurations that were created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5438,6 +5536,7 @@ pub struct ListNotebookInstanceLifecycleConfigsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNotebookInstancesInput {
     /// <p>A filter that returns only notebook instances with associated with the specified git repository.</p>
     #[serde(rename = "AdditionalCodeRepositoryEquals")]
@@ -5507,6 +5606,7 @@ pub struct ListNotebookInstancesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProcessingJobsRequest {
     /// <p>A filter that returns only processing jobs created after the specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5563,6 +5663,7 @@ pub struct ListProcessingJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscribedWorkteamsRequest {
     /// <p>The maximum number of work teams to return in each page of the response.</p>
     #[serde(rename = "MaxResults")]
@@ -5591,6 +5692,7 @@ pub struct ListSubscribedWorkteamsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsInput {
     /// <p>Maximum number of tags to return.</p>
     #[serde(rename = "MaxResults")]
@@ -5619,6 +5721,7 @@ pub struct ListTagsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrainingJobsForHyperParameterTuningJobRequest {
     /// <p>The name of the tuning job whose training jobs you want to list.</p>
     #[serde(rename = "HyperParameterTuningJobName")]
@@ -5658,6 +5761,7 @@ pub struct ListTrainingJobsForHyperParameterTuningJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrainingJobsRequest {
     /// <p>A filter that returns only training jobs created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5714,6 +5818,7 @@ pub struct ListTrainingJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTransformJobsRequest {
     /// <p>A filter that returns only transform jobs created after the specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5770,6 +5875,7 @@ pub struct ListTransformJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrialComponentsRequest {
     /// <p>A filter that returns only components created after the specified time.</p>
     #[serde(rename = "CreatedAfter")]
@@ -5815,6 +5921,7 @@ pub struct ListTrialComponentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrialsRequest {
     /// <p>A filter that returns only trials created after the specified time.</p>
     #[serde(rename = "CreatedAfter")]
@@ -5860,6 +5967,7 @@ pub struct ListTrialsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserProfilesRequest {
     /// <p>A parameter by which to filter the results.</p>
     #[serde(rename = "DomainIdEquals")]
@@ -5901,6 +6009,7 @@ pub struct ListUserProfilesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkteamsRequest {
     /// <p>The maximum number of work teams to return in each page of the response.</p>
     #[serde(rename = "MaxResults")]
@@ -6335,6 +6444,7 @@ pub struct MonitoringStoppingCondition {
 
 /// <p><p>Defines a list of <code>NestedFilters</code> objects. To satisfy the conditions specified in the <code>NestedFilters</code> call, a resource must satisfy the conditions of all of the filters.</p> <p>For example, you could define a <code>NestedFilters</code> using the training job&#39;s <code>InputDataConfig</code> property to filter on <code>Channel</code> objects. </p> <p>A <code>NestedFilters</code> object contains multiple filters. For example, to find all training jobs whose name contains <code>train</code> and that have <code>cat/data</code> in their <code>S3Uri</code> (specified in <code>InputDataConfig</code>), you need to create a <code>NestedFilters</code> object that specifies the <code>InputDataConfig</code> property with the following <code>Filter</code> objects:</p> <ul> <li> <p> <code>&#39;{Name:&quot;InputDataConfig.ChannelName&quot;, &quot;Operator&quot;:&quot;EQUALS&quot;, &quot;Value&quot;:&quot;train&quot;}&#39;,</code> </p> </li> <li> <p> <code>&#39;{Name:&quot;InputDataConfig.DataSource.S3DataSource.S3Uri&quot;, &quot;Operator&quot;:&quot;CONTAINS&quot;, &quot;Value&quot;:&quot;cat/data&quot;}&#39;</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NestedFilters {
     /// <p>A list of filters. Each filter acts on a property. Filters must contain at least one <code>Filters</code> value. For example, a <code>NestedFilters</code> call might include a filter on the <code>PropertyName</code> parameter of the <code>InputDataConfig</code> property: <code>InputDataConfig.DataSource.S3DataSource.S3Uri</code>.</p>
     #[serde(rename = "Filters")]
@@ -6733,6 +6843,7 @@ pub struct ProductionVariantSummary {
 
 /// <p>A type of <code>SuggestionQuery</code>. A suggestion query for retrieving property names that match the specified hint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PropertyNameQuery {
     /// <p>Text that is part of a property's name. The property names of hyperparameter, metric, and tag key names that begin with the specified text in the <code>PropertyNameHint</code>.</p>
     #[serde(rename = "PropertyNameHint")]
@@ -6759,6 +6870,7 @@ pub struct PublicWorkforceTaskPrice {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenderUiTemplateRequest {
     /// <p>The Amazon Resource Name (ARN) that has access to the S3 objects that are used by the template.</p>
     #[serde(rename = "RoleArn")]
@@ -6784,6 +6896,7 @@ pub struct RenderUiTemplateResponse {
 
 /// <p>Contains input values for a task.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenderableTask {
     /// <p>A JSON object that contains values for the variables defined in the template. It is made available to the template under the substitution variable <code>task.input</code>. For example, if you define a variable <code>task.input.text</code> in your template, you can supply the variable in the JSON object as <code>"text": "sample text"</code>.</p>
     #[serde(rename = "Input")]
@@ -6862,6 +6975,7 @@ pub struct ResourceSpec {
 
 /// <p>The retention policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetentionPolicy {
     /// <p>The home Amazon Elastic File System (EFS).</p>
     #[serde(rename = "HomeEfsFileSystem")]
@@ -6898,6 +7012,7 @@ pub struct ScheduleConfig {
 
 /// <p><p>A multi-expression that searches for the specified resource or resources in a search. All resource objects that satisfy the expression&#39;s condition are included in the search results. You must specify at least one subexpression, filter, or nested filter. A <code>SearchExpression</code> can contain up to twenty elements.</p> <p>A <code>SearchExpression</code> contains the following components:</p> <ul> <li> <p>A list of <code>Filter</code> objects. Each filter defines a simple Boolean expression comprised of a resource property name, Boolean operator, and value. A <code>SearchExpression</code> can include only one <code>Contains</code> operator.</p> </li> <li> <p>A list of <code>NestedFilter</code> objects. Each nested filter defines a list of Boolean expressions using a list of resource properties. A nested filter is satisfied if a single object in the list satisfies all Boolean expressions.</p> </li> <li> <p>A list of <code>SearchExpression</code> objects. A search expression object can be nested in a list of search expression objects.</p> </li> <li> <p>A Boolean operator: <code>And</code> or <code>Or</code>.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchExpression {
     /// <p>A list of filter objects.</p>
     #[serde(rename = "Filters")]
@@ -6940,6 +7055,7 @@ pub struct SearchRecord {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchRequest {
     /// <p>The maximum number of results to return in a <code>SearchResponse</code>.</p>
     #[serde(rename = "MaxResults")]
@@ -7045,6 +7161,7 @@ pub struct SourceAlgorithmSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMonitoringScheduleRequest {
     /// <p>The name of the schedule to start.</p>
     #[serde(rename = "MonitoringScheduleName")]
@@ -7052,6 +7169,7 @@ pub struct StartMonitoringScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartNotebookInstanceInput {
     /// <p>The name of the notebook instance to start.</p>
     #[serde(rename = "NotebookInstanceName")]
@@ -7059,6 +7177,7 @@ pub struct StartNotebookInstanceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAutoMLJobRequest {
     /// <p>The name of the object you are requesting.</p>
     #[serde(rename = "AutoMLJobName")]
@@ -7066,6 +7185,7 @@ pub struct StopAutoMLJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopCompilationJobRequest {
     /// <p>The name of the model compilation job to stop.</p>
     #[serde(rename = "CompilationJobName")]
@@ -7073,6 +7193,7 @@ pub struct StopCompilationJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopHyperParameterTuningJobRequest {
     /// <p>The name of the tuning job to stop.</p>
     #[serde(rename = "HyperParameterTuningJobName")]
@@ -7080,6 +7201,7 @@ pub struct StopHyperParameterTuningJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopLabelingJobRequest {
     /// <p>The name of the labeling job to stop.</p>
     #[serde(rename = "LabelingJobName")]
@@ -7087,6 +7209,7 @@ pub struct StopLabelingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopMonitoringScheduleRequest {
     /// <p>The name of the schedule to stop.</p>
     #[serde(rename = "MonitoringScheduleName")]
@@ -7094,6 +7217,7 @@ pub struct StopMonitoringScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopNotebookInstanceInput {
     /// <p>The name of the notebook instance to terminate.</p>
     #[serde(rename = "NotebookInstanceName")]
@@ -7101,6 +7225,7 @@ pub struct StopNotebookInstanceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopProcessingJobRequest {
     /// <p>The name of the processing job to stop.</p>
     #[serde(rename = "ProcessingJobName")]
@@ -7108,6 +7233,7 @@ pub struct StopProcessingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTrainingJobRequest {
     /// <p>The name of the training job to stop.</p>
     #[serde(rename = "TrainingJobName")]
@@ -7115,6 +7241,7 @@ pub struct StopTrainingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTransformJobRequest {
     /// <p>The name of the transform job to stop.</p>
     #[serde(rename = "TransformJobName")]
@@ -7161,6 +7288,7 @@ pub struct SubscribedWorkteam {
 
 /// <p>Limits the property names that are included in the response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SuggestionQuery {
     /// <p>A type of <code>SuggestionQuery</code>. Defines a property name hint. Only property names that match the specified hint are included in the response.</p>
     #[serde(rename = "PropertyNameQuery")]
@@ -7963,6 +8091,7 @@ pub struct UiConfig {
 
 /// <p>The Liquid template for the worker user interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UiTemplate {
     /// <p>The content of the Liquid template for the worker user interface.</p>
     #[serde(rename = "Content")]
@@ -7984,6 +8113,7 @@ pub struct UiTemplateInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCodeRepositoryInput {
     /// <p>The name of the Git repository to update.</p>
     #[serde(rename = "CodeRepositoryName")]
@@ -8003,6 +8133,7 @@ pub struct UpdateCodeRepositoryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainRequest {
     /// <p>A collection of settings.</p>
     #[serde(rename = "DefaultUserSettings")]
@@ -8023,6 +8154,7 @@ pub struct UpdateDomainResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointInput {
     /// <p>The name of the new endpoint configuration.</p>
     #[serde(rename = "EndpointConfigName")]
@@ -8041,6 +8173,7 @@ pub struct UpdateEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointWeightsAndCapacitiesInput {
     /// <p>An object that provides new capacity and weight values for a variant.</p>
     #[serde(rename = "DesiredWeightsAndCapacities")]
@@ -8059,6 +8192,7 @@ pub struct UpdateEndpointWeightsAndCapacitiesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateExperimentRequest {
     /// <p>The description of the experiment.</p>
     #[serde(rename = "Description")]
@@ -8083,6 +8217,7 @@ pub struct UpdateExperimentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMonitoringScheduleRequest {
     /// <p>The configuration object that specifies the monitoring schedule and defines the monitoring job.</p>
     #[serde(rename = "MonitoringScheduleConfig")]
@@ -8101,6 +8236,7 @@ pub struct UpdateMonitoringScheduleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotebookInstanceInput {
     /// <p>A list of the Elastic Inference (EI) instance types to associate with this notebook instance. Currently only one EI instance type can be associated with a notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
@@ -8156,6 +8292,7 @@ pub struct UpdateNotebookInstanceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotebookInstanceLifecycleConfigInput {
     /// <p>The name of the lifecycle configuration.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigName")]
@@ -8179,6 +8316,7 @@ pub struct UpdateNotebookInstanceLifecycleConfigOutput {}
 pub struct UpdateNotebookInstanceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTrialComponentRequest {
     /// <p>The name of the component as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>TrialComponentName</code> is displayed.</p>
     #[serde(rename = "DisplayName")]
@@ -8235,6 +8373,7 @@ pub struct UpdateTrialComponentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTrialRequest {
     /// <p>The name of the trial as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>TrialName</code> is displayed.</p>
     #[serde(rename = "DisplayName")]
@@ -8255,6 +8394,7 @@ pub struct UpdateTrialResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserProfileRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -8278,6 +8418,7 @@ pub struct UpdateUserProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorkteamRequest {
     /// <p>An updated description for the work team.</p>
     #[serde(rename = "Description")]
@@ -8443,14 +8584,10 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for AddTagsError {}
 /// Errors returned by AssociateTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum AssociateTrialComponentError {
@@ -8483,17 +8620,15 @@ impl AssociateTrialComponentError {
 }
 impl fmt::Display for AssociateTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateTrialComponentError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateTrialComponentError::ResourceLimitExceeded(ref cause) => cause,
-            AssociateTrialComponentError::ResourceNotFound(ref cause) => cause,
+            AssociateTrialComponentError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateTrialComponentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateTrialComponentError {}
 /// Errors returned by CreateAlgorithm
 #[derive(Debug, PartialEq)]
 pub enum CreateAlgorithmError {}
@@ -8511,14 +8646,10 @@ impl CreateAlgorithmError {
 }
 impl fmt::Display for CreateAlgorithmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAlgorithmError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreateAlgorithmError {}
 /// Errors returned by CreateApp
 #[derive(Debug, PartialEq)]
 pub enum CreateAppError {
@@ -8547,17 +8678,13 @@ impl CreateAppError {
 }
 impl fmt::Display for CreateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAppError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAppError::ResourceInUse(ref cause) => cause,
-            CreateAppError::ResourceLimitExceeded(ref cause) => cause,
+            CreateAppError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateAppError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAppError {}
 /// Errors returned by CreateAutoMLJob
 #[derive(Debug, PartialEq)]
 pub enum CreateAutoMLJobError {
@@ -8588,17 +8715,13 @@ impl CreateAutoMLJobError {
 }
 impl fmt::Display for CreateAutoMLJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAutoMLJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAutoMLJobError::ResourceInUse(ref cause) => cause,
-            CreateAutoMLJobError::ResourceLimitExceeded(ref cause) => cause,
+            CreateAutoMLJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateAutoMLJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAutoMLJobError {}
 /// Errors returned by CreateCodeRepository
 #[derive(Debug, PartialEq)]
 pub enum CreateCodeRepositoryError {}
@@ -8616,14 +8739,10 @@ impl CreateCodeRepositoryError {
 }
 impl fmt::Display for CreateCodeRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCodeRepositoryError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreateCodeRepositoryError {}
 /// Errors returned by CreateCompilationJob
 #[derive(Debug, PartialEq)]
 pub enum CreateCompilationJobError {
@@ -8654,17 +8773,13 @@ impl CreateCompilationJobError {
 }
 impl fmt::Display for CreateCompilationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCompilationJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCompilationJobError::ResourceInUse(ref cause) => cause,
-            CreateCompilationJobError::ResourceLimitExceeded(ref cause) => cause,
+            CreateCompilationJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateCompilationJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCompilationJobError {}
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
@@ -8693,17 +8808,13 @@ impl CreateDomainError {
 }
 impl fmt::Display for CreateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDomainError::ResourceInUse(ref cause) => cause,
-            CreateDomainError::ResourceLimitExceeded(ref cause) => cause,
+            CreateDomainError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDomainError {}
 /// Errors returned by CreateEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateEndpointError {
@@ -8729,16 +8840,12 @@ impl CreateEndpointError {
 }
 impl fmt::Display for CreateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEndpointError::ResourceLimitExceeded(ref cause) => cause,
+            CreateEndpointError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEndpointError {}
 /// Errors returned by CreateEndpointConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateEndpointConfigError {
@@ -8764,16 +8871,12 @@ impl CreateEndpointConfigError {
 }
 impl fmt::Display for CreateEndpointConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEndpointConfigError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEndpointConfigError::ResourceLimitExceeded(ref cause) => cause,
+            CreateEndpointConfigError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEndpointConfigError {}
 /// Errors returned by CreateExperiment
 #[derive(Debug, PartialEq)]
 pub enum CreateExperimentError {
@@ -8799,16 +8902,12 @@ impl CreateExperimentError {
 }
 impl fmt::Display for CreateExperimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateExperimentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateExperimentError::ResourceLimitExceeded(ref cause) => cause,
+            CreateExperimentError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateExperimentError {}
 /// Errors returned by CreateFlowDefinition
 #[derive(Debug, PartialEq)]
 pub enum CreateFlowDefinitionError {
@@ -8839,17 +8938,13 @@ impl CreateFlowDefinitionError {
 }
 impl fmt::Display for CreateFlowDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFlowDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFlowDefinitionError::ResourceInUse(ref cause) => cause,
-            CreateFlowDefinitionError::ResourceLimitExceeded(ref cause) => cause,
+            CreateFlowDefinitionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateFlowDefinitionError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFlowDefinitionError {}
 /// Errors returned by CreateHumanTaskUi
 #[derive(Debug, PartialEq)]
 pub enum CreateHumanTaskUiError {
@@ -8880,17 +8975,13 @@ impl CreateHumanTaskUiError {
 }
 impl fmt::Display for CreateHumanTaskUiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHumanTaskUiError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHumanTaskUiError::ResourceInUse(ref cause) => cause,
-            CreateHumanTaskUiError::ResourceLimitExceeded(ref cause) => cause,
+            CreateHumanTaskUiError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateHumanTaskUiError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHumanTaskUiError {}
 /// Errors returned by CreateHyperParameterTuningJob
 #[derive(Debug, PartialEq)]
 pub enum CreateHyperParameterTuningJobError {
@@ -8925,17 +9016,15 @@ impl CreateHyperParameterTuningJobError {
 }
 impl fmt::Display for CreateHyperParameterTuningJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHyperParameterTuningJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHyperParameterTuningJobError::ResourceInUse(ref cause) => cause,
-            CreateHyperParameterTuningJobError::ResourceLimitExceeded(ref cause) => cause,
+            CreateHyperParameterTuningJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateHyperParameterTuningJobError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateHyperParameterTuningJobError {}
 /// Errors returned by CreateLabelingJob
 #[derive(Debug, PartialEq)]
 pub enum CreateLabelingJobError {
@@ -8966,17 +9055,13 @@ impl CreateLabelingJobError {
 }
 impl fmt::Display for CreateLabelingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLabelingJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLabelingJobError::ResourceInUse(ref cause) => cause,
-            CreateLabelingJobError::ResourceLimitExceeded(ref cause) => cause,
+            CreateLabelingJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateLabelingJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLabelingJobError {}
 /// Errors returned by CreateModel
 #[derive(Debug, PartialEq)]
 pub enum CreateModelError {
@@ -9000,16 +9085,12 @@ impl CreateModelError {
 }
 impl fmt::Display for CreateModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateModelError {
-    fn description(&self) -> &str {
         match *self {
-            CreateModelError::ResourceLimitExceeded(ref cause) => cause,
+            CreateModelError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateModelError {}
 /// Errors returned by CreateModelPackage
 #[derive(Debug, PartialEq)]
 pub enum CreateModelPackageError {}
@@ -9027,14 +9108,10 @@ impl CreateModelPackageError {
 }
 impl fmt::Display for CreateModelPackageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateModelPackageError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreateModelPackageError {}
 /// Errors returned by CreateMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum CreateMonitoringScheduleError {
@@ -9067,17 +9144,15 @@ impl CreateMonitoringScheduleError {
 }
 impl fmt::Display for CreateMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMonitoringScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMonitoringScheduleError::ResourceInUse(ref cause) => cause,
-            CreateMonitoringScheduleError::ResourceLimitExceeded(ref cause) => cause,
+            CreateMonitoringScheduleError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateMonitoringScheduleError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateMonitoringScheduleError {}
 /// Errors returned by CreateNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum CreateNotebookInstanceError {
@@ -9103,16 +9178,12 @@ impl CreateNotebookInstanceError {
 }
 impl fmt::Display for CreateNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateNotebookInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateNotebookInstanceError::ResourceLimitExceeded(ref cause) => cause,
+            CreateNotebookInstanceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateNotebookInstanceError {}
 /// Errors returned by CreateNotebookInstanceLifecycleConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateNotebookInstanceLifecycleConfigError {
@@ -9140,16 +9211,14 @@ impl CreateNotebookInstanceLifecycleConfigError {
 }
 impl fmt::Display for CreateNotebookInstanceLifecycleConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateNotebookInstanceLifecycleConfigError {
-    fn description(&self) -> &str {
         match *self {
-            CreateNotebookInstanceLifecycleConfigError::ResourceLimitExceeded(ref cause) => cause,
+            CreateNotebookInstanceLifecycleConfigError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateNotebookInstanceLifecycleConfigError {}
 /// Errors returned by CreatePresignedDomainUrl
 #[derive(Debug, PartialEq)]
 pub enum CreatePresignedDomainUrlError {}
@@ -9167,14 +9236,10 @@ impl CreatePresignedDomainUrlError {
 }
 impl fmt::Display for CreatePresignedDomainUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePresignedDomainUrlError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreatePresignedDomainUrlError {}
 /// Errors returned by CreatePresignedNotebookInstanceUrl
 #[derive(Debug, PartialEq)]
 pub enum CreatePresignedNotebookInstanceUrlError {}
@@ -9194,14 +9259,10 @@ impl CreatePresignedNotebookInstanceUrlError {
 }
 impl fmt::Display for CreatePresignedNotebookInstanceUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePresignedNotebookInstanceUrlError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreatePresignedNotebookInstanceUrlError {}
 /// Errors returned by CreateProcessingJob
 #[derive(Debug, PartialEq)]
 pub enum CreateProcessingJobError {
@@ -9239,18 +9300,14 @@ impl CreateProcessingJobError {
 }
 impl fmt::Display for CreateProcessingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProcessingJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateProcessingJobError::ResourceInUse(ref cause) => cause,
-            CreateProcessingJobError::ResourceLimitExceeded(ref cause) => cause,
-            CreateProcessingJobError::ResourceNotFound(ref cause) => cause,
+            CreateProcessingJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateProcessingJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateProcessingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateProcessingJobError {}
 /// Errors returned by CreateTrainingJob
 #[derive(Debug, PartialEq)]
 pub enum CreateTrainingJobError {
@@ -9286,18 +9343,14 @@ impl CreateTrainingJobError {
 }
 impl fmt::Display for CreateTrainingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTrainingJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTrainingJobError::ResourceInUse(ref cause) => cause,
-            CreateTrainingJobError::ResourceLimitExceeded(ref cause) => cause,
-            CreateTrainingJobError::ResourceNotFound(ref cause) => cause,
+            CreateTrainingJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateTrainingJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTrainingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTrainingJobError {}
 /// Errors returned by CreateTransformJob
 #[derive(Debug, PartialEq)]
 pub enum CreateTransformJobError {
@@ -9333,18 +9386,14 @@ impl CreateTransformJobError {
 }
 impl fmt::Display for CreateTransformJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTransformJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTransformJobError::ResourceInUse(ref cause) => cause,
-            CreateTransformJobError::ResourceLimitExceeded(ref cause) => cause,
-            CreateTransformJobError::ResourceNotFound(ref cause) => cause,
+            CreateTransformJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateTransformJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTransformJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTransformJobError {}
 /// Errors returned by CreateTrial
 #[derive(Debug, PartialEq)]
 pub enum CreateTrialError {
@@ -9373,17 +9422,13 @@ impl CreateTrialError {
 }
 impl fmt::Display for CreateTrialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTrialError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTrialError::ResourceLimitExceeded(ref cause) => cause,
-            CreateTrialError::ResourceNotFound(ref cause) => cause,
+            CreateTrialError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTrialError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTrialError {}
 /// Errors returned by CreateTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum CreateTrialComponentError {
@@ -9409,16 +9454,12 @@ impl CreateTrialComponentError {
 }
 impl fmt::Display for CreateTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTrialComponentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTrialComponentError::ResourceLimitExceeded(ref cause) => cause,
+            CreateTrialComponentError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTrialComponentError {}
 /// Errors returned by CreateUserProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateUserProfileError {
@@ -9449,17 +9490,13 @@ impl CreateUserProfileError {
 }
 impl fmt::Display for CreateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserProfileError::ResourceInUse(ref cause) => cause,
-            CreateUserProfileError::ResourceLimitExceeded(ref cause) => cause,
+            CreateUserProfileError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateUserProfileError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserProfileError {}
 /// Errors returned by CreateWorkteam
 #[derive(Debug, PartialEq)]
 pub enum CreateWorkteamError {
@@ -9490,17 +9527,13 @@ impl CreateWorkteamError {
 }
 impl fmt::Display for CreateWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateWorkteamError {
-    fn description(&self) -> &str {
         match *self {
-            CreateWorkteamError::ResourceInUse(ref cause) => cause,
-            CreateWorkteamError::ResourceLimitExceeded(ref cause) => cause,
+            CreateWorkteamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateWorkteamError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateWorkteamError {}
 /// Errors returned by DeleteAlgorithm
 #[derive(Debug, PartialEq)]
 pub enum DeleteAlgorithmError {}
@@ -9518,14 +9551,10 @@ impl DeleteAlgorithmError {
 }
 impl fmt::Display for DeleteAlgorithmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAlgorithmError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteAlgorithmError {}
 /// Errors returned by DeleteApp
 #[derive(Debug, PartialEq)]
 pub enum DeleteAppError {
@@ -9554,17 +9583,13 @@ impl DeleteAppError {
 }
 impl fmt::Display for DeleteAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAppError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAppError::ResourceInUse(ref cause) => cause,
-            DeleteAppError::ResourceNotFound(ref cause) => cause,
+            DeleteAppError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAppError {}
 /// Errors returned by DeleteCodeRepository
 #[derive(Debug, PartialEq)]
 pub enum DeleteCodeRepositoryError {}
@@ -9582,14 +9607,10 @@ impl DeleteCodeRepositoryError {
 }
 impl fmt::Display for DeleteCodeRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCodeRepositoryError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteCodeRepositoryError {}
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
@@ -9618,17 +9639,13 @@ impl DeleteDomainError {
 }
 impl fmt::Display for DeleteDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDomainError::ResourceInUse(ref cause) => cause,
-            DeleteDomainError::ResourceNotFound(ref cause) => cause,
+            DeleteDomainError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDomainError {}
 /// Errors returned by DeleteEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointError {}
@@ -9646,14 +9663,10 @@ impl DeleteEndpointError {
 }
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEndpointError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteEndpointError {}
 /// Errors returned by DeleteEndpointConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointConfigError {}
@@ -9671,14 +9684,10 @@ impl DeleteEndpointConfigError {
 }
 impl fmt::Display for DeleteEndpointConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEndpointConfigError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteEndpointConfigError {}
 /// Errors returned by DeleteExperiment
 #[derive(Debug, PartialEq)]
 pub enum DeleteExperimentError {
@@ -9702,16 +9711,12 @@ impl DeleteExperimentError {
 }
 impl fmt::Display for DeleteExperimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteExperimentError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteExperimentError::ResourceNotFound(ref cause) => cause,
+            DeleteExperimentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteExperimentError {}
 /// Errors returned by DeleteFlowDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteFlowDefinitionError {
@@ -9737,16 +9742,12 @@ impl DeleteFlowDefinitionError {
 }
 impl fmt::Display for DeleteFlowDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFlowDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFlowDefinitionError::ResourceNotFound(ref cause) => cause,
+            DeleteFlowDefinitionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFlowDefinitionError {}
 /// Errors returned by DeleteModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteModelError {}
@@ -9764,14 +9765,10 @@ impl DeleteModelError {
 }
 impl fmt::Display for DeleteModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteModelError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteModelError {}
 /// Errors returned by DeleteModelPackage
 #[derive(Debug, PartialEq)]
 pub enum DeleteModelPackageError {}
@@ -9789,14 +9786,10 @@ impl DeleteModelPackageError {
 }
 impl fmt::Display for DeleteModelPackageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteModelPackageError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteModelPackageError {}
 /// Errors returned by DeleteMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum DeleteMonitoringScheduleError {
@@ -9822,16 +9815,12 @@ impl DeleteMonitoringScheduleError {
 }
 impl fmt::Display for DeleteMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMonitoringScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+            DeleteMonitoringScheduleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMonitoringScheduleError {}
 /// Errors returned by DeleteNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotebookInstanceError {}
@@ -9849,14 +9838,10 @@ impl DeleteNotebookInstanceError {
 }
 impl fmt::Display for DeleteNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNotebookInstanceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteNotebookInstanceError {}
 /// Errors returned by DeleteNotebookInstanceLifecycleConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotebookInstanceLifecycleConfigError {}
@@ -9876,14 +9861,10 @@ impl DeleteNotebookInstanceLifecycleConfigError {
 }
 impl fmt::Display for DeleteNotebookInstanceLifecycleConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNotebookInstanceLifecycleConfigError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteNotebookInstanceLifecycleConfigError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {}
@@ -9901,14 +9882,10 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteTagsError {}
 /// Errors returned by DeleteTrial
 #[derive(Debug, PartialEq)]
 pub enum DeleteTrialError {
@@ -9932,16 +9909,12 @@ impl DeleteTrialError {
 }
 impl fmt::Display for DeleteTrialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTrialError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTrialError::ResourceNotFound(ref cause) => cause,
+            DeleteTrialError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTrialError {}
 /// Errors returned by DeleteTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum DeleteTrialComponentError {
@@ -9967,16 +9940,12 @@ impl DeleteTrialComponentError {
 }
 impl fmt::Display for DeleteTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTrialComponentError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTrialComponentError::ResourceNotFound(ref cause) => cause,
+            DeleteTrialComponentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTrialComponentError {}
 /// Errors returned by DeleteUserProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserProfileError {
@@ -10005,17 +9974,13 @@ impl DeleteUserProfileError {
 }
 impl fmt::Display for DeleteUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserProfileError::ResourceInUse(ref cause) => cause,
-            DeleteUserProfileError::ResourceNotFound(ref cause) => cause,
+            DeleteUserProfileError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteUserProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserProfileError {}
 /// Errors returned by DeleteWorkteam
 #[derive(Debug, PartialEq)]
 pub enum DeleteWorkteamError {
@@ -10041,16 +10006,12 @@ impl DeleteWorkteamError {
 }
 impl fmt::Display for DeleteWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteWorkteamError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteWorkteamError::ResourceLimitExceeded(ref cause) => cause,
+            DeleteWorkteamError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteWorkteamError {}
 /// Errors returned by DescribeAlgorithm
 #[derive(Debug, PartialEq)]
 pub enum DescribeAlgorithmError {}
@@ -10068,14 +10029,10 @@ impl DescribeAlgorithmError {
 }
 impl fmt::Display for DescribeAlgorithmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAlgorithmError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAlgorithmError {}
 /// Errors returned by DescribeApp
 #[derive(Debug, PartialEq)]
 pub enum DescribeAppError {
@@ -10099,16 +10056,12 @@ impl DescribeAppError {
 }
 impl fmt::Display for DescribeAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAppError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAppError::ResourceNotFound(ref cause) => cause,
+            DescribeAppError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAppError {}
 /// Errors returned by DescribeAutoMLJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutoMLJobError {
@@ -10132,16 +10085,12 @@ impl DescribeAutoMLJobError {
 }
 impl fmt::Display for DescribeAutoMLJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAutoMLJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAutoMLJobError::ResourceNotFound(ref cause) => cause,
+            DescribeAutoMLJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAutoMLJobError {}
 /// Errors returned by DescribeCodeRepository
 #[derive(Debug, PartialEq)]
 pub enum DescribeCodeRepositoryError {}
@@ -10159,14 +10108,10 @@ impl DescribeCodeRepositoryError {
 }
 impl fmt::Display for DescribeCodeRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCodeRepositoryError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeCodeRepositoryError {}
 /// Errors returned by DescribeCompilationJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeCompilationJobError {
@@ -10192,16 +10137,12 @@ impl DescribeCompilationJobError {
 }
 impl fmt::Display for DescribeCompilationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCompilationJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCompilationJobError::ResourceNotFound(ref cause) => cause,
+            DescribeCompilationJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCompilationJobError {}
 /// Errors returned by DescribeDomain
 #[derive(Debug, PartialEq)]
 pub enum DescribeDomainError {
@@ -10225,16 +10166,12 @@ impl DescribeDomainError {
 }
 impl fmt::Display for DescribeDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDomainError::ResourceNotFound(ref cause) => cause,
+            DescribeDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDomainError {}
 /// Errors returned by DescribeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointError {}
@@ -10252,14 +10189,10 @@ impl DescribeEndpointError {
 }
 impl fmt::Display for DescribeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEndpointError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEndpointError {}
 /// Errors returned by DescribeEndpointConfig
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointConfigError {}
@@ -10277,14 +10210,10 @@ impl DescribeEndpointConfigError {
 }
 impl fmt::Display for DescribeEndpointConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEndpointConfigError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEndpointConfigError {}
 /// Errors returned by DescribeExperiment
 #[derive(Debug, PartialEq)]
 pub enum DescribeExperimentError {
@@ -10308,16 +10237,12 @@ impl DescribeExperimentError {
 }
 impl fmt::Display for DescribeExperimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeExperimentError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeExperimentError::ResourceNotFound(ref cause) => cause,
+            DescribeExperimentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeExperimentError {}
 /// Errors returned by DescribeFlowDefinition
 #[derive(Debug, PartialEq)]
 pub enum DescribeFlowDefinitionError {
@@ -10343,16 +10268,12 @@ impl DescribeFlowDefinitionError {
 }
 impl fmt::Display for DescribeFlowDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFlowDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFlowDefinitionError::ResourceNotFound(ref cause) => cause,
+            DescribeFlowDefinitionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFlowDefinitionError {}
 /// Errors returned by DescribeHumanTaskUi
 #[derive(Debug, PartialEq)]
 pub enum DescribeHumanTaskUiError {
@@ -10378,16 +10299,12 @@ impl DescribeHumanTaskUiError {
 }
 impl fmt::Display for DescribeHumanTaskUiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeHumanTaskUiError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeHumanTaskUiError::ResourceNotFound(ref cause) => cause,
+            DescribeHumanTaskUiError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeHumanTaskUiError {}
 /// Errors returned by DescribeHyperParameterTuningJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeHyperParameterTuningJobError {
@@ -10415,16 +10332,14 @@ impl DescribeHyperParameterTuningJobError {
 }
 impl fmt::Display for DescribeHyperParameterTuningJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeHyperParameterTuningJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeHyperParameterTuningJobError::ResourceNotFound(ref cause) => cause,
+            DescribeHyperParameterTuningJobError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeHyperParameterTuningJobError {}
 /// Errors returned by DescribeLabelingJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeLabelingJobError {
@@ -10450,16 +10365,12 @@ impl DescribeLabelingJobError {
 }
 impl fmt::Display for DescribeLabelingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLabelingJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLabelingJobError::ResourceNotFound(ref cause) => cause,
+            DescribeLabelingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLabelingJobError {}
 /// Errors returned by DescribeModel
 #[derive(Debug, PartialEq)]
 pub enum DescribeModelError {}
@@ -10477,14 +10388,10 @@ impl DescribeModelError {
 }
 impl fmt::Display for DescribeModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeModelError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeModelError {}
 /// Errors returned by DescribeModelPackage
 #[derive(Debug, PartialEq)]
 pub enum DescribeModelPackageError {}
@@ -10502,14 +10409,10 @@ impl DescribeModelPackageError {
 }
 impl fmt::Display for DescribeModelPackageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeModelPackageError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeModelPackageError {}
 /// Errors returned by DescribeMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum DescribeMonitoringScheduleError {
@@ -10537,16 +10440,12 @@ impl DescribeMonitoringScheduleError {
 }
 impl fmt::Display for DescribeMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMonitoringScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+            DescribeMonitoringScheduleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeMonitoringScheduleError {}
 /// Errors returned by DescribeNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotebookInstanceError {}
@@ -10564,14 +10463,10 @@ impl DescribeNotebookInstanceError {
 }
 impl fmt::Display for DescribeNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeNotebookInstanceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeNotebookInstanceError {}
 /// Errors returned by DescribeNotebookInstanceLifecycleConfig
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotebookInstanceLifecycleConfigError {}
@@ -10591,14 +10486,10 @@ impl DescribeNotebookInstanceLifecycleConfigError {
 }
 impl fmt::Display for DescribeNotebookInstanceLifecycleConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeNotebookInstanceLifecycleConfigError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeNotebookInstanceLifecycleConfigError {}
 /// Errors returned by DescribeProcessingJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeProcessingJobError {
@@ -10624,16 +10515,12 @@ impl DescribeProcessingJobError {
 }
 impl fmt::Display for DescribeProcessingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeProcessingJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeProcessingJobError::ResourceNotFound(ref cause) => cause,
+            DescribeProcessingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeProcessingJobError {}
 /// Errors returned by DescribeSubscribedWorkteam
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscribedWorkteamError {}
@@ -10653,14 +10540,10 @@ impl DescribeSubscribedWorkteamError {
 }
 impl fmt::Display for DescribeSubscribedWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSubscribedWorkteamError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeSubscribedWorkteamError {}
 /// Errors returned by DescribeTrainingJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrainingJobError {
@@ -10686,16 +10569,12 @@ impl DescribeTrainingJobError {
 }
 impl fmt::Display for DescribeTrainingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTrainingJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTrainingJobError::ResourceNotFound(ref cause) => cause,
+            DescribeTrainingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTrainingJobError {}
 /// Errors returned by DescribeTransformJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeTransformJobError {
@@ -10721,16 +10600,12 @@ impl DescribeTransformJobError {
 }
 impl fmt::Display for DescribeTransformJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTransformJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTransformJobError::ResourceNotFound(ref cause) => cause,
+            DescribeTransformJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTransformJobError {}
 /// Errors returned by DescribeTrial
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrialError {
@@ -10754,16 +10629,12 @@ impl DescribeTrialError {
 }
 impl fmt::Display for DescribeTrialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTrialError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTrialError::ResourceNotFound(ref cause) => cause,
+            DescribeTrialError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTrialError {}
 /// Errors returned by DescribeTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrialComponentError {
@@ -10789,16 +10660,12 @@ impl DescribeTrialComponentError {
 }
 impl fmt::Display for DescribeTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTrialComponentError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTrialComponentError::ResourceNotFound(ref cause) => cause,
+            DescribeTrialComponentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTrialComponentError {}
 /// Errors returned by DescribeUserProfile
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserProfileError {
@@ -10824,16 +10691,12 @@ impl DescribeUserProfileError {
 }
 impl fmt::Display for DescribeUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserProfileError::ResourceNotFound(ref cause) => cause,
+            DescribeUserProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserProfileError {}
 /// Errors returned by DescribeWorkteam
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkteamError {}
@@ -10851,14 +10714,10 @@ impl DescribeWorkteamError {
 }
 impl fmt::Display for DescribeWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWorkteamError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeWorkteamError {}
 /// Errors returned by DisassociateTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum DisassociateTrialComponentError {
@@ -10886,16 +10745,12 @@ impl DisassociateTrialComponentError {
 }
 impl fmt::Display for DisassociateTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateTrialComponentError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateTrialComponentError::ResourceNotFound(ref cause) => cause,
+            DisassociateTrialComponentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateTrialComponentError {}
 /// Errors returned by GetSearchSuggestions
 #[derive(Debug, PartialEq)]
 pub enum GetSearchSuggestionsError {}
@@ -10913,14 +10768,10 @@ impl GetSearchSuggestionsError {
 }
 impl fmt::Display for GetSearchSuggestionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSearchSuggestionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetSearchSuggestionsError {}
 /// Errors returned by ListAlgorithms
 #[derive(Debug, PartialEq)]
 pub enum ListAlgorithmsError {}
@@ -10938,14 +10789,10 @@ impl ListAlgorithmsError {
 }
 impl fmt::Display for ListAlgorithmsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAlgorithmsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListAlgorithmsError {}
 /// Errors returned by ListApps
 #[derive(Debug, PartialEq)]
 pub enum ListAppsError {}
@@ -10963,14 +10810,10 @@ impl ListAppsError {
 }
 impl fmt::Display for ListAppsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAppsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListAppsError {}
 /// Errors returned by ListAutoMLJobs
 #[derive(Debug, PartialEq)]
 pub enum ListAutoMLJobsError {}
@@ -10988,14 +10831,10 @@ impl ListAutoMLJobsError {
 }
 impl fmt::Display for ListAutoMLJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAutoMLJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListAutoMLJobsError {}
 /// Errors returned by ListCandidatesForAutoMLJob
 #[derive(Debug, PartialEq)]
 pub enum ListCandidatesForAutoMLJobError {
@@ -11023,16 +10862,12 @@ impl ListCandidatesForAutoMLJobError {
 }
 impl fmt::Display for ListCandidatesForAutoMLJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCandidatesForAutoMLJobError {
-    fn description(&self) -> &str {
         match *self {
-            ListCandidatesForAutoMLJobError::ResourceNotFound(ref cause) => cause,
+            ListCandidatesForAutoMLJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCandidatesForAutoMLJobError {}
 /// Errors returned by ListCodeRepositories
 #[derive(Debug, PartialEq)]
 pub enum ListCodeRepositoriesError {}
@@ -11050,14 +10885,10 @@ impl ListCodeRepositoriesError {
 }
 impl fmt::Display for ListCodeRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCodeRepositoriesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListCodeRepositoriesError {}
 /// Errors returned by ListCompilationJobs
 #[derive(Debug, PartialEq)]
 pub enum ListCompilationJobsError {}
@@ -11075,14 +10906,10 @@ impl ListCompilationJobsError {
 }
 impl fmt::Display for ListCompilationJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCompilationJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListCompilationJobsError {}
 /// Errors returned by ListDomains
 #[derive(Debug, PartialEq)]
 pub enum ListDomainsError {}
@@ -11100,14 +10927,10 @@ impl ListDomainsError {
 }
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDomainsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListDomainsError {}
 /// Errors returned by ListEndpointConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointConfigsError {}
@@ -11125,14 +10948,10 @@ impl ListEndpointConfigsError {
 }
 impl fmt::Display for ListEndpointConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEndpointConfigsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListEndpointConfigsError {}
 /// Errors returned by ListEndpoints
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointsError {}
@@ -11150,14 +10969,10 @@ impl ListEndpointsError {
 }
 impl fmt::Display for ListEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEndpointsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListEndpointsError {}
 /// Errors returned by ListExperiments
 #[derive(Debug, PartialEq)]
 pub enum ListExperimentsError {}
@@ -11175,14 +10990,10 @@ impl ListExperimentsError {
 }
 impl fmt::Display for ListExperimentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListExperimentsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListExperimentsError {}
 /// Errors returned by ListFlowDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListFlowDefinitionsError {}
@@ -11200,14 +11011,10 @@ impl ListFlowDefinitionsError {
 }
 impl fmt::Display for ListFlowDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFlowDefinitionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListFlowDefinitionsError {}
 /// Errors returned by ListHumanTaskUis
 #[derive(Debug, PartialEq)]
 pub enum ListHumanTaskUisError {}
@@ -11225,14 +11032,10 @@ impl ListHumanTaskUisError {
 }
 impl fmt::Display for ListHumanTaskUisError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHumanTaskUisError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListHumanTaskUisError {}
 /// Errors returned by ListHyperParameterTuningJobs
 #[derive(Debug, PartialEq)]
 pub enum ListHyperParameterTuningJobsError {}
@@ -11252,14 +11055,10 @@ impl ListHyperParameterTuningJobsError {
 }
 impl fmt::Display for ListHyperParameterTuningJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHyperParameterTuningJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListHyperParameterTuningJobsError {}
 /// Errors returned by ListLabelingJobs
 #[derive(Debug, PartialEq)]
 pub enum ListLabelingJobsError {}
@@ -11277,14 +11076,10 @@ impl ListLabelingJobsError {
 }
 impl fmt::Display for ListLabelingJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLabelingJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListLabelingJobsError {}
 /// Errors returned by ListLabelingJobsForWorkteam
 #[derive(Debug, PartialEq)]
 pub enum ListLabelingJobsForWorkteamError {
@@ -11312,16 +11107,12 @@ impl ListLabelingJobsForWorkteamError {
 }
 impl fmt::Display for ListLabelingJobsForWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLabelingJobsForWorkteamError {
-    fn description(&self) -> &str {
         match *self {
-            ListLabelingJobsForWorkteamError::ResourceNotFound(ref cause) => cause,
+            ListLabelingJobsForWorkteamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListLabelingJobsForWorkteamError {}
 /// Errors returned by ListModelPackages
 #[derive(Debug, PartialEq)]
 pub enum ListModelPackagesError {}
@@ -11339,14 +11130,10 @@ impl ListModelPackagesError {
 }
 impl fmt::Display for ListModelPackagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListModelPackagesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListModelPackagesError {}
 /// Errors returned by ListModels
 #[derive(Debug, PartialEq)]
 pub enum ListModelsError {}
@@ -11364,14 +11151,10 @@ impl ListModelsError {
 }
 impl fmt::Display for ListModelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListModelsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListModelsError {}
 /// Errors returned by ListMonitoringExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListMonitoringExecutionsError {}
@@ -11389,14 +11172,10 @@ impl ListMonitoringExecutionsError {
 }
 impl fmt::Display for ListMonitoringExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMonitoringExecutionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListMonitoringExecutionsError {}
 /// Errors returned by ListMonitoringSchedules
 #[derive(Debug, PartialEq)]
 pub enum ListMonitoringSchedulesError {}
@@ -11414,14 +11193,10 @@ impl ListMonitoringSchedulesError {
 }
 impl fmt::Display for ListMonitoringSchedulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMonitoringSchedulesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListMonitoringSchedulesError {}
 /// Errors returned by ListNotebookInstanceLifecycleConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListNotebookInstanceLifecycleConfigsError {}
@@ -11441,14 +11216,10 @@ impl ListNotebookInstanceLifecycleConfigsError {
 }
 impl fmt::Display for ListNotebookInstanceLifecycleConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListNotebookInstanceLifecycleConfigsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListNotebookInstanceLifecycleConfigsError {}
 /// Errors returned by ListNotebookInstances
 #[derive(Debug, PartialEq)]
 pub enum ListNotebookInstancesError {}
@@ -11466,14 +11237,10 @@ impl ListNotebookInstancesError {
 }
 impl fmt::Display for ListNotebookInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListNotebookInstancesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListNotebookInstancesError {}
 /// Errors returned by ListProcessingJobs
 #[derive(Debug, PartialEq)]
 pub enum ListProcessingJobsError {}
@@ -11491,14 +11258,10 @@ impl ListProcessingJobsError {
 }
 impl fmt::Display for ListProcessingJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProcessingJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListProcessingJobsError {}
 /// Errors returned by ListSubscribedWorkteams
 #[derive(Debug, PartialEq)]
 pub enum ListSubscribedWorkteamsError {}
@@ -11516,14 +11279,10 @@ impl ListSubscribedWorkteamsError {
 }
 impl fmt::Display for ListSubscribedWorkteamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSubscribedWorkteamsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListSubscribedWorkteamsError {}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {}
@@ -11541,14 +11300,10 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTagsError {}
 /// Errors returned by ListTrainingJobs
 #[derive(Debug, PartialEq)]
 pub enum ListTrainingJobsError {}
@@ -11566,14 +11321,10 @@ impl ListTrainingJobsError {
 }
 impl fmt::Display for ListTrainingJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrainingJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTrainingJobsError {}
 /// Errors returned by ListTrainingJobsForHyperParameterTuningJob
 #[derive(Debug, PartialEq)]
 pub enum ListTrainingJobsForHyperParameterTuningJobError {
@@ -11601,16 +11352,14 @@ impl ListTrainingJobsForHyperParameterTuningJobError {
 }
 impl fmt::Display for ListTrainingJobsForHyperParameterTuningJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrainingJobsForHyperParameterTuningJobError {
-    fn description(&self) -> &str {
         match *self {
-            ListTrainingJobsForHyperParameterTuningJobError::ResourceNotFound(ref cause) => cause,
+            ListTrainingJobsForHyperParameterTuningJobError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListTrainingJobsForHyperParameterTuningJobError {}
 /// Errors returned by ListTransformJobs
 #[derive(Debug, PartialEq)]
 pub enum ListTransformJobsError {}
@@ -11628,14 +11377,10 @@ impl ListTransformJobsError {
 }
 impl fmt::Display for ListTransformJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTransformJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTransformJobsError {}
 /// Errors returned by ListTrialComponents
 #[derive(Debug, PartialEq)]
 pub enum ListTrialComponentsError {}
@@ -11653,14 +11398,10 @@ impl ListTrialComponentsError {
 }
 impl fmt::Display for ListTrialComponentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrialComponentsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTrialComponentsError {}
 /// Errors returned by ListTrials
 #[derive(Debug, PartialEq)]
 pub enum ListTrialsError {}
@@ -11678,14 +11419,10 @@ impl ListTrialsError {
 }
 impl fmt::Display for ListTrialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrialsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTrialsError {}
 /// Errors returned by ListUserProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListUserProfilesError {}
@@ -11703,14 +11440,10 @@ impl ListUserProfilesError {
 }
 impl fmt::Display for ListUserProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUserProfilesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListUserProfilesError {}
 /// Errors returned by ListWorkteams
 #[derive(Debug, PartialEq)]
 pub enum ListWorkteamsError {}
@@ -11728,14 +11461,10 @@ impl ListWorkteamsError {
 }
 impl fmt::Display for ListWorkteamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWorkteamsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListWorkteamsError {}
 /// Errors returned by RenderUiTemplate
 #[derive(Debug, PartialEq)]
 pub enum RenderUiTemplateError {}
@@ -11753,14 +11482,10 @@ impl RenderUiTemplateError {
 }
 impl fmt::Display for RenderUiTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RenderUiTemplateError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for RenderUiTemplateError {}
 /// Errors returned by Search
 #[derive(Debug, PartialEq)]
 pub enum SearchError {}
@@ -11778,14 +11503,10 @@ impl SearchError {
 }
 impl fmt::Display for SearchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SearchError {}
 /// Errors returned by StartMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum StartMonitoringScheduleError {
@@ -11811,16 +11532,12 @@ impl StartMonitoringScheduleError {
 }
 impl fmt::Display for StartMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartMonitoringScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            StartMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+            StartMonitoringScheduleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartMonitoringScheduleError {}
 /// Errors returned by StartNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum StartNotebookInstanceError {
@@ -11846,16 +11563,12 @@ impl StartNotebookInstanceError {
 }
 impl fmt::Display for StartNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartNotebookInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            StartNotebookInstanceError::ResourceLimitExceeded(ref cause) => cause,
+            StartNotebookInstanceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartNotebookInstanceError {}
 /// Errors returned by StopAutoMLJob
 #[derive(Debug, PartialEq)]
 pub enum StopAutoMLJobError {
@@ -11879,16 +11592,12 @@ impl StopAutoMLJobError {
 }
 impl fmt::Display for StopAutoMLJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopAutoMLJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopAutoMLJobError::ResourceNotFound(ref cause) => cause,
+            StopAutoMLJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopAutoMLJobError {}
 /// Errors returned by StopCompilationJob
 #[derive(Debug, PartialEq)]
 pub enum StopCompilationJobError {
@@ -11912,16 +11621,12 @@ impl StopCompilationJobError {
 }
 impl fmt::Display for StopCompilationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopCompilationJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopCompilationJobError::ResourceNotFound(ref cause) => cause,
+            StopCompilationJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopCompilationJobError {}
 /// Errors returned by StopHyperParameterTuningJob
 #[derive(Debug, PartialEq)]
 pub enum StopHyperParameterTuningJobError {
@@ -11949,16 +11654,12 @@ impl StopHyperParameterTuningJobError {
 }
 impl fmt::Display for StopHyperParameterTuningJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopHyperParameterTuningJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopHyperParameterTuningJobError::ResourceNotFound(ref cause) => cause,
+            StopHyperParameterTuningJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopHyperParameterTuningJobError {}
 /// Errors returned by StopLabelingJob
 #[derive(Debug, PartialEq)]
 pub enum StopLabelingJobError {
@@ -11982,16 +11683,12 @@ impl StopLabelingJobError {
 }
 impl fmt::Display for StopLabelingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopLabelingJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopLabelingJobError::ResourceNotFound(ref cause) => cause,
+            StopLabelingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopLabelingJobError {}
 /// Errors returned by StopMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum StopMonitoringScheduleError {
@@ -12017,16 +11714,12 @@ impl StopMonitoringScheduleError {
 }
 impl fmt::Display for StopMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopMonitoringScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            StopMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+            StopMonitoringScheduleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopMonitoringScheduleError {}
 /// Errors returned by StopNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum StopNotebookInstanceError {}
@@ -12044,14 +11737,10 @@ impl StopNotebookInstanceError {
 }
 impl fmt::Display for StopNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopNotebookInstanceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for StopNotebookInstanceError {}
 /// Errors returned by StopProcessingJob
 #[derive(Debug, PartialEq)]
 pub enum StopProcessingJobError {
@@ -12075,16 +11764,12 @@ impl StopProcessingJobError {
 }
 impl fmt::Display for StopProcessingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopProcessingJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopProcessingJobError::ResourceNotFound(ref cause) => cause,
+            StopProcessingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopProcessingJobError {}
 /// Errors returned by StopTrainingJob
 #[derive(Debug, PartialEq)]
 pub enum StopTrainingJobError {
@@ -12108,16 +11793,12 @@ impl StopTrainingJobError {
 }
 impl fmt::Display for StopTrainingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopTrainingJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopTrainingJobError::ResourceNotFound(ref cause) => cause,
+            StopTrainingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopTrainingJobError {}
 /// Errors returned by StopTransformJob
 #[derive(Debug, PartialEq)]
 pub enum StopTransformJobError {
@@ -12141,16 +11822,12 @@ impl StopTransformJobError {
 }
 impl fmt::Display for StopTransformJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopTransformJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopTransformJobError::ResourceNotFound(ref cause) => cause,
+            StopTransformJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopTransformJobError {}
 /// Errors returned by UpdateCodeRepository
 #[derive(Debug, PartialEq)]
 pub enum UpdateCodeRepositoryError {}
@@ -12168,14 +11845,10 @@ impl UpdateCodeRepositoryError {
 }
 impl fmt::Display for UpdateCodeRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCodeRepositoryError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UpdateCodeRepositoryError {}
 /// Errors returned by UpdateDomain
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainError {
@@ -12209,18 +11882,14 @@ impl UpdateDomainError {
 }
 impl fmt::Display for UpdateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDomainError::ResourceInUse(ref cause) => cause,
-            UpdateDomainError::ResourceLimitExceeded(ref cause) => cause,
-            UpdateDomainError::ResourceNotFound(ref cause) => cause,
+            UpdateDomainError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateDomainError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDomainError {}
 /// Errors returned by UpdateEndpoint
 #[derive(Debug, PartialEq)]
 pub enum UpdateEndpointError {
@@ -12246,16 +11915,12 @@ impl UpdateEndpointError {
 }
 impl fmt::Display for UpdateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateEndpointError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateEndpointError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateEndpointError {}
 /// Errors returned by UpdateEndpointWeightsAndCapacities
 #[derive(Debug, PartialEq)]
 pub enum UpdateEndpointWeightsAndCapacitiesError {
@@ -12283,16 +11948,14 @@ impl UpdateEndpointWeightsAndCapacitiesError {
 }
 impl fmt::Display for UpdateEndpointWeightsAndCapacitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateEndpointWeightsAndCapacitiesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateEndpointWeightsAndCapacitiesError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateEndpointWeightsAndCapacitiesError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateEndpointWeightsAndCapacitiesError {}
 /// Errors returned by UpdateExperiment
 #[derive(Debug, PartialEq)]
 pub enum UpdateExperimentError {
@@ -12321,17 +11984,13 @@ impl UpdateExperimentError {
 }
 impl fmt::Display for UpdateExperimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateExperimentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateExperimentError::Conflict(ref cause) => cause,
-            UpdateExperimentError::ResourceNotFound(ref cause) => cause,
+            UpdateExperimentError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateExperimentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateExperimentError {}
 /// Errors returned by UpdateMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum UpdateMonitoringScheduleError {
@@ -12364,17 +12023,15 @@ impl UpdateMonitoringScheduleError {
 }
 impl fmt::Display for UpdateMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMonitoringScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMonitoringScheduleError::ResourceLimitExceeded(ref cause) => cause,
-            UpdateMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+            UpdateMonitoringScheduleError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateMonitoringScheduleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateMonitoringScheduleError {}
 /// Errors returned by UpdateNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum UpdateNotebookInstanceError {
@@ -12400,16 +12057,12 @@ impl UpdateNotebookInstanceError {
 }
 impl fmt::Display for UpdateNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNotebookInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNotebookInstanceError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateNotebookInstanceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateNotebookInstanceError {}
 /// Errors returned by UpdateNotebookInstanceLifecycleConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateNotebookInstanceLifecycleConfigError {
@@ -12437,16 +12090,14 @@ impl UpdateNotebookInstanceLifecycleConfigError {
 }
 impl fmt::Display for UpdateNotebookInstanceLifecycleConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNotebookInstanceLifecycleConfigError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNotebookInstanceLifecycleConfigError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateNotebookInstanceLifecycleConfigError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateNotebookInstanceLifecycleConfigError {}
 /// Errors returned by UpdateTrial
 #[derive(Debug, PartialEq)]
 pub enum UpdateTrialError {
@@ -12475,17 +12126,13 @@ impl UpdateTrialError {
 }
 impl fmt::Display for UpdateTrialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTrialError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTrialError::Conflict(ref cause) => cause,
-            UpdateTrialError::ResourceNotFound(ref cause) => cause,
+            UpdateTrialError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateTrialError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTrialError {}
 /// Errors returned by UpdateTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum UpdateTrialComponentError {
@@ -12516,17 +12163,13 @@ impl UpdateTrialComponentError {
 }
 impl fmt::Display for UpdateTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTrialComponentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTrialComponentError::Conflict(ref cause) => cause,
-            UpdateTrialComponentError::ResourceNotFound(ref cause) => cause,
+            UpdateTrialComponentError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateTrialComponentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTrialComponentError {}
 /// Errors returned by UpdateUserProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserProfileError {
@@ -12562,18 +12205,14 @@ impl UpdateUserProfileError {
 }
 impl fmt::Display for UpdateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserProfileError::ResourceInUse(ref cause) => cause,
-            UpdateUserProfileError::ResourceLimitExceeded(ref cause) => cause,
-            UpdateUserProfileError::ResourceNotFound(ref cause) => cause,
+            UpdateUserProfileError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateUserProfileError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateUserProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserProfileError {}
 /// Errors returned by UpdateWorkteam
 #[derive(Debug, PartialEq)]
 pub enum UpdateWorkteamError {
@@ -12599,16 +12238,12 @@ impl UpdateWorkteamError {
 }
 impl fmt::Display for UpdateWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateWorkteamError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateWorkteamError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateWorkteamError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateWorkteamError {}
 /// Trait representing the capabilities of the SageMaker API. SageMaker clients implement this trait.
 pub trait SageMaker {
     /// <p><p>Adds or overwrites one or more tags for the specified Amazon SageMaker resource. You can add tags to notebook instances, training jobs, hyperparameter tuning jobs, batch transform jobs, models, labeling jobs, work teams, endpoint configurations, and endpoints.</p> <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p> <note> <p>Tags that you add to a hyperparameter tuning job by calling this API are also added to any training jobs that the hyperparameter tuning job launches after you call this API, but not to training jobs that the hyperparameter tuning job launched before you called this API. To make sure that the tags associated with a hyperparameter tuning job are also added to all training jobs that the hyperparameter tuning job launches, add the tags when you first create the tuning job by specifying them in the <code>Tags</code> parameter of <a>CreateHyperParameterTuningJob</a> </p> </note></p>

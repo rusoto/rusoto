@@ -54,6 +54,7 @@ pub struct AccountModification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateIpGroupsRequest {
     /// <p>The identifier of the directory.</p>
     #[serde(rename = "DirectoryId")]
@@ -68,6 +69,7 @@ pub struct AssociateIpGroupsRequest {
 pub struct AssociateIpGroupsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeIpRulesRequest {
     /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
@@ -115,6 +117,7 @@ pub struct ComputeType {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyWorkspaceImageRequest {
     /// <p>A description of the image.</p>
     #[serde(rename = "Description")]
@@ -145,6 +148,7 @@ pub struct CopyWorkspaceImageResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIpGroupRequest {
     /// <p>The description of the group.</p>
     #[serde(rename = "GroupDesc")]
@@ -173,6 +177,7 @@ pub struct CreateIpGroupResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
     /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
     #[serde(rename = "ResourceId")]
@@ -187,6 +192,7 @@ pub struct CreateTagsRequest {
 pub struct CreateTagsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkspacesRequest {
     /// <p>The WorkSpaces to create. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "Workspaces")]
@@ -237,6 +243,7 @@ pub struct DefaultWorkspaceCreationProperties {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIpGroupRequest {
     /// <p>The identifier of the IP access control group.</p>
     #[serde(rename = "GroupId")]
@@ -248,6 +255,7 @@ pub struct DeleteIpGroupRequest {
 pub struct DeleteIpGroupResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
     /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
     #[serde(rename = "ResourceId")]
@@ -262,6 +270,7 @@ pub struct DeleteTagsRequest {
 pub struct DeleteTagsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkspaceImageRequest {
     /// <p>The identifier of the image.</p>
     #[serde(rename = "ImageId")]
@@ -273,6 +282,7 @@ pub struct DeleteWorkspaceImageRequest {
 pub struct DeleteWorkspaceImageResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterWorkspaceDirectoryRequest {
     /// <p>The identifier of the directory. If any WorkSpaces are registered to this directory, you must remove them before you deregister the directory, or you will receive an OperationNotSupportedException error.</p>
     #[serde(rename = "DirectoryId")]
@@ -284,6 +294,7 @@ pub struct DeregisterWorkspaceDirectoryRequest {
 pub struct DeregisterWorkspaceDirectoryResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountModificationsRequest {
     /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -305,6 +316,7 @@ pub struct DescribeAccountModificationsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -321,6 +333,7 @@ pub struct DescribeAccountResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClientPropertiesRequest {
     /// <p>The resource identifier, in the form of directory IDs.</p>
     #[serde(rename = "ResourceIds")]
@@ -337,6 +350,7 @@ pub struct DescribeClientPropertiesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIpGroupsRequest {
     /// <p>The identifiers of one or more IP access control groups.</p>
     #[serde(rename = "GroupIds")]
@@ -366,6 +380,7 @@ pub struct DescribeIpGroupsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
     /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
     #[serde(rename = "ResourceId")]
@@ -382,6 +397,7 @@ pub struct DescribeTagsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceBundlesRequest {
     /// <p>The identifiers of the bundles. You cannot combine this parameter with any other filter.</p>
     #[serde(rename = "BundleIds")]
@@ -411,6 +427,7 @@ pub struct DescribeWorkspaceBundlesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceDirectoriesRequest {
     /// <p>The identifiers of the directories. If the value is null, all directories are retrieved.</p>
     #[serde(rename = "DirectoryIds")]
@@ -440,6 +457,7 @@ pub struct DescribeWorkspaceDirectoriesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceImagesRequest {
     /// <p>The identifier of the image.</p>
     #[serde(rename = "ImageIds")]
@@ -469,6 +487,7 @@ pub struct DescribeWorkspaceImagesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceSnapshotsRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -489,6 +508,7 @@ pub struct DescribeWorkspaceSnapshotsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspacesConnectionStatusRequest {
     /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -514,6 +534,7 @@ pub struct DescribeWorkspacesConnectionStatusResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspacesRequest {
     /// <p>The identifier of the bundle. All WorkSpaces that are created from this bundle are retrieved. You cannot combine this parameter with any other filter.</p>
     #[serde(rename = "BundleId")]
@@ -555,6 +576,7 @@ pub struct DescribeWorkspacesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateIpGroupsRequest {
     /// <p>The identifier of the directory.</p>
     #[serde(rename = "DirectoryId")]
@@ -605,6 +627,7 @@ pub struct FailedWorkspaceChangeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportWorkspaceImageRequest {
     /// <p>The identifier of the EC2 image.</p>
     #[serde(rename = "Ec2ImageId")]
@@ -647,6 +670,7 @@ pub struct IpRuleItem {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAvailableManagementCidrRangesRequest {
     /// <p>The IP address range to search. Specify an IP address range that is compatible with your network and in CIDR notation (that is, specify the range as an IPv4 CIDR block).</p>
     #[serde(rename = "ManagementCidrRangeConstraint")]
@@ -689,6 +713,7 @@ pub struct ModificationState {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyAccountRequest {
     /// <p>The IP address range, specified as an IPv4 CIDR block, for the management network interface. Specify an IP address range that is compatible with your network and in CIDR notation (that is, specify the range as an IPv4 CIDR block). The CIDR block size must be /16 (for example, 203.0.113.25/16). It must also be specified as available by the <code>ListAvailableManagementCidrRanges</code> operation.</p>
     #[serde(rename = "DedicatedTenancyManagementCidrRange")]
@@ -705,6 +730,7 @@ pub struct ModifyAccountRequest {
 pub struct ModifyAccountResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClientPropertiesRequest {
     /// <p>Information about the Amazon WorkSpaces client.</p>
     #[serde(rename = "ClientProperties")]
@@ -719,6 +745,7 @@ pub struct ModifyClientPropertiesRequest {
 pub struct ModifyClientPropertiesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifySelfservicePermissionsRequest {
     /// <p>The identifier of the directory.</p>
     #[serde(rename = "ResourceId")]
@@ -733,6 +760,7 @@ pub struct ModifySelfservicePermissionsRequest {
 pub struct ModifySelfservicePermissionsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspaceAccessPropertiesRequest {
     /// <p>The identifier of the directory.</p>
     #[serde(rename = "ResourceId")]
@@ -747,6 +775,7 @@ pub struct ModifyWorkspaceAccessPropertiesRequest {
 pub struct ModifyWorkspaceAccessPropertiesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspaceCreationPropertiesRequest {
     /// <p>The identifier of the directory.</p>
     #[serde(rename = "ResourceId")]
@@ -761,6 +790,7 @@ pub struct ModifyWorkspaceCreationPropertiesRequest {
 pub struct ModifyWorkspaceCreationPropertiesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspacePropertiesRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -775,6 +805,7 @@ pub struct ModifyWorkspacePropertiesRequest {
 pub struct ModifyWorkspacePropertiesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspaceStateRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -800,6 +831,7 @@ pub struct OperatingSystem {
 
 /// <p>Describes the information used to reboot a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -807,6 +839,7 @@ pub struct RebootRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootWorkspacesRequest {
     /// <p>The WorkSpaces to reboot. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "RebootWorkspaceRequests")]
@@ -824,6 +857,7 @@ pub struct RebootWorkspacesResult {
 
 /// <p>Describes the information used to rebuild a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebuildRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -831,6 +865,7 @@ pub struct RebuildRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebuildWorkspacesRequest {
     /// <p>The WorkSpace to rebuild. You can specify a single WorkSpace.</p>
     #[serde(rename = "RebuildWorkspaceRequests")]
@@ -847,6 +882,7 @@ pub struct RebuildWorkspacesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterWorkspaceDirectoryRequest {
     /// <p>The identifier of the directory. You cannot register a directory if it does not have a status of Active. If the directory does not have a status of Active, you will receive an InvalidResourceStateException error. If you have already registered the maximum number of directories that you can register with Amazon WorkSpaces, you will receive a ResourceLimitExceededException error. Deregister directories that you are not using for WorkSpaces, and try again.</p>
     #[serde(rename = "DirectoryId")]
@@ -877,6 +913,7 @@ pub struct RegisterWorkspaceDirectoryRequest {
 pub struct RegisterWorkspaceDirectoryResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreWorkspaceRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -888,6 +925,7 @@ pub struct RestoreWorkspaceRequest {
 pub struct RestoreWorkspaceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeIpRulesRequest {
     /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
@@ -948,6 +986,7 @@ pub struct Snapshot {
 
 /// <p>Information used to start a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -956,6 +995,7 @@ pub struct StartRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartWorkspacesRequest {
     /// <p>The WorkSpaces to start. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "StartWorkspaceRequests")]
@@ -973,6 +1013,7 @@ pub struct StartWorkspacesResult {
 
 /// <p>Describes the information used to stop a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -981,6 +1022,7 @@ pub struct StopRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopWorkspacesRequest {
     /// <p>The WorkSpaces to stop. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "StopWorkspaceRequests")]
@@ -1010,6 +1052,7 @@ pub struct Tag {
 
 /// <p>Describes the information used to terminate a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -1017,6 +1060,7 @@ pub struct TerminateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateWorkspacesRequest {
     /// <p>The WorkSpaces to terminate. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "TerminateWorkspaceRequests")]
@@ -1033,6 +1077,7 @@ pub struct TerminateWorkspacesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRulesOfIpGroupRequest {
     /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
@@ -1221,6 +1266,7 @@ pub struct WorkspaceConnectionStatus {
 
 /// <p>Describes the default properties that are used for creating WorkSpaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html">Update Directory Details for Your WorkSpaces</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct WorkspaceCreationProperties {
     /// <p>The identifier of your custom security group.</p>
     #[serde(rename = "CustomSecurityGroupId")]
@@ -1489,21 +1535,17 @@ impl AssociateIpGroupsError {
 }
 impl fmt::Display for AssociateIpGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateIpGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateIpGroupsError::AccessDenied(ref cause) => cause,
-            AssociateIpGroupsError::InvalidParameterValues(ref cause) => cause,
-            AssociateIpGroupsError::InvalidResourceState(ref cause) => cause,
-            AssociateIpGroupsError::OperationNotSupported(ref cause) => cause,
-            AssociateIpGroupsError::ResourceLimitExceeded(ref cause) => cause,
-            AssociateIpGroupsError::ResourceNotFound(ref cause) => cause,
+            AssociateIpGroupsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AssociateIpGroupsError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            AssociateIpGroupsError::InvalidResourceState(ref cause) => write!(f, "{}", cause),
+            AssociateIpGroupsError::OperationNotSupported(ref cause) => write!(f, "{}", cause),
+            AssociateIpGroupsError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            AssociateIpGroupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateIpGroupsError {}
 /// Errors returned by AuthorizeIpRules
 #[derive(Debug, PartialEq)]
 pub enum AuthorizeIpRulesError {
@@ -1553,20 +1595,16 @@ impl AuthorizeIpRulesError {
 }
 impl fmt::Display for AuthorizeIpRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AuthorizeIpRulesError {
-    fn description(&self) -> &str {
         match *self {
-            AuthorizeIpRulesError::AccessDenied(ref cause) => cause,
-            AuthorizeIpRulesError::InvalidParameterValues(ref cause) => cause,
-            AuthorizeIpRulesError::InvalidResourceState(ref cause) => cause,
-            AuthorizeIpRulesError::ResourceLimitExceeded(ref cause) => cause,
-            AuthorizeIpRulesError::ResourceNotFound(ref cause) => cause,
+            AuthorizeIpRulesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AuthorizeIpRulesError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            AuthorizeIpRulesError::InvalidResourceState(ref cause) => write!(f, "{}", cause),
+            AuthorizeIpRulesError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            AuthorizeIpRulesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AuthorizeIpRulesError {}
 /// Errors returned by CopyWorkspaceImage
 #[derive(Debug, PartialEq)]
 pub enum CopyWorkspaceImageError {
@@ -1630,22 +1668,18 @@ impl CopyWorkspaceImageError {
 }
 impl fmt::Display for CopyWorkspaceImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CopyWorkspaceImageError {
-    fn description(&self) -> &str {
         match *self {
-            CopyWorkspaceImageError::AccessDenied(ref cause) => cause,
-            CopyWorkspaceImageError::InvalidParameterValues(ref cause) => cause,
-            CopyWorkspaceImageError::OperationNotSupported(ref cause) => cause,
-            CopyWorkspaceImageError::ResourceAlreadyExists(ref cause) => cause,
-            CopyWorkspaceImageError::ResourceLimitExceeded(ref cause) => cause,
-            CopyWorkspaceImageError::ResourceNotFound(ref cause) => cause,
-            CopyWorkspaceImageError::ResourceUnavailable(ref cause) => cause,
+            CopyWorkspaceImageError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CopyWorkspaceImageError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            CopyWorkspaceImageError::OperationNotSupported(ref cause) => write!(f, "{}", cause),
+            CopyWorkspaceImageError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CopyWorkspaceImageError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CopyWorkspaceImageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CopyWorkspaceImageError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CopyWorkspaceImageError {}
 /// Errors returned by CreateIpGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateIpGroupError {
@@ -1693,20 +1727,16 @@ impl CreateIpGroupError {
 }
 impl fmt::Display for CreateIpGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateIpGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateIpGroupError::AccessDenied(ref cause) => cause,
-            CreateIpGroupError::InvalidParameterValues(ref cause) => cause,
-            CreateIpGroupError::ResourceAlreadyExists(ref cause) => cause,
-            CreateIpGroupError::ResourceCreationFailed(ref cause) => cause,
-            CreateIpGroupError::ResourceLimitExceeded(ref cause) => cause,
+            CreateIpGroupError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateIpGroupError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            CreateIpGroupError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateIpGroupError::ResourceCreationFailed(ref cause) => write!(f, "{}", cause),
+            CreateIpGroupError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateIpGroupError {}
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
@@ -1740,18 +1770,14 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTagsError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTagsError::InvalidParameterValues(ref cause) => cause,
-            CreateTagsError::ResourceLimitExceeded(ref cause) => cause,
-            CreateTagsError::ResourceNotFound(ref cause) => cause,
+            CreateTagsError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTagsError {}
 /// Errors returned by CreateWorkspaces
 #[derive(Debug, PartialEq)]
 pub enum CreateWorkspacesError {
@@ -1784,17 +1810,13 @@ impl CreateWorkspacesError {
 }
 impl fmt::Display for CreateWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateWorkspacesError {
-    fn description(&self) -> &str {
         match *self {
-            CreateWorkspacesError::InvalidParameterValues(ref cause) => cause,
-            CreateWorkspacesError::ResourceLimitExceeded(ref cause) => cause,
+            CreateWorkspacesError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            CreateWorkspacesError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateWorkspacesError {}
 /// Errors returned by DeleteIpGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteIpGroupError {
@@ -1835,19 +1857,15 @@ impl DeleteIpGroupError {
 }
 impl fmt::Display for DeleteIpGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteIpGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteIpGroupError::AccessDenied(ref cause) => cause,
-            DeleteIpGroupError::InvalidParameterValues(ref cause) => cause,
-            DeleteIpGroupError::ResourceAssociated(ref cause) => cause,
-            DeleteIpGroupError::ResourceNotFound(ref cause) => cause,
+            DeleteIpGroupError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteIpGroupError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            DeleteIpGroupError::ResourceAssociated(ref cause) => write!(f, "{}", cause),
+            DeleteIpGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteIpGroupError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
@@ -1876,17 +1894,13 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTagsError::InvalidParameterValues(ref cause) => cause,
-            DeleteTagsError::ResourceNotFound(ref cause) => cause,
+            DeleteTagsError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTagsError {}
 /// Errors returned by DeleteWorkspaceImage
 #[derive(Debug, PartialEq)]
 pub enum DeleteWorkspaceImageError {
@@ -1924,18 +1938,14 @@ impl DeleteWorkspaceImageError {
 }
 impl fmt::Display for DeleteWorkspaceImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteWorkspaceImageError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteWorkspaceImageError::AccessDenied(ref cause) => cause,
-            DeleteWorkspaceImageError::InvalidResourceState(ref cause) => cause,
-            DeleteWorkspaceImageError::ResourceAssociated(ref cause) => cause,
+            DeleteWorkspaceImageError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteWorkspaceImageError::InvalidResourceState(ref cause) => write!(f, "{}", cause),
+            DeleteWorkspaceImageError::ResourceAssociated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteWorkspaceImageError {}
 /// Errors returned by DeregisterWorkspaceDirectory
 #[derive(Debug, PartialEq)]
 pub enum DeregisterWorkspaceDirectoryError {
@@ -1991,20 +2001,24 @@ impl DeregisterWorkspaceDirectoryError {
 }
 impl fmt::Display for DeregisterWorkspaceDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterWorkspaceDirectoryError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterWorkspaceDirectoryError::AccessDenied(ref cause) => cause,
-            DeregisterWorkspaceDirectoryError::InvalidParameterValues(ref cause) => cause,
-            DeregisterWorkspaceDirectoryError::InvalidResourceState(ref cause) => cause,
-            DeregisterWorkspaceDirectoryError::OperationNotSupported(ref cause) => cause,
-            DeregisterWorkspaceDirectoryError::ResourceNotFound(ref cause) => cause,
+            DeregisterWorkspaceDirectoryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeregisterWorkspaceDirectoryError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeregisterWorkspaceDirectoryError::InvalidResourceState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeregisterWorkspaceDirectoryError::OperationNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeregisterWorkspaceDirectoryError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeregisterWorkspaceDirectoryError {}
 /// Errors returned by DescribeAccount
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountError {
@@ -2028,16 +2042,12 @@ impl DescribeAccountError {
 }
 impl fmt::Display for DescribeAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAccountError::AccessDenied(ref cause) => cause,
+            DescribeAccountError::AccessDenied(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAccountError {}
 /// Errors returned by DescribeAccountModifications
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountModificationsError {
@@ -2065,16 +2075,12 @@ impl DescribeAccountModificationsError {
 }
 impl fmt::Display for DescribeAccountModificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountModificationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAccountModificationsError::AccessDenied(ref cause) => cause,
+            DescribeAccountModificationsError::AccessDenied(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAccountModificationsError {}
 /// Errors returned by DescribeClientProperties
 #[derive(Debug, PartialEq)]
 pub enum DescribeClientPropertiesError {
@@ -2114,18 +2120,16 @@ impl DescribeClientPropertiesError {
 }
 impl fmt::Display for DescribeClientPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClientPropertiesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClientPropertiesError::AccessDenied(ref cause) => cause,
-            DescribeClientPropertiesError::InvalidParameterValues(ref cause) => cause,
-            DescribeClientPropertiesError::ResourceNotFound(ref cause) => cause,
+            DescribeClientPropertiesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeClientPropertiesError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeClientPropertiesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClientPropertiesError {}
 /// Errors returned by DescribeIpGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeIpGroupsError {
@@ -2156,17 +2160,13 @@ impl DescribeIpGroupsError {
 }
 impl fmt::Display for DescribeIpGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeIpGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeIpGroupsError::AccessDenied(ref cause) => cause,
-            DescribeIpGroupsError::InvalidParameterValues(ref cause) => cause,
+            DescribeIpGroupsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeIpGroupsError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeIpGroupsError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
@@ -2190,16 +2190,12 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::ResourceNotFound(ref cause) => cause,
+            DescribeTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by DescribeWorkspaceBundles
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkspaceBundlesError {
@@ -2225,16 +2221,14 @@ impl DescribeWorkspaceBundlesError {
 }
 impl fmt::Display for DescribeWorkspaceBundlesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWorkspaceBundlesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeWorkspaceBundlesError::InvalidParameterValues(ref cause) => cause,
+            DescribeWorkspaceBundlesError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeWorkspaceBundlesError {}
 /// Errors returned by DescribeWorkspaceDirectories
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkspaceDirectoriesError {
@@ -2262,16 +2256,14 @@ impl DescribeWorkspaceDirectoriesError {
 }
 impl fmt::Display for DescribeWorkspaceDirectoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWorkspaceDirectoriesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeWorkspaceDirectoriesError::InvalidParameterValues(ref cause) => cause,
+            DescribeWorkspaceDirectoriesError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeWorkspaceDirectoriesError {}
 /// Errors returned by DescribeWorkspaceImages
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkspaceImagesError {
@@ -2297,16 +2289,12 @@ impl DescribeWorkspaceImagesError {
 }
 impl fmt::Display for DescribeWorkspaceImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWorkspaceImagesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeWorkspaceImagesError::AccessDenied(ref cause) => cause,
+            DescribeWorkspaceImagesError::AccessDenied(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeWorkspaceImagesError {}
 /// Errors returned by DescribeWorkspaceSnapshots
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkspaceSnapshotsError {
@@ -2348,18 +2336,16 @@ impl DescribeWorkspaceSnapshotsError {
 }
 impl fmt::Display for DescribeWorkspaceSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWorkspaceSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeWorkspaceSnapshotsError::AccessDenied(ref cause) => cause,
-            DescribeWorkspaceSnapshotsError::InvalidParameterValues(ref cause) => cause,
-            DescribeWorkspaceSnapshotsError::ResourceNotFound(ref cause) => cause,
+            DescribeWorkspaceSnapshotsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeWorkspaceSnapshotsError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeWorkspaceSnapshotsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeWorkspaceSnapshotsError {}
 /// Errors returned by DescribeWorkspaces
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkspacesError {
@@ -2392,17 +2378,13 @@ impl DescribeWorkspacesError {
 }
 impl fmt::Display for DescribeWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWorkspacesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeWorkspacesError::InvalidParameterValues(ref cause) => cause,
-            DescribeWorkspacesError::ResourceUnavailable(ref cause) => cause,
+            DescribeWorkspacesError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            DescribeWorkspacesError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeWorkspacesError {}
 /// Errors returned by DescribeWorkspacesConnectionStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkspacesConnectionStatusError {
@@ -2430,16 +2412,14 @@ impl DescribeWorkspacesConnectionStatusError {
 }
 impl fmt::Display for DescribeWorkspacesConnectionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWorkspacesConnectionStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeWorkspacesConnectionStatusError::InvalidParameterValues(ref cause) => cause,
+            DescribeWorkspacesConnectionStatusError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeWorkspacesConnectionStatusError {}
 /// Errors returned by DisassociateIpGroups
 #[derive(Debug, PartialEq)]
 pub enum DisassociateIpGroupsError {
@@ -2484,19 +2464,15 @@ impl DisassociateIpGroupsError {
 }
 impl fmt::Display for DisassociateIpGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateIpGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateIpGroupsError::AccessDenied(ref cause) => cause,
-            DisassociateIpGroupsError::InvalidParameterValues(ref cause) => cause,
-            DisassociateIpGroupsError::InvalidResourceState(ref cause) => cause,
-            DisassociateIpGroupsError::ResourceNotFound(ref cause) => cause,
+            DisassociateIpGroupsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisassociateIpGroupsError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            DisassociateIpGroupsError::InvalidResourceState(ref cause) => write!(f, "{}", cause),
+            DisassociateIpGroupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateIpGroupsError {}
 /// Errors returned by ImportWorkspaceImage
 #[derive(Debug, PartialEq)]
 pub enum ImportWorkspaceImageError {
@@ -2555,21 +2531,17 @@ impl ImportWorkspaceImageError {
 }
 impl fmt::Display for ImportWorkspaceImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportWorkspaceImageError {
-    fn description(&self) -> &str {
         match *self {
-            ImportWorkspaceImageError::AccessDenied(ref cause) => cause,
-            ImportWorkspaceImageError::InvalidParameterValues(ref cause) => cause,
-            ImportWorkspaceImageError::OperationNotSupported(ref cause) => cause,
-            ImportWorkspaceImageError::ResourceAlreadyExists(ref cause) => cause,
-            ImportWorkspaceImageError::ResourceLimitExceeded(ref cause) => cause,
-            ImportWorkspaceImageError::ResourceNotFound(ref cause) => cause,
+            ImportWorkspaceImageError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ImportWorkspaceImageError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            ImportWorkspaceImageError::OperationNotSupported(ref cause) => write!(f, "{}", cause),
+            ImportWorkspaceImageError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            ImportWorkspaceImageError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ImportWorkspaceImageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportWorkspaceImageError {}
 /// Errors returned by ListAvailableManagementCidrRanges
 #[derive(Debug, PartialEq)]
 pub enum ListAvailableManagementCidrRangesError {
@@ -2604,17 +2576,17 @@ impl ListAvailableManagementCidrRangesError {
 }
 impl fmt::Display for ListAvailableManagementCidrRangesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAvailableManagementCidrRangesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAvailableManagementCidrRangesError::AccessDenied(ref cause) => cause,
-            ListAvailableManagementCidrRangesError::InvalidParameterValues(ref cause) => cause,
+            ListAvailableManagementCidrRangesError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAvailableManagementCidrRangesError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListAvailableManagementCidrRangesError {}
 /// Errors returned by ModifyAccount
 #[derive(Debug, PartialEq)]
 pub enum ModifyAccountError {
@@ -2660,20 +2632,16 @@ impl ModifyAccountError {
 }
 impl fmt::Display for ModifyAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyAccountError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyAccountError::AccessDenied(ref cause) => cause,
-            ModifyAccountError::InvalidParameterValues(ref cause) => cause,
-            ModifyAccountError::InvalidResourceState(ref cause) => cause,
-            ModifyAccountError::ResourceNotFound(ref cause) => cause,
-            ModifyAccountError::ResourceUnavailable(ref cause) => cause,
+            ModifyAccountError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ModifyAccountError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            ModifyAccountError::InvalidResourceState(ref cause) => write!(f, "{}", cause),
+            ModifyAccountError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyAccountError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyAccountError {}
 /// Errors returned by ModifyClientProperties
 #[derive(Debug, PartialEq)]
 pub enum ModifyClientPropertiesError {
@@ -2711,18 +2679,16 @@ impl ModifyClientPropertiesError {
 }
 impl fmt::Display for ModifyClientPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyClientPropertiesError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyClientPropertiesError::AccessDenied(ref cause) => cause,
-            ModifyClientPropertiesError::InvalidParameterValues(ref cause) => cause,
-            ModifyClientPropertiesError::ResourceNotFound(ref cause) => cause,
+            ModifyClientPropertiesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ModifyClientPropertiesError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClientPropertiesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyClientPropertiesError {}
 /// Errors returned by ModifySelfservicePermissions
 #[derive(Debug, PartialEq)]
 pub enum ModifySelfservicePermissionsError {
@@ -2764,18 +2730,18 @@ impl ModifySelfservicePermissionsError {
 }
 impl fmt::Display for ModifySelfservicePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifySelfservicePermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            ModifySelfservicePermissionsError::AccessDenied(ref cause) => cause,
-            ModifySelfservicePermissionsError::InvalidParameterValues(ref cause) => cause,
-            ModifySelfservicePermissionsError::ResourceNotFound(ref cause) => cause,
+            ModifySelfservicePermissionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ModifySelfservicePermissionsError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifySelfservicePermissionsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifySelfservicePermissionsError {}
 /// Errors returned by ModifyWorkspaceAccessProperties
 #[derive(Debug, PartialEq)]
 pub enum ModifyWorkspaceAccessPropertiesError {
@@ -2810,17 +2776,15 @@ impl ModifyWorkspaceAccessPropertiesError {
 }
 impl fmt::Display for ModifyWorkspaceAccessPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyWorkspaceAccessPropertiesError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyWorkspaceAccessPropertiesError::AccessDenied(ref cause) => cause,
-            ModifyWorkspaceAccessPropertiesError::ResourceNotFound(ref cause) => cause,
+            ModifyWorkspaceAccessPropertiesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ModifyWorkspaceAccessPropertiesError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyWorkspaceAccessPropertiesError {}
 /// Errors returned by ModifyWorkspaceCreationProperties
 #[derive(Debug, PartialEq)]
 pub enum ModifyWorkspaceCreationPropertiesError {
@@ -2862,18 +2826,20 @@ impl ModifyWorkspaceCreationPropertiesError {
 }
 impl fmt::Display for ModifyWorkspaceCreationPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyWorkspaceCreationPropertiesError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyWorkspaceCreationPropertiesError::AccessDenied(ref cause) => cause,
-            ModifyWorkspaceCreationPropertiesError::InvalidParameterValues(ref cause) => cause,
-            ModifyWorkspaceCreationPropertiesError::ResourceNotFound(ref cause) => cause,
+            ModifyWorkspaceCreationPropertiesError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyWorkspaceCreationPropertiesError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyWorkspaceCreationPropertiesError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyWorkspaceCreationPropertiesError {}
 /// Errors returned by ModifyWorkspaceProperties
 #[derive(Debug, PartialEq)]
 pub enum ModifyWorkspacePropertiesError {
@@ -2941,22 +2907,28 @@ impl ModifyWorkspacePropertiesError {
 }
 impl fmt::Display for ModifyWorkspacePropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyWorkspacePropertiesError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyWorkspacePropertiesError::AccessDenied(ref cause) => cause,
-            ModifyWorkspacePropertiesError::InvalidParameterValues(ref cause) => cause,
-            ModifyWorkspacePropertiesError::InvalidResourceState(ref cause) => cause,
-            ModifyWorkspacePropertiesError::OperationInProgress(ref cause) => cause,
-            ModifyWorkspacePropertiesError::ResourceNotFound(ref cause) => cause,
-            ModifyWorkspacePropertiesError::ResourceUnavailable(ref cause) => cause,
-            ModifyWorkspacePropertiesError::UnsupportedWorkspaceConfiguration(ref cause) => cause,
+            ModifyWorkspacePropertiesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ModifyWorkspacePropertiesError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyWorkspacePropertiesError::InvalidResourceState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyWorkspacePropertiesError::OperationInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyWorkspacePropertiesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyWorkspacePropertiesError::ResourceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyWorkspacePropertiesError::UnsupportedWorkspaceConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyWorkspacePropertiesError {}
 /// Errors returned by ModifyWorkspaceState
 #[derive(Debug, PartialEq)]
 pub enum ModifyWorkspaceStateError {
@@ -2996,18 +2968,14 @@ impl ModifyWorkspaceStateError {
 }
 impl fmt::Display for ModifyWorkspaceStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyWorkspaceStateError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyWorkspaceStateError::InvalidParameterValues(ref cause) => cause,
-            ModifyWorkspaceStateError::InvalidResourceState(ref cause) => cause,
-            ModifyWorkspaceStateError::ResourceNotFound(ref cause) => cause,
+            ModifyWorkspaceStateError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            ModifyWorkspaceStateError::InvalidResourceState(ref cause) => write!(f, "{}", cause),
+            ModifyWorkspaceStateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyWorkspaceStateError {}
 /// Errors returned by RebootWorkspaces
 #[derive(Debug, PartialEq)]
 pub enum RebootWorkspacesError {}
@@ -3025,14 +2993,10 @@ impl RebootWorkspacesError {
 }
 impl fmt::Display for RebootWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootWorkspacesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for RebootWorkspacesError {}
 /// Errors returned by RebuildWorkspaces
 #[derive(Debug, PartialEq)]
 pub enum RebuildWorkspacesError {}
@@ -3050,14 +3014,10 @@ impl RebuildWorkspacesError {
 }
 impl fmt::Display for RebuildWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebuildWorkspacesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for RebuildWorkspacesError {}
 /// Errors returned by RegisterWorkspaceDirectory
 #[derive(Debug, PartialEq)]
 pub enum RegisterWorkspaceDirectoryError {
@@ -3134,23 +3094,31 @@ impl RegisterWorkspaceDirectoryError {
 }
 impl fmt::Display for RegisterWorkspaceDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterWorkspaceDirectoryError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterWorkspaceDirectoryError::AccessDenied(ref cause) => cause,
-            RegisterWorkspaceDirectoryError::InvalidParameterValues(ref cause) => cause,
-            RegisterWorkspaceDirectoryError::InvalidResourceState(ref cause) => cause,
-            RegisterWorkspaceDirectoryError::OperationNotSupported(ref cause) => cause,
-            RegisterWorkspaceDirectoryError::ResourceLimitExceeded(ref cause) => cause,
-            RegisterWorkspaceDirectoryError::ResourceNotFound(ref cause) => cause,
-            RegisterWorkspaceDirectoryError::UnsupportedNetworkConfiguration(ref cause) => cause,
-            RegisterWorkspaceDirectoryError::WorkspacesDefaultRoleNotFound(ref cause) => cause,
+            RegisterWorkspaceDirectoryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RegisterWorkspaceDirectoryError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterWorkspaceDirectoryError::InvalidResourceState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterWorkspaceDirectoryError::OperationNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterWorkspaceDirectoryError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterWorkspaceDirectoryError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RegisterWorkspaceDirectoryError::UnsupportedNetworkConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterWorkspaceDirectoryError::WorkspacesDefaultRoleNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RegisterWorkspaceDirectoryError {}
 /// Errors returned by RestoreWorkspace
 #[derive(Debug, PartialEq)]
 pub enum RestoreWorkspaceError {
@@ -3186,18 +3154,14 @@ impl RestoreWorkspaceError {
 }
 impl fmt::Display for RestoreWorkspaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreWorkspaceError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreWorkspaceError::AccessDenied(ref cause) => cause,
-            RestoreWorkspaceError::InvalidParameterValues(ref cause) => cause,
-            RestoreWorkspaceError::ResourceNotFound(ref cause) => cause,
+            RestoreWorkspaceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RestoreWorkspaceError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            RestoreWorkspaceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RestoreWorkspaceError {}
 /// Errors returned by RevokeIpRules
 #[derive(Debug, PartialEq)]
 pub enum RevokeIpRulesError {
@@ -3238,19 +3202,15 @@ impl RevokeIpRulesError {
 }
 impl fmt::Display for RevokeIpRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RevokeIpRulesError {
-    fn description(&self) -> &str {
         match *self {
-            RevokeIpRulesError::AccessDenied(ref cause) => cause,
-            RevokeIpRulesError::InvalidParameterValues(ref cause) => cause,
-            RevokeIpRulesError::InvalidResourceState(ref cause) => cause,
-            RevokeIpRulesError::ResourceNotFound(ref cause) => cause,
+            RevokeIpRulesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RevokeIpRulesError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            RevokeIpRulesError::InvalidResourceState(ref cause) => write!(f, "{}", cause),
+            RevokeIpRulesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RevokeIpRulesError {}
 /// Errors returned by StartWorkspaces
 #[derive(Debug, PartialEq)]
 pub enum StartWorkspacesError {}
@@ -3268,14 +3228,10 @@ impl StartWorkspacesError {
 }
 impl fmt::Display for StartWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartWorkspacesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for StartWorkspacesError {}
 /// Errors returned by StopWorkspaces
 #[derive(Debug, PartialEq)]
 pub enum StopWorkspacesError {}
@@ -3293,14 +3249,10 @@ impl StopWorkspacesError {
 }
 impl fmt::Display for StopWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopWorkspacesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for StopWorkspacesError {}
 /// Errors returned by TerminateWorkspaces
 #[derive(Debug, PartialEq)]
 pub enum TerminateWorkspacesError {}
@@ -3318,14 +3270,10 @@ impl TerminateWorkspacesError {
 }
 impl fmt::Display for TerminateWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TerminateWorkspacesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for TerminateWorkspacesError {}
 /// Errors returned by UpdateRulesOfIpGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateRulesOfIpGroupError {
@@ -3377,20 +3325,16 @@ impl UpdateRulesOfIpGroupError {
 }
 impl fmt::Display for UpdateRulesOfIpGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRulesOfIpGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRulesOfIpGroupError::AccessDenied(ref cause) => cause,
-            UpdateRulesOfIpGroupError::InvalidParameterValues(ref cause) => cause,
-            UpdateRulesOfIpGroupError::InvalidResourceState(ref cause) => cause,
-            UpdateRulesOfIpGroupError::ResourceLimitExceeded(ref cause) => cause,
-            UpdateRulesOfIpGroupError::ResourceNotFound(ref cause) => cause,
+            UpdateRulesOfIpGroupError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateRulesOfIpGroupError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            UpdateRulesOfIpGroupError::InvalidResourceState(ref cause) => write!(f, "{}", cause),
+            UpdateRulesOfIpGroupError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateRulesOfIpGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRulesOfIpGroupError {}
 /// Trait representing the capabilities of the Amazon WorkSpaces API. Amazon WorkSpaces clients implement this trait.
 pub trait Workspaces {
     /// <p>Associates the specified IP access control group with the specified directory.</p>

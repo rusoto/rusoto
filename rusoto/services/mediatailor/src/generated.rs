@@ -57,6 +57,7 @@ pub struct DashConfiguration {
 
 /// <p>The configuration for DASH PUT operations. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DashConfigurationForPut {
     /// <p>The setting that controls whether MediaTailor includes the Location tag in DASH manifests. MediaTailor populates the Location tag with the URL for manifest update requests, to be used by players that don't support sticky redirects. Disable this if you have CDN routing rules set up for accessing MediaTailor manifests, and you are either using client-side reporting or your players support sticky HTTP redirects. Valid values are DISABLED and EMT_DEFAULT. The EMT_DEFAULT setting enables the inclusion of the tag and is the default value. </p>
     #[serde(rename = "MpdLocation")]
@@ -69,6 +70,7 @@ pub struct DashConfigurationForPut {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePlaybackConfigurationRequest {
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
@@ -80,6 +82,7 @@ pub struct DeletePlaybackConfigurationRequest {
 pub struct DeletePlaybackConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPlaybackConfigurationRequest {
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
@@ -154,6 +157,7 @@ pub struct HlsConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPlaybackConfigurationsRequest {
     /// <p>Maximum number of records to return. </p>
     #[serde(rename = "MaxResults")]
@@ -179,6 +183,7 @@ pub struct ListPlaybackConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the playback configuration. You can get this from the response to any playback configuration request. </p>
     #[serde(rename = "ResourceArn")]
@@ -267,6 +272,7 @@ pub struct PlaybackConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPlaybackConfigurationRequest {
     /// <p>The URL for the ad decision server (ADS). This includes the specification of static parameters and placeholders for dynamic parameters. AWS Elemental MediaTailor substitutes player-specific and session-specific parameters as needed when calling the ADS. Alternately, for testing you can provide a static VAST URL. The maximum length is 25,000 characters.</p>
     #[serde(rename = "AdDecisionServerUrl")]
@@ -364,6 +370,7 @@ pub struct PutPlaybackConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the playback configuration. You can get this from the response to any playback configuration request. </p>
     #[serde(rename = "ResourceArn")]
@@ -379,6 +386,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the playback configuration. You can get this from the response to any playback configuration request. </p>
     #[serde(rename = "ResourceArn")]
@@ -407,14 +415,10 @@ impl DeletePlaybackConfigurationError {
 }
 impl fmt::Display for DeletePlaybackConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePlaybackConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeletePlaybackConfigurationError {}
 /// Errors returned by GetPlaybackConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetPlaybackConfigurationError {}
@@ -432,14 +436,10 @@ impl GetPlaybackConfigurationError {
 }
 impl fmt::Display for GetPlaybackConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPlaybackConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetPlaybackConfigurationError {}
 /// Errors returned by ListPlaybackConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListPlaybackConfigurationsError {}
@@ -459,14 +459,10 @@ impl ListPlaybackConfigurationsError {
 }
 impl fmt::Display for ListPlaybackConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPlaybackConfigurationsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListPlaybackConfigurationsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -490,16 +486,12 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutPlaybackConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutPlaybackConfigurationError {}
@@ -517,14 +509,10 @@ impl PutPlaybackConfigurationError {
 }
 impl fmt::Display for PutPlaybackConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutPlaybackConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutPlaybackConfigurationError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -548,16 +536,12 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -581,16 +565,12 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the MediaTailor API. MediaTailor clients implement this trait.
 pub trait MediaTailor {
     /// <p>Deletes the playback configuration for the specified name. </p>

@@ -73,6 +73,7 @@ pub struct EntitlementValue {
 
 /// <p>The GetEntitlementsRequest contains parameters for the GetEntitlements operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEntitlementsRequest {
     /// <p>Filter is used to return entitlements for a specific customer or for a specific dimension. Filters are described as keys mapped to a lists of values. Filtered requests are <i>unioned</i> for each value in the value list, and then <i>intersected</i> for each filter key.</p>
     #[serde(rename = "Filter")]
@@ -140,18 +141,14 @@ impl GetEntitlementsError {
 }
 impl fmt::Display for GetEntitlementsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetEntitlementsError {
-    fn description(&self) -> &str {
         match *self {
-            GetEntitlementsError::InternalServiceError(ref cause) => cause,
-            GetEntitlementsError::InvalidParameter(ref cause) => cause,
-            GetEntitlementsError::Throttling(ref cause) => cause,
+            GetEntitlementsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            GetEntitlementsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetEntitlementsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetEntitlementsError {}
 /// Trait representing the capabilities of the AWS Marketplace Entitlement Service API. AWS Marketplace Entitlement Service clients implement this trait.
 pub trait MarketplaceEntitlement {
     /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>

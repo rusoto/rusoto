@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptQualificationRequestRequest {
     /// <p> The value of the Qualification. You can omit this value if you are using the presence or absence of the Qualification as the basis for a HIT requirement. </p>
     #[serde(rename = "IntegerValue")]
@@ -39,6 +40,7 @@ pub struct AcceptQualificationRequestRequest {
 pub struct AcceptQualificationRequestResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApproveAssignmentRequest {
     /// <p> The ID of the assignment. The assignment must correspond to a HIT created by the Requester. </p>
     #[serde(rename = "AssignmentId")]
@@ -112,6 +114,7 @@ pub struct Assignment {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateQualificationWithWorkerRequest {
     /// <p>The value of the Qualification to assign.</p>
     #[serde(rename = "IntegerValue")]
@@ -159,6 +162,7 @@ pub struct BonusPayment {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAdditionalAssignmentsForHITRequest {
     /// <p>The ID of the HIT to extend.</p>
     #[serde(rename = "HITId")]
@@ -177,6 +181,7 @@ pub struct CreateAdditionalAssignmentsForHITRequest {
 pub struct CreateAdditionalAssignmentsForHITResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHITRequest {
     /// <p> The amount of time, in seconds, that a Worker has to complete the HIT after accepting it. If a Worker does not complete the assignment within the specified duration, the assignment is considered abandoned. If the HIT is still active (that is, its lifetime has not elapsed), the assignment becomes available for other users to find and accept. </p>
     #[serde(rename = "AssignmentDurationInSeconds")]
@@ -249,6 +254,7 @@ pub struct CreateHITResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHITTypeRequest {
     /// <p> The amount of time, in seconds, that a Worker has to complete the HIT after accepting it. If a Worker does not complete the assignment within the specified duration, the assignment is considered abandoned. If the HIT is still active (that is, its lifetime has not elapsed), the assignment becomes available for other users to find and accept. </p>
     #[serde(rename = "AssignmentDurationInSeconds")]
@@ -286,6 +292,7 @@ pub struct CreateHITTypeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHITWithHITTypeRequest {
     /// <p> The Assignment-level Review Policy applies to the assignments under the HIT. You can specify for Mechanical Turk to take various actions based on the policy. </p>
     #[serde(rename = "AssignmentReviewPolicy")]
@@ -337,6 +344,7 @@ pub struct CreateHITWithHITTypeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateQualificationTypeRequest {
     /// <p>The answers to the Qualification test specified in the Test parameter, in the form of an AnswerKey data structure.</p> <p>Constraints: Must not be longer than 65535 bytes.</p> <p>Constraints: None. If not specified, you must process Qualification requests manually.</p>
     #[serde(rename = "AnswerKey")]
@@ -387,6 +395,7 @@ pub struct CreateQualificationTypeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkerBlockRequest {
     /// <p>A message explaining the reason for blocking the Worker. This parameter enables you to keep track of your Workers. The Worker does not see this message.</p>
     #[serde(rename = "Reason")]
@@ -401,6 +410,7 @@ pub struct CreateWorkerBlockRequest {
 pub struct CreateWorkerBlockResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHITRequest {
     /// <p>The ID of the HIT to be deleted.</p>
     #[serde(rename = "HITId")]
@@ -412,6 +422,7 @@ pub struct DeleteHITRequest {
 pub struct DeleteHITResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQualificationTypeRequest {
     /// <p>The ID of the QualificationType to dispose.</p>
     #[serde(rename = "QualificationTypeId")]
@@ -423,6 +434,7 @@ pub struct DeleteQualificationTypeRequest {
 pub struct DeleteQualificationTypeResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkerBlockRequest {
     /// <p>A message that explains the reason for unblocking the Worker. The Worker does not see this message.</p>
     #[serde(rename = "Reason")]
@@ -438,6 +450,7 @@ pub struct DeleteWorkerBlockRequest {
 pub struct DeleteWorkerBlockResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateQualificationFromWorkerRequest {
     /// <p>The ID of the Qualification type of the Qualification to be revoked.</p>
     #[serde(rename = "QualificationTypeId")]
@@ -456,6 +469,7 @@ pub struct DisassociateQualificationFromWorkerRequest {
 pub struct DisassociateQualificationFromWorkerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountBalanceRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -470,6 +484,7 @@ pub struct GetAccountBalanceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssignmentRequest {
     /// <p>The ID of the Assignment to be retrieved.</p>
     #[serde(rename = "AssignmentId")]
@@ -490,6 +505,7 @@ pub struct GetAssignmentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFileUploadURLRequest {
     /// <p>The ID of the assignment that contains the question with a FileUploadAnswer.</p>
     #[serde(rename = "AssignmentId")]
@@ -509,6 +525,7 @@ pub struct GetFileUploadURLResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHITRequest {
     /// <p>The ID of the HIT to be retrieved.</p>
     #[serde(rename = "HITId")]
@@ -525,6 +542,7 @@ pub struct GetHITResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQualificationScoreRequest {
     /// <p>The ID of the QualificationType.</p>
     #[serde(rename = "QualificationTypeId")]
@@ -544,6 +562,7 @@ pub struct GetQualificationScoreResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQualificationTypeRequest {
     /// <p>The ID of the QualificationType.</p>
     #[serde(rename = "QualificationTypeId")]
@@ -650,6 +669,7 @@ pub struct HIT {
 
 /// <p> The HITLayoutParameter data structure defines parameter values used with a HITLayout. A HITLayout is a reusable Amazon Mechanical Turk project template used to provide Human Intelligence Task (HIT) question data for CreateHIT. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HITLayoutParameter {
     /// <p> The name of the parameter in the HITLayout. </p>
     #[serde(rename = "Name")]
@@ -660,6 +680,7 @@ pub struct HITLayoutParameter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssignmentsForHITRequest {
     /// <p>The status of the assignments to return: Submitted | Approved | Rejected</p>
     #[serde(rename = "AssignmentStatuses")]
@@ -694,6 +715,7 @@ pub struct ListAssignmentsForHITResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBonusPaymentsRequest {
     /// <p>The ID of the assignment associated with the bonus payments to retrieve. If specified, only bonus payments for the given assignment are returned. Either the HITId parameter or the AssignmentId parameter must be specified</p>
     #[serde(rename = "AssignmentId")]
@@ -729,6 +751,7 @@ pub struct ListBonusPaymentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHITsForQualificationTypeRequest {
     /// <p> Limit the number of results returned. </p>
     #[serde(rename = "MaxResults")]
@@ -760,6 +783,7 @@ pub struct ListHITsForQualificationTypeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHITsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -787,6 +811,7 @@ pub struct ListHITsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQualificationRequestsRequest {
     /// <p> The maximum number of results to return in a single call. </p>
     #[serde(rename = "MaxResults")]
@@ -818,6 +843,7 @@ pub struct ListQualificationRequestsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQualificationTypesRequest {
     /// <p> The maximum number of results to return in a single call. </p>
     #[serde(rename = "MaxResults")]
@@ -856,6 +882,7 @@ pub struct ListQualificationTypesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReviewPolicyResultsForHITRequest {
     /// <p>The unique identifier of the HIT to retrieve review results for.</p>
     #[serde(rename = "HITId")]
@@ -911,6 +938,7 @@ pub struct ListReviewPolicyResultsForHITResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReviewableHITsRequest {
     /// <p> The ID of the HIT type of the HITs to consider for the query. If not specified, all HITs for the Reviewer are considered </p>
     #[serde(rename = "HITTypeId")]
@@ -947,6 +975,7 @@ pub struct ListReviewableHITsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkerBlocksRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -974,6 +1003,7 @@ pub struct ListWorkerBlocksResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkersWithQualificationTypeRequest {
     /// <p> Limit the number of results returned. </p>
     #[serde(rename = "MaxResults")]
@@ -1022,6 +1052,7 @@ pub struct Locale {
 
 /// <p>The NotificationSpecification data structure describes a HIT event notification for a HIT type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotificationSpecification {
     /// <p><p> The target for notification messages. The Destination’s format is determined by the specified Transport: </p> <ul> <li> <p>When Transport is Email, the Destination is your email address.</p> </li> <li> <p>When Transport is SQS, the Destination is your queue URL.</p> </li> <li> <p>When Transport is SNS, the Destination is the ARN of your topic.</p> </li> </ul></p>
     #[serde(rename = "Destination")]
@@ -1056,6 +1087,7 @@ pub struct NotifyWorkersFailureStatus {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyWorkersRequest {
     /// <p>The text of the email message to send. Can include up to 4,096 characters</p>
     #[serde(rename = "MessageText")]
@@ -1248,6 +1280,7 @@ pub struct QualificationType {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectAssignmentRequest {
     /// <p> The ID of the assignment. The assignment must correspond to a HIT created by the Requester. </p>
     #[serde(rename = "AssignmentId")]
@@ -1262,6 +1295,7 @@ pub struct RejectAssignmentRequest {
 pub struct RejectAssignmentResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectQualificationRequestRequest {
     /// <p> The ID of the Qualification request, as returned by the <code>ListQualificationRequests</code> operation. </p>
     #[serde(rename = "QualificationRequestId")]
@@ -1371,6 +1405,7 @@ pub struct ReviewResultDetail {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendBonusRequest {
     /// <p>The ID of the assignment for which this bonus is paid.</p>
     #[serde(rename = "AssignmentId")]
@@ -1395,6 +1430,7 @@ pub struct SendBonusRequest {
 pub struct SendBonusResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendTestEventNotificationRequest {
     /// <p> The notification specification to test. This value is identical to the value you would provide to the UpdateNotificationSettings operation when you establish the notification specification for a HIT type. </p>
     #[serde(rename = "Notification")]
@@ -1409,6 +1445,7 @@ pub struct SendTestEventNotificationRequest {
 pub struct SendTestEventNotificationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateExpirationForHITRequest {
     /// <p> The date and time at which you want the HIT to expire </p>
     #[serde(rename = "ExpireAt")]
@@ -1423,6 +1460,7 @@ pub struct UpdateExpirationForHITRequest {
 pub struct UpdateExpirationForHITResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateHITReviewStatusRequest {
     /// <p> The ID of the HIT to update. </p>
     #[serde(rename = "HITId")]
@@ -1438,6 +1476,7 @@ pub struct UpdateHITReviewStatusRequest {
 pub struct UpdateHITReviewStatusResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateHITTypeOfHITRequest {
     /// <p>The HIT to update.</p>
     #[serde(rename = "HITId")]
@@ -1452,6 +1491,7 @@ pub struct UpdateHITTypeOfHITRequest {
 pub struct UpdateHITTypeOfHITResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotificationSettingsRequest {
     /// <p> Specifies whether notifications are sent for HITs of this HIT type, according to the notification specification. You must specify either the Notification parameter or the Active parameter for the call to UpdateNotificationSettings to succeed. </p>
     #[serde(rename = "Active")]
@@ -1471,6 +1511,7 @@ pub struct UpdateNotificationSettingsRequest {
 pub struct UpdateNotificationSettingsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateQualificationTypeRequest {
     /// <p>The answers to the Qualification test specified in the Test parameter, in the form of an AnswerKey data structure.</p>
     #[serde(rename = "AnswerKey")]
@@ -1566,17 +1607,13 @@ impl AcceptQualificationRequestError {
 }
 impl fmt::Display for AcceptQualificationRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AcceptQualificationRequestError {
-    fn description(&self) -> &str {
         match *self {
-            AcceptQualificationRequestError::RequestError(ref cause) => cause,
-            AcceptQualificationRequestError::ServiceFault(ref cause) => cause,
+            AcceptQualificationRequestError::RequestError(ref cause) => write!(f, "{}", cause),
+            AcceptQualificationRequestError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AcceptQualificationRequestError {}
 /// Errors returned by ApproveAssignment
 #[derive(Debug, PartialEq)]
 pub enum ApproveAssignmentError {
@@ -1605,17 +1642,13 @@ impl ApproveAssignmentError {
 }
 impl fmt::Display for ApproveAssignmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ApproveAssignmentError {
-    fn description(&self) -> &str {
         match *self {
-            ApproveAssignmentError::RequestError(ref cause) => cause,
-            ApproveAssignmentError::ServiceFault(ref cause) => cause,
+            ApproveAssignmentError::RequestError(ref cause) => write!(f, "{}", cause),
+            ApproveAssignmentError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ApproveAssignmentError {}
 /// Errors returned by AssociateQualificationWithWorker
 #[derive(Debug, PartialEq)]
 pub enum AssociateQualificationWithWorkerError {
@@ -1650,17 +1683,17 @@ impl AssociateQualificationWithWorkerError {
 }
 impl fmt::Display for AssociateQualificationWithWorkerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateQualificationWithWorkerError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateQualificationWithWorkerError::RequestError(ref cause) => cause,
-            AssociateQualificationWithWorkerError::ServiceFault(ref cause) => cause,
+            AssociateQualificationWithWorkerError::RequestError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateQualificationWithWorkerError::ServiceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateQualificationWithWorkerError {}
 /// Errors returned by CreateAdditionalAssignmentsForHIT
 #[derive(Debug, PartialEq)]
 pub enum CreateAdditionalAssignmentsForHITError {
@@ -1695,17 +1728,17 @@ impl CreateAdditionalAssignmentsForHITError {
 }
 impl fmt::Display for CreateAdditionalAssignmentsForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAdditionalAssignmentsForHITError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAdditionalAssignmentsForHITError::RequestError(ref cause) => cause,
-            CreateAdditionalAssignmentsForHITError::ServiceFault(ref cause) => cause,
+            CreateAdditionalAssignmentsForHITError::RequestError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAdditionalAssignmentsForHITError::ServiceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateAdditionalAssignmentsForHITError {}
 /// Errors returned by CreateHIT
 #[derive(Debug, PartialEq)]
 pub enum CreateHITError {
@@ -1734,17 +1767,13 @@ impl CreateHITError {
 }
 impl fmt::Display for CreateHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHITError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHITError::RequestError(ref cause) => cause,
-            CreateHITError::ServiceFault(ref cause) => cause,
+            CreateHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            CreateHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHITError {}
 /// Errors returned by CreateHITType
 #[derive(Debug, PartialEq)]
 pub enum CreateHITTypeError {
@@ -1773,17 +1802,13 @@ impl CreateHITTypeError {
 }
 impl fmt::Display for CreateHITTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHITTypeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHITTypeError::RequestError(ref cause) => cause,
-            CreateHITTypeError::ServiceFault(ref cause) => cause,
+            CreateHITTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            CreateHITTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHITTypeError {}
 /// Errors returned by CreateHITWithHITType
 #[derive(Debug, PartialEq)]
 pub enum CreateHITWithHITTypeError {
@@ -1812,17 +1837,13 @@ impl CreateHITWithHITTypeError {
 }
 impl fmt::Display for CreateHITWithHITTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHITWithHITTypeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHITWithHITTypeError::RequestError(ref cause) => cause,
-            CreateHITWithHITTypeError::ServiceFault(ref cause) => cause,
+            CreateHITWithHITTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            CreateHITWithHITTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHITWithHITTypeError {}
 /// Errors returned by CreateQualificationType
 #[derive(Debug, PartialEq)]
 pub enum CreateQualificationTypeError {
@@ -1855,17 +1876,13 @@ impl CreateQualificationTypeError {
 }
 impl fmt::Display for CreateQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateQualificationTypeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateQualificationTypeError::RequestError(ref cause) => cause,
-            CreateQualificationTypeError::ServiceFault(ref cause) => cause,
+            CreateQualificationTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            CreateQualificationTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateQualificationTypeError {}
 /// Errors returned by CreateWorkerBlock
 #[derive(Debug, PartialEq)]
 pub enum CreateWorkerBlockError {
@@ -1894,17 +1911,13 @@ impl CreateWorkerBlockError {
 }
 impl fmt::Display for CreateWorkerBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateWorkerBlockError {
-    fn description(&self) -> &str {
         match *self {
-            CreateWorkerBlockError::RequestError(ref cause) => cause,
-            CreateWorkerBlockError::ServiceFault(ref cause) => cause,
+            CreateWorkerBlockError::RequestError(ref cause) => write!(f, "{}", cause),
+            CreateWorkerBlockError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateWorkerBlockError {}
 /// Errors returned by DeleteHIT
 #[derive(Debug, PartialEq)]
 pub enum DeleteHITError {
@@ -1933,17 +1946,13 @@ impl DeleteHITError {
 }
 impl fmt::Display for DeleteHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteHITError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteHITError::RequestError(ref cause) => cause,
-            DeleteHITError::ServiceFault(ref cause) => cause,
+            DeleteHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            DeleteHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteHITError {}
 /// Errors returned by DeleteQualificationType
 #[derive(Debug, PartialEq)]
 pub enum DeleteQualificationTypeError {
@@ -1976,17 +1985,13 @@ impl DeleteQualificationTypeError {
 }
 impl fmt::Display for DeleteQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteQualificationTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteQualificationTypeError::RequestError(ref cause) => cause,
-            DeleteQualificationTypeError::ServiceFault(ref cause) => cause,
+            DeleteQualificationTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            DeleteQualificationTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteQualificationTypeError {}
 /// Errors returned by DeleteWorkerBlock
 #[derive(Debug, PartialEq)]
 pub enum DeleteWorkerBlockError {
@@ -2015,17 +2020,13 @@ impl DeleteWorkerBlockError {
 }
 impl fmt::Display for DeleteWorkerBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteWorkerBlockError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteWorkerBlockError::RequestError(ref cause) => cause,
-            DeleteWorkerBlockError::ServiceFault(ref cause) => cause,
+            DeleteWorkerBlockError::RequestError(ref cause) => write!(f, "{}", cause),
+            DeleteWorkerBlockError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteWorkerBlockError {}
 /// Errors returned by DisassociateQualificationFromWorker
 #[derive(Debug, PartialEq)]
 pub enum DisassociateQualificationFromWorkerError {
@@ -2060,17 +2061,17 @@ impl DisassociateQualificationFromWorkerError {
 }
 impl fmt::Display for DisassociateQualificationFromWorkerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateQualificationFromWorkerError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateQualificationFromWorkerError::RequestError(ref cause) => cause,
-            DisassociateQualificationFromWorkerError::ServiceFault(ref cause) => cause,
+            DisassociateQualificationFromWorkerError::RequestError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateQualificationFromWorkerError::ServiceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateQualificationFromWorkerError {}
 /// Errors returned by GetAccountBalance
 #[derive(Debug, PartialEq)]
 pub enum GetAccountBalanceError {
@@ -2099,17 +2100,13 @@ impl GetAccountBalanceError {
 }
 impl fmt::Display for GetAccountBalanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountBalanceError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountBalanceError::RequestError(ref cause) => cause,
-            GetAccountBalanceError::ServiceFault(ref cause) => cause,
+            GetAccountBalanceError::RequestError(ref cause) => write!(f, "{}", cause),
+            GetAccountBalanceError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAccountBalanceError {}
 /// Errors returned by GetAssignment
 #[derive(Debug, PartialEq)]
 pub enum GetAssignmentError {
@@ -2138,17 +2135,13 @@ impl GetAssignmentError {
 }
 impl fmt::Display for GetAssignmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAssignmentError {
-    fn description(&self) -> &str {
         match *self {
-            GetAssignmentError::RequestError(ref cause) => cause,
-            GetAssignmentError::ServiceFault(ref cause) => cause,
+            GetAssignmentError::RequestError(ref cause) => write!(f, "{}", cause),
+            GetAssignmentError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAssignmentError {}
 /// Errors returned by GetFileUploadURL
 #[derive(Debug, PartialEq)]
 pub enum GetFileUploadURLError {
@@ -2177,17 +2170,13 @@ impl GetFileUploadURLError {
 }
 impl fmt::Display for GetFileUploadURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFileUploadURLError {
-    fn description(&self) -> &str {
         match *self {
-            GetFileUploadURLError::RequestError(ref cause) => cause,
-            GetFileUploadURLError::ServiceFault(ref cause) => cause,
+            GetFileUploadURLError::RequestError(ref cause) => write!(f, "{}", cause),
+            GetFileUploadURLError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFileUploadURLError {}
 /// Errors returned by GetHIT
 #[derive(Debug, PartialEq)]
 pub enum GetHITError {
@@ -2212,17 +2201,13 @@ impl GetHITError {
 }
 impl fmt::Display for GetHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetHITError {
-    fn description(&self) -> &str {
         match *self {
-            GetHITError::RequestError(ref cause) => cause,
-            GetHITError::ServiceFault(ref cause) => cause,
+            GetHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            GetHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetHITError {}
 /// Errors returned by GetQualificationScore
 #[derive(Debug, PartialEq)]
 pub enum GetQualificationScoreError {
@@ -2251,17 +2236,13 @@ impl GetQualificationScoreError {
 }
 impl fmt::Display for GetQualificationScoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQualificationScoreError {
-    fn description(&self) -> &str {
         match *self {
-            GetQualificationScoreError::RequestError(ref cause) => cause,
-            GetQualificationScoreError::ServiceFault(ref cause) => cause,
+            GetQualificationScoreError::RequestError(ref cause) => write!(f, "{}", cause),
+            GetQualificationScoreError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetQualificationScoreError {}
 /// Errors returned by GetQualificationType
 #[derive(Debug, PartialEq)]
 pub enum GetQualificationTypeError {
@@ -2290,17 +2271,13 @@ impl GetQualificationTypeError {
 }
 impl fmt::Display for GetQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQualificationTypeError {
-    fn description(&self) -> &str {
         match *self {
-            GetQualificationTypeError::RequestError(ref cause) => cause,
-            GetQualificationTypeError::ServiceFault(ref cause) => cause,
+            GetQualificationTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            GetQualificationTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetQualificationTypeError {}
 /// Errors returned by ListAssignmentsForHIT
 #[derive(Debug, PartialEq)]
 pub enum ListAssignmentsForHITError {
@@ -2329,17 +2306,13 @@ impl ListAssignmentsForHITError {
 }
 impl fmt::Display for ListAssignmentsForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAssignmentsForHITError {
-    fn description(&self) -> &str {
         match *self {
-            ListAssignmentsForHITError::RequestError(ref cause) => cause,
-            ListAssignmentsForHITError::ServiceFault(ref cause) => cause,
+            ListAssignmentsForHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListAssignmentsForHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAssignmentsForHITError {}
 /// Errors returned by ListBonusPayments
 #[derive(Debug, PartialEq)]
 pub enum ListBonusPaymentsError {
@@ -2368,17 +2341,13 @@ impl ListBonusPaymentsError {
 }
 impl fmt::Display for ListBonusPaymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBonusPaymentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListBonusPaymentsError::RequestError(ref cause) => cause,
-            ListBonusPaymentsError::ServiceFault(ref cause) => cause,
+            ListBonusPaymentsError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListBonusPaymentsError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBonusPaymentsError {}
 /// Errors returned by ListHITs
 #[derive(Debug, PartialEq)]
 pub enum ListHITsError {
@@ -2407,17 +2376,13 @@ impl ListHITsError {
 }
 impl fmt::Display for ListHITsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHITsError {
-    fn description(&self) -> &str {
         match *self {
-            ListHITsError::RequestError(ref cause) => cause,
-            ListHITsError::ServiceFault(ref cause) => cause,
+            ListHITsError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListHITsError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListHITsError {}
 /// Errors returned by ListHITsForQualificationType
 #[derive(Debug, PartialEq)]
 pub enum ListHITsForQualificationTypeError {
@@ -2452,17 +2417,13 @@ impl ListHITsForQualificationTypeError {
 }
 impl fmt::Display for ListHITsForQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHITsForQualificationTypeError {
-    fn description(&self) -> &str {
         match *self {
-            ListHITsForQualificationTypeError::RequestError(ref cause) => cause,
-            ListHITsForQualificationTypeError::ServiceFault(ref cause) => cause,
+            ListHITsForQualificationTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListHITsForQualificationTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListHITsForQualificationTypeError {}
 /// Errors returned by ListQualificationRequests
 #[derive(Debug, PartialEq)]
 pub enum ListQualificationRequestsError {
@@ -2495,17 +2456,13 @@ impl ListQualificationRequestsError {
 }
 impl fmt::Display for ListQualificationRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListQualificationRequestsError {
-    fn description(&self) -> &str {
         match *self {
-            ListQualificationRequestsError::RequestError(ref cause) => cause,
-            ListQualificationRequestsError::ServiceFault(ref cause) => cause,
+            ListQualificationRequestsError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListQualificationRequestsError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListQualificationRequestsError {}
 /// Errors returned by ListQualificationTypes
 #[derive(Debug, PartialEq)]
 pub enum ListQualificationTypesError {
@@ -2534,17 +2491,13 @@ impl ListQualificationTypesError {
 }
 impl fmt::Display for ListQualificationTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListQualificationTypesError {
-    fn description(&self) -> &str {
         match *self {
-            ListQualificationTypesError::RequestError(ref cause) => cause,
-            ListQualificationTypesError::ServiceFault(ref cause) => cause,
+            ListQualificationTypesError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListQualificationTypesError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListQualificationTypesError {}
 /// Errors returned by ListReviewPolicyResultsForHIT
 #[derive(Debug, PartialEq)]
 pub enum ListReviewPolicyResultsForHITError {
@@ -2579,17 +2532,13 @@ impl ListReviewPolicyResultsForHITError {
 }
 impl fmt::Display for ListReviewPolicyResultsForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListReviewPolicyResultsForHITError {
-    fn description(&self) -> &str {
         match *self {
-            ListReviewPolicyResultsForHITError::RequestError(ref cause) => cause,
-            ListReviewPolicyResultsForHITError::ServiceFault(ref cause) => cause,
+            ListReviewPolicyResultsForHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListReviewPolicyResultsForHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListReviewPolicyResultsForHITError {}
 /// Errors returned by ListReviewableHITs
 #[derive(Debug, PartialEq)]
 pub enum ListReviewableHITsError {
@@ -2618,17 +2567,13 @@ impl ListReviewableHITsError {
 }
 impl fmt::Display for ListReviewableHITsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListReviewableHITsError {
-    fn description(&self) -> &str {
         match *self {
-            ListReviewableHITsError::RequestError(ref cause) => cause,
-            ListReviewableHITsError::ServiceFault(ref cause) => cause,
+            ListReviewableHITsError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListReviewableHITsError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListReviewableHITsError {}
 /// Errors returned by ListWorkerBlocks
 #[derive(Debug, PartialEq)]
 pub enum ListWorkerBlocksError {
@@ -2657,17 +2602,13 @@ impl ListWorkerBlocksError {
 }
 impl fmt::Display for ListWorkerBlocksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWorkerBlocksError {
-    fn description(&self) -> &str {
         match *self {
-            ListWorkerBlocksError::RequestError(ref cause) => cause,
-            ListWorkerBlocksError::ServiceFault(ref cause) => cause,
+            ListWorkerBlocksError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListWorkerBlocksError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListWorkerBlocksError {}
 /// Errors returned by ListWorkersWithQualificationType
 #[derive(Debug, PartialEq)]
 pub enum ListWorkersWithQualificationTypeError {
@@ -2702,17 +2643,17 @@ impl ListWorkersWithQualificationTypeError {
 }
 impl fmt::Display for ListWorkersWithQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWorkersWithQualificationTypeError {
-    fn description(&self) -> &str {
         match *self {
-            ListWorkersWithQualificationTypeError::RequestError(ref cause) => cause,
-            ListWorkersWithQualificationTypeError::ServiceFault(ref cause) => cause,
+            ListWorkersWithQualificationTypeError::RequestError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListWorkersWithQualificationTypeError::ServiceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListWorkersWithQualificationTypeError {}
 /// Errors returned by NotifyWorkers
 #[derive(Debug, PartialEq)]
 pub enum NotifyWorkersError {
@@ -2741,17 +2682,13 @@ impl NotifyWorkersError {
 }
 impl fmt::Display for NotifyWorkersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for NotifyWorkersError {
-    fn description(&self) -> &str {
         match *self {
-            NotifyWorkersError::RequestError(ref cause) => cause,
-            NotifyWorkersError::ServiceFault(ref cause) => cause,
+            NotifyWorkersError::RequestError(ref cause) => write!(f, "{}", cause),
+            NotifyWorkersError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for NotifyWorkersError {}
 /// Errors returned by RejectAssignment
 #[derive(Debug, PartialEq)]
 pub enum RejectAssignmentError {
@@ -2780,17 +2717,13 @@ impl RejectAssignmentError {
 }
 impl fmt::Display for RejectAssignmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RejectAssignmentError {
-    fn description(&self) -> &str {
         match *self {
-            RejectAssignmentError::RequestError(ref cause) => cause,
-            RejectAssignmentError::ServiceFault(ref cause) => cause,
+            RejectAssignmentError::RequestError(ref cause) => write!(f, "{}", cause),
+            RejectAssignmentError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RejectAssignmentError {}
 /// Errors returned by RejectQualificationRequest
 #[derive(Debug, PartialEq)]
 pub enum RejectQualificationRequestError {
@@ -2825,17 +2758,13 @@ impl RejectQualificationRequestError {
 }
 impl fmt::Display for RejectQualificationRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RejectQualificationRequestError {
-    fn description(&self) -> &str {
         match *self {
-            RejectQualificationRequestError::RequestError(ref cause) => cause,
-            RejectQualificationRequestError::ServiceFault(ref cause) => cause,
+            RejectQualificationRequestError::RequestError(ref cause) => write!(f, "{}", cause),
+            RejectQualificationRequestError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RejectQualificationRequestError {}
 /// Errors returned by SendBonus
 #[derive(Debug, PartialEq)]
 pub enum SendBonusError {
@@ -2864,17 +2793,13 @@ impl SendBonusError {
 }
 impl fmt::Display for SendBonusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendBonusError {
-    fn description(&self) -> &str {
         match *self {
-            SendBonusError::RequestError(ref cause) => cause,
-            SendBonusError::ServiceFault(ref cause) => cause,
+            SendBonusError::RequestError(ref cause) => write!(f, "{}", cause),
+            SendBonusError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendBonusError {}
 /// Errors returned by SendTestEventNotification
 #[derive(Debug, PartialEq)]
 pub enum SendTestEventNotificationError {
@@ -2907,17 +2832,13 @@ impl SendTestEventNotificationError {
 }
 impl fmt::Display for SendTestEventNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendTestEventNotificationError {
-    fn description(&self) -> &str {
         match *self {
-            SendTestEventNotificationError::RequestError(ref cause) => cause,
-            SendTestEventNotificationError::ServiceFault(ref cause) => cause,
+            SendTestEventNotificationError::RequestError(ref cause) => write!(f, "{}", cause),
+            SendTestEventNotificationError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendTestEventNotificationError {}
 /// Errors returned by UpdateExpirationForHIT
 #[derive(Debug, PartialEq)]
 pub enum UpdateExpirationForHITError {
@@ -2946,17 +2867,13 @@ impl UpdateExpirationForHITError {
 }
 impl fmt::Display for UpdateExpirationForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateExpirationForHITError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateExpirationForHITError::RequestError(ref cause) => cause,
-            UpdateExpirationForHITError::ServiceFault(ref cause) => cause,
+            UpdateExpirationForHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            UpdateExpirationForHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateExpirationForHITError {}
 /// Errors returned by UpdateHITReviewStatus
 #[derive(Debug, PartialEq)]
 pub enum UpdateHITReviewStatusError {
@@ -2985,17 +2902,13 @@ impl UpdateHITReviewStatusError {
 }
 impl fmt::Display for UpdateHITReviewStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateHITReviewStatusError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateHITReviewStatusError::RequestError(ref cause) => cause,
-            UpdateHITReviewStatusError::ServiceFault(ref cause) => cause,
+            UpdateHITReviewStatusError::RequestError(ref cause) => write!(f, "{}", cause),
+            UpdateHITReviewStatusError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateHITReviewStatusError {}
 /// Errors returned by UpdateHITTypeOfHIT
 #[derive(Debug, PartialEq)]
 pub enum UpdateHITTypeOfHITError {
@@ -3024,17 +2937,13 @@ impl UpdateHITTypeOfHITError {
 }
 impl fmt::Display for UpdateHITTypeOfHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateHITTypeOfHITError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateHITTypeOfHITError::RequestError(ref cause) => cause,
-            UpdateHITTypeOfHITError::ServiceFault(ref cause) => cause,
+            UpdateHITTypeOfHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            UpdateHITTypeOfHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateHITTypeOfHITError {}
 /// Errors returned by UpdateNotificationSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateNotificationSettingsError {
@@ -3069,17 +2978,13 @@ impl UpdateNotificationSettingsError {
 }
 impl fmt::Display for UpdateNotificationSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNotificationSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNotificationSettingsError::RequestError(ref cause) => cause,
-            UpdateNotificationSettingsError::ServiceFault(ref cause) => cause,
+            UpdateNotificationSettingsError::RequestError(ref cause) => write!(f, "{}", cause),
+            UpdateNotificationSettingsError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateNotificationSettingsError {}
 /// Errors returned by UpdateQualificationType
 #[derive(Debug, PartialEq)]
 pub enum UpdateQualificationTypeError {
@@ -3112,17 +3017,13 @@ impl UpdateQualificationTypeError {
 }
 impl fmt::Display for UpdateQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateQualificationTypeError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateQualificationTypeError::RequestError(ref cause) => cause,
-            UpdateQualificationTypeError::ServiceFault(ref cause) => cause,
+            UpdateQualificationTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            UpdateQualificationTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateQualificationTypeError {}
 /// Trait representing the capabilities of the Amazon MTurk API. Amazon MTurk clients implement this trait.
 pub trait MechanicalTurk {
     /// <p> The <code>AcceptQualificationRequest</code> operation approves a Worker's request for a Qualification. </p> <p> Only the owner of the Qualification type can grant a Qualification request for that type. </p> <p> A successful request for the <code>AcceptQualificationRequest</code> operation returns with no errors and an empty body. </p>

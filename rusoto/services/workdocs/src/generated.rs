@@ -25,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortDocumentVersionUploadRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -39,6 +40,7 @@ pub struct AbortDocumentVersionUploadRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActivateUserRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -101,6 +103,7 @@ pub struct Activity {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddResourcePermissionsRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -195,6 +198,7 @@ pub struct CommentMetadata {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCommentRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -237,6 +241,7 @@ pub struct CreateCommentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomMetadataRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -259,6 +264,7 @@ pub struct CreateCustomMetadataRequest {
 pub struct CreateCustomMetadataResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFolderRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -283,6 +289,7 @@ pub struct CreateFolderResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLabelsRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -301,6 +308,7 @@ pub struct CreateLabelsRequest {
 pub struct CreateLabelsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotificationSubscriptionRequest {
     /// <p>The endpoint to receive the notifications. If the protocol is HTTPS, the endpoint is a URL that begins with <code>https</code>.</p>
     #[serde(rename = "Endpoint")]
@@ -326,6 +334,7 @@ pub struct CreateNotificationSubscriptionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -371,6 +380,7 @@ pub struct CreateUserResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeactivateUserRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -382,6 +392,7 @@ pub struct DeactivateUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCommentRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -399,6 +410,7 @@ pub struct DeleteCommentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomMetadataRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -426,6 +438,7 @@ pub struct DeleteCustomMetadataRequest {
 pub struct DeleteCustomMetadataResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -437,6 +450,7 @@ pub struct DeleteDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFolderContentsRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -448,6 +462,7 @@ pub struct DeleteFolderContentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFolderRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -459,6 +474,7 @@ pub struct DeleteFolderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLabelsRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -482,6 +498,7 @@ pub struct DeleteLabelsRequest {
 pub struct DeleteLabelsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotificationSubscriptionRequest {
     /// <p>The ID of the organization.</p>
     #[serde(rename = "OrganizationId")]
@@ -492,6 +509,7 @@ pub struct DeleteNotificationSubscriptionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -503,6 +521,7 @@ pub struct DeleteUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActivitiesRequest {
     /// <p>Specifies which activity types to include in the response. If this field is left empty, all activity types are returned.</p>
     #[serde(rename = "ActivityTypes")]
@@ -560,6 +579,7 @@ pub struct DescribeActivitiesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCommentsRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -595,6 +615,7 @@ pub struct DescribeCommentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentVersionsRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -635,6 +656,7 @@ pub struct DescribeDocumentVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFolderContentsRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -687,6 +709,7 @@ pub struct DescribeFolderContentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGroupsRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -723,6 +746,7 @@ pub struct DescribeGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotificationSubscriptionsRequest {
     /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "Limit")]
@@ -751,6 +775,7 @@ pub struct DescribeNotificationSubscriptionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourcePermissionsRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -787,6 +812,7 @@ pub struct DescribeResourcePermissionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRootFoldersRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -815,6 +841,7 @@ pub struct DescribeRootFoldersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUsersRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1018,6 +1045,7 @@ pub struct FolderMetadata {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCurrentUserRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1034,6 +1062,7 @@ pub struct GetCurrentUserResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentPathRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1066,6 +1095,7 @@ pub struct GetDocumentPathResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1094,6 +1124,7 @@ pub struct GetDocumentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentVersionRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1129,6 +1160,7 @@ pub struct GetDocumentVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFolderPathRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1161,6 +1193,7 @@ pub struct GetFolderPathResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFolderRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1189,6 +1222,7 @@ pub struct GetFolderResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcesRequest {
     /// <p>The Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API operation using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1244,6 +1278,7 @@ pub struct GroupMetadata {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateDocumentVersionUploadRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1293,6 +1328,7 @@ pub struct InitiateDocumentVersionUploadResponse {
 
 /// <p>Set of options which defines notification preferences of given action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotificationOptions {
     /// <p>Text value to be included in the email body.</p>
     #[serde(rename = "EmailMessage")]
@@ -1351,6 +1387,7 @@ pub struct Principal {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveAllResourcePermissionsRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1362,6 +1399,7 @@ pub struct RemoveAllResourcePermissionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveResourcePermissionRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1439,6 +1477,7 @@ pub struct ResourcePathComponent {
 
 /// <p>Describes the recipient type and ID, if available.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SharePrincipal {
     /// <p>The ID of the recipient.</p>
     #[serde(rename = "Id")]
@@ -1513,6 +1552,7 @@ pub struct Subscription {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1536,6 +1576,7 @@ pub struct UpdateDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentVersionRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1554,6 +1595,7 @@ pub struct UpdateDocumentVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFolderRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1577,6 +1619,7 @@ pub struct UpdateFolderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
@@ -1806,21 +1849,23 @@ impl AbortDocumentVersionUploadError {
 }
 impl fmt::Display for AbortDocumentVersionUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AbortDocumentVersionUploadError {
-    fn description(&self) -> &str {
         match *self {
-            AbortDocumentVersionUploadError::EntityNotExists(ref cause) => cause,
-            AbortDocumentVersionUploadError::FailedDependency(ref cause) => cause,
-            AbortDocumentVersionUploadError::ProhibitedState(ref cause) => cause,
-            AbortDocumentVersionUploadError::ServiceUnavailable(ref cause) => cause,
-            AbortDocumentVersionUploadError::UnauthorizedOperation(ref cause) => cause,
-            AbortDocumentVersionUploadError::UnauthorizedResourceAccess(ref cause) => cause,
+            AbortDocumentVersionUploadError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            AbortDocumentVersionUploadError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            AbortDocumentVersionUploadError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            AbortDocumentVersionUploadError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AbortDocumentVersionUploadError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AbortDocumentVersionUploadError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AbortDocumentVersionUploadError {}
 /// Errors returned by ActivateUser
 #[derive(Debug, PartialEq)]
 pub enum ActivateUserError {
@@ -1866,20 +1911,16 @@ impl ActivateUserError {
 }
 impl fmt::Display for ActivateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ActivateUserError {
-    fn description(&self) -> &str {
         match *self {
-            ActivateUserError::EntityNotExists(ref cause) => cause,
-            ActivateUserError::FailedDependency(ref cause) => cause,
-            ActivateUserError::ServiceUnavailable(ref cause) => cause,
-            ActivateUserError::UnauthorizedOperation(ref cause) => cause,
-            ActivateUserError::UnauthorizedResourceAccess(ref cause) => cause,
+            ActivateUserError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            ActivateUserError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            ActivateUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ActivateUserError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            ActivateUserError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ActivateUserError {}
 /// Errors returned by AddResourcePermissions
 #[derive(Debug, PartialEq)]
 pub enum AddResourcePermissionsError {
@@ -1926,19 +1967,17 @@ impl AddResourcePermissionsError {
 }
 impl fmt::Display for AddResourcePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddResourcePermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            AddResourcePermissionsError::FailedDependency(ref cause) => cause,
-            AddResourcePermissionsError::ServiceUnavailable(ref cause) => cause,
-            AddResourcePermissionsError::UnauthorizedOperation(ref cause) => cause,
-            AddResourcePermissionsError::UnauthorizedResourceAccess(ref cause) => cause,
+            AddResourcePermissionsError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            AddResourcePermissionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AddResourcePermissionsError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            AddResourcePermissionsError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AddResourcePermissionsError {}
 /// Errors returned by CreateComment
 #[derive(Debug, PartialEq)]
 pub enum CreateCommentError {
@@ -2003,23 +2042,19 @@ impl CreateCommentError {
 }
 impl fmt::Display for CreateCommentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCommentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCommentError::DocumentLockedForComments(ref cause) => cause,
-            CreateCommentError::EntityNotExists(ref cause) => cause,
-            CreateCommentError::FailedDependency(ref cause) => cause,
-            CreateCommentError::InvalidCommentOperation(ref cause) => cause,
-            CreateCommentError::ProhibitedState(ref cause) => cause,
-            CreateCommentError::ServiceUnavailable(ref cause) => cause,
-            CreateCommentError::UnauthorizedOperation(ref cause) => cause,
-            CreateCommentError::UnauthorizedResourceAccess(ref cause) => cause,
+            CreateCommentError::DocumentLockedForComments(ref cause) => write!(f, "{}", cause),
+            CreateCommentError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            CreateCommentError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            CreateCommentError::InvalidCommentOperation(ref cause) => write!(f, "{}", cause),
+            CreateCommentError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            CreateCommentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateCommentError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            CreateCommentError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCommentError {}
 /// Errors returned by CreateCustomMetadata
 #[derive(Debug, PartialEq)]
 pub enum CreateCustomMetadataError {
@@ -2087,22 +2122,22 @@ impl CreateCustomMetadataError {
 }
 impl fmt::Display for CreateCustomMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCustomMetadataError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCustomMetadataError::CustomMetadataLimitExceeded(ref cause) => cause,
-            CreateCustomMetadataError::EntityNotExists(ref cause) => cause,
-            CreateCustomMetadataError::FailedDependency(ref cause) => cause,
-            CreateCustomMetadataError::ProhibitedState(ref cause) => cause,
-            CreateCustomMetadataError::ServiceUnavailable(ref cause) => cause,
-            CreateCustomMetadataError::UnauthorizedOperation(ref cause) => cause,
-            CreateCustomMetadataError::UnauthorizedResourceAccess(ref cause) => cause,
+            CreateCustomMetadataError::CustomMetadataLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomMetadataError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            CreateCustomMetadataError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            CreateCustomMetadataError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            CreateCustomMetadataError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateCustomMetadataError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            CreateCustomMetadataError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateCustomMetadataError {}
 /// Errors returned by CreateFolder
 #[derive(Debug, PartialEq)]
 pub enum CreateFolderError {
@@ -2168,24 +2203,20 @@ impl CreateFolderError {
 }
 impl fmt::Display for CreateFolderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFolderError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFolderError::ConflictingOperation(ref cause) => cause,
-            CreateFolderError::EntityAlreadyExists(ref cause) => cause,
-            CreateFolderError::EntityNotExists(ref cause) => cause,
-            CreateFolderError::FailedDependency(ref cause) => cause,
-            CreateFolderError::LimitExceeded(ref cause) => cause,
-            CreateFolderError::ProhibitedState(ref cause) => cause,
-            CreateFolderError::ServiceUnavailable(ref cause) => cause,
-            CreateFolderError::UnauthorizedOperation(ref cause) => cause,
-            CreateFolderError::UnauthorizedResourceAccess(ref cause) => cause,
+            CreateFolderError::ConflictingOperation(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFolderError {}
 /// Errors returned by CreateLabels
 #[derive(Debug, PartialEq)]
 pub enum CreateLabelsError {
@@ -2236,21 +2267,17 @@ impl CreateLabelsError {
 }
 impl fmt::Display for CreateLabelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLabelsError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLabelsError::EntityNotExists(ref cause) => cause,
-            CreateLabelsError::FailedDependency(ref cause) => cause,
-            CreateLabelsError::ServiceUnavailable(ref cause) => cause,
-            CreateLabelsError::TooManyLabels(ref cause) => cause,
-            CreateLabelsError::UnauthorizedOperation(ref cause) => cause,
-            CreateLabelsError::UnauthorizedResourceAccess(ref cause) => cause,
+            CreateLabelsError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            CreateLabelsError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            CreateLabelsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateLabelsError::TooManyLabels(ref cause) => write!(f, "{}", cause),
+            CreateLabelsError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            CreateLabelsError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLabelsError {}
 /// Errors returned by CreateNotificationSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateNotificationSubscriptionError {
@@ -2292,18 +2319,20 @@ impl CreateNotificationSubscriptionError {
 }
 impl fmt::Display for CreateNotificationSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateNotificationSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateNotificationSubscriptionError::ServiceUnavailable(ref cause) => cause,
-            CreateNotificationSubscriptionError::TooManySubscriptions(ref cause) => cause,
-            CreateNotificationSubscriptionError::UnauthorizedResourceAccess(ref cause) => cause,
+            CreateNotificationSubscriptionError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateNotificationSubscriptionError::TooManySubscriptions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateNotificationSubscriptionError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateNotificationSubscriptionError {}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
@@ -2349,20 +2378,16 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserError::EntityAlreadyExists(ref cause) => cause,
-            CreateUserError::FailedDependency(ref cause) => cause,
-            CreateUserError::ServiceUnavailable(ref cause) => cause,
-            CreateUserError::UnauthorizedOperation(ref cause) => cause,
-            CreateUserError::UnauthorizedResourceAccess(ref cause) => cause,
+            CreateUserError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateUserError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateUserError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            CreateUserError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserError {}
 /// Errors returned by DeactivateUser
 #[derive(Debug, PartialEq)]
 pub enum DeactivateUserError {
@@ -2410,20 +2435,16 @@ impl DeactivateUserError {
 }
 impl fmt::Display for DeactivateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeactivateUserError {
-    fn description(&self) -> &str {
         match *self {
-            DeactivateUserError::EntityNotExists(ref cause) => cause,
-            DeactivateUserError::FailedDependency(ref cause) => cause,
-            DeactivateUserError::ServiceUnavailable(ref cause) => cause,
-            DeactivateUserError::UnauthorizedOperation(ref cause) => cause,
-            DeactivateUserError::UnauthorizedResourceAccess(ref cause) => cause,
+            DeactivateUserError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            DeactivateUserError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DeactivateUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeactivateUserError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DeactivateUserError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeactivateUserError {}
 /// Errors returned by DeleteComment
 #[derive(Debug, PartialEq)]
 pub enum DeleteCommentError {
@@ -2481,22 +2502,18 @@ impl DeleteCommentError {
 }
 impl fmt::Display for DeleteCommentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCommentError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCommentError::DocumentLockedForComments(ref cause) => cause,
-            DeleteCommentError::EntityNotExists(ref cause) => cause,
-            DeleteCommentError::FailedDependency(ref cause) => cause,
-            DeleteCommentError::ProhibitedState(ref cause) => cause,
-            DeleteCommentError::ServiceUnavailable(ref cause) => cause,
-            DeleteCommentError::UnauthorizedOperation(ref cause) => cause,
-            DeleteCommentError::UnauthorizedResourceAccess(ref cause) => cause,
+            DeleteCommentError::DocumentLockedForComments(ref cause) => write!(f, "{}", cause),
+            DeleteCommentError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            DeleteCommentError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DeleteCommentError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            DeleteCommentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteCommentError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DeleteCommentError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCommentError {}
 /// Errors returned by DeleteCustomMetadata
 #[derive(Debug, PartialEq)]
 pub enum DeleteCustomMetadataError {
@@ -2557,21 +2574,19 @@ impl DeleteCustomMetadataError {
 }
 impl fmt::Display for DeleteCustomMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCustomMetadataError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCustomMetadataError::EntityNotExists(ref cause) => cause,
-            DeleteCustomMetadataError::FailedDependency(ref cause) => cause,
-            DeleteCustomMetadataError::ProhibitedState(ref cause) => cause,
-            DeleteCustomMetadataError::ServiceUnavailable(ref cause) => cause,
-            DeleteCustomMetadataError::UnauthorizedOperation(ref cause) => cause,
-            DeleteCustomMetadataError::UnauthorizedResourceAccess(ref cause) => cause,
+            DeleteCustomMetadataError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            DeleteCustomMetadataError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DeleteCustomMetadataError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            DeleteCustomMetadataError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteCustomMetadataError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DeleteCustomMetadataError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteCustomMetadataError {}
 /// Errors returned by DeleteDocument
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentError {
@@ -2636,23 +2651,19 @@ impl DeleteDocumentError {
 }
 impl fmt::Display for DeleteDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDocumentError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDocumentError::ConcurrentModification(ref cause) => cause,
-            DeleteDocumentError::ConflictingOperation(ref cause) => cause,
-            DeleteDocumentError::EntityNotExists(ref cause) => cause,
-            DeleteDocumentError::FailedDependency(ref cause) => cause,
-            DeleteDocumentError::ProhibitedState(ref cause) => cause,
-            DeleteDocumentError::ServiceUnavailable(ref cause) => cause,
-            DeleteDocumentError::UnauthorizedOperation(ref cause) => cause,
-            DeleteDocumentError::UnauthorizedResourceAccess(ref cause) => cause,
+            DeleteDocumentError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentError::ConflictingOperation(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDocumentError {}
 /// Errors returned by DeleteFolder
 #[derive(Debug, PartialEq)]
 pub enum DeleteFolderError {
@@ -2713,23 +2724,19 @@ impl DeleteFolderError {
 }
 impl fmt::Display for DeleteFolderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFolderError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFolderError::ConcurrentModification(ref cause) => cause,
-            DeleteFolderError::ConflictingOperation(ref cause) => cause,
-            DeleteFolderError::EntityNotExists(ref cause) => cause,
-            DeleteFolderError::FailedDependency(ref cause) => cause,
-            DeleteFolderError::ProhibitedState(ref cause) => cause,
-            DeleteFolderError::ServiceUnavailable(ref cause) => cause,
-            DeleteFolderError::UnauthorizedOperation(ref cause) => cause,
-            DeleteFolderError::UnauthorizedResourceAccess(ref cause) => cause,
+            DeleteFolderError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::ConflictingOperation(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFolderError {}
 /// Errors returned by DeleteFolderContents
 #[derive(Debug, PartialEq)]
 pub enum DeleteFolderContentsError {
@@ -2797,22 +2804,20 @@ impl DeleteFolderContentsError {
 }
 impl fmt::Display for DeleteFolderContentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFolderContentsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFolderContentsError::ConflictingOperation(ref cause) => cause,
-            DeleteFolderContentsError::EntityNotExists(ref cause) => cause,
-            DeleteFolderContentsError::FailedDependency(ref cause) => cause,
-            DeleteFolderContentsError::ProhibitedState(ref cause) => cause,
-            DeleteFolderContentsError::ServiceUnavailable(ref cause) => cause,
-            DeleteFolderContentsError::UnauthorizedOperation(ref cause) => cause,
-            DeleteFolderContentsError::UnauthorizedResourceAccess(ref cause) => cause,
+            DeleteFolderContentsError::ConflictingOperation(ref cause) => write!(f, "{}", cause),
+            DeleteFolderContentsError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            DeleteFolderContentsError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DeleteFolderContentsError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            DeleteFolderContentsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteFolderContentsError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DeleteFolderContentsError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteFolderContentsError {}
 /// Errors returned by DeleteLabels
 #[derive(Debug, PartialEq)]
 pub enum DeleteLabelsError {
@@ -2858,20 +2863,16 @@ impl DeleteLabelsError {
 }
 impl fmt::Display for DeleteLabelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLabelsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLabelsError::EntityNotExists(ref cause) => cause,
-            DeleteLabelsError::FailedDependency(ref cause) => cause,
-            DeleteLabelsError::ServiceUnavailable(ref cause) => cause,
-            DeleteLabelsError::UnauthorizedOperation(ref cause) => cause,
-            DeleteLabelsError::UnauthorizedResourceAccess(ref cause) => cause,
+            DeleteLabelsError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            DeleteLabelsError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DeleteLabelsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteLabelsError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DeleteLabelsError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLabelsError {}
 /// Errors returned by DeleteNotificationSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotificationSubscriptionError {
@@ -2920,19 +2921,23 @@ impl DeleteNotificationSubscriptionError {
 }
 impl fmt::Display for DeleteNotificationSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNotificationSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteNotificationSubscriptionError::EntityNotExists(ref cause) => cause,
-            DeleteNotificationSubscriptionError::ProhibitedState(ref cause) => cause,
-            DeleteNotificationSubscriptionError::ServiceUnavailable(ref cause) => cause,
-            DeleteNotificationSubscriptionError::UnauthorizedResourceAccess(ref cause) => cause,
+            DeleteNotificationSubscriptionError::EntityNotExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteNotificationSubscriptionError::ProhibitedState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteNotificationSubscriptionError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteNotificationSubscriptionError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteNotificationSubscriptionError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -2978,20 +2983,16 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserError::EntityNotExists(ref cause) => cause,
-            DeleteUserError::FailedDependency(ref cause) => cause,
-            DeleteUserError::ServiceUnavailable(ref cause) => cause,
-            DeleteUserError::UnauthorizedOperation(ref cause) => cause,
-            DeleteUserError::UnauthorizedResourceAccess(ref cause) => cause,
+            DeleteUserError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserError {}
 /// Errors returned by DescribeActivities
 #[derive(Debug, PartialEq)]
 pub enum DescribeActivitiesError {
@@ -3041,20 +3042,18 @@ impl DescribeActivitiesError {
 }
 impl fmt::Display for DescribeActivitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeActivitiesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeActivitiesError::FailedDependency(ref cause) => cause,
-            DescribeActivitiesError::InvalidArgument(ref cause) => cause,
-            DescribeActivitiesError::ServiceUnavailable(ref cause) => cause,
-            DescribeActivitiesError::UnauthorizedOperation(ref cause) => cause,
-            DescribeActivitiesError::UnauthorizedResourceAccess(ref cause) => cause,
+            DescribeActivitiesError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DescribeActivitiesError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeActivitiesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeActivitiesError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DescribeActivitiesError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeActivitiesError {}
 /// Errors returned by DescribeComments
 #[derive(Debug, PartialEq)]
 pub enum DescribeCommentsError {
@@ -3107,21 +3106,17 @@ impl DescribeCommentsError {
 }
 impl fmt::Display for DescribeCommentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCommentsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCommentsError::EntityNotExists(ref cause) => cause,
-            DescribeCommentsError::FailedDependency(ref cause) => cause,
-            DescribeCommentsError::ProhibitedState(ref cause) => cause,
-            DescribeCommentsError::ServiceUnavailable(ref cause) => cause,
-            DescribeCommentsError::UnauthorizedOperation(ref cause) => cause,
-            DescribeCommentsError::UnauthorizedResourceAccess(ref cause) => cause,
+            DescribeCommentsError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            DescribeCommentsError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DescribeCommentsError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            DescribeCommentsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeCommentsError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DescribeCommentsError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCommentsError {}
 /// Errors returned by DescribeDocumentVersions
 #[derive(Debug, PartialEq)]
 pub enum DescribeDocumentVersionsError {
@@ -3189,22 +3184,22 @@ impl DescribeDocumentVersionsError {
 }
 impl fmt::Display for DescribeDocumentVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDocumentVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDocumentVersionsError::EntityNotExists(ref cause) => cause,
-            DescribeDocumentVersionsError::FailedDependency(ref cause) => cause,
-            DescribeDocumentVersionsError::InvalidArgument(ref cause) => cause,
-            DescribeDocumentVersionsError::ProhibitedState(ref cause) => cause,
-            DescribeDocumentVersionsError::ServiceUnavailable(ref cause) => cause,
-            DescribeDocumentVersionsError::UnauthorizedOperation(ref cause) => cause,
-            DescribeDocumentVersionsError::UnauthorizedResourceAccess(ref cause) => cause,
+            DescribeDocumentVersionsError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentVersionsError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentVersionsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentVersionsError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentVersionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentVersionsError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDocumentVersionsError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDocumentVersionsError {}
 /// Errors returned by DescribeFolderContents
 #[derive(Debug, PartialEq)]
 pub enum DescribeFolderContentsError {
@@ -3265,21 +3260,19 @@ impl DescribeFolderContentsError {
 }
 impl fmt::Display for DescribeFolderContentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFolderContentsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFolderContentsError::EntityNotExists(ref cause) => cause,
-            DescribeFolderContentsError::FailedDependency(ref cause) => cause,
-            DescribeFolderContentsError::InvalidArgument(ref cause) => cause,
-            DescribeFolderContentsError::ProhibitedState(ref cause) => cause,
-            DescribeFolderContentsError::ServiceUnavailable(ref cause) => cause,
-            DescribeFolderContentsError::UnauthorizedResourceAccess(ref cause) => cause,
+            DescribeFolderContentsError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            DescribeFolderContentsError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DescribeFolderContentsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeFolderContentsError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            DescribeFolderContentsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeFolderContentsError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeFolderContentsError {}
 /// Errors returned by DescribeGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeGroupsError {
@@ -3322,19 +3315,15 @@ impl DescribeGroupsError {
 }
 impl fmt::Display for DescribeGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeGroupsError::FailedDependency(ref cause) => cause,
-            DescribeGroupsError::ServiceUnavailable(ref cause) => cause,
-            DescribeGroupsError::UnauthorizedOperation(ref cause) => cause,
-            DescribeGroupsError::UnauthorizedResourceAccess(ref cause) => cause,
+            DescribeGroupsError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DescribeGroupsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeGroupsError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DescribeGroupsError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeGroupsError {}
 /// Errors returned by DescribeNotificationSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotificationSubscriptionsError {
@@ -3376,18 +3365,20 @@ impl DescribeNotificationSubscriptionsError {
 }
 impl fmt::Display for DescribeNotificationSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeNotificationSubscriptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeNotificationSubscriptionsError::EntityNotExists(ref cause) => cause,
-            DescribeNotificationSubscriptionsError::ServiceUnavailable(ref cause) => cause,
-            DescribeNotificationSubscriptionsError::UnauthorizedResourceAccess(ref cause) => cause,
+            DescribeNotificationSubscriptionsError::EntityNotExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeNotificationSubscriptionsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeNotificationSubscriptionsError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeNotificationSubscriptionsError {}
 /// Errors returned by DescribeResourcePermissions
 #[derive(Debug, PartialEq)]
 pub enum DescribeResourcePermissionsError {
@@ -3436,19 +3427,21 @@ impl DescribeResourcePermissionsError {
 }
 impl fmt::Display for DescribeResourcePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeResourcePermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeResourcePermissionsError::FailedDependency(ref cause) => cause,
-            DescribeResourcePermissionsError::ServiceUnavailable(ref cause) => cause,
-            DescribeResourcePermissionsError::UnauthorizedOperation(ref cause) => cause,
-            DescribeResourcePermissionsError::UnauthorizedResourceAccess(ref cause) => cause,
+            DescribeResourcePermissionsError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DescribeResourcePermissionsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeResourcePermissionsError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeResourcePermissionsError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeResourcePermissionsError {}
 /// Errors returned by DescribeRootFolders
 #[derive(Debug, PartialEq)]
 pub enum DescribeRootFoldersError {
@@ -3500,20 +3493,18 @@ impl DescribeRootFoldersError {
 }
 impl fmt::Display for DescribeRootFoldersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRootFoldersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRootFoldersError::FailedDependency(ref cause) => cause,
-            DescribeRootFoldersError::InvalidArgument(ref cause) => cause,
-            DescribeRootFoldersError::ServiceUnavailable(ref cause) => cause,
-            DescribeRootFoldersError::UnauthorizedOperation(ref cause) => cause,
-            DescribeRootFoldersError::UnauthorizedResourceAccess(ref cause) => cause,
+            DescribeRootFoldersError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DescribeRootFoldersError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeRootFoldersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeRootFoldersError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DescribeRootFoldersError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeRootFoldersError {}
 /// Errors returned by DescribeUsers
 #[derive(Debug, PartialEq)]
 pub enum DescribeUsersError {
@@ -3571,22 +3562,18 @@ impl DescribeUsersError {
 }
 impl fmt::Display for DescribeUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUsersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUsersError::EntityNotExists(ref cause) => cause,
-            DescribeUsersError::FailedDependency(ref cause) => cause,
-            DescribeUsersError::InvalidArgument(ref cause) => cause,
-            DescribeUsersError::RequestedEntityTooLarge(ref cause) => cause,
-            DescribeUsersError::ServiceUnavailable(ref cause) => cause,
-            DescribeUsersError::UnauthorizedOperation(ref cause) => cause,
-            DescribeUsersError::UnauthorizedResourceAccess(ref cause) => cause,
+            DescribeUsersError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            DescribeUsersError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            DescribeUsersError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeUsersError::RequestedEntityTooLarge(ref cause) => write!(f, "{}", cause),
+            DescribeUsersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeUsersError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            DescribeUsersError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUsersError {}
 /// Errors returned by GetCurrentUser
 #[derive(Debug, PartialEq)]
 pub enum GetCurrentUserError {
@@ -3634,20 +3621,16 @@ impl GetCurrentUserError {
 }
 impl fmt::Display for GetCurrentUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCurrentUserError {
-    fn description(&self) -> &str {
         match *self {
-            GetCurrentUserError::EntityNotExists(ref cause) => cause,
-            GetCurrentUserError::FailedDependency(ref cause) => cause,
-            GetCurrentUserError::ServiceUnavailable(ref cause) => cause,
-            GetCurrentUserError::UnauthorizedOperation(ref cause) => cause,
-            GetCurrentUserError::UnauthorizedResourceAccess(ref cause) => cause,
+            GetCurrentUserError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            GetCurrentUserError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            GetCurrentUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetCurrentUserError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            GetCurrentUserError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCurrentUserError {}
 /// Errors returned by GetDocument
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentError {
@@ -3703,22 +3686,18 @@ impl GetDocumentError {
 }
 impl fmt::Display for GetDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDocumentError {
-    fn description(&self) -> &str {
         match *self {
-            GetDocumentError::EntityNotExists(ref cause) => cause,
-            GetDocumentError::FailedDependency(ref cause) => cause,
-            GetDocumentError::InvalidArgument(ref cause) => cause,
-            GetDocumentError::InvalidPassword(ref cause) => cause,
-            GetDocumentError::ServiceUnavailable(ref cause) => cause,
-            GetDocumentError::UnauthorizedOperation(ref cause) => cause,
-            GetDocumentError::UnauthorizedResourceAccess(ref cause) => cause,
+            GetDocumentError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            GetDocumentError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            GetDocumentError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetDocumentError::InvalidPassword(ref cause) => write!(f, "{}", cause),
+            GetDocumentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetDocumentError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            GetDocumentError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDocumentError {}
 /// Errors returned by GetDocumentPath
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentPathError {
@@ -3766,20 +3745,16 @@ impl GetDocumentPathError {
 }
 impl fmt::Display for GetDocumentPathError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDocumentPathError {
-    fn description(&self) -> &str {
         match *self {
-            GetDocumentPathError::EntityNotExists(ref cause) => cause,
-            GetDocumentPathError::FailedDependency(ref cause) => cause,
-            GetDocumentPathError::ServiceUnavailable(ref cause) => cause,
-            GetDocumentPathError::UnauthorizedOperation(ref cause) => cause,
-            GetDocumentPathError::UnauthorizedResourceAccess(ref cause) => cause,
+            GetDocumentPathError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            GetDocumentPathError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            GetDocumentPathError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetDocumentPathError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            GetDocumentPathError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDocumentPathError {}
 /// Errors returned by GetDocumentVersion
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentVersionError {
@@ -3839,22 +3814,20 @@ impl GetDocumentVersionError {
 }
 impl fmt::Display for GetDocumentVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDocumentVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetDocumentVersionError::EntityNotExists(ref cause) => cause,
-            GetDocumentVersionError::FailedDependency(ref cause) => cause,
-            GetDocumentVersionError::InvalidPassword(ref cause) => cause,
-            GetDocumentVersionError::ProhibitedState(ref cause) => cause,
-            GetDocumentVersionError::ServiceUnavailable(ref cause) => cause,
-            GetDocumentVersionError::UnauthorizedOperation(ref cause) => cause,
-            GetDocumentVersionError::UnauthorizedResourceAccess(ref cause) => cause,
+            GetDocumentVersionError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            GetDocumentVersionError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            GetDocumentVersionError::InvalidPassword(ref cause) => write!(f, "{}", cause),
+            GetDocumentVersionError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            GetDocumentVersionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetDocumentVersionError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            GetDocumentVersionError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetDocumentVersionError {}
 /// Errors returned by GetFolder
 #[derive(Debug, PartialEq)]
 pub enum GetFolderError {
@@ -3910,22 +3883,18 @@ impl GetFolderError {
 }
 impl fmt::Display for GetFolderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFolderError {
-    fn description(&self) -> &str {
         match *self {
-            GetFolderError::EntityNotExists(ref cause) => cause,
-            GetFolderError::FailedDependency(ref cause) => cause,
-            GetFolderError::InvalidArgument(ref cause) => cause,
-            GetFolderError::ProhibitedState(ref cause) => cause,
-            GetFolderError::ServiceUnavailable(ref cause) => cause,
-            GetFolderError::UnauthorizedOperation(ref cause) => cause,
-            GetFolderError::UnauthorizedResourceAccess(ref cause) => cause,
+            GetFolderError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            GetFolderError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            GetFolderError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetFolderError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            GetFolderError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetFolderError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            GetFolderError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFolderError {}
 /// Errors returned by GetFolderPath
 #[derive(Debug, PartialEq)]
 pub enum GetFolderPathError {
@@ -3971,20 +3940,16 @@ impl GetFolderPathError {
 }
 impl fmt::Display for GetFolderPathError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFolderPathError {
-    fn description(&self) -> &str {
         match *self {
-            GetFolderPathError::EntityNotExists(ref cause) => cause,
-            GetFolderPathError::FailedDependency(ref cause) => cause,
-            GetFolderPathError::ServiceUnavailable(ref cause) => cause,
-            GetFolderPathError::UnauthorizedOperation(ref cause) => cause,
-            GetFolderPathError::UnauthorizedResourceAccess(ref cause) => cause,
+            GetFolderPathError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            GetFolderPathError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            GetFolderPathError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetFolderPathError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            GetFolderPathError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFolderPathError {}
 /// Errors returned by GetResources
 #[derive(Debug, PartialEq)]
 pub enum GetResourcesError {
@@ -4030,20 +3995,16 @@ impl GetResourcesError {
 }
 impl fmt::Display for GetResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourcesError::FailedDependency(ref cause) => cause,
-            GetResourcesError::InvalidArgument(ref cause) => cause,
-            GetResourcesError::ServiceUnavailable(ref cause) => cause,
-            GetResourcesError::UnauthorizedOperation(ref cause) => cause,
-            GetResourcesError::UnauthorizedResourceAccess(ref cause) => cause,
+            GetResourcesError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            GetResourcesError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetResourcesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetResourcesError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            GetResourcesError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetResourcesError {}
 /// Errors returned by InitiateDocumentVersionUpload
 #[derive(Debug, PartialEq)]
 pub enum InitiateDocumentVersionUploadError {
@@ -4141,26 +4102,44 @@ impl InitiateDocumentVersionUploadError {
 }
 impl fmt::Display for InitiateDocumentVersionUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InitiateDocumentVersionUploadError {
-    fn description(&self) -> &str {
         match *self {
-            InitiateDocumentVersionUploadError::DraftUploadOutOfSync(ref cause) => cause,
-            InitiateDocumentVersionUploadError::EntityAlreadyExists(ref cause) => cause,
-            InitiateDocumentVersionUploadError::EntityNotExists(ref cause) => cause,
-            InitiateDocumentVersionUploadError::FailedDependency(ref cause) => cause,
-            InitiateDocumentVersionUploadError::ProhibitedState(ref cause) => cause,
-            InitiateDocumentVersionUploadError::ResourceAlreadyCheckedOut(ref cause) => cause,
-            InitiateDocumentVersionUploadError::ServiceUnavailable(ref cause) => cause,
-            InitiateDocumentVersionUploadError::StorageLimitExceeded(ref cause) => cause,
-            InitiateDocumentVersionUploadError::StorageLimitWillExceed(ref cause) => cause,
-            InitiateDocumentVersionUploadError::UnauthorizedOperation(ref cause) => cause,
-            InitiateDocumentVersionUploadError::UnauthorizedResourceAccess(ref cause) => cause,
+            InitiateDocumentVersionUploadError::DraftUploadOutOfSync(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InitiateDocumentVersionUploadError::EntityAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InitiateDocumentVersionUploadError::EntityNotExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InitiateDocumentVersionUploadError::FailedDependency(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InitiateDocumentVersionUploadError::ProhibitedState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InitiateDocumentVersionUploadError::ResourceAlreadyCheckedOut(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InitiateDocumentVersionUploadError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InitiateDocumentVersionUploadError::StorageLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InitiateDocumentVersionUploadError::StorageLimitWillExceed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InitiateDocumentVersionUploadError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InitiateDocumentVersionUploadError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for InitiateDocumentVersionUploadError {}
 /// Errors returned by RemoveAllResourcePermissions
 #[derive(Debug, PartialEq)]
 pub enum RemoveAllResourcePermissionsError {
@@ -4209,19 +4188,23 @@ impl RemoveAllResourcePermissionsError {
 }
 impl fmt::Display for RemoveAllResourcePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveAllResourcePermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveAllResourcePermissionsError::FailedDependency(ref cause) => cause,
-            RemoveAllResourcePermissionsError::ServiceUnavailable(ref cause) => cause,
-            RemoveAllResourcePermissionsError::UnauthorizedOperation(ref cause) => cause,
-            RemoveAllResourcePermissionsError::UnauthorizedResourceAccess(ref cause) => cause,
+            RemoveAllResourcePermissionsError::FailedDependency(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveAllResourcePermissionsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveAllResourcePermissionsError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveAllResourcePermissionsError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveAllResourcePermissionsError {}
 /// Errors returned by RemoveResourcePermission
 #[derive(Debug, PartialEq)]
 pub enum RemoveResourcePermissionError {
@@ -4268,19 +4251,19 @@ impl RemoveResourcePermissionError {
 }
 impl fmt::Display for RemoveResourcePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveResourcePermissionError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveResourcePermissionError::FailedDependency(ref cause) => cause,
-            RemoveResourcePermissionError::ServiceUnavailable(ref cause) => cause,
-            RemoveResourcePermissionError::UnauthorizedOperation(ref cause) => cause,
-            RemoveResourcePermissionError::UnauthorizedResourceAccess(ref cause) => cause,
+            RemoveResourcePermissionError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            RemoveResourcePermissionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RemoveResourcePermissionError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveResourcePermissionError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveResourcePermissionError {}
 /// Errors returned by UpdateDocument
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentError {
@@ -4355,25 +4338,21 @@ impl UpdateDocumentError {
 }
 impl fmt::Display for UpdateDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDocumentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDocumentError::ConcurrentModification(ref cause) => cause,
-            UpdateDocumentError::ConflictingOperation(ref cause) => cause,
-            UpdateDocumentError::EntityAlreadyExists(ref cause) => cause,
-            UpdateDocumentError::EntityNotExists(ref cause) => cause,
-            UpdateDocumentError::FailedDependency(ref cause) => cause,
-            UpdateDocumentError::LimitExceeded(ref cause) => cause,
-            UpdateDocumentError::ProhibitedState(ref cause) => cause,
-            UpdateDocumentError::ServiceUnavailable(ref cause) => cause,
-            UpdateDocumentError::UnauthorizedOperation(ref cause) => cause,
-            UpdateDocumentError::UnauthorizedResourceAccess(ref cause) => cause,
+            UpdateDocumentError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::ConflictingOperation(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDocumentError {}
 /// Errors returned by UpdateDocumentVersion
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentVersionError {
@@ -4448,23 +4427,21 @@ impl UpdateDocumentVersionError {
 }
 impl fmt::Display for UpdateDocumentVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDocumentVersionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDocumentVersionError::ConcurrentModification(ref cause) => cause,
-            UpdateDocumentVersionError::EntityNotExists(ref cause) => cause,
-            UpdateDocumentVersionError::FailedDependency(ref cause) => cause,
-            UpdateDocumentVersionError::InvalidOperation(ref cause) => cause,
-            UpdateDocumentVersionError::ProhibitedState(ref cause) => cause,
-            UpdateDocumentVersionError::ServiceUnavailable(ref cause) => cause,
-            UpdateDocumentVersionError::UnauthorizedOperation(ref cause) => cause,
-            UpdateDocumentVersionError::UnauthorizedResourceAccess(ref cause) => cause,
+            UpdateDocumentVersionError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentVersionError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentVersionError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentVersionError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentVersionError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentVersionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentVersionError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentVersionError::UnauthorizedResourceAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateDocumentVersionError {}
 /// Errors returned by UpdateFolder
 #[derive(Debug, PartialEq)]
 pub enum UpdateFolderError {
@@ -4535,25 +4512,21 @@ impl UpdateFolderError {
 }
 impl fmt::Display for UpdateFolderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFolderError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFolderError::ConcurrentModification(ref cause) => cause,
-            UpdateFolderError::ConflictingOperation(ref cause) => cause,
-            UpdateFolderError::EntityAlreadyExists(ref cause) => cause,
-            UpdateFolderError::EntityNotExists(ref cause) => cause,
-            UpdateFolderError::FailedDependency(ref cause) => cause,
-            UpdateFolderError::LimitExceeded(ref cause) => cause,
-            UpdateFolderError::ProhibitedState(ref cause) => cause,
-            UpdateFolderError::ServiceUnavailable(ref cause) => cause,
-            UpdateFolderError::UnauthorizedOperation(ref cause) => cause,
-            UpdateFolderError::UnauthorizedResourceAccess(ref cause) => cause,
+            UpdateFolderError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::ConflictingOperation(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::ProhibitedState(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFolderError {}
 /// Errors returned by UpdateUser
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserError {
@@ -4616,23 +4589,19 @@ impl UpdateUserError {
 }
 impl fmt::Display for UpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserError::DeactivatingLastSystemUser(ref cause) => cause,
-            UpdateUserError::EntityNotExists(ref cause) => cause,
-            UpdateUserError::FailedDependency(ref cause) => cause,
-            UpdateUserError::IllegalUserState(ref cause) => cause,
-            UpdateUserError::InvalidArgument(ref cause) => cause,
-            UpdateUserError::ServiceUnavailable(ref cause) => cause,
-            UpdateUserError::UnauthorizedOperation(ref cause) => cause,
-            UpdateUserError::UnauthorizedResourceAccess(ref cause) => cause,
+            UpdateUserError::DeactivatingLastSystemUser(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::EntityNotExists(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::FailedDependency(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::IllegalUserState(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::UnauthorizedResourceAccess(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserError {}
 /// Trait representing the capabilities of the Amazon WorkDocs API. Amazon WorkDocs clients implement this trait.
 pub trait Workdocs {
     /// <p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>

@@ -6,7 +6,7 @@
 - Updated AWS-CREDENTIALS.md to address https://github.com/rusoto/rusoto/issues/1597
 - Fixed SNS API's attributes and value keyword https://github.com/rusoto/rusoto/pull/1591
 - Adding support for web identity provider, which enables IAM roles for Kubernetes service accounts.
-- Add object-safe AwsCredentialsProvider trait as alternative to the existing generic `ProvideAwsCredentials
+- Add object-safe AwsCredentialsProvider trait as alternative to the existing generic `ProvideAwsCredentials`
   trait.
 - Introduce `Secret` type to automatically zero-out memory use to stored secret credentials. So far, 
   only used in the new web identity provider.
@@ -16,6 +16,8 @@
 - Add Debug trait to generated Clients
 - Add `rusoto_ec2::filter!` macro
 - Improve `InstanceMetadataProvider` to avoid cloning unnecessarily
+- Remove deprecated `Error::description` implementations
+- Add features `serialize_structs` and `deserialize_structs`
 - Implement Clone on various Credential structs.
 
 ## [0.42.0] - 2019-11-18

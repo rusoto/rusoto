@@ -59,6 +59,7 @@ pub struct ChannelInfo {
 
 /// <p>An optional input parameter for the <code>ListSignalingChannels</code> API. When this parameter is specified while invoking <code>ListSignalingChannels</code>, the API returns only the channels that satisfy a condition specified in <code>ChannelNameCondition</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChannelNameCondition {
     /// <p>A comparison operator. Currently, you can only specify the <code>BEGINS_WITH</code> operator, which finds signaling channels whose names begin with a given prefix.</p>
     #[serde(rename = "ComparisonOperator")]
@@ -71,6 +72,7 @@ pub struct ChannelNameCondition {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSignalingChannelInput {
     /// <p>A name for the signaling channel that you are creating. It must be unique for each account and region.</p>
     #[serde(rename = "ChannelName")]
@@ -99,6 +101,7 @@ pub struct CreateSignalingChannelOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamInput {
     /// <p>The number of hours that you want to retain the data in the stream. Kinesis Video Streams retains the data in a data store that is associated with the stream.</p> <p>The default value is 0, indicating that the stream does not persist data.</p> <p>When the <code>DataRetentionInHours</code> value is 0, consumers can still consume the fragments that remain in the service host buffer, which has a retention time limit of 5 minutes and a retention memory limit of 200 MB. Fragments are removed from the buffer when either limit is reached.</p>
     #[serde(rename = "DataRetentionInHours")]
@@ -135,6 +138,7 @@ pub struct CreateStreamOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSignalingChannelInput {
     /// <p>The ARN of the signaling channel that you want to delete.</p>
     #[serde(rename = "ChannelARN")]
@@ -150,6 +154,7 @@ pub struct DeleteSignalingChannelInput {
 pub struct DeleteSignalingChannelOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamInput {
     /// <p>Optional: The version of the stream that you want to delete. </p> <p>Specify the version as a safeguard to ensure that your are deleting the correct stream. To get the stream version, use the <code>DescribeStream</code> API.</p> <p>If not specified, only the <code>CreationTime</code> is checked before deleting the stream.</p>
     #[serde(rename = "CurrentVersion")]
@@ -165,6 +170,7 @@ pub struct DeleteStreamInput {
 pub struct DeleteStreamOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSignalingChannelInput {
     /// <p>The ARN of the signaling channel that you want to describe.</p>
     #[serde(rename = "ChannelARN")]
@@ -186,6 +192,7 @@ pub struct DescribeSignalingChannelOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamInput {
     /// <p>The Amazon Resource Name (ARN) of the stream.</p>
     #[serde(rename = "StreamARN")]
@@ -207,6 +214,7 @@ pub struct DescribeStreamOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataEndpointInput {
     /// <p>The name of the API action for which to get an endpoint.</p>
     #[serde(rename = "APIName")]
@@ -231,6 +239,7 @@ pub struct GetDataEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSignalingChannelEndpointInput {
     /// <p>The ARN of the signalling channel for which you want to get an endpoint.</p>
     #[serde(rename = "ChannelARN")]
@@ -252,6 +261,7 @@ pub struct GetSignalingChannelEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSignalingChannelsInput {
     /// <p>Optional: Returns only the channels that satisfy a specific condition.</p>
     #[serde(rename = "ChannelNameCondition")]
@@ -281,6 +291,7 @@ pub struct ListSignalingChannelsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamsInput {
     /// <p>The maximum number of streams to return in the response. The default is 10,000.</p>
     #[serde(rename = "MaxResults")]
@@ -310,6 +321,7 @@ pub struct ListStreamsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>If you specify this parameter and the result of a ListTagsForResource call is truncated, the response includes a token that you can use in the next request to fetch the next batch of tags. </p>
     #[serde(rename = "NextToken")]
@@ -334,6 +346,7 @@ pub struct ListTagsForResourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForStreamInput {
     /// <p>If you specify this parameter and the result of a <code>ListTagsForStream</code> call is truncated, the response includes a token that you can use in the next request to fetch the next batch of tags.</p>
     #[serde(rename = "NextToken")]
@@ -378,6 +391,7 @@ pub struct ResourceEndpointListItem {
 
 /// <p>An object that contains the endpoint configuration for the <code>SINGLE_MASTER</code> channel type. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SingleMasterChannelEndpointConfiguration {
     /// <p>This property is used to determine the nature of communication over this <code>SINGLE_MASTER</code> signaling channel. If <code>WSS</code> is specified, this API returns a websocket endpoint. If <code>HTTPS</code> is specified, this API returns an <code>HTTPS</code> endpoint.</p>
     #[serde(rename = "Protocols")]
@@ -442,6 +456,7 @@ pub struct StreamInfo {
 
 /// <p>Specifies the condition that streams must satisfy to be returned when you list streams (see the <code>ListStreams</code> API). A condition has a comparison operation and a value. Currently, you can specify only the <code>BEGINS_WITH</code> operator, which finds streams whose names start with a given prefix. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamNameCondition {
     /// <p>A comparison operator. Currently, you can specify only the <code>BEGINS_WITH</code> operator, which finds streams whose names start with a given prefix.</p>
     #[serde(rename = "ComparisonOperator")]
@@ -455,6 +470,7 @@ pub struct StreamNameCondition {
 
 /// <p>A key and value pair that is associated with the specified signaling channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>The key of the tag that is associated with the specified signaling channel.</p>
     #[serde(rename = "Key")]
@@ -465,6 +481,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The ARN of the signaling channel to which you want to add tags.</p>
     #[serde(rename = "ResourceARN")]
@@ -479,6 +496,7 @@ pub struct TagResourceInput {
 pub struct TagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagStreamInput {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to add the tag or tags to.</p>
     #[serde(rename = "StreamARN")]
@@ -498,6 +516,7 @@ pub struct TagStreamInput {
 pub struct TagStreamOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>The ARN of the signaling channel from which you want to remove tags.</p>
     #[serde(rename = "ResourceARN")]
@@ -512,6 +531,7 @@ pub struct UntagResourceInput {
 pub struct UntagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagStreamInput {
     /// <p>The Amazon Resource Name (ARN) of the stream that you want to remove tags from.</p>
     #[serde(rename = "StreamARN")]
@@ -531,6 +551,7 @@ pub struct UntagStreamInput {
 pub struct UntagStreamOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataRetentionInput {
     /// <p>The version of the stream whose retention period you want to change. To get the version, call either the <code>DescribeStream</code> or the <code>ListStreams</code> API.</p>
     #[serde(rename = "CurrentVersion")]
@@ -556,6 +577,7 @@ pub struct UpdateDataRetentionInput {
 pub struct UpdateDataRetentionOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSignalingChannelInput {
     /// <p>The ARN of the signaling channel that you want to update.</p>
     #[serde(rename = "ChannelARN")]
@@ -574,6 +596,7 @@ pub struct UpdateSignalingChannelInput {
 pub struct UpdateSignalingChannelOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStreamInput {
     /// <p>The version of the stream whose metadata you want to update.</p>
     #[serde(rename = "CurrentVersion")]
@@ -658,21 +681,21 @@ impl CreateSignalingChannelError {
 }
 impl fmt::Display for CreateSignalingChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSignalingChannelError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSignalingChannelError::AccessDenied(ref cause) => cause,
-            CreateSignalingChannelError::AccountChannelLimitExceeded(ref cause) => cause,
-            CreateSignalingChannelError::ClientLimitExceeded(ref cause) => cause,
-            CreateSignalingChannelError::InvalidArgument(ref cause) => cause,
-            CreateSignalingChannelError::ResourceInUse(ref cause) => cause,
-            CreateSignalingChannelError::TagsPerResourceExceededLimit(ref cause) => cause,
+            CreateSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateSignalingChannelError::AccountChannelLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateSignalingChannelError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateSignalingChannelError::TagsPerResourceExceededLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateSignalingChannelError {}
 /// Errors returned by CreateStream
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamError {
@@ -732,22 +755,18 @@ impl CreateStreamError {
 }
 impl fmt::Display for CreateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStreamError::AccountStreamLimitExceeded(ref cause) => cause,
-            CreateStreamError::ClientLimitExceeded(ref cause) => cause,
-            CreateStreamError::DeviceStreamLimitExceeded(ref cause) => cause,
-            CreateStreamError::InvalidArgument(ref cause) => cause,
-            CreateStreamError::InvalidDevice(ref cause) => cause,
-            CreateStreamError::ResourceInUse(ref cause) => cause,
-            CreateStreamError::TagsPerResourceExceededLimit(ref cause) => cause,
+            CreateStreamError::AccountStreamLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::DeviceStreamLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::InvalidDevice(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::TagsPerResourceExceededLimit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStreamError {}
 /// Errors returned by DeleteSignalingChannel
 #[derive(Debug, PartialEq)]
 pub enum DeleteSignalingChannelError {
@@ -799,20 +818,16 @@ impl DeleteSignalingChannelError {
 }
 impl fmt::Display for DeleteSignalingChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSignalingChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSignalingChannelError::AccessDenied(ref cause) => cause,
-            DeleteSignalingChannelError::ClientLimitExceeded(ref cause) => cause,
-            DeleteSignalingChannelError::InvalidArgument(ref cause) => cause,
-            DeleteSignalingChannelError::ResourceNotFound(ref cause) => cause,
-            DeleteSignalingChannelError::VersionMismatch(ref cause) => cause,
+            DeleteSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSignalingChannelError {}
 /// Errors returned by DeleteStream
 #[derive(Debug, PartialEq)]
 pub enum DeleteStreamError {
@@ -856,20 +871,16 @@ impl DeleteStreamError {
 }
 impl fmt::Display for DeleteStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStreamError::ClientLimitExceeded(ref cause) => cause,
-            DeleteStreamError::InvalidArgument(ref cause) => cause,
-            DeleteStreamError::NotAuthorized(ref cause) => cause,
-            DeleteStreamError::ResourceNotFound(ref cause) => cause,
-            DeleteStreamError::VersionMismatch(ref cause) => cause,
+            DeleteStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStreamError {}
 /// Errors returned by DescribeSignalingChannel
 #[derive(Debug, PartialEq)]
 pub enum DescribeSignalingChannelError {
@@ -916,19 +927,15 @@ impl DescribeSignalingChannelError {
 }
 impl fmt::Display for DescribeSignalingChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSignalingChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSignalingChannelError::AccessDenied(ref cause) => cause,
-            DescribeSignalingChannelError::ClientLimitExceeded(ref cause) => cause,
-            DescribeSignalingChannelError::InvalidArgument(ref cause) => cause,
-            DescribeSignalingChannelError::ResourceNotFound(ref cause) => cause,
+            DescribeSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeSignalingChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSignalingChannelError {}
 /// Errors returned by DescribeStream
 #[derive(Debug, PartialEq)]
 pub enum DescribeStreamError {
@@ -967,19 +974,15 @@ impl DescribeStreamError {
 }
 impl fmt::Display for DescribeStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStreamError::ClientLimitExceeded(ref cause) => cause,
-            DescribeStreamError::InvalidArgument(ref cause) => cause,
-            DescribeStreamError::NotAuthorized(ref cause) => cause,
-            DescribeStreamError::ResourceNotFound(ref cause) => cause,
+            DescribeStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStreamError {}
 /// Errors returned by GetDataEndpoint
 #[derive(Debug, PartialEq)]
 pub enum GetDataEndpointError {
@@ -1018,19 +1021,15 @@ impl GetDataEndpointError {
 }
 impl fmt::Display for GetDataEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDataEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            GetDataEndpointError::ClientLimitExceeded(ref cause) => cause,
-            GetDataEndpointError::InvalidArgument(ref cause) => cause,
-            GetDataEndpointError::NotAuthorized(ref cause) => cause,
-            GetDataEndpointError::ResourceNotFound(ref cause) => cause,
+            GetDataEndpointError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetDataEndpointError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetDataEndpointError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetDataEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDataEndpointError {}
 /// Errors returned by GetSignalingChannelEndpoint
 #[derive(Debug, PartialEq)]
 pub enum GetSignalingChannelEndpointError {
@@ -1086,20 +1085,18 @@ impl GetSignalingChannelEndpointError {
 }
 impl fmt::Display for GetSignalingChannelEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSignalingChannelEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            GetSignalingChannelEndpointError::AccessDenied(ref cause) => cause,
-            GetSignalingChannelEndpointError::ClientLimitExceeded(ref cause) => cause,
-            GetSignalingChannelEndpointError::InvalidArgument(ref cause) => cause,
-            GetSignalingChannelEndpointError::ResourceInUse(ref cause) => cause,
-            GetSignalingChannelEndpointError::ResourceNotFound(ref cause) => cause,
+            GetSignalingChannelEndpointError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetSignalingChannelEndpointError::ClientLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSignalingChannelEndpointError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetSignalingChannelEndpointError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            GetSignalingChannelEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSignalingChannelEndpointError {}
 /// Errors returned by ListSignalingChannels
 #[derive(Debug, PartialEq)]
 pub enum ListSignalingChannelsError {
@@ -1137,18 +1134,14 @@ impl ListSignalingChannelsError {
 }
 impl fmt::Display for ListSignalingChannelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSignalingChannelsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSignalingChannelsError::AccessDenied(ref cause) => cause,
-            ListSignalingChannelsError::ClientLimitExceeded(ref cause) => cause,
-            ListSignalingChannelsError::InvalidArgument(ref cause) => cause,
+            ListSignalingChannelsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListSignalingChannelsError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListSignalingChannelsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSignalingChannelsError {}
 /// Errors returned by ListStreams
 #[derive(Debug, PartialEq)]
 pub enum ListStreamsError {
@@ -1177,17 +1170,13 @@ impl ListStreamsError {
 }
 impl fmt::Display for ListStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStreamsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStreamsError::ClientLimitExceeded(ref cause) => cause,
-            ListStreamsError::InvalidArgument(ref cause) => cause,
+            ListStreamsError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListStreamsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStreamsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1230,19 +1219,15 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::AccessDenied(ref cause) => cause,
-            ListTagsForResourceError::ClientLimitExceeded(ref cause) => cause,
-            ListTagsForResourceError::InvalidArgument(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTagsForStream
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForStreamError {
@@ -1290,20 +1275,16 @@ impl ListTagsForStreamError {
 }
 impl fmt::Display for ListTagsForStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForStreamError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForStreamError::ClientLimitExceeded(ref cause) => cause,
-            ListTagsForStreamError::InvalidArgument(ref cause) => cause,
-            ListTagsForStreamError::InvalidResourceFormat(ref cause) => cause,
-            ListTagsForStreamError::NotAuthorized(ref cause) => cause,
-            ListTagsForStreamError::ResourceNotFound(ref cause) => cause,
+            ListTagsForStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::InvalidResourceFormat(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForStreamError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1349,20 +1330,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AccessDenied(ref cause) => cause,
-            TagResourceError::ClientLimitExceeded(ref cause) => cause,
-            TagResourceError::InvalidArgument(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::TagsPerResourceExceededLimit(ref cause) => cause,
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagsPerResourceExceededLimit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by TagStream
 #[derive(Debug, PartialEq)]
 pub enum TagStreamError {
@@ -1413,21 +1390,17 @@ impl TagStreamError {
 }
 impl fmt::Display for TagStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagStreamError {
-    fn description(&self) -> &str {
         match *self {
-            TagStreamError::ClientLimitExceeded(ref cause) => cause,
-            TagStreamError::InvalidArgument(ref cause) => cause,
-            TagStreamError::InvalidResourceFormat(ref cause) => cause,
-            TagStreamError::NotAuthorized(ref cause) => cause,
-            TagStreamError::ResourceNotFound(ref cause) => cause,
-            TagStreamError::TagsPerResourceExceededLimit(ref cause) => cause,
+            TagStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            TagStreamError::InvalidResourceFormat(ref cause) => write!(f, "{}", cause),
+            TagStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            TagStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagStreamError::TagsPerResourceExceededLimit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagStreamError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1466,19 +1439,15 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AccessDenied(ref cause) => cause,
-            UntagResourceError::ClientLimitExceeded(ref cause) => cause,
-            UntagResourceError::InvalidArgument(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UntagStream
 #[derive(Debug, PartialEq)]
 pub enum UntagStreamError {
@@ -1522,20 +1491,16 @@ impl UntagStreamError {
 }
 impl fmt::Display for UntagStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagStreamError {
-    fn description(&self) -> &str {
         match *self {
-            UntagStreamError::ClientLimitExceeded(ref cause) => cause,
-            UntagStreamError::InvalidArgument(ref cause) => cause,
-            UntagStreamError::InvalidResourceFormat(ref cause) => cause,
-            UntagStreamError::NotAuthorized(ref cause) => cause,
-            UntagStreamError::ResourceNotFound(ref cause) => cause,
+            UntagStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UntagStreamError::InvalidResourceFormat(ref cause) => write!(f, "{}", cause),
+            UntagStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UntagStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagStreamError {}
 /// Errors returned by UpdateDataRetention
 #[derive(Debug, PartialEq)]
 pub enum UpdateDataRetentionError {
@@ -1588,21 +1553,17 @@ impl UpdateDataRetentionError {
 }
 impl fmt::Display for UpdateDataRetentionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDataRetentionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDataRetentionError::ClientLimitExceeded(ref cause) => cause,
-            UpdateDataRetentionError::InvalidArgument(ref cause) => cause,
-            UpdateDataRetentionError::NotAuthorized(ref cause) => cause,
-            UpdateDataRetentionError::ResourceInUse(ref cause) => cause,
-            UpdateDataRetentionError::ResourceNotFound(ref cause) => cause,
-            UpdateDataRetentionError::VersionMismatch(ref cause) => cause,
+            UpdateDataRetentionError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDataRetentionError {}
 /// Errors returned by UpdateSignalingChannel
 #[derive(Debug, PartialEq)]
 pub enum UpdateSignalingChannelError {
@@ -1661,21 +1622,17 @@ impl UpdateSignalingChannelError {
 }
 impl fmt::Display for UpdateSignalingChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSignalingChannelError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSignalingChannelError::AccessDenied(ref cause) => cause,
-            UpdateSignalingChannelError::ClientLimitExceeded(ref cause) => cause,
-            UpdateSignalingChannelError::InvalidArgument(ref cause) => cause,
-            UpdateSignalingChannelError::ResourceInUse(ref cause) => cause,
-            UpdateSignalingChannelError::ResourceNotFound(ref cause) => cause,
-            UpdateSignalingChannelError::VersionMismatch(ref cause) => cause,
+            UpdateSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSignalingChannelError {}
 /// Errors returned by UpdateStream
 #[derive(Debug, PartialEq)]
 pub enum UpdateStreamError {
@@ -1724,21 +1681,17 @@ impl UpdateStreamError {
 }
 impl fmt::Display for UpdateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStreamError::ClientLimitExceeded(ref cause) => cause,
-            UpdateStreamError::InvalidArgument(ref cause) => cause,
-            UpdateStreamError::NotAuthorized(ref cause) => cause,
-            UpdateStreamError::ResourceInUse(ref cause) => cause,
-            UpdateStreamError::ResourceNotFound(ref cause) => cause,
-            UpdateStreamError::VersionMismatch(ref cause) => cause,
+            UpdateStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStreamError {}
 /// Trait representing the capabilities of the Kinesis Video API. Kinesis Video clients implement this trait.
 pub trait KinesisVideo {
     /// <p>Creates a signaling channel. </p> <p> <code>CreateSignalingChannel</code> is an asynchronous operation.</p>

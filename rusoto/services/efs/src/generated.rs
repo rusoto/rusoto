@@ -25,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFileSystemRequest {
     /// <p>A string of up to 64 ASCII characters. Amazon EFS uses this to ensure idempotent creation.</p>
     #[serde(rename = "CreationToken")]
@@ -57,6 +58,7 @@ pub struct CreateFileSystemRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMountTargetRequest {
     /// <p>The ID of the file system for which to create the mount target.</p>
     #[serde(rename = "FileSystemId")]
@@ -76,6 +78,7 @@ pub struct CreateMountTargetRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
     /// <p>The ID of the file system whose tags you want to modify (String). This operation modifies the tags only, not the file system.</p>
     #[serde(rename = "FileSystemId")]
@@ -87,6 +90,7 @@ pub struct CreateTagsRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileSystemRequest {
     /// <p>The ID of the file system you want to delete.</p>
     #[serde(rename = "FileSystemId")]
@@ -95,6 +99,7 @@ pub struct DeleteFileSystemRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMountTargetRequest {
     /// <p>The ID of the mount target to delete (String).</p>
     #[serde(rename = "MountTargetId")]
@@ -103,6 +108,7 @@ pub struct DeleteMountTargetRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
     /// <p>The ID of the file system whose tags you want to delete (String).</p>
     #[serde(rename = "FileSystemId")]
@@ -114,6 +120,7 @@ pub struct DeleteTagsRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFileSystemsRequest {
     /// <p>(Optional) Restricts the list to the file system with this creation token (String). You specify a creation token when you create an Amazon EFS file system.</p>
     #[serde(rename = "CreationToken")]
@@ -151,6 +158,7 @@ pub struct DescribeFileSystemsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLifecycleConfigurationRequest {
     /// <p>The ID of the file system whose <code>LifecycleConfiguration</code> object you want to retrieve (String).</p>
     #[serde(rename = "FileSystemId")]
@@ -159,6 +167,7 @@ pub struct DescribeLifecycleConfigurationRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMountTargetSecurityGroupsRequest {
     /// <p>The ID of the mount target whose security groups you want to retrieve.</p>
     #[serde(rename = "MountTargetId")]
@@ -175,6 +184,7 @@ pub struct DescribeMountTargetSecurityGroupsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMountTargetsRequest {
     /// <p>(Optional) ID of the file system whose mount targets you want to list (String). It must be included in your request if <code>MountTargetId</code> is not included.</p>
     #[serde(rename = "FileSystemId")]
@@ -214,6 +224,7 @@ pub struct DescribeMountTargetsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
     /// <p>The ID of the file system whose tag set you want to retrieve.</p>
     #[serde(rename = "FileSystemId")]
@@ -339,6 +350,7 @@ pub struct LifecyclePolicy {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyMountTargetSecurityGroupsRequest {
     /// <p>The ID of the mount target whose security groups you want to modify.</p>
     #[serde(rename = "MountTargetId")]
@@ -380,6 +392,7 @@ pub struct MountTargetDescription {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLifecycleConfigurationRequest {
     /// <p>The ID of the file system for which you are creating the <code>LifecycleConfiguration</code> object (String).</p>
     #[serde(rename = "FileSystemId")]
@@ -401,6 +414,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFileSystemRequest {
     /// <p>The ID of the file system that you want to update.</p>
     #[serde(rename = "FileSystemId")]
@@ -473,21 +487,19 @@ impl CreateFileSystemError {
 }
 impl fmt::Display for CreateFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFileSystemError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFileSystemError::BadRequest(ref cause) => cause,
-            CreateFileSystemError::FileSystemAlreadyExists(ref cause) => cause,
-            CreateFileSystemError::FileSystemLimitExceeded(ref cause) => cause,
-            CreateFileSystemError::InsufficientThroughputCapacity(ref cause) => cause,
-            CreateFileSystemError::InternalServerError(ref cause) => cause,
-            CreateFileSystemError::ThroughputLimitExceeded(ref cause) => cause,
+            CreateFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::FileSystemAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::FileSystemLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InsufficientThroughputCapacity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::ThroughputLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFileSystemError {}
 /// Errors returned by CreateMountTarget
 #[derive(Debug, PartialEq)]
 pub enum CreateMountTargetError {
@@ -584,27 +596,29 @@ impl CreateMountTargetError {
 }
 impl fmt::Display for CreateMountTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMountTargetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMountTargetError::BadRequest(ref cause) => cause,
-            CreateMountTargetError::FileSystemNotFound(ref cause) => cause,
-            CreateMountTargetError::IncorrectFileSystemLifeCycleState(ref cause) => cause,
-            CreateMountTargetError::InternalServerError(ref cause) => cause,
-            CreateMountTargetError::IpAddressInUse(ref cause) => cause,
-            CreateMountTargetError::MountTargetConflict(ref cause) => cause,
-            CreateMountTargetError::NetworkInterfaceLimitExceeded(ref cause) => cause,
-            CreateMountTargetError::NoFreeAddressesInSubnet(ref cause) => cause,
-            CreateMountTargetError::SecurityGroupLimitExceeded(ref cause) => cause,
-            CreateMountTargetError::SecurityGroupNotFound(ref cause) => cause,
-            CreateMountTargetError::SubnetNotFound(ref cause) => cause,
-            CreateMountTargetError::UnsupportedAvailabilityZone(ref cause) => cause,
+            CreateMountTargetError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateMountTargetError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            CreateMountTargetError::IncorrectFileSystemLifeCycleState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMountTargetError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateMountTargetError::IpAddressInUse(ref cause) => write!(f, "{}", cause),
+            CreateMountTargetError::MountTargetConflict(ref cause) => write!(f, "{}", cause),
+            CreateMountTargetError::NetworkInterfaceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMountTargetError::NoFreeAddressesInSubnet(ref cause) => write!(f, "{}", cause),
+            CreateMountTargetError::SecurityGroupLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateMountTargetError::SecurityGroupNotFound(ref cause) => write!(f, "{}", cause),
+            CreateMountTargetError::SubnetNotFound(ref cause) => write!(f, "{}", cause),
+            CreateMountTargetError::UnsupportedAvailabilityZone(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateMountTargetError {}
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
@@ -636,18 +650,14 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTagsError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTagsError::BadRequest(ref cause) => cause,
-            CreateTagsError::FileSystemNotFound(ref cause) => cause,
-            CreateTagsError::InternalServerError(ref cause) => cause,
+            CreateTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTagsError {}
 /// Errors returned by DeleteFileSystem
 #[derive(Debug, PartialEq)]
 pub enum DeleteFileSystemError {
@@ -688,19 +698,15 @@ impl DeleteFileSystemError {
 }
 impl fmt::Display for DeleteFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFileSystemError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFileSystemError::BadRequest(ref cause) => cause,
-            DeleteFileSystemError::FileSystemInUse(ref cause) => cause,
-            DeleteFileSystemError::FileSystemNotFound(ref cause) => cause,
-            DeleteFileSystemError::InternalServerError(ref cause) => cause,
+            DeleteFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::FileSystemInUse(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFileSystemError {}
 /// Errors returned by DeleteMountTarget
 #[derive(Debug, PartialEq)]
 pub enum DeleteMountTargetError {
@@ -743,19 +749,15 @@ impl DeleteMountTargetError {
 }
 impl fmt::Display for DeleteMountTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMountTargetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMountTargetError::BadRequest(ref cause) => cause,
-            DeleteMountTargetError::DependencyTimeout(ref cause) => cause,
-            DeleteMountTargetError::InternalServerError(ref cause) => cause,
-            DeleteMountTargetError::MountTargetNotFound(ref cause) => cause,
+            DeleteMountTargetError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteMountTargetError::DependencyTimeout(ref cause) => write!(f, "{}", cause),
+            DeleteMountTargetError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteMountTargetError::MountTargetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMountTargetError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
@@ -787,18 +789,14 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTagsError::BadRequest(ref cause) => cause,
-            DeleteTagsError::FileSystemNotFound(ref cause) => cause,
-            DeleteTagsError::InternalServerError(ref cause) => cause,
+            DeleteTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTagsError {}
 /// Errors returned by DescribeFileSystems
 #[derive(Debug, PartialEq)]
 pub enum DescribeFileSystemsError {
@@ -836,18 +834,14 @@ impl DescribeFileSystemsError {
 }
 impl fmt::Display for DescribeFileSystemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFileSystemsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFileSystemsError::BadRequest(ref cause) => cause,
-            DescribeFileSystemsError::FileSystemNotFound(ref cause) => cause,
-            DescribeFileSystemsError::InternalServerError(ref cause) => cause,
+            DescribeFileSystemsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeFileSystemsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFileSystemsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFileSystemsError {}
 /// Errors returned by DescribeLifecycleConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeLifecycleConfigurationError {
@@ -889,18 +883,18 @@ impl DescribeLifecycleConfigurationError {
 }
 impl fmt::Display for DescribeLifecycleConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLifecycleConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLifecycleConfigurationError::BadRequest(ref cause) => cause,
-            DescribeLifecycleConfigurationError::FileSystemNotFound(ref cause) => cause,
-            DescribeLifecycleConfigurationError::InternalServerError(ref cause) => cause,
+            DescribeLifecycleConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeLifecycleConfigurationError::FileSystemNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeLifecycleConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLifecycleConfigurationError {}
 /// Errors returned by DescribeMountTargetSecurityGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeMountTargetSecurityGroupsError {
@@ -949,19 +943,21 @@ impl DescribeMountTargetSecurityGroupsError {
 }
 impl fmt::Display for DescribeMountTargetSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMountTargetSecurityGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMountTargetSecurityGroupsError::BadRequest(ref cause) => cause,
-            DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(ref cause) => cause,
-            DescribeMountTargetSecurityGroupsError::InternalServerError(ref cause) => cause,
-            DescribeMountTargetSecurityGroupsError::MountTargetNotFound(ref cause) => cause,
+            DescribeMountTargetSecurityGroupsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMountTargetSecurityGroupsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMountTargetSecurityGroupsError::MountTargetNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMountTargetSecurityGroupsError {}
 /// Errors returned by DescribeMountTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeMountTargetsError {
@@ -1006,19 +1002,15 @@ impl DescribeMountTargetsError {
 }
 impl fmt::Display for DescribeMountTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMountTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMountTargetsError::BadRequest(ref cause) => cause,
-            DescribeMountTargetsError::FileSystemNotFound(ref cause) => cause,
-            DescribeMountTargetsError::InternalServerError(ref cause) => cause,
-            DescribeMountTargetsError::MountTargetNotFound(ref cause) => cause,
+            DescribeMountTargetsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeMountTargetsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeMountTargetsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeMountTargetsError::MountTargetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeMountTargetsError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
@@ -1052,18 +1044,14 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::BadRequest(ref cause) => cause,
-            DescribeTagsError::FileSystemNotFound(ref cause) => cause,
-            DescribeTagsError::InternalServerError(ref cause) => cause,
+            DescribeTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by ModifyMountTargetSecurityGroups
 #[derive(Debug, PartialEq)]
 pub enum ModifyMountTargetSecurityGroupsError {
@@ -1126,21 +1114,27 @@ impl ModifyMountTargetSecurityGroupsError {
 }
 impl fmt::Display for ModifyMountTargetSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyMountTargetSecurityGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyMountTargetSecurityGroupsError::BadRequest(ref cause) => cause,
-            ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(ref cause) => cause,
-            ModifyMountTargetSecurityGroupsError::InternalServerError(ref cause) => cause,
-            ModifyMountTargetSecurityGroupsError::MountTargetNotFound(ref cause) => cause,
-            ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(ref cause) => cause,
-            ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(ref cause) => cause,
+            ModifyMountTargetSecurityGroupsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyMountTargetSecurityGroupsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyMountTargetSecurityGroupsError::MountTargetNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyMountTargetSecurityGroupsError {}
 /// Errors returned by PutLifecycleConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutLifecycleConfigurationError {
@@ -1187,19 +1181,19 @@ impl PutLifecycleConfigurationError {
 }
 impl fmt::Display for PutLifecycleConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutLifecycleConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutLifecycleConfigurationError::BadRequest(ref cause) => cause,
-            PutLifecycleConfigurationError::FileSystemNotFound(ref cause) => cause,
-            PutLifecycleConfigurationError::IncorrectFileSystemLifeCycleState(ref cause) => cause,
-            PutLifecycleConfigurationError::InternalServerError(ref cause) => cause,
+            PutLifecycleConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutLifecycleConfigurationError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            PutLifecycleConfigurationError::IncorrectFileSystemLifeCycleState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutLifecycleConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutLifecycleConfigurationError {}
 /// Errors returned by UpdateFileSystem
 #[derive(Debug, PartialEq)]
 pub enum UpdateFileSystemError {
@@ -1261,22 +1255,22 @@ impl UpdateFileSystemError {
 }
 impl fmt::Display for UpdateFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFileSystemError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFileSystemError::BadRequest(ref cause) => cause,
-            UpdateFileSystemError::FileSystemNotFound(ref cause) => cause,
-            UpdateFileSystemError::IncorrectFileSystemLifeCycleState(ref cause) => cause,
-            UpdateFileSystemError::InsufficientThroughputCapacity(ref cause) => cause,
-            UpdateFileSystemError::InternalServerError(ref cause) => cause,
-            UpdateFileSystemError::ThroughputLimitExceeded(ref cause) => cause,
-            UpdateFileSystemError::TooManyRequests(ref cause) => cause,
+            UpdateFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::IncorrectFileSystemLifeCycleState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFileSystemError::InsufficientThroughputCapacity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::ThroughputLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFileSystemError {}
 /// Trait representing the capabilities of the EFS API. EFS clients implement this trait.
 pub trait Efs {
     /// <p>Creates a new, empty file system. The operation requires a creation token in the request that Amazon EFS uses to ensure idempotent creation (calling the operation with same creation token has no effect). If a file system does not currently exist that is owned by the caller's AWS account with the specified creation token, this operation does the following:</p> <ul> <li> <p>Creates a new, empty file system. The file system will have an Amazon EFS assigned ID, and an initial lifecycle state <code>creating</code>.</p> </li> <li> <p>Returns with the description of the created file system.</p> </li> </ul> <p>Otherwise, this operation returns a <code>FileSystemAlreadyExists</code> error with the ID of the existing file system.</p> <note> <p>For basic use cases, you can use a randomly generated UUID for the creation token.</p> </note> <p> The idempotent operation allows you to retry a <code>CreateFileSystem</code> call without risk of creating an extra file system. This can happen when an initial call fails in a way that leaves it uncertain whether or not a file system was actually created. An example might be that a transport level timeout occurred or your connection was reset. As long as you use the same creation token, if the initial call had succeeded in creating a file system, the client can learn of its existence from the <code>FileSystemAlreadyExists</code> error.</p> <note> <p>The <code>CreateFileSystem</code> call returns while the file system's lifecycle state is still <code>creating</code>. You can check the file system creation status by calling the <a>DescribeFileSystems</a> operation, which among other things returns the file system state.</p> </note> <p>This operation also takes an optional <code>PerformanceMode</code> parameter that you choose for your file system. We recommend <code>generalPurpose</code> performance mode for most file systems. File systems using the <code>maxIO</code> performance mode can scale to higher levels of aggregate throughput and operations per second with a tradeoff of slightly higher latencies for most file operations. The performance mode can't be changed after the file system has been created. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/performance.html#performancemodes.html">Amazon EFS: Performance Modes</a>.</p> <p>After the file system is fully created, Amazon EFS sets its lifecycle state to <code>available</code>, at which point you can create one or more mount targets for the file system in your VPC. For more information, see <a>CreateMountTarget</a>. You mount your Amazon EFS file system on an EC2 instances in your VPC by using the mount target. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html">Amazon EFS: How it Works</a>. </p> <p> This operation requires permissions for the <code>elasticfilesystem:CreateFileSystem</code> action. </p>

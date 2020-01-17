@@ -47,6 +47,7 @@ pub struct Attachment {
 
 /// <p>An object representing a change in state for a task attachment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachmentStateChange {
     /// <p>The Amazon Resource Name (ARN) of the attachment.</p>
     #[serde(rename = "attachmentArn")]
@@ -572,6 +573,7 @@ pub struct ContainerOverride {
 
 /// <p>An object representing a change in state for a container.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContainerStateChange {
     /// <p>The name of the container.</p>
     #[serde(rename = "containerName")]
@@ -604,6 +606,7 @@ pub struct ContainerStateChange {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCapacityProviderRequest {
     /// <p>The details of the Auto Scaling group for the capacity provider.</p>
     #[serde(rename = "autoScalingGroupProvider")]
@@ -627,6 +630,7 @@ pub struct CreateCapacityProviderResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of one or more capacity providers to associate with the cluster.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created and not already associated with another cluster. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>The <a>PutClusterCapacityProviders</a> API operation is used to update the list of available capacity providers for a cluster after the cluster is created.</p>
     #[serde(rename = "capacityProviders")]
@@ -660,6 +664,7 @@ pub struct CreateClusterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServiceRequest {
     /// <p>The capacity provider strategy to use for the service.</p> <p>A capacity provider strategy consists of one or more capacity providers along with the <code>base</code> and <code>weight</code> to assign to them. A capacity provider must be associated with the cluster to be used in a capacity provider strategy. The <a>PutClusterCapacityProviders</a> API is used to associate a capacity provider with a cluster. Only capacity providers with an <code>ACTIVE</code> or <code>UPDATING</code> status can be used.</p> <p>If a <code>capacityProviderStrategy</code> is specified, the <code>launchType</code> parameter must be omitted. If no <code>capacityProviderStrategy</code> or <code>launchType</code> is specified, the <code>defaultCapacityProviderStrategy</code> for the cluster is used.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>The <a>PutClusterCapacityProviders</a> API operation is used to update the list of available capacity providers for a cluster after the cluster is created.</p>
     #[serde(rename = "capacityProviderStrategy")]
@@ -756,6 +761,7 @@ pub struct CreateServiceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTaskSetRequest {
     /// <p>The capacity provider strategy to use for the task set.</p> <p>A capacity provider strategy consists of one or more capacity providers along with the <code>base</code> and <code>weight</code> to assign to them. A capacity provider must be associated with the cluster to be used in a capacity provider strategy. The <a>PutClusterCapacityProviders</a> API is used to associate a capacity provider with a cluster. Only capacity providers with an <code>ACTIVE</code> or <code>UPDATING</code> status can be used.</p> <p>If a <code>capacityProviderStrategy</code> is specified, the <code>launchType</code> parameter must be omitted. If no <code>capacityProviderStrategy</code> or <code>launchType</code> is specified, the <code>defaultCapacityProviderStrategy</code> for the cluster is used.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>The <a>PutClusterCapacityProviders</a> API operation is used to update the list of available capacity providers for a cluster after the cluster is created.</p>
     #[serde(rename = "capacityProviderStrategy")]
@@ -811,6 +817,7 @@ pub struct CreateTaskSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccountSettingRequest {
     /// <p>The resource name for which to disable the account setting. If <code>serviceLongArnFormat</code> is specified, the ARN for your Amazon ECS services is affected. If <code>taskLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS tasks is affected. If <code>containerInstanceLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS container instances is affected. If <code>awsvpcTrunking</code> is specified, the ENI limit for your Amazon ECS container instances is affected.</p>
     #[serde(rename = "name")]
@@ -831,6 +838,7 @@ pub struct DeleteAccountSettingResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAttributesRequest {
     /// <p>The attributes to delete from your resource. You can specify up to 10 attributes per request. For custom attributes, specify the attribute name and target ID, but do not specify the value. If you specify the target ID using the short form, you must also specify the target type.</p>
     #[serde(rename = "attributes")]
@@ -851,6 +859,7 @@ pub struct DeleteAttributesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster to delete.</p>
     #[serde(rename = "cluster")]
@@ -867,6 +876,7 @@ pub struct DeleteClusterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the service to delete. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -891,6 +901,7 @@ pub struct DeleteServiceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTaskSetRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the service that the task set exists in to delete.</p>
     #[serde(rename = "cluster")]
@@ -991,6 +1002,7 @@ pub struct DeploymentController {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterContainerInstanceRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instance to deregister. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -1015,6 +1027,7 @@ pub struct DeregisterContainerInstanceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTaskDefinitionRequest {
     /// <p>The <code>family</code> and <code>revision</code> (<code>family:revision</code>) or full Amazon Resource Name (ARN) of the task definition to deregister. You must specify a <code>revision</code>.</p>
     #[serde(rename = "taskDefinition")]
@@ -1031,6 +1044,7 @@ pub struct DeregisterTaskDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCapacityProvidersRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of one or more capacity providers. Up to <code>100</code> capacity providers can be described in an action.</p>
     #[serde(rename = "capacityProviders")]
@@ -1068,6 +1082,7 @@ pub struct DescribeCapacityProvidersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClustersRequest {
     /// <p>A list of up to 100 cluster names or full cluster Amazon Resource Name (ARN) entries. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "clusters")]
@@ -1093,6 +1108,7 @@ pub struct DescribeClustersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContainerInstancesRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instances to describe. If you do not specify a cluster, the default cluster is assumed. This parameter is required if the container instance or container instances you are describing were launched in any cluster other than the default cluster.</p>
     #[serde(rename = "cluster")]
@@ -1121,6 +1137,7 @@ pub struct DescribeContainerInstancesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServicesRequest {
     /// <p>The short name or full Amazon Resource Name (ARN)the cluster that hosts the service to describe. If you do not specify a cluster, the default cluster is assumed. This parameter is required if the service or services you are describing were launched in any cluster other than the default cluster.</p>
     #[serde(rename = "cluster")]
@@ -1149,6 +1166,7 @@ pub struct DescribeServicesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTaskDefinitionRequest {
     /// <p>Specifies whether to see the resource tags for the task definition. If <code>TAGS</code> is specified, the tags are included in the response. If this field is omitted, tags are not included in the response.</p>
     #[serde(rename = "include")]
@@ -1173,6 +1191,7 @@ pub struct DescribeTaskDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTaskSetsRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the service that the task sets exist in.</p>
     #[serde(rename = "cluster")]
@@ -1200,6 +1219,7 @@ pub struct DescribeTaskSetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTasksRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the task or tasks to describe. If you do not specify a cluster, the default cluster is assumed. This parameter is required if the task or tasks you are describing were launched in any cluster other than the default cluster.</p>
     #[serde(rename = "cluster")]
@@ -1244,6 +1264,7 @@ pub struct Device {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DiscoverPollEndpointRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster to which the container instance belongs.</p>
     #[serde(rename = "cluster")]
@@ -1451,6 +1472,7 @@ pub struct LinuxParameters {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountSettingsRequest {
     /// <p>Specifies whether to return the effective settings. If <code>true</code>, the account settings for the root user or the default setting for the <code>principalArn</code> are returned. If <code>false</code>, the account settings for the <code>principalArn</code> are returned if they are set. Otherwise, no account settings are returned.</p>
     #[serde(rename = "effectiveSettings")]
@@ -1492,6 +1514,7 @@ pub struct ListAccountSettingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttributesRequest {
     /// <p>The name of the attribute with which to filter the results. </p>
     #[serde(rename = "attributeName")]
@@ -1532,6 +1555,7 @@ pub struct ListAttributesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClustersRequest {
     /// <p>The maximum number of cluster results returned by <code>ListClusters</code> in paginated output. When this parameter is used, <code>ListClusters</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListClusters</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListClusters</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "maxResults")]
@@ -1557,6 +1581,7 @@ pub struct ListClustersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContainerInstancesRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instances to list. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -1594,6 +1619,7 @@ pub struct ListContainerInstancesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServicesRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the services to list. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -1631,6 +1657,7 @@ pub struct ListServicesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the resource for which to list the tags. Currently, the supported resources are Amazon ECS tasks, services, task definitions, clusters, and container instances.</p>
     #[serde(rename = "resourceArn")]
@@ -1647,6 +1674,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTaskDefinitionFamiliesRequest {
     /// <p>The <code>familyPrefix</code> is a string that is used to filter the results of <code>ListTaskDefinitionFamilies</code>. If you specify a <code>familyPrefix</code>, only task definition family names that begin with the <code>familyPrefix</code> string are returned.</p>
     #[serde(rename = "familyPrefix")]
@@ -1680,6 +1708,7 @@ pub struct ListTaskDefinitionFamiliesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTaskDefinitionsRequest {
     /// <p>The full family name with which to filter the <code>ListTaskDefinitions</code> results. Specifying a <code>familyPrefix</code> limits the listed task definitions to task definition revisions that belong to that family.</p>
     #[serde(rename = "familyPrefix")]
@@ -1717,6 +1746,7 @@ pub struct ListTaskDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTasksRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the tasks to list. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -1920,6 +1950,7 @@ pub struct PlacementStrategy {
 
 /// <p>The devices that are available on the container instance. The only supported device type is a GPU.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PlatformDevice {
     /// <p>The ID for the GPU(s) on the container instance. The available GPU IDs can also be obtained on the container instance in the <code>/var/lib/ecs/gpu/nvidia_gpu_info.json</code> file.</p>
     #[serde(rename = "id")]
@@ -1963,6 +1994,7 @@ pub struct ProxyConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAccountSettingDefaultRequest {
     /// <p>The resource name for which to modify the account setting. If <code>serviceLongArnFormat</code> is specified, the ARN for your Amazon ECS services is affected. If <code>taskLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS tasks is affected. If <code>containerInstanceLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS container instances is affected. If <code>awsvpcTrunking</code> is specified, the ENI limit for your Amazon ECS container instances is affected. If <code>containerInsights</code> is specified, the default setting for CloudWatch Container Insights for your clusters is affected.</p>
     #[serde(rename = "name")]
@@ -1981,6 +2013,7 @@ pub struct PutAccountSettingDefaultResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAccountSettingRequest {
     /// <p>The Amazon ECS resource name for which to modify the account setting. If <code>serviceLongArnFormat</code> is specified, the ARN for your Amazon ECS services is affected. If <code>taskLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS tasks is affected. If <code>containerInstanceLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS container instances is affected. If <code>awsvpcTrunking</code> is specified, the elastic network interface (ENI) limit for your Amazon ECS container instances is affected. If <code>containerInsights</code> is specified, the default setting for CloudWatch Container Insights for your clusters is affected.</p>
     #[serde(rename = "name")]
@@ -2004,6 +2037,7 @@ pub struct PutAccountSettingResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAttributesRequest {
     /// <p>The attributes to apply to your resource. You can specify up to 10 custom attributes per resource. You can specify up to 10 attributes in a single call.</p>
     #[serde(rename = "attributes")]
@@ -2024,6 +2058,7 @@ pub struct PutAttributesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutClusterCapacityProvidersRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of one or more capacity providers to associate with the cluster.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p>
     #[serde(rename = "capacityProviders")]
@@ -2045,6 +2080,7 @@ pub struct PutClusterCapacityProvidersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterContainerInstanceRequest {
     /// <p>The container instance attributes that this container instance supports.</p>
     #[serde(rename = "attributes")]
@@ -2094,6 +2130,7 @@ pub struct RegisterContainerInstanceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTaskDefinitionRequest {
     /// <p>A list of container definitions in JSON format that describe the different containers that make up your task.</p>
     #[serde(rename = "containerDefinitions")]
@@ -2216,6 +2253,7 @@ pub struct ResourceRequirement {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunTaskRequest {
     /// <p>The capacity provider strategy to use for the task.</p> <p>A capacity provider strategy consists of one or more capacity providers along with the <code>base</code> and <code>weight</code> to assign to them. A capacity provider must be associated with the cluster to be used in a capacity provider strategy. The <a>PutClusterCapacityProviders</a> API is used to associate a capacity provider with a cluster. Only capacity providers with an <code>ACTIVE</code> or <code>UPDATING</code> status can be used.</p> <p>If a <code>capacityProviderStrategy</code> is specified, the <code>launchType</code> parameter must be omitted. If no <code>capacityProviderStrategy</code> or <code>launchType</code> is specified, the <code>defaultCapacityProviderStrategy</code> for the cluster is used.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>The <a>PutClusterCapacityProviders</a> API operation is used to update the list of available capacity providers for a cluster after the cluster is created.</p>
     #[serde(rename = "capacityProviderStrategy")]
@@ -2499,6 +2537,7 @@ pub struct Setting {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTaskRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster on which to start your task. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -2558,6 +2597,7 @@ pub struct StartTaskResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTaskRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the task to stop. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -2582,6 +2622,7 @@ pub struct StopTaskResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubmitAttachmentStateChangesRequest {
     /// <p>Any attachments associated with the state change request.</p>
     #[serde(rename = "attachments")]
@@ -2602,6 +2643,7 @@ pub struct SubmitAttachmentStateChangesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubmitContainerStateChangeRequest {
     /// <p>The short name or full ARN of the cluster that hosts the container.</p>
     #[serde(rename = "cluster")]
@@ -2647,6 +2689,7 @@ pub struct SubmitContainerStateChangeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubmitTaskStateChangeRequest {
     /// <p>Any attachments associated with the state change request.</p>
     #[serde(rename = "attachments")]
@@ -2722,6 +2765,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource to which to add tags. Currently, the supported resources are Amazon ECS capacity providers, tasks, services, task definitions, clusters, and container instances.</p>
     #[serde(rename = "resourceArn")]
@@ -3121,6 +3165,7 @@ pub struct Ulimit {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource from which to delete tags. Currently, the supported resources are Amazon ECS capacity providers, tasks, services, task definitions, clusters, and container instances.</p>
     #[serde(rename = "resourceArn")]
@@ -3135,6 +3180,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClusterSettingsRequest {
     /// <p>The name of the cluster to modify the settings for.</p>
     #[serde(rename = "cluster")]
@@ -3153,6 +3199,7 @@ pub struct UpdateClusterSettingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContainerAgentRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that your container instance is running on. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -3173,6 +3220,7 @@ pub struct UpdateContainerAgentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContainerInstancesStateRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instance to update. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -3200,6 +3248,7 @@ pub struct UpdateContainerInstancesStateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServicePrimaryTaskSetRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the service that the task set exists in.</p>
     #[serde(rename = "cluster")]
@@ -3221,6 +3270,7 @@ pub struct UpdateServicePrimaryTaskSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceRequest {
     /// <p><p>The capacity provider strategy to update the service to use.</p> <p>If the service is using the default capacity provider strategy for the cluster, the service can be updated to use one or more capacity providers. However, when a service is using a non-default capacity provider strategy, the service cannot be updated to use the cluster&#39;s default capacity provider strategy.</p> <p/></p>
     #[serde(rename = "capacityProviderStrategy")]
@@ -3272,6 +3322,7 @@ pub struct UpdateServiceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTaskSetRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the service that the task set exists in.</p>
     #[serde(rename = "cluster")]
@@ -3383,19 +3434,15 @@ impl CreateCapacityProviderError {
 }
 impl fmt::Display for CreateCapacityProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCapacityProviderError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCapacityProviderError::Client(ref cause) => cause,
-            CreateCapacityProviderError::InvalidParameter(ref cause) => cause,
-            CreateCapacityProviderError::LimitExceeded(ref cause) => cause,
-            CreateCapacityProviderError::Server(ref cause) => cause,
+            CreateCapacityProviderError::Client(ref cause) => write!(f, "{}", cause),
+            CreateCapacityProviderError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateCapacityProviderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateCapacityProviderError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCapacityProviderError {}
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
@@ -3429,18 +3476,14 @@ impl CreateClusterError {
 }
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateClusterError {
-    fn description(&self) -> &str {
         match *self {
-            CreateClusterError::Client(ref cause) => cause,
-            CreateClusterError::InvalidParameter(ref cause) => cause,
-            CreateClusterError::Server(ref cause) => cause,
+            CreateClusterError::Client(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateClusterError {}
 /// Errors returned by CreateService
 #[derive(Debug, PartialEq)]
 pub enum CreateServiceError {
@@ -3501,23 +3544,21 @@ impl CreateServiceError {
 }
 impl fmt::Display for CreateServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateServiceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateServiceError::AccessDenied(ref cause) => cause,
-            CreateServiceError::Client(ref cause) => cause,
-            CreateServiceError::ClusterNotFound(ref cause) => cause,
-            CreateServiceError::InvalidParameter(ref cause) => cause,
-            CreateServiceError::PlatformTaskDefinitionIncompatibility(ref cause) => cause,
-            CreateServiceError::PlatformUnknown(ref cause) => cause,
-            CreateServiceError::Server(ref cause) => cause,
-            CreateServiceError::UnsupportedFeature(ref cause) => cause,
+            CreateServiceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::Client(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::PlatformTaskDefinitionIncompatibility(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateServiceError::PlatformUnknown(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::Server(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::UnsupportedFeature(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateServiceError {}
 /// Errors returned by CreateTaskSet
 #[derive(Debug, PartialEq)]
 pub enum CreateTaskSetError {
@@ -3588,25 +3629,23 @@ impl CreateTaskSetError {
 }
 impl fmt::Display for CreateTaskSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTaskSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTaskSetError::AccessDenied(ref cause) => cause,
-            CreateTaskSetError::Client(ref cause) => cause,
-            CreateTaskSetError::ClusterNotFound(ref cause) => cause,
-            CreateTaskSetError::InvalidParameter(ref cause) => cause,
-            CreateTaskSetError::PlatformTaskDefinitionIncompatibility(ref cause) => cause,
-            CreateTaskSetError::PlatformUnknown(ref cause) => cause,
-            CreateTaskSetError::Server(ref cause) => cause,
-            CreateTaskSetError::ServiceNotActive(ref cause) => cause,
-            CreateTaskSetError::ServiceNotFound(ref cause) => cause,
-            CreateTaskSetError::UnsupportedFeature(ref cause) => cause,
+            CreateTaskSetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateTaskSetError::Client(ref cause) => write!(f, "{}", cause),
+            CreateTaskSetError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            CreateTaskSetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateTaskSetError::PlatformTaskDefinitionIncompatibility(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTaskSetError::PlatformUnknown(ref cause) => write!(f, "{}", cause),
+            CreateTaskSetError::Server(ref cause) => write!(f, "{}", cause),
+            CreateTaskSetError::ServiceNotActive(ref cause) => write!(f, "{}", cause),
+            CreateTaskSetError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateTaskSetError::UnsupportedFeature(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTaskSetError {}
 /// Errors returned by DeleteAccountSetting
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccountSettingError {
@@ -3642,18 +3681,14 @@ impl DeleteAccountSettingError {
 }
 impl fmt::Display for DeleteAccountSettingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAccountSettingError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAccountSettingError::Client(ref cause) => cause,
-            DeleteAccountSettingError::InvalidParameter(ref cause) => cause,
-            DeleteAccountSettingError::Server(ref cause) => cause,
+            DeleteAccountSettingError::Client(ref cause) => write!(f, "{}", cause),
+            DeleteAccountSettingError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteAccountSettingError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAccountSettingError {}
 /// Errors returned by DeleteAttributes
 #[derive(Debug, PartialEq)]
 pub enum DeleteAttributesError {
@@ -3687,18 +3722,14 @@ impl DeleteAttributesError {
 }
 impl fmt::Display for DeleteAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAttributesError::ClusterNotFound(ref cause) => cause,
-            DeleteAttributesError::InvalidParameter(ref cause) => cause,
-            DeleteAttributesError::TargetNotFound(ref cause) => cause,
+            DeleteAttributesError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteAttributesError::TargetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAttributesError {}
 /// Errors returned by DeleteCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterError {
@@ -3761,23 +3792,21 @@ impl DeleteClusterError {
 }
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteClusterError::Client(ref cause) => cause,
-            DeleteClusterError::ClusterContainsContainerInstances(ref cause) => cause,
-            DeleteClusterError::ClusterContainsServices(ref cause) => cause,
-            DeleteClusterError::ClusterContainsTasks(ref cause) => cause,
-            DeleteClusterError::ClusterNotFound(ref cause) => cause,
-            DeleteClusterError::InvalidParameter(ref cause) => cause,
-            DeleteClusterError::Server(ref cause) => cause,
-            DeleteClusterError::UpdateInProgress(ref cause) => cause,
+            DeleteClusterError::Client(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::ClusterContainsContainerInstances(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteClusterError::ClusterContainsServices(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::ClusterContainsTasks(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::Server(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::UpdateInProgress(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteClusterError {}
 /// Errors returned by DeleteService
 #[derive(Debug, PartialEq)]
 pub enum DeleteServiceError {
@@ -3821,20 +3850,16 @@ impl DeleteServiceError {
 }
 impl fmt::Display for DeleteServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServiceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServiceError::Client(ref cause) => cause,
-            DeleteServiceError::ClusterNotFound(ref cause) => cause,
-            DeleteServiceError::InvalidParameter(ref cause) => cause,
-            DeleteServiceError::Server(ref cause) => cause,
-            DeleteServiceError::ServiceNotFound(ref cause) => cause,
+            DeleteServiceError::Client(ref cause) => write!(f, "{}", cause),
+            DeleteServiceError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteServiceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteServiceError::Server(ref cause) => write!(f, "{}", cause),
+            DeleteServiceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServiceError {}
 /// Errors returned by DeleteTaskSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteTaskSetError {
@@ -3898,24 +3923,20 @@ impl DeleteTaskSetError {
 }
 impl fmt::Display for DeleteTaskSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTaskSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTaskSetError::AccessDenied(ref cause) => cause,
-            DeleteTaskSetError::Client(ref cause) => cause,
-            DeleteTaskSetError::ClusterNotFound(ref cause) => cause,
-            DeleteTaskSetError::InvalidParameter(ref cause) => cause,
-            DeleteTaskSetError::Server(ref cause) => cause,
-            DeleteTaskSetError::ServiceNotActive(ref cause) => cause,
-            DeleteTaskSetError::ServiceNotFound(ref cause) => cause,
-            DeleteTaskSetError::TaskSetNotFound(ref cause) => cause,
-            DeleteTaskSetError::UnsupportedFeature(ref cause) => cause,
+            DeleteTaskSetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteTaskSetError::Client(ref cause) => write!(f, "{}", cause),
+            DeleteTaskSetError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTaskSetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteTaskSetError::Server(ref cause) => write!(f, "{}", cause),
+            DeleteTaskSetError::ServiceNotActive(ref cause) => write!(f, "{}", cause),
+            DeleteTaskSetError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTaskSetError::TaskSetNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTaskSetError::UnsupportedFeature(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTaskSetError {}
 /// Errors returned by DeregisterContainerInstance
 #[derive(Debug, PartialEq)]
 pub enum DeregisterContainerInstanceError {
@@ -3960,19 +3981,15 @@ impl DeregisterContainerInstanceError {
 }
 impl fmt::Display for DeregisterContainerInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterContainerInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterContainerInstanceError::Client(ref cause) => cause,
-            DeregisterContainerInstanceError::ClusterNotFound(ref cause) => cause,
-            DeregisterContainerInstanceError::InvalidParameter(ref cause) => cause,
-            DeregisterContainerInstanceError::Server(ref cause) => cause,
+            DeregisterContainerInstanceError::Client(ref cause) => write!(f, "{}", cause),
+            DeregisterContainerInstanceError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            DeregisterContainerInstanceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeregisterContainerInstanceError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterContainerInstanceError {}
 /// Errors returned by DeregisterTaskDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTaskDefinitionError {
@@ -4008,18 +4025,14 @@ impl DeregisterTaskDefinitionError {
 }
 impl fmt::Display for DeregisterTaskDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterTaskDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterTaskDefinitionError::Client(ref cause) => cause,
-            DeregisterTaskDefinitionError::InvalidParameter(ref cause) => cause,
-            DeregisterTaskDefinitionError::Server(ref cause) => cause,
+            DeregisterTaskDefinitionError::Client(ref cause) => write!(f, "{}", cause),
+            DeregisterTaskDefinitionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeregisterTaskDefinitionError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterTaskDefinitionError {}
 /// Errors returned by DescribeCapacityProviders
 #[derive(Debug, PartialEq)]
 pub enum DescribeCapacityProvidersError {
@@ -4055,18 +4068,14 @@ impl DescribeCapacityProvidersError {
 }
 impl fmt::Display for DescribeCapacityProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCapacityProvidersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCapacityProvidersError::Client(ref cause) => cause,
-            DescribeCapacityProvidersError::InvalidParameter(ref cause) => cause,
-            DescribeCapacityProvidersError::Server(ref cause) => cause,
+            DescribeCapacityProvidersError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeCapacityProvidersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeCapacityProvidersError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCapacityProvidersError {}
 /// Errors returned by DescribeClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeClustersError {
@@ -4100,18 +4109,14 @@ impl DescribeClustersError {
 }
 impl fmt::Display for DescribeClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClustersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClustersError::Client(ref cause) => cause,
-            DescribeClustersError::InvalidParameter(ref cause) => cause,
-            DescribeClustersError::Server(ref cause) => cause,
+            DescribeClustersError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeClustersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeClustersError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClustersError {}
 /// Errors returned by DescribeContainerInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeContainerInstancesError {
@@ -4156,19 +4161,15 @@ impl DescribeContainerInstancesError {
 }
 impl fmt::Display for DescribeContainerInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeContainerInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeContainerInstancesError::Client(ref cause) => cause,
-            DescribeContainerInstancesError::ClusterNotFound(ref cause) => cause,
-            DescribeContainerInstancesError::InvalidParameter(ref cause) => cause,
-            DescribeContainerInstancesError::Server(ref cause) => cause,
+            DescribeContainerInstancesError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeContainerInstancesError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeContainerInstancesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeContainerInstancesError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeContainerInstancesError {}
 /// Errors returned by DescribeServices
 #[derive(Debug, PartialEq)]
 pub enum DescribeServicesError {
@@ -4207,19 +4208,15 @@ impl DescribeServicesError {
 }
 impl fmt::Display for DescribeServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeServicesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeServicesError::Client(ref cause) => cause,
-            DescribeServicesError::ClusterNotFound(ref cause) => cause,
-            DescribeServicesError::InvalidParameter(ref cause) => cause,
-            DescribeServicesError::Server(ref cause) => cause,
+            DescribeServicesError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeServicesError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeServicesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeServicesError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeServicesError {}
 /// Errors returned by DescribeTaskDefinition
 #[derive(Debug, PartialEq)]
 pub enum DescribeTaskDefinitionError {
@@ -4255,18 +4252,14 @@ impl DescribeTaskDefinitionError {
 }
 impl fmt::Display for DescribeTaskDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTaskDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTaskDefinitionError::Client(ref cause) => cause,
-            DescribeTaskDefinitionError::InvalidParameter(ref cause) => cause,
-            DescribeTaskDefinitionError::Server(ref cause) => cause,
+            DescribeTaskDefinitionError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeTaskDefinitionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeTaskDefinitionError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTaskDefinitionError {}
 /// Errors returned by DescribeTaskSets
 #[derive(Debug, PartialEq)]
 pub enum DescribeTaskSetsError {
@@ -4325,23 +4318,19 @@ impl DescribeTaskSetsError {
 }
 impl fmt::Display for DescribeTaskSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTaskSetsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTaskSetsError::AccessDenied(ref cause) => cause,
-            DescribeTaskSetsError::Client(ref cause) => cause,
-            DescribeTaskSetsError::ClusterNotFound(ref cause) => cause,
-            DescribeTaskSetsError::InvalidParameter(ref cause) => cause,
-            DescribeTaskSetsError::Server(ref cause) => cause,
-            DescribeTaskSetsError::ServiceNotActive(ref cause) => cause,
-            DescribeTaskSetsError::ServiceNotFound(ref cause) => cause,
-            DescribeTaskSetsError::UnsupportedFeature(ref cause) => cause,
+            DescribeTaskSetsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeTaskSetsError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeTaskSetsError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTaskSetsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeTaskSetsError::Server(ref cause) => write!(f, "{}", cause),
+            DescribeTaskSetsError::ServiceNotActive(ref cause) => write!(f, "{}", cause),
+            DescribeTaskSetsError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTaskSetsError::UnsupportedFeature(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTaskSetsError {}
 /// Errors returned by DescribeTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeTasksError {
@@ -4380,19 +4369,15 @@ impl DescribeTasksError {
 }
 impl fmt::Display for DescribeTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTasksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTasksError::Client(ref cause) => cause,
-            DescribeTasksError::ClusterNotFound(ref cause) => cause,
-            DescribeTasksError::InvalidParameter(ref cause) => cause,
-            DescribeTasksError::Server(ref cause) => cause,
+            DescribeTasksError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeTasksError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTasksError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeTasksError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTasksError {}
 /// Errors returned by DiscoverPollEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DiscoverPollEndpointError {
@@ -4421,17 +4406,13 @@ impl DiscoverPollEndpointError {
 }
 impl fmt::Display for DiscoverPollEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DiscoverPollEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DiscoverPollEndpointError::Client(ref cause) => cause,
-            DiscoverPollEndpointError::Server(ref cause) => cause,
+            DiscoverPollEndpointError::Client(ref cause) => write!(f, "{}", cause),
+            DiscoverPollEndpointError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DiscoverPollEndpointError {}
 /// Errors returned by ListAccountSettings
 #[derive(Debug, PartialEq)]
 pub enum ListAccountSettingsError {
@@ -4467,18 +4448,14 @@ impl ListAccountSettingsError {
 }
 impl fmt::Display for ListAccountSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAccountSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAccountSettingsError::Client(ref cause) => cause,
-            ListAccountSettingsError::InvalidParameter(ref cause) => cause,
-            ListAccountSettingsError::Server(ref cause) => cause,
+            ListAccountSettingsError::Client(ref cause) => write!(f, "{}", cause),
+            ListAccountSettingsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListAccountSettingsError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAccountSettingsError {}
 /// Errors returned by ListAttributes
 #[derive(Debug, PartialEq)]
 pub enum ListAttributesError {
@@ -4507,17 +4484,13 @@ impl ListAttributesError {
 }
 impl fmt::Display for ListAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAttributesError::ClusterNotFound(ref cause) => cause,
-            ListAttributesError::InvalidParameter(ref cause) => cause,
+            ListAttributesError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            ListAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAttributesError {}
 /// Errors returned by ListClusters
 #[derive(Debug, PartialEq)]
 pub enum ListClustersError {
@@ -4551,18 +4524,14 @@ impl ListClustersError {
 }
 impl fmt::Display for ListClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListClustersError {
-    fn description(&self) -> &str {
         match *self {
-            ListClustersError::Client(ref cause) => cause,
-            ListClustersError::InvalidParameter(ref cause) => cause,
-            ListClustersError::Server(ref cause) => cause,
+            ListClustersError::Client(ref cause) => write!(f, "{}", cause),
+            ListClustersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListClustersError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListClustersError {}
 /// Errors returned by ListContainerInstances
 #[derive(Debug, PartialEq)]
 pub enum ListContainerInstancesError {
@@ -4605,19 +4574,15 @@ impl ListContainerInstancesError {
 }
 impl fmt::Display for ListContainerInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListContainerInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            ListContainerInstancesError::Client(ref cause) => cause,
-            ListContainerInstancesError::ClusterNotFound(ref cause) => cause,
-            ListContainerInstancesError::InvalidParameter(ref cause) => cause,
-            ListContainerInstancesError::Server(ref cause) => cause,
+            ListContainerInstancesError::Client(ref cause) => write!(f, "{}", cause),
+            ListContainerInstancesError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            ListContainerInstancesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListContainerInstancesError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListContainerInstancesError {}
 /// Errors returned by ListServices
 #[derive(Debug, PartialEq)]
 pub enum ListServicesError {
@@ -4656,19 +4621,15 @@ impl ListServicesError {
 }
 impl fmt::Display for ListServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListServicesError {
-    fn description(&self) -> &str {
         match *self {
-            ListServicesError::Client(ref cause) => cause,
-            ListServicesError::ClusterNotFound(ref cause) => cause,
-            ListServicesError::InvalidParameter(ref cause) => cause,
-            ListServicesError::Server(ref cause) => cause,
+            ListServicesError::Client(ref cause) => write!(f, "{}", cause),
+            ListServicesError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            ListServicesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListServicesError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListServicesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -4709,19 +4670,15 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::Client(ref cause) => cause,
-            ListTagsForResourceError::ClusterNotFound(ref cause) => cause,
-            ListTagsForResourceError::InvalidParameter(ref cause) => cause,
-            ListTagsForResourceError::Server(ref cause) => cause,
+            ListTagsForResourceError::Client(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTaskDefinitionFamilies
 #[derive(Debug, PartialEq)]
 pub enum ListTaskDefinitionFamiliesError {
@@ -4759,18 +4716,14 @@ impl ListTaskDefinitionFamiliesError {
 }
 impl fmt::Display for ListTaskDefinitionFamiliesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTaskDefinitionFamiliesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTaskDefinitionFamiliesError::Client(ref cause) => cause,
-            ListTaskDefinitionFamiliesError::InvalidParameter(ref cause) => cause,
-            ListTaskDefinitionFamiliesError::Server(ref cause) => cause,
+            ListTaskDefinitionFamiliesError::Client(ref cause) => write!(f, "{}", cause),
+            ListTaskDefinitionFamiliesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTaskDefinitionFamiliesError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTaskDefinitionFamiliesError {}
 /// Errors returned by ListTaskDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListTaskDefinitionsError {
@@ -4806,18 +4759,14 @@ impl ListTaskDefinitionsError {
 }
 impl fmt::Display for ListTaskDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTaskDefinitionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTaskDefinitionsError::Client(ref cause) => cause,
-            ListTaskDefinitionsError::InvalidParameter(ref cause) => cause,
-            ListTaskDefinitionsError::Server(ref cause) => cause,
+            ListTaskDefinitionsError::Client(ref cause) => write!(f, "{}", cause),
+            ListTaskDefinitionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTaskDefinitionsError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTaskDefinitionsError {}
 /// Errors returned by ListTasks
 #[derive(Debug, PartialEq)]
 pub enum ListTasksError {
@@ -4857,20 +4806,16 @@ impl ListTasksError {
 }
 impl fmt::Display for ListTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTasksError {
-    fn description(&self) -> &str {
         match *self {
-            ListTasksError::Client(ref cause) => cause,
-            ListTasksError::ClusterNotFound(ref cause) => cause,
-            ListTasksError::InvalidParameter(ref cause) => cause,
-            ListTasksError::Server(ref cause) => cause,
-            ListTasksError::ServiceNotFound(ref cause) => cause,
+            ListTasksError::Client(ref cause) => write!(f, "{}", cause),
+            ListTasksError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            ListTasksError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTasksError::Server(ref cause) => write!(f, "{}", cause),
+            ListTasksError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTasksError {}
 /// Errors returned by PutAccountSetting
 #[derive(Debug, PartialEq)]
 pub enum PutAccountSettingError {
@@ -4904,18 +4849,14 @@ impl PutAccountSettingError {
 }
 impl fmt::Display for PutAccountSettingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAccountSettingError {
-    fn description(&self) -> &str {
         match *self {
-            PutAccountSettingError::Client(ref cause) => cause,
-            PutAccountSettingError::InvalidParameter(ref cause) => cause,
-            PutAccountSettingError::Server(ref cause) => cause,
+            PutAccountSettingError::Client(ref cause) => write!(f, "{}", cause),
+            PutAccountSettingError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutAccountSettingError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutAccountSettingError {}
 /// Errors returned by PutAccountSettingDefault
 #[derive(Debug, PartialEq)]
 pub enum PutAccountSettingDefaultError {
@@ -4951,18 +4892,14 @@ impl PutAccountSettingDefaultError {
 }
 impl fmt::Display for PutAccountSettingDefaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAccountSettingDefaultError {
-    fn description(&self) -> &str {
         match *self {
-            PutAccountSettingDefaultError::Client(ref cause) => cause,
-            PutAccountSettingDefaultError::InvalidParameter(ref cause) => cause,
-            PutAccountSettingDefaultError::Server(ref cause) => cause,
+            PutAccountSettingDefaultError::Client(ref cause) => write!(f, "{}", cause),
+            PutAccountSettingDefaultError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutAccountSettingDefaultError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutAccountSettingDefaultError {}
 /// Errors returned by PutAttributes
 #[derive(Debug, PartialEq)]
 pub enum PutAttributesError {
@@ -5003,19 +4940,15 @@ impl PutAttributesError {
 }
 impl fmt::Display for PutAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            PutAttributesError::AttributeLimitExceeded(ref cause) => cause,
-            PutAttributesError::ClusterNotFound(ref cause) => cause,
-            PutAttributesError::InvalidParameter(ref cause) => cause,
-            PutAttributesError::TargetNotFound(ref cause) => cause,
+            PutAttributesError::AttributeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::TargetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutAttributesError {}
 /// Errors returned by PutClusterCapacityProviders
 #[derive(Debug, PartialEq)]
 pub enum PutClusterCapacityProvidersError {
@@ -5074,21 +5007,17 @@ impl PutClusterCapacityProvidersError {
 }
 impl fmt::Display for PutClusterCapacityProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutClusterCapacityProvidersError {
-    fn description(&self) -> &str {
         match *self {
-            PutClusterCapacityProvidersError::Client(ref cause) => cause,
-            PutClusterCapacityProvidersError::ClusterNotFound(ref cause) => cause,
-            PutClusterCapacityProvidersError::InvalidParameter(ref cause) => cause,
-            PutClusterCapacityProvidersError::ResourceInUse(ref cause) => cause,
-            PutClusterCapacityProvidersError::Server(ref cause) => cause,
-            PutClusterCapacityProvidersError::UpdateInProgress(ref cause) => cause,
+            PutClusterCapacityProvidersError::Client(ref cause) => write!(f, "{}", cause),
+            PutClusterCapacityProvidersError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            PutClusterCapacityProvidersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutClusterCapacityProvidersError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            PutClusterCapacityProvidersError::Server(ref cause) => write!(f, "{}", cause),
+            PutClusterCapacityProvidersError::UpdateInProgress(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutClusterCapacityProvidersError {}
 /// Errors returned by RegisterContainerInstance
 #[derive(Debug, PartialEq)]
 pub enum RegisterContainerInstanceError {
@@ -5124,18 +5053,14 @@ impl RegisterContainerInstanceError {
 }
 impl fmt::Display for RegisterContainerInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterContainerInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterContainerInstanceError::Client(ref cause) => cause,
-            RegisterContainerInstanceError::InvalidParameter(ref cause) => cause,
-            RegisterContainerInstanceError::Server(ref cause) => cause,
+            RegisterContainerInstanceError::Client(ref cause) => write!(f, "{}", cause),
+            RegisterContainerInstanceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            RegisterContainerInstanceError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterContainerInstanceError {}
 /// Errors returned by RegisterTaskDefinition
 #[derive(Debug, PartialEq)]
 pub enum RegisterTaskDefinitionError {
@@ -5171,18 +5096,14 @@ impl RegisterTaskDefinitionError {
 }
 impl fmt::Display for RegisterTaskDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterTaskDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterTaskDefinitionError::Client(ref cause) => cause,
-            RegisterTaskDefinitionError::InvalidParameter(ref cause) => cause,
-            RegisterTaskDefinitionError::Server(ref cause) => cause,
+            RegisterTaskDefinitionError::Client(ref cause) => write!(f, "{}", cause),
+            RegisterTaskDefinitionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            RegisterTaskDefinitionError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterTaskDefinitionError {}
 /// Errors returned by RunTask
 #[derive(Debug, PartialEq)]
 pub enum RunTaskError {
@@ -5242,24 +5163,22 @@ impl RunTaskError {
 }
 impl fmt::Display for RunTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RunTaskError {
-    fn description(&self) -> &str {
         match *self {
-            RunTaskError::AccessDenied(ref cause) => cause,
-            RunTaskError::Blocked(ref cause) => cause,
-            RunTaskError::Client(ref cause) => cause,
-            RunTaskError::ClusterNotFound(ref cause) => cause,
-            RunTaskError::InvalidParameter(ref cause) => cause,
-            RunTaskError::PlatformTaskDefinitionIncompatibility(ref cause) => cause,
-            RunTaskError::PlatformUnknown(ref cause) => cause,
-            RunTaskError::Server(ref cause) => cause,
-            RunTaskError::UnsupportedFeature(ref cause) => cause,
+            RunTaskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RunTaskError::Blocked(ref cause) => write!(f, "{}", cause),
+            RunTaskError::Client(ref cause) => write!(f, "{}", cause),
+            RunTaskError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            RunTaskError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            RunTaskError::PlatformTaskDefinitionIncompatibility(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RunTaskError::PlatformUnknown(ref cause) => write!(f, "{}", cause),
+            RunTaskError::Server(ref cause) => write!(f, "{}", cause),
+            RunTaskError::UnsupportedFeature(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RunTaskError {}
 /// Errors returned by StartTask
 #[derive(Debug, PartialEq)]
 pub enum StartTaskError {
@@ -5294,19 +5213,15 @@ impl StartTaskError {
 }
 impl fmt::Display for StartTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StartTaskError::Client(ref cause) => cause,
-            StartTaskError::ClusterNotFound(ref cause) => cause,
-            StartTaskError::InvalidParameter(ref cause) => cause,
-            StartTaskError::Server(ref cause) => cause,
+            StartTaskError::Client(ref cause) => write!(f, "{}", cause),
+            StartTaskError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            StartTaskError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartTaskError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartTaskError {}
 /// Errors returned by StopTask
 #[derive(Debug, PartialEq)]
 pub enum StopTaskError {
@@ -5341,19 +5256,15 @@ impl StopTaskError {
 }
 impl fmt::Display for StopTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StopTaskError::Client(ref cause) => cause,
-            StopTaskError::ClusterNotFound(ref cause) => cause,
-            StopTaskError::InvalidParameter(ref cause) => cause,
-            StopTaskError::Server(ref cause) => cause,
+            StopTaskError::Client(ref cause) => write!(f, "{}", cause),
+            StopTaskError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            StopTaskError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StopTaskError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopTaskError {}
 /// Errors returned by SubmitAttachmentStateChanges
 #[derive(Debug, PartialEq)]
 pub enum SubmitAttachmentStateChangesError {
@@ -5398,19 +5309,17 @@ impl SubmitAttachmentStateChangesError {
 }
 impl fmt::Display for SubmitAttachmentStateChangesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SubmitAttachmentStateChangesError {
-    fn description(&self) -> &str {
         match *self {
-            SubmitAttachmentStateChangesError::AccessDenied(ref cause) => cause,
-            SubmitAttachmentStateChangesError::Client(ref cause) => cause,
-            SubmitAttachmentStateChangesError::InvalidParameter(ref cause) => cause,
-            SubmitAttachmentStateChangesError::Server(ref cause) => cause,
+            SubmitAttachmentStateChangesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            SubmitAttachmentStateChangesError::Client(ref cause) => write!(f, "{}", cause),
+            SubmitAttachmentStateChangesError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SubmitAttachmentStateChangesError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SubmitAttachmentStateChangesError {}
 /// Errors returned by SubmitContainerStateChange
 #[derive(Debug, PartialEq)]
 pub enum SubmitContainerStateChangeError {
@@ -5448,18 +5357,14 @@ impl SubmitContainerStateChangeError {
 }
 impl fmt::Display for SubmitContainerStateChangeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SubmitContainerStateChangeError {
-    fn description(&self) -> &str {
         match *self {
-            SubmitContainerStateChangeError::AccessDenied(ref cause) => cause,
-            SubmitContainerStateChangeError::Client(ref cause) => cause,
-            SubmitContainerStateChangeError::Server(ref cause) => cause,
+            SubmitContainerStateChangeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            SubmitContainerStateChangeError::Client(ref cause) => write!(f, "{}", cause),
+            SubmitContainerStateChangeError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SubmitContainerStateChangeError {}
 /// Errors returned by SubmitTaskStateChange
 #[derive(Debug, PartialEq)]
 pub enum SubmitTaskStateChangeError {
@@ -5500,19 +5405,15 @@ impl SubmitTaskStateChangeError {
 }
 impl fmt::Display for SubmitTaskStateChangeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SubmitTaskStateChangeError {
-    fn description(&self) -> &str {
         match *self {
-            SubmitTaskStateChangeError::AccessDenied(ref cause) => cause,
-            SubmitTaskStateChangeError::Client(ref cause) => cause,
-            SubmitTaskStateChangeError::InvalidParameter(ref cause) => cause,
-            SubmitTaskStateChangeError::Server(ref cause) => cause,
+            SubmitTaskStateChangeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            SubmitTaskStateChangeError::Client(ref cause) => write!(f, "{}", cause),
+            SubmitTaskStateChangeError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SubmitTaskStateChangeError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SubmitTaskStateChangeError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -5556,20 +5457,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::Client(ref cause) => cause,
-            TagResourceError::ClusterNotFound(ref cause) => cause,
-            TagResourceError::InvalidParameter(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::Server(ref cause) => cause,
+            TagResourceError::Client(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -5613,20 +5510,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::Client(ref cause) => cause,
-            UntagResourceError::ClusterNotFound(ref cause) => cause,
-            UntagResourceError::InvalidParameter(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::Server(ref cause) => cause,
+            UntagResourceError::Client(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateClusterSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterSettingsError {
@@ -5669,19 +5562,15 @@ impl UpdateClusterSettingsError {
 }
 impl fmt::Display for UpdateClusterSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateClusterSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateClusterSettingsError::Client(ref cause) => cause,
-            UpdateClusterSettingsError::ClusterNotFound(ref cause) => cause,
-            UpdateClusterSettingsError::InvalidParameter(ref cause) => cause,
-            UpdateClusterSettingsError::Server(ref cause) => cause,
+            UpdateClusterSettingsError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateClusterSettingsError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateClusterSettingsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateClusterSettingsError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateClusterSettingsError {}
 /// Errors returned by UpdateContainerAgent
 #[derive(Debug, PartialEq)]
 pub enum UpdateContainerAgentError {
@@ -5743,22 +5632,18 @@ impl UpdateContainerAgentError {
 }
 impl fmt::Display for UpdateContainerAgentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateContainerAgentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateContainerAgentError::Client(ref cause) => cause,
-            UpdateContainerAgentError::ClusterNotFound(ref cause) => cause,
-            UpdateContainerAgentError::InvalidParameter(ref cause) => cause,
-            UpdateContainerAgentError::MissingVersion(ref cause) => cause,
-            UpdateContainerAgentError::NoUpdateAvailable(ref cause) => cause,
-            UpdateContainerAgentError::Server(ref cause) => cause,
-            UpdateContainerAgentError::UpdateInProgress(ref cause) => cause,
+            UpdateContainerAgentError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateContainerAgentError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateContainerAgentError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateContainerAgentError::MissingVersion(ref cause) => write!(f, "{}", cause),
+            UpdateContainerAgentError::NoUpdateAvailable(ref cause) => write!(f, "{}", cause),
+            UpdateContainerAgentError::Server(ref cause) => write!(f, "{}", cause),
+            UpdateContainerAgentError::UpdateInProgress(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateContainerAgentError {}
 /// Errors returned by UpdateContainerInstancesState
 #[derive(Debug, PartialEq)]
 pub enum UpdateContainerInstancesStateError {
@@ -5807,19 +5692,19 @@ impl UpdateContainerInstancesStateError {
 }
 impl fmt::Display for UpdateContainerInstancesStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateContainerInstancesStateError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateContainerInstancesStateError::Client(ref cause) => cause,
-            UpdateContainerInstancesStateError::ClusterNotFound(ref cause) => cause,
-            UpdateContainerInstancesStateError::InvalidParameter(ref cause) => cause,
-            UpdateContainerInstancesStateError::Server(ref cause) => cause,
+            UpdateContainerInstancesStateError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateContainerInstancesStateError::ClusterNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateContainerInstancesStateError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateContainerInstancesStateError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateContainerInstancesStateError {}
 /// Errors returned by UpdateService
 #[derive(Debug, PartialEq)]
 pub enum UpdateServiceError {
@@ -5885,24 +5770,22 @@ impl UpdateServiceError {
 }
 impl fmt::Display for UpdateServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServiceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServiceError::AccessDenied(ref cause) => cause,
-            UpdateServiceError::Client(ref cause) => cause,
-            UpdateServiceError::ClusterNotFound(ref cause) => cause,
-            UpdateServiceError::InvalidParameter(ref cause) => cause,
-            UpdateServiceError::PlatformTaskDefinitionIncompatibility(ref cause) => cause,
-            UpdateServiceError::PlatformUnknown(ref cause) => cause,
-            UpdateServiceError::Server(ref cause) => cause,
-            UpdateServiceError::ServiceNotActive(ref cause) => cause,
-            UpdateServiceError::ServiceNotFound(ref cause) => cause,
+            UpdateServiceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateServiceError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateServiceError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateServiceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateServiceError::PlatformTaskDefinitionIncompatibility(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateServiceError::PlatformUnknown(ref cause) => write!(f, "{}", cause),
+            UpdateServiceError::Server(ref cause) => write!(f, "{}", cause),
+            UpdateServiceError::ServiceNotActive(ref cause) => write!(f, "{}", cause),
+            UpdateServiceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServiceError {}
 /// Errors returned by UpdateServicePrimaryTaskSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateServicePrimaryTaskSetError {
@@ -5982,24 +5865,22 @@ impl UpdateServicePrimaryTaskSetError {
 }
 impl fmt::Display for UpdateServicePrimaryTaskSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServicePrimaryTaskSetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServicePrimaryTaskSetError::AccessDenied(ref cause) => cause,
-            UpdateServicePrimaryTaskSetError::Client(ref cause) => cause,
-            UpdateServicePrimaryTaskSetError::ClusterNotFound(ref cause) => cause,
-            UpdateServicePrimaryTaskSetError::InvalidParameter(ref cause) => cause,
-            UpdateServicePrimaryTaskSetError::Server(ref cause) => cause,
-            UpdateServicePrimaryTaskSetError::ServiceNotActive(ref cause) => cause,
-            UpdateServicePrimaryTaskSetError::ServiceNotFound(ref cause) => cause,
-            UpdateServicePrimaryTaskSetError::TaskSetNotFound(ref cause) => cause,
-            UpdateServicePrimaryTaskSetError::UnsupportedFeature(ref cause) => cause,
+            UpdateServicePrimaryTaskSetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateServicePrimaryTaskSetError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateServicePrimaryTaskSetError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateServicePrimaryTaskSetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateServicePrimaryTaskSetError::Server(ref cause) => write!(f, "{}", cause),
+            UpdateServicePrimaryTaskSetError::ServiceNotActive(ref cause) => write!(f, "{}", cause),
+            UpdateServicePrimaryTaskSetError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateServicePrimaryTaskSetError::TaskSetNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateServicePrimaryTaskSetError::UnsupportedFeature(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateServicePrimaryTaskSetError {}
 /// Errors returned by UpdateTaskSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateTaskSetError {
@@ -6063,24 +5944,20 @@ impl UpdateTaskSetError {
 }
 impl fmt::Display for UpdateTaskSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTaskSetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTaskSetError::AccessDenied(ref cause) => cause,
-            UpdateTaskSetError::Client(ref cause) => cause,
-            UpdateTaskSetError::ClusterNotFound(ref cause) => cause,
-            UpdateTaskSetError::InvalidParameter(ref cause) => cause,
-            UpdateTaskSetError::Server(ref cause) => cause,
-            UpdateTaskSetError::ServiceNotActive(ref cause) => cause,
-            UpdateTaskSetError::ServiceNotFound(ref cause) => cause,
-            UpdateTaskSetError::TaskSetNotFound(ref cause) => cause,
-            UpdateTaskSetError::UnsupportedFeature(ref cause) => cause,
+            UpdateTaskSetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateTaskSetError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateTaskSetError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateTaskSetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateTaskSetError::Server(ref cause) => write!(f, "{}", cause),
+            UpdateTaskSetError::ServiceNotActive(ref cause) => write!(f, "{}", cause),
+            UpdateTaskSetError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateTaskSetError::TaskSetNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateTaskSetError::UnsupportedFeature(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTaskSetError {}
 /// Trait representing the capabilities of the Amazon ECS API. Amazon ECS clients implement this trait.
 pub trait Ecs {
     /// <p>Creates a new capacity provider. Capacity providers are associated with an Amazon ECS cluster and are used in capacity provider strategies to facilitate cluster auto scaling.</p> <p>Only capacity providers using an Auto Scaling group can be created. Amazon ECS tasks on AWS Fargate use the <code>FARGATE</code> and <code>FARGATE_SPOT</code> capacity providers which are already created and available to all accounts in Regions supported by AWS Fargate.</p>
