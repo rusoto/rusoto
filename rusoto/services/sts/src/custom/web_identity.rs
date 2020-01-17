@@ -8,7 +8,6 @@ use rusoto_core::credential::{
 };
 use rusoto_core::request::HttpClient;
 use rusoto_core::{Client, Region, RusotoFuture};
-use std::error::Error;
 
 const AWS_WEB_IDENTITY_TOKEN_FILE: &str = "AWS_WEB_IDENTITY_TOKEN_FILE";
 
