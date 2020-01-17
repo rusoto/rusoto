@@ -1,4 +1,3 @@
-use std::error::Error;
 use std::fmt::{Formatter, Result as FmtResult};
 
 use base64;
@@ -32,7 +31,7 @@ impl<'de> Visitor<'de> for BlobVisitor {
     {
         base64::decode(v)
             .map(Bytes::from)
-            .map_err(|err| SerdeError::custom(err.description()))
+            .map_err(|err| SerdeError::custom(err.to_string()))
     }
 }
 

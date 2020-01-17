@@ -1,3 +1,4 @@
+
 // =================================================================
 //
 //                           * WARNING *
@@ -10,15 +11,15 @@
 //
 // =================================================================
 
-#![doc(
-    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
-)]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
 //! <p>Amazon API Gateway V2</p>
 //!
 //! If you're using the service, you're probably looking for [ApiGatewayV2Client](struct.ApiGatewayV2Client.html) and [ApiGatewayV2](trait.ApiGatewayV2.html).
 
-mod custom;
-mod generated;
 
-pub use custom::*;
+mod generated;
+mod custom;
+
 pub use generated::*;
+pub use custom::*;
+            

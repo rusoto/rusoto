@@ -26,11 +26,11 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateServerRequest {
-    /// <p>The virtual private cloud (VPC) endpoint settings that you want to configure for your SFTP server. This parameter is required when you specify a value for the <code>EndpointType</code> parameter.</p>
+    /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your SFTP server. With a VPC endpoint, you can restrict access to your SFTP server to resources only within your VPC. To control incoming internet traffic, you will need to invoke the <code>UpdateServer</code> API and attach an Elastic IP to your server's endpoint. </p>
     #[serde(rename = "EndpointDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_details: Option<EndpointDetails>,
-    /// <p>The type of VPC endpoint that you want your SFTP server to connect to. If you connect to a VPC endpoint, your SFTP server isn't accessible over the public internet.</p>
+    /// <p>The type of VPC endpoint that you want your SFTP server to connect to. You can choose to connect to the public internet or a virtual private cloud (VPC) endpoint. With a VPC endpoint, you can restrict access to your SFTP server and resources only within your VPC.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
@@ -70,7 +70,7 @@ pub struct CreateUserRequest {
     #[serde(rename = "HomeDirectory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory: Option<String>,
-    /// <p>Logical directory mappings that specify what S3 paths and keys should be visible to your user and how you want to make them visible. You will need to specify the "<code>Entry</code>" and "<code>Target</code>" pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual S3 path. If you only specify a target, it will be displayed as is. You will need to also make sure that your AWS IAM Role provides access to paths in <code>Target</code>. The following is an example.</p> <p> <code>'[ "/bucket2/documentation", { "Entry": "your-personal-report.pdf", "Target": "/bucket3/customized-reports/${transfer:UserName}.pdf" } ]'</code> </p> <p>In most cases, you can use this value instead of the scope down policy to lock your user down to the designated home directory ("chroot"). To do this, you can set <code>Entry</code> to '/' and set <code>Target</code> to the HomeDirectory parameter value. </p>
+    /// <p><p>Logical directory mappings that specify what S3 paths and keys should be visible to your user and how you want to make them visible. You will need to specify the &quot;<code>Entry</code>&quot; and &quot;<code>Target</code>&quot; pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual S3 path. If you only specify a target, it will be displayed as is. You will need to also make sure that your AWS IAM Role provides access to paths in <code>Target</code>. The following is an example.</p> <p> <code>&#39;[ &quot;/bucket2/documentation&quot;, { &quot;Entry&quot;: &quot;your-personal-report.pdf&quot;, &quot;Target&quot;: &quot;/bucket3/customized-reports/${transfer:UserName}.pdf&quot; } ]&#39;</code> </p> <p>In most cases, you can use this value instead of the scope down policy to lock your user down to the designated home directory (&quot;chroot&quot;). To do this, you can set <code>Entry</code> to &#39;/&#39; and set <code>Target</code> to the HomeDirectory parameter value. </p> <note> <p>If the target of a logical directory entry does not exist in S3, the entry will be ignored. As a workaround, you can use the S3 api to create 0 byte objects as place holders for your directory. If using the CLI, use the s3api call instead of s3 so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a / for it to be considered a folder. </p> </note></p>
     #[serde(rename = "HomeDirectoryMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_mappings: Option<Vec<HomeDirectoryMapEntry>>,
@@ -268,13 +268,25 @@ pub struct DescribedUser {
     pub user_name: Option<String>,
 }
 
-/// <p>The configuration settings for the virtual private cloud (VPC) endpoint for your SFTP server.</p>
+/// <p>The virtual private cloud (VPC) endpoint settings that are configured for your SFTP server. With a VPC endpoint, you can restrict access to your SFTP server and resources only within your VPC. To control incoming internet traffic, invoke the <code>UpdateServer</code> API and attach an Elastic IP to your server's endpoint. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EndpointDetails {
+    /// <p><p>A list of address allocation IDs that are required to attach an Elastic IP address to your SFTP server&#39;s endpoint. This is only valid in the <code>UpdateServer</code> API.</p> <note> <p>This property can only be use when <code>EndpointType</code> is set to <code>VPC</code>.</p> </note></p>
+    #[serde(rename = "AddressAllocationIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address_allocation_ids: Option<Vec<String>>,
+    /// <p>A list of subnet IDs that are required to host your SFTP server endpoint in your VPC.</p>
+    #[serde(rename = "SubnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_ids: Option<Vec<String>>,
     /// <p>The ID of the VPC endpoint.</p>
     #[serde(rename = "VpcEndpointId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_endpoint_id: Option<String>,
+    /// <p>The VPC ID of the virtual private cloud in which the SFTP server's endpoint will be hosted.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
 }
 
 /// <p>Represents an object that contains entries and a targets for <code>HomeDirectoryMappings</code>.</p>
@@ -572,7 +584,7 @@ pub struct UntagResourceRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateServerRequest {
-    /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your SFTP server. With a VPC endpoint, your SFTP server isn't accessible over the public internet.</p>
+    /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your SFTP server. With a VPC endpoint, you can restrict access to your SFTP server to resources only within your VPC. To control incoming internet traffic, you will need to associate one or more Elastic IP addresses with your server's endpoint. </p>
     #[serde(rename = "EndpointDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_details: Option<EndpointDetails>,
@@ -611,7 +623,7 @@ pub struct UpdateUserRequest {
     #[serde(rename = "HomeDirectory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory: Option<String>,
-    /// <p>Logical directory mappings that specify what S3 paths and keys should be visible to your user and how you want to make them visible. You will need to specify the "<code>Entry</code>" and "<code>Target</code>" pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual S3 path. If you only specify a target, it will be displayed as is. You will need to also make sure that your AWS IAM Role provides access to paths in <code>Target</code>. The following is an example.</p> <p> <code>'[ "/bucket2/documentation", { "Entry": "your-personal-report.pdf", "Target": "/bucket3/customized-reports/${transfer:UserName}.pdf" } ]'</code> </p> <p>In most cases, you can use this value instead of the scope down policy to lock your user down to the designated home directory ("chroot"). To do this, you can set <code>Entry</code> to '/' and set <code>Target</code> to the HomeDirectory parameter value. </p> <p> </p>
+    /// <p><p>Logical directory mappings that specify what S3 paths and keys should be visible to your user and how you want to make them visible. You will need to specify the &quot;<code>Entry</code>&quot; and &quot;<code>Target</code>&quot; pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual S3 path. If you only specify a target, it will be displayed as is. You will need to also make sure that your AWS IAM Role provides access to paths in <code>Target</code>. The following is an example.</p> <p> <code>&#39;[ &quot;/bucket2/documentation&quot;, { &quot;Entry&quot;: &quot;your-personal-report.pdf&quot;, &quot;Target&quot;: &quot;/bucket3/customized-reports/${transfer:UserName}.pdf&quot; } ]&#39;</code> </p> <p>In most cases, you can use this value instead of the scope down policy to lock your user down to the designated home directory (&quot;chroot&quot;). To do this, you can set <code>Entry</code> to &#39;/&#39; and set <code>Target</code> to the HomeDirectory parameter value. </p> <note> <p>If the target of a logical directory entry does not exist in S3, the entry will be ignored. As a workaround, you can use the S3 api to create 0 byte objects as place holders for your directory. If using the CLI, use the s3api call instead of s3 so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a / for it to be considered a folder. </p> </note></p>
     #[serde(rename = "HomeDirectoryMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_mappings: Option<Vec<HomeDirectoryMapEntry>>,
@@ -1528,6 +1540,8 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdateServer
 #[derive(Debug, PartialEq)]
 pub enum UpdateServerError {
+    /// <p>This exception is thrown when the <code>UpdatServer</code> is called for a server that has VPC as the endpoint type and the server's <code>VpcEndpointID</code> is not in the available state.</p>
+    Conflict(String),
     /// <p>This exception is thrown when an error occurs in the AWS Transfer for SFTP service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
@@ -1546,6 +1560,9 @@ impl UpdateServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateServerError::Conflict(err.msg))
+                }
                 "InternalServiceError" => {
                     return RusotoError::Service(UpdateServerError::InternalServiceError(err.msg))
                 }
@@ -1579,6 +1596,7 @@ impl fmt::Display for UpdateServerError {
 impl Error for UpdateServerError {
     fn description(&self) -> &str {
         match *self {
+            UpdateServerError::Conflict(ref cause) => cause,
             UpdateServerError::InternalServiceError(ref cause) => cause,
             UpdateServerError::InvalidRequest(ref cause) => cause,
             UpdateServerError::ResourceExists(ref cause) => cause,
@@ -1678,7 +1696,7 @@ pub trait Transfer {
         input: DeleteUserRequest,
     ) -> Result<(), RusotoError<DeleteUserError>>;
 
-    /// <p>Describes the server that you specify by passing the <code>ServerId</code> parameter.</p> <p>The response contains a description of the server's properties.</p>
+    /// <p>Describes the server that you specify by passing the <code>ServerId</code> parameter.</p> <p>The response contains a description of the server's properties. When you set <code>EndpointType</code> to VPC, the response will contain the <code>EndpointDetails</code>.</p>
     async fn describe_server(
         &self,
         input: DescribeServerRequest,
@@ -1928,7 +1946,7 @@ impl Transfer for TransferClient {
         }
     }
 
-    /// <p>Describes the server that you specify by passing the <code>ServerId</code> parameter.</p> <p>The response contains a description of the server's properties.</p>
+    /// <p>Describes the server that you specify by passing the <code>ServerId</code> parameter.</p> <p>The response contains a description of the server's properties. When you set <code>EndpointType</code> to VPC, the response will contain the <code>EndpointDetails</code>.</p>
     async fn describe_server(
         &self,
         input: DescribeServerRequest,

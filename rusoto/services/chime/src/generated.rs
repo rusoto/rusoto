@@ -50,6 +50,10 @@ pub struct Account {
     /// <p>The Amazon Chime account name.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The sign-in delegate groups associated with the account.</p>
+    #[serde(rename = "SigninDelegateGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signin_delegate_groups: Option<Vec<SigninDelegateGroup>>,
     /// <p>Supported licenses for the Amazon Chime account.</p>
     #[serde(rename = "SupportedLicenses")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -67,6 +71,19 @@ pub struct AccountSettings {
     #[serde(rename = "EnableDialOut")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_dial_out: Option<bool>,
+}
+
+/// <p>The Alexa for Business metadata associated with an Amazon Chime user, used to integrate Alexa for Business with a device.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AlexaForBusinessMetadata {
+    /// <p>The ARN of the room resource.</p>
+    #[serde(rename = "AlexaForBusinessRoomArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alexa_for_business_room_arn: Option<String>,
+    /// <p>Starts or stops Alexa for Business.</p>
+    #[serde(rename = "IsAlexaForBusinessEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_alexa_for_business_enabled: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -133,6 +150,20 @@ pub struct AssociatePhoneNumbersWithVoiceConnectorResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateSigninDelegateGroupsWithAccountRequest {
+    /// <p>The Amazon Chime account ID.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The sign-in delegate groups.</p>
+    #[serde(rename = "SigninDelegateGroups")]
+    pub signin_delegate_groups: Vec<SigninDelegateGroup>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateSigninDelegateGroupsWithAccountResponse {}
 
 /// <p>An Amazon Chime SDK meeting attendee. Includes a unique <code>AttendeeId</code> and <code>JoinToken</code>. The <code>JoinToken</code> allows a client to authenticate and join as the specified attendee. The <code>JoinToken</code> expires when the meeting ends or when <a>DeleteAttendee</a> is called. After that, the attendee is unable to join the meeting.</p> <p>We recommend securely transferring each <code>JoinToken</code> from your server application to the client so that no other client has access to the token except for the one authorized to represent the attendee.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -426,7 +457,7 @@ pub struct CreateMeetingRequest {
     /// <p>The unique identifier for the client request. Use a different token for different meetings.</p>
     #[serde(rename = "ClientRequestToken")]
     pub client_request_token: String,
-    /// <p>The Region in which to create the meeting. Available values: <code>us-east-1</code>, <code>us-west-2</code>.</p>
+    /// <p>The Region in which to create the meeting. Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_region: Option<String>,
@@ -515,6 +546,33 @@ pub struct CreateRoomResponse {
     #[serde(rename = "Room")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub room: Option<Room>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateUserRequest {
+    /// <p>The Amazon Chime account ID.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The user's email address.</p>
+    #[serde(rename = "Email")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// <p>The user type.</p>
+    #[serde(rename = "UserType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_type: Option<String>,
+    /// <p>The user name.</p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateUserResponse {
+    #[serde(rename = "User")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user: Option<User>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -740,6 +798,20 @@ pub struct DisassociatePhoneNumbersFromVoiceConnectorResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisassociateSigninDelegateGroupsFromAccountRequest {
+    /// <p>The Amazon Chime account ID.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The sign-in delegate group names.</p>
+    #[serde(rename = "GroupNames")]
+    pub group_names: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateSigninDelegateGroupsFromAccountResponse {}
 
 /// <p>The configuration that allows a bot to receive outgoing events. Can be either an HTTPS endpoint or a Lambda function ARN.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1121,6 +1193,10 @@ pub struct InviteUsersRequest {
     /// <p>The user email addresses to which to send the email invitation.</p>
     #[serde(rename = "UserEmailList")]
     pub user_email_list: Vec<String>,
+    /// <p>The user type.</p>
+    #[serde(rename = "UserType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1392,6 +1468,10 @@ pub struct ListUsersRequest {
     #[serde(rename = "UserEmail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_email: Option<String>,
+    /// <p>The user type.</p>
+    #[serde(rename = "UserType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1534,7 +1614,7 @@ pub struct Meeting {
     #[serde(rename = "MediaPlacement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_placement: Option<MediaPlacement>,
-    /// <p>The Region in which to create the meeting. Available values: <code>us-east-1</code>, <code>us-west-2</code>.</p>
+    /// <p>The Region in which to create the meeting. Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_region: Option<String>,
@@ -2078,6 +2158,15 @@ pub struct SearchAvailablePhoneNumbersResponse {
     pub e164_phone_numbers: Option<Vec<String>>,
 }
 
+/// <p>An Active Directory (AD) group whose members are granted permission to act as delegates.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SigninDelegateGroup {
+    /// <p>The group name.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+}
+
 /// <p>The streaming configuration associated with an Amazon Chime Voice Connector. Specifies whether media streaming is enabled for sending to Amazon Kinesis, and shows the retention period for the Amazon Kinesis data, in hours.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StreamingConfiguration {
@@ -2311,6 +2400,10 @@ pub struct UpdateUserRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The Alexa for Business metadata.</p>
+    #[serde(rename = "AlexaForBusinessMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alexa_for_business_metadata: Option<AlexaForBusinessMetadata>,
     /// <p>The user license type to update. This must be a supported license type for the Amazon Chime account that the user belongs to.</p>
     #[serde(rename = "LicenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2318,11 +2411,19 @@ pub struct UpdateUserRequest {
     /// <p>The user ID.</p>
     #[serde(rename = "UserId")]
     pub user_id: String,
+    /// <p>The user type.</p>
+    #[serde(rename = "UserType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_type: Option<String>,
 }
 
 /// <p>The user ID and user fields to update, used with the <a>BatchUpdateUser</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateUserRequestItem {
+    /// <p>The Alexa for Business metadata.</p>
+    #[serde(rename = "AlexaForBusinessMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alexa_for_business_metadata: Option<AlexaForBusinessMetadata>,
     /// <p>The user license type.</p>
     #[serde(rename = "LicenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2330,6 +2431,10 @@ pub struct UpdateUserRequestItem {
     /// <p>The user ID.</p>
     #[serde(rename = "UserId")]
     pub user_id: String,
+    /// <p>The user type.</p>
+    #[serde(rename = "UserType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2406,6 +2511,10 @@ pub struct User {
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
+    /// <p>The Alexa for Business metadata.</p>
+    #[serde(rename = "AlexaForBusinessMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alexa_for_business_metadata: Option<AlexaForBusinessMetadata>,
     /// <p>The display name of the user.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2445,6 +2554,10 @@ pub struct User {
     #[serde(rename = "UserRegistrationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_registration_status: Option<String>,
+    /// <p>The user type.</p>
+    #[serde(rename = "UserType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_type: Option<String>,
 }
 
 /// <p>The list of errors returned when errors are encountered during the <a>BatchSuspendUser</a>, <a>BatchUnsuspendUser</a>, or <a>BatchUpdateUser</a> actions. This includes user IDs, error codes, and error messages.</p>
@@ -2840,6 +2953,91 @@ impl Error for AssociatePhoneNumbersWithVoiceConnectorGroupError {
         }
     }
 }
+/// Errors returned by AssociateSigninDelegateGroupsWithAccount
+#[derive(Debug, PartialEq)]
+pub enum AssociateSigninDelegateGroupsWithAccountError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl AssociateSigninDelegateGroupsWithAccountError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateSigninDelegateGroupsWithAccountError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for AssociateSigninDelegateGroupsWithAccountError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+impl Error for AssociateSigninDelegateGroupsWithAccountError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateSigninDelegateGroupsWithAccountError::BadRequest(ref cause) => cause,
+            AssociateSigninDelegateGroupsWithAccountError::Forbidden(ref cause) => cause,
+            AssociateSigninDelegateGroupsWithAccountError::NotFound(ref cause) => cause,
+            AssociateSigninDelegateGroupsWithAccountError::ServiceFailure(ref cause) => cause,
+            AssociateSigninDelegateGroupsWithAccountError::ServiceUnavailable(ref cause) => cause,
+            AssociateSigninDelegateGroupsWithAccountError::ThrottledClient(ref cause) => cause,
+            AssociateSigninDelegateGroupsWithAccountError::UnauthorizedClient(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by BatchCreateAttendee
 #[derive(Debug, PartialEq)]
 pub enum BatchCreateAttendeeError {
@@ -2934,6 +3132,8 @@ pub enum BatchCreateRoomMembershipError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -2963,6 +3163,11 @@ impl BatchCreateRoomMembershipError {
                         BatchCreateRoomMembershipError::ServiceUnavailable(err.msg),
                     )
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(BatchCreateRoomMembershipError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(
                         BatchCreateRoomMembershipError::UnauthorizedClient(err.msg),
@@ -2988,6 +3193,7 @@ impl Error for BatchCreateRoomMembershipError {
             BatchCreateRoomMembershipError::NotFound(ref cause) => cause,
             BatchCreateRoomMembershipError::ServiceFailure(ref cause) => cause,
             BatchCreateRoomMembershipError::ServiceUnavailable(ref cause) => cause,
+            BatchCreateRoomMembershipError::ThrottledClient(ref cause) => cause,
             BatchCreateRoomMembershipError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -3518,6 +3724,8 @@ pub enum CreateBotError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -3544,6 +3752,9 @@ impl CreateBotError {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateBotError::ServiceUnavailable(err.msg))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateBotError::ThrottledClient(err.msg))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(CreateBotError::UnauthorizedClient(err.msg))
                 }
@@ -3568,6 +3779,7 @@ impl Error for CreateBotError {
             CreateBotError::ResourceLimitExceeded(ref cause) => cause,
             CreateBotError::ServiceFailure(ref cause) => cause,
             CreateBotError::ServiceUnavailable(ref cause) => cause,
+            CreateBotError::ThrottledClient(ref cause) => cause,
             CreateBotError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -3741,6 +3953,8 @@ pub enum CreateRoomError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -3767,6 +3981,9 @@ impl CreateRoomError {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateRoomError::ServiceUnavailable(err.msg))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateRoomError::ThrottledClient(err.msg))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(CreateRoomError::UnauthorizedClient(err.msg))
                 }
@@ -3791,6 +4008,7 @@ impl Error for CreateRoomError {
             CreateRoomError::ResourceLimitExceeded(ref cause) => cause,
             CreateRoomError::ServiceFailure(ref cause) => cause,
             CreateRoomError::ServiceUnavailable(ref cause) => cause,
+            CreateRoomError::ThrottledClient(ref cause) => cause,
             CreateRoomError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -3812,6 +4030,8 @@ pub enum CreateRoomMembershipError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -3845,6 +4065,11 @@ impl CreateRoomMembershipError {
                         err.msg,
                     ))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateRoomMembershipError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(CreateRoomMembershipError::UnauthorizedClient(
                         err.msg,
@@ -3872,7 +4097,83 @@ impl Error for CreateRoomMembershipError {
             CreateRoomMembershipError::ResourceLimitExceeded(ref cause) => cause,
             CreateRoomMembershipError::ServiceFailure(ref cause) => cause,
             CreateRoomMembershipError::ServiceUnavailable(ref cause) => cause,
+            CreateRoomMembershipError::ThrottledClient(ref cause) => cause,
             CreateRoomMembershipError::UnauthorizedClient(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateUser
+#[derive(Debug, PartialEq)]
+pub enum CreateUserError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateUserError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateUserError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateUserError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateUserError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateUserError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateUserError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateUserError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(CreateUserError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateUserError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+impl Error for CreateUserError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateUserError::BadRequest(ref cause) => cause,
+            CreateUserError::Conflict(ref cause) => cause,
+            CreateUserError::Forbidden(ref cause) => cause,
+            CreateUserError::NotFound(ref cause) => cause,
+            CreateUserError::ServiceFailure(ref cause) => cause,
+            CreateUserError::ServiceUnavailable(ref cause) => cause,
+            CreateUserError::ThrottledClient(ref cause) => cause,
+            CreateUserError::UnauthorizedClient(ref cause) => cause,
         }
     }
 }
@@ -4420,6 +4721,8 @@ pub enum DeleteRoomError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -4442,6 +4745,9 @@ impl DeleteRoomError {
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteRoomError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteRoomError::ThrottledClient(err.msg))
                 }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(DeleteRoomError::UnauthorizedClient(err.msg))
@@ -4466,6 +4772,7 @@ impl Error for DeleteRoomError {
             DeleteRoomError::NotFound(ref cause) => cause,
             DeleteRoomError::ServiceFailure(ref cause) => cause,
             DeleteRoomError::ServiceUnavailable(ref cause) => cause,
+            DeleteRoomError::ThrottledClient(ref cause) => cause,
             DeleteRoomError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -4483,6 +4790,8 @@ pub enum DeleteRoomMembershipError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -4505,6 +4814,11 @@ impl DeleteRoomMembershipError {
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteRoomMembershipError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteRoomMembershipError::ThrottledClient(
                         err.msg,
                     ))
                 }
@@ -4533,6 +4847,7 @@ impl Error for DeleteRoomMembershipError {
             DeleteRoomMembershipError::NotFound(ref cause) => cause,
             DeleteRoomMembershipError::ServiceFailure(ref cause) => cause,
             DeleteRoomMembershipError::ServiceUnavailable(ref cause) => cause,
+            DeleteRoomMembershipError::ThrottledClient(ref cause) => cause,
             DeleteRoomMembershipError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -5326,6 +5641,99 @@ impl Error for DisassociatePhoneNumbersFromVoiceConnectorGroupError {
         }
     }
 }
+/// Errors returned by DisassociateSigninDelegateGroupsFromAccount
+#[derive(Debug, PartialEq)]
+pub enum DisassociateSigninDelegateGroupsFromAccountError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DisassociateSigninDelegateGroupsFromAccountError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateSigninDelegateGroupsFromAccountError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::ServiceUnavailable(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::UnauthorizedClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DisassociateSigninDelegateGroupsFromAccountError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+impl Error for DisassociateSigninDelegateGroupsFromAccountError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateSigninDelegateGroupsFromAccountError::BadRequest(ref cause) => cause,
+            DisassociateSigninDelegateGroupsFromAccountError::Forbidden(ref cause) => cause,
+            DisassociateSigninDelegateGroupsFromAccountError::NotFound(ref cause) => cause,
+            DisassociateSigninDelegateGroupsFromAccountError::ServiceFailure(ref cause) => cause,
+            DisassociateSigninDelegateGroupsFromAccountError::ServiceUnavailable(ref cause) => {
+                cause
+            }
+            DisassociateSigninDelegateGroupsFromAccountError::ThrottledClient(ref cause) => cause,
+            DisassociateSigninDelegateGroupsFromAccountError::UnauthorizedClient(ref cause) => {
+                cause
+            }
+        }
+    }
+}
 /// Errors returned by GetAccount
 #[derive(Debug, PartialEq)]
 pub enum GetAccountError {
@@ -5550,6 +5958,8 @@ pub enum GetBotError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -5570,6 +5980,9 @@ impl GetBotError {
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetBotError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(GetBotError::ThrottledClient(err.msg))
                 }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(GetBotError::UnauthorizedClient(err.msg))
@@ -5594,6 +6007,7 @@ impl Error for GetBotError {
             GetBotError::NotFound(ref cause) => cause,
             GetBotError::ServiceFailure(ref cause) => cause,
             GetBotError::ServiceUnavailable(ref cause) => cause,
+            GetBotError::ThrottledClient(ref cause) => cause,
             GetBotError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -6037,6 +6451,8 @@ pub enum GetRoomError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -6059,6 +6475,9 @@ impl GetRoomError {
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetRoomError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(GetRoomError::ThrottledClient(err.msg))
                 }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(GetRoomError::UnauthorizedClient(err.msg))
@@ -6083,6 +6502,7 @@ impl Error for GetRoomError {
             GetRoomError::NotFound(ref cause) => cause,
             GetRoomError::ServiceFailure(ref cause) => cause,
             GetRoomError::ServiceUnavailable(ref cause) => cause,
+            GetRoomError::ThrottledClient(ref cause) => cause,
             GetRoomError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -7020,6 +7440,8 @@ pub enum ListBotsError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -7042,6 +7464,9 @@ impl ListBotsError {
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListBotsError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListBotsError::ThrottledClient(err.msg))
                 }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(ListBotsError::UnauthorizedClient(err.msg))
@@ -7066,6 +7491,7 @@ impl Error for ListBotsError {
             ListBotsError::NotFound(ref cause) => cause,
             ListBotsError::ServiceFailure(ref cause) => cause,
             ListBotsError::ServiceUnavailable(ref cause) => cause,
+            ListBotsError::ThrottledClient(ref cause) => cause,
             ListBotsError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -7280,6 +7706,8 @@ pub enum ListRoomMembershipsError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -7304,6 +7732,9 @@ impl ListRoomMembershipsError {
                     return RusotoError::Service(ListRoomMembershipsError::ServiceUnavailable(
                         err.msg,
                     ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListRoomMembershipsError::ThrottledClient(err.msg))
                 }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(ListRoomMembershipsError::UnauthorizedClient(
@@ -7330,6 +7761,7 @@ impl Error for ListRoomMembershipsError {
             ListRoomMembershipsError::NotFound(ref cause) => cause,
             ListRoomMembershipsError::ServiceFailure(ref cause) => cause,
             ListRoomMembershipsError::ServiceUnavailable(ref cause) => cause,
+            ListRoomMembershipsError::ThrottledClient(ref cause) => cause,
             ListRoomMembershipsError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -7347,6 +7779,8 @@ pub enum ListRoomsError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -7369,6 +7803,9 @@ impl ListRoomsError {
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListRoomsError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListRoomsError::ThrottledClient(err.msg))
                 }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(ListRoomsError::UnauthorizedClient(err.msg))
@@ -7393,6 +7830,7 @@ impl Error for ListRoomsError {
             ListRoomsError::NotFound(ref cause) => cause,
             ListRoomsError::ServiceFailure(ref cause) => cause,
             ListRoomsError::ServiceUnavailable(ref cause) => cause,
+            ListRoomsError::ThrottledClient(ref cause) => cause,
             ListRoomsError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -8281,6 +8719,8 @@ pub enum RegenerateSecurityTokenError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -8305,6 +8745,11 @@ impl RegenerateSecurityTokenError {
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(RegenerateSecurityTokenError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(RegenerateSecurityTokenError::ThrottledClient(
                         err.msg,
                     ))
                 }
@@ -8333,6 +8778,7 @@ impl Error for RegenerateSecurityTokenError {
             RegenerateSecurityTokenError::NotFound(ref cause) => cause,
             RegenerateSecurityTokenError::ServiceFailure(ref cause) => cause,
             RegenerateSecurityTokenError::ServiceUnavailable(ref cause) => cause,
+            RegenerateSecurityTokenError::ThrottledClient(ref cause) => cause,
             RegenerateSecurityTokenError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -8737,6 +9183,8 @@ pub enum UpdateBotError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -8759,6 +9207,9 @@ impl UpdateBotError {
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateBotError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateBotError::ThrottledClient(err.msg))
                 }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(UpdateBotError::UnauthorizedClient(err.msg))
@@ -8783,6 +9234,7 @@ impl Error for UpdateBotError {
             UpdateBotError::NotFound(ref cause) => cause,
             UpdateBotError::ServiceFailure(ref cause) => cause,
             UpdateBotError::ServiceUnavailable(ref cause) => cause,
+            UpdateBotError::ThrottledClient(ref cause) => cause,
             UpdateBotError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -9015,6 +9467,8 @@ pub enum UpdateRoomError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -9037,6 +9491,9 @@ impl UpdateRoomError {
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateRoomError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateRoomError::ThrottledClient(err.msg))
                 }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(UpdateRoomError::UnauthorizedClient(err.msg))
@@ -9061,6 +9518,7 @@ impl Error for UpdateRoomError {
             UpdateRoomError::NotFound(ref cause) => cause,
             UpdateRoomError::ServiceFailure(ref cause) => cause,
             UpdateRoomError::ServiceUnavailable(ref cause) => cause,
+            UpdateRoomError::ThrottledClient(ref cause) => cause,
             UpdateRoomError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -9078,6 +9536,8 @@ pub enum UpdateRoomMembershipError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -9100,6 +9560,11 @@ impl UpdateRoomMembershipError {
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateRoomMembershipError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateRoomMembershipError::ThrottledClient(
                         err.msg,
                     ))
                 }
@@ -9128,6 +9593,7 @@ impl Error for UpdateRoomMembershipError {
             UpdateRoomMembershipError::NotFound(ref cause) => cause,
             UpdateRoomMembershipError::ServiceFailure(ref cause) => cause,
             UpdateRoomMembershipError::ServiceUnavailable(ref cause) => cause,
+            UpdateRoomMembershipError::ThrottledClient(ref cause) => cause,
             UpdateRoomMembershipError::UnauthorizedClient(ref cause) => cause,
         }
     }
@@ -9461,6 +9927,15 @@ pub trait Chime {
         RusotoError<AssociatePhoneNumbersWithVoiceConnectorGroupError>,
     >;
 
+    /// <p>Associates the specified sign-in delegate groups with the specified Amazon Chime account.</p>
+    async fn associate_signin_delegate_groups_with_account(
+        &self,
+        input: AssociateSigninDelegateGroupsWithAccountRequest,
+    ) -> Result<
+        AssociateSigninDelegateGroupsWithAccountResponse,
+        RusotoError<AssociateSigninDelegateGroupsWithAccountError>,
+    >;
+
     /// <p>Creates up to 100 new attendees for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
     async fn batch_create_attendee(
         &self,
@@ -9479,7 +9954,7 @@ pub trait Chime {
         input: BatchDeletePhoneNumberRequest,
     ) -> Result<BatchDeletePhoneNumberResponse, RusotoError<BatchDeletePhoneNumberError>>;
 
-    /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are dissasociated from the account, but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action. </p> <p>To sign out users without suspending them, use the <a>LogoutUser</a> action.</p>
+    /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are disassociated from the account, but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action. </p> <p>To sign out users without suspending them, use the <a>LogoutUser</a> action.</p>
     async fn batch_suspend_user(
         &self,
         input: BatchSuspendUserRequest,
@@ -9544,6 +10019,12 @@ pub trait Chime {
         &self,
         input: CreateRoomMembershipRequest,
     ) -> Result<CreateRoomMembershipResponse, RusotoError<CreateRoomMembershipError>>;
+
+    /// <p>Creates a user under the specified Amazon Chime account.</p>
+    async fn create_user(
+        &self,
+        input: CreateUserRequest,
+    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>>;
 
     /// <p>Creates an Amazon Chime Voice Connector under the administrator's AWS account. You can choose to create an Amazon Chime Voice Connector in a specific AWS Region.</p> <p>Enabling <a>CreateVoiceConnectorRequest$RequireEncryption</a> configures your Amazon Chime Voice Connector to use TLS transport for SIP signaling and Secure RTP (SRTP) for media. Inbound calls use TLS transport, and unencrypted outbound calls are blocked.</p>
     async fn create_voice_connector(
@@ -9662,6 +10143,15 @@ pub trait Chime {
         RusotoError<DisassociatePhoneNumbersFromVoiceConnectorGroupError>,
     >;
 
+    /// <p>Disassociates the specified sign-in delegate groups from the specified Amazon Chime account.</p>
+    async fn disassociate_signin_delegate_groups_from_account(
+        &self,
+        input: DisassociateSigninDelegateGroupsFromAccountRequest,
+    ) -> Result<
+        DisassociateSigninDelegateGroupsFromAccountResponse,
+        RusotoError<DisassociateSigninDelegateGroupsFromAccountError>,
+    >;
+
     /// <p>Retrieves details for the specified Amazon Chime account, such as account type and supported licenses.</p>
     async fn get_account(
         &self,
@@ -9720,7 +10210,7 @@ pub trait Chime {
         &self,
     ) -> Result<GetPhoneNumberSettingsResponse, RusotoError<GetPhoneNumberSettingsError>>;
 
-    /// <p>Retrieves room details, such as name.</p>
+    /// <p>Retrieves room details, such as the room name.</p>
     async fn get_room(
         &self,
         input: GetRoomRequest,
@@ -9831,7 +10321,7 @@ pub trait Chime {
         input: ListPhoneNumbersRequest,
     ) -> Result<ListPhoneNumbersResponse, RusotoError<ListPhoneNumbersError>>;
 
-    /// <p>Lists the membership details for the specified room, such as member IDs, member email addresses, and member names.</p>
+    /// <p>Lists the membership details for the specified room, such as the members' IDs, email addresses, and names.</p>
     async fn list_room_memberships(
         &self,
         input: ListRoomMembershipsRequest,
@@ -9984,7 +10474,7 @@ pub trait Chime {
         input: UpdateRoomRequest,
     ) -> Result<UpdateRoomResponse, RusotoError<UpdateRoomError>>;
 
-    /// <p>Updates room membership details, such as member role. The member role designates whether the member is a chat room administrator or a general chat room member. Member role can only be updated for user IDs.</p>
+    /// <p>Updates room membership details, such as the member role. The member role designates whether the member is a chat room administrator or a general chat room member. The member role can be updated only for user IDs.</p>
     async fn update_room_membership(
         &self,
         input: UpdateRoomMembershipRequest,
@@ -10176,6 +10666,43 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Associates the specified sign-in delegate groups with the specified Amazon Chime account.</p>
+    async fn associate_signin_delegate_groups_with_account(
+        &self,
+        input: AssociateSigninDelegateGroupsWithAccountRequest,
+    ) -> Result<
+        AssociateSigninDelegateGroupsWithAccountResponse,
+        RusotoError<AssociateSigninDelegateGroupsWithAccountError>,
+    > {
+        let request_uri = format!("/accounts/{account_id}", account_id = input.account_id);
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "associate-signin-delegate-groups");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateSigninDelegateGroupsWithAccountResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateSigninDelegateGroupsWithAccountError::from_response(response))
+        }
+    }
+
     /// <p>Creates up to 100 new attendees for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
     async fn batch_create_attendee(
         &self,
@@ -10286,7 +10813,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are dissasociated from the account, but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action. </p> <p>To sign out users without suspending them, use the <a>LogoutUser</a> action.</p>
+    /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are disassociated from the account, but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action. </p> <p>To sign out users without suspending them, use the <a>LogoutUser</a> action.</p>
     async fn batch_suspend_user(
         &self,
         input: BatchSuspendUserRequest,
@@ -10644,6 +11171,43 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateRoomMembershipError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a user under the specified Amazon Chime account.</p>
+    async fn create_user(
+        &self,
+        input: CreateUserRequest,
+    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
+        let request_uri = format!(
+            "/accounts/{account_id}/users",
+            account_id = input.account_id
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "create");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateUserResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateUserError::from_response(response))
         }
     }
 
@@ -11217,6 +11781,43 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Disassociates the specified sign-in delegate groups from the specified Amazon Chime account.</p>
+    async fn disassociate_signin_delegate_groups_from_account(
+        &self,
+        input: DisassociateSigninDelegateGroupsFromAccountRequest,
+    ) -> Result<
+        DisassociateSigninDelegateGroupsFromAccountResponse,
+        RusotoError<DisassociateSigninDelegateGroupsFromAccountError>,
+    > {
+        let request_uri = format!("/accounts/{account_id}", account_id = input.account_id);
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "disassociate-signin-delegate-groups");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateSigninDelegateGroupsFromAccountResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateSigninDelegateGroupsFromAccountError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves details for the specified Amazon Chime account, such as account type and supported licenses.</p>
     async fn get_account(
         &self,
@@ -11506,7 +12107,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Retrieves room details, such as name.</p>
+    /// <p>Retrieves room details, such as the room name.</p>
     async fn get_room(
         &self,
         input: GetRoomRequest,
@@ -12100,7 +12701,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Lists the membership details for the specified room, such as member IDs, member email addresses, and member names.</p>
+    /// <p>Lists the membership details for the specified room, such as the members' IDs, email addresses, and names.</p>
     async fn list_room_memberships(
         &self,
         input: ListRoomMembershipsRequest,
@@ -12204,6 +12805,9 @@ impl Chime for ChimeClient {
         }
         if let Some(ref x) = input.user_email {
             params.put("user-email", x);
+        }
+        if let Some(ref x) = input.user_type {
+            params.put("user-type", x);
         }
         request.set_params(params);
 
@@ -12959,7 +13563,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Updates room membership details, such as member role. The member role designates whether the member is a chat room administrator or a general chat room member. Member role can only be updated for user IDs.</p>
+    /// <p>Updates room membership details, such as the member role. The member role designates whether the member is a chat room administrator or a general chat room member. The member role can be updated only for user IDs.</p>
     async fn update_room_membership(
         &self,
         input: UpdateRoomMembershipRequest,

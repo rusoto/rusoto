@@ -621,7 +621,7 @@ pub struct AutomationExecutionMetadata {
     #[serde(rename = "AutomationExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_id: Option<String>,
-    /// <p>The status of the execution. Valid values include: Running, Succeeded, Failed, Timed out, or Cancelled.</p>
+    /// <p>The status of the execution.</p>
     #[serde(rename = "AutomationExecutionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_status: Option<String>,
@@ -653,7 +653,7 @@ pub struct AutomationExecutionMetadata {
     #[serde(rename = "ExecutionEndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_end_time: Option<f64>,
-    /// <p>The time the execution started.&gt;</p>
+    /// <p>The time the execution started.</p>
     #[serde(rename = "ExecutionStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_start_time: Option<f64>,
@@ -1117,11 +1117,11 @@ pub struct CompliantSummary {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateActivationRequest {
-    /// <p><p>The name of the registered, managed instance as it will appear in the Amazon EC2 console or when you use the AWS command line tools to list EC2 resources.</p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
+    /// <p><p>The name of the registered, managed instance as it will appear in the Systems Manager console or when you use the AWS command line tools to list Systems Manager resources.</p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
     #[serde(rename = "DefaultInstanceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_instance_name: Option<String>,
-    /// <p><p>A user-defined description of the resource that you want to register with Amazon EC2. </p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
+    /// <p><p>A user-defined description of the resource that you want to register with Systems Manager. </p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -1129,7 +1129,7 @@ pub struct CreateActivationRequest {
     #[serde(rename = "ExpirationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expiration_date: Option<f64>,
-    /// <p>The Amazon Identity and Access Management (IAM) role that you want to assign to the managed instance. </p>
+    /// <p>The Amazon Identity and Access Management (IAM) role that you want to assign to the managed instance. This IAM role must provide AssumeRole permissions for the Systems Manager service principal <code>ssm.amazonaws.com</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-service-role.html">Create an IAM Service Role for a Hybrid Environment</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "IamRole")]
     pub iam_role: String,
     /// <p>Specify the maximum number of managed instances you want to register. The default value is 1 instance.</p>
@@ -1300,7 +1300,7 @@ pub struct CreateDocumentRequest {
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_format: Option<String>,
-    /// <p>The type of document to create. Valid document types include: <code>Command</code>, <code>Policy</code>, <code>Automation</code>, <code>Session</code>, and <code>Package</code>.</p>
+    /// <p>The type of document to create.</p>
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_type: Option<String>,
@@ -2674,7 +2674,7 @@ pub struct DescribePatchGroupStateResult {
     #[serde(rename = "InstancesWithInstalledPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instances_with_installed_patches: Option<i64>,
-    /// <p>Reserved for future use. </p>
+    /// <p>The number of instances with patches installed by Patch Manager that have not been rebooted after the patch installation. The status of these instances is NON_COMPLIANT.</p>
     #[serde(rename = "InstancesWithInstalledPendingRebootPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instances_with_installed_pending_reboot_patches: Option<i64>,
@@ -4280,7 +4280,7 @@ pub struct InstancePatchState {
     #[serde(rename = "InstalledOtherCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub installed_other_count: Option<i64>,
-    /// <p>Reserved for future use.</p>
+    /// <p>The number of patches installed by Patch Manager since the last time the instance was rebooted.</p>
     #[serde(rename = "InstalledPendingRebootCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub installed_pending_reboot_count: Option<i64>,
@@ -4291,7 +4291,7 @@ pub struct InstancePatchState {
     /// <p>The ID of the managed instance the high-level patch compliance information was collected for.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>Reserved for future use. </p>
+    /// <p>The time of the last attempt to patch the instance with <code>NoReboot</code> specified as the reboot option.</p>
     #[serde(rename = "LastNoRebootInstallOperationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_no_reboot_install_operation_time: Option<f64>,
@@ -4319,7 +4319,7 @@ pub struct InstancePatchState {
     /// <p>The name of the patch group the managed instance belongs to.</p>
     #[serde(rename = "PatchGroup")]
     pub patch_group: String,
-    /// <p>Reserved for future use. </p>
+    /// <p><p>Indicates the reboot option specified in the patch baseline.</p> <note> <p>Reboot options apply to <code>Install</code> operations only. Reboots are not attempted for Patch Manager <code>Scan</code> operations.</p> </note> <ul> <li> <p> <b>RebootIfNeeded</b>: Patch Manager tries to reboot the instance if it installed any patches, or if any patches are detected with a status of <code>InstalledPendingReboot</code>.</p> </li> <li> <p> <b>NoReboot</b>: Patch Manager attempts to install missing packages without trying to reboot the system. Patches installed with this option are assigned a status of <code>InstalledPendingReboot</code>. These patches might not be in effect until a reboot is performed.</p> </li> </ul></p>
     #[serde(rename = "RebootOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reboot_option: Option<String>,
@@ -4440,7 +4440,7 @@ pub struct InventoryFilter {
     /// <p>The name of the filter key.</p>
     #[serde(rename = "Key")]
     pub key: String,
-    /// <p>The type of filter. Valid values include the following: "Equal"|"NotEqual"|"BeginWith"|"LessThan"|"GreaterThan"</p>
+    /// <p>The type of filter.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -7085,7 +7085,7 @@ pub struct StepExecution {
     #[serde(rename = "StepName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_name: Option<String>,
-    /// <p>The execution status for this step. Valid values include: Pending, InProgress, Success, Cancelled, Failed, and TimedOut.</p>
+    /// <p>The execution status for this step.</p>
     #[serde(rename = "StepStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_status: Option<String>,
@@ -14550,7 +14550,7 @@ pub trait Ssm {
         RusotoError<CancelMaintenanceWindowExecutionError>,
     >;
 
-    /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up AWS Systems Manager for Hybrid Environments</a>.</p>
+    /// <p><p>Generates an activation code and activation ID you can use to register your on-premises server or virtual machine (VM) with Systems Manager. Registering these machines with Systems Manager makes it possible to manage them using Systems Manager capabilities. You use the activation code and ID when installing SSM Agent on machines in your hybrid environment. For more information about requirements for managing on-premises instances and VMs using Systems Manager, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up AWS Systems Manager for Hybrid Environments</a> in the <i>AWS Systems Manager User Guide</i>. </p> <note> <p>On-premises servers or VMs that are registered with Systems Manager and Amazon EC2 instances that you manage with Systems Manager are all called <i>managed instances</i>.</p> </note></p>
     async fn create_activation(
         &self,
         input: CreateActivationRequest,
@@ -15075,7 +15075,7 @@ pub trait Ssm {
         input: ListAssociationVersionsRequest,
     ) -> Result<ListAssociationVersionsResult, RusotoError<ListAssociationVersionsError>>;
 
-    /// <p>Lists the associations for the specified Systems Manager document or instance.</p>
+    /// <p>Returns all State Manager associations in the current AWS account and Region. You can limit the results to a specific State Manager association document or instance by specifying a filter.</p>
     async fn list_associations(
         &self,
         input: ListAssociationsRequest,
@@ -15111,7 +15111,7 @@ pub trait Ssm {
         input: ListDocumentVersionsRequest,
     ) -> Result<ListDocumentVersionsResult, RusotoError<ListDocumentVersionsError>>;
 
-    /// <p>Describes one or more of your Systems Manager documents.</p>
+    /// <p>Returns all Systems Manager (SSM) documents in the current AWS account and Region. You can limit the results of this request by using a filter.</p>
     async fn list_documents(
         &self,
         input: ListDocumentsRequest,
@@ -15460,7 +15460,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up AWS Systems Manager for Hybrid Environments</a>.</p>
+    /// <p><p>Generates an activation code and activation ID you can use to register your on-premises server or virtual machine (VM) with Systems Manager. Registering these machines with Systems Manager makes it possible to manage them using Systems Manager capabilities. You use the activation code and ID when installing SSM Agent on machines in your hybrid environment. For more information about requirements for managing on-premises instances and VMs using Systems Manager, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up AWS Systems Manager for Hybrid Environments</a> in the <i>AWS Systems Manager User Guide</i>. </p> <note> <p>On-premises servers or VMs that are registered with Systems Manager and Amazon EC2 instances that you manage with Systems Manager are all called <i>managed instances</i>.</p> </note></p>
     async fn create_activation(
         &self,
         input: CreateActivationRequest,
@@ -17767,7 +17767,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Lists the associations for the specified Systems Manager document or instance.</p>
+    /// <p>Returns all State Manager associations in the current AWS account and Region. You can limit the results to a specific State Manager association document or instance by specifying a filter.</p>
     async fn list_associations(
         &self,
         input: ListAssociationsRequest,
@@ -17933,7 +17933,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Describes one or more of your Systems Manager documents.</p>
+    /// <p>Returns all Systems Manager (SSM) documents in the current AWS account and Region. You can limit the results of this request by using a filter.</p>
     async fn list_documents(
         &self,
         input: ListDocumentsRequest,

@@ -50,7 +50,7 @@ pub struct AlgorithmSpecification {
     #[serde(rename = "AlgorithmName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub algorithm_name: Option<String>,
-    /// <p><p>To generate and save time-series metrics during training, set to <code>true</code>. The default is <code>false</code> and time-series metrics aren&#39;t generated except in the following cases:</p> <ul> <li> <p>You use one of the Amazon SageMaker built-in algorithms</p> </li> <li> <p>You use one of the following prebuilt Amazon SageMaker Docker images:</p> <ul> <li> <p>Tensorflow</p> </li> <li> <p>MXNet</p> </li> <li> <p>PyTorch</p> </li> </ul> </li> <li> <p>You specify at least one <a>MetricDefinition</a> </p> </li> </ul></p>
+    /// <p><p>To generate and save time-series metrics during training, set to <code>true</code>. The default is <code>false</code> and time-series metrics aren&#39;t generated except in the following cases:</p> <ul> <li> <p>You use one of the Amazon SageMaker built-in algorithms</p> </li> <li> <p>You use one of the following <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/pre-built-containers-frameworks-deep-learning.html">Prebuilt Amazon SageMaker Docker Images</a>:</p> <ul> <li> <p>Tensorflow (version &gt;= 1.15)</p> </li> <li> <p>MXNet (version &gt;= 1.6)</p> </li> <li> <p>PyTorch (version &gt;= 1.3)</p> </li> </ul> </li> <li> <p>You specify at least one <a>MetricDefinition</a> </p> </li> </ul></p>
     #[serde(rename = "EnableSageMakerMetricsTimeSeries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_sage_maker_metrics_time_series: Option<bool>,
@@ -587,7 +587,7 @@ pub struct CognitoMemberDefinition {
 /// <p>Configuration information for tensor collections.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CollectionConfiguration {
-    /// <p>The name of the tensor collection.</p>
+    /// <p>The name of the tensor collection. The name must be unique relative to other rule configuration names.</p>
     #[serde(rename = "CollectionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub collection_name: Option<String>,
@@ -892,7 +892,7 @@ pub struct CreateEndpointConfigInput {
     /// <p>The name of the endpoint configuration. You specify this name in a <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> request. </p>
     #[serde(rename = "EndpointConfigName")]
     pub endpoint_config_name: String,
-    /// <p><p>The Amazon Resource Name (ARN) of a AWS Key Management Service key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance that hosts the endpoint.</p> <note> <p>Certain Nitro-based instances include local storage, dependent on the instance type. Local storage volumes are encrypted using a hardware module on the instance. You can&#39;t request a <code>KmsKeyId</code> when using an instance type with local storage. If any of the models that you specify in the <code>ProductionVariants</code> parameter use nitro-based instances with local storage, do not specify a value for the <code>KmsKeyId</code> parameter. If you specify a value for <code>KmsKeyId</code> when using any nitro-based instances with local storage, the call to <code>CreateEndpointConfig</code> fails.</p> <p>For a list of instance types that support local instance storage, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#instance-store-volumes">Instance Store Volumes</a>.</p> <p>For more information about local instance storage encryption, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ssd-instance-store.html">SSD Instance Store Volumes</a>.</p> </note></p>
+    /// <p><p>The Amazon Resource Name (ARN) of a AWS Key Management Service key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance that hosts the endpoint.</p> <p>The KmsKeyId can be any of the following formats: </p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias name ARN: <code>arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>The KMS key policy must grant permission to the IAM role that you specify in your <code>CreateEndpoint</code>, <code>UpdateEndpoint</code> requests. For more information, refer to the AWS Key Management Service section<a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html"> Using Key Policies in AWS KMS </a> </p> <note> <p>Certain Nitro-based instances include local storage, dependent on the instance type. Local storage volumes are encrypted using a hardware module on the instance. You can&#39;t request a <code>KmsKeyId</code> when using an instance type with local storage. If any of the models that you specify in the <code>ProductionVariants</code> parameter use nitro-based instances with local storage, do not specify a value for the <code>KmsKeyId</code> parameter. If you specify a value for <code>KmsKeyId</code> when using any nitro-based instances with local storage, the call to <code>CreateEndpointConfig</code> fails.</p> <p>For a list of instance types that support local instance storage, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#instance-store-volumes">Instance Store Volumes</a>.</p> <p>For more information about local instance storage encryption, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ssd-instance-store.html">SSD Instance Store Volumes</a>.</p> </note></p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -1102,7 +1102,7 @@ pub struct CreateModelInput {
     #[serde(rename = "Containers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub containers: Option<Vec<ContainerDefinition>>,
-    /// <p><p>Isolates the model container. No inbound or outbound network calls can be made to or from the model container.</p> <note> <p>The Semantic Segmentation built-in algorithm does not support network isolation.</p> </note></p>
+    /// <p>Isolates the model container. No inbound or outbound network calls can be made to or from the model container.</p>
     #[serde(rename = "EnableNetworkIsolation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_network_isolation: Option<bool>,
@@ -1399,7 +1399,7 @@ pub struct CreateTrainingJobRequest {
     #[serde(rename = "EnableManagedSpotTraining")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_managed_spot_training: Option<bool>,
-    /// <p><p>Isolates the training container. No inbound or outbound network calls can be made, except for calls between peers within a training cluster for distributed training. If you enable network isolation for training jobs that are configured to use a VPC, Amazon SageMaker downloads and uploads customer data and model artifacts through the specified VPC, but the training container does not have network access.</p> <note> <p>The Semantic Segmentation built-in algorithm does not support network isolation.</p> </note></p>
+    /// <p>Isolates the training container. No inbound or outbound network calls can be made, except for calls between peers within a training cluster for distributed training. If you enable network isolation for training jobs that are configured to use a VPC, Amazon SageMaker downloads and uploads customer data and model artifacts through the specified VPC, but the training container does not have network access.</p>
     #[serde(rename = "EnableNetworkIsolation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_network_isolation: Option<bool>,
@@ -1748,7 +1748,7 @@ pub struct DebugRuleConfiguration {
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p>Path to local storage location for rules. Defaults to <code>/opt/ml/processing/output/rule/</code>.</p>
+    /// <p>Path to local storage location for output of rules. Defaults to <code>/opt/ml/processing/output/rule/</code>.</p>
     #[serde(rename = "LocalPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub local_path: Option<String>,
@@ -1766,7 +1766,7 @@ pub struct DebugRuleConfiguration {
     #[serde(rename = "S3OutputPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_output_path: Option<String>,
-    /// <p>The size, in GB, of the ML storage volume attached to the notebook instance.</p>
+    /// <p>The size, in GB, of the ML storage volume attached to the processing instance.</p>
     #[serde(rename = "VolumeSizeInGB")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_size_in_gb: Option<i64>,
@@ -2686,7 +2686,7 @@ pub struct DescribeModelOutput {
     /// <p>A timestamp that shows when the model was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
-    /// <p><p>If <code>True</code>, no inbound or outbound network calls can be made to or from the model container.</p> <note> <p>The Semantic Segmentation built-in algorithm does not support network isolation.</p> </note></p>
+    /// <p>If <code>True</code>, no inbound or outbound network calls can be made to or from the model container.</p>
     #[serde(rename = "EnableNetworkIsolation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_network_isolation: Option<bool>,
@@ -3077,7 +3077,7 @@ pub struct DescribeTrainingJobResponse {
     #[serde(rename = "EnableManagedSpotTraining")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_managed_spot_training: Option<bool>,
-    /// <p><p>If you want to allow inbound or outbound network calls, except for calls between peers within a training cluster for distributed training, choose <code>True</code>. If you enable network isolation for training jobs that are configured to use a VPC, Amazon SageMaker downloads and uploads customer data and model artifacts through the specified VPC, but the training container does not have network access.</p> <note> <p>The Semantic Segmentation built-in algorithm does not support network isolation.</p> </note></p>
+    /// <p>If you want to allow inbound or outbound network calls, except for calls between peers within a training cluster for distributed training, choose <code>True</code>. If you enable network isolation for training jobs that are configured to use a VPC, Amazon SageMaker downloads and uploads customer data and model artifacts through the specified VPC, but the training container does not have network access.</p>
     #[serde(rename = "EnableNetworkIsolation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_network_isolation: Option<bool>,
@@ -3422,6 +3422,21 @@ pub struct DescribeUserProfileResponse {
     #[serde(rename = "UserSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_settings: Option<UserSettings>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeWorkforceRequest {
+    /// <p>The name of the private workforce whose access you want to restrict. <code>WorkforceName</code> is automatically set to <code>"default"</code> when a workforce is created and cannot be modified. </p>
+    #[serde(rename = "WorkforceName")]
+    pub workforce_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeWorkforceResponse {
+    /// <p>A single private workforce, which is automatically created when you create your first private work team. You can create one private work force in each AWS Region. By default, any workforce related API operation used in a specific region will apply to the workforce created in that region. To learn how to create a private workforce, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-create-private.html">Create a Private Workforce</a>.</p>
+    #[serde(rename = "Workforce")]
+    pub workforce: Workforce,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3770,7 +3785,7 @@ pub struct FlowDefinitionSummary {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetSearchSuggestionsRequest {
-    /// <p>The name of the Amazon SageMaker resource to Search for. The only valid <code>Resource</code> value is <code>TrainingJob</code>.</p>
+    /// <p>The name of the Amazon SageMaker resource to Search for.</p>
     #[serde(rename = "Resource")]
     pub resource: String,
     /// <p>Limits the property names that are included in the response.</p>
@@ -3813,7 +3828,7 @@ pub struct GitConfigForUpdate {
     pub secret_arn: Option<String>,
 }
 
-/// <p>Defines under what conditions SageMaker creates a human loop.</p>
+/// <p>Defines under what conditions SageMaker creates a human loop. Used within .</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HumanLoopActivationConditionsConfig {
     /// <p>JSON expressing use-case specific conditions declaratively. If any condition is matched, atomic tasks are created against the configured work team. The set of conditions is different for Rekognition and Textract.</p>
@@ -3881,7 +3896,7 @@ pub struct HumanTaskConfig {
     /// <p>Configures how labels are consolidated across human workers.</p>
     #[serde(rename = "AnnotationConsolidationConfig")]
     pub annotation_consolidation_config: AnnotationConsolidationConfig,
-    /// <p>Defines the maximum number of data objects that can be labeled by human workers at the same time. Also referred to as batch size. Each object may have more than one worker at one time.</p>
+    /// <p>Defines the maximum number of data objects that can be labeled by human workers at the same time. Also referred to as batch size. Each object may have more than one worker at one time. The default value is 1000 objects.</p>
     #[serde(rename = "MaxConcurrentTaskCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrent_task_count: Option<i64>,
@@ -3895,7 +3910,7 @@ pub struct HumanTaskConfig {
     #[serde(rename = "PublicWorkforceTaskPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_workforce_task_price: Option<PublicWorkforceTaskPrice>,
-    /// <p>The length of time that a task remains available for labeling by human workers. <b>If you choose the Amazon Mechanical Turk workforce, the maximum is 12 hours (43200)</b>. For private and vendor workforces, the maximum is as listed.</p>
+    /// <p>The length of time that a task remains available for labeling by human workers. <b>If you choose the Amazon Mechanical Turk workforce, the maximum is 12 hours (43200)</b>. The default value is 864000 seconds (1 day). For private and vendor workforces, the maximum is as listed.</p>
     #[serde(rename = "TaskAvailabilityLifetimeInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_availability_lifetime_in_seconds: Option<i64>,
@@ -4007,7 +4022,7 @@ pub struct HyperParameterTrainingJobDefinition {
     #[serde(rename = "EnableManagedSpotTraining")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_managed_spot_training: Option<bool>,
-    /// <p><p>Isolates the training container. No inbound or outbound network calls can be made, except for calls between peers within a training cluster for distributed training. If network isolation is used for training jobs that are configured to use a VPC, Amazon SageMaker downloads and uploads customer data and model artifacts through the specified VPC, but the training container does not have network access.</p> <note> <p>The Semantic Segmentation built-in algorithm does not support network isolation.</p> </note></p>
+    /// <p>Isolates the training container. No inbound or outbound network calls can be made, except for calls between peers within a training cluster for distributed training. If network isolation is used for training jobs that are configured to use a VPC, Amazon SageMaker downloads and uploads customer data and model artifacts through the specified VPC, but the training container does not have network access.</p>
     #[serde(rename = "EnableNetworkIsolation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_network_isolation: Option<bool>,
@@ -4204,7 +4219,7 @@ pub struct InferenceSpecification {
 /// <p>Contains information about the location of input model artifacts, the name and shape of the expected data inputs, and the framework in which the model was trained.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputConfig {
-    /// <p><p>Specifies the name and shape of the expected data inputs for your trained model with a JSON dictionary form. The data inputs are <a>InputConfig$Framework</a> specific. </p> <ul> <li> <p> <code>TensorFlow</code>: You must specify the name and shape (NHWC format) of the expected data inputs using a dictionary format for your trained model. The dictionary formats required for the console and CLI are different.</p> <ul> <li> <p>Examples for one input:</p> <ul> <li> <p>If using the console, <code>{&quot;input&quot;:[1,1024,1024,3]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input&quot;:[1,1024,1024,3]}</code> </p> </li> </ul> </li> <li> <p>Examples for two inputs:</p> <ul> <li> <p>If using the console, <code>{&quot;data1&quot;: [1,28,28,1], &quot;data2&quot;:[1,28,28,1]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;data1&quot;: [1,28,28,1], &quot;data2&quot;:[1,28,28,1]}</code> </p> </li> </ul> </li> </ul> </li> <li> <p> <code>MXNET/ONNX</code>: You must specify the name and shape (NCHW format) of the expected data inputs in order using a dictionary format for your trained model. The dictionary formats required for the console and CLI are different.</p> <ul> <li> <p>Examples for one input:</p> <ul> <li> <p>If using the console, <code>{&quot;data&quot;:[1,3,1024,1024]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;data&quot;:[1,3,1024,1024]}</code> </p> </li> </ul> </li> <li> <p>Examples for two inputs:</p> <ul> <li> <p>If using the console, <code>{&quot;var1&quot;: [1,1,28,28], &quot;var2&quot;:[1,1,28,28]} </code> </p> </li> <li> <p>If using the CLI, <code>{&quot;var1&quot;: [1,1,28,28], &quot;var2&quot;:[1,1,28,28]}</code> </p> </li> </ul> </li> </ul> </li> <li> <p> <code>PyTorch</code>: You can either specify the name and shape (NCHW format) of expected data inputs in order using a dictionary format for your trained model or you can specify the shape only using a list format. The dictionary formats required for the console and CLI are different. The list formats for the console and CLI are the same.</p> <ul> <li> <p>Examples for one input in dictionary format:</p> <ul> <li> <p>If using the console, <code>{&quot;input0&quot;:[1,3,224,224]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input0&quot;:[1,3,224,224]}</code> </p> </li> </ul> </li> <li> <p>Example for one input in list format: <code>[[1,3,224,224]]</code> </p> </li> <li> <p>Examples for two inputs in dictionary format:</p> <ul> <li> <p>If using the console, <code>{&quot;input0&quot;:[1,3,224,224], &quot;input1&quot;:[1,3,224,224]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input0&quot;:[1,3,224,224], &quot;input1&quot;:[1,3,224,224]} </code> </p> </li> </ul> </li> <li> <p>Example for two inputs in list format: <code>[[1,3,224,224], [1,3,224,224]]</code> </p> </li> </ul> </li> <li> <p> <code>XGBOOST</code>: input data name and shape are not needed.</p> </li> </ul></p>
+    /// <p><p>Specifies the name and shape of the expected data inputs for your trained model with a JSON dictionary form. The data inputs are <a>InputConfig$Framework</a> specific. </p> <ul> <li> <p> <code>TensorFlow</code>: You must specify the name and shape (NHWC format) of the expected data inputs using a dictionary format for your trained model. The dictionary formats required for the console and CLI are different.</p> <ul> <li> <p>Examples for one input:</p> <ul> <li> <p>If using the console, <code>{&quot;input&quot;:[1,1024,1024,3]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input&quot;:[1,1024,1024,3]}</code> </p> </li> </ul> </li> <li> <p>Examples for two inputs:</p> <ul> <li> <p>If using the console, <code>{&quot;data1&quot;: [1,28,28,1], &quot;data2&quot;:[1,28,28,1]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;data1&quot;: [1,28,28,1], &quot;data2&quot;:[1,28,28,1]}</code> </p> </li> </ul> </li> </ul> </li> <li> <p> <code>KERAS</code>: You must specify the name and shape (NCHW format) of expected data inputs using a dictionary format for your trained model. Note that while Keras model artifacts should be uploaded in NHWC (channel-last) format, <code>DataInputConfig</code> should be specified in NCHW (channel-first) format. The dictionary formats required for the console and CLI are different.</p> <ul> <li> <p>Examples for one input:</p> <ul> <li> <p>If using the console, <code>{&quot;input<em>1&quot;:[1,3,224,224]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input</em>1&quot;:[1,3,224,224]}</code> </p> </li> </ul> </li> <li> <p>Examples for two inputs:</p> <ul> <li> <p>If using the console, <code>{&quot;input<em>1&quot;: [1,3,224,224], &quot;input</em>2&quot;:[1,3,224,224]} </code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input<em>1&quot;: [1,3,224,224], &quot;input</em>2&quot;:[1,3,224,224]}</code> </p> </li> </ul> </li> </ul> </li> <li> <p> <code>MXNET/ONNX</code>: You must specify the name and shape (NCHW format) of the expected data inputs in order using a dictionary format for your trained model. The dictionary formats required for the console and CLI are different.</p> <ul> <li> <p>Examples for one input:</p> <ul> <li> <p>If using the console, <code>{&quot;data&quot;:[1,3,1024,1024]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;data&quot;:[1,3,1024,1024]}</code> </p> </li> </ul> </li> <li> <p>Examples for two inputs:</p> <ul> <li> <p>If using the console, <code>{&quot;var1&quot;: [1,1,28,28], &quot;var2&quot;:[1,1,28,28]} </code> </p> </li> <li> <p>If using the CLI, <code>{&quot;var1&quot;: [1,1,28,28], &quot;var2&quot;:[1,1,28,28]}</code> </p> </li> </ul> </li> </ul> </li> <li> <p> <code>PyTorch</code>: You can either specify the name and shape (NCHW format) of expected data inputs in order using a dictionary format for your trained model or you can specify the shape only using a list format. The dictionary formats required for the console and CLI are different. The list formats for the console and CLI are the same.</p> <ul> <li> <p>Examples for one input in dictionary format:</p> <ul> <li> <p>If using the console, <code>{&quot;input0&quot;:[1,3,224,224]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input0&quot;:[1,3,224,224]}</code> </p> </li> </ul> </li> <li> <p>Example for one input in list format: <code>[[1,3,224,224]]</code> </p> </li> <li> <p>Examples for two inputs in dictionary format:</p> <ul> <li> <p>If using the console, <code>{&quot;input0&quot;:[1,3,224,224], &quot;input1&quot;:[1,3,224,224]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input0&quot;:[1,3,224,224], &quot;input1&quot;:[1,3,224,224]} </code> </p> </li> </ul> </li> <li> <p>Example for two inputs in list format: <code>[[1,3,224,224], [1,3,224,224]]</code> </p> </li> </ul> </li> <li> <p> <code>XGBOOST</code>: input data name and shape are not needed.</p> </li> </ul></p>
     #[serde(rename = "DataInputConfig")]
     pub data_input_config: String,
     /// <p>Identifies the framework in which the model was trained. For example: TENSORFLOW.</p>
@@ -4906,7 +4921,7 @@ pub struct ListExperimentsRequest {
     #[serde(rename = "CreatedBefore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_before: Option<f64>,
-    /// <p>The maximum number of experiments to return in the response.</p>
+    /// <p>The maximum number of experiments to return in the response. The default value is 10.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -5780,7 +5795,11 @@ pub struct ListTrialComponentsRequest {
     #[serde(rename = "CreatedBefore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_before: Option<f64>,
-    /// <p>The maximum number of components to return in the response.</p>
+    /// <p>A filter that returns only components that are part of the specified experiment. If you specify <code>ExperimentName</code>, you can't filter by <code>SourceArn</code> or <code>TrialName</code>.</p>
+    #[serde(rename = "ExperimentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_name: Option<String>,
+    /// <p>The maximum number of components to return in the response. The default value is 10.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -5796,10 +5815,14 @@ pub struct ListTrialComponentsRequest {
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
-    /// <p>A filter that returns only components that have the specified source Amazon Resource Name (ARN).</p>
+    /// <p>A filter that returns only components that have the specified source Amazon Resource Name (ARN). If you specify <code>SourceArn</code>, you can't filter by <code>ExperimentName</code> or <code>TrialName</code>.</p>
     #[serde(rename = "SourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_arn: Option<String>,
+    /// <p>A filter that returns only components that are part of the specified trial. If you specify <code>TrialName</code>, you can't filter by <code>ExperimentName</code> or <code>SourceArn</code>.</p>
+    #[serde(rename = "TrialName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -5829,7 +5852,7 @@ pub struct ListTrialsRequest {
     #[serde(rename = "ExperimentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub experiment_name: Option<String>,
-    /// <p>The maximum number of trials to return in the response.</p>
+    /// <p>The maximum number of trials to return in the response. The default value is 10.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -6340,7 +6363,7 @@ pub struct NestedFilters {
     /// <p>A list of filters. Each filter acts on a property. Filters must contain at least one <code>Filters</code> value. For example, a <code>NestedFilters</code> call might include a filter on the <code>PropertyName</code> parameter of the <code>InputDataConfig</code> property: <code>InputDataConfig.DataSource.S3DataSource.S3Uri</code>.</p>
     #[serde(rename = "Filters")]
     pub filters: Vec<Filter>,
-    /// <p>The name of the property to use in the nested filters. The value must match a listed property name, such as <code>InputDataConfig</code> .</p>
+    /// <p>The name of the property to use in the nested filters. The value must match a listed property name, such as <code>InputDataConfig</code>.</p>
     #[serde(rename = "NestedPropertyName")]
     pub nested_property_name: String,
 }
@@ -6732,10 +6755,10 @@ pub struct ProductionVariantSummary {
     pub variant_name: String,
 }
 
-/// <p>A type of <code>SuggestionQuery</code>. A suggestion query for retrieving property names that match the specified hint.</p>
+/// <p>Part of the <code>SuggestionQuery</code> type. Specifies a hint for retrieving property names that begin with the specified text.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PropertyNameQuery {
-    /// <p>Text that is part of a property's name. The property names of hyperparameter, metric, and tag key names that begin with the specified text in the <code>PropertyNameHint</code>.</p>
+    /// <p>Text that begins a property's name.</p>
     #[serde(rename = "PropertyNameHint")]
     pub property_name_hint: String,
 }
@@ -6950,7 +6973,7 @@ pub struct SearchRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The name of the Amazon SageMaker resource to search for. Currently, the only valid <code>Resource</code> value is <code>TrainingJob</code>.</p>
+    /// <p>The name of the Amazon SageMaker resource to search for.</p>
     #[serde(rename = "Resource")]
     pub resource: String,
     /// <p>A Boolean conditional statement. Resource objects must satisfy this condition to be included in search results. You must provide at least one subexpression, filter, or nested filter. The maximum number of recursive <code>SubExpressions</code>, <code>NestedFilters</code>, and <code>Filters</code> that can be included in a <code>SearchExpression</code> object is 50.</p>
@@ -7017,7 +7040,7 @@ pub struct SharingSettings {
     pub s3_output_path: Option<String>,
 }
 
-/// <p>A configuration for a shuffle option for input data in a channel. If you use <code>S3Prefix</code> for <code>S3DataType</code>, the results of the S3 key prefix matches are shuffled. If you use <code>ManifestFile</code>, the order of the S3 object references in the <code>ManifestFile</code> is shuffled. If you use <code>AugmentedManifestFile</code>, the order of the JSON lines in the <code>AugmentedManifestFile</code> is shuffled. The shuffling order is determined using the <code>Seed</code> value.</p> <p>For Pipe input mode, shuffling is done at the start of every epoch. With large datasets, this ensures that the order of the training data is different for each epoch, and it helps reduce bias and possible overfitting. In a multi-node training job when <code>ShuffleConfig</code> is combined with <code>S3DataDistributionType</code> of <code>ShardedByS3Key</code>, the data is shuffled across nodes so that the content sent to a particular node on the first epoch might be sent to a different node on the second epoch.</p>
+/// <p>A configuration for a shuffle option for input data in a channel. If you use <code>S3Prefix</code> for <code>S3DataType</code>, the results of the S3 key prefix matches are shuffled. If you use <code>ManifestFile</code>, the order of the S3 object references in the <code>ManifestFile</code> is shuffled. If you use <code>AugmentedManifestFile</code>, the order of the JSON lines in the <code>AugmentedManifestFile</code> is shuffled. The shuffling order is determined using the <code>Seed</code> value.</p> <p>For Pipe input mode, when <code>ShuffleConfig</code> is specified shuffling is done at the start of every epoch. With large datasets, this ensures that the order of the training data is different for each epoch, and it helps reduce bias and possible overfitting. In a multi-node training job when <code>ShuffleConfig</code> is combined with <code>S3DataDistributionType</code> of <code>ShardedByS3Key</code>, the data is shuffled across nodes so that the content sent to a particular node on the first epoch might be sent to a different node on the second epoch.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ShuffleConfig {
     /// <p>Determines the shuffling order in <code>ShuffleConfig</code> value.</p>
@@ -7043,6 +7066,14 @@ pub struct SourceAlgorithmSpecification {
     /// <p>A list of the algorithms that were used to create a model package.</p>
     #[serde(rename = "SourceAlgorithms")]
     pub source_algorithms: Vec<SourceAlgorithm>,
+}
+
+/// <p>A list of IP address ranges (<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>). Used to create an allow list of IP addresses for a private workforce. For more information, see .</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SourceIpConfig {
+    /// <p><p>A list of one to four <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Classless Inter-Domain Routing</a> (CIDR) values.</p> <p>Maximum: 4 CIDR values</p> <note> <p>The following Length Constraints apply to individual CIDR values in the CIDR value list.</p> </note></p>
+    #[serde(rename = "Cidrs")]
+    pub cidrs: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -7160,10 +7191,10 @@ pub struct SubscribedWorkteam {
     pub workteam_arn: String,
 }
 
-/// <p>Limits the property names that are included in the response.</p>
+/// <p>Specified in the <a>GetSearchSuggestions</a> request. Limits the property names that are included in the response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SuggestionQuery {
-    /// <p>A type of <code>SuggestionQuery</code>. Defines a property name hint. Only property names that match the specified hint are included in the response.</p>
+    /// <p>Defines a property name hint. Only property names that begin with the specified hint are included in the response.</p>
     #[serde(rename = "PropertyNameQuery")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub property_name_query: Option<PropertyNameQuery>,
@@ -7552,7 +7583,7 @@ pub struct TransformOutput {
     #[serde(rename = "AssembleWith")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub assemble_with: Option<String>,
-    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption. The <code>KmsKeyId</code> can be any of the following formats: </p> <ul> <li> <p>// KMS Key ID</p> <p> <code>"1234abcd-12ab-34cd-56ef-1234567890ab"</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key</p> <p> <code>"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"</code> </p> </li> <li> <p>// KMS Key Alias</p> <p> <code>"alias/ExampleAlias"</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key Alias</p> <p> <code>"arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias"</code> </p> </li> </ul> <p>If you don't provide a KMS key ID, Amazon SageMaker uses the default KMS key for Amazon S3 for your role's account. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">KMS-Managed Encryption Keys</a> in the <i>Amazon Simple Storage Service Developer Guide.</i> </p> <p>The KMS key policy must grant permission to the IAM role that you specify in your <a>CreateModel</a> request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Using Key Policies in AWS KMS</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption. The <code>KmsKeyId</code> can be any of the following formats: </p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias name ARN: <code>arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>If you don't provide a KMS key ID, Amazon SageMaker uses the default KMS key for Amazon S3 for your role's account. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">KMS-Managed Encryption Keys</a> in the <i>Amazon Simple Storage Service Developer Guide.</i> </p> <p>The KMS key policy must grant permission to the IAM role that you specify in your <a>CreateModel</a> request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Using Key Policies in AWS KMS</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -7570,7 +7601,7 @@ pub struct TransformResources {
     /// <p>The ML compute instance type for the transform job. If you are using built-in algorithms to transform moderately sized datasets, we recommend using ml.m4.xlarge or <code>ml.m5.large</code> instance types.</p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
-    /// <p><p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt model data on the storage volume attached to the ML compute instance(s) that run the batch transform job. The <code>VolumeKmsKeyId</code> can be any of the following formats:</p> <ul> <li> <p>// KMS Key ID</p> <p> <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key</p> <p> <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    /// <p><p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt model data on the storage volume attached to the ML compute instance(s) that run the batch transform job. The <code>VolumeKmsKeyId</code> can be any of the following formats:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias name ARN: <code>arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul></p>
     #[serde(rename = "VolumeKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_kms_key_id: Option<String>,
@@ -8279,6 +8310,25 @@ pub struct UpdateUserProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateWorkforceRequest {
+    /// <p>A list of one to four worker IP address ranges (<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>) that can be used to access tasks assigned to this workforce.</p> <p>Maximum: 4 CIDR values</p>
+    #[serde(rename = "SourceIpConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_ip_config: Option<SourceIpConfig>,
+    /// <p>The name of the private workforce whose access you want to restrict. <code>WorkforceName</code> is automatically set to <code>"default"</code> when a workforce is created and cannot be modified. </p>
+    #[serde(rename = "WorkforceName")]
+    pub workforce_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateWorkforceResponse {
+    /// <p>A single private workforce, which is automatically created when you create your first private work team. You can create one private work force in each AWS Region. By default, any workforce related API operation used in a specific region will apply to the workforce created in that region. To learn how to create a private workforce, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-create-private.html">Create a Private Workforce</a>.</p>
+    #[serde(rename = "Workforce")]
+    pub workforce: Workforce,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateWorkteamRequest {
     /// <p>An updated description for the work team.</p>
     #[serde(rename = "Description")]
@@ -8387,6 +8437,26 @@ pub struct VpcConfig {
     /// <p><p>The ID of the subnets in the VPC to which you want to connect your training job or model. </p> <note> <p>Amazon EC2 P3 accelerated computing instances are not available in the c/d/e availability zones of region us-east-1. If you want to create endpoints with P3 instances in VPC mode in region us-east-1, create subnets in a/b/f availability zones instead.</p> </note></p>
     #[serde(rename = "Subnets")]
     pub subnets: Vec<String>,
+}
+
+/// <p>A single private workforce, which is automatically created when you create your first private work team. You can create one private work force in each AWS Region. By default, any workforce related API operation used in a specific region will apply to the workforce created in that region. To learn how to create a private workforce, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-create-private.html">Create a Private Workforce</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Workforce {
+    /// <p>The most recent date that was used to successfully add one or more IP address ranges (<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>) to a private workforce's allow list.</p>
+    #[serde(rename = "LastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date: Option<f64>,
+    /// <p>A list of one to four IP address ranges (<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>) to be added to the workforce allow list.</p>
+    #[serde(rename = "SourceIpConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_ip_config: Option<SourceIpConfig>,
+    /// <p>The Amazon Resource Name (ARN) of the private workforce.</p>
+    #[serde(rename = "WorkforceArn")]
+    pub workforce_arn: String,
+    /// <p>The name of the private workforce whose access you want to restrict. <code>WorkforceName</code> is automatically set to <code>"default"</code> when a workforce is created and cannot be modified. </p>
+    #[serde(rename = "WorkforceName")]
+    pub workforce_name: String,
 }
 
 /// <p>Provides details about a labeling work team.</p>
@@ -9153,12 +9223,20 @@ impl Error for CreateNotebookInstanceLifecycleConfigError {
 }
 /// Errors returned by CreatePresignedDomainUrl
 #[derive(Debug, PartialEq)]
-pub enum CreatePresignedDomainUrlError {}
+pub enum CreatePresignedDomainUrlError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
 
 impl CreatePresignedDomainUrlError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePresignedDomainUrlError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(CreatePresignedDomainUrlError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -9173,7 +9251,9 @@ impl fmt::Display for CreatePresignedDomainUrlError {
 }
 impl Error for CreatePresignedDomainUrlError {
     fn description(&self) -> &str {
-        match *self {}
+        match *self {
+            CreatePresignedDomainUrlError::ResourceNotFound(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by CreatePresignedNotebookInstanceUrl
@@ -10835,6 +10915,31 @@ impl Error for DescribeUserProfileError {
         }
     }
 }
+/// Errors returned by DescribeWorkforce
+#[derive(Debug, PartialEq)]
+pub enum DescribeWorkforceError {}
+
+impl DescribeWorkforceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkforceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeWorkforceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+impl Error for DescribeWorkforceError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by DescribeWorkteam
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkteamError {}
@@ -11639,12 +11744,20 @@ impl Error for ListTransformJobsError {
 }
 /// Errors returned by ListTrialComponents
 #[derive(Debug, PartialEq)]
-pub enum ListTrialComponentsError {}
+pub enum ListTrialComponentsError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
 
 impl ListTrialComponentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrialComponentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(ListTrialComponentsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -11659,17 +11772,25 @@ impl fmt::Display for ListTrialComponentsError {
 }
 impl Error for ListTrialComponentsError {
     fn description(&self) -> &str {
-        match *self {}
+        match *self {
+            ListTrialComponentsError::ResourceNotFound(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by ListTrials
 #[derive(Debug, PartialEq)]
-pub enum ListTrialsError {}
+pub enum ListTrialsError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
 
 impl ListTrialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrialsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(ListTrialsError::ResourceNotFound(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -11684,7 +11805,9 @@ impl fmt::Display for ListTrialsError {
 }
 impl Error for ListTrialsError {
     fn description(&self) -> &str {
-        match *self {}
+        match *self {
+            ListTrialsError::ResourceNotFound(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by ListUserProfiles
@@ -12575,6 +12698,31 @@ impl Error for UpdateUserProfileError {
         }
     }
 }
+/// Errors returned by UpdateWorkforce
+#[derive(Debug, PartialEq)]
+pub enum UpdateWorkforceError {}
+
+impl UpdateWorkforceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWorkforceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateWorkforceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+impl Error for UpdateWorkforceError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by UpdateWorkteam
 #[derive(Debug, PartialEq)]
 pub enum UpdateWorkteamError {
@@ -12778,7 +12926,7 @@ pub trait SageMaker {
         input: CreateTrialRequest,
     ) -> Result<CreateTrialResponse, RusotoError<CreateTrialError>>;
 
-    /// <p><p>Creates a <i>trial component</i>, which is a stage of a machine learning <i>trial</i>. A trial is composed of one or more trial components. A trial component can be used in multiple trials.</p> <p>Trial components include pre-processing jobs, training jobs, and batch transform jobs.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to a trial component and then use the <a>Search</a> API to search for the tags.</p> <note> <p>You can create a trial component through a direct call to the <code>CreateTrialComponent</code> API. However, you can&#39;t specify the <code>Source</code> property of the component in the request, therefore, the component isn&#39;t associated with an Amazon SageMaker job. You must use Amazon SageMaker Studio, the Amazon SageMaker Python SDK, or the AWS SDK for Python (Boto) to create the component with a valid <code>Source</code> property.</p> </note></p>
+    /// <p><p>Creates a <i>trial component</i>, which is a stage of a machine learning <i>trial</i>. A trial is composed of one or more trial components. A trial component can be used in multiple trials.</p> <p>Trial components include pre-processing jobs, training jobs, and batch transform jobs.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to a trial component and then use the <a>Search</a> API to search for the tags.</p> <note> <p> <code>CreateTrialComponent</code> can only be invoked from within an Amazon SageMaker managed environment. This includes Amazon SageMaker training jobs, processing jobs, transform jobs, and Amazon SageMaker notebooks. A call to <code>CreateTrialComponent</code> from outside one of these environments results in an error.</p> </note></p>
     async fn create_trial_component(
         &self,
         input: CreateTrialComponentRequest,
@@ -13057,6 +13205,12 @@ pub trait SageMaker {
         input: DescribeUserProfileRequest,
     ) -> Result<DescribeUserProfileResponse, RusotoError<DescribeUserProfileError>>;
 
+    /// <p><p>Lists private workforce information, including workforce name, Amazon Resource Name (ARN), and, if applicable, allowed IP address ranges (<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>). Allowable IP address ranges are the IP addresses that workers can use to access tasks. </p> <important> <p>This operation applies only to private workforces.</p> </important></p>
+    async fn describe_workforce(
+        &self,
+        input: DescribeWorkforceRequest,
+    ) -> Result<DescribeWorkforceResponse, RusotoError<DescribeWorkforceError>>;
+
     /// <p>Gets information about a specific work team. You can see information such as the create date, the last updated date, membership information, and the work team's Amazon Resource Name (ARN).</p>
     async fn describe_workteam(
         &self,
@@ -13243,7 +13397,7 @@ pub trait SageMaker {
         input: ListTransformJobsRequest,
     ) -> Result<ListTransformJobsResponse, RusotoError<ListTransformJobsError>>;
 
-    /// <p>Lists the trial components in your account. You can filter the list to show only components that were created in a specific time range. You can sort the list by trial component name or creation time.</p>
+    /// <p><p>Lists the trial components in your account. You can sort the list by trial component name or creation time. You can filter the list to show only components that were created in a specific time range. You can also filter on one of the following:</p> <ul> <li> <p> <code>ExperimentName</code> </p> </li> <li> <p> <code>SourceArn</code> </p> </li> <li> <p> <code>TrialName</code> </p> </li> </ul></p>
     async fn list_trial_components(
         &self,
         input: ListTrialComponentsRequest,
@@ -13273,7 +13427,7 @@ pub trait SageMaker {
         input: RenderUiTemplateRequest,
     ) -> Result<RenderUiTemplateResponse, RusotoError<RenderUiTemplateError>>;
 
-    /// <p>Finds Amazon SageMaker resources that match a search query. Matching resource objects are returned as a list of <code>SearchResult</code> objects in the response. You can sort the search results by any resource property in a ascending or descending order.</p> <p>You can query against the following value types: numerical, text, Booleans, and timestamps.</p>
+    /// <p>Finds Amazon SageMaker resources that match a search query. Matching resource objects are returned as a list of <code>SearchResult</code> objects in the response. You can sort the search results by any resource property in a ascending or descending order.</p> <p>You can query against the following value types: numeric, text, Boolean, and timestamp.</p>
     async fn search(
         &self,
         input: SearchRequest,
@@ -13416,6 +13570,12 @@ pub trait SageMaker {
         &self,
         input: UpdateUserProfileRequest,
     ) -> Result<UpdateUserProfileResponse, RusotoError<UpdateUserProfileError>>;
+
+    /// <p><p>Restricts access to tasks assigned to workers in the specified workforce to those within specific ranges of IP addresses. You specify allowed IP addresses by creating a list of up to four <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>.</p> <p>By default, a workforce isn&#39;t restricted to specific IP addresses. If you specify a range of IP addresses, workers who attempt to access tasks using any IP address outside the specified range are denied access and get a <code>Not Found</code> error message on the worker portal. After restricting access with this operation, you can see the allowed IP values for a private workforce with the operation.</p> <important> <p>This operation applies only to private workforces.</p> </important></p>
+    async fn update_workforce(
+        &self,
+        input: UpdateWorkforceRequest,
+    ) -> Result<UpdateWorkforceResponse, RusotoError<UpdateWorkforceError>>;
 
     /// <p>Updates an existing work team with new member definitions or description.</p>
     async fn update_workteam(
@@ -14202,7 +14362,7 @@ impl SageMaker for SageMakerClient {
         }
     }
 
-    /// <p><p>Creates a <i>trial component</i>, which is a stage of a machine learning <i>trial</i>. A trial is composed of one or more trial components. A trial component can be used in multiple trials.</p> <p>Trial components include pre-processing jobs, training jobs, and batch transform jobs.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to a trial component and then use the <a>Search</a> API to search for the tags.</p> <note> <p>You can create a trial component through a direct call to the <code>CreateTrialComponent</code> API. However, you can&#39;t specify the <code>Source</code> property of the component in the request, therefore, the component isn&#39;t associated with an Amazon SageMaker job. You must use Amazon SageMaker Studio, the Amazon SageMaker Python SDK, or the AWS SDK for Python (Boto) to create the component with a valid <code>Source</code> property.</p> </note></p>
+    /// <p><p>Creates a <i>trial component</i>, which is a stage of a machine learning <i>trial</i>. A trial is composed of one or more trial components. A trial component can be used in multiple trials.</p> <p>Trial components include pre-processing jobs, training jobs, and batch transform jobs.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to a trial component and then use the <a>Search</a> API to search for the tags.</p> <note> <p> <code>CreateTrialComponent</code> can only be invoked from within an Amazon SageMaker managed environment. This includes Amazon SageMaker training jobs, processing jobs, transform jobs, and Amazon SageMaker notebooks. A call to <code>CreateTrialComponent</code> from outside one of these environments results in an error.</p> </note></p>
     async fn create_trial_component(
         &self,
         input: CreateTrialComponentRequest,
@@ -15473,6 +15633,34 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p><p>Lists private workforce information, including workforce name, Amazon Resource Name (ARN), and, if applicable, allowed IP address ranges (<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>). Allowable IP address ranges are the IP addresses that workers can use to access tasks. </p> <important> <p>This operation applies only to private workforces.</p> </important></p>
+    async fn describe_workforce(
+        &self,
+        input: DescribeWorkforceRequest,
+    ) -> Result<DescribeWorkforceResponse, RusotoError<DescribeWorkforceError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DescribeWorkforce");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWorkforceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWorkforceError::from_response(response))
+        }
+    }
+
     /// <p>Gets information about a specific work team. You can see information such as the create date, the last updated date, membership information, and the work team's Amazon Resource Name (ARN).</p>
     async fn describe_workteam(
         &self,
@@ -16322,7 +16510,7 @@ impl SageMaker for SageMakerClient {
         }
     }
 
-    /// <p>Lists the trial components in your account. You can filter the list to show only components that were created in a specific time range. You can sort the list by trial component name or creation time.</p>
+    /// <p><p>Lists the trial components in your account. You can sort the list by trial component name or creation time. You can filter the list to show only components that were created in a specific time range. You can also filter on one of the following:</p> <ul> <li> <p> <code>ExperimentName</code> </p> </li> <li> <p> <code>SourceArn</code> </p> </li> <li> <p> <code>TrialName</code> </p> </li> </ul></p>
     async fn list_trial_components(
         &self,
         input: ListTrialComponentsRequest,
@@ -16460,7 +16648,7 @@ impl SageMaker for SageMakerClient {
         }
     }
 
-    /// <p>Finds Amazon SageMaker resources that match a search query. Matching resource objects are returned as a list of <code>SearchResult</code> objects in the response. You can sort the search results by any resource property in a ascending or descending order.</p> <p>You can query against the following value types: numerical, text, Booleans, and timestamps.</p>
+    /// <p>Finds Amazon SageMaker resources that match a search query. Matching resource objects are returned as a list of <code>SearchResult</code> objects in the response. You can sort the search results by any resource property in a ascending or descending order.</p> <p>You can query against the following value types: numeric, text, Boolean, and timestamp.</p>
     async fn search(
         &self,
         input: SearchRequest,
@@ -17091,6 +17279,33 @@ impl SageMaker for SageMakerClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserProfileError::from_response(response))
+        }
+    }
+
+    /// <p><p>Restricts access to tasks assigned to workers in the specified workforce to those within specific ranges of IP addresses. You specify allowed IP addresses by creating a list of up to four <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>.</p> <p>By default, a workforce isn&#39;t restricted to specific IP addresses. If you specify a range of IP addresses, workers who attempt to access tasks using any IP address outside the specified range are denied access and get a <code>Not Found</code> error message on the worker portal. After restricting access with this operation, you can see the allowed IP values for a private workforce with the operation.</p> <important> <p>This operation applies only to private workforces.</p> </important></p>
+    async fn update_workforce(
+        &self,
+        input: UpdateWorkforceRequest,
+    ) -> Result<UpdateWorkforceResponse, RusotoError<UpdateWorkforceError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.UpdateWorkforce");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateWorkforceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateWorkforceError::from_response(response))
         }
     }
 

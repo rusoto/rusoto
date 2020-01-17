@@ -178,7 +178,7 @@ pub struct CreateTagsRequest {
     /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p>The tags. Each WorkSpaces resource can have a maximum of 50 tags.</p>
+    /// <p>The tags. Each WorkSpaces resource can have a maximum of 50 tags. If you want to add new tags to a set of existing tags, you must submit all of the existing tags along with the new ones.</p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
@@ -675,6 +675,29 @@ pub struct ListAvailableManagementCidrRangesResult {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct MigrateWorkspaceRequest {
+    /// <p>The identifier of the target bundle type to migrate the WorkSpace to.</p>
+    #[serde(rename = "BundleId")]
+    pub bundle_id: String,
+    /// <p>The identifier of the WorkSpace to migrate from.</p>
+    #[serde(rename = "SourceWorkspaceId")]
+    pub source_workspace_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct MigrateWorkspaceResult {
+    /// <p>The original identifier of the WorkSpace that is being migrated.</p>
+    #[serde(rename = "SourceWorkspaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_workspace_id: Option<String>,
+    /// <p>The new identifier of the WorkSpace that is being migrated. If the migration does not succeed, the target WorkSpace ID will not be used, and the WorkSpace will still have the original WorkSpace ID.</p>
+    #[serde(rename = "TargetWorkspaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_workspace_id: Option<String>,
+}
+
 /// <p>Describes a WorkSpace modification.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1109,7 +1132,7 @@ pub struct Workspace {
     #[serde(rename = "UserVolumeEncryptionEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_volume_encryption_enabled: Option<bool>,
-    /// <p>The KMS key used to encrypt data stored on your WorkSpace.</p>
+    /// <p>The symmetric AWS KMS customer master key (CMK) used to encrypt data stored on your WorkSpace. Amazon WorkSpaces does not support asymmetric CMKs.</p>
     #[serde(rename = "VolumeEncryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_encryption_key: Option<String>,
@@ -1297,7 +1320,7 @@ pub struct WorkspaceDirectory {
     #[serde(rename = "Tenancy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tenancy: Option<String>,
-    /// <p>The devices and operating systems that users can use to access Workspaces.</p>
+    /// <p>The devices and operating systems that users can use to access WorkSpaces.</p>
     #[serde(rename = "WorkspaceAccessProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_access_properties: Option<WorkspaceAccessProperties>,
@@ -1402,7 +1425,7 @@ pub struct WorkspaceRequest {
     #[serde(rename = "UserVolumeEncryptionEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_volume_encryption_enabled: Option<bool>,
-    /// <p>The KMS key used to encrypt data stored on your WorkSpace.</p>
+    /// <p>The symmetric AWS KMS customer master key (CMK) used to encrypt data stored on your WorkSpace. Amazon WorkSpaces does not support asymmetric CMKs.</p>
     #[serde(rename = "VolumeEncryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_encryption_key: Option<String>,
@@ -2616,6 +2639,77 @@ impl Error for ListAvailableManagementCidrRangesError {
         }
     }
 }
+/// Errors returned by MigrateWorkspace
+#[derive(Debug, PartialEq)]
+pub enum MigrateWorkspaceError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The properties of this WorkSpace are currently being modified. Try again in a moment.</p>
+    OperationInProgress(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available.</p>
+    ResourceUnavailable(String),
+}
+
+impl MigrateWorkspaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MigrateWorkspaceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(MigrateWorkspaceError::AccessDenied(err.msg))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(MigrateWorkspaceError::InvalidParameterValues(
+                        err.msg,
+                    ))
+                }
+                "OperationInProgressException" => {
+                    return RusotoError::Service(MigrateWorkspaceError::OperationInProgress(
+                        err.msg,
+                    ))
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(MigrateWorkspaceError::OperationNotSupported(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(MigrateWorkspaceError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(MigrateWorkspaceError::ResourceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for MigrateWorkspaceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+impl Error for MigrateWorkspaceError {
+    fn description(&self) -> &str {
+        match *self {
+            MigrateWorkspaceError::AccessDenied(ref cause) => cause,
+            MigrateWorkspaceError::InvalidParameterValues(ref cause) => cause,
+            MigrateWorkspaceError::OperationInProgress(ref cause) => cause,
+            MigrateWorkspaceError::OperationNotSupported(ref cause) => cause,
+            MigrateWorkspaceError::ResourceNotFound(ref cause) => cause,
+            MigrateWorkspaceError::ResourceUnavailable(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ModifyAccount
 #[derive(Debug, PartialEq)]
 pub enum ModifyAccountError {
@@ -3544,6 +3638,12 @@ pub trait Workspaces {
         RusotoError<ListAvailableManagementCidrRangesError>,
     >;
 
+    /// <p>Migrates a WorkSpace from one operating system or bundle type to another, while retaining the data on the user volume.</p> <p>The migration process recreates the WorkSpace by using a new root volume from the target bundle image and the user volume from the last available snapshot of the original WorkSpace. During migration, the original <code>D:\Users\%USERNAME%</code> user profile folder is renamed to <code>D:\Users\%USERNAME%MMddyyTHHmmss%.NotMigrated</code>. A new <code>D:\Users\%USERNAME%\</code> folder is generated by the new OS. Certain files in the old user profile are moved to the new user profile.</p> <p>For available migration scenarios, details about what happens during migration, and best practices, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/migrate-workspaces.html">Migrate a WorkSpace</a>.</p>
+    async fn migrate_workspace(
+        &self,
+        input: MigrateWorkspaceRequest,
+    ) -> Result<MigrateWorkspaceResult, RusotoError<MigrateWorkspaceError>>;
+
     /// <p>Modifies the configuration of Bring Your Own License (BYOL) for the specified account.</p>
     async fn modify_account(
         &self,
@@ -3562,7 +3662,7 @@ pub trait Workspaces {
         input: ModifySelfservicePermissionsRequest,
     ) -> Result<ModifySelfservicePermissionsResult, RusotoError<ModifySelfservicePermissionsError>>;
 
-    /// <p>Specifies which devices and operating systems users can use to access their Workspaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html#control-device-access"> Control Device Access</a>.</p>
+    /// <p>Specifies which devices and operating systems users can use to access their WorkSpaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html#control-device-access"> Control Device Access</a>.</p>
     async fn modify_workspace_access_properties(
         &self,
         input: ModifyWorkspaceAccessPropertiesRequest,
@@ -4378,6 +4478,33 @@ impl Workspaces for WorkspacesClient {
         }
     }
 
+    /// <p>Migrates a WorkSpace from one operating system or bundle type to another, while retaining the data on the user volume.</p> <p>The migration process recreates the WorkSpace by using a new root volume from the target bundle image and the user volume from the last available snapshot of the original WorkSpace. During migration, the original <code>D:\Users\%USERNAME%</code> user profile folder is renamed to <code>D:\Users\%USERNAME%MMddyyTHHmmss%.NotMigrated</code>. A new <code>D:\Users\%USERNAME%\</code> folder is generated by the new OS. Certain files in the old user profile are moved to the new user profile.</p> <p>For available migration scenarios, details about what happens during migration, and best practices, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/migrate-workspaces.html">Migrate a WorkSpace</a>.</p>
+    async fn migrate_workspace(
+        &self,
+        input: MigrateWorkspaceRequest,
+    ) -> Result<MigrateWorkspaceResult, RusotoError<MigrateWorkspaceError>> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.MigrateWorkspace");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<MigrateWorkspaceResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(MigrateWorkspaceError::from_response(response))
+        }
+    }
+
     /// <p>Modifies the configuration of Bring Your Own License (BYOL) for the specified account.</p>
     async fn modify_account(
         &self,
@@ -4465,7 +4592,7 @@ impl Workspaces for WorkspacesClient {
         }
     }
 
-    /// <p>Specifies which devices and operating systems users can use to access their Workspaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html#control-device-access"> Control Device Access</a>.</p>
+    /// <p>Specifies which devices and operating systems users can use to access their WorkSpaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html#control-device-access"> Control Device Access</a>.</p>
     async fn modify_workspace_access_properties(
         &self,
         input: ModifyWorkspaceAccessPropertiesRequest,

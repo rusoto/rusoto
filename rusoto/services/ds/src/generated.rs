@@ -1060,8 +1060,7 @@ pub struct DisableLDAPSRequest {
     pub directory_id: String,
     /// <p>The type of LDAP security that the customer wants to enable. The security can be either server or client, but currently only the default <code>Client</code> is supported.</p>
     #[serde(rename = "Type")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1155,8 +1154,7 @@ pub struct EnableLDAPSRequest {
     pub directory_id: String,
     /// <p>The type of LDAP security the customer wants to enable. The security can be either server or client, but currently only the default <code>Client</code> is supported.</p>
     #[serde(rename = "Type")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]

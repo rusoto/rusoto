@@ -281,6 +281,22 @@ pub struct ListPoliciesResponse {
     pub policy_list: Option<Vec<PolicySummary>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource to return tags for. The Firewall Manager policy is the only AWS resource that supports tagging, so this ARN is a policy ARN..</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The tags associated with the resource.</p>
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_list: Option<Vec<Tag>>,
+}
+
 /// <p>An AWS Firewall Manager policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Policy {
@@ -438,6 +454,10 @@ pub struct PutPolicyRequest {
     /// <p>The details of the AWS Firewall Manager policy to be created.</p>
     #[serde(rename = "Policy")]
     pub policy: Policy,
+    /// <p>The tags to add to the AWS resource.</p>
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_list: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -476,6 +496,45 @@ pub struct SecurityServicePolicyData {
     #[serde(rename = "Type")]
     pub type_: String,
 }
+
+/// <p>A collection of key:value pairs associated with an AWS resource. The key:value pair can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each AWS resource. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>Part of the key:value pair that defines a tag. You can use a tag key to describe a category of information, such as "customer." Tag keys are case-sensitive.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>Part of the key:value pair that defines a tag. You can use a tag value to describe a specific value within a category, such as "companyA" or "companyB." Tag values are case-sensitive. </p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource. The Firewall Manager policy is the only AWS resource that supports tagging, so this ARN is a policy ARN.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tags to add to the resource.</p>
+    #[serde(rename = "TagList")]
+    pub tag_list: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource. The Firewall Manager policy is the only AWS resource that supports tagging, so this ARN is a policy ARN.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The keys of the tags to remove from the resource. </p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 /// Errors returned by AssociateAdminAccount
 #[derive(Debug, PartialEq)]
@@ -1045,6 +1104,61 @@ impl Error for ListPoliciesError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The parameters of the request were invalid.</p>
+    InvalidInput(String),
+    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    InvalidOperation(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalError(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidInput(err.msg))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidOperation(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::InternalError(ref cause) => cause,
+            ListTagsForResourceError::InvalidInput(ref cause) => cause,
+            ListTagsForResourceError::InvalidOperation(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutNotificationChannel
 #[derive(Debug, PartialEq)]
 pub enum PutNotificationChannelError {
@@ -1159,6 +1273,114 @@ impl Error for PutPolicyError {
         }
     }
 }
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The parameters of the request were invalid.</p>
+    InvalidInput(String),
+    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    InvalidOperation(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>policy</code> objects that you can create for an AWS account. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html">Firewall Manager Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(TagResourceError::InternalError(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(TagResourceError::InvalidInput(err.msg))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(TagResourceError::InvalidOperation(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(TagResourceError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::InternalError(ref cause) => cause,
+            TagResourceError::InvalidInput(ref cause) => cause,
+            TagResourceError::InvalidOperation(ref cause) => cause,
+            TagResourceError::LimitExceeded(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The parameters of the request were invalid.</p>
+    InvalidInput(String),
+    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    InvalidOperation(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(UntagResourceError::InternalError(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidInput(err.msg))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidOperation(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::InternalError(ref cause) => cause,
+            UntagResourceError::InvalidInput(ref cause) => cause,
+            UntagResourceError::InvalidOperation(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the FMS API. FMS clients implement this trait.
 #[async_trait]
 pub trait Fms {
@@ -1230,6 +1452,12 @@ pub trait Fms {
         input: ListPoliciesRequest,
     ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>;
 
+    /// <p>Retrieves the list of tags for the specified AWS resource. </p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
     /// <p>Designates the IAM role and Amazon Simple Notification Service (SNS) topic that AWS Firewall Manager uses to record SNS logs.</p>
     async fn put_notification_channel(
         &self,
@@ -1241,6 +1469,18 @@ pub trait Fms {
         &self,
         input: PutPolicyRequest,
     ) -> Result<PutPolicyResponse, RusotoError<PutPolicyError>>;
+
+    /// <p>Adds one or more tags to an AWS resource.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Removes one or more tags from an AWS resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 }
 /// A client for the FMS API.
 #[derive(Clone)]
@@ -1599,6 +1839,34 @@ impl Fms for FmsClient {
         }
     }
 
+    /// <p>Retrieves the list of tags for the specified AWS resource. </p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSFMS_20180101.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
     /// <p>Designates the IAM role and Amazon Simple Notification Service (SNS) topic that AWS Firewall Manager uses to record SNS logs.</p>
     async fn put_notification_channel(
         &self,
@@ -1649,6 +1917,60 @@ impl Fms for FmsClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(PutPolicyError::from_response(response))
+        }
+    }
+
+    /// <p>Adds one or more tags to an AWS resource.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSFMS_20180101.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Removes one or more tags from an AWS resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSFMS_20180101.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 }

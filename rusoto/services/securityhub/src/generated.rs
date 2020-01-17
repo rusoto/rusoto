@@ -1345,6 +1345,34 @@ pub struct DescribeProductsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeStandardsControlsRequest {
+    /// <p>The maximum number of compliance standard controls to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>For requests to get the next page of results, the pagination token that was returned with the previous set of results. The initial request does not include a pagination token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The ARN of a resource that represents your subscription to a supported standard.</p>
+    #[serde(rename = "StandardsSubscriptionArn")]
+    pub standards_subscription_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeStandardsControlsResponse {
+    /// <p>A list of compliance standards controls.</p>
+    #[serde(rename = "Controls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub controls: Option<Vec<StandardsControl>>,
+    /// <p>If there are more compliance standards control remaining in the results, then this is the pagination token to use to request the next page of compliance standard controls.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisableImportFindingsForProductRequest {
     /// <p>The ARN of the integrated product to disable the integration for.</p>
     #[serde(rename = "ProductSubscriptionArn")]
@@ -2158,6 +2186,48 @@ pub struct SortCriterion {
     pub sort_order: Option<String>,
 }
 
+/// <p>Details for an individual compliance standard control.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StandardsControl {
+    /// <p>The identifier of the compliance standard control.</p>
+    #[serde(rename = "ControlId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub control_id: Option<String>,
+    /// <p>The current status of the compliance standard control. Indicates whether the control is enabled or disabled. Security Hub does not check against disabled controls.</p>
+    #[serde(rename = "ControlStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub control_status: Option<String>,
+    /// <p>The date and time that the status of the compliance standard control was most recently updated.</p>
+    #[serde(rename = "ControlStatusUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub control_status_updated_at: Option<f64>,
+    /// <p>The longer description of the compliance standard control. Provides information about what the control is checking for.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The reason provided for the most recent change in status for the control.</p>
+    #[serde(rename = "DisabledReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disabled_reason: Option<String>,
+    /// <p>A link to remediation information for the control in the Security Hub user documentation</p>
+    #[serde(rename = "RemediationUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remediation_url: Option<String>,
+    /// <p>The severity of findings generated from this compliance standard control.</p> <p>The finding severity is based on an assessment of how easy it would be to compromise AWS resources if the compliance issue is detected.</p>
+    #[serde(rename = "SeverityRating")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub severity_rating: Option<String>,
+    /// <p>The ARN of the compliance standard control.</p>
+    #[serde(rename = "StandardsControlArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub standards_control_arn: Option<String>,
+    /// <p>The title of the compliance standard control.</p>
+    #[serde(rename = "Title")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+}
+
 /// <p>A resource that represents your subscription to a supported standard.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2318,6 +2388,25 @@ pub struct UpdateInsightRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateInsightResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateStandardsControlRequest {
+    /// <p>The updated status of the compliance standard control.</p>
+    #[serde(rename = "ControlStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub control_status: Option<String>,
+    /// <p>A description of the reason why you are disabling a compliance standard control.</p>
+    #[serde(rename = "DisabledReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disabled_reason: Option<String>,
+    /// <p>The ARN of the compliance standard control to enable or disable.</p>
+    #[serde(rename = "StandardsControlArn")]
+    pub standards_control_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateStandardsControlResponse {}
 
 /// Errors returned by AcceptInvitation
 #[derive(Debug, PartialEq)]
@@ -3131,6 +3220,63 @@ impl Error for DescribeProductsError {
             DescribeProductsError::InvalidAccess(ref cause) => cause,
             DescribeProductsError::InvalidInput(ref cause) => cause,
             DescribeProductsError::LimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeStandardsControls
+#[derive(Debug, PartialEq)]
+pub enum DescribeStandardsControlsError {
+    /// <p>Internal server error.</p>
+    Internal(String),
+    /// <p>AWS Security Hub isn't enabled for the account used to make this request.</p>
+    InvalidAccess(String),
+    /// <p>The request was rejected because you supplied an invalid or out-of-range value for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because we can't find the specified resource.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeStandardsControlsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStandardsControlsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(DescribeStandardsControlsError::Internal(err.msg))
+                }
+                "InvalidAccessException" => {
+                    return RusotoError::Service(DescribeStandardsControlsError::InvalidAccess(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DescribeStandardsControlsError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeStandardsControlsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeStandardsControlsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+impl Error for DescribeStandardsControlsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeStandardsControlsError::Internal(ref cause) => cause,
+            DescribeStandardsControlsError::InvalidAccess(ref cause) => cause,
+            DescribeStandardsControlsError::InvalidInput(ref cause) => cause,
+            DescribeStandardsControlsError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -4403,6 +4549,61 @@ impl Error for UpdateInsightError {
         }
     }
 }
+/// Errors returned by UpdateStandardsControl
+#[derive(Debug, PartialEq)]
+pub enum UpdateStandardsControlError {
+    /// <p>Internal server error.</p>
+    Internal(String),
+    /// <p>AWS Security Hub isn't enabled for the account used to make this request.</p>
+    InvalidAccess(String),
+    /// <p>The request was rejected because you supplied an invalid or out-of-range value for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because we can't find the specified resource.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateStandardsControlError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStandardsControlError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(UpdateStandardsControlError::Internal(err.msg))
+                }
+                "InvalidAccessException" => {
+                    return RusotoError::Service(UpdateStandardsControlError::InvalidAccess(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(UpdateStandardsControlError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateStandardsControlError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateStandardsControlError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+impl Error for UpdateStandardsControlError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateStandardsControlError::Internal(ref cause) => cause,
+            UpdateStandardsControlError::InvalidAccess(ref cause) => cause,
+            UpdateStandardsControlError::InvalidInput(ref cause) => cause,
+            UpdateStandardsControlError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS SecurityHub API. AWS SecurityHub clients implement this trait.
 #[async_trait]
 pub trait SecurityHub {
@@ -4495,6 +4696,12 @@ pub trait SecurityHub {
         &self,
         input: DescribeProductsRequest,
     ) -> Result<DescribeProductsResponse, RusotoError<DescribeProductsError>>;
+
+    /// <p>Returns a list of compliance standards controls.</p> <p>For each control, the results include information about whether it is currently enabled, the severity, and a link to remediation information.</p>
+    async fn describe_standards_controls(
+        &self,
+        input: DescribeStandardsControlsRequest,
+    ) -> Result<DescribeStandardsControlsResponse, RusotoError<DescribeStandardsControlsError>>;
 
     /// <p>Disables the integration of the specified product with Security Hub. Findings from that product are no longer sent to Security Hub after the integration is disabled.</p>
     async fn disable_import_findings_for_product(
@@ -4638,6 +4845,12 @@ pub trait SecurityHub {
         &self,
         input: UpdateInsightRequest,
     ) -> Result<UpdateInsightResponse, RusotoError<UpdateInsightError>>;
+
+    /// <p>Used to control whether an individual compliance standard control is enabled or disabled.</p>
+    async fn update_standards_control(
+        &self,
+        input: UpdateStandardsControlRequest,
+    ) -> Result<UpdateStandardsControlResponse, RusotoError<UpdateStandardsControlError>>;
 }
 /// A client for the AWS SecurityHub API.
 #[derive(Clone)]
@@ -5132,6 +5345,46 @@ impl SecurityHub for SecurityHubClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeProductsError::from_response(response))
+        }
+    }
+
+    /// <p>Returns a list of compliance standards controls.</p> <p>For each control, the results include information about whether it is currently enabled, the severity, and a link to remediation information.</p>
+    async fn describe_standards_controls(
+        &self,
+        input: DescribeStandardsControlsRequest,
+    ) -> Result<DescribeStandardsControlsResponse, RusotoError<DescribeStandardsControlsError>>
+    {
+        let request_uri = format!(
+            "/standards/controls/{standards_subscription_arn}",
+            standards_subscription_arn = input.standards_subscription_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeStandardsControlsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeStandardsControlsError::from_response(response))
         }
     }
 
@@ -5842,6 +6095,39 @@ impl SecurityHub for SecurityHubClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateInsightError::from_response(response))
+        }
+    }
+
+    /// <p>Used to control whether an individual compliance standard control is enabled or disabled.</p>
+    async fn update_standards_control(
+        &self,
+        input: UpdateStandardsControlRequest,
+    ) -> Result<UpdateStandardsControlResponse, RusotoError<UpdateStandardsControlError>> {
+        let request_uri = format!(
+            "/standards/control/{standards_control_arn}",
+            standards_control_arn = input.standards_control_arn
+        );
+
+        let mut request = SignedRequest::new("PATCH", "securityhub", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateStandardsControlResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateStandardsControlError::from_response(response))
         }
     }
 }
