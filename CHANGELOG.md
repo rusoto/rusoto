@@ -20,6 +20,7 @@
 - Add features `serialize_structs` and `deserialize_structs`
 - Implement Clone on various Credential structs.
 - Fix incorrect encoding of Session Token when pre-signing URLs
+- Always encode + in query strings
 
 ## [0.42.0] - 2019-11-18
 

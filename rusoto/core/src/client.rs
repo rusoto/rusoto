@@ -219,7 +219,7 @@ where
                             Some(SignAndDispatchState::FetchingCredentials { future, request });
                     }
                     None => {
-                        request.complement_with_plus(true);
+                        request.complement();
                         let future = self.inner.dispatcher.dispatch(request, self.timeout);
                         self.state = Some(SignAndDispatchState::Dispatching { future });
                     }
@@ -239,9 +239,9 @@ where
                 Ok(Async::Ready(credentials)) => {
                     self.inner.content_encoding.encode(&mut request);
                     if credentials.is_anonymous() {
-                        request.complement_with_plus(true);
+                        request.complement();
                     } else {
-                        request.sign_with_plus(&credentials, true);
+                        request.sign(&credentials);
                     }
                     let future = self.inner.dispatcher.dispatch(request, self.timeout);
                     self.state = Some(SignAndDispatchState::Dispatching { future });
