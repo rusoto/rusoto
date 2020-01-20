@@ -3,14 +3,12 @@
 ## [Unreleased]
 
 (Please put changes here)
-
-- Remove unused import
 - Updated AWS-CREDENTIALS.md to address https://github.com/rusoto/rusoto/issues/1597
 - Fixed SNS API's attributes and value keyword https://github.com/rusoto/rusoto/pull/1591
 - Adding support for web identity provider, which enables IAM roles for Kubernetes service accounts.
 - Add object-safe AwsCredentialsProvider trait as alternative to the existing generic `ProvideAwsCredentials`
   trait.
-- Introduce `Secret` type to automatically zero-out memory use to stored secret credentials. So far,
+- Introduce `Secret` type to automatically zero-out memory use to stored secret credentials. So far, 
   only used in the new web identity provider.
 - Introduce `Variable` to abstract over certain credential provider input parameters.
 
@@ -30,7 +28,7 @@
 - Add QLDB Session service
 - Update Skeptic tests for Rusoto v0.41
 - Don't decode query string parameters before encoding it. Results in fixing the prefix and marker
-  params for s3 `list_objects` methods
+params for s3 `list_objects` methods
 - Add Textract service
 - Update CloudDirectory API definition to `2017-01-11`
 - Add SecurityHub service
@@ -39,7 +37,7 @@
 - Make static credentials into a credential provider
 - Add anonymous credentials support
 - Don't trim whitepsace when parsing xml payload. Fixes truncating of items with spaces in payloads
-  such as an S3 key returned in `list_objects_v2`
+such as an S3 key returned in `list_objects_v2`
 - Region deserialization format matches what Region serializers expect: https://github.com/rusoto/rusoto/pull/1544
 - Fixed regression of `x-amz-content-sha256` header not being signed: https://github.com/rusoto/rusoto/pull/1545
 - Allow `rustls` to be used in `rusoto_mock`: https://github.com/rusoto/rusoto/pull/1557
@@ -193,10 +191,10 @@
 - Honor profile region in `Default` implementation of `Region`
 - Fix bug that could not authenticate ARN with colon
 - Fix error parsing for services using boto's `rest-json` protocol published prior to this release . The following service crates were affected.
-  - `apigateway`, `batch`, `clouddirectory`, `cloudsearchdomain`, `cognito-sync`,
-    `efs`, `eks`, `elastictranscoder`, `glacier`, `greengrass`, `guardduty`, `iot`,
-    `lambda`, `lex-models`, `lex-runtime`, `mq`, `polly`, `serverlessrepo`,
-    `workdocs`, `xray`
+  * `apigateway`, `batch`, `clouddirectory`, `cloudsearchdomain`, `cognito-sync`,
+  `efs`, `eks`, `elastictranscoder`, `glacier`, `greengrass`, `guardduty`, `iot`,
+  `lambda`, `lex-models`, `lex-runtime`, `mq`, `polly`, `serverlessrepo`,
+  `workdocs`, `xray`
 
 ## [0.34.0] - 2018-09-05
 
@@ -238,12 +236,12 @@
 - Convert all services to `futures`-based APIs
 - Show secret keys and tokens as `"**********"` in `Debug` output
 - Ensure list of signed headers is correct when not all headers are signed
-- Use `$AWS_PROFILE` to obtain default profile name
+- Use ```$AWS_PROFILE``` to obtain default profile name
 - Implement `Default` for `Region`
 - Derive Clone for remaining types (affects CloudFront, Route 53 and S3)
 - Link to service-specific documentation in generated Cargo manifests
-- Change credential expiration for non-temporary credentials to be optional and add support for `AWS_CREDENTIAL_EXPIRATION` to EnvironmentProvider
-- Improve ContainerProvider to mimic the behavior of the other SDKs by also considering `AWS_CONTAINER_AUTHORIZATION_TOKEN` and `AWS_CONTAINER_CREDENTIALS_FULL_URI`
+- Change credential expiration for non-temporary credentials to be optional and add support for ```AWS_CREDENTIAL_EXPIRATION``` to EnvironmentProvider
+- Improve ContainerProvider to mimic the behavior of the other SDKs by also considering ```AWS_CONTAINER_AUTHORIZATION_TOKEN``` and ```AWS_CONTAINER_CREDENTIALS_FULL_URI```
 - Implement per-call timeouts for the `DispatchSignedRequest` trait
 - Implement timeouts for `ContainerProvider` and `InstanceMetadataProvider`
 
@@ -301,7 +299,6 @@
 ## [0.28.0] - 2017-08-25
 
 ### Added
-
 - Credentials: accept `aws_security_token` for backwards compatibility
 - Codegen: add `check` command for missing or outdated services
 - API Gateway support
@@ -319,7 +316,6 @@
 - Code of Condcut
 
 ### Changed
-
 - Moved root Cargo.toml to root of git project to allow git dependency references
 - Updated botocore to 1.5.75
 - Integration tests now build, but don't run, as part of the CI process
@@ -327,7 +323,6 @@
 - REST protocols now sends requests with headers and bodies
 
 ### Removed
-
 - Credentials crate no longer retries credential acquiring
-- Type aliases removed. Example: we no longer use `BucketName` which was an alias for `String`.
+- Type aliases removed.  Example: we no longer use `BucketName` which was an alias for `String`.
 - travis-cargo from TravisCI builds
