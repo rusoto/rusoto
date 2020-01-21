@@ -279,7 +279,7 @@ impl SignedRequest {
             self.remove_header("X-Amz-Security-Token");
             self.params.insert(
                 "X-Amz-Security-Token".into(),
-                encode_uri_strict(token).into(),
+                Some(token.to_string()),
             );
         }
 
@@ -315,7 +315,7 @@ impl SignedRequest {
         self.params
             .insert("X-Amz-Date".into(), current_time_fmted.into());
 
-        self.canonical_query_string = build_canonical_query_string(&self.params);
+        self.canonical_query_string = build_canonical_query_string(&self.params, true);
 
         debug!("canonical_uri: {:?}", self.canonical_uri);
         debug!("canonical_headers: {:?}", canonical_headers);
@@ -380,7 +380,7 @@ impl SignedRequest {
             self.scheme(),
             hostname,
             self.canonical_uri,
-            build_canonical_query_string(&self.params)
+            build_canonical_query_string(&self.params, true)
         )
     }
 
@@ -406,7 +406,7 @@ impl SignedRequest {
         // build the canonical request
         self.canonical_uri = self.canonical_path();
         self.canonical_query_string =
-            build_canonical_query_string_with_plus(&self.params, should_treat_plus_literally);
+            build_canonical_query_string(&self.params, should_treat_plus_literally);
         // Gotta remove and re-add headers since by default they append the value.  If we're following
         // a 307 redirect we end up with Three Stooges in the headers with duplicate values.
         self.remove_header("host");
@@ -693,17 +693,10 @@ fn canonical_uri(path: &str, region: &Region) -> String {
     }
 }
 
-/// Canonicalizes query while iterating through the given paramaters
-///
-/// Read more about it: [HERE](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html#query-string-auth-v4-signing)
-fn build_canonical_query_string(params: &Params) -> String {
-    build_canonical_query_string_with_plus(params, false)
-}
-
 /// Canonicalizes query while iterating through the given parameters.
 ///
 /// Read more about it: [HERE](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html#query-string-auth-v4-signing)
-fn build_canonical_query_string_with_plus(
+fn build_canonical_query_string(
     params: &Params,
     should_treat_plus_literally: bool,
 ) -> String {
@@ -913,7 +906,7 @@ mod tests {
         let mut params = Params::new();
         for code in start..end {
             params.insert("k".to_owned(), Some((code as char).to_string()));
-            let enc = build_canonical_query_string(&params);
+            let enc = build_canonical_query_string(&params, false);
             let expected = if (code as char) == '+' {
                 "k=%20".to_owned()
             } else {
@@ -933,7 +926,7 @@ mod tests {
         request.add_param("arg1%7B", "arg1%7B");
         request.add_param("arg2%7B+%2B", "+%2B");
         assert_eq!(
-            super::build_canonical_query_string(&request.params),
+            super::build_canonical_query_string(&request.params, false),
             "arg1%257B=arg1%257B&arg2%257B%20%252B=%20%252B"
         );
         assert_eq!(
@@ -953,7 +946,7 @@ mod tests {
             "key:with@funny&characters",
             "value with/funny%characters/Рускии",
         );
-        let canonical_query_string = super::build_canonical_query_string(&request.params);
+        let canonical_query_string = super::build_canonical_query_string(&request.params, false);
         assert_eq!("key%3Awith%40funny%26characters=value%20with%2Ffunny%25characters%2F%D0%A0%D1%83%D1%81%D0%BA%D0%B8%D0%B8",
                    canonical_query_string);
         let canonical_uri_string = super::canonical_uri(&request.path, &Region::default());
@@ -961,6 +954,13 @@ mod tests {
             "/path%20with%20spaces%3A%20the%20sequel%2B%2B",
             canonical_uri_string
         );
+    }
+    #[test]
+    fn query_string_literal_plus() {
+        let mut params = Params::new();
+        params.insert("key".into(), Some("val+ue".into()));
+        let encoded = build_canonical_query_string(&params, true);
+        assert_eq!("key=val%2Bue", encoded);
     }
 
     #[test]

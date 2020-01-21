@@ -12,7 +12,6 @@
 - Introduce `Secret` type to automatically zero-out memory use to stored secret credentials. So far, 
   only used in the new web identity provider.
 - Introduce `Variable` to abstract over certain credential provider input parameters.
-
 - Encode request payload optionally with Gzip : https://github.com/rusoto/rusoto/pull/1615
 - Add Debug trait to generated Clients
 - Add `rusoto_ec2::filter!` macro
@@ -20,6 +19,7 @@
 - Remove deprecated `Error::description` implementations
 - Add features `serialize_structs` and `deserialize_structs`
 - Implement Clone on various Credential structs.
+- Fix incorrect encoding of Session Token when pre-signing URLs
 - Add IoT Secure Tunneling service
 
 ## [0.42.0] - 2019-11-18
