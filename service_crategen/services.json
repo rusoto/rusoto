@@ -479,6 +479,12 @@
     "protocolVersion": "2017-09-29",
     "baseTypeName": "IotJobsData"
   },
+  "iotsecuretunneling": {
+    "version": "0.42.0",
+    "coreVersion": "0.42.0",
+    "protocolVersion": "2018-10-05",
+    "baseTypeName": "IoTSecureTunneling"
+  },
   "iot1click-devices": {
     "version": "0.42.0",
     "coreVersion": "0.42.0",
