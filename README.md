@@ -19,6 +19,7 @@
             <a href="https://crates.io/crates/rusoto_core" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto_core.svg" alt="crates-io"></img></a>
             <a href="#license" title="License: MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license-badge"></img></a>
             <img src="https://tokei.rs/b1/github/rusoto/rusoto"></img>
+	    <a href="https://discordapp.com/invite/WMJ4DWp"><img src="https://img.shields.io/discord/670751965273391124"></img></a>
         </td>
     </tr>
 </table>
@@ -108,7 +109,9 @@ Information on release schedules and procedures are in [RELEASING](RELEASING.md)
 
 ## Contributing
 
-See [CONTRIBUTING](CONTRIBUTING.md).
+Discussions take place on the [Rusoto Discord channel][discord-invite].
+
+See [CONTRIBUTING](CONTRIBUTING.md) for more information.
 
 ## Supported OSs, Rust versions and non-AWS projects
 
@@ -129,3 +132,4 @@ See [LICENSE][license] for details.
 [rusoto-help]: https://www.rusoto.org/help.html "Getting help with Rusoto"
 [rusoto-overview]: https://www.rusoto.org/ "Rusoto overview"
 [supported-aws-services]: https://www.rusoto.org/supported-aws-services.html "List of AWS services supported by Rusoto"
+[discord-invite]: https://discordapp.com/invite/WMJ4DWp "Discord channel invite"

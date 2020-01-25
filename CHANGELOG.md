@@ -21,6 +21,7 @@
 - Implement Clone on various Credential structs.
 - Fix incorrect encoding of Session Token when pre-signing URLs
 - Add IoT Secure Tunneling service
+- Add Discord invite link to README.md and CONTRIBUTING.md
 
 ## [0.42.0] - 2019-11-18
 
