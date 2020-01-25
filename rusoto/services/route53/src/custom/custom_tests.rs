@@ -1,15 +1,13 @@
-extern crate rusoto_mock;
-
 use crate::custom::util::quote_txt_record;
 use crate::generated::{
     ListResourceRecordSetsError, ListResourceRecordSetsRequest, Route53, Route53Client,
 };
 use rusoto_core::{Region, RusotoError};
 
-use self::rusoto_mock::*;
+use rusoto_mock::*;
 
-#[test]
-fn test_parse_no_such_hosted_zone_error() {
+#[tokio::test]
+async fn test_parse_no_such_hosted_zone_error() {
     let mock = MockRequestDispatcher::with_status(404).with_body(
         r#"<?xml version="1.0"?>
             <ErrorResponse xmlns="https://route53.amazonaws.com/doc/2013-04-01/">
@@ -28,7 +26,7 @@ fn test_parse_no_such_hosted_zone_error() {
     };
 
     let client = Route53Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.list_resource_record_sets(request).sync();
+    let result = client.list_resource_record_sets(request).await;
     assert!(result.is_err());
     let err = result.err().unwrap();
     assert_eq!(

@@ -11,7 +11,8 @@
 /// # use rusoto_ec2::{filter, DescribeAvailabilityZonesRequest, Ec2, Ec2Client};
 /// # use rusoto_core::Region;
 ///
-/// # fn main() -> Result<(), Box<dyn Error>> {
+/// # #[tokio::main]
+/// # async fn main() -> Result<(), Box<dyn Error>> {
 /// let filter = filter!("region-name", "us-east-1");
 /// let input = DescribeAvailabilityZonesRequest {
 ///     filters: Some(vec![filter]),
@@ -20,7 +21,7 @@
 ///
 /// let output = Ec2Client::new(Region::default())
 ///     .describe_availability_zones(input)
-///     .sync()?;
+///     .await?;
 /// #
 /// #     Ok(())
 /// # }

@@ -26,11 +26,6 @@
 //! log group.
 //!
 //! ```rust,no_run
-//! 
-//! extern crate chrono;
-//! extern crate rusoto_core;
-//! extern crate rusoto_logs;
-//! 
 //! use chrono::Utc;
 //! 
 //! use rusoto_core::Region;
@@ -40,9 +35,10 @@
 //! };
 //! use std::default::Default;
 //! 
-//! fn main() {
-//!     const LOG_GROUP_NAME: &'static str = "testing";
-//!     const LOG_STREAM_NAME: &'static str = "testing";
+//! #[tokio::main]
+//! async fn main() {
+//!     const LOG_GROUP_NAME: &str = "testing";
+//!     const LOG_STREAM_NAME: &str = "testing";
 //! 
 //!     let client = CloudWatchLogsClient::new(Region::UsEast2);
 //! 
@@ -54,7 +50,7 @@
 //!     // We need the log stream to get the sequence token
 //!     let mut desc_streams_req: DescribeLogStreamsRequest = Default::default();
 //!     desc_streams_req.log_group_name = LOG_GROUP_NAME.to_string();
-//!     let streams_resp = client.describe_log_streams(desc_streams_req).sync();
+//!     let streams_resp = client.describe_log_streams(desc_streams_req).await;
 //!     let log_streams = streams_resp.unwrap().log_streams.unwrap();
 //!     let stream = &log_streams
 //!         .iter()
@@ -66,10 +62,10 @@
 //!         log_events: vec![input_log_event], // > 1 must sort by timestamp ASC
 //!         log_group_name: LOG_GROUP_NAME.to_string(),
 //!         log_stream_name: LOG_STREAM_NAME.to_string(),
-//!         sequence_token: sequence_token,
+//!         sequence_token,
 //!     };
 //! 
-//!     let resp = client.put_log_events(put_log_events_request).sync();
+//!     let resp = client.put_log_events(put_log_events_request).await;
 //!     println!("{:#?}", resp);
 //! }
 //! ```

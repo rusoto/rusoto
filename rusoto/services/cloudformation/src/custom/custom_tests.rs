@@ -9,8 +9,8 @@ use rusoto_core::signature::SignedRequestPayload;
 use rusoto_core::Region;
 use serde_urlencoded;
 
-#[test]
-fn should_serialize_list_parameters_in_request_body() {
+#[tokio::test]
+async fn should_serialize_list_parameters_in_request_body() {
     let mock = MockRequestDispatcher::with_status(200)
         .with_body(
             r#"<?xml version="1.0" encoding="UTF-8"?>
@@ -75,5 +75,5 @@ fn should_serialize_list_parameters_in_request_body() {
     };
 
     let client = CloudFormationClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let _result = client.list_stacks(request).sync().unwrap();
+    let _result = client.list_stacks(request).await.unwrap();
 }
