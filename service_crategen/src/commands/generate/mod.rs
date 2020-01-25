@@ -70,7 +70,7 @@ pub fn generate_services(
 
         // Panicking on error is okay because we can't do anything if the definition isn't present
         #[allow(clippy::match_wild_err_arm)]
-        let service = match ServiceDefinition::load(name, &service_config.protocol_version) {
+            let service = match ServiceDefinition::load(name, &service_config.protocol_version) {
             Ok(sd) => Service::new(service_config, sd),
             Err(_) => panic!("Failed to load service {}. Make sure the botocore submodule has been initialized!", name),
         };
@@ -89,47 +89,21 @@ pub fn generate_services(
         features.insert("native-tls".into(), vec!["rusoto_core/native-tls".into()]);
         features.insert("rustls".into(), vec!["rusoto_core/rustls".into()]);
 
-        let mut serialize_feature_dependencies = vec!["bytes/serde".into()];
+        let serialize_feature_dependencies = vec!["bytes/serde".into()];
 
         let service_dependencies = service.get_dependencies();
         let service_dev_dependencies = service.get_dev_dependencies();
-
-        let mut extern_crates = service_dependencies.iter().map(|(name, dep_obj)| {
-            if name == "xml-rs" {
-                return "extern crate xml;".into();
-            }
-            let mut crate_str = String::new();
-            let safe_name = name.replace("-", "_");
-            if let cargo::Dependency::Extended { optional: Some(is_optional), .. } = dep_obj {
-                if *is_optional {
-                    crate_str.push_str("#[cfg(any(feature = \"serialize_structs\", feature = \"deserialize_structs\"))]\n");
-                    if name == "serde" || name == "serde_derive" {
-                        serialize_feature_dependencies.push(name.into());
-                    }
-                }
-            }
-            let use_macro = name == "serde_derive" || name == "lazy_static";
-            if use_macro {
-                crate_str.push_str("#[macro_use]\n");
-            }
-            crate_str.push_str(&format!("extern crate {};", safe_name));
-            crate_str
-        }).collect::<Vec<String>>().join("\n");
-        // S3 needs the external test crate for benchmark tests
-        if service.full_name() == "Amazon Simple Storage Service" {
-            extern_crates.push_str("\n#[cfg(nightly)]\nextern crate test;");
-        }
 
         features.insert("serialize_structs".into(), serialize_feature_dependencies.clone());
         features.insert("deserialize_structs".into(), serialize_feature_dependencies.clone());
 
         let mut cargo_manifest = BufWriter::new(
             OpenOptions::new()
-            .write(true)
-            .truncate(true)
-            .create(true)
-            .open(crate_dir.join("Cargo.toml"))
-            .expect("Unable to write Cargo.toml")
+                .write(true)
+                .truncate(true)
+                .create(true)
+                .open(crate_dir.join("Cargo.toml"))
+                .expect("Unable to write Cargo.toml")
         );
 
         let mut name_for_keyword = name.clone().to_string();
@@ -167,59 +141,43 @@ pub fn generate_services(
 
         let mut readme_file = BufWriter::new(
             OpenOptions::new()
-            .write(true)
-            .truncate(true)
-            .create(true)
-            .open(crate_dir.join("README.md"))
-            .expect("Unable to write README.md")
+                .write(true)
+                .truncate(true)
+                .create(true)
+                .open(crate_dir.join("README.md"))
+                .expect("Unable to write README.md")
         );
 
         writeln!(readme_file, r#"
 # Rusoto {short_name}
 Rust SDK for {aws_name}
-
 You may be looking for:
-
 * [An overview of Rusoto][rusoto-overview]
 * [AWS services supported by Rusoto][supported-aws-services]
 * [API documentation][api-documentation]
 * [Getting help with Rusoto][rusoto-help]
-
 ## Requirements
-
 Rust stable or beta are required to use Rusoto. Nightly is tested, but not guaranteed to be supported. Older
 versions _may_ be supported. The currently supported Rust versions can be found in the Rusoto project
 [`travis.yml`](https://github.com/rusoto/rusoto/blob/master/.travis.yml).
-
 On Linux, OpenSSL is required.
-
 ## Installation
-
 To use `{crate_name}` in your application, add it as a dependency in your `Cargo.toml`:
-
 ```toml
 [dependencies]
 {crate_name} = "{version}"
 ```
-
 ## Crate Features
 - `native-tls` - use platform-specific TLS implementation.
 - `rustls` - use rustls TLS implementation.
 - `serialize_structs` - output structs of most operations get `derive(Serialize)`.
 - `deserialize_structs` - input structs of most operations get `derive(Deserialize)`.
-
 Note: the crate will use the `native-tls` TLS implementation by default.
-
 ## Contributing
-
 See [CONTRIBUTING][contributing].
-
 ## License
-
 Rusoto is distributed under the terms of the MIT license.
-
 See [LICENSE][license] for details.
-
 [api-documentation]: https://docs.rs/{crate_name} "API documentation"
 [license]: https://github.com/rusoto/rusoto/blob/master/LICENSE "MIT License"
 [contributing]: https://github.com/rusoto/rusoto/blob/master/CONTRIBUTING.md "Contributing Guide"
@@ -227,10 +185,10 @@ See [LICENSE][license] for details.
 [rusoto-overview]: https://www.rusoto.org/ "Rusoto overview"
 [supported-aws-services]: https://www.rusoto.org/supported-aws-services.html "List of AWS services supported by Rusoto"
         "#,
-        short_name = service.service_type_name(),
-        aws_name = service.full_name(),
-        crate_name = crate_name,
-        version = service_config.version
+                 short_name = service.service_type_name(),
+                 aws_name = service.full_name(),
+                 crate_name = crate_name,
+                 version = service_config.version
         ).expect("Couldn't write README for crate");
 
         {
@@ -244,11 +202,11 @@ See [LICENSE][license] for details.
 
             let mut lib_file = BufWriter::new(
                 OpenOptions::new()
-                .write(true)
-                .truncate(true)
-                .create(true)
-                .open(&lib_file_path)
-                .expect("Unable to write lib.rs")
+                    .write(true)
+                    .truncate(true)
+                    .create(true)
+                    .open(&lib_file_path)
+                    .expect("Unable to write lib.rs")
             );
 
             writeln!(lib_file, r#"
@@ -263,36 +221,32 @@ See [LICENSE][license] for details.
 //  must be updated to generate the changes.
 //
 // =================================================================
-
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 {service_docs}
 //!
 //! If you're using the service, you're probably looking for [{client_name}](struct.{client_name}.html) and [{trait_name}](trait.{trait_name}.html).
 {examples}
-{extern_crates}
-
-mod generated;
 mod custom;
-
-pub use crate::generated::*;
-pub use crate::custom::*;
-            "#,
-            service_docs = crate::doco::Module(service.documentation().unwrap_or(&service.full_name().to_owned())),
-            client_name = service.client_type_name(),
-            trait_name = service.service_type_name(),
-            examples = generate_examples(&crate_dir).unwrap_or_else(|| "".to_string()),
-            extern_crates = extern_crates
+mod generated;
+pub use custom::*;
+pub use generated::*;"#,
+                     service_docs = crate::doco::Module(service.documentation().unwrap_or(&service.full_name().to_owned())),
+                     client_name = service.client_type_name(),
+                     trait_name = service.service_type_name(),
+                     examples = generate_examples(&crate_dir).unwrap_or_else(|| "".to_string()),
             ).expect("Couldn't write library file");
 
             let gen_file_path = src_dir.join("generated.rs");
 
             let mut gen_writer = BufWriter::new(
                 OpenOptions::new()
-                .create(true)
-                .write(true)
-                .truncate(true)
-                .open(&gen_file_path)
-                .expect("Unable to write generated.rs")
+                    .create(true)
+                    .write(true)
+                    .truncate(true)
+                    .open(&gen_file_path)
+                    .expect("Unable to write generated.rs")
             );
 
             codegen::generate_source(&service, &mut gen_writer).unwrap();
@@ -319,7 +273,7 @@ pub use crate::custom::*;
             let gen_file_path = src_dir.join("generated.rs");
 
             let status = Command::new("rustfmt")
-                .args(&["--emit", "files"])
+                .args(&["--emit", "files", "--edition", "2018"])
                 .args(&["--config-path", "rustfmt.toml"])
                 .arg(gen_file_path)
                 .status()

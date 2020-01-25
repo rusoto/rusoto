@@ -1,6 +1,6 @@
 use toml;
 
-use serde_derive::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
 #[derive(Debug, Default, Deserialize, Serialize)]

@@ -54,6 +54,7 @@ pub trait GenerateErrorTypes {
 
                 {error_from_body_impl}
                 impl fmt::Display for {type_name} {{
+                    #[allow(unused_variables)]
                     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
                         match *self {{
                             {display_matchers}

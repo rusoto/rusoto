@@ -8,7 +8,11 @@ use crate::Service;
 pub struct JsonGenerator;
 
 impl GenerateProtocol for JsonGenerator {
-    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
+    fn generate_method_signatures(
+        &self,
+        writer: &mut FileWriter,
+        service: &Service<'_>,
+    ) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             let output_type = operation.output_shape_or("()");
 
@@ -16,7 +20,7 @@ impl GenerateProtocol for JsonGenerator {
                 writer,
                 "
                 {documentation}
-                {method_signature} -> RusotoFuture<{output_type}, {error_type}>;
+                {method_signature} -> Result<{output_type}, RusotoError<{error_type}>>;
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
                 method_signature = generate_method_signature(service, operation),
@@ -34,22 +38,21 @@ impl GenerateProtocol for JsonGenerator {
             writeln!(writer,
                      "
                 {documentation}
-                {method_signature} -> RusotoFuture<{output_type}, {error_type}> {{
+                {method_signature} -> Result<{output_type}, RusotoError<{error_type}>> {{
                     let mut request = SignedRequest::new(\"{http_method}\", \"{signing_name}\", &self.region, \"{request_uri}\");
                     {modify_endpoint_prefix}
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     {payload}
 
-                    self.client.sign_and_dispatch(request, |response| {{
-                        if response.status.is_success() {{
-                            {ok_response}
-                        }} else {{
-                            Box::new(response.buffer().from_err().and_then(|response| {{
-                                Err({error_type}::from_response(response))
-                            }}))
-                        }}
-                    }})
+                    let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
+                    if response.status.is_success() {{
+                        {ok_response}
+                    }} else {{
+                        let try_response = response.buffer().await;
+                        let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                        Err({error_type}::from_response(response))
+                    }}
                 }}
                 ",
                      documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
@@ -73,9 +76,10 @@ impl GenerateProtocol for JsonGenerator {
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         let res = writeln!(
             writer,
-            "
-        use rusoto_core::proto;
-        use rusoto_core::signature::SignedRequest;"
+            "use rusoto_core::proto;
+        use rusoto_core::signature::SignedRequest;
+        #[allow(unused_imports)]
+        use serde::{{Deserialize, Serialize}};"
         );
         if service.needs_serde_json_crate() {
             return writeln!(writer, "use serde_json;");
@@ -117,13 +121,13 @@ fn generate_method_signature(service: &Service<'_>, operation: &Operation) -> St
             .unwrap_or(false)
     {
         format!(
-            "fn {method_name}(&self, input: {input_type}) ",
+            "async fn {method_name}(&self, input: {input_type}) ",
             input_type = operation.input_shape(),
             method_name = operation.name.to_snake_case()
         )
     } else {
         format!(
-            "fn {method_name}(&self) ",
+            "async fn {method_name}(&self) ",
             method_name = operation.name.to_snake_case()
         )
     }
@@ -159,12 +163,11 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
         format!(
-            "Box::new(response.buffer().from_err().and_then(|response| {{
-                    proto::json::ResponsePayload::new(&response).deserialize::<{}, _>()
-                }}))",
-            output_type
+            "let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<{}, _>()",
+            output_type = output_type,
         )
     } else {
-        "Box::new(future::ok(::std::mem::drop(response)))".to_owned()
+        "Ok(std::mem::drop(response))".to_owned()
     }
 }
