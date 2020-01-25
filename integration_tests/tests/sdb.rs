@@ -10,20 +10,20 @@ use rusoto_sdb::{
 
 // See https://github.com/rusoto/rusoto/issues/978 for details on why these tests are ignored.
 
-#[test]
+#[tokio::test]
 #[ignore]
-fn should_list_domains() {
+async fn should_list_domains() {
     let client = SimpleDbClient::new(Region::UsEast1);
     let _ = env_logger::try_init();
     let request = ListDomainsRequest::default();
 
-    let result = client.list_domains(request).sync().unwrap();
+    let result = client.list_domains(request).await.unwrap();
     println!("{:#?}", result);
 }
 
-#[test]
+#[tokio::test]
 #[ignore]
-fn roundtrip_test() {
+async fn roundtrip_test() {
     let _ = env_logger::try_init();
     let client = SimpleDbClient::new(Region::UsEast1);
     let test_domain = "rusoto_domain".to_string();
@@ -32,13 +32,13 @@ fn roundtrip_test() {
     let create_domain_req = CreateDomainRequest {
         domain_name: test_domain.clone(),
     };
-    let create_result = client.create_domain(create_domain_req).sync();
+    let create_result = client.create_domain(create_domain_req).await;
     println!("create domain result: {:#?}", create_result);
     assert!(create_result.is_ok());
 
     // see domain in list (may take up to 10 seconds)
     let request = ListDomainsRequest::default();
-    let list_domains_result = client.list_domains(request).sync();
+    let list_domains_result = client.list_domains(request).await;
     println!("list domains result: {:#?}", list_domains_result);
     assert!(list_domains_result.is_ok());
 
@@ -52,7 +52,7 @@ fn roundtrip_test() {
     let delete_req = DeleteDomainRequest {
         domain_name: test_domain,
     };
-    let delete_result = client.delete_domain(delete_req).sync();
+    let delete_result = client.delete_domain(delete_req).await;
     println!("delete domain result: {:#?}", delete_result);
     assert!(delete_result.is_ok());
 }

@@ -8,14 +8,14 @@ use rusoto_cognito_idp::{
 };
 use rusoto_core::Region;
 
-#[test]
-fn should_list_user_pools() {
+#[tokio::test]
+async fn should_list_user_pools() {
     let client = CognitoIdentityProviderClient::new(Region::UsEast1);
     let request = ListUserPoolsRequest {
         max_results: 10,
         ..Default::default()
     };
 
-    let result = client.list_user_pools(request).sync().unwrap();
+    let result = client.list_user_pools(request).await.unwrap();
     println!("{:#?}", result);
 }

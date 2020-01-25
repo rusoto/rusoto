@@ -8,13 +8,13 @@ use rusoto_config::{
 };
 use rusoto_core::Region;
 
-#[test]
-fn should_describe_config_rules() {
+#[tokio::test]
+async fn should_describe_config_rules() {
     let client = ConfigServiceClient::new(Region::UsEast1);
 
     let request = DescribeConfigRulesRequest::default();
 
-    match client.describe_config_rules(request).sync() {
+    match client.describe_config_rules(request).await {
         Ok(response) => {
             println!("{:#?}", response);
             assert!(true)
@@ -23,13 +23,13 @@ fn should_describe_config_rules() {
     };
 }
 
-#[test]
-fn should_describe_delivery_channels() {
+#[tokio::test]
+async fn should_describe_delivery_channels() {
     let client = ConfigServiceClient::new(Region::UsEast1);
 
     let request = DescribeDeliveryChannelsRequest::default();
 
-    match client.describe_delivery_channels(request).sync() {
+    match client.describe_delivery_channels(request).await {
         Ok(response) => {
             println!("{:#?}", response);
             assert!(true)

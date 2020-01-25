@@ -6,13 +6,13 @@ extern crate rusoto_importexport;
 use rusoto_core::Region;
 use rusoto_importexport::{ImportExport, ImportExportClient, ListJobsInput};
 
-#[test]
+#[tokio::test]
 #[ignore]
-fn should_list_jobs() {
+async fn should_list_jobs() {
     let _ = env_logger::try_init();
     let client = ImportExportClient::new(Region::UsEast1);
     let request = ListJobsInput::default();
 
-    let result = client.list_jobs(request).sync().unwrap();
+    let result = client.list_jobs(request).await.unwrap();
     println!("{:#?}", result);
 }

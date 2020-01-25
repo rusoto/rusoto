@@ -20,20 +20,20 @@ use rusoto_sqs::{
 };
 use rusoto_sqs::{Sqs, SqsClient};
 
-#[test]
-fn list_queues() {
+#[tokio::test]
+async fn list_queues() {
     let sqs = SqsClient::new(Region::UsEast1);
 
     let request = ListQueuesRequest {
         ..Default::default()
     };
 
-    let result = sqs.list_queues(request).sync().expect("List queues failed");
+    let result = sqs.list_queues(request).await.expect("List queues failed");
     println!("{:#?}", result);
 }
 
-#[test]
-fn sqs_roundtrip_tests() {
+#[tokio::test]
+async fn sqs_roundtrip_tests() {
     let _ = env_logger::try_init();
     let sqs = SqsClient::new(Region::UsEast1);
 
@@ -52,7 +52,7 @@ fn sqs_roundtrip_tests() {
 
     let response = sqs
         .create_queue(q_creation_req)
-        .sync()
+        .await
         .expect("Create queue failed");
     println!(
         "Created queue {} with url {}",
@@ -72,7 +72,7 @@ fn sqs_roundtrip_tests() {
     };
     let response = sqs
         .get_queue_url(get_q_by_name_request)
-        .sync()
+        .await
         .expect("Get queue by URL request failed");
     let queue_url = &response
         .queue_url
@@ -88,7 +88,7 @@ fn sqs_roundtrip_tests() {
         queue_url: queue_url.clone(),
         attribute_names: Some(vec!["All".to_string()]),
     };
-    match sqs.get_queue_attributes(queue_attributes_req).sync() {
+    match sqs.get_queue_attributes(queue_attributes_req).await {
         Ok(result) => println!("Queue attributes: {:?}", result),
         Err(e) => panic!("Error getting queue attributes: {:?}", e),
     }
@@ -100,7 +100,7 @@ fn sqs_roundtrip_tests() {
         queue_url: queue_url.clone(),
         ..Default::default()
     };
-    let response = sqs.send_message(send_msg_request).sync();
+    let response = sqs.send_message(send_msg_request).await;
     println!(
         "Sent message with body '{}' and created message_id {}",
         msg_str,
@@ -114,7 +114,7 @@ fn sqs_roundtrip_tests() {
         ..Default::default()
     };
 
-    let response = sqs.receive_message(receive_request).sync();
+    let response = sqs.receive_message(receive_request).await;
     for msg in response
         .expect("Expected to have a receive message response")
         .messages
@@ -133,7 +133,7 @@ fn sqs_roundtrip_tests() {
             queue_url: queue_url.clone(),
             receipt_handle: msg.receipt_handle.clone().unwrap(),
         };
-        match sqs.delete_message(delete_message_request).sync() {
+        match sqs.delete_message(delete_message_request).await {
             Ok(_) => println!(
                 "Deleted message via receipt handle {:?}",
                 msg.receipt_handle
@@ -145,15 +145,15 @@ fn sqs_roundtrip_tests() {
     let queue_deletion_req = DeleteQueueRequest {
         queue_url: queue_url.clone(),
     };
-    match sqs.delete_queue(queue_deletion_req).sync() {
+    match sqs.delete_queue(queue_deletion_req).await {
         Ok(_) => (),
         Err(e) => panic!("Couldn't delete queue: {:?}", e),
     }
     println!("Queue {} deleted", queue_url.clone());
 }
 
-#[test]
-fn sqs_timeout_test() {
+#[tokio::test]
+async fn sqs_timeout_test() {
     let _ = env_logger::try_init();
     let sqs = SqsClient::new(Region::UsEast1);
 
@@ -165,7 +165,7 @@ fn sqs_timeout_test() {
     };
     let response = sqs
         .create_queue(q_creation_req)
-        .sync()
+        .await
         .expect("create queue failed");
     let queue_url = response.queue_url.unwrap();
     assert!(queue_url.ends_with(q_name));
@@ -175,10 +175,9 @@ fn sqs_timeout_test() {
         wait_time_seconds: Some(10),
         ..Default::default()
     };
-    let result = sqs
-        .receive_message(receive_request)
-        .with_timeout(Duration::from_secs(2))
-        .sync();
+    let result = tokio::time::timeout(Duration::from_secs(2), sqs
+        .receive_message(receive_request))
+        .await;
     println!("sqs receive result: {:?}", result);
 
     let err = result.err().expect("receive did not fail as expected");
@@ -188,12 +187,12 @@ fn sqs_timeout_test() {
         queue_url: queue_url.clone(),
     };
     sqs.delete_queue(queue_deletion_req)
-        .sync()
+        .await
         .expect("delete queue failed");
 }
 
-#[test]
-fn sqs_bulk_roundtrip_tests() {
+#[tokio::test]
+async fn sqs_bulk_roundtrip_tests() {
     let _ = env_logger::try_init();
     let sqs = SqsClient::new(Region::UsEast1);
 
@@ -206,7 +205,7 @@ fn sqs_bulk_roundtrip_tests() {
 
     let response = sqs
         .create_queue(q_creation_req)
-        .sync()
+        .await
         .expect("Create queue failed");
     println!(
         "Created queue {} with url {}",
@@ -226,7 +225,7 @@ fn sqs_bulk_roundtrip_tests() {
     };
     let response = sqs
         .get_queue_url(get_q_by_name_request)
-        .sync()
+        .await
         .expect("Get queue by URL request failed");
     let queue_url = &response
         .queue_url
@@ -242,7 +241,7 @@ fn sqs_bulk_roundtrip_tests() {
         queue_url: queue_url.clone(),
         attribute_names: Some(vec!["All".to_string()]),
     };
-    match sqs.get_queue_attributes(queue_attributes_req).sync() {
+    match sqs.get_queue_attributes(queue_attributes_req).await {
         Ok(result) => println!("Queue attributes: {:?}", result),
         Err(e) => panic!("Error getting queue attributes: {:?}", e),
     }
@@ -264,7 +263,7 @@ fn sqs_bulk_roundtrip_tests() {
         entries: vec![send_msg_request_entry_1, send_msg_request_entry_2],
         ..Default::default()
     };
-    let response = sqs.send_message_batch(send_msg_request).sync();
+    let response = sqs.send_message_batch(send_msg_request).await;
     println!(
         "Sent message with body '{}' and created messages {:?}",
         msg_str,
@@ -278,7 +277,7 @@ fn sqs_bulk_roundtrip_tests() {
         ..Default::default()
     };
 
-    let response = sqs.receive_message(receive_request).sync();
+    let response = sqs.receive_message(receive_request).await;
     let mut delete_entries: Vec<DeleteMessageBatchRequestEntry> = Vec::new();
     for msg in response
         .expect("Expected to have a receive message response")
@@ -301,7 +300,7 @@ fn sqs_bulk_roundtrip_tests() {
         queue_url: queue_url.clone(),
         entries: delete_entries.clone(),
     };
-    match sqs.delete_message_batch(delete_message_request).sync() {
+    match sqs.delete_message_batch(delete_message_request).await {
         Ok(_) => println!("Deleted messages via receipt handle {:?}", delete_entries),
         Err(e) => panic!("Couldn't delete message: {:?}", e),
     }
@@ -309,7 +308,7 @@ fn sqs_bulk_roundtrip_tests() {
     let queue_deletion_req = DeleteQueueRequest {
         queue_url: queue_url.clone(),
     };
-    match sqs.delete_queue(queue_deletion_req).sync() {
+    match sqs.delete_queue(queue_deletion_req).await {
         Ok(_) => (),
         Err(e) => panic!("Couldn't delete queue: {:?}", e),
     }

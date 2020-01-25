@@ -650,13 +650,14 @@ path = "../rusoto/services/ram"
 
 [dev-dependencies]
 env_logger = "0.7"
-futures = "0.1.16"
-futures-fs = "0.0.3"
-log = "0.4.1"
-rand = "^0.7.2"
+bytes = "0.5"
+futures = "0.3"
+log = "0.4"
+rand = "0.7"
 time = "0.2"
-reqwest = "0.9"
-http = "0.1.17"
+reqwest = { version = "0.10", features = ["json"] }
+http = "0.2"
+tokio = { version = "0.2", features = ["time", "rt-core", "fs"] }
 
 [features]
 all = [

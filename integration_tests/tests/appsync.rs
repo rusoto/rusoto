@@ -7,12 +7,12 @@ extern crate rusoto_core;
 use rusoto_appsync::{AppSync, AppSyncClient, ListGraphqlApisRequest};
 use rusoto_core::Region;
 
-#[test]
-fn should_list_graphql_apis() {
+#[tokio::test]
+async fn should_list_graphql_apis() {
     let _ = env_logger::try_init();
     let client = AppSyncClient::new(Region::UsEast1);
     let request = ListGraphqlApisRequest::default();
 
-    let result = client.list_graphql_apis(request).sync().unwrap();
+    let result = client.list_graphql_apis(request).await.unwrap();
     println!("{:#?}", result);
 }

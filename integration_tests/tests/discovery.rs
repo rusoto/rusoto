@@ -15,14 +15,14 @@ use std::str;
 // These tests require the calling AWS account to be whitelisted.
 // See http://docs.aws.amazon.com/application-discovery/latest/userguide/console_walkthrough.html
 // For now we'll accept the error message returned if the account is not whitelisted.
-#[test]
-fn should_describe_tags() {
+#[tokio::test]
+async fn should_describe_tags() {
     let _ = env_logger::try_init();
 
     let client = DiscoveryClient::new(Region::UsWest2);
     let request = DescribeTagsRequest::default();
 
-    match client.describe_tags(request).sync() {
+    match client.describe_tags(request).await {
         Ok(response) => println!("Response: {:?}", response),
         Err(e) => {
             println!("Got expected error of {}", e);
@@ -38,8 +38,8 @@ fn should_describe_tags() {
     }
 }
 
-#[test]
-fn should_list_configurations() {
+#[tokio::test]
+async fn should_list_configurations() {
     let _ = env_logger::try_init();
 
     let client = DiscoveryClient::new(Region::UsWest2);
@@ -48,7 +48,7 @@ fn should_list_configurations() {
         ..Default::default()
     };
 
-    match client.list_configurations(request).sync() {
+    match client.list_configurations(request).await {
         Ok(response) => println!("Response: {:?}", response),
         Err(e) => match e {
             RusotoError::Unknown(ref e) => {

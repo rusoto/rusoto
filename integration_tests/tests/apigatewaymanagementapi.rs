@@ -8,8 +8,8 @@ use rusoto_apigatewaymanagementapi::{
 };
 use rusoto_core::Region;
 
-#[test]
-fn should_work() {
+#[tokio::test]
+async fn should_work() {
     // post_to_connection is a bit like invoke using the following method
     // https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-call-api.html
     // except this is intended for websocket connection postings over rest
@@ -27,7 +27,7 @@ fn should_work() {
             connection_id: "bogus".into(),
             ..PostToConnectionRequest::default()
         })
-        .sync();
+        .await;
     // we expect an error because we're posting to an apigw that does not exist
     assert!(response.is_err());
     println!("response is {:#?}", response);

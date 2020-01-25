@@ -8,11 +8,11 @@ use rusoto_dms::{
     DatabaseMigrationService, DatabaseMigrationServiceClient, DescribeEndpointsMessage,
 };
 
-#[test]
-fn should_describe_tags() {
+#[tokio::test]
+async fn should_describe_tags() {
     let client = DatabaseMigrationServiceClient::new(Region::UsEast1);
     let request = DescribeEndpointsMessage::default();
 
-    let result = client.describe_endpoints(request).sync().unwrap();
+    let result = client.describe_endpoints(request).await.unwrap();
     println!("{:#?}", result);
 }

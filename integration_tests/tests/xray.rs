@@ -10,8 +10,8 @@ use time::Time;
 
 // duplicates the AWS X-Ray CLI example, which gets an (empty) service graph
 // for the last 600 seconds
-#[test]
-fn should_get_service_graph() {
+#[tokio::test]
+async fn should_get_service_graph() {
     let client = XRayClient::new(Region::UsEast1);
 
     let time = (Time::now().second() - 30) as f64; // 30 seconds in the past
@@ -22,7 +22,7 @@ fn should_get_service_graph() {
         ..Default::default()
     };
 
-    let result = client.get_service_graph(request).sync();
+    let result = client.get_service_graph(request).await;
     println!("{:#?}", result);
     result.unwrap();
 }
