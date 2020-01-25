@@ -22,7 +22,7 @@ use bytes::Bytes;
 use hex;
 use hmac::{Hmac, Mac};
 use http::header::{HeaderMap, HeaderName, HeaderValue};
-use http::{HttpTryFrom, Method, Request};
+use http::{Method, Request};
 use hyper::Body;
 use log::{debug, log_enabled, Level::Debug};
 use md5;
@@ -48,6 +48,16 @@ pub enum SignedRequestPayload {
     Buffer(Bytes),
     /// Transfer payload in multiple chunks
     Stream(ByteStream),
+}
+
+impl SignedRequestPayload {
+    /// Convert `SignedRequestPayload` into a hyper `Body`
+    pub fn into_body(self) -> Body {
+        match self {
+            SignedRequestPayload::Buffer(bytes) => Body::from(bytes),
+            SignedRequestPayload::Stream(stream) => Body::wrap_stream(stream),
+        }
+    }
 }
 
 impl fmt::Debug for SignedRequestPayload {
@@ -214,7 +224,7 @@ impl SignedRequest {
 
     /// If the key exists in headers, set it to blank/unoccupied:
     pub fn remove_header(&mut self, key: &str) {
-        let key_lower = key.to_ascii_lowercase().to_string();
+        let key_lower = key.to_ascii_lowercase();
         self.headers.remove(&key_lower);
     }
 
@@ -277,10 +287,8 @@ impl SignedRequest {
 
         if let Some(ref token) = *creds.token() {
             self.remove_header("X-Amz-Security-Token");
-            self.params.insert(
-                "X-Amz-Security-Token".into(),
-                Some(token.to_string()),
-            );
+            self.params
+                .insert("X-Amz-Security-Token".into(), Some(token.to_string()));
         }
 
         self.remove_header("X-Amz-Algorithm");
@@ -510,7 +518,7 @@ impl TryInto<Request<Body>> for SignedRequest {
     type Error = http::Error;
 
     fn try_into(self) -> Result<Request<Body>, Self::Error> {
-        let method = Method::try_from(self.method.as_str())?;
+        let method = Method::from_bytes(self.method.as_bytes())?;
 
         let headers = self
             .headers()
@@ -555,9 +563,7 @@ impl TryInto<Request<Body>> for SignedRequest {
             }
         }
 
-        let mut builder = Request::builder();
-        builder.method(method);
-        builder.uri(final_uri);
+        let builder = Request::builder().method(method).uri(final_uri);
 
         let body = if let Some(payload) = self.payload {
             match payload {
@@ -696,10 +702,7 @@ fn canonical_uri(path: &str, region: &Region) -> String {
 /// Canonicalizes query while iterating through the given parameters.
 ///
 /// Read more about it: [HERE](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html#query-string-auth-v4-signing)
-fn build_canonical_query_string(
-    params: &Params,
-    should_treat_plus_literally: bool,
-) -> String {
+fn build_canonical_query_string(params: &Params, should_treat_plus_literally: bool) -> String {
     if params.is_empty() {
         return String::new();
     }

@@ -21,29 +21,30 @@ appveyor = { repository = "matthewkmayer/rusoto", branch = "master" }
 azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
 
 [build-dependencies]
-rustc_version = "0.2.1"
+rustc_version = "0.2"
 
 [dependencies]
-bytes = "0.4.12"
-futures = "0.1.16"
-hmac = "0.7.1"
-http = "0.1.17"
-hyper = "0.12"
+bytes = "0.5"
+futures = "0.3"
+hmac = "0.7"
+http = "0.2"
+hyper = "0.13"
 log = "0.4.1"
 md5 = "0.7"
 base64 = "0.11"
 hex = "0.4"
-serde = "1.0.2"
+serde = "1"
 sha2 = "0.8.0"
 time = "0.2"
-percent-encoding = "2.1.0"
-tokio = "0.1.7"
+pin-project = "0.4"
+percent-encoding = "2"
+tokio = { version = "0.2", features = ["macros"] }
 
 [dependencies.rusoto_credential]
 path = "../credential"
 version = "0.42"
 
 [dev-dependencies]
-serde_json = "1.0.2"
-serde_test = "1.0.1"
+serde_json = "1"
+serde_test = "1"
 
