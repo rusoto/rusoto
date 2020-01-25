@@ -1,25 +1,17 @@
-extern crate tokio_core;
-
 use rusoto_credential::{InstanceMetadataProvider, ProvideAwsCredentials};
 use std::time::Duration;
-use tokio_core::reactor::Core;
 
 // This test is marked ignored because it requires special setup.
 // It's run with the `credential_integration_test` Makefile target.
-#[test]
+#[tokio::test]
 #[ignore]
-fn it_fetches_basic_role() {
+async fn it_fetches_basic_role() {
     // set env vars to point to local provider
     let mut provider = InstanceMetadataProvider::new();
     provider.set_timeout(Duration::from_secs(5));
     provider.set_ip_addr_with_port("127.0.0.1", "8080");
 
-    let creds_future = provider.credentials();
-    let mut core = Core::new().unwrap();
-    let creds = match core.run(creds_future) {
-        Ok(creds) => creds,
-        Err(e) => panic!("Got error: {:?}", e),
-    };
+    let creds = provider.credentials().await.expect("credentials");
 
     assert_eq!(creds.aws_access_key_id(), "Access_key_id_value");
     assert_eq!(creds.aws_secret_access_key(), "Secret_access_key_value");

@@ -2,11 +2,10 @@
 
 use std::time::Duration;
 
-use futures::future::{err, FutureResult};
-use futures::{Async, Future, Poll};
+use async_trait::async_trait;
 use hyper::{Body, Request};
 
-use crate::request::{HttpClient, HttpClientFuture};
+use crate::request::HttpClient;
 use crate::{
     non_empty_env_var, parse_credentials_from_aws_service, AwsCredentials, CredentialsError,
     ProvideAwsCredentials,
@@ -80,48 +79,27 @@ impl Default for ContainerProvider {
     }
 }
 
-/// Future returned from `ContainerProvider`.
-pub struct ContainerProviderFuture {
-    inner: ContainerProviderFutureInner,
-}
-
-enum ContainerProviderFutureInner {
-    Result(FutureResult<String, CredentialsError>),
-    Future(HttpClientFuture),
-}
-
-impl Future for ContainerProviderFuture {
-    type Item = AwsCredentials;
-    type Error = CredentialsError;
-
-    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        let resp = match self.inner {
-            ContainerProviderFutureInner::Result(ref mut result) => try_ready!(result.poll()),
-            ContainerProviderFutureInner::Future(ref mut future) => try_ready!(future.poll()),
-        };
-        let creds = parse_credentials_from_aws_service(&resp)?;
-        Ok(Async::Ready(creds))
-    }
-}
-
+#[async_trait]
 impl ProvideAwsCredentials for ContainerProvider {
-    type Future = ContainerProviderFuture;
-
-    fn credentials(&self) -> Self::Future {
-        let inner = match credentials_from_container(&self.client, self.timeout) {
-            Ok(future) => ContainerProviderFutureInner::Future(future),
-            Err(e) => ContainerProviderFutureInner::Result(err(e)),
-        };
-        ContainerProviderFuture { inner }
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        let req = request_from_env_vars().map_err(|err| CredentialsError {
+            message: format!(
+                "Could not get request from environment: {}",
+                err.to_string()
+            ),
+        })?;
+        let resp = self
+            .client
+            .request(req, self.timeout)
+            .await
+            .map_err(|err| CredentialsError {
+                message: format!(
+                    "Could not get credentials from container: {}",
+                    err.to_string()
+                ),
+            })?;
+        parse_credentials_from_aws_service(&resp)
     }
-}
-
-/// Grabs the Credentials from the AWS Container Credentials Provider. (169.254.170.2).
-fn credentials_from_container(
-    client: &HttpClient,
-    timeout: Duration,
-) -> Result<HttpClientFuture, CredentialsError> {
-    Ok(client.request(request_from_env_vars()?, timeout))
 }
 
 fn request_from_env_vars() -> Result<Request<Body>, CredentialsError> {
@@ -167,13 +145,13 @@ fn new_request(uri: &str, env_var_name: &str) -> Result<Request<Body>, Credentia
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::lock_env;
+    use crate::test_utils::{lock, ENV_MUTEX};
     use std::env;
 
     #[test]
     fn request_from_relative_uri() {
         let path = "/xxx";
-        let _guard = lock_env();
+        let _guard = lock(&ENV_MUTEX);
         env::set_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI, path);
         env::set_var(AWS_CONTAINER_CREDENTIALS_FULL_URI, "dummy");
         env::set_var(AWS_CONTAINER_AUTHORIZATION_TOKEN, "dummy");
@@ -189,7 +167,7 @@ mod tests {
 
     #[test]
     fn error_from_missing_env_vars() {
-        let _guard = lock_env();
+        let _guard = lock(&ENV_MUTEX);
         env::remove_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI);
         env::remove_var(AWS_CONTAINER_CREDENTIALS_FULL_URI);
         let result = request_from_env_vars();
@@ -198,7 +176,7 @@ mod tests {
 
     #[test]
     fn error_from_empty_env_vars() {
-        let _guard = lock_env();
+        let _guard = lock(&ENV_MUTEX);
         env::set_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI, "");
         env::set_var(AWS_CONTAINER_CREDENTIALS_FULL_URI, "");
         env::set_var(AWS_CONTAINER_AUTHORIZATION_TOKEN, "");
@@ -212,7 +190,7 @@ mod tests {
     #[test]
     fn request_from_full_uri_with_token() {
         let url = "http://localhost/xxx";
-        let _guard = lock_env();
+        let _guard = lock(&ENV_MUTEX);
         env::remove_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI);
         env::set_var(AWS_CONTAINER_CREDENTIALS_FULL_URI, url);
         env::set_var(AWS_CONTAINER_AUTHORIZATION_TOKEN, "dummy");
@@ -228,7 +206,7 @@ mod tests {
     #[test]
     fn request_from_full_uri_without_token() {
         let url = "http://localhost/xxx";
-        let _guard = lock_env();
+        let _guard = lock(&ENV_MUTEX);
         env::remove_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI);
         env::set_var(AWS_CONTAINER_CREDENTIALS_FULL_URI, url);
         env::remove_var(AWS_CONTAINER_AUTHORIZATION_TOKEN);
@@ -243,7 +221,7 @@ mod tests {
     #[test]
     fn request_from_full_uri_with_empty_token() {
         let url = "http://localhost/xxx";
-        let _guard = lock_env();
+        let _guard = lock(&ENV_MUTEX);
         env::remove_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI);
         env::set_var(AWS_CONTAINER_CREDENTIALS_FULL_URI, url);
         env::set_var(AWS_CONTAINER_AUTHORIZATION_TOKEN, "");

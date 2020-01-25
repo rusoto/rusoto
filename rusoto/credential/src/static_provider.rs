@@ -1,8 +1,7 @@
 //! Provides a way to create static/programmatically generated AWS Credentials.
 //! For those who can't get them from an environment, or a file.
-
+use async_trait::async_trait;
 use chrono::{Duration, Utc};
-use futures::future::{ok, FutureResult};
 
 use crate::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
@@ -67,13 +66,12 @@ impl StaticProvider {
     }
 }
 
+#[async_trait]
 impl ProvideAwsCredentials for StaticProvider {
-    type Future = FutureResult<AwsCredentials, CredentialsError>;
-
-    fn credentials(&self) -> Self::Future {
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         let mut creds = self.credentials.clone();
         creds.expires_at = self.valid_for.map(|v| Utc::now() + Duration::seconds(v));
-        ok(creds)
+        Ok(creds)
     }
 }
 
@@ -88,7 +86,6 @@ impl From<AwsCredentials> for StaticProvider {
 
 #[cfg(test)]
 mod tests {
-    use futures::Future;
     use std::thread;
     use std::time;
 
@@ -96,15 +93,10 @@ mod tests {
     use crate::test_utils::{is_secret_hidden_behind_asterisks, SECRET};
     use crate::ProvideAwsCredentials;
 
-    #[test]
-    fn static_provider_impl_from_for_awscredentials() {
-        let provider = StaticProvider::from(AwsCredentials::default());
-        assert_eq!(provider.get_aws_access_key_id(), "");
-        assert_eq!(*provider.is_valid_for(), None);
-    }
+    use quickcheck_macros::quickcheck;
 
-    #[test]
-    fn test_static_provider_creation() {
+    #[tokio::test]
+    async fn test_static_provider_creation() {
         let result = StaticProvider::new(
             "fake-key".to_owned(),
             "fake-secret".to_owned(),
@@ -112,21 +104,21 @@ mod tests {
             Some(300),
         )
         .credentials()
-        .wait();
+        .await;
         assert!(result.is_ok());
     }
 
-    #[test]
-    fn test_static_provider_minimal_creation() {
+    #[tokio::test]
+    async fn test_static_provider_minimal_creation() {
         let result =
             StaticProvider::new_minimal("fake-key-2".to_owned(), "fake-secret-2".to_owned())
                 .credentials()
-                .wait();
+                .await;
         assert!(result.is_ok());
     }
 
-    #[test]
-    fn test_static_provider_custom_time_expiration() {
+    #[tokio::test]
+    async fn test_static_provider_custom_time_expiration() {
         let start_time = Utc::now();
         let result = StaticProvider::new(
             "fake-key".to_owned(),
@@ -135,7 +127,7 @@ mod tests {
             Some(10000),
         )
         .credentials()
-        .wait();
+        .await;
         assert!(result.is_ok());
         let finalized = result.unwrap();
         let expires_at = finalized.expires_at().unwrap().clone();
@@ -145,34 +137,32 @@ mod tests {
         assert!(expires_at < start_time + Duration::minutes(200));
     }
 
-    #[test]
-    fn test_static_provider_expiration_time_is_recalculated() {
+    #[tokio::test]
+    async fn test_static_provider_expiration_time_is_recalculated() {
         let provider = StaticProvider::new(
             "fake-key".to_owned(),
             "fake-secret".to_owned(),
             None,
             Some(10000),
         );
-        let creds1 = provider.credentials().wait().unwrap();
+        let creds1 = provider.credentials().await.unwrap();
         thread::sleep(time::Duration::from_secs(1));
-        let creds2 = provider.credentials().wait().unwrap();
+        let creds2 = provider.credentials().await.unwrap();
         assert!(creds1.expires_at() < creds2.expires_at());
     }
 
-    #[cfg(test)]
-    quickcheck! {
-        fn test_static_provider_secrets_not_in_debug(
-            access_key: String,
-            token: Option<()>,
-            valid_for: Option<i64>
-        ) -> bool {
-            let provider = StaticProvider::new(
-                access_key,
-                SECRET.to_owned(),
-                token.map(|_| SECRET.to_owned()),
-                valid_for
-            );
-            is_secret_hidden_behind_asterisks(&provider)
-        }
+    #[quickcheck]
+    fn test_static_provider_secrets_not_in_debug(
+        access_key: String,
+        token: Option<()>,
+        valid_for: Option<i64>,
+    ) -> bool {
+        let provider = StaticProvider::new(
+            access_key,
+            SECRET.to_owned(),
+            token.map(|_| SECRET.to_owned()),
+            valid_for,
+        );
+        is_secret_hidden_behind_asterisks(&provider)
     }
 }
