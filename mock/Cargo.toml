@@ -23,11 +23,13 @@ appveyor = { repository = "matthewkmayer/rusoto", branch = "master" }
 azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
 
 [dependencies]
-chrono = "0.4.0"
-futures = "0.1.16"
-http = "0.1.7"
-serde = "1.0.2"
-serde_json = "1.0.2"
+async-trait = "0.1"
+chrono = "0.4"
+futures = "0.3"
+http = "0.2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
 [dependencies.clippy]
 optional = true
 version = "0.0"
