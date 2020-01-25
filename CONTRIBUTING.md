@@ -9,6 +9,8 @@ Pull requests (PRs) should follow these guidelines:
 * Generated code should be included in the PR.  Putting the codegen changes in a separate commit is preferred.
 * Tests are highly encouraged.
 
+General discussions regarding Rusoto development take place on our [Discord channel][discord-invite].
+
 The project follows the code of conduct as specified in [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md).
 
 ### Setting up the build environment (only needed once)
@@ -57,3 +59,4 @@ To run clippy:
 
 `cargo clippy`
 
+[discord-invite]: https://discordapp.com/invite/WMJ4DWp "Discord channel invite"
