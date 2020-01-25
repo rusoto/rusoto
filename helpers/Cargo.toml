@@ -5,20 +5,21 @@ name = "rusoto_helpers"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto_helpers"
 version = "0.1.0"
+edition = "2018"
 
 [dependencies]
-
-[dependencies.rusoto]
-path = ".."
-version = ">= 0.13.1"
+rusoto_core = { path = "../rusoto/core" }
+rusoto_dynamodb = { path = "../rusoto/services/dynamodb", optional = true }
+rusoto_kms = { path = "../rusoto/services/kms", optional = true }
+rusoto_sqs = { path = "../rusoto/services/sqs", optional = true }
 
 [dev-dependencies]
 time = "0.2"
-env_logger = "^0.4.0"
-log = "^0.3.3"
+env_logger = "0.7"
+log = "0.4"
 
 [features]
 all = ["dynamodb", "kms", "sqs"]
-dynamodb = ["rusoto/dynamodb"]
-kms = ["rusoto/kms"]
-sqs = ["rusoto/sqs"]
+dynamodb = ["rusoto_dynamodb"]
+kms = ["rusoto_kms"]
+sqs = ["rusoto_sqs"]

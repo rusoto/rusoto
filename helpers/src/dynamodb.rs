@@ -3,8 +3,8 @@
 #![allow(unused_variables, unused_mut, non_snake_case)]
 use std::str;
 
-use rusoto::{AwsResult, ProvideAwsCredentials, Region};
-use rusoto::dynamodb::*;
+use rusoto_core::{Region, RusotoResult};
+use rusoto_dynamodb::*;
 
 // Make getting values out of nested Option objects less verbose.
 macro_rules! try_opt {
@@ -14,42 +14,42 @@ macro_rules! try_opt {
     })
 }
 
-pub struct DynamoDbHelper<P> where P: ProvideAwsCredentials {
-    client: DynamoDbClient<P>,
+pub struct DynamoDbHelper {
+    client: DynamoDbClient,
 }
 
-impl <P: ProvideAwsCredentials> DynamoDbHelper<P> {
-    pub fn new(credentials: P, region: Region) -> DynamoDbHelper<P> {
-        DynamoDbHelper { client: DynamoDbClient::new(credentials, region) }
+impl DynamoDbHelper {
+    pub fn new(region: Region) -> DynamoDbHelper {
+        DynamoDbHelper { client: DynamoDbClient::new(region) }
     }
 
-    pub fn list_tables(&mut self) -> AwsResult<ListTablesOutput> {
+    pub async fn list_tables(&mut self) -> RusotoResult<ListTablesOutput, ListTablesError> {
         let mut req = ListTablesInput::default();
-        self.client.list_tables(&req)
+        self.client.list_tables(req).await
     }
 
-    pub fn create_table(&mut self, input: &CreateTableInput) -> AwsResult<CreateTableOutput> {
-        self.client.create_table(input)
+    pub async fn create_table(&mut self, input: CreateTableInput) -> RusotoResult<CreateTableOutput, CreateTableError> {
+        self.client.create_table(input).await
     }
 
-    pub fn describe_table(&mut self, name: &str) -> AwsResult<DescribeTableOutput> {
+    pub async fn describe_table(&mut self, name: &str) -> RusotoResult<DescribeTableOutput, DescribeTableError> {
         let mut input = DescribeTableInput::default();
         input.table_name = String::from(name);
-        self.client.describe_table(&input)
+        self.client.describe_table(input).await
     }
 
-    pub fn delete_table(&mut self, name: &str) -> AwsResult<DeleteTableOutput> {
+    pub async fn delete_table(&mut self, name: &str) -> RusotoResult<DeleteTableOutput, DeleteTableError> {
         let mut input = DeleteTableInput::default();
         input.table_name = String::from(name);
-        self.client.delete_table(&input)
+        self.client.delete_table(input).await
     }
 
-    pub fn put_item(&mut self, input: &PutItemInput) -> AwsResult<PutItemOutput> {
-        self.client.put_item(input)
+    pub async fn put_item(&mut self, input: PutItemInput) -> RusotoResult<PutItemOutput, PutItemError> {
+        self.client.put_item(input).await
     }
 
-    pub fn get_item(&mut self, input: &GetItemInput) -> AwsResult<GetItemOutput> {
-        self.client.get_item(input)
+    pub async fn get_item(&mut self, input: GetItemInput) -> RusotoResult<GetItemOutput, GetItemError> {
+        self.client.get_item(input).await
     }
 }
 
@@ -65,12 +65,11 @@ impl PutItemInputHelper for PutItemInput {
 
 pub trait CreateTableInputHelper {
     fn new() -> CreateTableInput;
-    fn with_name(mut self, table_name: &str) -> CreateTableInput;
-    fn with_write_capacity(mut self, write_capacity: PositiveLongObject) -> CreateTableInput;
-    fn with_read_capacity(mut self, read_capacity: PositiveLongObject) -> CreateTableInput;
-    fn with_attributes(mut self, attributes: Vec<AttributeDefinition>) -> CreateTableInput;
-    fn with_key_schema(mut self, key_schema: Vec<KeySchemaElement>) -> CreateTableInput;
-    fn add_attribute<N: Into<String>, T: Into<String>>(mut self,
+    fn with_name(self, table_name: &str) -> CreateTableInput;
+    fn with_provisioned_capacity(self, write_capacity_units: i64, read_capacity_units: i64) -> CreateTableInput;
+    fn with_attributes(self, attributes: Vec<AttributeDefinition>) -> CreateTableInput;
+    fn with_key_schema(self, key_schema: Vec<KeySchemaElement>) -> CreateTableInput;
+    fn add_attribute<N: Into<String>, T: Into<String>>(self,
                                                        name: N,
                                                        attr_type: T)
                                                        -> CreateTableInput;
@@ -86,13 +85,11 @@ impl CreateTableInputHelper for CreateTableInput {
         self
     }
 
-    fn with_write_capacity(mut self, write_capacity: PositiveLongObject) -> CreateTableInput {
-        self.provisioned_throughput.write_capacity_units = write_capacity;
-        self
-    }
-
-    fn with_read_capacity(mut self, read_capacity: PositiveLongObject) -> CreateTableInput {
-        self.provisioned_throughput.read_capacity_units = read_capacity;
+    fn with_provisioned_capacity(mut self, write_capacity_units: i64, read_capacity_units: i64) -> CreateTableInput {
+        self.provisioned_throughput = Some(ProvisionedThroughput{
+            read_capacity_units,
+            write_capacity_units,
+        });
         self
     }
 

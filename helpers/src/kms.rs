@@ -1,26 +1,28 @@
 //! KMS helper types.
 
-use rusoto::{AwsResult, ProvideAwsCredentials, Region};
-use rusoto::kms::{
+use rusoto_core::{Region, RusotoResult};
+use rusoto_kms::{
+    Kms,
     KmsClient,
+    ListKeysError,
     ListKeysRequest,
     ListKeysResponse,
 };
 
-pub struct KmsHelper<P> where P: ProvideAwsCredentials {
-	client: KmsClient<P>
+pub struct KmsHelper {
+    client: KmsClient,
 }
 
-impl <P: ProvideAwsCredentials> KmsHelper<P> {
+impl KmsHelper {
     /// Create a new KMS helper.
-    pub fn new(credentials: P, region: Region) -> KmsHelper<P> {
+    pub fn new(region: Region) -> KmsHelper {
         KmsHelper {
-            client: KmsClient::new(credentials, region)
+            client: KmsClient::new(region)
         }
     }
 
-    pub fn list_keys(&mut self) -> AwsResult<ListKeysResponse> {
+    pub async fn list_keys(&mut self) -> RusotoResult<ListKeysResponse, ListKeysError> {
         let req = ListKeysRequest::default();
-        self.client.list_keys(&req)
+        self.client.list_keys(req).await
     }
 }

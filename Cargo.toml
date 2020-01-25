@@ -164,7 +164,7 @@ members = [
     "rusoto/services/worklink",
     "rusoto/services/workmail",
     "rusoto/services/workspaces",
-    "rusoto/services/xray"
+    "rusoto/services/xray",
 ]
 
 exclude = [
