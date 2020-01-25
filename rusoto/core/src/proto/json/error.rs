@@ -1,3 +1,4 @@
+use serde::Deserialize;
 use serde_json::{from_slice, Value};
 
 use super::super::super::request::BufferedHttpResponse;
@@ -25,7 +26,7 @@ impl Error {
             let typ = pieces.last().expect("Expected error type");
 
             Some(Error {
-                typ: typ.to_string(),
+                typ: (*typ).to_string(),
                 msg,
             })
         } else {

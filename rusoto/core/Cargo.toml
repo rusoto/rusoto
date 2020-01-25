@@ -23,25 +23,29 @@ appveyor = { repository = "matthewkmayer/rusoto", branch = "master" }
 azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
 
 [build-dependencies]
-rustc_version = "0.2.1"
+rustc_version = "0.2"
 
 [dependencies]
-bytes = "0.4.12"
-futures = "0.1.16"
-http = "0.1.17"
-hyper = "0.12"
-hyper-tls = { version = "0.3.0", optional = true }
-hyper-rustls = { version = "0.17.1", optional = true }
-lazy_static = "1.0"
-log = "0.4.1"
+async-trait = "0.1"
+bytes = "0.5"
+futures = "0.3"
+hmac = "0.7"
+http = "0.2"
+hyper = "0.13"
+hyper-rustls = { version = "0.19", optional = true }
+hyper-tls = { version = "0.4", optional = true }
+lazy_static = "1.4"
+log = "0.4"
+md5 = "0.7"
+percent-encoding = "2.1"
+pin-project = "0.4"
 base64 = "0.11"
-serde = "1.0.2"
-serde_derive = "1.0.2"
-serde_json = "1.0.2"
-tokio = "0.1.7"
-tokio-timer = "0.2.6"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.8"
+tokio = { version = "0.2", features = ["tcp", "time", "rt-core", "fs"] }
 xml-rs = "0.8"
-flate2 = {version = "1.0", optional = true}
+flate2 = { version = "1.0", optional = true }
 
 [dependencies.rusoto_credential]
 path = "../credential"
@@ -51,11 +55,8 @@ version = "0.42"
 path = "../signature"
 version = "0.42"
 
-[dependencies.clippy]
-optional = true
-version = "0.0"
-
 [dev-dependencies]
+tokio = { version = "0.2", features = ["macros"] }
 env_logger = "0.7"
 rand = "0.7"
 serde_json = "1.0.1"

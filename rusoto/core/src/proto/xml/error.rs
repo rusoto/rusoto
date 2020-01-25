@@ -1,3 +1,5 @@
+use log::*;
+
 use super::util::{characters, end_element, peek_at_name, skip_tree, start_element, string_field};
 use super::util::{Next, Peek, XmlParseError};
 

@@ -1,16 +1,11 @@
-use std::time::Duration;
+use std::future::Future;
+use std::pin::Pin;
+use std::task::{Context, Poll};
 
-use futures::sync::oneshot::spawn;
-use futures::{Async, Future, IntoFuture, Poll};
-use tokio::runtime::Runtime;
-
-use super::client::{SignAndDispatchError, TimeoutFuture};
 use super::error::{RusotoError, RusotoResult};
-use super::request::HttpResponse;
 
-lazy_static! {
-    static ref FALLBACK_RUNTIME: Runtime = Runtime::new().unwrap();
-}
+use futures::FutureExt;
+use pin_project::pin_project;
 
 /// Future that is returned from all rusoto service APIs.
 ///
@@ -141,67 +136,29 @@ lazy_static! {
 /// #   fn upload_part_copy(&self, _: UploadPartCopyRequest) -> RusotoFuture<UploadPartCopyOutput, UploadPartCopyError> { unimplemented!() }
 /// }
 /// ```
+#[pin_project]
 pub struct RusotoFuture<T, E> {
-    state: Option<RusotoFutureState<T, E>>,
+    #[pin]
+    inner: RusotoHandlerFuture<T, E>,
 }
 
-pub fn new<T, E>(
-    future: Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
-    handler: fn(HttpResponse) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
-) -> RusotoFuture<T, E> {
-    RusotoFuture {
-        state: Some(RusotoFutureState::SignAndDispatch { future, handler }),
-    }
-}
+pub(crate) type RusotoHandlerFuture<T, E> =
+    Pin<Box<dyn Future<Output = Result<T, RusotoError<E>>> + Send>>;
+
+// pub fn new<T, E>(
+//     future: SignAndDispatchFuture,
+//     handler: fn(HttpResponse) -> RusotoHandlerFuture<T, E>,
+// ) -> RusotoFuture<T, E>
+// where
+//     T: Send + 'static,
+//     E: Send + From<std::io::Error> + 'static,
+// {
+//     RusotoFuture {
+//         inner: dispatch_rusoto_future(future, handler).boxed(),
+//     }
+// }
 
 impl<T, E> RusotoFuture<T, E> {
-    /// Set the timeout on the future to the provided duration.
-    ///
-    /// Unlike `set_timeout` this method can be easily chained:
-    ///
-    /// ```rust,ignore
-    /// # // TODO: remove ignore when the cyclic dependency issue has been fixed
-    /// # // https://github.com/rusoto/rusoto/pull/1141#issuecomment-421865362
-    /// # extern crate rusoto_core;
-    /// # extern crate rusoto_s3;
-    /// #
-    /// # use std::time::Duration;
-    /// # use rusoto_core::Region;
-    /// # use rusoto_s3::{S3, S3Client};
-    /// #
-    /// # let s3 = S3Client::new(Region::default());
-    /// #
-    /// let future = s3.list_buckets()
-    ///     .with_timeout(Duration::from_secs(10));
-    /// ```
-    ///
-    /// This is only guaranteed to take effect when called before the future
-    /// is polled for the first time.
-    pub fn with_timeout(mut self, timeout: Duration) -> Self {
-        self.set_timeout(timeout);
-        self
-    }
-
-    /// Set the timeout on the future to the provided duration.
-    ///
-    /// This is only guaranteed to take effect when called before the future
-    /// is polled for the first time.
-    pub fn set_timeout(&mut self, timeout: Duration) {
-        if let Some(RusotoFutureState::SignAndDispatch { ref mut future, .. }) = self.state {
-            future.set_timeout(timeout);
-        }
-    }
-
-    /// Clear the timeout on the future.
-    ///
-    /// This is only guaranteed to take effect when called before the future
-    /// is polled for the first time.
-    pub fn clear_timeout(&mut self) {
-        if let Some(RusotoFutureState::SignAndDispatch { ref mut future, .. }) = self.state {
-            future.clear_timeout();
-        }
-    }
-
     /// Blocks the current thread until the future has resolved.
     ///
     /// This is meant to provide a simple way for non-async consumers
@@ -209,72 +166,33 @@ impl<T, E> RusotoFuture<T, E> {
     pub fn sync(self) -> RusotoResult<T, E>
     where
         T: Send + 'static,
-        E: Send + 'static,
+        E: Send + From<std::io::Error> + 'static,
     {
-        spawn(self, &FALLBACK_RUNTIME.executor()).wait()
-    }
+        let mut rt = tokio::runtime::Builder::new()
+            .enable_io()
+            .enable_time()
+            .basic_scheduler()
+            .build()
+            .map_err(|_| RusotoError::Blocking)?;
 
-    /// Wraps the provided future, mainly to mock the service response.
-    ///
-    /// ## Caution
-    ///
-    /// This is not intended to be used outside of the test case.
-    /// In production, [`Box`] is recommended.
-    pub fn from_future<F>(fut: F) -> Self
-    where
-        F: IntoFuture<Item = T, Error = RusotoError<E>>,
-        F::Future: Send + 'static,
-    {
-        let fut = fut.into_future();
-        RusotoFuture {
-            state: Some(RusotoFutureState::RunningResponseHandler(Box::new(fut))),
-        }
+        rt.block_on(self)
     }
 }
 
 impl<T, E> Future for RusotoFuture<T, E> {
-    type Item = T;
-    type Error = RusotoError<E>;
+    type Output = Result<T, RusotoError<E>>;
 
-    fn poll(&mut self) -> Poll<T, RusotoError<E>> {
-        match self.state.take().unwrap() {
-            RusotoFutureState::SignAndDispatch {
-                mut future,
-                handler,
-            } => match future.poll() {
-                Err(SignAndDispatchError::Credentials(err)) => Err(err.into()),
-                Err(SignAndDispatchError::Dispatch(err)) => Err(err.into()),
-                Ok(Async::Ready(response)) => {
-                    self.state = Some(RusotoFutureState::RunningResponseHandler(handler(response)));
-                    self.poll()
-                }
-                Ok(Async::NotReady) => {
-                    self.state = Some(RusotoFutureState::SignAndDispatch { future, handler });
-                    Ok(Async::NotReady)
-                }
-            },
-            RusotoFutureState::RunningResponseHandler(mut future) => match future.poll()? {
-                Async::Ready(value) => Ok(Async::Ready(value)),
-                Async::NotReady => {
-                    self.state = Some(RusotoFutureState::RunningResponseHandler(future));
-                    Ok(Async::NotReady)
-                }
-            },
-        }
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        let this = self.project();
+        this.inner.poll(cx)
     }
-}
-
-enum RusotoFutureState<T, E> {
-    SignAndDispatch {
-        future: Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
-        handler: fn(HttpResponse) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
-    },
-    RunningResponseHandler(Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>),
 }
 
 impl<T: Send + 'static, E: Send + 'static> From<RusotoResult<T, E>> for RusotoFuture<T, E> {
     fn from(value: RusotoResult<T, E>) -> Self {
-        RusotoFuture::from_future(value)
+        RusotoFuture {
+            inner: futures::future::ready(value).boxed(),
+        }
     }
 }
 
@@ -285,35 +203,19 @@ fn rusoto_future_is_send() {
     is_send::<RusotoFuture<(), ()>>();
 }
 
-#[test]
-fn rusoto_future_from_ok() {
+#[tokio::test]
+async fn rusoto_future_from_ok() {
     use std::error::Error;
     let fut: RusotoFuture<i32, Box<dyn Error + Send + Sync>> = RusotoFuture::from(Ok(42));
-    assert_eq!(fut.sync().unwrap(), 42);
+    assert_eq!(fut.await.unwrap(), 42);
 }
 
-#[test]
-fn rusoto_future_from_err() {
+#[tokio::test]
+async fn rusoto_future_from_err() {
     use std::error::Error;
     let fut: RusotoFuture<i32, Box<dyn Error + Send + Sync>> = RusotoFuture::from(
         "ab".parse::<i32>()
             .map_err(|e| RusotoError::Service(e.into())),
     );
-    assert!(fut.sync().is_err());
-}
-
-#[test]
-fn rusoto_future_from_delay() {
-    use std::error::Error;
-    use std::time::{Duration, Instant};
-    use tokio_timer::Delay;
-    let deadline = Instant::now() + Duration::from_millis(500);
-    let delay = Delay::new(deadline);
-    let fut: RusotoFuture<i32, Box<dyn Error + Send + Sync>> = RusotoFuture::from_future(
-        delay
-            .map_err(|e| RusotoError::Service(e.into()))
-            .map(|_| 42),
-    );
-    assert_eq!(fut.sync().unwrap(), 42);
-    assert!(deadline <= Instant::now());
+    assert!(fut.await.is_err());
 }

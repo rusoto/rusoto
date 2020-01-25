@@ -19,26 +19,10 @@
 //! Rusoto is an [AWS](https://aws.amazon.com/) SDK for Rust.
 //! A high level overview is available in `README.md` at <https://github.com/rusoto/rusoto>.
 
-extern crate bytes;
-extern crate futures;
-extern crate hyper;
 #[cfg(feature = "rustls")]
-extern crate hyper_rustls as tls;
+use hyper_rustls as tls;
 #[cfg(feature = "native-tls")]
-extern crate hyper_tls as tls;
-#[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate log;
-extern crate base64;
-pub extern crate rusoto_credential as credential;
-extern crate serde;
-#[macro_use]
-extern crate serde_derive;
-extern crate serde_json;
-extern crate tokio;
-extern crate tokio_timer;
-extern crate xml;
+use hyper_tls as tls;
 
 mod client;
 mod error;
@@ -61,9 +45,10 @@ pub mod proto;
 #[doc(hidden)]
 pub mod serialization;
 
-pub use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
+//pub use rusoto_credential::{AwsCredentials, CredentialsError, DefaultCredentialsProvider, ProfileProvider, ProvideAwsCredentials};
 pub use crate::error::{RusotoError, RusotoResult};
 pub use crate::future::RusotoFuture;
 pub use crate::region::Region;
 pub use crate::request::{DispatchSignedRequest, HttpClient, HttpConfig, HttpDispatchError};
 pub use crate::stream::ByteStream;
+pub use rusoto_credential as credential;
