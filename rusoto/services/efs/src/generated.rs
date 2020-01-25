@@ -9,21 +9,92 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
+
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>Provides a description of an EFS file system access point.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AccessPointDescription {
+    /// <p>The unique Amazon Resource Name (ARN) associated with the access point.</p>
+    #[serde(rename = "AccessPointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_point_arn: Option<String>,
+    /// <p>The ID of the access point, assigned by Amazon EFS.</p>
+    #[serde(rename = "AccessPointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_point_id: Option<String>,
+    /// <p>The opaque string specified in the request to ensure idempotent creation.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>The ID of the EFS file system that the access point applies to.</p>
+    #[serde(rename = "FileSystemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_id: Option<String>,
+    /// <p>Identifies the lifecycle phase of the access point.</p>
+    #[serde(rename = "LifeCycleState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub life_cycle_state: Option<String>,
+    /// <p>The name of the access point. This is the value of the <code>Name</code> tag.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Identified the AWS account that owns the access point resource.</p>
+    #[serde(rename = "OwnerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
+    /// <p>The full POSIX identity, including the user ID, group ID, and secondary group IDs on the access point that is used for all file operations by NFS clients using the access point.</p>
+    #[serde(rename = "PosixUser")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub posix_user: Option<PosixUser>,
+    /// <p>The directory on the Amazon EFS file system that the access point exposes as the root directory to NFS clients using the access point.</p>
+    #[serde(rename = "RootDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub root_directory: Option<RootDirectory>,
+    /// <p>The tags associated with the access point, presented as an array of Tag objects.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAccessPointRequest {
+    /// <p>A string of up to 64 ASCII characters that Amazon EFS uses to ensure idempotent creation.</p>
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    /// <p>The ID of the EFS file system that the access point provides access to.</p>
+    #[serde(rename = "FileSystemId")]
+    pub file_system_id: String,
+    /// <p>The operating system user and group applied to all file system requests made using the access point.</p>
+    #[serde(rename = "PosixUser")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub posix_user: Option<PosixUser>,
+    /// <p>Specifies the directory on the Amazon EFS file system that the access point exposes as the root directory of your file system to NFS clients using the access point. The clients using the access point can only access the root directory and below. If the <code>RootDirectory</code> &gt; <code>Path</code> specified does not exist, EFS creates it and applies the <code>CreationInfo</code> settings when a client connects to an access point. When specifying a <code>RootDirectory</code>, you need to provide the <code>Path</code>, and the <code>CreationInfo</code> is optional.</p>
+    #[serde(rename = "RootDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub root_directory: Option<RootDirectory>,
+    /// <p>Creates tags associated with the access point. Each tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFileSystemRequest {
@@ -88,6 +159,36 @@ pub struct CreateTagsRequest {
     pub tags: Vec<Tag>,
 }
 
+/// <p><p>Required if the <code>RootDirectory</code> &gt; <code>Path</code> specified does not exist. Specifies the POSIX IDs and permissions to apply to the access point&#39;s <code>RootDirectory</code> &gt; <code>Path</code>. If the access point root directory does not exist, EFS creates it with these settings when a client connects to the access point. When specifying <code>CreationInfo</code>, you must include values for all properties. </p> <important> <p>If you do not provide <code>CreationInfo</code> and the specified <code>RootDirectory</code> does not exist, attempts to mount the file system using the access point will fail.</p> </important></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreationInfo {
+    /// <p>Specifies the POSIX group ID to apply to the <code>RootDirectory</code>. Accepts values from 0 to 2^32 (4294967295).</p>
+    #[serde(rename = "OwnerGid")]
+    pub owner_gid: i64,
+    /// <p>Specifies the POSIX user ID to apply to the <code>RootDirectory</code>. Accepts values from 0 to 2^32 (4294967295).</p>
+    #[serde(rename = "OwnerUid")]
+    pub owner_uid: i64,
+    /// <p>Specifies the POSIX permissions to apply to the <code>RootDirectory</code>, in the format of an octal number representing the file's mode bits.</p>
+    #[serde(rename = "Permissions")]
+    pub permissions: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAccessPointRequest {
+    /// <p>The ID of the access point that you want to delete.</p>
+    #[serde(rename = "AccessPointId")]
+    pub access_point_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteFileSystemPolicyRequest {
+    /// <p>Specifies the EFS file system for which to delete the <code>FileSystemPolicy</code>.</p>
+    #[serde(rename = "FileSystemId")]
+    pub file_system_id: String,
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -118,6 +219,48 @@ pub struct DeleteTagsRequest {
     pub tag_keys: Vec<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAccessPointsRequest {
+    /// <p>(Optional) Specifies an EFS access point to describe in the response; mutually exclusive with <code>FileSystemId</code>.</p>
+    #[serde(rename = "AccessPointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_point_id: Option<String>,
+    /// <p>(Optional) If you provide a <code>FileSystemId</code>, EFS returns all access points for that file system; mutually exclusive with <code>AccessPointId</code>.</p>
+    #[serde(rename = "FileSystemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_id: Option<String>,
+    /// <p>(Optional) When retrieving all access points for a file system, you can optionally specify the <code>MaxItems</code> parameter to limit the number of objects returned in a response. The default value is 100. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> <code>NextToken</code> is present if the response is paginated. You can use <code>NextMarker</code> in the subsequent request to fetch the next page of access point descriptions.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAccessPointsResponse {
+    /// <p>An array of access point descriptions.</p>
+    #[serde(rename = "AccessPoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_points: Option<Vec<AccessPointDescription>>,
+    /// <p>Present if there are more access points than returned in the response. You can use the NextMarker in the subsequent request to fetch the additional descriptions.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeFileSystemPolicyRequest {
+    /// <p>Specifies which EFS file system to retrieve the <code>FileSystemPolicy</code> for.</p>
+    #[serde(rename = "FileSystemId")]
+    pub file_system_id: String,
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -134,7 +277,7 @@ pub struct DescribeFileSystemsRequest {
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    /// <p>(Optional) Specifies the maximum number of file systems to return in the response (integer). Currently, this number is automatically set to 10, and other values are ignored. The response is paginated at 10 per page if you have more than 10 file systems. </p>
+    /// <p>(Optional) Specifies the maximum number of file systems to return in the response (integer). This number is automatically set to 100. The response is paginated at 100 per page if you have more than 100 file systems. </p>
     #[serde(rename = "MaxItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<i64>,
@@ -186,7 +329,11 @@ pub struct DescribeMountTargetSecurityGroupsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMountTargetsRequest {
-    /// <p>(Optional) ID of the file system whose mount targets you want to list (String). It must be included in your request if <code>MountTargetId</code> is not included.</p>
+    /// <p>(Optional) The ID of the access point whose mount targets that you want to list. It must be included in your request if a <code>FileSystemId</code> or <code>MountTargetId</code> is not included in your request. Accepts either an access point ID or ARN as input.</p>
+    #[serde(rename = "AccessPointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_point_id: Option<String>,
+    /// <p>(Optional) ID of the file system whose mount targets you want to list (String). It must be included in your request if an <code>AccessPointId</code> or <code>MountTargetId</code> is not included. Accepts either a file system ID or ARN as input.</p>
     #[serde(rename = "FileSystemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_system_id: Option<String>,
@@ -194,11 +341,11 @@ pub struct DescribeMountTargetsRequest {
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    /// <p>(Optional) Maximum number of mount targets to return in the response. Currently, this number is automatically set to 10, and other values are ignored. The response is paginated at 10 per page if you have more than 10 mount targets.</p>
+    /// <p>(Optional) Maximum number of mount targets to return in the response. Currently, this number is automatically set to 10, and other values are ignored. The response is paginated at 100 per page if you have more than 100 mount targets.</p>
     #[serde(rename = "MaxItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<i64>,
-    /// <p>(Optional) ID of the mount target that you want to have described (String). It must be included in your request if <code>FileSystemId</code> is not included.</p>
+    /// <p>(Optional) ID of the mount target that you want to have described (String). It must be included in your request if <code>FileSystemId</code> is not included. Accepts either a mount target ID or ARN as input.</p>
     #[serde(rename = "MountTargetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mount_target_id: Option<String>,
@@ -233,7 +380,7 @@ pub struct DescribeTagsRequest {
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    /// <p>(Optional) The maximum number of file system tags to return in the response. Currently, this number is automatically set to 10, and other values are ignored. The response is paginated at 10 per page if you have more than 10 tags.</p>
+    /// <p>(Optional) The maximum number of file system tags to return in the response. Currently, this number is automatically set to 100, and other values are ignored. The response is paginated at 100 per page if you have more than 100 tags.</p>
     #[serde(rename = "MaxItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<i64>,
@@ -309,6 +456,19 @@ pub struct FileSystemDescription {
     pub throughput_mode: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FileSystemPolicyDescription {
+    /// <p>Specifies the EFS file system to which the <code>FileSystemPolicy</code> applies.</p>
+    #[serde(rename = "FileSystemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_id: Option<String>,
+    /// <p>The JSON formatted <code>FileSystemPolicy</code> for the EFS file system.</p>
+    #[serde(rename = "Policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+}
+
 /// <p>The latest known metered size (in bytes) of data stored in the file system, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. The value doesn't represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, the value represents the actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not necessarily the exact size the file system was at any instant in time.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -348,6 +508,35 @@ pub struct LifecyclePolicy {
     pub transition_to_ia: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>(Optional) Specifies the maximum number of tag objects to return in the response. The default value is 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>You can use <code>NextToken</code> in a subsequent request to fetch the next page of access point descriptions if the response payload was paginated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Specifies the EFS resource you want to retrieve tags for. You can retrieve tags for EFS file systems and access points using this API endpoint.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p> <code>NextToken</code> is present if the response payload is paginated. You can use <code>NextToken</code> in a subsequent request to fetch the next page of access point descriptions.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of the tags for the specified EFS resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -365,6 +554,14 @@ pub struct ModifyMountTargetSecurityGroupsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MountTargetDescription {
+    /// <p>The unique and consistent identifier of the Availability Zone (AZ) that the mount target resides in. For example, <code>use1-az1</code> is an AZ ID for the us-east-1 Region and it has the same location in every AWS account.</p>
+    #[serde(rename = "AvailabilityZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone_id: Option<String>,
+    /// <p>The name of the Availability Zone (AZ) that the mount target resides in. AZs are independently mapped to names for each AWS account. For example, the Availability Zone <code>us-east-1a</code> for your AWS account might not be the same location as <code>us-east-1a</code> for another AWS account.</p>
+    #[serde(rename = "AvailabilityZoneName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone_name: Option<String>,
     /// <p>The ID of the file system for which the mount target is intended.</p>
     #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
@@ -391,6 +588,36 @@ pub struct MountTargetDescription {
     pub subnet_id: String,
 }
 
+/// <p>The full POSIX identity, including the user ID, group ID, and any secondary group IDs, on the access point that is used for all file system operations performed by NFS clients using the access point.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PosixUser {
+    /// <p>The POSIX group ID used for all file system operations using this access point.</p>
+    #[serde(rename = "Gid")]
+    pub gid: i64,
+    /// <p>Secondary POSIX group IDs used for all file system operations using this access point.</p>
+    #[serde(rename = "SecondaryGids")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_gids: Option<Vec<i64>>,
+    /// <p>The POSIX user ID used for all file system operations using this access point.</p>
+    #[serde(rename = "Uid")]
+    pub uid: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutFileSystemPolicyRequest {
+    /// <p>(Optional) A flag to indicate whether to bypass the <code>FileSystemPolicy</code> lockout safety check. The policy lockout safety check determines whether the policy in the request will prevent the principal making the request will be locked out from making future <code>PutFileSystemPolicy</code> requests on the file system. Set <code>BypassPolicyLockoutSafetyCheck</code> to <code>True</code> only when you intend to prevent the principal that is making the request from making a subsequent <code>PutFileSystemPolicy</code> request on the file system. The default value is False. </p>
+    #[serde(rename = "BypassPolicyLockoutSafetyCheck")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bypass_policy_lockout_safety_check: Option<bool>,
+    /// <p>The ID of the EFS file system that you want to create or update the <code>FileSystemPolicy</code> for.</p>
+    #[serde(rename = "FileSystemId")]
+    pub file_system_id: String,
+    /// <p>The <code>FileSystemPolicy</code> that you're creating. Accepts a JSON formatted policy definition. To find out more about the elements that make up a file system policy, see <a href="https://docs.aws.amazon.com/efs/latest/ug/access-control-overview.html#access-control-manage-access-intro-resource-policies">EFS Resource-based Policies</a>. </p>
+    #[serde(rename = "Policy")]
+    pub policy: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLifecycleConfigurationRequest {
@@ -402,6 +629,19 @@ pub struct PutLifecycleConfigurationRequest {
     pub lifecycle_policies: Vec<LifecyclePolicy>,
 }
 
+/// <p>Specifies the directory on the Amazon EFS file system that the access point provides access to. The access point exposes the specified file system path as the root directory of your file system to applications using the access point. NFS clients using the access point can only access data in the access point's <code>RootDirectory</code> and it's subdirectories.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RootDirectory {
+    /// <p><p>(Optional) Specifies the POSIX IDs and permissions to apply to the access point&#39;s <code>RootDirectory</code>. If the <code>RootDirectory</code> &gt; <code>Path</code> specified does not exist, EFS creates the root directory using the <code>CreationInfo</code> settings when a client connects to an access point. When specifying the <code>CreationInfo</code>, you must provide values for all properties. </p> <important> <p>If you do not provide <code>CreationInfo</code> and the specified <code>RootDirectory</code> &gt; <code>Path</code> does not exist, attempts to mount the file system using the access point will fail.</p> </important></p>
+    #[serde(rename = "CreationInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_info: Option<CreationInfo>,
+    /// <p>Specifies the path on the EFS file system to expose as the root directory to NFS clients using the access point to access the EFS file system. A path can have up to four subdirectories. If the specified path does not exist, you are required to provide the <code>CreationInfo</code>.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+}
+
 /// <p>A tag is a key-value pair. Allowed characters are letters, white space, and numbers that can be represented in UTF-8, and the following characters:<code> + - = . _ : /</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
@@ -411,6 +651,29 @@ pub struct Tag {
     /// <p>The value of the tag key.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The ID specifying the EFS resource that you want to create a tag for. </p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+    /// <p><p/></p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>Specifies the EFS resource that you want to remove tags from.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+    /// <p>The keys of the key:value tag pairs that you want to remove from the specified EFS resource.</p>
+    #[serde(rename = "TagKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_keys: Option<Vec<String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -429,6 +692,68 @@ pub struct UpdateFileSystemRequest {
     pub throughput_mode: Option<String>,
 }
 
+/// Errors returned by CreateAccessPoint
+#[derive(Debug, PartialEq)]
+pub enum CreateAccessPointError {
+    /// <p>Returned if the access point you are trying to create already exists, with the creation token you provided in the request.</p>
+    AccessPointAlreadyExists(String),
+    /// <p>Returned if the AWS account has already created the maximum number of access points allowed per file system.</p>
+    AccessPointLimitExceeded(String),
+    /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
+    BadRequest(String),
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
+    FileSystemNotFound(String),
+    /// <p>Returned if an error occurred on the server side.</p>
+    InternalServerError(String),
+}
+
+impl CreateAccessPointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAccessPointError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessPointAlreadyExists" => {
+                    return RusotoError::Service(CreateAccessPointError::AccessPointAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "AccessPointLimitExceeded" => {
+                    return RusotoError::Service(CreateAccessPointError::AccessPointLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "BadRequest" => {
+                    return RusotoError::Service(CreateAccessPointError::BadRequest(err.msg))
+                }
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(CreateAccessPointError::FileSystemNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(CreateAccessPointError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateAccessPointError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAccessPointError::AccessPointAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateAccessPointError::AccessPointLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAccessPointError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateAccessPointError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            CreateAccessPointError::InternalServerError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAccessPointError {}
 /// Errors returned by CreateFileSystem
 #[derive(Debug, PartialEq)]
 pub enum CreateFileSystemError {
@@ -486,6 +811,7 @@ impl CreateFileSystemError {
     }
 }
 impl fmt::Display for CreateFileSystemError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -595,6 +921,7 @@ impl CreateMountTargetError {
     }
 }
 impl fmt::Display for CreateMountTargetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateMountTargetError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -649,6 +976,7 @@ impl CreateTagsError {
     }
 }
 impl fmt::Display for CreateTagsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -658,6 +986,52 @@ impl fmt::Display for CreateTagsError {
     }
 }
 impl Error for CreateTagsError {}
+/// Errors returned by DeleteAccessPoint
+#[derive(Debug, PartialEq)]
+pub enum DeleteAccessPointError {
+    /// <p>Returned if the specified <code>AccessPointId</code> value doesn't exist in the requester's AWS account.</p>
+    AccessPointNotFound(String),
+    /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
+    BadRequest(String),
+    /// <p>Returned if an error occurred on the server side.</p>
+    InternalServerError(String),
+}
+
+impl DeleteAccessPointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAccessPointError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessPointNotFound" => {
+                    return RusotoError::Service(DeleteAccessPointError::AccessPointNotFound(
+                        err.msg,
+                    ))
+                }
+                "BadRequest" => {
+                    return RusotoError::Service(DeleteAccessPointError::BadRequest(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(DeleteAccessPointError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteAccessPointError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAccessPointError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAccessPointError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAccessPointError::InternalServerError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAccessPointError {}
 /// Errors returned by DeleteFileSystem
 #[derive(Debug, PartialEq)]
 pub enum DeleteFileSystemError {
@@ -697,6 +1071,7 @@ impl DeleteFileSystemError {
     }
 }
 impl fmt::Display for DeleteFileSystemError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -707,6 +1082,56 @@ impl fmt::Display for DeleteFileSystemError {
     }
 }
 impl Error for DeleteFileSystemError {}
+/// Errors returned by DeleteFileSystemPolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteFileSystemPolicyError {
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
+    FileSystemNotFound(String),
+    /// <p>Returned if the file system's lifecycle state is not "available".</p>
+    IncorrectFileSystemLifeCycleState(String),
+    /// <p>Returned if an error occurred on the server side.</p>
+    InternalServerError(String),
+}
+
+impl DeleteFileSystemPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFileSystemPolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(DeleteFileSystemPolicyError::FileSystemNotFound(
+                        err.msg,
+                    ))
+                }
+                "IncorrectFileSystemLifeCycleState" => {
+                    return RusotoError::Service(
+                        DeleteFileSystemPolicyError::IncorrectFileSystemLifeCycleState(err.msg),
+                    )
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(DeleteFileSystemPolicyError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteFileSystemPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteFileSystemPolicyError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemPolicyError::IncorrectFileSystemLifeCycleState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteFileSystemPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteFileSystemPolicyError {}
 /// Errors returned by DeleteMountTarget
 #[derive(Debug, PartialEq)]
 pub enum DeleteMountTargetError {
@@ -748,6 +1173,7 @@ impl DeleteMountTargetError {
     }
 }
 impl fmt::Display for DeleteMountTargetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteMountTargetError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -788,6 +1214,7 @@ impl DeleteTagsError {
     }
 }
 impl fmt::Display for DeleteTagsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -797,6 +1224,108 @@ impl fmt::Display for DeleteTagsError {
     }
 }
 impl Error for DeleteTagsError {}
+/// Errors returned by DescribeAccessPoints
+#[derive(Debug, PartialEq)]
+pub enum DescribeAccessPointsError {
+    /// <p>Returned if the specified <code>AccessPointId</code> value doesn't exist in the requester's AWS account.</p>
+    AccessPointNotFound(String),
+    /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
+    BadRequest(String),
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
+    FileSystemNotFound(String),
+    /// <p>Returned if an error occurred on the server side.</p>
+    InternalServerError(String),
+}
+
+impl DescribeAccessPointsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccessPointsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessPointNotFound" => {
+                    return RusotoError::Service(DescribeAccessPointsError::AccessPointNotFound(
+                        err.msg,
+                    ))
+                }
+                "BadRequest" => {
+                    return RusotoError::Service(DescribeAccessPointsError::BadRequest(err.msg))
+                }
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(DescribeAccessPointsError::FileSystemNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(DescribeAccessPointsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeAccessPointsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAccessPointsError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAccessPointsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeAccessPointsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAccessPointsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAccessPointsError {}
+/// Errors returned by DescribeFileSystemPolicy
+#[derive(Debug, PartialEq)]
+pub enum DescribeFileSystemPolicyError {
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
+    FileSystemNotFound(String),
+    /// <p>Returned if an error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>Returned if the default file system policy is in effect for the EFS file system specified.</p>
+    PolicyNotFound(String),
+}
+
+impl DescribeFileSystemPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFileSystemPolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(DescribeFileSystemPolicyError::FileSystemNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DescribeFileSystemPolicyError::InternalServerError(err.msg),
+                    )
+                }
+                "PolicyNotFound" => {
+                    return RusotoError::Service(DescribeFileSystemPolicyError::PolicyNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeFileSystemPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeFileSystemPolicyError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFileSystemPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeFileSystemPolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeFileSystemPolicyError {}
 /// Errors returned by DescribeFileSystems
 #[derive(Debug, PartialEq)]
 pub enum DescribeFileSystemsError {
@@ -833,6 +1362,7 @@ impl DescribeFileSystemsError {
     }
 }
 impl fmt::Display for DescribeFileSystemsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeFileSystemsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -882,6 +1412,7 @@ impl DescribeLifecycleConfigurationError {
     }
 }
 impl fmt::Display for DescribeLifecycleConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeLifecycleConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -942,6 +1473,7 @@ impl DescribeMountTargetSecurityGroupsError {
     }
 }
 impl fmt::Display for DescribeMountTargetSecurityGroupsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeMountTargetSecurityGroupsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -961,6 +1493,8 @@ impl Error for DescribeMountTargetSecurityGroupsError {}
 /// Errors returned by DescribeMountTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeMountTargetsError {
+    /// <p>Returned if the specified <code>AccessPointId</code> value doesn't exist in the requester's AWS account.</p>
+    AccessPointNotFound(String),
     /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
     BadRequest(String),
     /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
@@ -975,6 +1509,11 @@ impl DescribeMountTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMountTargetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "AccessPointNotFound" => {
+                    return RusotoError::Service(DescribeMountTargetsError::AccessPointNotFound(
+                        err.msg,
+                    ))
+                }
                 "BadRequest" => {
                     return RusotoError::Service(DescribeMountTargetsError::BadRequest(err.msg))
                 }
@@ -1001,8 +1540,10 @@ impl DescribeMountTargetsError {
     }
 }
 impl fmt::Display for DescribeMountTargetsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DescribeMountTargetsError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
             DescribeMountTargetsError::BadRequest(ref cause) => write!(f, "{}", cause),
             DescribeMountTargetsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
             DescribeMountTargetsError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -1043,6 +1584,7 @@ impl DescribeTagsError {
     }
 }
 impl fmt::Display for DescribeTagsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -1052,6 +1594,60 @@ impl fmt::Display for DescribeTagsError {
     }
 }
 impl Error for DescribeTagsError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>Returned if the specified <code>AccessPointId</code> value doesn't exist in the requester's AWS account.</p>
+    AccessPointNotFound(String),
+    /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
+    BadRequest(String),
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
+    FileSystemNotFound(String),
+    /// <p>Returned if an error occurred on the server side.</p>
+    InternalServerError(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessPointNotFound" => {
+                    return RusotoError::Service(ListTagsForResourceError::AccessPointNotFound(
+                        err.msg,
+                    ))
+                }
+                "BadRequest" => {
+                    return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
+                }
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(ListTagsForResourceError::FileSystemNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ModifyMountTargetSecurityGroups
 #[derive(Debug, PartialEq)]
 pub enum ModifyMountTargetSecurityGroupsError {
@@ -1113,6 +1709,7 @@ impl ModifyMountTargetSecurityGroupsError {
     }
 }
 impl fmt::Display for ModifyMountTargetSecurityGroupsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ModifyMountTargetSecurityGroupsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -1135,6 +1732,62 @@ impl fmt::Display for ModifyMountTargetSecurityGroupsError {
     }
 }
 impl Error for ModifyMountTargetSecurityGroupsError {}
+/// Errors returned by PutFileSystemPolicy
+#[derive(Debug, PartialEq)]
+pub enum PutFileSystemPolicyError {
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
+    FileSystemNotFound(String),
+    /// <p>Returned if the file system's lifecycle state is not "available".</p>
+    IncorrectFileSystemLifeCycleState(String),
+    /// <p>Returned if an error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>Returned if the <code>FileSystemPolicy</code> is is malformed or contains an error such as an invalid parameter value or a missing required parameter. Returned in the case of a policy lockout safety check error.</p>
+    InvalidPolicy(String),
+}
+
+impl PutFileSystemPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutFileSystemPolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(PutFileSystemPolicyError::FileSystemNotFound(
+                        err.msg,
+                    ))
+                }
+                "IncorrectFileSystemLifeCycleState" => {
+                    return RusotoError::Service(
+                        PutFileSystemPolicyError::IncorrectFileSystemLifeCycleState(err.msg),
+                    )
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(PutFileSystemPolicyError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidPolicyException" => {
+                    return RusotoError::Service(PutFileSystemPolicyError::InvalidPolicy(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutFileSystemPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutFileSystemPolicyError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            PutFileSystemPolicyError::IncorrectFileSystemLifeCycleState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutFileSystemPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            PutFileSystemPolicyError::InvalidPolicy(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutFileSystemPolicyError {}
 /// Errors returned by PutLifecycleConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutLifecycleConfigurationError {
@@ -1180,6 +1833,7 @@ impl PutLifecycleConfigurationError {
     }
 }
 impl fmt::Display for PutLifecycleConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PutLifecycleConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -1194,6 +1848,100 @@ impl fmt::Display for PutLifecycleConfigurationError {
     }
 }
 impl Error for PutLifecycleConfigurationError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>Returned if the specified <code>AccessPointId</code> value doesn't exist in the requester's AWS account.</p>
+    AccessPointNotFound(String),
+    /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
+    BadRequest(String),
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
+    FileSystemNotFound(String),
+    /// <p>Returned if an error occurred on the server side.</p>
+    InternalServerError(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessPointNotFound" => {
+                    return RusotoError::Service(TagResourceError::AccessPointNotFound(err.msg))
+                }
+                "BadRequest" => return RusotoError::Service(TagResourceError::BadRequest(err.msg)),
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(TagResourceError::FileSystemNotFound(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(TagResourceError::InternalServerError(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>Returned if the specified <code>AccessPointId</code> value doesn't exist in the requester's AWS account.</p>
+    AccessPointNotFound(String),
+    /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
+    BadRequest(String),
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
+    FileSystemNotFound(String),
+    /// <p>Returned if an error occurred on the server side.</p>
+    InternalServerError(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessPointNotFound" => {
+                    return RusotoError::Service(UntagResourceError::AccessPointNotFound(err.msg))
+                }
+                "BadRequest" => {
+                    return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
+                }
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(UntagResourceError::FileSystemNotFound(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(UntagResourceError::InternalServerError(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateFileSystem
 #[derive(Debug, PartialEq)]
 pub enum UpdateFileSystemError {
@@ -1254,6 +2002,7 @@ impl UpdateFileSystemError {
     }
 }
 impl fmt::Display for UpdateFileSystemError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -1272,87 +2021,148 @@ impl fmt::Display for UpdateFileSystemError {
 }
 impl Error for UpdateFileSystemError {}
 /// Trait representing the capabilities of the EFS API. EFS clients implement this trait.
+#[async_trait]
 pub trait Efs {
+    /// <p>Creates an EFS access point. An access point is an application-specific view into an EFS file system that applies an operating system user and group, and a file system path, to any file system request made through the access point. The operating system user and group override any identity information provided by the NFS client. The file system path is exposed as the access point's root directory. Applications using the access point can only access data in its own directory and below. To learn more, see <a href="https://docs.aws.amazon.com/efs/latest/ug/efs-access-points.html">Mounting a File System Using EFS Access Points</a>.</p> <p>This operation requires permissions for the <code>elasticfilesystem:CreateAccessPoint</code> action.</p>
+    async fn create_access_point(
+        &self,
+        input: CreateAccessPointRequest,
+    ) -> Result<AccessPointDescription, RusotoError<CreateAccessPointError>>;
+
     /// <p>Creates a new, empty file system. The operation requires a creation token in the request that Amazon EFS uses to ensure idempotent creation (calling the operation with same creation token has no effect). If a file system does not currently exist that is owned by the caller's AWS account with the specified creation token, this operation does the following:</p> <ul> <li> <p>Creates a new, empty file system. The file system will have an Amazon EFS assigned ID, and an initial lifecycle state <code>creating</code>.</p> </li> <li> <p>Returns with the description of the created file system.</p> </li> </ul> <p>Otherwise, this operation returns a <code>FileSystemAlreadyExists</code> error with the ID of the existing file system.</p> <note> <p>For basic use cases, you can use a randomly generated UUID for the creation token.</p> </note> <p> The idempotent operation allows you to retry a <code>CreateFileSystem</code> call without risk of creating an extra file system. This can happen when an initial call fails in a way that leaves it uncertain whether or not a file system was actually created. An example might be that a transport level timeout occurred or your connection was reset. As long as you use the same creation token, if the initial call had succeeded in creating a file system, the client can learn of its existence from the <code>FileSystemAlreadyExists</code> error.</p> <note> <p>The <code>CreateFileSystem</code> call returns while the file system's lifecycle state is still <code>creating</code>. You can check the file system creation status by calling the <a>DescribeFileSystems</a> operation, which among other things returns the file system state.</p> </note> <p>This operation also takes an optional <code>PerformanceMode</code> parameter that you choose for your file system. We recommend <code>generalPurpose</code> performance mode for most file systems. File systems using the <code>maxIO</code> performance mode can scale to higher levels of aggregate throughput and operations per second with a tradeoff of slightly higher latencies for most file operations. The performance mode can't be changed after the file system has been created. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/performance.html#performancemodes.html">Amazon EFS: Performance Modes</a>.</p> <p>After the file system is fully created, Amazon EFS sets its lifecycle state to <code>available</code>, at which point you can create one or more mount targets for the file system in your VPC. For more information, see <a>CreateMountTarget</a>. You mount your Amazon EFS file system on an EC2 instances in your VPC by using the mount target. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html">Amazon EFS: How it Works</a>. </p> <p> This operation requires permissions for the <code>elasticfilesystem:CreateFileSystem</code> action. </p>
-    fn create_file_system(
+    async fn create_file_system(
         &self,
         input: CreateFileSystemRequest,
-    ) -> RusotoFuture<FileSystemDescription, CreateFileSystemError>;
+    ) -> Result<FileSystemDescription, RusotoError<CreateFileSystemError>>;
 
     /// <p><p>Creates a mount target for a file system. You can then mount the file system on EC2 instances by using the mount target.</p> <p>You can create one mount target in each Availability Zone in your VPC. All EC2 instances in a VPC within a given Availability Zone share a single mount target for a given file system. If you have multiple subnets in an Availability Zone, you create a mount target in one of the subnets. EC2 instances do not need to be in the same subnet as the mount target in order to access their file system. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html">Amazon EFS: How it Works</a>. </p> <p>In the request, you also specify a file system ID for which you are creating the mount target and the file system&#39;s lifecycle state must be <code>available</code>. For more information, see <a>DescribeFileSystems</a>.</p> <p>In the request, you also provide a subnet ID, which determines the following:</p> <ul> <li> <p>VPC in which Amazon EFS creates the mount target</p> </li> <li> <p>Availability Zone in which Amazon EFS creates the mount target</p> </li> <li> <p>IP address range from which Amazon EFS selects the IP address of the mount target (if you don&#39;t specify an IP address in the request)</p> </li> </ul> <p>After creating the mount target, Amazon EFS returns a response that includes, a <code>MountTargetId</code> and an <code>IpAddress</code>. You use this IP address when mounting the file system in an EC2 instance. You can also use the mount target&#39;s DNS name when mounting the file system. The EC2 instance on which you mount the file system by using the mount target can resolve the mount target&#39;s DNS name to its IP address. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html#how-it-works-implementation">How it Works: Implementation Overview</a>. </p> <p>Note that you can create mount targets for a file system in only one VPC, and there can be only one mount target per Availability Zone. That is, if the file system already has one or more mount targets created for it, the subnet specified in the request to add another mount target must meet the following requirements:</p> <ul> <li> <p>Must belong to the same VPC as the subnets of the existing mount targets</p> </li> <li> <p>Must not be in the same Availability Zone as any of the subnets of the existing mount targets</p> </li> </ul> <p>If the request satisfies the requirements, Amazon EFS does the following:</p> <ul> <li> <p>Creates a new mount target in the specified subnet.</p> </li> <li> <p>Also creates a new network interface in the subnet as follows:</p> <ul> <li> <p>If the request provides an <code>IpAddress</code>, Amazon EFS assigns that IP address to the network interface. Otherwise, Amazon EFS assigns a free address in the subnet (in the same way that the Amazon EC2 <code>CreateNetworkInterface</code> call does when a request does not specify a primary private IP address).</p> </li> <li> <p>If the request provides <code>SecurityGroups</code>, this network interface is associated with those security groups. Otherwise, it belongs to the default security group for the subnet&#39;s VPC.</p> </li> <li> <p>Assigns the description <code>Mount target <i>fsmt-id</i> for file system <i>fs-id</i> </code> where <code> <i>fsmt-id</i> </code> is the mount target ID, and <code> <i>fs-id</i> </code> is the <code>FileSystemId</code>.</p> </li> <li> <p>Sets the <code>requesterManaged</code> property of the network interface to <code>true</code>, and the <code>requesterId</code> value to <code>EFS</code>.</p> </li> </ul> <p>Each Amazon EFS mount target has one corresponding requester-managed EC2 network interface. After the network interface is created, Amazon EFS sets the <code>NetworkInterfaceId</code> field in the mount target&#39;s description to the network interface ID, and the <code>IpAddress</code> field to its address. If network interface creation fails, the entire <code>CreateMountTarget</code> operation fails.</p> </li> </ul> <note> <p>The <code>CreateMountTarget</code> call returns only after creating the network interface, but while the mount target state is still <code>creating</code>, you can check the mount target creation status by calling the <a>DescribeMountTargets</a> operation, which among other things returns the mount target state.</p> </note> <p>We recommend that you create a mount target in each of the Availability Zones. There are cost considerations for using a file system in an Availability Zone through a mount target created in another Availability Zone. For more information, see <a href="http://aws.amazon.com/efs/">Amazon EFS</a>. In addition, by always using a mount target local to the instance&#39;s Availability Zone, you eliminate a partial failure scenario. If the Availability Zone in which your mount target is created goes down, then you can&#39;t access your file system through that mount target. </p> <p>This operation requires permissions for the following action on the file system:</p> <ul> <li> <p> <code>elasticfilesystem:CreateMountTarget</code> </p> </li> </ul> <p>This operation also requires permissions for the following Amazon EC2 actions:</p> <ul> <li> <p> <code>ec2:DescribeSubnets</code> </p> </li> <li> <p> <code>ec2:DescribeNetworkInterfaces</code> </p> </li> <li> <p> <code>ec2:CreateNetworkInterface</code> </p> </li> </ul></p>
-    fn create_mount_target(
+    async fn create_mount_target(
         &self,
         input: CreateMountTargetRequest,
-    ) -> RusotoFuture<MountTargetDescription, CreateMountTargetError>;
+    ) -> Result<MountTargetDescription, RusotoError<CreateMountTargetError>>;
 
     /// <p>Creates or overwrites tags associated with a file system. Each tag is a key-value pair. If a tag key specified in the request already exists on the file system, this operation overwrites its value with the value provided in the request. If you add the <code>Name</code> tag to your file system, Amazon EFS returns it in the response to the <a>DescribeFileSystems</a> operation. </p> <p>This operation requires permission for the <code>elasticfilesystem:CreateTags</code> action.</p>
-    fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError>;
+    async fn create_tags(
+        &self,
+        input: CreateTagsRequest,
+    ) -> Result<(), RusotoError<CreateTagsError>>;
+
+    /// <p>Deletes the specified access point. After deletion is complete, new clients can no longer connect to the access points. Clients connected to the access point at the time of deletion will continue to function until they terminate their connection.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DeleteAccessPoint</code> action.</p>
+    async fn delete_access_point(
+        &self,
+        input: DeleteAccessPointRequest,
+    ) -> Result<(), RusotoError<DeleteAccessPointError>>;
 
     /// <p>Deletes a file system, permanently severing access to its contents. Upon return, the file system no longer exists and you can't access any contents of the deleted file system.</p> <p> You can't delete a file system that is in use. That is, if the file system has any mount targets, you must first delete them. For more information, see <a>DescribeMountTargets</a> and <a>DeleteMountTarget</a>. </p> <note> <p>The <code>DeleteFileSystem</code> call returns while the file system state is still <code>deleting</code>. You can check the file system deletion status by calling the <a>DescribeFileSystems</a> operation, which returns a list of file systems in your account. If you pass file system ID or creation token for the deleted file system, the <a>DescribeFileSystems</a> returns a <code>404 FileSystemNotFound</code> error.</p> </note> <p>This operation requires permissions for the <code>elasticfilesystem:DeleteFileSystem</code> action.</p>
-    fn delete_file_system(
+    async fn delete_file_system(
         &self,
         input: DeleteFileSystemRequest,
-    ) -> RusotoFuture<(), DeleteFileSystemError>;
+    ) -> Result<(), RusotoError<DeleteFileSystemError>>;
+
+    /// <p>Deletes the <code>FileSystemPolicy</code> for the specified file system. The default <code>FileSystemPolicy</code> goes into effect once the existing policy is deleted. For more information about the default file system policy, see <a href="https://docs.aws.amazon.com/efs/latest/ug/res-based-policies-efs.html">Using Resource-based Policies with EFS</a>.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DeleteFileSystemPolicy</code> action.</p>
+    async fn delete_file_system_policy(
+        &self,
+        input: DeleteFileSystemPolicyRequest,
+    ) -> Result<(), RusotoError<DeleteFileSystemPolicyError>>;
 
     /// <p><p>Deletes the specified mount target.</p> <p>This operation forcibly breaks any mounts of the file system by using the mount target that is being deleted, which might disrupt instances or applications using those mounts. To avoid applications getting cut off abruptly, you might consider unmounting any mounts of the mount target, if feasible. The operation also deletes the associated network interface. Uncommitted writes might be lost, but breaking a mount target using this operation does not corrupt the file system itself. The file system you created remains. You can mount an EC2 instance in your VPC by using another mount target.</p> <p>This operation requires permissions for the following action on the file system:</p> <ul> <li> <p> <code>elasticfilesystem:DeleteMountTarget</code> </p> </li> </ul> <note> <p>The <code>DeleteMountTarget</code> call returns while the mount target state is still <code>deleting</code>. You can check the mount target deletion by calling the <a>DescribeMountTargets</a> operation, which returns a list of mount target descriptions for the given file system. </p> </note> <p>The operation also requires permissions for the following Amazon EC2 action on the mount target&#39;s network interface:</p> <ul> <li> <p> <code>ec2:DeleteNetworkInterface</code> </p> </li> </ul></p>
-    fn delete_mount_target(
+    async fn delete_mount_target(
         &self,
         input: DeleteMountTargetRequest,
-    ) -> RusotoFuture<(), DeleteMountTargetError>;
+    ) -> Result<(), RusotoError<DeleteMountTargetError>>;
 
     /// <p>Deletes the specified tags from a file system. If the <code>DeleteTags</code> request includes a tag key that doesn't exist, Amazon EFS ignores it and doesn't cause an error. For more information about tags and related restrictions, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Tag Restrictions</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DeleteTags</code> action.</p>
-    fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError>;
+    async fn delete_tags(
+        &self,
+        input: DeleteTagsRequest,
+    ) -> Result<(), RusotoError<DeleteTagsError>>;
+
+    /// <p>Returns the description of a specific Amazon EFS access point if the <code>AccessPointId</code> is provided. If you provide an EFS <code>FileSystemId</code>, it returns descriptions of all access points for that file system. You can provide either an <code>AccessPointId</code> or a <code>FileSystemId</code> in the request, but not both. </p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeAccessPoints</code> action.</p>
+    async fn describe_access_points(
+        &self,
+        input: DescribeAccessPointsRequest,
+    ) -> Result<DescribeAccessPointsResponse, RusotoError<DescribeAccessPointsError>>;
+
+    /// <p>Returns the <code>FileSystemPolicy</code> for the specified EFS file system.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeFileSystemPolicy</code> action.</p>
+    async fn describe_file_system_policy(
+        &self,
+        input: DescribeFileSystemPolicyRequest,
+    ) -> Result<FileSystemPolicyDescription, RusotoError<DescribeFileSystemPolicyError>>;
 
     /// <p>Returns the description of a specific Amazon EFS file system if either the file system <code>CreationToken</code> or the <code>FileSystemId</code> is provided. Otherwise, it returns descriptions of all file systems owned by the caller's AWS account in the AWS Region of the endpoint that you're calling.</p> <p>When retrieving all file system descriptions, you can optionally specify the <code>MaxItems</code> parameter to limit the number of descriptions in a response. Currently, this number is automatically set to 10. If more file system descriptions remain, Amazon EFS returns a <code>NextMarker</code>, an opaque token, in the response. In this case, you should send a subsequent request with the <code>Marker</code> request parameter set to the value of <code>NextMarker</code>. </p> <p>To retrieve a list of your file system descriptions, this operation is used in an iterative process, where <code>DescribeFileSystems</code> is called first without the <code>Marker</code> and then the operation continues to call it with the <code>Marker</code> parameter set to the value of the <code>NextMarker</code> from the previous response until the response has no <code>NextMarker</code>. </p> <p> The order of file systems returned in the response of one <code>DescribeFileSystems</code> call and the order of file systems returned across the responses of a multi-call iteration is unspecified. </p> <p> This operation requires permissions for the <code>elasticfilesystem:DescribeFileSystems</code> action. </p>
-    fn describe_file_systems(
+    async fn describe_file_systems(
         &self,
         input: DescribeFileSystemsRequest,
-    ) -> RusotoFuture<DescribeFileSystemsResponse, DescribeFileSystemsError>;
+    ) -> Result<DescribeFileSystemsResponse, RusotoError<DescribeFileSystemsError>>;
 
     /// <p>Returns the current <code>LifecycleConfiguration</code> object for the specified Amazon EFS file system. EFS lifecycle management uses the <code>LifecycleConfiguration</code> object to identify which files to move to the EFS Infrequent Access (IA) storage class. For a file system without a <code>LifecycleConfiguration</code> object, the call returns an empty array in the response.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeLifecycleConfiguration</code> operation.</p>
-    fn describe_lifecycle_configuration(
+    async fn describe_lifecycle_configuration(
         &self,
         input: DescribeLifecycleConfigurationRequest,
-    ) -> RusotoFuture<LifecycleConfigurationDescription, DescribeLifecycleConfigurationError>;
+    ) -> Result<LifecycleConfigurationDescription, RusotoError<DescribeLifecycleConfigurationError>>;
 
     /// <p><p>Returns the security groups currently in effect for a mount target. This operation requires that the network interface of the mount target has been created and the lifecycle state of the mount target is not <code>deleted</code>.</p> <p>This operation requires permissions for the following actions:</p> <ul> <li> <p> <code>elasticfilesystem:DescribeMountTargetSecurityGroups</code> action on the mount target&#39;s file system. </p> </li> <li> <p> <code>ec2:DescribeNetworkInterfaceAttribute</code> action on the mount target&#39;s network interface. </p> </li> </ul></p>
-    fn describe_mount_target_security_groups(
+    async fn describe_mount_target_security_groups(
         &self,
         input: DescribeMountTargetSecurityGroupsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeMountTargetSecurityGroupsResponse,
-        DescribeMountTargetSecurityGroupsError,
+        RusotoError<DescribeMountTargetSecurityGroupsError>,
     >;
 
     /// <p>Returns the descriptions of all the current mount targets, or a specific mount target, for a file system. When requesting all of the current mount targets, the order of mount targets returned in the response is unspecified.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeMountTargets</code> action, on either the file system ID that you specify in <code>FileSystemId</code>, or on the file system of the mount target that you specify in <code>MountTargetId</code>.</p>
-    fn describe_mount_targets(
+    async fn describe_mount_targets(
         &self,
         input: DescribeMountTargetsRequest,
-    ) -> RusotoFuture<DescribeMountTargetsResponse, DescribeMountTargetsError>;
+    ) -> Result<DescribeMountTargetsResponse, RusotoError<DescribeMountTargetsError>>;
 
     /// <p>Returns the tags associated with a file system. The order of tags returned in the response of one <code>DescribeTags</code> call and the order of tags returned across the responses of a multiple-call iteration (when using pagination) is unspecified. </p> <p> This operation requires permissions for the <code>elasticfilesystem:DescribeTags</code> action. </p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsRequest,
-    ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError>;
+    ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>>;
+
+    /// <p>Lists all tags for a top-level EFS resource. You must provide the ID of the resource that you want to retrieve the tags for.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeAccessPoints</code> action.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p><p>Modifies the set of security groups in effect for a mount target.</p> <p>When you create a mount target, Amazon EFS also creates a new network interface. For more information, see <a>CreateMountTarget</a>. This operation replaces the security groups in effect for the network interface associated with a mount target, with the <code>SecurityGroups</code> provided in the request. This operation requires that the network interface of the mount target has been created and the lifecycle state of the mount target is not <code>deleted</code>. </p> <p>The operation requires permissions for the following actions:</p> <ul> <li> <p> <code>elasticfilesystem:ModifyMountTargetSecurityGroups</code> action on the mount target&#39;s file system. </p> </li> <li> <p> <code>ec2:ModifyNetworkInterfaceAttribute</code> action on the mount target&#39;s network interface. </p> </li> </ul></p>
-    fn modify_mount_target_security_groups(
+    async fn modify_mount_target_security_groups(
         &self,
         input: ModifyMountTargetSecurityGroupsRequest,
-    ) -> RusotoFuture<(), ModifyMountTargetSecurityGroupsError>;
+    ) -> Result<(), RusotoError<ModifyMountTargetSecurityGroupsError>>;
+
+    /// <p>Applies an Amazon EFS <code>FileSystemPolicy</code> to an Amazon EFS file system. A file system policy is an IAM resource-based policy and can contain multiple policy statements. A file system always has exactly one file system policy, which can be the default policy or an explicit policy set or updated using this API operation. When an explicit policy is set, it overrides the default policy. For more information about the default file system policy, see <a href="https://docs.aws.amazon.com/efs/latest/ug/res-based-policies-efs.html">Using Resource-based Policies with EFS</a>. </p> <p>This operation requires permissions for the <code>elasticfilesystem:PutFileSystemPolicy</code> action.</p>
+    async fn put_file_system_policy(
+        &self,
+        input: PutFileSystemPolicyRequest,
+    ) -> Result<FileSystemPolicyDescription, RusotoError<PutFileSystemPolicyError>>;
 
     /// <p>Enables lifecycle management by creating a new <code>LifecycleConfiguration</code> object. A <code>LifecycleConfiguration</code> object defines when files in an Amazon EFS file system are automatically transitioned to the lower-cost EFS Infrequent Access (IA) storage class. A <code>LifecycleConfiguration</code> applies to all files in a file system.</p> <p>Each Amazon EFS file system supports one lifecycle configuration, which applies to all files in the file system. If a <code>LifecycleConfiguration</code> object already exists for the specified file system, a <code>PutLifecycleConfiguration</code> call modifies the existing configuration. A <code>PutLifecycleConfiguration</code> call with an empty <code>LifecyclePolicies</code> array in the request body deletes any existing <code>LifecycleConfiguration</code> and disables lifecycle management.</p> <p>In the request, specify the following: </p> <ul> <li> <p>The ID for the file system for which you are enabling, disabling, or modifying lifecycle management.</p> </li> <li> <p>A <code>LifecyclePolicies</code> array of <code>LifecyclePolicy</code> objects that define when files are moved to the IA storage class. The array can contain only one <code>LifecyclePolicy</code> item.</p> </li> </ul> <p>This operation requires permissions for the <code>elasticfilesystem:PutLifecycleConfiguration</code> operation.</p> <p>To apply a <code>LifecycleConfiguration</code> object to an encrypted file system, you need the same AWS Key Management Service (AWS KMS) permissions as when you created the encrypted file system. </p>
-    fn put_lifecycle_configuration(
+    async fn put_lifecycle_configuration(
         &self,
         input: PutLifecycleConfigurationRequest,
-    ) -> RusotoFuture<LifecycleConfigurationDescription, PutLifecycleConfigurationError>;
+    ) -> Result<LifecycleConfigurationDescription, RusotoError<PutLifecycleConfigurationError>>;
+
+    /// <p>Creates a tag for an EFS resource. You can create tags for EFS file systems and access points using this API operation.</p> <p>This operation requires permissions for the <code>elasticfilesystem:TagResource</code> action.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>>;
+
+    /// <p>Removes tags from an EFS resource. You can remove tags from EFS file systems and access points using this API operation.</p> <p>This operation requires permissions for the <code>elasticfilesystem:UntagResource</code> action.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>>;
 
     /// <p>Updates the throughput mode or the amount of provisioned throughput of an existing file system.</p>
-    fn update_file_system(
+    async fn update_file_system(
         &self,
         input: UpdateFileSystemRequest,
-    ) -> RusotoFuture<FileSystemDescription, UpdateFileSystemError>;
+    ) -> Result<FileSystemDescription, RusotoError<UpdateFileSystemError>>;
 }
 /// A client for the EFS API.
 #[derive(Clone)]
@@ -1366,7 +2176,10 @@ impl EfsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> EfsClient {
-        Self::new_with_client(Client::shared(), region)
+        EfsClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -1376,14 +2189,12 @@ impl EfsClient {
     ) -> EfsClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        EfsClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> EfsClient {
@@ -1391,20 +2202,44 @@ impl EfsClient {
     }
 }
 
-impl fmt::Debug for EfsClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("EfsClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Efs for EfsClient {
+    /// <p>Creates an EFS access point. An access point is an application-specific view into an EFS file system that applies an operating system user and group, and a file system path, to any file system request made through the access point. The operating system user and group override any identity information provided by the NFS client. The file system path is exposed as the access point's root directory. Applications using the access point can only access data in its own directory and below. To learn more, see <a href="https://docs.aws.amazon.com/efs/latest/ug/efs-access-points.html">Mounting a File System Using EFS Access Points</a>.</p> <p>This operation requires permissions for the <code>elasticfilesystem:CreateAccessPoint</code> action.</p>
+    async fn create_access_point(
+        &self,
+        input: CreateAccessPointRequest,
+    ) -> Result<AccessPointDescription, RusotoError<CreateAccessPointError>> {
+        let request_uri = "/2015-02-01/access-points";
+
+        let mut request =
+            SignedRequest::new("POST", "elasticfilesystem", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AccessPointDescription, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAccessPointError::from_response(response))
+        }
+    }
+
     /// <p>Creates a new, empty file system. The operation requires a creation token in the request that Amazon EFS uses to ensure idempotent creation (calling the operation with same creation token has no effect). If a file system does not currently exist that is owned by the caller's AWS account with the specified creation token, this operation does the following:</p> <ul> <li> <p>Creates a new, empty file system. The file system will have an Amazon EFS assigned ID, and an initial lifecycle state <code>creating</code>.</p> </li> <li> <p>Returns with the description of the created file system.</p> </li> </ul> <p>Otherwise, this operation returns a <code>FileSystemAlreadyExists</code> error with the ID of the existing file system.</p> <note> <p>For basic use cases, you can use a randomly generated UUID for the creation token.</p> </note> <p> The idempotent operation allows you to retry a <code>CreateFileSystem</code> call without risk of creating an extra file system. This can happen when an initial call fails in a way that leaves it uncertain whether or not a file system was actually created. An example might be that a transport level timeout occurred or your connection was reset. As long as you use the same creation token, if the initial call had succeeded in creating a file system, the client can learn of its existence from the <code>FileSystemAlreadyExists</code> error.</p> <note> <p>The <code>CreateFileSystem</code> call returns while the file system's lifecycle state is still <code>creating</code>. You can check the file system creation status by calling the <a>DescribeFileSystems</a> operation, which among other things returns the file system state.</p> </note> <p>This operation also takes an optional <code>PerformanceMode</code> parameter that you choose for your file system. We recommend <code>generalPurpose</code> performance mode for most file systems. File systems using the <code>maxIO</code> performance mode can scale to higher levels of aggregate throughput and operations per second with a tradeoff of slightly higher latencies for most file operations. The performance mode can't be changed after the file system has been created. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/performance.html#performancemodes.html">Amazon EFS: Performance Modes</a>.</p> <p>After the file system is fully created, Amazon EFS sets its lifecycle state to <code>available</code>, at which point you can create one or more mount targets for the file system in your VPC. For more information, see <a>CreateMountTarget</a>. You mount your Amazon EFS file system on an EC2 instances in your VPC by using the mount target. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html">Amazon EFS: How it Works</a>. </p> <p> This operation requires permissions for the <code>elasticfilesystem:CreateFileSystem</code> action. </p>
-    fn create_file_system(
+    async fn create_file_system(
         &self,
         input: CreateFileSystemRequest,
-    ) -> RusotoFuture<FileSystemDescription, CreateFileSystemError> {
+    ) -> Result<FileSystemDescription, RusotoError<CreateFileSystemError>> {
         let request_uri = "/2015-02-01/file-systems";
 
         let mut request =
@@ -1414,30 +2249,28 @@ impl Efs for EfsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<FileSystemDescription, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<FileSystemDescription, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateFileSystemError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateFileSystemError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a mount target for a file system. You can then mount the file system on EC2 instances by using the mount target.</p> <p>You can create one mount target in each Availability Zone in your VPC. All EC2 instances in a VPC within a given Availability Zone share a single mount target for a given file system. If you have multiple subnets in an Availability Zone, you create a mount target in one of the subnets. EC2 instances do not need to be in the same subnet as the mount target in order to access their file system. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html">Amazon EFS: How it Works</a>. </p> <p>In the request, you also specify a file system ID for which you are creating the mount target and the file system&#39;s lifecycle state must be <code>available</code>. For more information, see <a>DescribeFileSystems</a>.</p> <p>In the request, you also provide a subnet ID, which determines the following:</p> <ul> <li> <p>VPC in which Amazon EFS creates the mount target</p> </li> <li> <p>Availability Zone in which Amazon EFS creates the mount target</p> </li> <li> <p>IP address range from which Amazon EFS selects the IP address of the mount target (if you don&#39;t specify an IP address in the request)</p> </li> </ul> <p>After creating the mount target, Amazon EFS returns a response that includes, a <code>MountTargetId</code> and an <code>IpAddress</code>. You use this IP address when mounting the file system in an EC2 instance. You can also use the mount target&#39;s DNS name when mounting the file system. The EC2 instance on which you mount the file system by using the mount target can resolve the mount target&#39;s DNS name to its IP address. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html#how-it-works-implementation">How it Works: Implementation Overview</a>. </p> <p>Note that you can create mount targets for a file system in only one VPC, and there can be only one mount target per Availability Zone. That is, if the file system already has one or more mount targets created for it, the subnet specified in the request to add another mount target must meet the following requirements:</p> <ul> <li> <p>Must belong to the same VPC as the subnets of the existing mount targets</p> </li> <li> <p>Must not be in the same Availability Zone as any of the subnets of the existing mount targets</p> </li> </ul> <p>If the request satisfies the requirements, Amazon EFS does the following:</p> <ul> <li> <p>Creates a new mount target in the specified subnet.</p> </li> <li> <p>Also creates a new network interface in the subnet as follows:</p> <ul> <li> <p>If the request provides an <code>IpAddress</code>, Amazon EFS assigns that IP address to the network interface. Otherwise, Amazon EFS assigns a free address in the subnet (in the same way that the Amazon EC2 <code>CreateNetworkInterface</code> call does when a request does not specify a primary private IP address).</p> </li> <li> <p>If the request provides <code>SecurityGroups</code>, this network interface is associated with those security groups. Otherwise, it belongs to the default security group for the subnet&#39;s VPC.</p> </li> <li> <p>Assigns the description <code>Mount target <i>fsmt-id</i> for file system <i>fs-id</i> </code> where <code> <i>fsmt-id</i> </code> is the mount target ID, and <code> <i>fs-id</i> </code> is the <code>FileSystemId</code>.</p> </li> <li> <p>Sets the <code>requesterManaged</code> property of the network interface to <code>true</code>, and the <code>requesterId</code> value to <code>EFS</code>.</p> </li> </ul> <p>Each Amazon EFS mount target has one corresponding requester-managed EC2 network interface. After the network interface is created, Amazon EFS sets the <code>NetworkInterfaceId</code> field in the mount target&#39;s description to the network interface ID, and the <code>IpAddress</code> field to its address. If network interface creation fails, the entire <code>CreateMountTarget</code> operation fails.</p> </li> </ul> <note> <p>The <code>CreateMountTarget</code> call returns only after creating the network interface, but while the mount target state is still <code>creating</code>, you can check the mount target creation status by calling the <a>DescribeMountTargets</a> operation, which among other things returns the mount target state.</p> </note> <p>We recommend that you create a mount target in each of the Availability Zones. There are cost considerations for using a file system in an Availability Zone through a mount target created in another Availability Zone. For more information, see <a href="http://aws.amazon.com/efs/">Amazon EFS</a>. In addition, by always using a mount target local to the instance&#39;s Availability Zone, you eliminate a partial failure scenario. If the Availability Zone in which your mount target is created goes down, then you can&#39;t access your file system through that mount target. </p> <p>This operation requires permissions for the following action on the file system:</p> <ul> <li> <p> <code>elasticfilesystem:CreateMountTarget</code> </p> </li> </ul> <p>This operation also requires permissions for the following Amazon EC2 actions:</p> <ul> <li> <p> <code>ec2:DescribeSubnets</code> </p> </li> <li> <p> <code>ec2:DescribeNetworkInterfaces</code> </p> </li> <li> <p> <code>ec2:CreateNetworkInterface</code> </p> </li> </ul></p>
-    fn create_mount_target(
+    async fn create_mount_target(
         &self,
         input: CreateMountTargetRequest,
-    ) -> RusotoFuture<MountTargetDescription, CreateMountTargetError> {
+    ) -> Result<MountTargetDescription, RusotoError<CreateMountTargetError>> {
         let request_uri = "/2015-02-01/mount-targets";
 
         let mut request =
@@ -1447,27 +2280,28 @@ impl Efs for EfsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<MountTargetDescription, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<MountTargetDescription, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateMountTargetError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateMountTargetError::from_response(response))
+        }
     }
 
     /// <p>Creates or overwrites tags associated with a file system. Each tag is a key-value pair. If a tag key specified in the request already exists on the file system, this operation overwrites its value with the value provided in the request. If you add the <code>Name</code> tag to your file system, Amazon EFS returns it in the response to the <a>DescribeFileSystems</a> operation. </p> <p>This operation requires permission for the <code>elasticfilesystem:CreateTags</code> action.</p>
-    fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError> {
+    async fn create_tags(
+        &self,
+        input: CreateTagsRequest,
+    ) -> Result<(), RusotoError<CreateTagsError>> {
         let request_uri = format!(
             "/2015-02-01/create-tags/{file_system_id}",
             file_system_id = input.file_system_id
@@ -1480,29 +2314,57 @@ impl Efs for EfsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateTagsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTagsError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the specified access point. After deletion is complete, new clients can no longer connect to the access points. Clients connected to the access point at the time of deletion will continue to function until they terminate their connection.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DeleteAccessPoint</code> action.</p>
+    async fn delete_access_point(
+        &self,
+        input: DeleteAccessPointRequest,
+    ) -> Result<(), RusotoError<DeleteAccessPointError>> {
+        let request_uri = format!(
+            "/2015-02-01/access-points/{access_point_id}",
+            access_point_id = input.access_point_id
+        );
+
+        let mut request =
+            SignedRequest::new("DELETE", "elasticfilesystem", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAccessPointError::from_response(response))
+        }
     }
 
     /// <p>Deletes a file system, permanently severing access to its contents. Upon return, the file system no longer exists and you can't access any contents of the deleted file system.</p> <p> You can't delete a file system that is in use. That is, if the file system has any mount targets, you must first delete them. For more information, see <a>DescribeMountTargets</a> and <a>DeleteMountTarget</a>. </p> <note> <p>The <code>DeleteFileSystem</code> call returns while the file system state is still <code>deleting</code>. You can check the file system deletion status by calling the <a>DescribeFileSystems</a> operation, which returns a list of file systems in your account. If you pass file system ID or creation token for the deleted file system, the <a>DescribeFileSystems</a> returns a <code>404 FileSystemNotFound</code> error.</p> </note> <p>This operation requires permissions for the <code>elasticfilesystem:DeleteFileSystem</code> action.</p>
-    fn delete_file_system(
+    async fn delete_file_system(
         &self,
         input: DeleteFileSystemRequest,
-    ) -> RusotoFuture<(), DeleteFileSystemError> {
+    ) -> Result<(), RusotoError<DeleteFileSystemError>> {
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}",
             file_system_id = input.file_system_id
@@ -1512,29 +2374,57 @@ impl Efs for EfsClient {
             SignedRequest::new("DELETE", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteFileSystemError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFileSystemError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the <code>FileSystemPolicy</code> for the specified file system. The default <code>FileSystemPolicy</code> goes into effect once the existing policy is deleted. For more information about the default file system policy, see <a href="https://docs.aws.amazon.com/efs/latest/ug/res-based-policies-efs.html">Using Resource-based Policies with EFS</a>.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DeleteFileSystemPolicy</code> action.</p>
+    async fn delete_file_system_policy(
+        &self,
+        input: DeleteFileSystemPolicyRequest,
+    ) -> Result<(), RusotoError<DeleteFileSystemPolicyError>> {
+        let request_uri = format!(
+            "/2015-02-01/file-systems/{file_system_id}/policy",
+            file_system_id = input.file_system_id
+        );
+
+        let mut request =
+            SignedRequest::new("DELETE", "elasticfilesystem", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFileSystemPolicyError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes the specified mount target.</p> <p>This operation forcibly breaks any mounts of the file system by using the mount target that is being deleted, which might disrupt instances or applications using those mounts. To avoid applications getting cut off abruptly, you might consider unmounting any mounts of the mount target, if feasible. The operation also deletes the associated network interface. Uncommitted writes might be lost, but breaking a mount target using this operation does not corrupt the file system itself. The file system you created remains. You can mount an EC2 instance in your VPC by using another mount target.</p> <p>This operation requires permissions for the following action on the file system:</p> <ul> <li> <p> <code>elasticfilesystem:DeleteMountTarget</code> </p> </li> </ul> <note> <p>The <code>DeleteMountTarget</code> call returns while the mount target state is still <code>deleting</code>. You can check the mount target deletion by calling the <a>DescribeMountTargets</a> operation, which returns a list of mount target descriptions for the given file system. </p> </note> <p>The operation also requires permissions for the following Amazon EC2 action on the mount target&#39;s network interface:</p> <ul> <li> <p> <code>ec2:DeleteNetworkInterface</code> </p> </li> </ul></p>
-    fn delete_mount_target(
+    async fn delete_mount_target(
         &self,
         input: DeleteMountTargetRequest,
-    ) -> RusotoFuture<(), DeleteMountTargetError> {
+    ) -> Result<(), RusotoError<DeleteMountTargetError>> {
         let request_uri = format!(
             "/2015-02-01/mount-targets/{mount_target_id}",
             mount_target_id = input.mount_target_id
@@ -1544,26 +2434,27 @@ impl Efs for EfsClient {
             SignedRequest::new("DELETE", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteMountTargetError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteMountTargetError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified tags from a file system. If the <code>DeleteTags</code> request includes a tag key that doesn't exist, Amazon EFS ignores it and doesn't cause an error. For more information about tags and related restrictions, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Tag Restrictions</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DeleteTags</code> action.</p>
-    fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError> {
+    async fn delete_tags(
+        &self,
+        input: DeleteTagsRequest,
+    ) -> Result<(), RusotoError<DeleteTagsError>> {
         let request_uri = format!(
             "/2015-02-01/delete-tags/{file_system_id}",
             file_system_id = input.file_system_id
@@ -1576,29 +2467,101 @@ impl Efs for EfsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTagsError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the description of a specific Amazon EFS access point if the <code>AccessPointId</code> is provided. If you provide an EFS <code>FileSystemId</code>, it returns descriptions of all access points for that file system. You can provide either an <code>AccessPointId</code> or a <code>FileSystemId</code> in the request, but not both. </p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeAccessPoints</code> action.</p>
+    async fn describe_access_points(
+        &self,
+        input: DescribeAccessPointsRequest,
+    ) -> Result<DescribeAccessPointsResponse, RusotoError<DescribeAccessPointsError>> {
+        let request_uri = "/2015-02-01/access-points";
+
+        let mut request =
+            SignedRequest::new("GET", "elasticfilesystem", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.access_point_id {
+            params.put("AccessPointId", x);
+        }
+        if let Some(ref x) = input.file_system_id {
+            params.put("FileSystemId", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAccessPointsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAccessPointsError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the <code>FileSystemPolicy</code> for the specified EFS file system.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeFileSystemPolicy</code> action.</p>
+    async fn describe_file_system_policy(
+        &self,
+        input: DescribeFileSystemPolicyRequest,
+    ) -> Result<FileSystemPolicyDescription, RusotoError<DescribeFileSystemPolicyError>> {
+        let request_uri = format!(
+            "/2015-02-01/file-systems/{file_system_id}/policy",
+            file_system_id = input.file_system_id
+        );
+
+        let mut request =
+            SignedRequest::new("GET", "elasticfilesystem", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<FileSystemPolicyDescription, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeFileSystemPolicyError::from_response(response))
+        }
     }
 
     /// <p>Returns the description of a specific Amazon EFS file system if either the file system <code>CreationToken</code> or the <code>FileSystemId</code> is provided. Otherwise, it returns descriptions of all file systems owned by the caller's AWS account in the AWS Region of the endpoint that you're calling.</p> <p>When retrieving all file system descriptions, you can optionally specify the <code>MaxItems</code> parameter to limit the number of descriptions in a response. Currently, this number is automatically set to 10. If more file system descriptions remain, Amazon EFS returns a <code>NextMarker</code>, an opaque token, in the response. In this case, you should send a subsequent request with the <code>Marker</code> request parameter set to the value of <code>NextMarker</code>. </p> <p>To retrieve a list of your file system descriptions, this operation is used in an iterative process, where <code>DescribeFileSystems</code> is called first without the <code>Marker</code> and then the operation continues to call it with the <code>Marker</code> parameter set to the value of the <code>NextMarker</code> from the previous response until the response has no <code>NextMarker</code>. </p> <p> The order of file systems returned in the response of one <code>DescribeFileSystems</code> call and the order of file systems returned across the responses of a multi-call iteration is unspecified. </p> <p> This operation requires permissions for the <code>elasticfilesystem:DescribeFileSystems</code> action. </p>
-    fn describe_file_systems(
+    async fn describe_file_systems(
         &self,
         input: DescribeFileSystemsRequest,
-    ) -> RusotoFuture<DescribeFileSystemsResponse, DescribeFileSystemsError> {
+    ) -> Result<DescribeFileSystemsResponse, RusotoError<DescribeFileSystemsError>> {
         let request_uri = "/2015-02-01/file-systems";
 
         let mut request =
@@ -1620,29 +2583,29 @@ impl Efs for EfsClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeFileSystemsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeFileSystemsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeFileSystemsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeFileSystemsError::from_response(response))
+        }
     }
 
     /// <p>Returns the current <code>LifecycleConfiguration</code> object for the specified Amazon EFS file system. EFS lifecycle management uses the <code>LifecycleConfiguration</code> object to identify which files to move to the EFS Infrequent Access (IA) storage class. For a file system without a <code>LifecycleConfiguration</code> object, the call returns an empty array in the response.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeLifecycleConfiguration</code> operation.</p>
-    fn describe_lifecycle_configuration(
+    async fn describe_lifecycle_configuration(
         &self,
         input: DescribeLifecycleConfigurationRequest,
-    ) -> RusotoFuture<LifecycleConfigurationDescription, DescribeLifecycleConfigurationError> {
+    ) -> Result<LifecycleConfigurationDescription, RusotoError<DescribeLifecycleConfigurationError>>
+    {
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}/lifecycle-configuration",
             file_system_id = input.file_system_id
@@ -1652,29 +2615,30 @@ impl Efs for EfsClient {
             SignedRequest::new("GET", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<LifecycleConfigurationDescription, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<LifecycleConfigurationDescription, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLifecycleConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeLifecycleConfigurationError::from_response(response))
+        }
     }
 
     /// <p><p>Returns the security groups currently in effect for a mount target. This operation requires that the network interface of the mount target has been created and the lifecycle state of the mount target is not <code>deleted</code>.</p> <p>This operation requires permissions for the following actions:</p> <ul> <li> <p> <code>elasticfilesystem:DescribeMountTargetSecurityGroups</code> action on the mount target&#39;s file system. </p> </li> <li> <p> <code>ec2:DescribeNetworkInterfaceAttribute</code> action on the mount target&#39;s network interface. </p> </li> </ul></p>
-    fn describe_mount_target_security_groups(
+    async fn describe_mount_target_security_groups(
         &self,
         input: DescribeMountTargetSecurityGroupsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeMountTargetSecurityGroupsResponse,
-        DescribeMountTargetSecurityGroupsError,
+        RusotoError<DescribeMountTargetSecurityGroupsError>,
     > {
         let request_uri = format!(
             "/2015-02-01/mount-targets/{mount_target_id}/security-groups",
@@ -1685,29 +2649,30 @@ impl Efs for EfsClient {
             SignedRequest::new("GET", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeMountTargetSecurityGroupsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeMountTargetSecurityGroupsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeMountTargetSecurityGroupsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeMountTargetSecurityGroupsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns the descriptions of all the current mount targets, or a specific mount target, for a file system. When requesting all of the current mount targets, the order of mount targets returned in the response is unspecified.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeMountTargets</code> action, on either the file system ID that you specify in <code>FileSystemId</code>, or on the file system of the mount target that you specify in <code>MountTargetId</code>.</p>
-    fn describe_mount_targets(
+    async fn describe_mount_targets(
         &self,
         input: DescribeMountTargetsRequest,
-    ) -> RusotoFuture<DescribeMountTargetsResponse, DescribeMountTargetsError> {
+    ) -> Result<DescribeMountTargetsResponse, RusotoError<DescribeMountTargetsError>> {
         let request_uri = "/2015-02-01/mount-targets";
 
         let mut request =
@@ -1715,6 +2680,9 @@ impl Efs for EfsClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.access_point_id {
+            params.put("AccessPointId", x);
+        }
         if let Some(ref x) = input.file_system_id {
             params.put("FileSystemId", x);
         }
@@ -1729,29 +2697,28 @@ impl Efs for EfsClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeMountTargetsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeMountTargetsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeMountTargetsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeMountTargetsError::from_response(response))
+        }
     }
 
     /// <p>Returns the tags associated with a file system. The order of tags returned in the response of one <code>DescribeTags</code> call and the order of tags returned across the responses of a multiple-call iteration (when using pagination) is unspecified. </p> <p> This operation requires permissions for the <code>elasticfilesystem:DescribeTags</code> action. </p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsRequest,
-    ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError> {
+    ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>> {
         let request_uri = format!(
             "/2015-02-01/tags/{file_system_id}/",
             file_system_id = input.file_system_id
@@ -1770,30 +2737,68 @@ impl Efs for EfsClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTagsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeTagsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTagsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all tags for a top-level EFS resource. You must provide the ID of the resource that you want to retrieve the tags for.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeAccessPoints</code> action.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let request_uri = format!(
+            "/2015-02-01/resource-tags/{resource_id}",
+            resource_id = input.resource_id
+        );
+
+        let mut request =
+            SignedRequest::new("GET", "elasticfilesystem", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p><p>Modifies the set of security groups in effect for a mount target.</p> <p>When you create a mount target, Amazon EFS also creates a new network interface. For more information, see <a>CreateMountTarget</a>. This operation replaces the security groups in effect for the network interface associated with a mount target, with the <code>SecurityGroups</code> provided in the request. This operation requires that the network interface of the mount target has been created and the lifecycle state of the mount target is not <code>deleted</code>. </p> <p>The operation requires permissions for the following actions:</p> <ul> <li> <p> <code>elasticfilesystem:ModifyMountTargetSecurityGroups</code> action on the mount target&#39;s file system. </p> </li> <li> <p> <code>ec2:ModifyNetworkInterfaceAttribute</code> action on the mount target&#39;s network interface. </p> </li> </ul></p>
-    fn modify_mount_target_security_groups(
+    async fn modify_mount_target_security_groups(
         &self,
         input: ModifyMountTargetSecurityGroupsRequest,
-    ) -> RusotoFuture<(), ModifyMountTargetSecurityGroupsError> {
+    ) -> Result<(), RusotoError<ModifyMountTargetSecurityGroupsError>> {
         let request_uri = format!(
             "/2015-02-01/mount-targets/{mount_target_id}/security-groups",
             mount_target_id = input.mount_target_id
@@ -1806,28 +2811,64 @@ impl Efs for EfsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyMountTargetSecurityGroupsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyMountTargetSecurityGroupsError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Applies an Amazon EFS <code>FileSystemPolicy</code> to an Amazon EFS file system. A file system policy is an IAM resource-based policy and can contain multiple policy statements. A file system always has exactly one file system policy, which can be the default policy or an explicit policy set or updated using this API operation. When an explicit policy is set, it overrides the default policy. For more information about the default file system policy, see <a href="https://docs.aws.amazon.com/efs/latest/ug/res-based-policies-efs.html">Using Resource-based Policies with EFS</a>. </p> <p>This operation requires permissions for the <code>elasticfilesystem:PutFileSystemPolicy</code> action.</p>
+    async fn put_file_system_policy(
+        &self,
+        input: PutFileSystemPolicyRequest,
+    ) -> Result<FileSystemPolicyDescription, RusotoError<PutFileSystemPolicyError>> {
+        let request_uri = format!(
+            "/2015-02-01/file-systems/{file_system_id}/policy",
+            file_system_id = input.file_system_id
+        );
+
+        let mut request =
+            SignedRequest::new("PUT", "elasticfilesystem", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<FileSystemPolicyDescription, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutFileSystemPolicyError::from_response(response))
+        }
     }
 
     /// <p>Enables lifecycle management by creating a new <code>LifecycleConfiguration</code> object. A <code>LifecycleConfiguration</code> object defines when files in an Amazon EFS file system are automatically transitioned to the lower-cost EFS Infrequent Access (IA) storage class. A <code>LifecycleConfiguration</code> applies to all files in a file system.</p> <p>Each Amazon EFS file system supports one lifecycle configuration, which applies to all files in the file system. If a <code>LifecycleConfiguration</code> object already exists for the specified file system, a <code>PutLifecycleConfiguration</code> call modifies the existing configuration. A <code>PutLifecycleConfiguration</code> call with an empty <code>LifecyclePolicies</code> array in the request body deletes any existing <code>LifecycleConfiguration</code> and disables lifecycle management.</p> <p>In the request, specify the following: </p> <ul> <li> <p>The ID for the file system for which you are enabling, disabling, or modifying lifecycle management.</p> </li> <li> <p>A <code>LifecyclePolicies</code> array of <code>LifecyclePolicy</code> objects that define when files are moved to the IA storage class. The array can contain only one <code>LifecyclePolicy</code> item.</p> </li> </ul> <p>This operation requires permissions for the <code>elasticfilesystem:PutLifecycleConfiguration</code> operation.</p> <p>To apply a <code>LifecycleConfiguration</code> object to an encrypted file system, you need the same AWS Key Management Service (AWS KMS) permissions as when you created the encrypted file system. </p>
-    fn put_lifecycle_configuration(
+    async fn put_lifecycle_configuration(
         &self,
         input: PutLifecycleConfigurationRequest,
-    ) -> RusotoFuture<LifecycleConfigurationDescription, PutLifecycleConfigurationError> {
+    ) -> Result<LifecycleConfigurationDescription, RusotoError<PutLifecycleConfigurationError>>
+    {
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}/lifecycle-configuration",
             file_system_id = input.file_system_id
@@ -1840,27 +2881,94 @@ impl Efs for EfsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<LifecycleConfigurationDescription, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<LifecycleConfigurationDescription, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutLifecycleConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutLifecycleConfigurationError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a tag for an EFS resource. You can create tags for EFS file systems and access points using this API operation.</p> <p>This operation requires permissions for the <code>elasticfilesystem:TagResource</code> action.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>> {
+        let request_uri = format!(
+            "/2015-02-01/resource-tags/{resource_id}",
+            resource_id = input.resource_id
+        );
+
+        let mut request =
+            SignedRequest::new("POST", "elasticfilesystem", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Removes tags from an EFS resource. You can remove tags from EFS file systems and access points using this API operation.</p> <p>This operation requires permissions for the <code>elasticfilesystem:UntagResource</code> action.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>> {
+        let request_uri = format!(
+            "/2015-02-01/resource-tags/{resource_id}",
+            resource_id = input.resource_id
+        );
+
+        let mut request =
+            SignedRequest::new("DELETE", "elasticfilesystem", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p>Updates the throughput mode or the amount of provisioned throughput of an existing file system.</p>
-    fn update_file_system(
+    async fn update_file_system(
         &self,
         input: UpdateFileSystemRequest,
-    ) -> RusotoFuture<FileSystemDescription, UpdateFileSystemError> {
+    ) -> Result<FileSystemDescription, RusotoError<UpdateFileSystemError>> {
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}",
             file_system_id = input.file_system_id
@@ -1873,22 +2981,20 @@ impl Efs for EfsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 202 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<FileSystemDescription, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 202 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<FileSystemDescription, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateFileSystemError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateFileSystemError::from_response(response))
+        }
     }
 }

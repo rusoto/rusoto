@@ -9,19 +9,21 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Describes a quota for an AWS account, for example, the number of replication instances allowed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2774,6 +2776,7 @@ impl AddTagsToResourceError {
     }
 }
 impl fmt::Display for AddTagsToResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AddTagsToResourceError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
@@ -2807,6 +2810,7 @@ impl ApplyPendingMaintenanceActionError {
     }
 }
 impl fmt::Display for ApplyPendingMaintenanceActionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => {
@@ -2873,6 +2877,7 @@ impl CreateEndpointError {
     }
 }
 impl fmt::Display for CreateEndpointError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateEndpointError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
@@ -2972,6 +2977,7 @@ impl CreateEventSubscriptionError {
     }
 }
 impl fmt::Display for CreateEventSubscriptionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateEventSubscriptionError::KMSAccessDeniedFault(ref cause) => write!(f, "{}", cause),
@@ -3085,6 +3091,7 @@ impl CreateReplicationInstanceError {
     }
 }
 impl fmt::Display for CreateReplicationInstanceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateReplicationInstanceError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
@@ -3178,6 +3185,7 @@ impl CreateReplicationSubnetGroupError {
     }
 }
 impl fmt::Display for CreateReplicationSubnetGroupError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateReplicationSubnetGroupError::AccessDeniedFault(ref cause) => {
@@ -3259,6 +3267,7 @@ impl CreateReplicationTaskError {
     }
 }
 impl fmt::Display for CreateReplicationTaskError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateReplicationTaskError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
@@ -3310,6 +3319,7 @@ impl DeleteCertificateError {
     }
 }
 impl fmt::Display for DeleteCertificateError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteCertificateError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
@@ -3354,6 +3364,7 @@ impl DeleteConnectionError {
     }
 }
 impl fmt::Display for DeleteConnectionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteConnectionError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
@@ -3394,6 +3405,7 @@ impl DeleteEndpointError {
     }
 }
 impl fmt::Display for DeleteEndpointError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteEndpointError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
@@ -3433,6 +3445,7 @@ impl DeleteEventSubscriptionError {
     }
 }
 impl fmt::Display for DeleteEventSubscriptionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteEventSubscriptionError::InvalidResourceStateFault(ref cause) => {
@@ -3476,6 +3489,7 @@ impl DeleteReplicationInstanceError {
     }
 }
 impl fmt::Display for DeleteReplicationInstanceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteReplicationInstanceError::InvalidResourceStateFault(ref cause) => {
@@ -3521,6 +3535,7 @@ impl DeleteReplicationSubnetGroupError {
     }
 }
 impl fmt::Display for DeleteReplicationSubnetGroupError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteReplicationSubnetGroupError::InvalidResourceStateFault(ref cause) => {
@@ -3564,6 +3579,7 @@ impl DeleteReplicationTaskError {
     }
 }
 impl fmt::Display for DeleteReplicationTaskError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteReplicationTaskError::InvalidResourceStateFault(ref cause) => {
@@ -3590,6 +3606,7 @@ impl DescribeAccountAttributesError {
     }
 }
 impl fmt::Display for DescribeAccountAttributesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {}
     }
@@ -3619,6 +3636,7 @@ impl DescribeCertificatesError {
     }
 }
 impl fmt::Display for DescribeCertificatesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeCertificatesError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
@@ -3650,6 +3668,7 @@ impl DescribeConnectionsError {
     }
 }
 impl fmt::Display for DescribeConnectionsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeConnectionsError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
@@ -3673,6 +3692,7 @@ impl DescribeEndpointTypesError {
     }
 }
 impl fmt::Display for DescribeEndpointTypesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {}
     }
@@ -3702,6 +3722,7 @@ impl DescribeEndpointsError {
     }
 }
 impl fmt::Display for DescribeEndpointsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeEndpointsError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
@@ -3725,6 +3746,7 @@ impl DescribeEventCategoriesError {
     }
 }
 impl fmt::Display for DescribeEventCategoriesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {}
     }
@@ -3756,6 +3778,7 @@ impl DescribeEventSubscriptionsError {
     }
 }
 impl fmt::Display for DescribeEventSubscriptionsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeEventSubscriptionsError::ResourceNotFoundFault(ref cause) => {
@@ -3781,6 +3804,7 @@ impl DescribeEventsError {
     }
 }
 impl fmt::Display for DescribeEventsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {}
     }
@@ -3804,6 +3828,7 @@ impl DescribeOrderableReplicationInstancesError {
     }
 }
 impl fmt::Display for DescribeOrderableReplicationInstancesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {}
     }
@@ -3835,6 +3860,7 @@ impl DescribePendingMaintenanceActionsError {
     }
 }
 impl fmt::Display for DescribePendingMaintenanceActionsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => {
@@ -3877,6 +3903,7 @@ impl DescribeRefreshSchemasStatusError {
     }
 }
 impl fmt::Display for DescribeRefreshSchemasStatusError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeRefreshSchemasStatusError::InvalidResourceStateFault(ref cause) => {
@@ -3924,6 +3951,7 @@ impl DescribeReplicationInstanceTaskLogsError {
     }
 }
 impl fmt::Display for DescribeReplicationInstanceTaskLogsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeReplicationInstanceTaskLogsError::InvalidResourceStateFault(ref cause) => {
@@ -3962,6 +3990,7 @@ impl DescribeReplicationInstancesError {
     }
 }
 impl fmt::Display for DescribeReplicationInstancesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeReplicationInstancesError::ResourceNotFoundFault(ref cause) => {
@@ -3997,6 +4026,7 @@ impl DescribeReplicationSubnetGroupsError {
     }
 }
 impl fmt::Display for DescribeReplicationSubnetGroupsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeReplicationSubnetGroupsError::ResourceNotFoundFault(ref cause) => {
@@ -4034,6 +4064,7 @@ impl DescribeReplicationTaskAssessmentResultsError {
     }
 }
 impl fmt::Display for DescribeReplicationTaskAssessmentResultsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeReplicationTaskAssessmentResultsError::ResourceNotFoundFault(ref cause) => {
@@ -4067,6 +4098,7 @@ impl DescribeReplicationTasksError {
     }
 }
 impl fmt::Display for DescribeReplicationTasksError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeReplicationTasksError::ResourceNotFoundFault(ref cause) => {
@@ -4107,6 +4139,7 @@ impl DescribeSchemasError {
     }
 }
 impl fmt::Display for DescribeSchemasError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeSchemasError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
@@ -4146,6 +4179,7 @@ impl DescribeTableStatisticsError {
     }
 }
 impl fmt::Display for DescribeTableStatisticsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeTableStatisticsError::InvalidResourceStateFault(ref cause) => {
@@ -4196,6 +4230,7 @@ impl ImportCertificateError {
     }
 }
 impl fmt::Display for ImportCertificateError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ImportCertificateError::InvalidCertificateFault(ref cause) => write!(f, "{}", cause),
@@ -4229,6 +4264,7 @@ impl ListTagsForResourceError {
     }
 }
 impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTagsForResourceError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
@@ -4286,6 +4322,7 @@ impl ModifyEndpointError {
     }
 }
 impl fmt::Display for ModifyEndpointError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ModifyEndpointError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
@@ -4377,6 +4414,7 @@ impl ModifyEventSubscriptionError {
     }
 }
 impl fmt::Display for ModifyEventSubscriptionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ModifyEventSubscriptionError::KMSAccessDeniedFault(ref cause) => write!(f, "{}", cause),
@@ -4464,6 +4502,7 @@ impl ModifyReplicationInstanceError {
     }
 }
 impl fmt::Display for ModifyReplicationInstanceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ModifyReplicationInstanceError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
@@ -4550,6 +4589,7 @@ impl ModifyReplicationSubnetGroupError {
     }
 }
 impl fmt::Display for ModifyReplicationSubnetGroupError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ModifyReplicationSubnetGroupError::AccessDeniedFault(ref cause) => {
@@ -4617,6 +4657,7 @@ impl ModifyReplicationTaskError {
     }
 }
 impl fmt::Display for ModifyReplicationTaskError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ModifyReplicationTaskError::InvalidResourceStateFault(ref cause) => {
@@ -4664,6 +4705,7 @@ impl RebootReplicationInstanceError {
     }
 }
 impl fmt::Display for RebootReplicationInstanceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             RebootReplicationInstanceError::InvalidResourceStateFault(ref cause) => {
@@ -4721,6 +4763,7 @@ impl RefreshSchemasError {
     }
 }
 impl fmt::Display for RefreshSchemasError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             RefreshSchemasError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
@@ -4760,6 +4803,7 @@ impl ReloadTablesError {
     }
 }
 impl fmt::Display for ReloadTablesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ReloadTablesError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
@@ -4792,6 +4836,7 @@ impl RemoveTagsFromResourceError {
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             RemoveTagsFromResourceError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
@@ -4837,6 +4882,7 @@ impl StartReplicationTaskError {
     }
 }
 impl fmt::Display for StartReplicationTaskError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StartReplicationTaskError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
@@ -4881,6 +4927,7 @@ impl StartReplicationTaskAssessmentError {
     }
 }
 impl fmt::Display for StartReplicationTaskAssessmentError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StartReplicationTaskAssessmentError::InvalidResourceStateFault(ref cause) => {
@@ -4924,6 +4971,7 @@ impl StopReplicationTaskError {
     }
 }
 impl fmt::Display for StopReplicationTaskError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StopReplicationTaskError::InvalidResourceStateFault(ref cause) => {
@@ -4979,6 +5027,7 @@ impl TestConnectionError {
     }
 }
 impl fmt::Display for TestConnectionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             TestConnectionError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
@@ -4990,299 +5039,309 @@ impl fmt::Display for TestConnectionError {
 }
 impl Error for TestConnectionError {}
 /// Trait representing the capabilities of the AWS Database Migration Service API. AWS Database Migration Service clients implement this trait.
+#[async_trait]
 pub trait DatabaseMigrationService {
     /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
-    fn add_tags_to_resource(
+    async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<AddTagsToResourceResponse, AddTagsToResourceError>;
+    ) -> Result<AddTagsToResourceResponse, RusotoError<AddTagsToResourceError>>;
 
     /// <p>Applies a pending maintenance action to a resource (for example, to a replication instance).</p>
-    fn apply_pending_maintenance_action(
+    async fn apply_pending_maintenance_action(
         &self,
         input: ApplyPendingMaintenanceActionMessage,
-    ) -> RusotoFuture<ApplyPendingMaintenanceActionResponse, ApplyPendingMaintenanceActionError>;
+    ) -> Result<
+        ApplyPendingMaintenanceActionResponse,
+        RusotoError<ApplyPendingMaintenanceActionError>,
+    >;
 
     /// <p>Creates an endpoint using the provided settings.</p>
-    fn create_endpoint(
+    async fn create_endpoint(
         &self,
         input: CreateEndpointMessage,
-    ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError>;
+    ) -> Result<CreateEndpointResponse, RusotoError<CreateEndpointError>>;
 
     /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn create_event_subscription(
+    async fn create_event_subscription(
         &self,
         input: CreateEventSubscriptionMessage,
-    ) -> RusotoFuture<CreateEventSubscriptionResponse, CreateEventSubscriptionError>;
+    ) -> Result<CreateEventSubscriptionResponse, RusotoError<CreateEventSubscriptionError>>;
 
     /// <p>Creates the replication instance using the specified parameters.</p> <p>AWS DMS requires that your account have certain roles with appropriate permissions before you can create a replication instance. For information on the required roles, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.APIRole.html">Creating the IAM Roles to Use With the AWS CLI and AWS DMS API</a>. For information on the required permissions, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.IAMPermissions.html">IAM Permissions Needed to Use AWS DMS</a>.</p>
-    fn create_replication_instance(
+    async fn create_replication_instance(
         &self,
         input: CreateReplicationInstanceMessage,
-    ) -> RusotoFuture<CreateReplicationInstanceResponse, CreateReplicationInstanceError>;
+    ) -> Result<CreateReplicationInstanceResponse, RusotoError<CreateReplicationInstanceError>>;
 
     /// <p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>
-    fn create_replication_subnet_group(
+    async fn create_replication_subnet_group(
         &self,
         input: CreateReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError>;
+    ) -> Result<CreateReplicationSubnetGroupResponse, RusotoError<CreateReplicationSubnetGroupError>>;
 
     /// <p>Creates a replication task using the specified parameters.</p>
-    fn create_replication_task(
+    async fn create_replication_task(
         &self,
         input: CreateReplicationTaskMessage,
-    ) -> RusotoFuture<CreateReplicationTaskResponse, CreateReplicationTaskError>;
+    ) -> Result<CreateReplicationTaskResponse, RusotoError<CreateReplicationTaskError>>;
 
     /// <p>Deletes the specified certificate. </p>
-    fn delete_certificate(
+    async fn delete_certificate(
         &self,
         input: DeleteCertificateMessage,
-    ) -> RusotoFuture<DeleteCertificateResponse, DeleteCertificateError>;
+    ) -> Result<DeleteCertificateResponse, RusotoError<DeleteCertificateError>>;
 
     /// <p>Deletes the connection between a replication instance and an endpoint.</p>
-    fn delete_connection(
+    async fn delete_connection(
         &self,
         input: DeleteConnectionMessage,
-    ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError>;
+    ) -> Result<DeleteConnectionResponse, RusotoError<DeleteConnectionError>>;
 
     /// <p><p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/></p>
-    fn delete_endpoint(
+    async fn delete_endpoint(
         &self,
         input: DeleteEndpointMessage,
-    ) -> RusotoFuture<DeleteEndpointResponse, DeleteEndpointError>;
+    ) -> Result<DeleteEndpointResponse, RusotoError<DeleteEndpointError>>;
 
     /// <p> Deletes an AWS DMS event subscription. </p>
-    fn delete_event_subscription(
+    async fn delete_event_subscription(
         &self,
         input: DeleteEventSubscriptionMessage,
-    ) -> RusotoFuture<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError>;
+    ) -> Result<DeleteEventSubscriptionResponse, RusotoError<DeleteEventSubscriptionError>>;
 
     /// <p><p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/></p>
-    fn delete_replication_instance(
+    async fn delete_replication_instance(
         &self,
         input: DeleteReplicationInstanceMessage,
-    ) -> RusotoFuture<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError>;
+    ) -> Result<DeleteReplicationInstanceResponse, RusotoError<DeleteReplicationInstanceError>>;
 
     /// <p>Deletes a subnet group.</p>
-    fn delete_replication_subnet_group(
+    async fn delete_replication_subnet_group(
         &self,
         input: DeleteReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError>;
+    ) -> Result<DeleteReplicationSubnetGroupResponse, RusotoError<DeleteReplicationSubnetGroupError>>;
 
     /// <p>Deletes the specified replication task.</p>
-    fn delete_replication_task(
+    async fn delete_replication_task(
         &self,
         input: DeleteReplicationTaskMessage,
-    ) -> RusotoFuture<DeleteReplicationTaskResponse, DeleteReplicationTaskError>;
+    ) -> Result<DeleteReplicationTaskResponse, RusotoError<DeleteReplicationTaskError>>;
 
     /// <p>Lists all of the AWS DMS attributes for a customer account. These attributes include AWS DMS quotas for the account and a unique account identifier in a particular DMS region. DMS quotas include a list of resource quotas supported by the account, such as the number of replication instances allowed. The description for each resource quota, includes the quota name, current usage toward that quota, and the quota's maximum value. DMS uses the unique account identifier to name each artifact used by DMS in the given region.</p> <p>This command does not take any parameters.</p>
-    fn describe_account_attributes(
+    async fn describe_account_attributes(
         &self,
-    ) -> RusotoFuture<DescribeAccountAttributesResponse, DescribeAccountAttributesError>;
+    ) -> Result<DescribeAccountAttributesResponse, RusotoError<DescribeAccountAttributesError>>;
 
     /// <p>Provides a description of the certificate.</p>
-    fn describe_certificates(
+    async fn describe_certificates(
         &self,
         input: DescribeCertificatesMessage,
-    ) -> RusotoFuture<DescribeCertificatesResponse, DescribeCertificatesError>;
+    ) -> Result<DescribeCertificatesResponse, RusotoError<DescribeCertificatesError>>;
 
     /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
-    fn describe_connections(
+    async fn describe_connections(
         &self,
         input: DescribeConnectionsMessage,
-    ) -> RusotoFuture<DescribeConnectionsResponse, DescribeConnectionsError>;
+    ) -> Result<DescribeConnectionsResponse, RusotoError<DescribeConnectionsError>>;
 
     /// <p>Returns information about the type of endpoints available.</p>
-    fn describe_endpoint_types(
+    async fn describe_endpoint_types(
         &self,
         input: DescribeEndpointTypesMessage,
-    ) -> RusotoFuture<DescribeEndpointTypesResponse, DescribeEndpointTypesError>;
+    ) -> Result<DescribeEndpointTypesResponse, RusotoError<DescribeEndpointTypesError>>;
 
     /// <p>Returns information about the endpoints for your account in the current region.</p>
-    fn describe_endpoints(
+    async fn describe_endpoints(
         &self,
         input: DescribeEndpointsMessage,
-    ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError>;
+    ) -> Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>>;
 
     /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn describe_event_categories(
+    async fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<DescribeEventCategoriesResponse, DescribeEventCategoriesError>;
+    ) -> Result<DescribeEventCategoriesResponse, RusotoError<DescribeEventCategoriesError>>;
 
     /// <p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>
-    fn describe_event_subscriptions(
+    async fn describe_event_subscriptions(
         &self,
         input: DescribeEventSubscriptionsMessage,
-    ) -> RusotoFuture<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError>;
+    ) -> Result<DescribeEventSubscriptionsResponse, RusotoError<DescribeEventSubscriptionsError>>;
 
     /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsMessage,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError>;
+    ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>>;
 
     /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
-    fn describe_orderable_replication_instances(
+    async fn describe_orderable_replication_instances(
         &self,
         input: DescribeOrderableReplicationInstancesMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeOrderableReplicationInstancesResponse,
-        DescribeOrderableReplicationInstancesError,
+        RusotoError<DescribeOrderableReplicationInstancesError>,
     >;
 
     /// <p>For internal use only</p>
-    fn describe_pending_maintenance_actions(
+    async fn describe_pending_maintenance_actions(
         &self,
         input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribePendingMaintenanceActionsResponse,
-        DescribePendingMaintenanceActionsError,
+        RusotoError<DescribePendingMaintenanceActionsError>,
     >;
 
     /// <p>Returns the status of the RefreshSchemas operation.</p>
-    fn describe_refresh_schemas_status(
+    async fn describe_refresh_schemas_status(
         &self,
         input: DescribeRefreshSchemasStatusMessage,
-    ) -> RusotoFuture<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError>;
+    ) -> Result<DescribeRefreshSchemasStatusResponse, RusotoError<DescribeRefreshSchemasStatusError>>;
 
     /// <p>Returns information about the task logs for the specified task.</p>
-    fn describe_replication_instance_task_logs(
+    async fn describe_replication_instance_task_logs(
         &self,
         input: DescribeReplicationInstanceTaskLogsMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeReplicationInstanceTaskLogsResponse,
-        DescribeReplicationInstanceTaskLogsError,
+        RusotoError<DescribeReplicationInstanceTaskLogsError>,
     >;
 
     /// <p>Returns information about replication instances for your account in the current region.</p>
-    fn describe_replication_instances(
+    async fn describe_replication_instances(
         &self,
         input: DescribeReplicationInstancesMessage,
-    ) -> RusotoFuture<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError>;
+    ) -> Result<DescribeReplicationInstancesResponse, RusotoError<DescribeReplicationInstancesError>>;
 
     /// <p>Returns information about the replication subnet groups.</p>
-    fn describe_replication_subnet_groups(
+    async fn describe_replication_subnet_groups(
         &self,
         input: DescribeReplicationSubnetGroupsMessage,
-    ) -> RusotoFuture<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>;
+    ) -> Result<
+        DescribeReplicationSubnetGroupsResponse,
+        RusotoError<DescribeReplicationSubnetGroupsError>,
+    >;
 
     /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
-    fn describe_replication_task_assessment_results(
+    async fn describe_replication_task_assessment_results(
         &self,
         input: DescribeReplicationTaskAssessmentResultsMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeReplicationTaskAssessmentResultsResponse,
-        DescribeReplicationTaskAssessmentResultsError,
+        RusotoError<DescribeReplicationTaskAssessmentResultsError>,
     >;
 
     /// <p>Returns information about replication tasks for your account in the current region.</p>
-    fn describe_replication_tasks(
+    async fn describe_replication_tasks(
         &self,
         input: DescribeReplicationTasksMessage,
-    ) -> RusotoFuture<DescribeReplicationTasksResponse, DescribeReplicationTasksError>;
+    ) -> Result<DescribeReplicationTasksResponse, RusotoError<DescribeReplicationTasksError>>;
 
     /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
-    fn describe_schemas(
+    async fn describe_schemas(
         &self,
         input: DescribeSchemasMessage,
-    ) -> RusotoFuture<DescribeSchemasResponse, DescribeSchemasError>;
+    ) -> Result<DescribeSchemasResponse, RusotoError<DescribeSchemasError>>;
 
     /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
-    fn describe_table_statistics(
+    async fn describe_table_statistics(
         &self,
         input: DescribeTableStatisticsMessage,
-    ) -> RusotoFuture<DescribeTableStatisticsResponse, DescribeTableStatisticsError>;
+    ) -> Result<DescribeTableStatisticsResponse, RusotoError<DescribeTableStatisticsError>>;
 
     /// <p>Uploads the specified certificate.</p>
-    fn import_certificate(
+    async fn import_certificate(
         &self,
         input: ImportCertificateMessage,
-    ) -> RusotoFuture<ImportCertificateResponse, ImportCertificateError>;
+    ) -> Result<ImportCertificateResponse, RusotoError<ImportCertificateError>>;
 
     /// <p>Lists all tags for an AWS DMS resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Modifies the specified endpoint.</p>
-    fn modify_endpoint(
+    async fn modify_endpoint(
         &self,
         input: ModifyEndpointMessage,
-    ) -> RusotoFuture<ModifyEndpointResponse, ModifyEndpointError>;
+    ) -> Result<ModifyEndpointResponse, RusotoError<ModifyEndpointError>>;
 
     /// <p>Modifies an existing AWS DMS event notification subscription. </p>
-    fn modify_event_subscription(
+    async fn modify_event_subscription(
         &self,
         input: ModifyEventSubscriptionMessage,
-    ) -> RusotoFuture<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError>;
+    ) -> Result<ModifyEventSubscriptionResponse, RusotoError<ModifyEventSubscriptionError>>;
 
     /// <p><p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/></p>
-    fn modify_replication_instance(
+    async fn modify_replication_instance(
         &self,
         input: ModifyReplicationInstanceMessage,
-    ) -> RusotoFuture<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError>;
+    ) -> Result<ModifyReplicationInstanceResponse, RusotoError<ModifyReplicationInstanceError>>;
 
     /// <p>Modifies the settings for the specified replication subnet group.</p>
-    fn modify_replication_subnet_group(
+    async fn modify_replication_subnet_group(
         &self,
         input: ModifyReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError>;
+    ) -> Result<ModifyReplicationSubnetGroupResponse, RusotoError<ModifyReplicationSubnetGroupError>>;
 
     /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
-    fn modify_replication_task(
+    async fn modify_replication_task(
         &self,
         input: ModifyReplicationTaskMessage,
-    ) -> RusotoFuture<ModifyReplicationTaskResponse, ModifyReplicationTaskError>;
+    ) -> Result<ModifyReplicationTaskResponse, RusotoError<ModifyReplicationTaskError>>;
 
     /// <p>Reboots a replication instance. Rebooting results in a momentary outage, until the replication instance becomes available again.</p>
-    fn reboot_replication_instance(
+    async fn reboot_replication_instance(
         &self,
         input: RebootReplicationInstanceMessage,
-    ) -> RusotoFuture<RebootReplicationInstanceResponse, RebootReplicationInstanceError>;
+    ) -> Result<RebootReplicationInstanceResponse, RusotoError<RebootReplicationInstanceError>>;
 
     /// <p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>
-    fn refresh_schemas(
+    async fn refresh_schemas(
         &self,
         input: RefreshSchemasMessage,
-    ) -> RusotoFuture<RefreshSchemasResponse, RefreshSchemasError>;
+    ) -> Result<RefreshSchemasResponse, RusotoError<RefreshSchemasError>>;
 
     /// <p>Reloads the target database table with the source data. </p>
-    fn reload_tables(
+    async fn reload_tables(
         &self,
         input: ReloadTablesMessage,
-    ) -> RusotoFuture<ReloadTablesResponse, ReloadTablesError>;
+    ) -> Result<ReloadTablesResponse, RusotoError<ReloadTablesError>>;
 
     /// <p>Removes metadata tags from a DMS resource.</p>
-    fn remove_tags_from_resource(
+    async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
+    ) -> Result<RemoveTagsFromResourceResponse, RusotoError<RemoveTagsFromResourceError>>;
 
     /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn start_replication_task(
+    async fn start_replication_task(
         &self,
         input: StartReplicationTaskMessage,
-    ) -> RusotoFuture<StartReplicationTaskResponse, StartReplicationTaskError>;
+    ) -> Result<StartReplicationTaskResponse, RusotoError<StartReplicationTaskError>>;
 
     /// <p> Starts the replication task assessment for unsupported data types in the source database. </p>
-    fn start_replication_task_assessment(
+    async fn start_replication_task_assessment(
         &self,
         input: StartReplicationTaskAssessmentMessage,
-    ) -> RusotoFuture<StartReplicationTaskAssessmentResponse, StartReplicationTaskAssessmentError>;
+    ) -> Result<
+        StartReplicationTaskAssessmentResponse,
+        RusotoError<StartReplicationTaskAssessmentError>,
+    >;
 
     /// <p><p>Stops the replication task.</p> <p/></p>
-    fn stop_replication_task(
+    async fn stop_replication_task(
         &self,
         input: StopReplicationTaskMessage,
-    ) -> RusotoFuture<StopReplicationTaskResponse, StopReplicationTaskError>;
+    ) -> Result<StopReplicationTaskResponse, RusotoError<StopReplicationTaskError>>;
 
     /// <p>Tests the connection between the replication instance and the endpoint.</p>
-    fn test_connection(
+    async fn test_connection(
         &self,
         input: TestConnectionMessage,
-    ) -> RusotoFuture<TestConnectionResponse, TestConnectionError>;
+    ) -> Result<TestConnectionResponse, RusotoError<TestConnectionError>>;
 }
 /// A client for the AWS Database Migration Service API.
 #[derive(Clone)]
@@ -5296,7 +5355,10 @@ impl DatabaseMigrationServiceClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DatabaseMigrationServiceClient {
-        Self::new_with_client(Client::shared(), region)
+        DatabaseMigrationServiceClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -5306,14 +5368,12 @@ impl DatabaseMigrationServiceClient {
     ) -> DatabaseMigrationServiceClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        DatabaseMigrationServiceClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(
@@ -5324,20 +5384,13 @@ impl DatabaseMigrationServiceClient {
     }
 }
 
-impl fmt::Debug for DatabaseMigrationServiceClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("DatabaseMigrationServiceClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl DatabaseMigrationService for DatabaseMigrationServiceClient {
     /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
-    fn add_tags_to_resource(
+    async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<AddTagsToResourceResponse, AddTagsToResourceError> {
+    ) -> Result<AddTagsToResourceResponse, RusotoError<AddTagsToResourceError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5345,29 +5398,30 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AddTagsToResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddTagsToResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AddTagsToResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AddTagsToResourceError::from_response(response))
+        }
     }
 
     /// <p>Applies a pending maintenance action to a resource (for example, to a replication instance).</p>
-    fn apply_pending_maintenance_action(
+    async fn apply_pending_maintenance_action(
         &self,
         input: ApplyPendingMaintenanceActionMessage,
-    ) -> RusotoFuture<ApplyPendingMaintenanceActionResponse, ApplyPendingMaintenanceActionError>
-    {
+    ) -> Result<
+        ApplyPendingMaintenanceActionResponse,
+        RusotoError<ApplyPendingMaintenanceActionError>,
+    > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5378,25 +5432,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ApplyPendingMaintenanceActionResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ApplyPendingMaintenanceActionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ApplyPendingMaintenanceActionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ApplyPendingMaintenanceActionError::from_response(response))
+        }
     }
 
     /// <p>Creates an endpoint using the provided settings.</p>
-    fn create_endpoint(
+    async fn create_endpoint(
         &self,
         input: CreateEndpointMessage,
-    ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError> {
+    ) -> Result<CreateEndpointResponse, RusotoError<CreateEndpointError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5404,28 +5460,26 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateEndpointResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateEndpointError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateEndpointResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateEndpointError::from_response(response))
+        }
     }
 
     /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn create_event_subscription(
+    async fn create_event_subscription(
         &self,
         input: CreateEventSubscriptionMessage,
-    ) -> RusotoFuture<CreateEventSubscriptionResponse, CreateEventSubscriptionError> {
+    ) -> Result<CreateEventSubscriptionResponse, RusotoError<CreateEventSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5433,25 +5487,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateEventSubscriptionResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateEventSubscriptionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateEventSubscriptionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateEventSubscriptionError::from_response(response))
+        }
     }
 
     /// <p>Creates the replication instance using the specified parameters.</p> <p>AWS DMS requires that your account have certain roles with appropriate permissions before you can create a replication instance. For information on the required roles, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.APIRole.html">Creating the IAM Roles to Use With the AWS CLI and AWS DMS API</a>. For information on the required permissions, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.IAMPermissions.html">IAM Permissions Needed to Use AWS DMS</a>.</p>
-    fn create_replication_instance(
+    async fn create_replication_instance(
         &self,
         input: CreateReplicationInstanceMessage,
-    ) -> RusotoFuture<CreateReplicationInstanceResponse, CreateReplicationInstanceError> {
+    ) -> Result<CreateReplicationInstanceResponse, RusotoError<CreateReplicationInstanceError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5462,25 +5519,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateReplicationInstanceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReplicationInstanceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateReplicationInstanceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateReplicationInstanceError::from_response(response))
+        }
     }
 
     /// <p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>
-    fn create_replication_subnet_group(
+    async fn create_replication_subnet_group(
         &self,
         input: CreateReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError> {
+    ) -> Result<CreateReplicationSubnetGroupResponse, RusotoError<CreateReplicationSubnetGroupError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5491,25 +5551,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateReplicationSubnetGroupResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReplicationSubnetGroupError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateReplicationSubnetGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateReplicationSubnetGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates a replication task using the specified parameters.</p>
-    fn create_replication_task(
+    async fn create_replication_task(
         &self,
         input: CreateReplicationTaskMessage,
-    ) -> RusotoFuture<CreateReplicationTaskResponse, CreateReplicationTaskError> {
+    ) -> Result<CreateReplicationTaskResponse, RusotoError<CreateReplicationTaskError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5517,27 +5579,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateReplicationTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateReplicationTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateReplicationTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateReplicationTaskError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified certificate. </p>
-    fn delete_certificate(
+    async fn delete_certificate(
         &self,
         input: DeleteCertificateMessage,
-    ) -> RusotoFuture<DeleteCertificateResponse, DeleteCertificateError> {
+    ) -> Result<DeleteCertificateResponse, RusotoError<DeleteCertificateError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5545,28 +5607,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteCertificateResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteCertificateError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteCertificateResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCertificateError::from_response(response))
+        }
     }
 
     /// <p>Deletes the connection between a replication instance and an endpoint.</p>
-    fn delete_connection(
+    async fn delete_connection(
         &self,
         input: DeleteConnectionMessage,
-    ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError> {
+    ) -> Result<DeleteConnectionResponse, RusotoError<DeleteConnectionError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5574,28 +5635,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteConnectionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteConnectionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteConnectionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteConnectionError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/></p>
-    fn delete_endpoint(
+    async fn delete_endpoint(
         &self,
         input: DeleteEndpointMessage,
-    ) -> RusotoFuture<DeleteEndpointResponse, DeleteEndpointError> {
+    ) -> Result<DeleteEndpointResponse, RusotoError<DeleteEndpointError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5603,28 +5663,26 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteEndpointResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteEndpointError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteEndpointResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteEndpointError::from_response(response))
+        }
     }
 
     /// <p> Deletes an AWS DMS event subscription. </p>
-    fn delete_event_subscription(
+    async fn delete_event_subscription(
         &self,
         input: DeleteEventSubscriptionMessage,
-    ) -> RusotoFuture<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError> {
+    ) -> Result<DeleteEventSubscriptionResponse, RusotoError<DeleteEventSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5632,25 +5690,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteEventSubscriptionResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteEventSubscriptionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteEventSubscriptionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteEventSubscriptionError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/></p>
-    fn delete_replication_instance(
+    async fn delete_replication_instance(
         &self,
         input: DeleteReplicationInstanceMessage,
-    ) -> RusotoFuture<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError> {
+    ) -> Result<DeleteReplicationInstanceResponse, RusotoError<DeleteReplicationInstanceError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5661,25 +5722,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteReplicationInstanceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReplicationInstanceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteReplicationInstanceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteReplicationInstanceError::from_response(response))
+        }
     }
 
     /// <p>Deletes a subnet group.</p>
-    fn delete_replication_subnet_group(
+    async fn delete_replication_subnet_group(
         &self,
         input: DeleteReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError> {
+    ) -> Result<DeleteReplicationSubnetGroupResponse, RusotoError<DeleteReplicationSubnetGroupError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5690,25 +5754,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteReplicationSubnetGroupResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReplicationSubnetGroupError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteReplicationSubnetGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteReplicationSubnetGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified replication task.</p>
-    fn delete_replication_task(
+    async fn delete_replication_task(
         &self,
         input: DeleteReplicationTaskMessage,
-    ) -> RusotoFuture<DeleteReplicationTaskResponse, DeleteReplicationTaskError> {
+    ) -> Result<DeleteReplicationTaskResponse, RusotoError<DeleteReplicationTaskError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5716,26 +5782,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteReplicationTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteReplicationTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteReplicationTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteReplicationTaskError::from_response(response))
+        }
     }
 
     /// <p>Lists all of the AWS DMS attributes for a customer account. These attributes include AWS DMS quotas for the account and a unique account identifier in a particular DMS region. DMS quotas include a list of resource quotas supported by the account, such as the number of replication instances allowed. The description for each resource quota, includes the quota name, current usage toward that quota, and the quota's maximum value. DMS uses the unique account identifier to name each artifact used by DMS in the given region.</p> <p>This command does not take any parameters.</p>
-    fn describe_account_attributes(
+    async fn describe_account_attributes(
         &self,
-    ) -> RusotoFuture<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {
+    ) -> Result<DescribeAccountAttributesResponse, RusotoError<DescribeAccountAttributesError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5745,25 +5812,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAccountAttributesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAccountAttributesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAccountAttributesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAccountAttributesError::from_response(response))
+        }
     }
 
     /// <p>Provides a description of the certificate.</p>
-    fn describe_certificates(
+    async fn describe_certificates(
         &self,
         input: DescribeCertificatesMessage,
-    ) -> RusotoFuture<DescribeCertificatesResponse, DescribeCertificatesError> {
+    ) -> Result<DescribeCertificatesResponse, RusotoError<DescribeCertificatesError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5771,27 +5840,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCertificatesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeCertificatesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeCertificatesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeCertificatesError::from_response(response))
+        }
     }
 
     /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
-    fn describe_connections(
+    async fn describe_connections(
         &self,
         input: DescribeConnectionsMessage,
-    ) -> RusotoFuture<DescribeConnectionsResponse, DescribeConnectionsError> {
+    ) -> Result<DescribeConnectionsResponse, RusotoError<DescribeConnectionsError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5799,27 +5868,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeConnectionsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeConnectionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConnectionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConnectionsError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the type of endpoints available.</p>
-    fn describe_endpoint_types(
+    async fn describe_endpoint_types(
         &self,
         input: DescribeEndpointTypesMessage,
-    ) -> RusotoFuture<DescribeEndpointTypesResponse, DescribeEndpointTypesError> {
+    ) -> Result<DescribeEndpointTypesResponse, RusotoError<DescribeEndpointTypesError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5827,27 +5896,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEndpointTypesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeEndpointTypesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEndpointTypesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEndpointTypesError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the endpoints for your account in the current region.</p>
-    fn describe_endpoints(
+    async fn describe_endpoints(
         &self,
         input: DescribeEndpointsMessage,
-    ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError> {
+    ) -> Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5855,28 +5924,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEndpointsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeEndpointsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEndpointsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEndpointsError::from_response(response))
+        }
     }
 
     /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn describe_event_categories(
+    async fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<DescribeEventCategoriesResponse, DescribeEventCategoriesError> {
+    ) -> Result<DescribeEventCategoriesResponse, RusotoError<DescribeEventCategoriesError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5884,25 +5952,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEventCategoriesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventCategoriesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEventCategoriesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventCategoriesError::from_response(response))
+        }
     }
 
     /// <p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>
-    fn describe_event_subscriptions(
+    async fn describe_event_subscriptions(
         &self,
         input: DescribeEventSubscriptionsMessage,
-    ) -> RusotoFuture<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError> {
+    ) -> Result<DescribeEventSubscriptionsResponse, RusotoError<DescribeEventSubscriptionsError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5913,25 +5984,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEventSubscriptionsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventSubscriptionsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEventSubscriptionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventSubscriptionsError::from_response(response))
+        }
     }
 
     /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsMessage,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
+    ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5939,30 +6012,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEventsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeEventsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeEventsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventsError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
-    fn describe_orderable_replication_instances(
+    async fn describe_orderable_replication_instances(
         &self,
         input: DescribeOrderableReplicationInstancesMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeOrderableReplicationInstancesResponse,
-        DescribeOrderableReplicationInstancesError,
+        RusotoError<DescribeOrderableReplicationInstancesError>,
     > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -5974,29 +6045,31 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeOrderableReplicationInstancesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeOrderableReplicationInstancesError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeOrderableReplicationInstancesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeOrderableReplicationInstancesError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>For internal use only</p>
-    fn describe_pending_maintenance_actions(
+    async fn describe_pending_maintenance_actions(
         &self,
         input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribePendingMaintenanceActionsResponse,
-        DescribePendingMaintenanceActionsError,
+        RusotoError<DescribePendingMaintenanceActionsError>,
     > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -6008,27 +6081,30 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribePendingMaintenanceActionsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribePendingMaintenanceActionsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribePendingMaintenanceActionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribePendingMaintenanceActionsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns the status of the RefreshSchemas operation.</p>
-    fn describe_refresh_schemas_status(
+    async fn describe_refresh_schemas_status(
         &self,
         input: DescribeRefreshSchemasStatusMessage,
-    ) -> RusotoFuture<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError> {
+    ) -> Result<DescribeRefreshSchemasStatusResponse, RusotoError<DescribeRefreshSchemasStatusError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6039,27 +6115,29 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeRefreshSchemasStatusResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeRefreshSchemasStatusError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeRefreshSchemasStatusResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeRefreshSchemasStatusError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the task logs for the specified task.</p>
-    fn describe_replication_instance_task_logs(
+    async fn describe_replication_instance_task_logs(
         &self,
         input: DescribeReplicationInstanceTaskLogsMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeReplicationInstanceTaskLogsResponse,
-        DescribeReplicationInstanceTaskLogsError,
+        RusotoError<DescribeReplicationInstanceTaskLogsError>,
     > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -6071,27 +6149,30 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeReplicationInstanceTaskLogsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationInstanceTaskLogsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReplicationInstanceTaskLogsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReplicationInstanceTaskLogsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns information about replication instances for your account in the current region.</p>
-    fn describe_replication_instances(
+    async fn describe_replication_instances(
         &self,
         input: DescribeReplicationInstancesMessage,
-    ) -> RusotoFuture<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError> {
+    ) -> Result<DescribeReplicationInstancesResponse, RusotoError<DescribeReplicationInstancesError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6102,26 +6183,30 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeReplicationInstancesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationInstancesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReplicationInstancesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReplicationInstancesError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the replication subnet groups.</p>
-    fn describe_replication_subnet_groups(
+    async fn describe_replication_subnet_groups(
         &self,
         input: DescribeReplicationSubnetGroupsMessage,
-    ) -> RusotoFuture<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>
-    {
+    ) -> Result<
+        DescribeReplicationSubnetGroupsResponse,
+        RusotoError<DescribeReplicationSubnetGroupsError>,
+    > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6132,29 +6217,31 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeReplicationSubnetGroupsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationSubnetGroupsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReplicationSubnetGroupsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReplicationSubnetGroupsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
-    fn describe_replication_task_assessment_results(
+    async fn describe_replication_task_assessment_results(
         &self,
         input: DescribeReplicationTaskAssessmentResultsMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeReplicationTaskAssessmentResultsResponse,
-        DescribeReplicationTaskAssessmentResultsError,
+        RusotoError<DescribeReplicationTaskAssessmentResultsError>,
     > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -6166,25 +6253,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeReplicationTaskAssessmentResultsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationTaskAssessmentResultsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReplicationTaskAssessmentResultsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReplicationTaskAssessmentResultsError::from_response(response))
+        }
     }
 
     /// <p>Returns information about replication tasks for your account in the current region.</p>
-    fn describe_replication_tasks(
+    async fn describe_replication_tasks(
         &self,
         input: DescribeReplicationTasksMessage,
-    ) -> RusotoFuture<DescribeReplicationTasksResponse, DescribeReplicationTasksError> {
+    ) -> Result<DescribeReplicationTasksResponse, RusotoError<DescribeReplicationTasksError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6195,25 +6284,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeReplicationTasksResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationTasksError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReplicationTasksResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReplicationTasksError::from_response(response))
+        }
     }
 
     /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
-    fn describe_schemas(
+    async fn describe_schemas(
         &self,
         input: DescribeSchemasMessage,
-    ) -> RusotoFuture<DescribeSchemasResponse, DescribeSchemasError> {
+    ) -> Result<DescribeSchemasResponse, RusotoError<DescribeSchemasError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6221,28 +6312,26 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeSchemasResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeSchemasError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeSchemasResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSchemasError::from_response(response))
+        }
     }
 
     /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
-    fn describe_table_statistics(
+    async fn describe_table_statistics(
         &self,
         input: DescribeTableStatisticsMessage,
-    ) -> RusotoFuture<DescribeTableStatisticsResponse, DescribeTableStatisticsError> {
+    ) -> Result<DescribeTableStatisticsResponse, RusotoError<DescribeTableStatisticsError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6250,25 +6339,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTableStatisticsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTableStatisticsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeTableStatisticsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTableStatisticsError::from_response(response))
+        }
     }
 
     /// <p>Uploads the specified certificate.</p>
-    fn import_certificate(
+    async fn import_certificate(
         &self,
         input: ImportCertificateMessage,
-    ) -> RusotoFuture<ImportCertificateResponse, ImportCertificateError> {
+    ) -> Result<ImportCertificateResponse, RusotoError<ImportCertificateError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6276,28 +6367,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ImportCertificateResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ImportCertificateError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ImportCertificateResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ImportCertificateError::from_response(response))
+        }
     }
 
     /// <p>Lists all tags for an AWS DMS resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6305,27 +6395,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Modifies the specified endpoint.</p>
-    fn modify_endpoint(
+    async fn modify_endpoint(
         &self,
         input: ModifyEndpointMessage,
-    ) -> RusotoFuture<ModifyEndpointResponse, ModifyEndpointError> {
+    ) -> Result<ModifyEndpointResponse, RusotoError<ModifyEndpointError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6333,28 +6423,26 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyEndpointResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyEndpointError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ModifyEndpointResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyEndpointError::from_response(response))
+        }
     }
 
     /// <p>Modifies an existing AWS DMS event notification subscription. </p>
-    fn modify_event_subscription(
+    async fn modify_event_subscription(
         &self,
         input: ModifyEventSubscriptionMessage,
-    ) -> RusotoFuture<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError> {
+    ) -> Result<ModifyEventSubscriptionResponse, RusotoError<ModifyEventSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6362,25 +6450,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyEventSubscriptionResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyEventSubscriptionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyEventSubscriptionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyEventSubscriptionError::from_response(response))
+        }
     }
 
     /// <p><p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/></p>
-    fn modify_replication_instance(
+    async fn modify_replication_instance(
         &self,
         input: ModifyReplicationInstanceMessage,
-    ) -> RusotoFuture<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError> {
+    ) -> Result<ModifyReplicationInstanceResponse, RusotoError<ModifyReplicationInstanceError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6391,25 +6482,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyReplicationInstanceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyReplicationInstanceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyReplicationInstanceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyReplicationInstanceError::from_response(response))
+        }
     }
 
     /// <p>Modifies the settings for the specified replication subnet group.</p>
-    fn modify_replication_subnet_group(
+    async fn modify_replication_subnet_group(
         &self,
         input: ModifyReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError> {
+    ) -> Result<ModifyReplicationSubnetGroupResponse, RusotoError<ModifyReplicationSubnetGroupError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6420,25 +6514,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyReplicationSubnetGroupResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyReplicationSubnetGroupError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyReplicationSubnetGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyReplicationSubnetGroupError::from_response(response))
+        }
     }
 
     /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
-    fn modify_replication_task(
+    async fn modify_replication_task(
         &self,
         input: ModifyReplicationTaskMessage,
-    ) -> RusotoFuture<ModifyReplicationTaskResponse, ModifyReplicationTaskError> {
+    ) -> Result<ModifyReplicationTaskResponse, RusotoError<ModifyReplicationTaskError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6446,27 +6542,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyReplicationTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ModifyReplicationTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyReplicationTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyReplicationTaskError::from_response(response))
+        }
     }
 
     /// <p>Reboots a replication instance. Rebooting results in a momentary outage, until the replication instance becomes available again.</p>
-    fn reboot_replication_instance(
+    async fn reboot_replication_instance(
         &self,
         input: RebootReplicationInstanceMessage,
-    ) -> RusotoFuture<RebootReplicationInstanceResponse, RebootReplicationInstanceError> {
+    ) -> Result<RebootReplicationInstanceResponse, RusotoError<RebootReplicationInstanceError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6477,25 +6574,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RebootReplicationInstanceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RebootReplicationInstanceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RebootReplicationInstanceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RebootReplicationInstanceError::from_response(response))
+        }
     }
 
     /// <p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>
-    fn refresh_schemas(
+    async fn refresh_schemas(
         &self,
         input: RefreshSchemasMessage,
-    ) -> RusotoFuture<RefreshSchemasResponse, RefreshSchemasError> {
+    ) -> Result<RefreshSchemasResponse, RusotoError<RefreshSchemasError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6503,28 +6602,26 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RefreshSchemasResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RefreshSchemasError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<RefreshSchemasResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RefreshSchemasError::from_response(response))
+        }
     }
 
     /// <p>Reloads the target database table with the source data. </p>
-    fn reload_tables(
+    async fn reload_tables(
         &self,
         input: ReloadTablesMessage,
-    ) -> RusotoFuture<ReloadTablesResponse, ReloadTablesError> {
+    ) -> Result<ReloadTablesResponse, RusotoError<ReloadTablesError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6532,28 +6629,26 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ReloadTablesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ReloadTablesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ReloadTablesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ReloadTablesError::from_response(response))
+        }
     }
 
     /// <p>Removes metadata tags from a DMS resource.</p>
-    fn remove_tags_from_resource(
+    async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError> {
+    ) -> Result<RemoveTagsFromResourceResponse, RusotoError<RemoveTagsFromResourceError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6561,27 +6656,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RemoveTagsFromResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RemoveTagsFromResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemoveTagsFromResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveTagsFromResourceError::from_response(response))
+        }
     }
 
     /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn start_replication_task(
+    async fn start_replication_task(
         &self,
         input: StartReplicationTaskMessage,
-    ) -> RusotoFuture<StartReplicationTaskResponse, StartReplicationTaskError> {
+    ) -> Result<StartReplicationTaskResponse, RusotoError<StartReplicationTaskError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6589,28 +6684,30 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartReplicationTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StartReplicationTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartReplicationTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartReplicationTaskError::from_response(response))
+        }
     }
 
     /// <p> Starts the replication task assessment for unsupported data types in the source database. </p>
-    fn start_replication_task_assessment(
+    async fn start_replication_task_assessment(
         &self,
         input: StartReplicationTaskAssessmentMessage,
-    ) -> RusotoFuture<StartReplicationTaskAssessmentResponse, StartReplicationTaskAssessmentError>
-    {
+    ) -> Result<
+        StartReplicationTaskAssessmentResponse,
+        RusotoError<StartReplicationTaskAssessmentError>,
+    > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6621,25 +6718,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartReplicationTaskAssessmentResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartReplicationTaskAssessmentError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartReplicationTaskAssessmentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartReplicationTaskAssessmentError::from_response(response))
+        }
     }
 
     /// <p><p>Stops the replication task.</p> <p/></p>
-    fn stop_replication_task(
+    async fn stop_replication_task(
         &self,
         input: StopReplicationTaskMessage,
-    ) -> RusotoFuture<StopReplicationTaskResponse, StopReplicationTaskError> {
+    ) -> Result<StopReplicationTaskResponse, RusotoError<StopReplicationTaskError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6647,27 +6746,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopReplicationTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StopReplicationTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopReplicationTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopReplicationTaskError::from_response(response))
+        }
     }
 
     /// <p>Tests the connection between the replication instance and the endpoint.</p>
-    fn test_connection(
+    async fn test_connection(
         &self,
         input: TestConnectionMessage,
-    ) -> RusotoFuture<TestConnectionResponse, TestConnectionError> {
+    ) -> Result<TestConnectionResponse, RusotoError<TestConnectionError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6675,20 +6774,18 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TestConnectionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TestConnectionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TestConnectionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TestConnectionError::from_response(response))
+        }
     }
 }

@@ -9,19 +9,21 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -322,6 +324,7 @@ impl CloseTunnelError {
     }
 }
 impl fmt::Display for CloseTunnelError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CloseTunnelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
@@ -351,6 +354,7 @@ impl DescribeTunnelError {
     }
 }
 impl fmt::Display for DescribeTunnelError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeTunnelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
@@ -382,6 +386,7 @@ impl ListTagsForResourceError {
     }
 }
 impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
@@ -405,6 +410,7 @@ impl ListTunnelsError {
     }
 }
 impl fmt::Display for ListTunnelsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {}
     }
@@ -432,6 +438,7 @@ impl OpenTunnelError {
     }
 }
 impl fmt::Display for OpenTunnelError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             OpenTunnelError::LimitExceeded(ref cause) => write!(f, "{}", cause),
@@ -461,6 +468,7 @@ impl TagResourceError {
     }
 }
 impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
@@ -490,6 +498,7 @@ impl UntagResourceError {
     }
 }
 impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
@@ -498,48 +507,49 @@ impl fmt::Display for UntagResourceError {
 }
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the AWS IoT Secure Tunneling API. AWS IoT Secure Tunneling clients implement this trait.
+#[async_trait]
 pub trait IoTSecureTunneling {
     /// <p>Closes a tunnel identified by the unique tunnel id. When a <code>CloseTunnel</code> request is received, we close the WebSocket connections between the client and proxy server so no data can be transmitted.</p>
-    fn close_tunnel(
+    async fn close_tunnel(
         &self,
         input: CloseTunnelRequest,
-    ) -> RusotoFuture<CloseTunnelResponse, CloseTunnelError>;
+    ) -> Result<CloseTunnelResponse, RusotoError<CloseTunnelError>>;
 
     /// <p>Gets information about a tunnel identified by the unique tunnel id.</p>
-    fn describe_tunnel(
+    async fn describe_tunnel(
         &self,
         input: DescribeTunnelRequest,
-    ) -> RusotoFuture<DescribeTunnelResponse, DescribeTunnelError>;
+    ) -> Result<DescribeTunnelResponse, RusotoError<DescribeTunnelError>>;
 
     /// <p>Lists the tags for the specified resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>List all tunnels for an AWS account. Tunnels are listed by creation time in descending order, newer tunnels will be listed before older tunnels.</p>
-    fn list_tunnels(
+    async fn list_tunnels(
         &self,
         input: ListTunnelsRequest,
-    ) -> RusotoFuture<ListTunnelsResponse, ListTunnelsError>;
+    ) -> Result<ListTunnelsResponse, RusotoError<ListTunnelsError>>;
 
     /// <p>Creates a new tunnel, and returns two client access tokens for clients to use to connect to the AWS IoT Secure Tunneling proxy server. .</p>
-    fn open_tunnel(
+    async fn open_tunnel(
         &self,
         input: OpenTunnelRequest,
-    ) -> RusotoFuture<OpenTunnelResponse, OpenTunnelError>;
+    ) -> Result<OpenTunnelResponse, RusotoError<OpenTunnelError>>;
 
     /// <p>A resource tag.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
     /// <p>Removes a tag from a resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 }
 /// A client for the AWS IoT Secure Tunneling API.
 #[derive(Clone)]
@@ -553,7 +563,10 @@ impl IoTSecureTunnelingClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> IoTSecureTunnelingClient {
-        Self::new_with_client(Client::shared(), region)
+        IoTSecureTunnelingClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -563,14 +576,12 @@ impl IoTSecureTunnelingClient {
     ) -> IoTSecureTunnelingClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        IoTSecureTunnelingClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> IoTSecureTunnelingClient {
@@ -578,20 +589,13 @@ impl IoTSecureTunnelingClient {
     }
 }
 
-impl fmt::Debug for IoTSecureTunnelingClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("IoTSecureTunnelingClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl IoTSecureTunneling for IoTSecureTunnelingClient {
     /// <p>Closes a tunnel identified by the unique tunnel id. When a <code>CloseTunnel</code> request is received, we close the WebSocket connections between the client and proxy server so no data can be transmitted.</p>
-    fn close_tunnel(
+    async fn close_tunnel(
         &self,
         input: CloseTunnelRequest,
-    ) -> RusotoFuture<CloseTunnelResponse, CloseTunnelError> {
+    ) -> Result<CloseTunnelResponse, RusotoError<CloseTunnelError>> {
         let mut request = SignedRequest::new("POST", "IoTSecuredTunneling", &self.region, "/");
         request.set_endpoint_prefix("api.tunneling.iot".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -599,28 +603,26 @@ impl IoTSecureTunneling for IoTSecureTunnelingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CloseTunnelResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CloseTunnelError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CloseTunnelResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CloseTunnelError::from_response(response))
+        }
     }
 
     /// <p>Gets information about a tunnel identified by the unique tunnel id.</p>
-    fn describe_tunnel(
+    async fn describe_tunnel(
         &self,
         input: DescribeTunnelRequest,
-    ) -> RusotoFuture<DescribeTunnelResponse, DescribeTunnelError> {
+    ) -> Result<DescribeTunnelResponse, RusotoError<DescribeTunnelError>> {
         let mut request = SignedRequest::new("POST", "IoTSecuredTunneling", &self.region, "/");
         request.set_endpoint_prefix("api.tunneling.iot".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -628,28 +630,26 @@ impl IoTSecureTunneling for IoTSecureTunnelingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTunnelResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTunnelError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTunnelResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTunnelError::from_response(response))
+        }
     }
 
     /// <p>Lists the tags for the specified resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "IoTSecuredTunneling", &self.region, "/");
         request.set_endpoint_prefix("api.tunneling.iot".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -657,27 +657,27 @@ impl IoTSecureTunneling for IoTSecureTunnelingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>List all tunnels for an AWS account. Tunnels are listed by creation time in descending order, newer tunnels will be listed before older tunnels.</p>
-    fn list_tunnels(
+    async fn list_tunnels(
         &self,
         input: ListTunnelsRequest,
-    ) -> RusotoFuture<ListTunnelsResponse, ListTunnelsError> {
+    ) -> Result<ListTunnelsResponse, RusotoError<ListTunnelsError>> {
         let mut request = SignedRequest::new("POST", "IoTSecuredTunneling", &self.region, "/");
         request.set_endpoint_prefix("api.tunneling.iot".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -685,28 +685,26 @@ impl IoTSecureTunneling for IoTSecureTunnelingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTunnelsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListTunnelsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListTunnelsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTunnelsError::from_response(response))
+        }
     }
 
     /// <p>Creates a new tunnel, and returns two client access tokens for clients to use to connect to the AWS IoT Secure Tunneling proxy server. .</p>
-    fn open_tunnel(
+    async fn open_tunnel(
         &self,
         input: OpenTunnelRequest,
-    ) -> RusotoFuture<OpenTunnelResponse, OpenTunnelError> {
+    ) -> Result<OpenTunnelResponse, RusotoError<OpenTunnelError>> {
         let mut request = SignedRequest::new("POST", "IoTSecuredTunneling", &self.region, "/");
         request.set_endpoint_prefix("api.tunneling.iot".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -714,28 +712,26 @@ impl IoTSecureTunneling for IoTSecureTunnelingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<OpenTunnelResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(OpenTunnelError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<OpenTunnelResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(OpenTunnelError::from_response(response))
+        }
     }
 
     /// <p>A resource tag.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "IoTSecuredTunneling", &self.region, "/");
         request.set_endpoint_prefix("api.tunneling.iot".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -743,28 +739,26 @@ impl IoTSecureTunneling for IoTSecureTunnelingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>Removes a tag from a resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "IoTSecuredTunneling", &self.region, "/");
         request.set_endpoint_prefix("api.tunneling.iot".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -772,20 +766,18 @@ impl IoTSecureTunneling for IoTSecureTunnelingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 }

@@ -9,20 +9,22 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
+
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>The Amazon Chime account details. An AWS account can have multiple Amazon Chime accounts.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -49,6 +51,10 @@ pub struct Account {
     /// <p>The Amazon Chime account name.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The sign-in delegate groups associated with the account.</p>
+    #[serde(rename = "SigninDelegateGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signin_delegate_groups: Option<Vec<SigninDelegateGroup>>,
     /// <p>Supported licenses for the Amazon Chime account.</p>
     #[serde(rename = "SupportedLicenses")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -66,6 +72,19 @@ pub struct AccountSettings {
     #[serde(rename = "EnableDialOut")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_dial_out: Option<bool>,
+}
+
+/// <p>The Alexa for Business metadata associated with an Amazon Chime user, used to integrate Alexa for Business with a device.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AlexaForBusinessMetadata {
+    /// <p>The ARN of the room resource.</p>
+    #[serde(rename = "AlexaForBusinessRoomArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alexa_for_business_room_arn: Option<String>,
+    /// <p>Starts or stops Alexa for Business.</p>
+    #[serde(rename = "IsAlexaForBusinessEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_alexa_for_business_enabled: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -135,6 +154,21 @@ pub struct AssociatePhoneNumbersWithVoiceConnectorResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateSigninDelegateGroupsWithAccountRequest {
+    /// <p>The Amazon Chime account ID.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The sign-in delegate groups.</p>
+    #[serde(rename = "SigninDelegateGroups")]
+    pub signin_delegate_groups: Vec<SigninDelegateGroup>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociateSigninDelegateGroupsWithAccountResponse {}
 
 /// <p>An Amazon Chime SDK meeting attendee. Includes a unique <code>AttendeeId</code> and <code>JoinToken</code>. The <code>JoinToken</code> allows a client to authenticate and join as the specified attendee. The <code>JoinToken</code> expires when the meeting ends or when <a>DeleteAttendee</a> is called. After that, the attendee is unable to join the meeting.</p> <p>We recommend securely transferring each <code>JoinToken</code> from your server application to the client so that no other client has access to the token except for the one authorized to represent the attendee.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -440,7 +474,7 @@ pub struct CreateMeetingRequest {
     /// <p>The unique identifier for the client request. Use a different token for different meetings.</p>
     #[serde(rename = "ClientRequestToken")]
     pub client_request_token: String,
-    /// <p>The Region in which to create the meeting. Available values: <code>us-east-1</code>, <code>us-west-2</code>.</p>
+    /// <p>The Region in which to create the meeting. Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_region: Option<String>,
@@ -532,6 +566,34 @@ pub struct CreateRoomResponse {
     #[serde(rename = "Room")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub room: Option<Room>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateUserRequest {
+    /// <p>The Amazon Chime account ID.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The user's email address.</p>
+    #[serde(rename = "Email")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// <p>The user type.</p>
+    #[serde(rename = "UserType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_type: Option<String>,
+    /// <p>The user name.</p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateUserResponse {
+    #[serde(rename = "User")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user: Option<User>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -776,6 +838,21 @@ pub struct DisassociatePhoneNumbersFromVoiceConnectorResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateSigninDelegateGroupsFromAccountRequest {
+    /// <p>The Amazon Chime account ID.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The sign-in delegate group names.</p>
+    #[serde(rename = "GroupNames")]
+    pub group_names: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisassociateSigninDelegateGroupsFromAccountResponse {}
 
 /// <p>The configuration that allows a bot to receive outgoing events. Can be either an HTTPS endpoint or a Lambda function ARN.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1176,6 +1253,10 @@ pub struct InviteUsersRequest {
     /// <p>The user email addresses to which to send the email invitation.</p>
     #[serde(rename = "UserEmailList")]
     pub user_email_list: Vec<String>,
+    /// <p>The user type.</p>
+    #[serde(rename = "UserType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1456,6 +1537,10 @@ pub struct ListUsersRequest {
     #[serde(rename = "UserEmail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_email: Option<String>,
+    /// <p>The user type.</p>
+    #[serde(rename = "UserType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1602,7 +1687,7 @@ pub struct Meeting {
     #[serde(rename = "MediaPlacement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_placement: Option<MediaPlacement>,
-    /// <p>The Region in which to create the meeting. Available values: <code>us-east-1</code>, <code>us-west-2</code>.</p>
+    /// <p>The Region in which to create the meeting. Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_region: Option<String>,
@@ -2158,6 +2243,15 @@ pub struct SearchAvailablePhoneNumbersResponse {
     pub e164_phone_numbers: Option<Vec<String>>,
 }
 
+/// <p>An Active Directory (AD) group whose members are granted permission to act as delegates.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SigninDelegateGroup {
+    /// <p>The group name.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+}
+
 /// <p>The streaming configuration associated with an Amazon Chime Voice Connector. Specifies whether media streaming is enabled for sending to Amazon Kinesis, and shows the retention period for the Amazon Kinesis data, in hours.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StreamingConfiguration {
@@ -2401,6 +2495,10 @@ pub struct UpdateUserRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The Alexa for Business metadata.</p>
+    #[serde(rename = "AlexaForBusinessMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alexa_for_business_metadata: Option<AlexaForBusinessMetadata>,
     /// <p>The user license type to update. This must be a supported license type for the Amazon Chime account that the user belongs to.</p>
     #[serde(rename = "LicenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2408,12 +2506,20 @@ pub struct UpdateUserRequest {
     /// <p>The user ID.</p>
     #[serde(rename = "UserId")]
     pub user_id: String,
+    /// <p>The user type.</p>
+    #[serde(rename = "UserType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_type: Option<String>,
 }
 
 /// <p>The user ID and user fields to update, used with the <a>BatchUpdateUser</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequestItem {
+    /// <p>The Alexa for Business metadata.</p>
+    #[serde(rename = "AlexaForBusinessMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alexa_for_business_metadata: Option<AlexaForBusinessMetadata>,
     /// <p>The user license type.</p>
     #[serde(rename = "LicenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2421,6 +2527,10 @@ pub struct UpdateUserRequestItem {
     /// <p>The user ID.</p>
     #[serde(rename = "UserId")]
     pub user_id: String,
+    /// <p>The user type.</p>
+    #[serde(rename = "UserType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2500,6 +2610,10 @@ pub struct User {
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
+    /// <p>The Alexa for Business metadata.</p>
+    #[serde(rename = "AlexaForBusinessMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alexa_for_business_metadata: Option<AlexaForBusinessMetadata>,
     /// <p>The display name of the user.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2539,6 +2653,10 @@ pub struct User {
     #[serde(rename = "UserRegistrationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_registration_status: Option<String>,
+    /// <p>The user type.</p>
+    #[serde(rename = "UserType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_type: Option<String>,
 }
 
 /// <p>The list of errors returned when errors are encountered during the <a>BatchSuspendUser</a>, <a>BatchUnsuspendUser</a>, or <a>BatchUpdateUser</a> actions. This includes user IDs, error codes, and error messages.</p>
@@ -2722,6 +2840,7 @@ impl AssociatePhoneNumberWithUserError {
     }
 }
 impl fmt::Display for AssociatePhoneNumberWithUserError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociatePhoneNumberWithUserError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2815,6 +2934,7 @@ impl AssociatePhoneNumbersWithVoiceConnectorError {
     }
 }
 impl fmt::Display for AssociatePhoneNumbersWithVoiceConnectorError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociatePhoneNumbersWithVoiceConnectorError::AccessDenied(ref cause) => {
@@ -2924,6 +3044,7 @@ impl AssociatePhoneNumbersWithVoiceConnectorGroupError {
     }
 }
 impl fmt::Display for AssociatePhoneNumbersWithVoiceConnectorGroupError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociatePhoneNumbersWithVoiceConnectorGroupError::AccessDenied(ref cause) => {
@@ -2954,6 +3075,102 @@ impl fmt::Display for AssociatePhoneNumbersWithVoiceConnectorGroupError {
     }
 }
 impl Error for AssociatePhoneNumbersWithVoiceConnectorGroupError {}
+/// Errors returned by AssociateSigninDelegateGroupsWithAccount
+#[derive(Debug, PartialEq)]
+pub enum AssociateSigninDelegateGroupsWithAccountError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl AssociateSigninDelegateGroupsWithAccountError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateSigninDelegateGroupsWithAccountError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        AssociateSigninDelegateGroupsWithAccountError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for AssociateSigninDelegateGroupsWithAccountError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateSigninDelegateGroupsWithAccountError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateSigninDelegateGroupsWithAccountError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateSigninDelegateGroupsWithAccountError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateSigninDelegateGroupsWithAccountError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateSigninDelegateGroupsWithAccountError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateSigninDelegateGroupsWithAccountError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateSigninDelegateGroupsWithAccountError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AssociateSigninDelegateGroupsWithAccountError {}
 /// Errors returned by BatchCreateAttendee
 #[derive(Debug, PartialEq)]
 pub enum BatchCreateAttendeeError {
@@ -3017,6 +3234,7 @@ impl BatchCreateAttendeeError {
     }
 }
 impl fmt::Display for BatchCreateAttendeeError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             BatchCreateAttendeeError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3044,6 +3262,8 @@ pub enum BatchCreateRoomMembershipError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -3073,6 +3293,11 @@ impl BatchCreateRoomMembershipError {
                         BatchCreateRoomMembershipError::ServiceUnavailable(err.msg),
                     )
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(BatchCreateRoomMembershipError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(
                         BatchCreateRoomMembershipError::UnauthorizedClient(err.msg),
@@ -3086,6 +3311,7 @@ impl BatchCreateRoomMembershipError {
     }
 }
 impl fmt::Display for BatchCreateRoomMembershipError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             BatchCreateRoomMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3093,6 +3319,7 @@ impl fmt::Display for BatchCreateRoomMembershipError {
             BatchCreateRoomMembershipError::NotFound(ref cause) => write!(f, "{}", cause),
             BatchCreateRoomMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             BatchCreateRoomMembershipError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            BatchCreateRoomMembershipError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             BatchCreateRoomMembershipError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -3158,6 +3385,7 @@ impl BatchDeletePhoneNumberError {
     }
 }
 impl fmt::Display for BatchDeletePhoneNumberError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             BatchDeletePhoneNumberError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3223,6 +3451,7 @@ impl BatchSuspendUserError {
     }
 }
 impl fmt::Display for BatchSuspendUserError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             BatchSuspendUserError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3292,6 +3521,7 @@ impl BatchUnsuspendUserError {
     }
 }
 impl fmt::Display for BatchUnsuspendUserError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             BatchUnsuspendUserError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3365,6 +3595,7 @@ impl BatchUpdatePhoneNumberError {
     }
 }
 impl fmt::Display for BatchUpdatePhoneNumberError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             BatchUpdatePhoneNumberError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3430,6 +3661,7 @@ impl BatchUpdateUserError {
     }
 }
 impl fmt::Display for BatchUpdateUserError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             BatchUpdateUserError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3495,6 +3727,7 @@ impl CreateAccountError {
     }
 }
 impl fmt::Display for CreateAccountError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateAccountError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3567,6 +3800,7 @@ impl CreateAttendeeError {
     }
 }
 impl fmt::Display for CreateAttendeeError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateAttendeeError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3596,6 +3830,8 @@ pub enum CreateBotError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -3622,6 +3858,9 @@ impl CreateBotError {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateBotError::ServiceUnavailable(err.msg))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateBotError::ThrottledClient(err.msg))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(CreateBotError::UnauthorizedClient(err.msg))
                 }
@@ -3633,6 +3872,7 @@ impl CreateBotError {
     }
 }
 impl fmt::Display for CreateBotError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateBotError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3641,6 +3881,7 @@ impl fmt::Display for CreateBotError {
             CreateBotError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateBotError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             CreateBotError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateBotError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             CreateBotError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -3698,6 +3939,7 @@ impl CreateMeetingError {
     }
 }
 impl fmt::Display for CreateMeetingError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateMeetingError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3778,6 +4020,7 @@ impl CreatePhoneNumberOrderError {
     }
 }
 impl fmt::Display for CreatePhoneNumberOrderError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreatePhoneNumberOrderError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -3807,6 +4050,8 @@ pub enum CreateRoomError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -3833,6 +4078,9 @@ impl CreateRoomError {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateRoomError::ServiceUnavailable(err.msg))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateRoomError::ThrottledClient(err.msg))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(CreateRoomError::UnauthorizedClient(err.msg))
                 }
@@ -3844,6 +4092,7 @@ impl CreateRoomError {
     }
 }
 impl fmt::Display for CreateRoomError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateRoomError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3852,6 +4101,7 @@ impl fmt::Display for CreateRoomError {
             CreateRoomError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateRoomError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             CreateRoomError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateRoomError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             CreateRoomError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -3874,6 +4124,8 @@ pub enum CreateRoomMembershipError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -3907,6 +4159,11 @@ impl CreateRoomMembershipError {
                         err.msg,
                     ))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateRoomMembershipError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(CreateRoomMembershipError::UnauthorizedClient(
                         err.msg,
@@ -3920,6 +4177,7 @@ impl CreateRoomMembershipError {
     }
 }
 impl fmt::Display for CreateRoomMembershipError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateRoomMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -3929,11 +4187,84 @@ impl fmt::Display for CreateRoomMembershipError {
             CreateRoomMembershipError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateRoomMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             CreateRoomMembershipError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateRoomMembershipError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             CreateRoomMembershipError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
 impl Error for CreateRoomMembershipError {}
+/// Errors returned by CreateUser
+#[derive(Debug, PartialEq)]
+pub enum CreateUserError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateUserError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateUserError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateUserError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateUserError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateUserError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateUserError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateUserError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(CreateUserError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateUserError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateUserError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateUserError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateUserError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateUserError {}
 /// Errors returned by CreateVoiceConnector
 #[derive(Debug, PartialEq)]
 pub enum CreateVoiceConnectorError {
@@ -3999,6 +4330,7 @@ impl CreateVoiceConnectorError {
     }
 }
 impl fmt::Display for CreateVoiceConnectorError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateVoiceConnectorError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -4084,6 +4416,7 @@ impl CreateVoiceConnectorGroupError {
     }
 }
 impl fmt::Display for CreateVoiceConnectorGroupError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateVoiceConnectorGroupError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -4157,6 +4490,7 @@ impl DeleteAccountError {
     }
 }
 impl fmt::Display for DeleteAccountError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteAccountError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -4223,6 +4557,7 @@ impl DeleteAttendeeError {
     }
 }
 impl fmt::Display for DeleteAttendeeError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteAttendeeError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -4293,6 +4628,7 @@ impl DeleteEventsConfigurationError {
     }
 }
 impl fmt::Display for DeleteEventsConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteEventsConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -4359,6 +4695,7 @@ impl DeleteMeetingError {
     }
 }
 impl fmt::Display for DeleteMeetingError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteMeetingError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -4428,6 +4765,7 @@ impl DeletePhoneNumberError {
     }
 }
 impl fmt::Display for DeletePhoneNumberError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeletePhoneNumberError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -4454,6 +4792,8 @@ pub enum DeleteRoomError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -4477,6 +4817,9 @@ impl DeleteRoomError {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteRoomError::ServiceUnavailable(err.msg))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteRoomError::ThrottledClient(err.msg))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(DeleteRoomError::UnauthorizedClient(err.msg))
                 }
@@ -4488,6 +4831,7 @@ impl DeleteRoomError {
     }
 }
 impl fmt::Display for DeleteRoomError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteRoomError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -4495,6 +4839,7 @@ impl fmt::Display for DeleteRoomError {
             DeleteRoomError::NotFound(ref cause) => write!(f, "{}", cause),
             DeleteRoomError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             DeleteRoomError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteRoomError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             DeleteRoomError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -4513,6 +4858,8 @@ pub enum DeleteRoomMembershipError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -4538,6 +4885,11 @@ impl DeleteRoomMembershipError {
                         err.msg,
                     ))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteRoomMembershipError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(DeleteRoomMembershipError::UnauthorizedClient(
                         err.msg,
@@ -4551,6 +4903,7 @@ impl DeleteRoomMembershipError {
     }
 }
 impl fmt::Display for DeleteRoomMembershipError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteRoomMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -4558,6 +4911,7 @@ impl fmt::Display for DeleteRoomMembershipError {
             DeleteRoomMembershipError::NotFound(ref cause) => write!(f, "{}", cause),
             DeleteRoomMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             DeleteRoomMembershipError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteRoomMembershipError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             DeleteRoomMembershipError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -4626,6 +4980,7 @@ impl DeleteVoiceConnectorError {
     }
 }
 impl fmt::Display for DeleteVoiceConnectorError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteVoiceConnectorError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -4707,6 +5062,7 @@ impl DeleteVoiceConnectorGroupError {
     }
 }
 impl fmt::Display for DeleteVoiceConnectorGroupError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteVoiceConnectorGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -4789,6 +5145,7 @@ impl DeleteVoiceConnectorOriginationError {
     }
 }
 impl fmt::Display for DeleteVoiceConnectorOriginationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteVoiceConnectorOriginationError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -4882,6 +5239,7 @@ impl DeleteVoiceConnectorStreamingConfigurationError {
     }
 }
 impl fmt::Display for DeleteVoiceConnectorStreamingConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteVoiceConnectorStreamingConfigurationError::BadRequest(ref cause) => {
@@ -4977,6 +5335,7 @@ impl DeleteVoiceConnectorTerminationError {
     }
 }
 impl fmt::Display for DeleteVoiceConnectorTerminationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteVoiceConnectorTerminationError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -5070,6 +5429,7 @@ impl DeleteVoiceConnectorTerminationCredentialsError {
     }
 }
 impl fmt::Display for DeleteVoiceConnectorTerminationCredentialsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteVoiceConnectorTerminationCredentialsError::BadRequest(ref cause) => {
@@ -5165,6 +5525,7 @@ impl DisassociatePhoneNumberFromUserError {
     }
 }
 impl fmt::Display for DisassociatePhoneNumberFromUserError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisassociatePhoneNumberFromUserError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -5258,6 +5619,7 @@ impl DisassociatePhoneNumbersFromVoiceConnectorError {
     }
 }
 impl fmt::Display for DisassociatePhoneNumbersFromVoiceConnectorError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisassociatePhoneNumbersFromVoiceConnectorError::BadRequest(ref cause) => {
@@ -5361,6 +5723,7 @@ impl DisassociatePhoneNumbersFromVoiceConnectorGroupError {
     }
 }
 impl fmt::Display for DisassociatePhoneNumbersFromVoiceConnectorGroupError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisassociatePhoneNumbersFromVoiceConnectorGroupError::BadRequest(ref cause) => {
@@ -5388,6 +5751,106 @@ impl fmt::Display for DisassociatePhoneNumbersFromVoiceConnectorGroupError {
     }
 }
 impl Error for DisassociatePhoneNumbersFromVoiceConnectorGroupError {}
+/// Errors returned by DisassociateSigninDelegateGroupsFromAccount
+#[derive(Debug, PartialEq)]
+pub enum DisassociateSigninDelegateGroupsFromAccountError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DisassociateSigninDelegateGroupsFromAccountError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateSigninDelegateGroupsFromAccountError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::ServiceUnavailable(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        DisassociateSigninDelegateGroupsFromAccountError::UnauthorizedClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DisassociateSigninDelegateGroupsFromAccountError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateSigninDelegateGroupsFromAccountError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateSigninDelegateGroupsFromAccountError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateSigninDelegateGroupsFromAccountError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateSigninDelegateGroupsFromAccountError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateSigninDelegateGroupsFromAccountError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateSigninDelegateGroupsFromAccountError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateSigninDelegateGroupsFromAccountError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DisassociateSigninDelegateGroupsFromAccountError {}
 /// Errors returned by GetAccount
 #[derive(Debug, PartialEq)]
 pub enum GetAccountError {
@@ -5440,6 +5903,7 @@ impl GetAccountError {
     }
 }
 impl fmt::Display for GetAccountError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetAccountError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -5509,6 +5973,7 @@ impl GetAccountSettingsError {
     }
 }
 impl fmt::Display for GetAccountSettingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetAccountSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -5574,6 +6039,7 @@ impl GetAttendeeError {
     }
 }
 impl fmt::Display for GetAttendeeError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetAttendeeError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -5600,6 +6066,8 @@ pub enum GetBotError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -5621,6 +6089,9 @@ impl GetBotError {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetBotError::ServiceUnavailable(err.msg))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(GetBotError::ThrottledClient(err.msg))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(GetBotError::UnauthorizedClient(err.msg))
                 }
@@ -5632,6 +6103,7 @@ impl GetBotError {
     }
 }
 impl fmt::Display for GetBotError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetBotError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -5639,6 +6111,7 @@ impl fmt::Display for GetBotError {
             GetBotError::NotFound(ref cause) => write!(f, "{}", cause),
             GetBotError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             GetBotError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetBotError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             GetBotError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -5704,6 +6177,7 @@ impl GetEventsConfigurationError {
     }
 }
 impl fmt::Display for GetEventsConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetEventsConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -5768,6 +6242,7 @@ impl GetGlobalSettingsError {
     }
 }
 impl fmt::Display for GetGlobalSettingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetGlobalSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -5832,6 +6307,7 @@ impl GetMeetingError {
     }
 }
 impl fmt::Display for GetMeetingError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetMeetingError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -5897,6 +6373,7 @@ impl GetPhoneNumberError {
     }
 }
 impl fmt::Display for GetPhoneNumberError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetPhoneNumberError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -5966,6 +6443,7 @@ impl GetPhoneNumberOrderError {
     }
 }
 impl fmt::Display for GetPhoneNumberOrderError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetPhoneNumberOrderError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -6034,6 +6512,7 @@ impl GetPhoneNumberSettingsError {
     }
 }
 impl fmt::Display for GetPhoneNumberSettingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetPhoneNumberSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -6059,6 +6538,8 @@ pub enum GetRoomError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -6082,6 +6563,9 @@ impl GetRoomError {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetRoomError::ServiceUnavailable(err.msg))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(GetRoomError::ThrottledClient(err.msg))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(GetRoomError::UnauthorizedClient(err.msg))
                 }
@@ -6093,6 +6577,7 @@ impl GetRoomError {
     }
 }
 impl fmt::Display for GetRoomError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetRoomError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -6100,6 +6585,7 @@ impl fmt::Display for GetRoomError {
             GetRoomError::NotFound(ref cause) => write!(f, "{}", cause),
             GetRoomError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             GetRoomError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetRoomError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             GetRoomError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -6157,6 +6643,7 @@ impl GetUserError {
     }
 }
 impl fmt::Display for GetUserError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetUserError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -6222,6 +6709,7 @@ impl GetUserSettingsError {
     }
 }
 impl fmt::Display for GetUserSettingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetUserSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -6291,6 +6779,7 @@ impl GetVoiceConnectorError {
     }
 }
 impl fmt::Display for GetVoiceConnectorError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetVoiceConnectorError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -6364,6 +6853,7 @@ impl GetVoiceConnectorGroupError {
     }
 }
 impl fmt::Display for GetVoiceConnectorGroupError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetVoiceConnectorGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -6445,6 +6935,7 @@ impl GetVoiceConnectorLoggingConfigurationError {
     }
 }
 impl fmt::Display for GetVoiceConnectorLoggingConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetVoiceConnectorLoggingConfigurationError::BadRequest(ref cause) => {
@@ -6540,6 +7031,7 @@ impl GetVoiceConnectorOriginationError {
     }
 }
 impl fmt::Display for GetVoiceConnectorOriginationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetVoiceConnectorOriginationError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -6625,6 +7117,7 @@ impl GetVoiceConnectorStreamingConfigurationError {
     }
 }
 impl fmt::Display for GetVoiceConnectorStreamingConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetVoiceConnectorStreamingConfigurationError::BadRequest(ref cause) => {
@@ -6720,6 +7213,7 @@ impl GetVoiceConnectorTerminationError {
     }
 }
 impl fmt::Display for GetVoiceConnectorTerminationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetVoiceConnectorTerminationError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -6805,6 +7299,7 @@ impl GetVoiceConnectorTerminationHealthError {
     }
 }
 impl fmt::Display for GetVoiceConnectorTerminationHealthError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetVoiceConnectorTerminationHealthError::BadRequest(ref cause) => {
@@ -6880,6 +7375,7 @@ impl InviteUsersError {
     }
 }
 impl fmt::Display for InviteUsersError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             InviteUsersError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -6945,6 +7441,7 @@ impl ListAccountsError {
     }
 }
 impl fmt::Display for ListAccountsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListAccountsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7010,6 +7507,7 @@ impl ListAttendeesError {
     }
 }
 impl fmt::Display for ListAttendeesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListAttendeesError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7036,6 +7534,8 @@ pub enum ListBotsError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -7059,6 +7559,9 @@ impl ListBotsError {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListBotsError::ServiceUnavailable(err.msg))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListBotsError::ThrottledClient(err.msg))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(ListBotsError::UnauthorizedClient(err.msg))
                 }
@@ -7070,6 +7573,7 @@ impl ListBotsError {
     }
 }
 impl fmt::Display for ListBotsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListBotsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7077,6 +7581,7 @@ impl fmt::Display for ListBotsError {
             ListBotsError::NotFound(ref cause) => write!(f, "{}", cause),
             ListBotsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             ListBotsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListBotsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             ListBotsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -7129,6 +7634,7 @@ impl ListMeetingsError {
     }
 }
 impl fmt::Display for ListMeetingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListMeetingsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7196,6 +7702,7 @@ impl ListPhoneNumberOrdersError {
     }
 }
 impl fmt::Display for ListPhoneNumberOrdersError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListPhoneNumberOrdersError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7255,6 +7762,7 @@ impl ListPhoneNumbersError {
     }
 }
 impl fmt::Display for ListPhoneNumbersError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListPhoneNumbersError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7280,6 +7788,8 @@ pub enum ListRoomMembershipsError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -7305,6 +7815,9 @@ impl ListRoomMembershipsError {
                         err.msg,
                     ))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListRoomMembershipsError::ThrottledClient(err.msg))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(ListRoomMembershipsError::UnauthorizedClient(
                         err.msg,
@@ -7318,6 +7831,7 @@ impl ListRoomMembershipsError {
     }
 }
 impl fmt::Display for ListRoomMembershipsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListRoomMembershipsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7325,6 +7839,7 @@ impl fmt::Display for ListRoomMembershipsError {
             ListRoomMembershipsError::NotFound(ref cause) => write!(f, "{}", cause),
             ListRoomMembershipsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             ListRoomMembershipsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListRoomMembershipsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             ListRoomMembershipsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -7343,6 +7858,8 @@ pub enum ListRoomsError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -7366,6 +7883,9 @@ impl ListRoomsError {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListRoomsError::ServiceUnavailable(err.msg))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListRoomsError::ThrottledClient(err.msg))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(ListRoomsError::UnauthorizedClient(err.msg))
                 }
@@ -7377,6 +7897,7 @@ impl ListRoomsError {
     }
 }
 impl fmt::Display for ListRoomsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListRoomsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7384,6 +7905,7 @@ impl fmt::Display for ListRoomsError {
             ListRoomsError::NotFound(ref cause) => write!(f, "{}", cause),
             ListRoomsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             ListRoomsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListRoomsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             ListRoomsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -7441,6 +7963,7 @@ impl ListUsersError {
     }
 }
 impl fmt::Display for ListUsersError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListUsersError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7509,6 +8032,7 @@ impl ListVoiceConnectorGroupsError {
     }
 }
 impl fmt::Display for ListVoiceConnectorGroupsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListVoiceConnectorGroupsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7589,6 +8113,7 @@ impl ListVoiceConnectorTerminationCredentialsError {
     }
 }
 impl fmt::Display for ListVoiceConnectorTerminationCredentialsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListVoiceConnectorTerminationCredentialsError::BadRequest(ref cause) => {
@@ -7667,6 +8192,7 @@ impl ListVoiceConnectorsError {
     }
 }
 impl fmt::Display for ListVoiceConnectorsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListVoiceConnectorsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7731,6 +8257,7 @@ impl LogoutUserError {
     }
 }
 impl fmt::Display for LogoutUserError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             LogoutUserError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7804,6 +8331,7 @@ impl PutEventsConfigurationError {
     }
 }
 impl fmt::Display for PutEventsConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PutEventsConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -7885,6 +8413,7 @@ impl PutVoiceConnectorLoggingConfigurationError {
     }
 }
 impl fmt::Display for PutVoiceConnectorLoggingConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PutVoiceConnectorLoggingConfigurationError::BadRequest(ref cause) => {
@@ -7980,6 +8509,7 @@ impl PutVoiceConnectorOriginationError {
     }
 }
 impl fmt::Display for PutVoiceConnectorOriginationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PutVoiceConnectorOriginationError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -8065,6 +8595,7 @@ impl PutVoiceConnectorStreamingConfigurationError {
     }
 }
 impl fmt::Display for PutVoiceConnectorStreamingConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PutVoiceConnectorStreamingConfigurationError::BadRequest(ref cause) => {
@@ -8167,6 +8698,7 @@ impl PutVoiceConnectorTerminationError {
     }
 }
 impl fmt::Display for PutVoiceConnectorTerminationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PutVoiceConnectorTerminationError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -8253,6 +8785,7 @@ impl PutVoiceConnectorTerminationCredentialsError {
     }
 }
 impl fmt::Display for PutVoiceConnectorTerminationCredentialsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PutVoiceConnectorTerminationCredentialsError::BadRequest(ref cause) => {
@@ -8293,6 +8826,8 @@ pub enum RegenerateSecurityTokenError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -8320,6 +8855,11 @@ impl RegenerateSecurityTokenError {
                         err.msg,
                     ))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(RegenerateSecurityTokenError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(RegenerateSecurityTokenError::UnauthorizedClient(
                         err.msg,
@@ -8333,6 +8873,7 @@ impl RegenerateSecurityTokenError {
     }
 }
 impl fmt::Display for RegenerateSecurityTokenError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             RegenerateSecurityTokenError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -8340,6 +8881,7 @@ impl fmt::Display for RegenerateSecurityTokenError {
             RegenerateSecurityTokenError::NotFound(ref cause) => write!(f, "{}", cause),
             RegenerateSecurityTokenError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             RegenerateSecurityTokenError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RegenerateSecurityTokenError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             RegenerateSecurityTokenError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -8397,6 +8939,7 @@ impl ResetPersonalPINError {
     }
 }
 impl fmt::Display for ResetPersonalPINError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ResetPersonalPINError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -8473,6 +9016,7 @@ impl RestorePhoneNumberError {
     }
 }
 impl fmt::Display for RestorePhoneNumberError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             RestorePhoneNumberError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -8555,6 +9099,7 @@ impl SearchAvailablePhoneNumbersError {
     }
 }
 impl fmt::Display for SearchAvailablePhoneNumbersError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             SearchAvailablePhoneNumbersError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -8624,6 +9169,7 @@ impl UpdateAccountError {
     }
 }
 impl fmt::Display for UpdateAccountError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateAccountError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -8702,6 +9248,7 @@ impl UpdateAccountSettingsError {
     }
 }
 impl fmt::Display for UpdateAccountSettingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateAccountSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -8729,6 +9276,8 @@ pub enum UpdateBotError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -8752,6 +9301,9 @@ impl UpdateBotError {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateBotError::ServiceUnavailable(err.msg))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateBotError::ThrottledClient(err.msg))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(UpdateBotError::UnauthorizedClient(err.msg))
                 }
@@ -8763,6 +9315,7 @@ impl UpdateBotError {
     }
 }
 impl fmt::Display for UpdateBotError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateBotError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -8770,6 +9323,7 @@ impl fmt::Display for UpdateBotError {
             UpdateBotError::NotFound(ref cause) => write!(f, "{}", cause),
             UpdateBotError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             UpdateBotError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateBotError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             UpdateBotError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -8828,6 +9382,7 @@ impl UpdateGlobalSettingsError {
     }
 }
 impl fmt::Display for UpdateGlobalSettingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateGlobalSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -8896,6 +9451,7 @@ impl UpdatePhoneNumberError {
     }
 }
 impl fmt::Display for UpdatePhoneNumberError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdatePhoneNumberError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -8966,6 +9522,7 @@ impl UpdatePhoneNumberSettingsError {
     }
 }
 impl fmt::Display for UpdatePhoneNumberSettingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdatePhoneNumberSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -8991,6 +9548,8 @@ pub enum UpdateRoomError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -9014,6 +9573,9 @@ impl UpdateRoomError {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateRoomError::ServiceUnavailable(err.msg))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateRoomError::ThrottledClient(err.msg))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(UpdateRoomError::UnauthorizedClient(err.msg))
                 }
@@ -9025,6 +9587,7 @@ impl UpdateRoomError {
     }
 }
 impl fmt::Display for UpdateRoomError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateRoomError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -9032,6 +9595,7 @@ impl fmt::Display for UpdateRoomError {
             UpdateRoomError::NotFound(ref cause) => write!(f, "{}", cause),
             UpdateRoomError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             UpdateRoomError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateRoomError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             UpdateRoomError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -9050,6 +9614,8 @@ pub enum UpdateRoomMembershipError {
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
     ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
     /// <p>The client is not currently authorized to make the request.</p>
     UnauthorizedClient(String),
 }
@@ -9075,6 +9641,11 @@ impl UpdateRoomMembershipError {
                         err.msg,
                     ))
                 }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateRoomMembershipError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
                 "UnauthorizedClientException" => {
                     return RusotoError::Service(UpdateRoomMembershipError::UnauthorizedClient(
                         err.msg,
@@ -9088,6 +9659,7 @@ impl UpdateRoomMembershipError {
     }
 }
 impl fmt::Display for UpdateRoomMembershipError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateRoomMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -9095,6 +9667,7 @@ impl fmt::Display for UpdateRoomMembershipError {
             UpdateRoomMembershipError::NotFound(ref cause) => write!(f, "{}", cause),
             UpdateRoomMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             UpdateRoomMembershipError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateRoomMembershipError::ThrottledClient(ref cause) => write!(f, "{}", cause),
             UpdateRoomMembershipError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -9152,6 +9725,7 @@ impl UpdateUserError {
     }
 }
 impl fmt::Display for UpdateUserError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateUserError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -9221,6 +9795,7 @@ impl UpdateUserSettingsError {
     }
 }
 impl fmt::Display for UpdateUserSettingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateUserSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -9292,6 +9867,7 @@ impl UpdateVoiceConnectorError {
     }
 }
 impl fmt::Display for UpdateVoiceConnectorError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateVoiceConnectorError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -9372,6 +9948,7 @@ impl UpdateVoiceConnectorGroupError {
     }
 }
 impl fmt::Display for UpdateVoiceConnectorGroupError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateVoiceConnectorGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -9387,562 +9964,608 @@ impl fmt::Display for UpdateVoiceConnectorGroupError {
 }
 impl Error for UpdateVoiceConnectorGroupError {}
 /// Trait representing the capabilities of the Amazon Chime API. Amazon Chime clients implement this trait.
+#[async_trait]
 pub trait Chime {
     /// <p>Associates a phone number with the specified Amazon Chime user.</p>
-    fn associate_phone_number_with_user(
+    async fn associate_phone_number_with_user(
         &self,
         input: AssociatePhoneNumberWithUserRequest,
-    ) -> RusotoFuture<AssociatePhoneNumberWithUserResponse, AssociatePhoneNumberWithUserError>;
+    ) -> Result<AssociatePhoneNumberWithUserResponse, RusotoError<AssociatePhoneNumberWithUserError>>;
 
     /// <p>Associates phone numbers with the specified Amazon Chime Voice Connector.</p>
-    fn associate_phone_numbers_with_voice_connector(
+    async fn associate_phone_numbers_with_voice_connector(
         &self,
         input: AssociatePhoneNumbersWithVoiceConnectorRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociatePhoneNumbersWithVoiceConnectorResponse,
-        AssociatePhoneNumbersWithVoiceConnectorError,
+        RusotoError<AssociatePhoneNumbersWithVoiceConnectorError>,
     >;
 
     /// <p>Associates phone numbers with the specified Amazon Chime Voice Connector group.</p>
-    fn associate_phone_numbers_with_voice_connector_group(
+    async fn associate_phone_numbers_with_voice_connector_group(
         &self,
         input: AssociatePhoneNumbersWithVoiceConnectorGroupRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociatePhoneNumbersWithVoiceConnectorGroupResponse,
-        AssociatePhoneNumbersWithVoiceConnectorGroupError,
+        RusotoError<AssociatePhoneNumbersWithVoiceConnectorGroupError>,
+    >;
+
+    /// <p>Associates the specified sign-in delegate groups with the specified Amazon Chime account.</p>
+    async fn associate_signin_delegate_groups_with_account(
+        &self,
+        input: AssociateSigninDelegateGroupsWithAccountRequest,
+    ) -> Result<
+        AssociateSigninDelegateGroupsWithAccountResponse,
+        RusotoError<AssociateSigninDelegateGroupsWithAccountError>,
     >;
 
     /// <p>Creates up to 100 new attendees for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
-    fn batch_create_attendee(
+    async fn batch_create_attendee(
         &self,
         input: BatchCreateAttendeeRequest,
-    ) -> RusotoFuture<BatchCreateAttendeeResponse, BatchCreateAttendeeError>;
+    ) -> Result<BatchCreateAttendeeResponse, RusotoError<BatchCreateAttendeeError>>;
 
     /// <p>Adds up to 50 members to a chat room. Members can be either users or bots. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
-    fn batch_create_room_membership(
+    async fn batch_create_room_membership(
         &self,
         input: BatchCreateRoomMembershipRequest,
-    ) -> RusotoFuture<BatchCreateRoomMembershipResponse, BatchCreateRoomMembershipError>;
+    ) -> Result<BatchCreateRoomMembershipResponse, RusotoError<BatchCreateRoomMembershipError>>;
 
     /// <p>Moves phone numbers into the <b>Deletion queue</b>. Phone numbers must be disassociated from any users or Amazon Chime Voice Connectors before they can be deleted.</p> <p>Phone numbers remain in the <b>Deletion queue</b> for 7 days before they are deleted permanently.</p>
-    fn batch_delete_phone_number(
+    async fn batch_delete_phone_number(
         &self,
         input: BatchDeletePhoneNumberRequest,
-    ) -> RusotoFuture<BatchDeletePhoneNumberResponse, BatchDeletePhoneNumberError>;
+    ) -> Result<BatchDeletePhoneNumberResponse, RusotoError<BatchDeletePhoneNumberError>>;
 
-    /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are dissasociated from the account, but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action. </p> <p>To sign out users without suspending them, use the <a>LogoutUser</a> action.</p>
-    fn batch_suspend_user(
+    /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are disassociated from the account, but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action. </p> <p>To sign out users without suspending them, use the <a>LogoutUser</a> action.</p>
+    async fn batch_suspend_user(
         &self,
         input: BatchSuspendUserRequest,
-    ) -> RusotoFuture<BatchSuspendUserResponse, BatchSuspendUserError>;
+    ) -> Result<BatchSuspendUserResponse, RusotoError<BatchSuspendUserError>>;
 
     /// <p>Removes the suspension from up to 50 previously suspended users for the specified Amazon Chime <code>EnterpriseLWA</code> account. Only users on <code>EnterpriseLWA</code> accounts can be unsuspended using this action. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Previously suspended users who are unsuspended using this action are returned to <code>Registered</code> status. Users who are not previously suspended are ignored.</p>
-    fn batch_unsuspend_user(
+    async fn batch_unsuspend_user(
         &self,
         input: BatchUnsuspendUserRequest,
-    ) -> RusotoFuture<BatchUnsuspendUserResponse, BatchUnsuspendUserError>;
+    ) -> Result<BatchUnsuspendUserResponse, RusotoError<BatchUnsuspendUserError>>;
 
     /// <p>Updates phone number product types or calling names. You can update one attribute at a time for each <code>UpdatePhoneNumberRequestItem</code>. For example, you can update either the product type or the calling name.</p> <p>For product types, choose from Amazon Chime Business Calling and Amazon Chime Voice Connector. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
-    fn batch_update_phone_number(
+    async fn batch_update_phone_number(
         &self,
         input: BatchUpdatePhoneNumberRequest,
-    ) -> RusotoFuture<BatchUpdatePhoneNumberResponse, BatchUpdatePhoneNumberError>;
+    ) -> Result<BatchUpdatePhoneNumberResponse, RusotoError<BatchUpdatePhoneNumberError>>;
 
     /// <p>Updates user details within the <a>UpdateUserRequestItem</a> object for up to 20 users for the specified Amazon Chime account. Currently, only <code>LicenseType</code> updates are supported for this action.</p>
-    fn batch_update_user(
+    async fn batch_update_user(
         &self,
         input: BatchUpdateUserRequest,
-    ) -> RusotoFuture<BatchUpdateUserResponse, BatchUpdateUserError>;
+    ) -> Result<BatchUpdateUserResponse, RusotoError<BatchUpdateUserError>>;
 
     /// <p>Creates an Amazon Chime account under the administrator's AWS account. Only <code>Team</code> account types are currently supported for this action. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p>
-    fn create_account(
+    async fn create_account(
         &self,
         input: CreateAccountRequest,
-    ) -> RusotoFuture<CreateAccountResponse, CreateAccountError>;
+    ) -> Result<CreateAccountResponse, RusotoError<CreateAccountError>>;
 
     /// <p>Creates a new attendee for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn create_attendee(
+    async fn create_attendee(
         &self,
         input: CreateAttendeeRequest,
-    ) -> RusotoFuture<CreateAttendeeResponse, CreateAttendeeError>;
+    ) -> Result<CreateAttendeeResponse, RusotoError<CreateAttendeeError>>;
 
     /// <p>Creates a bot for an Amazon Chime Enterprise account.</p>
-    fn create_bot(
+    async fn create_bot(
         &self,
         input: CreateBotRequest,
-    ) -> RusotoFuture<CreateBotResponse, CreateBotError>;
+    ) -> Result<CreateBotResponse, RusotoError<CreateBotError>>;
 
     /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn create_meeting(
+    async fn create_meeting(
         &self,
         input: CreateMeetingRequest,
-    ) -> RusotoFuture<CreateMeetingResponse, CreateMeetingError>;
+    ) -> Result<CreateMeetingResponse, RusotoError<CreateMeetingError>>;
 
     /// <p>Creates an order for phone numbers to be provisioned. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p>
-    fn create_phone_number_order(
+    async fn create_phone_number_order(
         &self,
         input: CreatePhoneNumberOrderRequest,
-    ) -> RusotoFuture<CreatePhoneNumberOrderResponse, CreatePhoneNumberOrderError>;
+    ) -> Result<CreatePhoneNumberOrderResponse, RusotoError<CreatePhoneNumberOrderError>>;
 
     /// <p>Creates a chat room for the specified Amazon Chime account.</p>
-    fn create_room(
+    async fn create_room(
         &self,
         input: CreateRoomRequest,
-    ) -> RusotoFuture<CreateRoomResponse, CreateRoomError>;
+    ) -> Result<CreateRoomResponse, RusotoError<CreateRoomError>>;
 
     /// <p>Adds a member to a chat room. A member can be either a user or a bot. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
-    fn create_room_membership(
+    async fn create_room_membership(
         &self,
         input: CreateRoomMembershipRequest,
-    ) -> RusotoFuture<CreateRoomMembershipResponse, CreateRoomMembershipError>;
+    ) -> Result<CreateRoomMembershipResponse, RusotoError<CreateRoomMembershipError>>;
+
+    /// <p>Creates a user under the specified Amazon Chime account.</p>
+    async fn create_user(
+        &self,
+        input: CreateUserRequest,
+    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>>;
 
     /// <p>Creates an Amazon Chime Voice Connector under the administrator's AWS account. You can choose to create an Amazon Chime Voice Connector in a specific AWS Region.</p> <p>Enabling <a>CreateVoiceConnectorRequest$RequireEncryption</a> configures your Amazon Chime Voice Connector to use TLS transport for SIP signaling and Secure RTP (SRTP) for media. Inbound calls use TLS transport, and unencrypted outbound calls are blocked.</p>
-    fn create_voice_connector(
+    async fn create_voice_connector(
         &self,
         input: CreateVoiceConnectorRequest,
-    ) -> RusotoFuture<CreateVoiceConnectorResponse, CreateVoiceConnectorError>;
+    ) -> Result<CreateVoiceConnectorResponse, RusotoError<CreateVoiceConnectorError>>;
 
     /// <p>Creates an Amazon Chime Voice Connector group under the administrator's AWS account. You can associate up to three existing Amazon Chime Voice Connectors with the Amazon Chime Voice Connector group by including <code>VoiceConnectorItems</code> in the request.</p> <p>You can include Amazon Chime Voice Connectors from different AWS Regions in your group. This creates a fault tolerant mechanism for fallback in case of availability events.</p>
-    fn create_voice_connector_group(
+    async fn create_voice_connector_group(
         &self,
         input: CreateVoiceConnectorGroupRequest,
-    ) -> RusotoFuture<CreateVoiceConnectorGroupResponse, CreateVoiceConnectorGroupError>;
+    ) -> Result<CreateVoiceConnectorGroupResponse, RusotoError<CreateVoiceConnectorGroupError>>;
 
     /// <p>Deletes the specified Amazon Chime account. You must suspend all users before deleting a <code>Team</code> account. You can use the <a>BatchSuspendUser</a> action to do so.</p> <p>For <code>EnterpriseLWA</code> and <code>EnterpriseAD</code> accounts, you must release the claimed domains for your Amazon Chime account before deletion. As soon as you release the domain, all users under that account are suspended.</p> <p>Deleted accounts appear in your <code>Disabled</code> accounts list for 90 days. To restore a deleted account from your <code>Disabled</code> accounts list, you must contact AWS Support.</p> <p>After 90 days, deleted accounts are permanently removed from your <code>Disabled</code> accounts list.</p>
-    fn delete_account(
+    async fn delete_account(
         &self,
         input: DeleteAccountRequest,
-    ) -> RusotoFuture<DeleteAccountResponse, DeleteAccountError>;
+    ) -> Result<DeleteAccountResponse, RusotoError<DeleteAccountError>>;
 
     /// <p>Deletes an attendee from the specified Amazon Chime SDK meeting and deletes their <code>JoinToken</code>. Attendees are automatically deleted when a Amazon Chime SDK meeting is deleted. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn delete_attendee(
+    async fn delete_attendee(
         &self,
         input: DeleteAttendeeRequest,
-    ) -> RusotoFuture<(), DeleteAttendeeError>;
+    ) -> Result<(), RusotoError<DeleteAttendeeError>>;
 
     /// <p>Deletes the events configuration that allows a bot to receive outgoing events.</p>
-    fn delete_events_configuration(
+    async fn delete_events_configuration(
         &self,
         input: DeleteEventsConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteEventsConfigurationError>;
+    ) -> Result<(), RusotoError<DeleteEventsConfigurationError>>;
 
     /// <p>Deletes the specified Amazon Chime SDK meeting. When a meeting is deleted, its attendees are also deleted and clients can no longer join it. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn delete_meeting(&self, input: DeleteMeetingRequest) -> RusotoFuture<(), DeleteMeetingError>;
+    async fn delete_meeting(
+        &self,
+        input: DeleteMeetingRequest,
+    ) -> Result<(), RusotoError<DeleteMeetingError>>;
 
     /// <p>Moves the specified phone number into the <b>Deletion queue</b>. A phone number must be disassociated from any users or Amazon Chime Voice Connectors before it can be deleted.</p> <p>Deleted phone numbers remain in the <b>Deletion queue</b> for 7 days before they are deleted permanently.</p>
-    fn delete_phone_number(
+    async fn delete_phone_number(
         &self,
         input: DeletePhoneNumberRequest,
-    ) -> RusotoFuture<(), DeletePhoneNumberError>;
+    ) -> Result<(), RusotoError<DeletePhoneNumberError>>;
 
     /// <p>Deletes a chat room.</p>
-    fn delete_room(&self, input: DeleteRoomRequest) -> RusotoFuture<(), DeleteRoomError>;
+    async fn delete_room(
+        &self,
+        input: DeleteRoomRequest,
+    ) -> Result<(), RusotoError<DeleteRoomError>>;
 
     /// <p>Removes a member from a chat room.</p>
-    fn delete_room_membership(
+    async fn delete_room_membership(
         &self,
         input: DeleteRoomMembershipRequest,
-    ) -> RusotoFuture<(), DeleteRoomMembershipError>;
+    ) -> Result<(), RusotoError<DeleteRoomMembershipError>>;
 
     /// <p>Deletes the specified Amazon Chime Voice Connector. Any phone numbers associated with the Amazon Chime Voice Connector must be disassociated from it before it can be deleted.</p>
-    fn delete_voice_connector(
+    async fn delete_voice_connector(
         &self,
         input: DeleteVoiceConnectorRequest,
-    ) -> RusotoFuture<(), DeleteVoiceConnectorError>;
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorError>>;
 
     /// <p>Deletes the specified Amazon Chime Voice Connector group. Any <code>VoiceConnectorItems</code> and phone numbers associated with the group must be removed before it can be deleted.</p>
-    fn delete_voice_connector_group(
+    async fn delete_voice_connector_group(
         &self,
         input: DeleteVoiceConnectorGroupRequest,
-    ) -> RusotoFuture<(), DeleteVoiceConnectorGroupError>;
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorGroupError>>;
 
     /// <p>Deletes the origination settings for the specified Amazon Chime Voice Connector.</p>
-    fn delete_voice_connector_origination(
+    async fn delete_voice_connector_origination(
         &self,
         input: DeleteVoiceConnectorOriginationRequest,
-    ) -> RusotoFuture<(), DeleteVoiceConnectorOriginationError>;
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorOriginationError>>;
 
     /// <p>Deletes the streaming configuration for the specified Amazon Chime Voice Connector.</p>
-    fn delete_voice_connector_streaming_configuration(
+    async fn delete_voice_connector_streaming_configuration(
         &self,
         input: DeleteVoiceConnectorStreamingConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteVoiceConnectorStreamingConfigurationError>;
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorStreamingConfigurationError>>;
 
     /// <p>Deletes the termination settings for the specified Amazon Chime Voice Connector.</p>
-    fn delete_voice_connector_termination(
+    async fn delete_voice_connector_termination(
         &self,
         input: DeleteVoiceConnectorTerminationRequest,
-    ) -> RusotoFuture<(), DeleteVoiceConnectorTerminationError>;
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorTerminationError>>;
 
     /// <p>Deletes the specified SIP credentials used by your equipment to authenticate during call termination.</p>
-    fn delete_voice_connector_termination_credentials(
+    async fn delete_voice_connector_termination_credentials(
         &self,
         input: DeleteVoiceConnectorTerminationCredentialsRequest,
-    ) -> RusotoFuture<(), DeleteVoiceConnectorTerminationCredentialsError>;
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorTerminationCredentialsError>>;
 
     /// <p>Disassociates the primary provisioned phone number from the specified Amazon Chime user.</p>
-    fn disassociate_phone_number_from_user(
+    async fn disassociate_phone_number_from_user(
         &self,
         input: DisassociatePhoneNumberFromUserRequest,
-    ) -> RusotoFuture<DisassociatePhoneNumberFromUserResponse, DisassociatePhoneNumberFromUserError>;
+    ) -> Result<
+        DisassociatePhoneNumberFromUserResponse,
+        RusotoError<DisassociatePhoneNumberFromUserError>,
+    >;
 
     /// <p>Disassociates the specified phone numbers from the specified Amazon Chime Voice Connector.</p>
-    fn disassociate_phone_numbers_from_voice_connector(
+    async fn disassociate_phone_numbers_from_voice_connector(
         &self,
         input: DisassociatePhoneNumbersFromVoiceConnectorRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociatePhoneNumbersFromVoiceConnectorResponse,
-        DisassociatePhoneNumbersFromVoiceConnectorError,
+        RusotoError<DisassociatePhoneNumbersFromVoiceConnectorError>,
     >;
 
     /// <p>Disassociates the specified phone numbers from the specified Amazon Chime Voice Connector group.</p>
-    fn disassociate_phone_numbers_from_voice_connector_group(
+    async fn disassociate_phone_numbers_from_voice_connector_group(
         &self,
         input: DisassociatePhoneNumbersFromVoiceConnectorGroupRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociatePhoneNumbersFromVoiceConnectorGroupResponse,
-        DisassociatePhoneNumbersFromVoiceConnectorGroupError,
+        RusotoError<DisassociatePhoneNumbersFromVoiceConnectorGroupError>,
+    >;
+
+    /// <p>Disassociates the specified sign-in delegate groups from the specified Amazon Chime account.</p>
+    async fn disassociate_signin_delegate_groups_from_account(
+        &self,
+        input: DisassociateSigninDelegateGroupsFromAccountRequest,
+    ) -> Result<
+        DisassociateSigninDelegateGroupsFromAccountResponse,
+        RusotoError<DisassociateSigninDelegateGroupsFromAccountError>,
     >;
 
     /// <p>Retrieves details for the specified Amazon Chime account, such as account type and supported licenses.</p>
-    fn get_account(
+    async fn get_account(
         &self,
         input: GetAccountRequest,
-    ) -> RusotoFuture<GetAccountResponse, GetAccountError>;
+    ) -> Result<GetAccountResponse, RusotoError<GetAccountError>>;
 
     /// <p>Retrieves account settings for the specified Amazon Chime account ID, such as remote control and dial out settings. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>.</p>
-    fn get_account_settings(
+    async fn get_account_settings(
         &self,
         input: GetAccountSettingsRequest,
-    ) -> RusotoFuture<GetAccountSettingsResponse, GetAccountSettingsError>;
+    ) -> Result<GetAccountSettingsResponse, RusotoError<GetAccountSettingsError>>;
 
     /// <p>Gets the Amazon Chime SDK attendee details for a specified meeting ID and attendee ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn get_attendee(
+    async fn get_attendee(
         &self,
         input: GetAttendeeRequest,
-    ) -> RusotoFuture<GetAttendeeResponse, GetAttendeeError>;
+    ) -> Result<GetAttendeeResponse, RusotoError<GetAttendeeError>>;
 
     /// <p>Retrieves details for the specified bot, such as bot email address, bot type, status, and display name.</p>
-    fn get_bot(&self, input: GetBotRequest) -> RusotoFuture<GetBotResponse, GetBotError>;
+    async fn get_bot(
+        &self,
+        input: GetBotRequest,
+    ) -> Result<GetBotResponse, RusotoError<GetBotError>>;
 
     /// <p>Gets details for an events configuration that allows a bot to receive outgoing events, such as an HTTPS endpoint or Lambda function ARN. </p>
-    fn get_events_configuration(
+    async fn get_events_configuration(
         &self,
         input: GetEventsConfigurationRequest,
-    ) -> RusotoFuture<GetEventsConfigurationResponse, GetEventsConfigurationError>;
+    ) -> Result<GetEventsConfigurationResponse, RusotoError<GetEventsConfigurationError>>;
 
     /// <p>Retrieves global settings for the administrator's AWS account, such as Amazon Chime Business Calling and Amazon Chime Voice Connector settings.</p>
-    fn get_global_settings(
+    async fn get_global_settings(
         &self,
-    ) -> RusotoFuture<GetGlobalSettingsResponse, GetGlobalSettingsError>;
+    ) -> Result<GetGlobalSettingsResponse, RusotoError<GetGlobalSettingsError>>;
 
     /// <p>Gets the Amazon Chime SDK meeting details for the specified meeting ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn get_meeting(
+    async fn get_meeting(
         &self,
         input: GetMeetingRequest,
-    ) -> RusotoFuture<GetMeetingResponse, GetMeetingError>;
+    ) -> Result<GetMeetingResponse, RusotoError<GetMeetingError>>;
 
     /// <p>Retrieves details for the specified phone number ID, such as associations, capabilities, and product type.</p>
-    fn get_phone_number(
+    async fn get_phone_number(
         &self,
         input: GetPhoneNumberRequest,
-    ) -> RusotoFuture<GetPhoneNumberResponse, GetPhoneNumberError>;
+    ) -> Result<GetPhoneNumberResponse, RusotoError<GetPhoneNumberError>>;
 
     /// <p>Retrieves details for the specified phone number order, such as order creation timestamp, phone numbers in E.164 format, product type, and order status.</p>
-    fn get_phone_number_order(
+    async fn get_phone_number_order(
         &self,
         input: GetPhoneNumberOrderRequest,
-    ) -> RusotoFuture<GetPhoneNumberOrderResponse, GetPhoneNumberOrderError>;
+    ) -> Result<GetPhoneNumberOrderResponse, RusotoError<GetPhoneNumberOrderError>>;
 
     /// <p>Retrieves the phone number settings for the administrator's AWS account, such as the default outbound calling name.</p>
-    fn get_phone_number_settings(
+    async fn get_phone_number_settings(
         &self,
-    ) -> RusotoFuture<GetPhoneNumberSettingsResponse, GetPhoneNumberSettingsError>;
+    ) -> Result<GetPhoneNumberSettingsResponse, RusotoError<GetPhoneNumberSettingsError>>;
 
-    /// <p>Retrieves room details, such as name.</p>
-    fn get_room(&self, input: GetRoomRequest) -> RusotoFuture<GetRoomResponse, GetRoomError>;
+    /// <p>Retrieves room details, such as the room name.</p>
+    async fn get_room(
+        &self,
+        input: GetRoomRequest,
+    ) -> Result<GetRoomResponse, RusotoError<GetRoomError>>;
 
     /// <p>Retrieves details for the specified user ID, such as primary email address, license type, and personal meeting PIN.</p> <p>To retrieve user details with an email address instead of a user ID, use the <a>ListUsers</a> action, and then filter by email address.</p>
-    fn get_user(&self, input: GetUserRequest) -> RusotoFuture<GetUserResponse, GetUserError>;
+    async fn get_user(
+        &self,
+        input: GetUserRequest,
+    ) -> Result<GetUserResponse, RusotoError<GetUserError>>;
 
     /// <p>Retrieves settings for the specified user ID, such as any associated phone number settings.</p>
-    fn get_user_settings(
+    async fn get_user_settings(
         &self,
         input: GetUserSettingsRequest,
-    ) -> RusotoFuture<GetUserSettingsResponse, GetUserSettingsError>;
+    ) -> Result<GetUserSettingsResponse, RusotoError<GetUserSettingsError>>;
 
     /// <p>Retrieves details for the specified Amazon Chime Voice Connector, such as timestamps, name, outbound host, and encryption requirements.</p>
-    fn get_voice_connector(
+    async fn get_voice_connector(
         &self,
         input: GetVoiceConnectorRequest,
-    ) -> RusotoFuture<GetVoiceConnectorResponse, GetVoiceConnectorError>;
+    ) -> Result<GetVoiceConnectorResponse, RusotoError<GetVoiceConnectorError>>;
 
     /// <p>Retrieves details for the specified Amazon Chime Voice Connector group, such as timestamps, name, and associated <code>VoiceConnectorItems</code>.</p>
-    fn get_voice_connector_group(
+    async fn get_voice_connector_group(
         &self,
         input: GetVoiceConnectorGroupRequest,
-    ) -> RusotoFuture<GetVoiceConnectorGroupResponse, GetVoiceConnectorGroupError>;
+    ) -> Result<GetVoiceConnectorGroupResponse, RusotoError<GetVoiceConnectorGroupError>>;
 
     /// <p>Retrieves the logging configuration details for the specified Amazon Chime Voice Connector. Shows whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
-    fn get_voice_connector_logging_configuration(
+    async fn get_voice_connector_logging_configuration(
         &self,
         input: GetVoiceConnectorLoggingConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetVoiceConnectorLoggingConfigurationResponse,
-        GetVoiceConnectorLoggingConfigurationError,
+        RusotoError<GetVoiceConnectorLoggingConfigurationError>,
     >;
 
     /// <p>Retrieves origination setting details for the specified Amazon Chime Voice Connector.</p>
-    fn get_voice_connector_origination(
+    async fn get_voice_connector_origination(
         &self,
         input: GetVoiceConnectorOriginationRequest,
-    ) -> RusotoFuture<GetVoiceConnectorOriginationResponse, GetVoiceConnectorOriginationError>;
+    ) -> Result<GetVoiceConnectorOriginationResponse, RusotoError<GetVoiceConnectorOriginationError>>;
 
     /// <p>Retrieves the streaming configuration details for the specified Amazon Chime Voice Connector. Shows whether media streaming is enabled for sending to Amazon Kinesis. It also shows the retention period, in hours, for the Amazon Kinesis data.</p>
-    fn get_voice_connector_streaming_configuration(
+    async fn get_voice_connector_streaming_configuration(
         &self,
         input: GetVoiceConnectorStreamingConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetVoiceConnectorStreamingConfigurationResponse,
-        GetVoiceConnectorStreamingConfigurationError,
+        RusotoError<GetVoiceConnectorStreamingConfigurationError>,
     >;
 
     /// <p>Retrieves termination setting details for the specified Amazon Chime Voice Connector.</p>
-    fn get_voice_connector_termination(
+    async fn get_voice_connector_termination(
         &self,
         input: GetVoiceConnectorTerminationRequest,
-    ) -> RusotoFuture<GetVoiceConnectorTerminationResponse, GetVoiceConnectorTerminationError>;
+    ) -> Result<GetVoiceConnectorTerminationResponse, RusotoError<GetVoiceConnectorTerminationError>>;
 
     /// <p>Retrieves information about the last time a SIP <code>OPTIONS</code> ping was received from your SIP infrastructure for the specified Amazon Chime Voice Connector.</p>
-    fn get_voice_connector_termination_health(
+    async fn get_voice_connector_termination_health(
         &self,
         input: GetVoiceConnectorTerminationHealthRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetVoiceConnectorTerminationHealthResponse,
-        GetVoiceConnectorTerminationHealthError,
+        RusotoError<GetVoiceConnectorTerminationHealthError>,
     >;
 
     /// <p>Sends email to a maximum of 50 users, inviting them to the specified Amazon Chime <code>Team</code> account. Only <code>Team</code> account types are currently supported for this action. </p>
-    fn invite_users(
+    async fn invite_users(
         &self,
         input: InviteUsersRequest,
-    ) -> RusotoFuture<InviteUsersResponse, InviteUsersError>;
+    ) -> Result<InviteUsersResponse, RusotoError<InviteUsersError>>;
 
     /// <p>Lists the Amazon Chime accounts under the administrator's AWS account. You can filter accounts by account name prefix. To find out which Amazon Chime account a user belongs to, you can filter by the user's email address, which returns one account result.</p>
-    fn list_accounts(
+    async fn list_accounts(
         &self,
         input: ListAccountsRequest,
-    ) -> RusotoFuture<ListAccountsResponse, ListAccountsError>;
+    ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>>;
 
     /// <p>Lists the attendees for the specified Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn list_attendees(
+    async fn list_attendees(
         &self,
         input: ListAttendeesRequest,
-    ) -> RusotoFuture<ListAttendeesResponse, ListAttendeesError>;
+    ) -> Result<ListAttendeesResponse, RusotoError<ListAttendeesError>>;
 
     /// <p>Lists the bots associated with the administrator's Amazon Chime Enterprise account ID.</p>
-    fn list_bots(&self, input: ListBotsRequest) -> RusotoFuture<ListBotsResponse, ListBotsError>;
+    async fn list_bots(
+        &self,
+        input: ListBotsRequest,
+    ) -> Result<ListBotsResponse, RusotoError<ListBotsError>>;
 
     /// <p>Lists up to 100 active Amazon Chime SDK meetings. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn list_meetings(
+    async fn list_meetings(
         &self,
         input: ListMeetingsRequest,
-    ) -> RusotoFuture<ListMeetingsResponse, ListMeetingsError>;
+    ) -> Result<ListMeetingsResponse, RusotoError<ListMeetingsError>>;
 
     /// <p>Lists the phone number orders for the administrator's Amazon Chime account.</p>
-    fn list_phone_number_orders(
+    async fn list_phone_number_orders(
         &self,
         input: ListPhoneNumberOrdersRequest,
-    ) -> RusotoFuture<ListPhoneNumberOrdersResponse, ListPhoneNumberOrdersError>;
+    ) -> Result<ListPhoneNumberOrdersResponse, RusotoError<ListPhoneNumberOrdersError>>;
 
     /// <p>Lists the phone numbers for the specified Amazon Chime account, Amazon Chime user, Amazon Chime Voice Connector, or Amazon Chime Voice Connector group.</p>
-    fn list_phone_numbers(
+    async fn list_phone_numbers(
         &self,
         input: ListPhoneNumbersRequest,
-    ) -> RusotoFuture<ListPhoneNumbersResponse, ListPhoneNumbersError>;
+    ) -> Result<ListPhoneNumbersResponse, RusotoError<ListPhoneNumbersError>>;
 
-    /// <p>Lists the membership details for the specified room, such as member IDs, member email addresses, and member names.</p>
-    fn list_room_memberships(
+    /// <p>Lists the membership details for the specified room, such as the members' IDs, email addresses, and names.</p>
+    async fn list_room_memberships(
         &self,
         input: ListRoomMembershipsRequest,
-    ) -> RusotoFuture<ListRoomMembershipsResponse, ListRoomMembershipsError>;
+    ) -> Result<ListRoomMembershipsResponse, RusotoError<ListRoomMembershipsError>>;
 
     /// <p>Lists the room details for the specified Amazon Chime account. Optionally, filter the results by a member ID (user ID or bot ID) to see a list of rooms that the member belongs to.</p>
-    fn list_rooms(
+    async fn list_rooms(
         &self,
         input: ListRoomsRequest,
-    ) -> RusotoFuture<ListRoomsResponse, ListRoomsError>;
+    ) -> Result<ListRoomsResponse, RusotoError<ListRoomsError>>;
 
     /// <p>Lists the users that belong to the specified Amazon Chime account. You can specify an email address to list only the user that the email address belongs to.</p>
-    fn list_users(
+    async fn list_users(
         &self,
         input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError>;
+    ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
 
     /// <p>Lists the Amazon Chime Voice Connector groups for the administrator's AWS account.</p>
-    fn list_voice_connector_groups(
+    async fn list_voice_connector_groups(
         &self,
         input: ListVoiceConnectorGroupsRequest,
-    ) -> RusotoFuture<ListVoiceConnectorGroupsResponse, ListVoiceConnectorGroupsError>;
+    ) -> Result<ListVoiceConnectorGroupsResponse, RusotoError<ListVoiceConnectorGroupsError>>;
 
     /// <p>Lists the SIP credentials for the specified Amazon Chime Voice Connector.</p>
-    fn list_voice_connector_termination_credentials(
+    async fn list_voice_connector_termination_credentials(
         &self,
         input: ListVoiceConnectorTerminationCredentialsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListVoiceConnectorTerminationCredentialsResponse,
-        ListVoiceConnectorTerminationCredentialsError,
+        RusotoError<ListVoiceConnectorTerminationCredentialsError>,
     >;
 
     /// <p>Lists the Amazon Chime Voice Connectors for the administrator's AWS account.</p>
-    fn list_voice_connectors(
+    async fn list_voice_connectors(
         &self,
         input: ListVoiceConnectorsRequest,
-    ) -> RusotoFuture<ListVoiceConnectorsResponse, ListVoiceConnectorsError>;
+    ) -> Result<ListVoiceConnectorsResponse, RusotoError<ListVoiceConnectorsError>>;
 
     /// <p>Logs out the specified user from all of the devices they are currently logged into.</p>
-    fn logout_user(
+    async fn logout_user(
         &self,
         input: LogoutUserRequest,
-    ) -> RusotoFuture<LogoutUserResponse, LogoutUserError>;
+    ) -> Result<LogoutUserResponse, RusotoError<LogoutUserError>>;
 
     /// <p>Creates an events configuration that allows a bot to receive outgoing events sent by Amazon Chime. Choose either an HTTPS endpoint or a Lambda function ARN. For more information, see <a>Bot</a>.</p>
-    fn put_events_configuration(
+    async fn put_events_configuration(
         &self,
         input: PutEventsConfigurationRequest,
-    ) -> RusotoFuture<PutEventsConfigurationResponse, PutEventsConfigurationError>;
+    ) -> Result<PutEventsConfigurationResponse, RusotoError<PutEventsConfigurationError>>;
 
     /// <p>Adds a logging configuration for the specified Amazon Chime Voice Connector. The logging configuration specifies whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
-    fn put_voice_connector_logging_configuration(
+    async fn put_voice_connector_logging_configuration(
         &self,
         input: PutVoiceConnectorLoggingConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         PutVoiceConnectorLoggingConfigurationResponse,
-        PutVoiceConnectorLoggingConfigurationError,
+        RusotoError<PutVoiceConnectorLoggingConfigurationError>,
     >;
 
     /// <p>Adds origination settings for the specified Amazon Chime Voice Connector.</p>
-    fn put_voice_connector_origination(
+    async fn put_voice_connector_origination(
         &self,
         input: PutVoiceConnectorOriginationRequest,
-    ) -> RusotoFuture<PutVoiceConnectorOriginationResponse, PutVoiceConnectorOriginationError>;
+    ) -> Result<PutVoiceConnectorOriginationResponse, RusotoError<PutVoiceConnectorOriginationError>>;
 
     /// <p>Adds a streaming configuration for the specified Amazon Chime Voice Connector. The streaming configuration specifies whether media streaming is enabled for sending to Amazon Kinesis. It also sets the retention period, in hours, for the Amazon Kinesis data.</p>
-    fn put_voice_connector_streaming_configuration(
+    async fn put_voice_connector_streaming_configuration(
         &self,
         input: PutVoiceConnectorStreamingConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         PutVoiceConnectorStreamingConfigurationResponse,
-        PutVoiceConnectorStreamingConfigurationError,
+        RusotoError<PutVoiceConnectorStreamingConfigurationError>,
     >;
 
     /// <p>Adds termination settings for the specified Amazon Chime Voice Connector.</p>
-    fn put_voice_connector_termination(
+    async fn put_voice_connector_termination(
         &self,
         input: PutVoiceConnectorTerminationRequest,
-    ) -> RusotoFuture<PutVoiceConnectorTerminationResponse, PutVoiceConnectorTerminationError>;
+    ) -> Result<PutVoiceConnectorTerminationResponse, RusotoError<PutVoiceConnectorTerminationError>>;
 
     /// <p>Adds termination SIP credentials for the specified Amazon Chime Voice Connector.</p>
-    fn put_voice_connector_termination_credentials(
+    async fn put_voice_connector_termination_credentials(
         &self,
         input: PutVoiceConnectorTerminationCredentialsRequest,
-    ) -> RusotoFuture<(), PutVoiceConnectorTerminationCredentialsError>;
+    ) -> Result<(), RusotoError<PutVoiceConnectorTerminationCredentialsError>>;
 
     /// <p>Regenerates the security token for a bot.</p>
-    fn regenerate_security_token(
+    async fn regenerate_security_token(
         &self,
         input: RegenerateSecurityTokenRequest,
-    ) -> RusotoFuture<RegenerateSecurityTokenResponse, RegenerateSecurityTokenError>;
+    ) -> Result<RegenerateSecurityTokenResponse, RusotoError<RegenerateSecurityTokenError>>;
 
     /// <p>Resets the personal meeting PIN for the specified user on an Amazon Chime account. Returns the <a>User</a> object with the updated personal meeting PIN.</p>
-    fn reset_personal_pin(
+    async fn reset_personal_pin(
         &self,
         input: ResetPersonalPINRequest,
-    ) -> RusotoFuture<ResetPersonalPINResponse, ResetPersonalPINError>;
+    ) -> Result<ResetPersonalPINResponse, RusotoError<ResetPersonalPINError>>;
 
     /// <p>Moves a phone number from the <b>Deletion queue</b> back into the phone number <b>Inventory</b>.</p>
-    fn restore_phone_number(
+    async fn restore_phone_number(
         &self,
         input: RestorePhoneNumberRequest,
-    ) -> RusotoFuture<RestorePhoneNumberResponse, RestorePhoneNumberError>;
+    ) -> Result<RestorePhoneNumberResponse, RusotoError<RestorePhoneNumberError>>;
 
     /// <p>Searches phone numbers that can be ordered.</p>
-    fn search_available_phone_numbers(
+    async fn search_available_phone_numbers(
         &self,
         input: SearchAvailablePhoneNumbersRequest,
-    ) -> RusotoFuture<SearchAvailablePhoneNumbersResponse, SearchAvailablePhoneNumbersError>;
+    ) -> Result<SearchAvailablePhoneNumbersResponse, RusotoError<SearchAvailablePhoneNumbersError>>;
 
     /// <p>Updates account details for the specified Amazon Chime account. Currently, only account name updates are supported for this action.</p>
-    fn update_account(
+    async fn update_account(
         &self,
         input: UpdateAccountRequest,
-    ) -> RusotoFuture<UpdateAccountResponse, UpdateAccountError>;
+    ) -> Result<UpdateAccountResponse, RusotoError<UpdateAccountError>>;
 
     /// <p>Updates the settings for the specified Amazon Chime account. You can update settings for remote control of shared screens, or for the dial-out option. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>.</p>
-    fn update_account_settings(
+    async fn update_account_settings(
         &self,
         input: UpdateAccountSettingsRequest,
-    ) -> RusotoFuture<UpdateAccountSettingsResponse, UpdateAccountSettingsError>;
+    ) -> Result<UpdateAccountSettingsResponse, RusotoError<UpdateAccountSettingsError>>;
 
     /// <p>Updates the status of the specified bot, such as starting or stopping the bot from running in your Amazon Chime Enterprise account.</p>
-    fn update_bot(
+    async fn update_bot(
         &self,
         input: UpdateBotRequest,
-    ) -> RusotoFuture<UpdateBotResponse, UpdateBotError>;
+    ) -> Result<UpdateBotResponse, RusotoError<UpdateBotError>>;
 
     /// <p>Updates global settings for the administrator's AWS account, such as Amazon Chime Business Calling and Amazon Chime Voice Connector settings.</p>
-    fn update_global_settings(
+    async fn update_global_settings(
         &self,
         input: UpdateGlobalSettingsRequest,
-    ) -> RusotoFuture<(), UpdateGlobalSettingsError>;
+    ) -> Result<(), RusotoError<UpdateGlobalSettingsError>>;
 
     /// <p>Updates phone number details, such as product type or calling name, for the specified phone number ID. You can update one phone number detail at a time. For example, you can update either the product type or the calling name in one action.</p> <p>For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
-    fn update_phone_number(
+    async fn update_phone_number(
         &self,
         input: UpdatePhoneNumberRequest,
-    ) -> RusotoFuture<UpdatePhoneNumberResponse, UpdatePhoneNumberError>;
+    ) -> Result<UpdatePhoneNumberResponse, RusotoError<UpdatePhoneNumberError>>;
 
     /// <p>Updates the phone number settings for the administrator's AWS account, such as the default outbound calling name. You can update the default outbound calling name once every seven days. Outbound calling names can take up to 72 hours to update.</p>
-    fn update_phone_number_settings(
+    async fn update_phone_number_settings(
         &self,
         input: UpdatePhoneNumberSettingsRequest,
-    ) -> RusotoFuture<(), UpdatePhoneNumberSettingsError>;
+    ) -> Result<(), RusotoError<UpdatePhoneNumberSettingsError>>;
 
     /// <p>Updates room details, such as the room name.</p>
-    fn update_room(
+    async fn update_room(
         &self,
         input: UpdateRoomRequest,
-    ) -> RusotoFuture<UpdateRoomResponse, UpdateRoomError>;
+    ) -> Result<UpdateRoomResponse, RusotoError<UpdateRoomError>>;
 
-    /// <p>Updates room membership details, such as member role. The member role designates whether the member is a chat room administrator or a general chat room member. Member role can only be updated for user IDs.</p>
-    fn update_room_membership(
+    /// <p>Updates room membership details, such as the member role. The member role designates whether the member is a chat room administrator or a general chat room member. The member role can be updated only for user IDs.</p>
+    async fn update_room_membership(
         &self,
         input: UpdateRoomMembershipRequest,
-    ) -> RusotoFuture<UpdateRoomMembershipResponse, UpdateRoomMembershipError>;
+    ) -> Result<UpdateRoomMembershipResponse, RusotoError<UpdateRoomMembershipError>>;
 
     /// <p>Updates user details for a specified user ID. Currently, only <code>LicenseType</code> updates are supported for this action.</p>
-    fn update_user(
+    async fn update_user(
         &self,
         input: UpdateUserRequest,
-    ) -> RusotoFuture<UpdateUserResponse, UpdateUserError>;
+    ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>>;
 
     /// <p>Updates the settings for the specified user, such as phone number settings.</p>
-    fn update_user_settings(
+    async fn update_user_settings(
         &self,
         input: UpdateUserSettingsRequest,
-    ) -> RusotoFuture<(), UpdateUserSettingsError>;
+    ) -> Result<(), RusotoError<UpdateUserSettingsError>>;
 
     /// <p>Updates details for the specified Amazon Chime Voice Connector.</p>
-    fn update_voice_connector(
+    async fn update_voice_connector(
         &self,
         input: UpdateVoiceConnectorRequest,
-    ) -> RusotoFuture<UpdateVoiceConnectorResponse, UpdateVoiceConnectorError>;
+    ) -> Result<UpdateVoiceConnectorResponse, RusotoError<UpdateVoiceConnectorError>>;
 
     /// <p>Updates details for the specified Amazon Chime Voice Connector group, such as the name and Amazon Chime Voice Connector priority ranking.</p>
-    fn update_voice_connector_group(
+    async fn update_voice_connector_group(
         &self,
         input: UpdateVoiceConnectorGroupRequest,
-    ) -> RusotoFuture<UpdateVoiceConnectorGroupResponse, UpdateVoiceConnectorGroupError>;
+    ) -> Result<UpdateVoiceConnectorGroupResponse, RusotoError<UpdateVoiceConnectorGroupError>>;
 }
 /// A client for the Amazon Chime API.
 #[derive(Clone)]
@@ -9956,7 +10579,10 @@ impl ChimeClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ChimeClient {
-        Self::new_with_client(Client::shared(), region)
+        ChimeClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -9966,14 +10592,12 @@ impl ChimeClient {
     ) -> ChimeClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        ChimeClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> ChimeClient {
@@ -9981,20 +10605,14 @@ impl ChimeClient {
     }
 }
 
-impl fmt::Debug for ChimeClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("ChimeClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Chime for ChimeClient {
     /// <p>Associates a phone number with the specified Amazon Chime user.</p>
-    fn associate_phone_number_with_user(
+    async fn associate_phone_number_with_user(
         &self,
         input: AssociatePhoneNumberWithUserRequest,
-    ) -> RusotoFuture<AssociatePhoneNumberWithUserResponse, AssociatePhoneNumberWithUserError> {
+    ) -> Result<AssociatePhoneNumberWithUserResponse, RusotoError<AssociatePhoneNumberWithUserError>>
+    {
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}",
             account_id = input.account_id,
@@ -10011,29 +10629,30 @@ impl Chime for ChimeClient {
         params.put("operation", "associate-phone-number");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociatePhoneNumberWithUserResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociatePhoneNumberWithUserResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociatePhoneNumberWithUserError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociatePhoneNumberWithUserError::from_response(response))
+        }
     }
 
     /// <p>Associates phone numbers with the specified Amazon Chime Voice Connector.</p>
-    fn associate_phone_numbers_with_voice_connector(
+    async fn associate_phone_numbers_with_voice_connector(
         &self,
         input: AssociatePhoneNumbersWithVoiceConnectorRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociatePhoneNumbersWithVoiceConnectorResponse,
-        AssociatePhoneNumbersWithVoiceConnectorError,
+        RusotoError<AssociatePhoneNumbersWithVoiceConnectorError>,
     > {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}",
@@ -10050,32 +10669,32 @@ impl Chime for ChimeClient {
         params.put("operation", "associate-phone-numbers");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociatePhoneNumbersWithVoiceConnectorResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociatePhoneNumbersWithVoiceConnectorResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociatePhoneNumbersWithVoiceConnectorError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociatePhoneNumbersWithVoiceConnectorError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Associates phone numbers with the specified Amazon Chime Voice Connector group.</p>
-    fn associate_phone_numbers_with_voice_connector_group(
+    async fn associate_phone_numbers_with_voice_connector_group(
         &self,
         input: AssociatePhoneNumbersWithVoiceConnectorGroupRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociatePhoneNumbersWithVoiceConnectorGroupResponse,
-        AssociatePhoneNumbersWithVoiceConnectorGroupError,
+        RusotoError<AssociatePhoneNumbersWithVoiceConnectorGroupError>,
     > {
         let request_uri = format!(
             "/voice-connector-groups/{voice_connector_group_id}",
@@ -10092,28 +10711,66 @@ impl Chime for ChimeClient {
         params.put("operation", "associate-phone-numbers");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociatePhoneNumbersWithVoiceConnectorGroupResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociatePhoneNumbersWithVoiceConnectorGroupResponse, _>(
+            )?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociatePhoneNumbersWithVoiceConnectorGroupError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociatePhoneNumbersWithVoiceConnectorGroupError::from_response(response))
+        }
+    }
+
+    /// <p>Associates the specified sign-in delegate groups with the specified Amazon Chime account.</p>
+    async fn associate_signin_delegate_groups_with_account(
+        &self,
+        input: AssociateSigninDelegateGroupsWithAccountRequest,
+    ) -> Result<
+        AssociateSigninDelegateGroupsWithAccountResponse,
+        RusotoError<AssociateSigninDelegateGroupsWithAccountError>,
+    > {
+        let request_uri = format!("/accounts/{account_id}", account_id = input.account_id);
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "associate-signin-delegate-groups");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateSigninDelegateGroupsWithAccountResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateSigninDelegateGroupsWithAccountError::from_response(response))
+        }
     }
 
     /// <p>Creates up to 100 new attendees for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
-    fn batch_create_attendee(
+    async fn batch_create_attendee(
         &self,
         input: BatchCreateAttendeeRequest,
-    ) -> RusotoFuture<BatchCreateAttendeeResponse, BatchCreateAttendeeError> {
+    ) -> Result<BatchCreateAttendeeResponse, RusotoError<BatchCreateAttendeeError>> {
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees",
             meeting_id = input.meeting_id
@@ -10129,29 +10786,29 @@ impl Chime for ChimeClient {
         params.put("operation", "batch-create");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchCreateAttendeeResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchCreateAttendeeResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(BatchCreateAttendeeError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchCreateAttendeeError::from_response(response))
+        }
     }
 
     /// <p>Adds up to 50 members to a chat room. Members can be either users or bots. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
-    fn batch_create_room_membership(
+    async fn batch_create_room_membership(
         &self,
         input: BatchCreateRoomMembershipRequest,
-    ) -> RusotoFuture<BatchCreateRoomMembershipResponse, BatchCreateRoomMembershipError> {
+    ) -> Result<BatchCreateRoomMembershipResponse, RusotoError<BatchCreateRoomMembershipError>>
+    {
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}/memberships",
             account_id = input.account_id,
@@ -10168,27 +10825,28 @@ impl Chime for ChimeClient {
         params.put("operation", "batch-create");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchCreateRoomMembershipResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchCreateRoomMembershipResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchCreateRoomMembershipError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchCreateRoomMembershipError::from_response(response))
+        }
     }
 
     /// <p>Moves phone numbers into the <b>Deletion queue</b>. Phone numbers must be disassociated from any users or Amazon Chime Voice Connectors before they can be deleted.</p> <p>Phone numbers remain in the <b>Deletion queue</b> for 7 days before they are deleted permanently.</p>
-    fn batch_delete_phone_number(
+    async fn batch_delete_phone_number(
         &self,
         input: BatchDeletePhoneNumberRequest,
-    ) -> RusotoFuture<BatchDeletePhoneNumberResponse, BatchDeletePhoneNumberError> {
+    ) -> Result<BatchDeletePhoneNumberResponse, RusotoError<BatchDeletePhoneNumberError>> {
         let request_uri = "/phone-numbers";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -10201,29 +10859,28 @@ impl Chime for ChimeClient {
         params.put("operation", "batch-delete");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchDeletePhoneNumberResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchDeletePhoneNumberResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(BatchDeletePhoneNumberError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchDeletePhoneNumberError::from_response(response))
+        }
     }
 
-    /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are dissasociated from the account, but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action. </p> <p>To sign out users without suspending them, use the <a>LogoutUser</a> action.</p>
-    fn batch_suspend_user(
+    /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are disassociated from the account, but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action. </p> <p>To sign out users without suspending them, use the <a>LogoutUser</a> action.</p>
+    async fn batch_suspend_user(
         &self,
         input: BatchSuspendUserRequest,
-    ) -> RusotoFuture<BatchSuspendUserResponse, BatchSuspendUserError> {
+    ) -> Result<BatchSuspendUserResponse, RusotoError<BatchSuspendUserError>> {
         let request_uri = format!(
             "/accounts/{account_id}/users",
             account_id = input.account_id
@@ -10239,30 +10896,28 @@ impl Chime for ChimeClient {
         params.put("operation", "suspend");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchSuspendUserResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchSuspendUserResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(BatchSuspendUserError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchSuspendUserError::from_response(response))
+        }
     }
 
     /// <p>Removes the suspension from up to 50 previously suspended users for the specified Amazon Chime <code>EnterpriseLWA</code> account. Only users on <code>EnterpriseLWA</code> accounts can be unsuspended using this action. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Previously suspended users who are unsuspended using this action are returned to <code>Registered</code> status. Users who are not previously suspended are ignored.</p>
-    fn batch_unsuspend_user(
+    async fn batch_unsuspend_user(
         &self,
         input: BatchUnsuspendUserRequest,
-    ) -> RusotoFuture<BatchUnsuspendUserResponse, BatchUnsuspendUserError> {
+    ) -> Result<BatchUnsuspendUserResponse, RusotoError<BatchUnsuspendUserError>> {
         let request_uri = format!(
             "/accounts/{account_id}/users",
             account_id = input.account_id
@@ -10278,30 +10933,28 @@ impl Chime for ChimeClient {
         params.put("operation", "unsuspend");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchUnsuspendUserResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchUnsuspendUserResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(BatchUnsuspendUserError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchUnsuspendUserError::from_response(response))
+        }
     }
 
     /// <p>Updates phone number product types or calling names. You can update one attribute at a time for each <code>UpdatePhoneNumberRequestItem</code>. For example, you can update either the product type or the calling name.</p> <p>For product types, choose from Amazon Chime Business Calling and Amazon Chime Voice Connector. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
-    fn batch_update_phone_number(
+    async fn batch_update_phone_number(
         &self,
         input: BatchUpdatePhoneNumberRequest,
-    ) -> RusotoFuture<BatchUpdatePhoneNumberResponse, BatchUpdatePhoneNumberError> {
+    ) -> Result<BatchUpdatePhoneNumberResponse, RusotoError<BatchUpdatePhoneNumberError>> {
         let request_uri = "/phone-numbers";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -10314,29 +10967,28 @@ impl Chime for ChimeClient {
         params.put("operation", "batch-update");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchUpdatePhoneNumberResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchUpdatePhoneNumberResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(BatchUpdatePhoneNumberError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchUpdatePhoneNumberError::from_response(response))
+        }
     }
 
     /// <p>Updates user details within the <a>UpdateUserRequestItem</a> object for up to 20 users for the specified Amazon Chime account. Currently, only <code>LicenseType</code> updates are supported for this action.</p>
-    fn batch_update_user(
+    async fn batch_update_user(
         &self,
         input: BatchUpdateUserRequest,
-    ) -> RusotoFuture<BatchUpdateUserResponse, BatchUpdateUserError> {
+    ) -> Result<BatchUpdateUserResponse, RusotoError<BatchUpdateUserError>> {
         let request_uri = format!(
             "/accounts/{account_id}/users",
             account_id = input.account_id
@@ -10348,30 +11000,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchUpdateUserResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchUpdateUserResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(BatchUpdateUserError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchUpdateUserError::from_response(response))
+        }
     }
 
     /// <p>Creates an Amazon Chime account under the administrator's AWS account. Only <code>Team</code> account types are currently supported for this action. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p>
-    fn create_account(
+    async fn create_account(
         &self,
         input: CreateAccountRequest,
-    ) -> RusotoFuture<CreateAccountResponse, CreateAccountError> {
+    ) -> Result<CreateAccountResponse, RusotoError<CreateAccountError>> {
         let request_uri = "/accounts";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -10380,30 +11030,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateAccountResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAccountResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateAccountError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAccountError::from_response(response))
+        }
     }
 
     /// <p>Creates a new attendee for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn create_attendee(
+    async fn create_attendee(
         &self,
         input: CreateAttendeeRequest,
-    ) -> RusotoFuture<CreateAttendeeResponse, CreateAttendeeError> {
+    ) -> Result<CreateAttendeeResponse, RusotoError<CreateAttendeeError>> {
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees",
             meeting_id = input.meeting_id
@@ -10415,30 +11063,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateAttendeeResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAttendeeResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateAttendeeError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAttendeeError::from_response(response))
+        }
     }
 
     /// <p>Creates a bot for an Amazon Chime Enterprise account.</p>
-    fn create_bot(
+    async fn create_bot(
         &self,
         input: CreateBotRequest,
-    ) -> RusotoFuture<CreateBotResponse, CreateBotError> {
+    ) -> Result<CreateBotResponse, RusotoError<CreateBotError>> {
         let request_uri = format!("/accounts/{account_id}/bots", account_id = input.account_id);
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -10447,30 +11093,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateBotResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateBotResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateBotError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateBotError::from_response(response))
+        }
     }
 
     /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn create_meeting(
+    async fn create_meeting(
         &self,
         input: CreateMeetingRequest,
-    ) -> RusotoFuture<CreateMeetingResponse, CreateMeetingError> {
+    ) -> Result<CreateMeetingResponse, RusotoError<CreateMeetingError>> {
         let request_uri = "/meetings";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -10479,30 +11123,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateMeetingResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateMeetingResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateMeetingError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateMeetingError::from_response(response))
+        }
     }
 
     /// <p>Creates an order for phone numbers to be provisioned. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p>
-    fn create_phone_number_order(
+    async fn create_phone_number_order(
         &self,
         input: CreatePhoneNumberOrderRequest,
-    ) -> RusotoFuture<CreatePhoneNumberOrderResponse, CreatePhoneNumberOrderError> {
+    ) -> Result<CreatePhoneNumberOrderResponse, RusotoError<CreatePhoneNumberOrderError>> {
         let request_uri = "/phone-number-orders";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -10511,29 +11153,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreatePhoneNumberOrderResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreatePhoneNumberOrderResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreatePhoneNumberOrderError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreatePhoneNumberOrderError::from_response(response))
+        }
     }
 
     /// <p>Creates a chat room for the specified Amazon Chime account.</p>
-    fn create_room(
+    async fn create_room(
         &self,
         input: CreateRoomRequest,
-    ) -> RusotoFuture<CreateRoomResponse, CreateRoomError> {
+    ) -> Result<CreateRoomResponse, RusotoError<CreateRoomError>> {
         let request_uri = format!(
             "/accounts/{account_id}/rooms",
             account_id = input.account_id
@@ -10545,30 +11186,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateRoomResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateRoomResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateRoomError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateRoomError::from_response(response))
+        }
     }
 
     /// <p>Adds a member to a chat room. A member can be either a user or a bot. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
-    fn create_room_membership(
+    async fn create_room_membership(
         &self,
         input: CreateRoomMembershipRequest,
-    ) -> RusotoFuture<CreateRoomMembershipResponse, CreateRoomMembershipError> {
+    ) -> Result<CreateRoomMembershipResponse, RusotoError<CreateRoomMembershipError>> {
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}/memberships",
             account_id = input.account_id,
@@ -10581,29 +11220,65 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateRoomMembershipResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateRoomMembershipResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateRoomMembershipError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateRoomMembershipError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a user under the specified Amazon Chime account.</p>
+    async fn create_user(
+        &self,
+        input: CreateUserRequest,
+    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
+        let request_uri = format!(
+            "/accounts/{account_id}/users",
+            account_id = input.account_id
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "create");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateUserResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateUserError::from_response(response))
+        }
     }
 
     /// <p>Creates an Amazon Chime Voice Connector under the administrator's AWS account. You can choose to create an Amazon Chime Voice Connector in a specific AWS Region.</p> <p>Enabling <a>CreateVoiceConnectorRequest$RequireEncryption</a> configures your Amazon Chime Voice Connector to use TLS transport for SIP signaling and Secure RTP (SRTP) for media. Inbound calls use TLS transport, and unencrypted outbound calls are blocked.</p>
-    fn create_voice_connector(
+    async fn create_voice_connector(
         &self,
         input: CreateVoiceConnectorRequest,
-    ) -> RusotoFuture<CreateVoiceConnectorResponse, CreateVoiceConnectorError> {
+    ) -> Result<CreateVoiceConnectorResponse, RusotoError<CreateVoiceConnectorError>> {
         let request_uri = "/voice-connectors";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -10612,29 +11287,29 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateVoiceConnectorResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateVoiceConnectorResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateVoiceConnectorError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateVoiceConnectorError::from_response(response))
+        }
     }
 
     /// <p>Creates an Amazon Chime Voice Connector group under the administrator's AWS account. You can associate up to three existing Amazon Chime Voice Connectors with the Amazon Chime Voice Connector group by including <code>VoiceConnectorItems</code> in the request.</p> <p>You can include Amazon Chime Voice Connectors from different AWS Regions in your group. This creates a fault tolerant mechanism for fallback in case of availability events.</p>
-    fn create_voice_connector_group(
+    async fn create_voice_connector_group(
         &self,
         input: CreateVoiceConnectorGroupRequest,
-    ) -> RusotoFuture<CreateVoiceConnectorGroupResponse, CreateVoiceConnectorGroupError> {
+    ) -> Result<CreateVoiceConnectorGroupResponse, RusotoError<CreateVoiceConnectorGroupError>>
+    {
         let request_uri = "/voice-connector-groups";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -10643,56 +11318,55 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateVoiceConnectorGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateVoiceConnectorGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateVoiceConnectorGroupError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateVoiceConnectorGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified Amazon Chime account. You must suspend all users before deleting a <code>Team</code> account. You can use the <a>BatchSuspendUser</a> action to do so.</p> <p>For <code>EnterpriseLWA</code> and <code>EnterpriseAD</code> accounts, you must release the claimed domains for your Amazon Chime account before deletion. As soon as you release the domain, all users under that account are suspended.</p> <p>Deleted accounts appear in your <code>Disabled</code> accounts list for 90 days. To restore a deleted account from your <code>Disabled</code> accounts list, you must contact AWS Support.</p> <p>After 90 days, deleted accounts are permanently removed from your <code>Disabled</code> accounts list.</p>
-    fn delete_account(
+    async fn delete_account(
         &self,
         input: DeleteAccountRequest,
-    ) -> RusotoFuture<DeleteAccountResponse, DeleteAccountError> {
+    ) -> Result<DeleteAccountResponse, RusotoError<DeleteAccountError>> {
         let request_uri = format!("/accounts/{account_id}", account_id = input.account_id);
 
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteAccountResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteAccountResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteAccountError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAccountError::from_response(response))
+        }
     }
 
     /// <p>Deletes an attendee from the specified Amazon Chime SDK meeting and deletes their <code>JoinToken</code>. Attendees are automatically deleted when a Amazon Chime SDK meeting is deleted. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn delete_attendee(
+    async fn delete_attendee(
         &self,
         input: DeleteAttendeeRequest,
-    ) -> RusotoFuture<(), DeleteAttendeeError> {
+    ) -> Result<(), RusotoError<DeleteAttendeeError>> {
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees/{attendee_id}",
             attendee_id = input.attendee_id,
@@ -10702,29 +11376,27 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteAttendeeError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAttendeeError::from_response(response))
+        }
     }
 
     /// <p>Deletes the events configuration that allows a bot to receive outgoing events.</p>
-    fn delete_events_configuration(
+    async fn delete_events_configuration(
         &self,
         input: DeleteEventsConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteEventsConfigurationError> {
+    ) -> Result<(), RusotoError<DeleteEventsConfigurationError>> {
         let request_uri = format!(
             "/accounts/{account_id}/bots/{bot_id}/events-configuration",
             account_id = input.account_id,
@@ -10734,51 +11406,53 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteEventsConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteEventsConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified Amazon Chime SDK meeting. When a meeting is deleted, its attendees are also deleted and clients can no longer join it. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn delete_meeting(&self, input: DeleteMeetingRequest) -> RusotoFuture<(), DeleteMeetingError> {
+    async fn delete_meeting(
+        &self,
+        input: DeleteMeetingRequest,
+    ) -> Result<(), RusotoError<DeleteMeetingError>> {
         let request_uri = format!("/meetings/{meeting_id}", meeting_id = input.meeting_id);
 
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteMeetingError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteMeetingError::from_response(response))
+        }
     }
 
     /// <p>Moves the specified phone number into the <b>Deletion queue</b>. A phone number must be disassociated from any users or Amazon Chime Voice Connectors before it can be deleted.</p> <p>Deleted phone numbers remain in the <b>Deletion queue</b> for 7 days before they are deleted permanently.</p>
-    fn delete_phone_number(
+    async fn delete_phone_number(
         &self,
         input: DeletePhoneNumberRequest,
-    ) -> RusotoFuture<(), DeletePhoneNumberError> {
+    ) -> Result<(), RusotoError<DeletePhoneNumberError>> {
         let request_uri = format!(
             "/phone-numbers/{phone_number_id}",
             phone_number_id = input.phone_number_id
@@ -10787,26 +11461,27 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeletePhoneNumberError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeletePhoneNumberError::from_response(response))
+        }
     }
 
     /// <p>Deletes a chat room.</p>
-    fn delete_room(&self, input: DeleteRoomRequest) -> RusotoFuture<(), DeleteRoomError> {
+    async fn delete_room(
+        &self,
+        input: DeleteRoomRequest,
+    ) -> Result<(), RusotoError<DeleteRoomError>> {
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}",
             account_id = input.account_id,
@@ -10816,29 +11491,27 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteRoomError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRoomError::from_response(response))
+        }
     }
 
     /// <p>Removes a member from a chat room.</p>
-    fn delete_room_membership(
+    async fn delete_room_membership(
         &self,
         input: DeleteRoomMembershipRequest,
-    ) -> RusotoFuture<(), DeleteRoomMembershipError> {
+    ) -> Result<(), RusotoError<DeleteRoomMembershipError>> {
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}/memberships/{member_id}",
             account_id = input.account_id,
@@ -10849,28 +11522,27 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteRoomMembershipError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRoomMembershipError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified Amazon Chime Voice Connector. Any phone numbers associated with the Amazon Chime Voice Connector must be disassociated from it before it can be deleted.</p>
-    fn delete_voice_connector(
+    async fn delete_voice_connector(
         &self,
         input: DeleteVoiceConnectorRequest,
-    ) -> RusotoFuture<(), DeleteVoiceConnectorError> {
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorError>> {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}",
             voice_connector_id = input.voice_connector_id
@@ -10879,28 +11551,27 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteVoiceConnectorError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVoiceConnectorError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified Amazon Chime Voice Connector group. Any <code>VoiceConnectorItems</code> and phone numbers associated with the group must be removed before it can be deleted.</p>
-    fn delete_voice_connector_group(
+    async fn delete_voice_connector_group(
         &self,
         input: DeleteVoiceConnectorGroupRequest,
-    ) -> RusotoFuture<(), DeleteVoiceConnectorGroupError> {
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorGroupError>> {
         let request_uri = format!(
             "/voice-connector-groups/{voice_connector_group_id}",
             voice_connector_group_id = input.voice_connector_group_id
@@ -10909,26 +11580,27 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVoiceConnectorGroupError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVoiceConnectorGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes the origination settings for the specified Amazon Chime Voice Connector.</p>
-    fn delete_voice_connector_origination(
+    async fn delete_voice_connector_origination(
         &self,
         input: DeleteVoiceConnectorOriginationRequest,
-    ) -> RusotoFuture<(), DeleteVoiceConnectorOriginationError> {
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorOriginationError>> {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/origination",
             voice_connector_id = input.voice_connector_id
@@ -10937,28 +11609,29 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVoiceConnectorOriginationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVoiceConnectorOriginationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Deletes the streaming configuration for the specified Amazon Chime Voice Connector.</p>
-    fn delete_voice_connector_streaming_configuration(
+    async fn delete_voice_connector_streaming_configuration(
         &self,
         input: DeleteVoiceConnectorStreamingConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteVoiceConnectorStreamingConfigurationError> {
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorStreamingConfigurationError>> {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/streaming-configuration",
             voice_connector_id = input.voice_connector_id
@@ -10967,26 +11640,27 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVoiceConnectorStreamingConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVoiceConnectorStreamingConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Deletes the termination settings for the specified Amazon Chime Voice Connector.</p>
-    fn delete_voice_connector_termination(
+    async fn delete_voice_connector_termination(
         &self,
         input: DeleteVoiceConnectorTerminationRequest,
-    ) -> RusotoFuture<(), DeleteVoiceConnectorTerminationError> {
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorTerminationError>> {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination",
             voice_connector_id = input.voice_connector_id
@@ -10995,28 +11669,29 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVoiceConnectorTerminationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVoiceConnectorTerminationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Deletes the specified SIP credentials used by your equipment to authenticate during call termination.</p>
-    fn delete_voice_connector_termination_credentials(
+    async fn delete_voice_connector_termination_credentials(
         &self,
         input: DeleteVoiceConnectorTerminationCredentialsRequest,
-    ) -> RusotoFuture<(), DeleteVoiceConnectorTerminationCredentialsError> {
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorTerminationCredentialsError>> {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination/credentials",
             voice_connector_id = input.voice_connector_id
@@ -11032,27 +11707,30 @@ impl Chime for ChimeClient {
         params.put("operation", "delete");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVoiceConnectorTerminationCredentialsError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVoiceConnectorTerminationCredentialsError::from_response(response))
+        }
     }
 
     /// <p>Disassociates the primary provisioned phone number from the specified Amazon Chime user.</p>
-    fn disassociate_phone_number_from_user(
+    async fn disassociate_phone_number_from_user(
         &self,
         input: DisassociatePhoneNumberFromUserRequest,
-    ) -> RusotoFuture<DisassociatePhoneNumberFromUserResponse, DisassociatePhoneNumberFromUserError>
-    {
+    ) -> Result<
+        DisassociatePhoneNumberFromUserResponse,
+        RusotoError<DisassociatePhoneNumberFromUserError>,
+    > {
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}",
             account_id = input.account_id,
@@ -11066,31 +11744,32 @@ impl Chime for ChimeClient {
         params.put("operation", "disassociate-phone-number");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociatePhoneNumberFromUserResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociatePhoneNumberFromUserResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociatePhoneNumberFromUserError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociatePhoneNumberFromUserError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Disassociates the specified phone numbers from the specified Amazon Chime Voice Connector.</p>
-    fn disassociate_phone_numbers_from_voice_connector(
+    async fn disassociate_phone_numbers_from_voice_connector(
         &self,
         input: DisassociatePhoneNumbersFromVoiceConnectorRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociatePhoneNumbersFromVoiceConnectorResponse,
-        DisassociatePhoneNumbersFromVoiceConnectorError,
+        RusotoError<DisassociatePhoneNumbersFromVoiceConnectorError>,
     > {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}",
@@ -11107,30 +11786,30 @@ impl Chime for ChimeClient {
         params.put("operation", "disassociate-phone-numbers");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociatePhoneNumbersFromVoiceConnectorResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociatePhoneNumbersFromVoiceConnectorResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociatePhoneNumbersFromVoiceConnectorError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociatePhoneNumbersFromVoiceConnectorError::from_response(response))
+        }
     }
 
     /// <p>Disassociates the specified phone numbers from the specified Amazon Chime Voice Connector group.</p>
-    fn disassociate_phone_numbers_from_voice_connector_group(
+    async fn disassociate_phone_numbers_from_voice_connector_group(
         &self,
         input: DisassociatePhoneNumbersFromVoiceConnectorGroupRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociatePhoneNumbersFromVoiceConnectorGroupResponse,
-        DisassociatePhoneNumbersFromVoiceConnectorGroupError,
+        RusotoError<DisassociatePhoneNumbersFromVoiceConnectorGroupError>,
     > {
         let request_uri = format!(
             "/voice-connector-groups/{voice_connector_group_id}",
@@ -11147,61 +11826,93 @@ impl Chime for ChimeClient {
         params.put("operation", "disassociate-phone-numbers");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociatePhoneNumbersFromVoiceConnectorGroupResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociatePhoneNumbersFromVoiceConnectorGroupResponse, _>(
+            )?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(
-                        DisassociatePhoneNumbersFromVoiceConnectorGroupError::from_response(
-                            response,
-                        ),
-                    )
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociatePhoneNumbersFromVoiceConnectorGroupError::from_response(response))
+        }
+    }
+
+    /// <p>Disassociates the specified sign-in delegate groups from the specified Amazon Chime account.</p>
+    async fn disassociate_signin_delegate_groups_from_account(
+        &self,
+        input: DisassociateSigninDelegateGroupsFromAccountRequest,
+    ) -> Result<
+        DisassociateSigninDelegateGroupsFromAccountResponse,
+        RusotoError<DisassociateSigninDelegateGroupsFromAccountError>,
+    > {
+        let request_uri = format!("/accounts/{account_id}", account_id = input.account_id);
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "disassociate-signin-delegate-groups");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateSigninDelegateGroupsFromAccountResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateSigninDelegateGroupsFromAccountError::from_response(response))
+        }
     }
 
     /// <p>Retrieves details for the specified Amazon Chime account, such as account type and supported licenses.</p>
-    fn get_account(
+    async fn get_account(
         &self,
         input: GetAccountRequest,
-    ) -> RusotoFuture<GetAccountResponse, GetAccountError> {
+    ) -> Result<GetAccountResponse, RusotoError<GetAccountError>> {
         let request_uri = format!("/accounts/{account_id}", account_id = input.account_id);
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAccountResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAccountResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetAccountError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAccountError::from_response(response))
+        }
     }
 
     /// <p>Retrieves account settings for the specified Amazon Chime account ID, such as remote control and dial out settings. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>.</p>
-    fn get_account_settings(
+    async fn get_account_settings(
         &self,
         input: GetAccountSettingsRequest,
-    ) -> RusotoFuture<GetAccountSettingsResponse, GetAccountSettingsError> {
+    ) -> Result<GetAccountSettingsResponse, RusotoError<GetAccountSettingsError>> {
         let request_uri = format!(
             "/accounts/{account_id}/settings",
             account_id = input.account_id
@@ -11210,30 +11921,28 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAccountSettingsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAccountSettingsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetAccountSettingsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAccountSettingsError::from_response(response))
+        }
     }
 
     /// <p>Gets the Amazon Chime SDK attendee details for a specified meeting ID and attendee ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn get_attendee(
+    async fn get_attendee(
         &self,
         input: GetAttendeeRequest,
-    ) -> RusotoFuture<GetAttendeeResponse, GetAttendeeError> {
+    ) -> Result<GetAttendeeResponse, RusotoError<GetAttendeeError>> {
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees/{attendee_id}",
             attendee_id = input.attendee_id,
@@ -11243,27 +11952,28 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAttendeeResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAttendeeResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetAttendeeError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAttendeeError::from_response(response))
+        }
     }
 
     /// <p>Retrieves details for the specified bot, such as bot email address, bot type, status, and display name.</p>
-    fn get_bot(&self, input: GetBotRequest) -> RusotoFuture<GetBotResponse, GetBotError> {
+    async fn get_bot(
+        &self,
+        input: GetBotRequest,
+    ) -> Result<GetBotResponse, RusotoError<GetBotError>> {
         let request_uri = format!(
             "/accounts/{account_id}/bots/{bot_id}",
             account_id = input.account_id,
@@ -11273,30 +11983,28 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetBotResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<GetBotResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetBotError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetBotError::from_response(response))
+        }
     }
 
     /// <p>Gets details for an events configuration that allows a bot to receive outgoing events, such as an HTTPS endpoint or Lambda function ARN. </p>
-    fn get_events_configuration(
+    async fn get_events_configuration(
         &self,
         input: GetEventsConfigurationRequest,
-    ) -> RusotoFuture<GetEventsConfigurationResponse, GetEventsConfigurationError> {
+    ) -> Result<GetEventsConfigurationResponse, RusotoError<GetEventsConfigurationError>> {
         let request_uri = format!(
             "/accounts/{account_id}/bots/{bot_id}/events-configuration",
             account_id = input.account_id,
@@ -11306,86 +12014,81 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetEventsConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetEventsConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetEventsConfigurationError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetEventsConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Retrieves global settings for the administrator's AWS account, such as Amazon Chime Business Calling and Amazon Chime Voice Connector settings.</p>
-    fn get_global_settings(
+    async fn get_global_settings(
         &self,
-    ) -> RusotoFuture<GetGlobalSettingsResponse, GetGlobalSettingsError> {
+    ) -> Result<GetGlobalSettingsResponse, RusotoError<GetGlobalSettingsError>> {
         let request_uri = "/settings";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetGlobalSettingsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetGlobalSettingsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetGlobalSettingsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetGlobalSettingsError::from_response(response))
+        }
     }
 
     /// <p>Gets the Amazon Chime SDK meeting details for the specified meeting ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn get_meeting(
+    async fn get_meeting(
         &self,
         input: GetMeetingRequest,
-    ) -> RusotoFuture<GetMeetingResponse, GetMeetingError> {
+    ) -> Result<GetMeetingResponse, RusotoError<GetMeetingError>> {
         let request_uri = format!("/meetings/{meeting_id}", meeting_id = input.meeting_id);
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetMeetingResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetMeetingResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetMeetingError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetMeetingError::from_response(response))
+        }
     }
 
     /// <p>Retrieves details for the specified phone number ID, such as associations, capabilities, and product type.</p>
-    fn get_phone_number(
+    async fn get_phone_number(
         &self,
         input: GetPhoneNumberRequest,
-    ) -> RusotoFuture<GetPhoneNumberResponse, GetPhoneNumberError> {
+    ) -> Result<GetPhoneNumberResponse, RusotoError<GetPhoneNumberError>> {
         let request_uri = format!(
             "/phone-numbers/{phone_number_id}",
             phone_number_id = input.phone_number_id
@@ -11394,30 +12097,28 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPhoneNumberResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetPhoneNumberResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetPhoneNumberError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetPhoneNumberError::from_response(response))
+        }
     }
 
     /// <p>Retrieves details for the specified phone number order, such as order creation timestamp, phone numbers in E.164 format, product type, and order status.</p>
-    fn get_phone_number_order(
+    async fn get_phone_number_order(
         &self,
         input: GetPhoneNumberOrderRequest,
-    ) -> RusotoFuture<GetPhoneNumberOrderResponse, GetPhoneNumberOrderError> {
+    ) -> Result<GetPhoneNumberOrderResponse, RusotoError<GetPhoneNumberOrderError>> {
         let request_uri = format!(
             "/phone-number-orders/{phone_number_order_id}",
             phone_number_order_id = input.phone_number_order_id
@@ -11426,53 +12127,54 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPhoneNumberOrderResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetPhoneNumberOrderResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetPhoneNumberOrderError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetPhoneNumberOrderError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the phone number settings for the administrator's AWS account, such as the default outbound calling name.</p>
-    fn get_phone_number_settings(
+    async fn get_phone_number_settings(
         &self,
-    ) -> RusotoFuture<GetPhoneNumberSettingsResponse, GetPhoneNumberSettingsError> {
+    ) -> Result<GetPhoneNumberSettingsResponse, RusotoError<GetPhoneNumberSettingsError>> {
         let request_uri = "/settings/phone-number";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPhoneNumberSettingsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetPhoneNumberSettingsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetPhoneNumberSettingsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetPhoneNumberSettingsError::from_response(response))
+        }
     }
 
-    /// <p>Retrieves room details, such as name.</p>
-    fn get_room(&self, input: GetRoomRequest) -> RusotoFuture<GetRoomResponse, GetRoomError> {
+    /// <p>Retrieves room details, such as the room name.</p>
+    async fn get_room(
+        &self,
+        input: GetRoomRequest,
+    ) -> Result<GetRoomResponse, RusotoError<GetRoomError>> {
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}",
             account_id = input.account_id,
@@ -11482,27 +12184,28 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRoomResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<GetRoomResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetRoomError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetRoomError::from_response(response))
+        }
     }
 
     /// <p>Retrieves details for the specified user ID, such as primary email address, license type, and personal meeting PIN.</p> <p>To retrieve user details with an email address instead of a user ID, use the <a>ListUsers</a> action, and then filter by email address.</p>
-    fn get_user(&self, input: GetUserRequest) -> RusotoFuture<GetUserResponse, GetUserError> {
+    async fn get_user(
+        &self,
+        input: GetUserRequest,
+    ) -> Result<GetUserResponse, RusotoError<GetUserError>> {
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}",
             account_id = input.account_id,
@@ -11512,30 +12215,28 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetUserResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<GetUserResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetUserError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetUserError::from_response(response))
+        }
     }
 
     /// <p>Retrieves settings for the specified user ID, such as any associated phone number settings.</p>
-    fn get_user_settings(
+    async fn get_user_settings(
         &self,
         input: GetUserSettingsRequest,
-    ) -> RusotoFuture<GetUserSettingsResponse, GetUserSettingsError> {
+    ) -> Result<GetUserSettingsResponse, RusotoError<GetUserSettingsError>> {
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}/settings",
             account_id = input.account_id,
@@ -11545,30 +12246,28 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetUserSettingsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetUserSettingsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetUserSettingsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetUserSettingsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves details for the specified Amazon Chime Voice Connector, such as timestamps, name, outbound host, and encryption requirements.</p>
-    fn get_voice_connector(
+    async fn get_voice_connector(
         &self,
         input: GetVoiceConnectorRequest,
-    ) -> RusotoFuture<GetVoiceConnectorResponse, GetVoiceConnectorError> {
+    ) -> Result<GetVoiceConnectorResponse, RusotoError<GetVoiceConnectorError>> {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}",
             voice_connector_id = input.voice_connector_id
@@ -11577,30 +12276,28 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetVoiceConnectorResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVoiceConnectorResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetVoiceConnectorError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVoiceConnectorError::from_response(response))
+        }
     }
 
     /// <p>Retrieves details for the specified Amazon Chime Voice Connector group, such as timestamps, name, and associated <code>VoiceConnectorItems</code>.</p>
-    fn get_voice_connector_group(
+    async fn get_voice_connector_group(
         &self,
         input: GetVoiceConnectorGroupRequest,
-    ) -> RusotoFuture<GetVoiceConnectorGroupResponse, GetVoiceConnectorGroupError> {
+    ) -> Result<GetVoiceConnectorGroupResponse, RusotoError<GetVoiceConnectorGroupError>> {
         let request_uri = format!(
             "/voice-connector-groups/{voice_connector_group_id}",
             voice_connector_group_id = input.voice_connector_group_id
@@ -11609,31 +12306,30 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetVoiceConnectorGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVoiceConnectorGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetVoiceConnectorGroupError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVoiceConnectorGroupError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the logging configuration details for the specified Amazon Chime Voice Connector. Shows whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
-    fn get_voice_connector_logging_configuration(
+    async fn get_voice_connector_logging_configuration(
         &self,
         input: GetVoiceConnectorLoggingConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetVoiceConnectorLoggingConfigurationResponse,
-        GetVoiceConnectorLoggingConfigurationError,
+        RusotoError<GetVoiceConnectorLoggingConfigurationError>,
     > {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/logging-configuration",
@@ -11643,30 +12339,31 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetVoiceConnectorLoggingConfigurationResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVoiceConnectorLoggingConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetVoiceConnectorLoggingConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVoiceConnectorLoggingConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Retrieves origination setting details for the specified Amazon Chime Voice Connector.</p>
-    fn get_voice_connector_origination(
+    async fn get_voice_connector_origination(
         &self,
         input: GetVoiceConnectorOriginationRequest,
-    ) -> RusotoFuture<GetVoiceConnectorOriginationResponse, GetVoiceConnectorOriginationError> {
+    ) -> Result<GetVoiceConnectorOriginationResponse, RusotoError<GetVoiceConnectorOriginationError>>
+    {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/origination",
             voice_connector_id = input.voice_connector_id
@@ -11675,29 +12372,30 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetVoiceConnectorOriginationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVoiceConnectorOriginationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetVoiceConnectorOriginationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVoiceConnectorOriginationError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the streaming configuration details for the specified Amazon Chime Voice Connector. Shows whether media streaming is enabled for sending to Amazon Kinesis. It also shows the retention period, in hours, for the Amazon Kinesis data.</p>
-    fn get_voice_connector_streaming_configuration(
+    async fn get_voice_connector_streaming_configuration(
         &self,
         input: GetVoiceConnectorStreamingConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetVoiceConnectorStreamingConfigurationResponse,
-        GetVoiceConnectorStreamingConfigurationError,
+        RusotoError<GetVoiceConnectorStreamingConfigurationError>,
     > {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/streaming-configuration",
@@ -11707,30 +12405,31 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetVoiceConnectorStreamingConfigurationResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVoiceConnectorStreamingConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetVoiceConnectorStreamingConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVoiceConnectorStreamingConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Retrieves termination setting details for the specified Amazon Chime Voice Connector.</p>
-    fn get_voice_connector_termination(
+    async fn get_voice_connector_termination(
         &self,
         input: GetVoiceConnectorTerminationRequest,
-    ) -> RusotoFuture<GetVoiceConnectorTerminationResponse, GetVoiceConnectorTerminationError> {
+    ) -> Result<GetVoiceConnectorTerminationResponse, RusotoError<GetVoiceConnectorTerminationError>>
+    {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination",
             voice_connector_id = input.voice_connector_id
@@ -11739,29 +12438,30 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetVoiceConnectorTerminationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVoiceConnectorTerminationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetVoiceConnectorTerminationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVoiceConnectorTerminationError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about the last time a SIP <code>OPTIONS</code> ping was received from your SIP infrastructure for the specified Amazon Chime Voice Connector.</p>
-    fn get_voice_connector_termination_health(
+    async fn get_voice_connector_termination_health(
         &self,
         input: GetVoiceConnectorTerminationHealthRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetVoiceConnectorTerminationHealthResponse,
-        GetVoiceConnectorTerminationHealthError,
+        RusotoError<GetVoiceConnectorTerminationHealthError>,
     > {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination/health",
@@ -11771,29 +12471,30 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetVoiceConnectorTerminationHealthResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVoiceConnectorTerminationHealthResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetVoiceConnectorTerminationHealthError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVoiceConnectorTerminationHealthError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Sends email to a maximum of 50 users, inviting them to the specified Amazon Chime <code>Team</code> account. Only <code>Team</code> account types are currently supported for this action. </p>
-    fn invite_users(
+    async fn invite_users(
         &self,
         input: InviteUsersRequest,
-    ) -> RusotoFuture<InviteUsersResponse, InviteUsersError> {
+    ) -> Result<InviteUsersResponse, RusotoError<InviteUsersError>> {
         let request_uri = format!(
             "/accounts/{account_id}/users",
             account_id = input.account_id
@@ -11809,30 +12510,28 @@ impl Chime for ChimeClient {
         params.put("operation", "add");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<InviteUsersResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<InviteUsersResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(InviteUsersError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(InviteUsersError::from_response(response))
+        }
     }
 
     /// <p>Lists the Amazon Chime accounts under the administrator's AWS account. You can filter accounts by account name prefix. To find out which Amazon Chime account a user belongs to, you can filter by the user's email address, which returns one account result.</p>
-    fn list_accounts(
+    async fn list_accounts(
         &self,
         input: ListAccountsRequest,
-    ) -> RusotoFuture<ListAccountsResponse, ListAccountsError> {
+    ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>> {
         let request_uri = "/accounts";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -11853,30 +12552,28 @@ impl Chime for ChimeClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAccountsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAccountsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListAccountsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAccountsError::from_response(response))
+        }
     }
 
     /// <p>Lists the attendees for the specified Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn list_attendees(
+    async fn list_attendees(
         &self,
         input: ListAttendeesRequest,
-    ) -> RusotoFuture<ListAttendeesResponse, ListAttendeesError> {
+    ) -> Result<ListAttendeesResponse, RusotoError<ListAttendeesError>> {
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees",
             meeting_id = input.meeting_id
@@ -11894,27 +12591,28 @@ impl Chime for ChimeClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAttendeesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAttendeesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListAttendeesError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAttendeesError::from_response(response))
+        }
     }
 
     /// <p>Lists the bots associated with the administrator's Amazon Chime Enterprise account ID.</p>
-    fn list_bots(&self, input: ListBotsRequest) -> RusotoFuture<ListBotsResponse, ListBotsError> {
+    async fn list_bots(
+        &self,
+        input: ListBotsRequest,
+    ) -> Result<ListBotsResponse, RusotoError<ListBotsError>> {
         let request_uri = format!("/accounts/{account_id}/bots", account_id = input.account_id);
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -11929,30 +12627,28 @@ impl Chime for ChimeClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListBotsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListBotsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListBotsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListBotsError::from_response(response))
+        }
     }
 
     /// <p>Lists up to 100 active Amazon Chime SDK meetings. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
-    fn list_meetings(
+    async fn list_meetings(
         &self,
         input: ListMeetingsRequest,
-    ) -> RusotoFuture<ListMeetingsResponse, ListMeetingsError> {
+    ) -> Result<ListMeetingsResponse, RusotoError<ListMeetingsError>> {
         let request_uri = "/meetings";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -11967,30 +12663,28 @@ impl Chime for ChimeClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListMeetingsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListMeetingsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListMeetingsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListMeetingsError::from_response(response))
+        }
     }
 
     /// <p>Lists the phone number orders for the administrator's Amazon Chime account.</p>
-    fn list_phone_number_orders(
+    async fn list_phone_number_orders(
         &self,
         input: ListPhoneNumberOrdersRequest,
-    ) -> RusotoFuture<ListPhoneNumberOrdersResponse, ListPhoneNumberOrdersError> {
+    ) -> Result<ListPhoneNumberOrdersResponse, RusotoError<ListPhoneNumberOrdersError>> {
         let request_uri = "/phone-number-orders";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -12005,29 +12699,28 @@ impl Chime for ChimeClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPhoneNumberOrdersResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPhoneNumberOrdersResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListPhoneNumberOrdersError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPhoneNumberOrdersError::from_response(response))
+        }
     }
 
     /// <p>Lists the phone numbers for the specified Amazon Chime account, Amazon Chime user, Amazon Chime Voice Connector, or Amazon Chime Voice Connector group.</p>
-    fn list_phone_numbers(
+    async fn list_phone_numbers(
         &self,
         input: ListPhoneNumbersRequest,
-    ) -> RusotoFuture<ListPhoneNumbersResponse, ListPhoneNumbersError> {
+    ) -> Result<ListPhoneNumbersResponse, RusotoError<ListPhoneNumbersError>> {
         let request_uri = "/phone-numbers";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -12054,30 +12747,28 @@ impl Chime for ChimeClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPhoneNumbersResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPhoneNumbersResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListPhoneNumbersError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPhoneNumbersError::from_response(response))
+        }
     }
 
-    /// <p>Lists the membership details for the specified room, such as member IDs, member email addresses, and member names.</p>
-    fn list_room_memberships(
+    /// <p>Lists the membership details for the specified room, such as the members' IDs, email addresses, and names.</p>
+    async fn list_room_memberships(
         &self,
         input: ListRoomMembershipsRequest,
-    ) -> RusotoFuture<ListRoomMembershipsResponse, ListRoomMembershipsError> {
+    ) -> Result<ListRoomMembershipsResponse, RusotoError<ListRoomMembershipsError>> {
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}/memberships",
             account_id = input.account_id,
@@ -12096,29 +12787,28 @@ impl Chime for ChimeClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListRoomMembershipsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListRoomMembershipsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListRoomMembershipsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListRoomMembershipsError::from_response(response))
+        }
     }
 
     /// <p>Lists the room details for the specified Amazon Chime account. Optionally, filter the results by a member ID (user ID or bot ID) to see a list of rooms that the member belongs to.</p>
-    fn list_rooms(
+    async fn list_rooms(
         &self,
         input: ListRoomsRequest,
-    ) -> RusotoFuture<ListRoomsResponse, ListRoomsError> {
+    ) -> Result<ListRoomsResponse, RusotoError<ListRoomsError>> {
         let request_uri = format!(
             "/accounts/{account_id}/rooms",
             account_id = input.account_id
@@ -12139,30 +12829,28 @@ impl Chime for ChimeClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListRoomsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListRoomsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListRoomsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListRoomsError::from_response(response))
+        }
     }
 
     /// <p>Lists the users that belong to the specified Amazon Chime account. You can specify an email address to list only the user that the email address belongs to.</p>
-    fn list_users(
+    async fn list_users(
         &self,
         input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
+    ) -> Result<ListUsersResponse, RusotoError<ListUsersError>> {
         let request_uri = format!(
             "/accounts/{account_id}/users",
             account_id = input.account_id
@@ -12181,32 +12869,33 @@ impl Chime for ChimeClient {
         if let Some(ref x) = input.user_email {
             params.put("user-email", x);
         }
+        if let Some(ref x) = input.user_type {
+            params.put("user-type", x);
+        }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListUsersResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListUsersResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListUsersError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListUsersError::from_response(response))
+        }
     }
 
     /// <p>Lists the Amazon Chime Voice Connector groups for the administrator's AWS account.</p>
-    fn list_voice_connector_groups(
+    async fn list_voice_connector_groups(
         &self,
         input: ListVoiceConnectorGroupsRequest,
-    ) -> RusotoFuture<ListVoiceConnectorGroupsResponse, ListVoiceConnectorGroupsError> {
+    ) -> Result<ListVoiceConnectorGroupsResponse, RusotoError<ListVoiceConnectorGroupsError>> {
         let request_uri = "/voice-connector-groups";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -12221,29 +12910,30 @@ impl Chime for ChimeClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListVoiceConnectorGroupsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListVoiceConnectorGroupsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVoiceConnectorGroupsError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListVoiceConnectorGroupsError::from_response(response))
+        }
     }
 
     /// <p>Lists the SIP credentials for the specified Amazon Chime Voice Connector.</p>
-    fn list_voice_connector_termination_credentials(
+    async fn list_voice_connector_termination_credentials(
         &self,
         input: ListVoiceConnectorTerminationCredentialsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListVoiceConnectorTerminationCredentialsResponse,
-        ListVoiceConnectorTerminationCredentialsError,
+        RusotoError<ListVoiceConnectorTerminationCredentialsError>,
     > {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination/credentials",
@@ -12253,28 +12943,28 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListVoiceConnectorTerminationCredentialsResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListVoiceConnectorTerminationCredentialsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVoiceConnectorTerminationCredentialsError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListVoiceConnectorTerminationCredentialsError::from_response(response))
+        }
     }
 
     /// <p>Lists the Amazon Chime Voice Connectors for the administrator's AWS account.</p>
-    fn list_voice_connectors(
+    async fn list_voice_connectors(
         &self,
         input: ListVoiceConnectorsRequest,
-    ) -> RusotoFuture<ListVoiceConnectorsResponse, ListVoiceConnectorsError> {
+    ) -> Result<ListVoiceConnectorsResponse, RusotoError<ListVoiceConnectorsError>> {
         let request_uri = "/voice-connectors";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -12289,29 +12979,28 @@ impl Chime for ChimeClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListVoiceConnectorsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListVoiceConnectorsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListVoiceConnectorsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListVoiceConnectorsError::from_response(response))
+        }
     }
 
     /// <p>Logs out the specified user from all of the devices they are currently logged into.</p>
-    fn logout_user(
+    async fn logout_user(
         &self,
         input: LogoutUserRequest,
-    ) -> RusotoFuture<LogoutUserResponse, LogoutUserError> {
+    ) -> Result<LogoutUserResponse, RusotoError<LogoutUserError>> {
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}",
             account_id = input.account_id,
@@ -12325,30 +13014,28 @@ impl Chime for ChimeClient {
         params.put("operation", "logout");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<LogoutUserResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<LogoutUserResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(LogoutUserError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(LogoutUserError::from_response(response))
+        }
     }
 
     /// <p>Creates an events configuration that allows a bot to receive outgoing events sent by Amazon Chime. Choose either an HTTPS endpoint or a Lambda function ARN. For more information, see <a>Bot</a>.</p>
-    fn put_events_configuration(
+    async fn put_events_configuration(
         &self,
         input: PutEventsConfigurationRequest,
-    ) -> RusotoFuture<PutEventsConfigurationResponse, PutEventsConfigurationError> {
+    ) -> Result<PutEventsConfigurationResponse, RusotoError<PutEventsConfigurationError>> {
         let request_uri = format!(
             "/accounts/{account_id}/bots/{bot_id}/events-configuration",
             account_id = input.account_id,
@@ -12361,31 +13048,30 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutEventsConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutEventsConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutEventsConfigurationError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutEventsConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Adds a logging configuration for the specified Amazon Chime Voice Connector. The logging configuration specifies whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
-    fn put_voice_connector_logging_configuration(
+    async fn put_voice_connector_logging_configuration(
         &self,
         input: PutVoiceConnectorLoggingConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         PutVoiceConnectorLoggingConfigurationResponse,
-        PutVoiceConnectorLoggingConfigurationError,
+        RusotoError<PutVoiceConnectorLoggingConfigurationError>,
     > {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/logging-configuration",
@@ -12398,30 +13084,31 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutVoiceConnectorLoggingConfigurationResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutVoiceConnectorLoggingConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutVoiceConnectorLoggingConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutVoiceConnectorLoggingConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Adds origination settings for the specified Amazon Chime Voice Connector.</p>
-    fn put_voice_connector_origination(
+    async fn put_voice_connector_origination(
         &self,
         input: PutVoiceConnectorOriginationRequest,
-    ) -> RusotoFuture<PutVoiceConnectorOriginationResponse, PutVoiceConnectorOriginationError> {
+    ) -> Result<PutVoiceConnectorOriginationResponse, RusotoError<PutVoiceConnectorOriginationError>>
+    {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/origination",
             voice_connector_id = input.voice_connector_id
@@ -12433,29 +13120,30 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutVoiceConnectorOriginationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutVoiceConnectorOriginationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutVoiceConnectorOriginationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutVoiceConnectorOriginationError::from_response(response))
+        }
     }
 
     /// <p>Adds a streaming configuration for the specified Amazon Chime Voice Connector. The streaming configuration specifies whether media streaming is enabled for sending to Amazon Kinesis. It also sets the retention period, in hours, for the Amazon Kinesis data.</p>
-    fn put_voice_connector_streaming_configuration(
+    async fn put_voice_connector_streaming_configuration(
         &self,
         input: PutVoiceConnectorStreamingConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         PutVoiceConnectorStreamingConfigurationResponse,
-        PutVoiceConnectorStreamingConfigurationError,
+        RusotoError<PutVoiceConnectorStreamingConfigurationError>,
     > {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/streaming-configuration",
@@ -12468,30 +13156,31 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutVoiceConnectorStreamingConfigurationResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutVoiceConnectorStreamingConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutVoiceConnectorStreamingConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutVoiceConnectorStreamingConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Adds termination settings for the specified Amazon Chime Voice Connector.</p>
-    fn put_voice_connector_termination(
+    async fn put_voice_connector_termination(
         &self,
         input: PutVoiceConnectorTerminationRequest,
-    ) -> RusotoFuture<PutVoiceConnectorTerminationResponse, PutVoiceConnectorTerminationError> {
+    ) -> Result<PutVoiceConnectorTerminationResponse, RusotoError<PutVoiceConnectorTerminationError>>
+    {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination",
             voice_connector_id = input.voice_connector_id
@@ -12503,27 +13192,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutVoiceConnectorTerminationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutVoiceConnectorTerminationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutVoiceConnectorTerminationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutVoiceConnectorTerminationError::from_response(response))
+        }
     }
 
     /// <p>Adds termination SIP credentials for the specified Amazon Chime Voice Connector.</p>
-    fn put_voice_connector_termination_credentials(
+    async fn put_voice_connector_termination_credentials(
         &self,
         input: PutVoiceConnectorTerminationCredentialsRequest,
-    ) -> RusotoFuture<(), PutVoiceConnectorTerminationCredentialsError> {
+    ) -> Result<(), RusotoError<PutVoiceConnectorTerminationCredentialsError>> {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination/credentials",
             voice_connector_id = input.voice_connector_id
@@ -12539,28 +13229,29 @@ impl Chime for ChimeClient {
         params.put("operation", "put");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutVoiceConnectorTerminationCredentialsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutVoiceConnectorTerminationCredentialsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Regenerates the security token for a bot.</p>
-    fn regenerate_security_token(
+    async fn regenerate_security_token(
         &self,
         input: RegenerateSecurityTokenRequest,
-    ) -> RusotoFuture<RegenerateSecurityTokenResponse, RegenerateSecurityTokenError> {
+    ) -> Result<RegenerateSecurityTokenResponse, RusotoError<RegenerateSecurityTokenError>> {
         let request_uri = format!(
             "/accounts/{account_id}/bots/{bot_id}",
             account_id = input.account_id,
@@ -12574,27 +13265,28 @@ impl Chime for ChimeClient {
         params.put("operation", "regenerate-security-token");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegenerateSecurityTokenResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegenerateSecurityTokenResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegenerateSecurityTokenError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RegenerateSecurityTokenError::from_response(response))
+        }
     }
 
     /// <p>Resets the personal meeting PIN for the specified user on an Amazon Chime account. Returns the <a>User</a> object with the updated personal meeting PIN.</p>
-    fn reset_personal_pin(
+    async fn reset_personal_pin(
         &self,
         input: ResetPersonalPINRequest,
-    ) -> RusotoFuture<ResetPersonalPINResponse, ResetPersonalPINError> {
+    ) -> Result<ResetPersonalPINResponse, RusotoError<ResetPersonalPINError>> {
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}",
             account_id = input.account_id,
@@ -12608,30 +13300,28 @@ impl Chime for ChimeClient {
         params.put("operation", "reset-personal-pin");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ResetPersonalPINResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ResetPersonalPINResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ResetPersonalPINError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ResetPersonalPINError::from_response(response))
+        }
     }
 
     /// <p>Moves a phone number from the <b>Deletion queue</b> back into the phone number <b>Inventory</b>.</p>
-    fn restore_phone_number(
+    async fn restore_phone_number(
         &self,
         input: RestorePhoneNumberRequest,
-    ) -> RusotoFuture<RestorePhoneNumberResponse, RestorePhoneNumberError> {
+    ) -> Result<RestorePhoneNumberResponse, RusotoError<RestorePhoneNumberError>> {
         let request_uri = format!(
             "/phone-numbers/{phone_number_id}",
             phone_number_id = input.phone_number_id
@@ -12644,30 +13334,29 @@ impl Chime for ChimeClient {
         params.put("operation", "restore");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RestorePhoneNumberResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RestorePhoneNumberResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RestorePhoneNumberError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RestorePhoneNumberError::from_response(response))
+        }
     }
 
     /// <p>Searches phone numbers that can be ordered.</p>
-    fn search_available_phone_numbers(
+    async fn search_available_phone_numbers(
         &self,
         input: SearchAvailablePhoneNumbersRequest,
-    ) -> RusotoFuture<SearchAvailablePhoneNumbersResponse, SearchAvailablePhoneNumbersError> {
+    ) -> Result<SearchAvailablePhoneNumbersResponse, RusotoError<SearchAvailablePhoneNumbersError>>
+    {
         let request_uri = "/search";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -12698,27 +13387,28 @@ impl Chime for ChimeClient {
         params.put("type", "phone-numbers");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchAvailablePhoneNumbersResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SearchAvailablePhoneNumbersResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchAvailablePhoneNumbersError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchAvailablePhoneNumbersError::from_response(response))
+        }
     }
 
     /// <p>Updates account details for the specified Amazon Chime account. Currently, only account name updates are supported for this action.</p>
-    fn update_account(
+    async fn update_account(
         &self,
         input: UpdateAccountRequest,
-    ) -> RusotoFuture<UpdateAccountResponse, UpdateAccountError> {
+    ) -> Result<UpdateAccountResponse, RusotoError<UpdateAccountError>> {
         let request_uri = format!("/accounts/{account_id}", account_id = input.account_id);
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -12727,30 +13417,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateAccountResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAccountResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateAccountError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAccountError::from_response(response))
+        }
     }
 
     /// <p>Updates the settings for the specified Amazon Chime account. You can update settings for remote control of shared screens, or for the dial-out option. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>.</p>
-    fn update_account_settings(
+    async fn update_account_settings(
         &self,
         input: UpdateAccountSettingsRequest,
-    ) -> RusotoFuture<UpdateAccountSettingsResponse, UpdateAccountSettingsError> {
+    ) -> Result<UpdateAccountSettingsResponse, RusotoError<UpdateAccountSettingsError>> {
         let request_uri = format!(
             "/accounts/{account_id}/settings",
             account_id = input.account_id
@@ -12762,29 +13450,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateAccountSettingsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAccountSettingsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateAccountSettingsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAccountSettingsError::from_response(response))
+        }
     }
 
     /// <p>Updates the status of the specified bot, such as starting or stopping the bot from running in your Amazon Chime Enterprise account.</p>
-    fn update_bot(
+    async fn update_bot(
         &self,
         input: UpdateBotRequest,
-    ) -> RusotoFuture<UpdateBotResponse, UpdateBotError> {
+    ) -> Result<UpdateBotResponse, RusotoError<UpdateBotError>> {
         let request_uri = format!(
             "/accounts/{account_id}/bots/{bot_id}",
             account_id = input.account_id,
@@ -12797,30 +13484,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateBotResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateBotResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateBotError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateBotError::from_response(response))
+        }
     }
 
     /// <p>Updates global settings for the administrator's AWS account, such as Amazon Chime Business Calling and Amazon Chime Voice Connector settings.</p>
-    fn update_global_settings(
+    async fn update_global_settings(
         &self,
         input: UpdateGlobalSettingsRequest,
-    ) -> RusotoFuture<(), UpdateGlobalSettingsError> {
+    ) -> Result<(), RusotoError<UpdateGlobalSettingsError>> {
         let request_uri = "/settings";
 
         let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
@@ -12829,28 +13514,27 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateGlobalSettingsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateGlobalSettingsError::from_response(response))
+        }
     }
 
     /// <p>Updates phone number details, such as product type or calling name, for the specified phone number ID. You can update one phone number detail at a time. For example, you can update either the product type or the calling name in one action.</p> <p>For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
-    fn update_phone_number(
+    async fn update_phone_number(
         &self,
         input: UpdatePhoneNumberRequest,
-    ) -> RusotoFuture<UpdatePhoneNumberResponse, UpdatePhoneNumberError> {
+    ) -> Result<UpdatePhoneNumberResponse, RusotoError<UpdatePhoneNumberError>> {
         let request_uri = format!(
             "/phone-numbers/{phone_number_id}",
             phone_number_id = input.phone_number_id
@@ -12862,30 +13546,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdatePhoneNumberResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdatePhoneNumberResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdatePhoneNumberError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdatePhoneNumberError::from_response(response))
+        }
     }
 
     /// <p>Updates the phone number settings for the administrator's AWS account, such as the default outbound calling name. You can update the default outbound calling name once every seven days. Outbound calling names can take up to 72 hours to update.</p>
-    fn update_phone_number_settings(
+    async fn update_phone_number_settings(
         &self,
         input: UpdatePhoneNumberSettingsRequest,
-    ) -> RusotoFuture<(), UpdatePhoneNumberSettingsError> {
+    ) -> Result<(), RusotoError<UpdatePhoneNumberSettingsError>> {
         let request_uri = "/settings/phone-number";
 
         let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
@@ -12894,26 +13576,27 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdatePhoneNumberSettingsError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdatePhoneNumberSettingsError::from_response(response))
+        }
     }
 
     /// <p>Updates room details, such as the room name.</p>
-    fn update_room(
+    async fn update_room(
         &self,
         input: UpdateRoomRequest,
-    ) -> RusotoFuture<UpdateRoomResponse, UpdateRoomError> {
+    ) -> Result<UpdateRoomResponse, RusotoError<UpdateRoomError>> {
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}",
             account_id = input.account_id,
@@ -12926,30 +13609,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateRoomResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateRoomResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateRoomError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateRoomError::from_response(response))
+        }
     }
 
-    /// <p>Updates room membership details, such as member role. The member role designates whether the member is a chat room administrator or a general chat room member. Member role can only be updated for user IDs.</p>
-    fn update_room_membership(
+    /// <p>Updates room membership details, such as the member role. The member role designates whether the member is a chat room administrator or a general chat room member. The member role can be updated only for user IDs.</p>
+    async fn update_room_membership(
         &self,
         input: UpdateRoomMembershipRequest,
-    ) -> RusotoFuture<UpdateRoomMembershipResponse, UpdateRoomMembershipError> {
+    ) -> Result<UpdateRoomMembershipResponse, RusotoError<UpdateRoomMembershipError>> {
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}/memberships/{member_id}",
             account_id = input.account_id,
@@ -12963,29 +13644,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateRoomMembershipResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateRoomMembershipResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateRoomMembershipError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateRoomMembershipError::from_response(response))
+        }
     }
 
     /// <p>Updates user details for a specified user ID. Currently, only <code>LicenseType</code> updates are supported for this action.</p>
-    fn update_user(
+    async fn update_user(
         &self,
         input: UpdateUserRequest,
-    ) -> RusotoFuture<UpdateUserResponse, UpdateUserError> {
+    ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>> {
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}",
             account_id = input.account_id,
@@ -12998,30 +13678,28 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateUserResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateUserResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateUserError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateUserError::from_response(response))
+        }
     }
 
     /// <p>Updates the settings for the specified user, such as phone number settings.</p>
-    fn update_user_settings(
+    async fn update_user_settings(
         &self,
         input: UpdateUserSettingsRequest,
-    ) -> RusotoFuture<(), UpdateUserSettingsError> {
+    ) -> Result<(), RusotoError<UpdateUserSettingsError>> {
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}/settings",
             account_id = input.account_id,
@@ -13034,29 +13712,27 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateUserSettingsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateUserSettingsError::from_response(response))
+        }
     }
 
     /// <p>Updates details for the specified Amazon Chime Voice Connector.</p>
-    fn update_voice_connector(
+    async fn update_voice_connector(
         &self,
         input: UpdateVoiceConnectorRequest,
-    ) -> RusotoFuture<UpdateVoiceConnectorResponse, UpdateVoiceConnectorError> {
+    ) -> Result<UpdateVoiceConnectorResponse, RusotoError<UpdateVoiceConnectorError>> {
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}",
             voice_connector_id = input.voice_connector_id
@@ -13068,29 +13744,29 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateVoiceConnectorResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateVoiceConnectorResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateVoiceConnectorError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateVoiceConnectorError::from_response(response))
+        }
     }
 
     /// <p>Updates details for the specified Amazon Chime Voice Connector group, such as the name and Amazon Chime Voice Connector priority ranking.</p>
-    fn update_voice_connector_group(
+    async fn update_voice_connector_group(
         &self,
         input: UpdateVoiceConnectorGroupRequest,
-    ) -> RusotoFuture<UpdateVoiceConnectorGroupResponse, UpdateVoiceConnectorGroupError> {
+    ) -> Result<UpdateVoiceConnectorGroupResponse, RusotoError<UpdateVoiceConnectorGroupError>>
+    {
         let request_uri = format!(
             "/voice-connector-groups/{voice_connector_group_id}",
             voice_connector_group_id = input.voice_connector_group_id
@@ -13102,19 +13778,20 @@ impl Chime for ChimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 202 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateVoiceConnectorGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 202 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateVoiceConnectorGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateVoiceConnectorGroupError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateVoiceConnectorGroupError::from_response(response))
+        }
     }
 }

@@ -9,19 +9,21 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Information about an entity that is affected by a Health event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -35,6 +37,7 @@ pub struct AffectedEntity {
     #[serde(rename = "entityArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_arn: Option<String>,
+    /// <p>The URL of the affected entity.</p>
     #[serde(rename = "entityUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_url: Option<String>,
@@ -76,8 +79,74 @@ pub struct DateTimeRange {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAffectedAccountsForOrganizationRequest {
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>
+    #[serde(rename = "eventArn")]
+    pub event_arn: String,
+    /// <p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAffectedAccountsForOrganizationResponse {
+    /// <p>A JSON set of elements of the affected accounts.</p>
+    #[serde(rename = "affectedAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub affected_accounts: Option<Vec<String>>,
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAffectedEntitiesForOrganizationRequest {
+    /// <p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locale: Option<String>,
+    /// <p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A JSON set of elements including the <code>awsAccountId</code> and the <code>eventArn</code>.</p>
+    #[serde(rename = "organizationEntityFilters")]
+    pub organization_entity_filters: Vec<EventAccountFilter>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAffectedEntitiesForOrganizationResponse {
+    /// <p>A JSON set of elements including the <code>awsAccountId</code> and its <code>entityArn</code>, <code>entityValue</code> and its <code>entityArn</code>, <code>lastUpdatedTime</code>, <code>statusCode</code>, and <code>tags</code>.</p>
+    #[serde(rename = "entities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entities: Option<Vec<AffectedEntity>>,
+    /// <p>A JSON set of elements of the failed response, including the <code>awsAccountId</code>, <code>errorMessage</code>, <code>errorName</code>, and <code>eventArn</code>.</p>
+    #[serde(rename = "failedSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_set: Option<Vec<OrganizationAffectedEntitiesErrorItem>>,
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAffectedEntitiesRequest {
-    /// <p>Values to narrow the results returned. At least one event ARN is required. </p>
+    /// <p>Values to narrow the results returned. At least one event ARN is required.</p>
     #[serde(rename = "filter")]
     pub filter: EntityFilter,
     /// <p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>
@@ -160,6 +229,31 @@ pub struct DescribeEventAggregatesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeEventDetailsForOrganizationRequest {
+    /// <p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locale: Option<String>,
+    /// <p>A set of JSON elements that includes the <code>awsAccountId</code> and the <code>eventArn</code>.</p>
+    #[serde(rename = "organizationEventDetailFilters")]
+    pub organization_event_detail_filters: Vec<EventAccountFilter>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeEventDetailsForOrganizationResponse {
+    /// <p>Error messages for any events that could not be retrieved.</p>
+    #[serde(rename = "failedSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_set: Option<Vec<OrganizationEventDetailsErrorItem>>,
+    /// <p>Information about the events that could be retrieved.</p>
+    #[serde(rename = "successfulSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub successful_set: Option<Vec<OrganizationEventDetails>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventDetailsRequest {
     /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456", "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"</code> </p>
     #[serde(rename = "eventArns")]
@@ -219,6 +313,40 @@ pub struct DescribeEventTypesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeEventsForOrganizationRequest {
+    /// <p>Values to narrow the results returned.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<OrganizationEventFilter>,
+    /// <p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locale: Option<String>,
+    /// <p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeEventsForOrganizationResponse {
+    /// <p>The events that match the specified filter criteria.</p>
+    #[serde(rename = "events")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub events: Option<Vec<OrganizationEvent>>,
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsRequest {
     /// <p>Values to narrow the results returned.</p>
     #[serde(rename = "filter")]
@@ -249,6 +377,15 @@ pub struct DescribeEventsResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeHealthServiceStatusForOrganizationResponse {
+    /// <p>Information about the status of enabling or disabling AWS Health Organizational View in your organization.</p> <p>Valid values are <code>ENABLED | DISABLED | PENDING</code>. </p>
+    #[serde(rename = "healthServiceAccessStatusForOrganization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_service_access_status_for_organization: Option<String>,
 }
 
 /// <p>The number of entities that are affected by one or more events. Returned by the <a>DescribeEntityAggregates</a> operation.</p>
@@ -294,7 +431,7 @@ pub struct EntityFilter {
     pub tags: Option<Vec<::std::collections::HashMap<String, String>>>,
 }
 
-/// <p>Summary information about an event, returned by the <a>DescribeEvents</a> operation. The <a>DescribeEventDetails</a> operation also returns this information, as well as the <a>EventDescription</a> and additional event metadata.</p>
+/// <p>Summary information about an AWS Health event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Event {
@@ -338,6 +475,18 @@ pub struct Event {
     #[serde(rename = "statusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<String>,
+}
+
+/// <p>The values used to filter results from the <a>DescribeEventDetailsForOrganization</a> and <a>DescribeAffectedEntitiesForOrganization</a> operations.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct EventAccountFilter {
+    /// <p>The 12-digit AWS account numbers that contains the affected entities.</p>
+    #[serde(rename = "awsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>
+    #[serde(rename = "eventArn")]
+    pub event_arn: String,
 }
 
 /// <p>The number of events of each issue type. Returned by the <a>DescribeEventAggregates</a> operation.</p>
@@ -422,7 +571,7 @@ pub struct EventFilter {
     #[serde(rename = "eventTypeCategories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_type_categories: Option<Vec<String>>,
-    /// <p>A list of unique identifiers for event types. For example, <code>"AWS_EC2_SYSTEM_MAINTENANCE_EVENT","AWS_RDS_MAINTENANCE_SCHEDULED"</code> </p>
+    /// <p>A list of unique identifiers for event types. For example, <code>"AWS_EC2_SYSTEM_MAINTENANCE_EVENT","AWS_RDS_MAINTENANCE_SCHEDULED".</code> </p>
     #[serde(rename = "eventTypeCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_type_codes: Option<Vec<String>>,
@@ -466,6 +615,197 @@ pub struct EventTypeFilter {
     pub services: Option<Vec<String>>,
 }
 
+/// <p>Error information returned when a <a>DescribeAffectedEntitiesForOrganization</a> operation cannot find or process a specific entity.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OrganizationAffectedEntitiesErrorItem {
+    /// <p>The 12-digit AWS account numbers that contains the affected entities.</p>
+    #[serde(rename = "awsAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_account_id: Option<String>,
+    /// <p>The unique identifier for the event type. The format is <code>AWS_SERVICE_DESCRIPTION</code>. For example, <code>AWS_EC2_SYSTEM_MAINTENANCE_EVENT</code>.</p>
+    #[serde(rename = "errorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The name of the error.</p>
+    #[serde(rename = "errorName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_name: Option<String>,
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>
+    #[serde(rename = "eventArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_arn: Option<String>,
+}
+
+/// <p>Summary information about an event, returned by the <a>DescribeEventsForOrganization</a> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OrganizationEvent {
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date and time that the event ended.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The category of the event type.</p>
+    #[serde(rename = "eventTypeCategory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_type_category: Option<String>,
+    /// <p>The unique identifier for the event type. The format is <code>AWS_SERVICE_DESCRIPTION</code>. For example, <code>AWS_EC2_SYSTEM_MAINTENANCE_EVENT</code>.</p>
+    #[serde(rename = "eventTypeCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_type_code: Option<String>,
+    /// <p>The most recent date and time that the event was updated.</p>
+    #[serde(rename = "lastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<f64>,
+    /// <p>The AWS Region name of the event.</p>
+    #[serde(rename = "region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
+    /// <p>The AWS service that is affected by the event. For example, EC2, RDS.</p>
+    #[serde(rename = "service")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service: Option<String>,
+    /// <p>The date and time that the event began.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The most recent status of the event. Possible values are <code>open</code>, <code>closed</code>, and <code>upcoming</code>.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
+}
+
+/// <p>Detailed information about an event. A combination of an <a>Event</a> object, an <a>EventDescription</a> object, and additional metadata about the event. Returned by the <a>DescribeEventDetailsForOrganization</a> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OrganizationEventDetails {
+    /// <p>The 12-digit AWS account numbers that contains the affected entities.</p>
+    #[serde(rename = "awsAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_account_id: Option<String>,
+    #[serde(rename = "event")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event: Option<Event>,
+    #[serde(rename = "eventDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_description: Option<String>,
+    /// <p>Additional metadata about the event.</p>
+    #[serde(rename = "eventMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_metadata: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Error information returned when a <a>DescribeEventDetailsForOrganization</a> operation cannot find a specified event.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OrganizationEventDetailsErrorItem {
+    /// <p>Error information returned when a <a>DescribeEventDetailsForOrganization</a> operation cannot find a specified event.</p>
+    #[serde(rename = "awsAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_account_id: Option<String>,
+    /// <p>A message that describes the error.</p>
+    #[serde(rename = "errorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The name of the error.</p>
+    #[serde(rename = "errorName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_name: Option<String>,
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>
+    #[serde(rename = "eventArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_arn: Option<String>,
+}
+
+/// <p>The values to filter results from the <a>DescribeEventsForOrganization</a> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OrganizationEventFilter {
+    /// <p>A list of 12-digit AWS account numbers that contains the affected entities.</p>
+    #[serde(rename = "awsAccountIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_account_ids: Option<Vec<String>>,
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<DateTimeRange>,
+    /// <p>REPLACEME</p>
+    #[serde(rename = "entityArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_arns: Option<Vec<String>>,
+    /// <p>A list of entity identifiers, such as EC2 instance IDs (i-34ab692e) or EBS volumes (vol-426ab23e).</p>
+    #[serde(rename = "entityValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_values: Option<Vec<String>>,
+    /// <p>A list of event status codes.</p>
+    #[serde(rename = "eventStatusCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_status_codes: Option<Vec<String>>,
+    /// <p>REPLACEME</p>
+    #[serde(rename = "eventTypeCategories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_type_categories: Option<Vec<String>>,
+    /// <p>A list of unique identifiers for event types. For example, <code>"AWS_EC2_SYSTEM_MAINTENANCE_EVENT","AWS_RDS_MAINTENANCE_SCHEDULED".</code> </p>
+    #[serde(rename = "eventTypeCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_type_codes: Option<Vec<String>>,
+    #[serde(rename = "lastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<DateTimeRange>,
+    /// <p>A list of AWS Regions.</p>
+    #[serde(rename = "regions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regions: Option<Vec<String>>,
+    /// <p>The AWS services associated with the event. For example, <code>EC2</code>, <code>RDS</code>.</p>
+    #[serde(rename = "services")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub services: Option<Vec<String>>,
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<DateTimeRange>,
+}
+
+/// Errors returned by DescribeAffectedAccountsForOrganization
+#[derive(Debug, PartialEq)]
+pub enum DescribeAffectedAccountsForOrganizationError {
+    /// <p>The specified pagination token (<code>nextToken</code>) is not valid.</p>
+    InvalidPaginationToken(String),
+}
+
+impl DescribeAffectedAccountsForOrganizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeAffectedAccountsForOrganizationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidPaginationToken" => {
+                    return RusotoError::Service(
+                        DescribeAffectedAccountsForOrganizationError::InvalidPaginationToken(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeAffectedAccountsForOrganizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAffectedAccountsForOrganizationError::InvalidPaginationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeAffectedAccountsForOrganizationError {}
 /// Errors returned by DescribeAffectedEntities
 #[derive(Debug, PartialEq)]
 pub enum DescribeAffectedEntitiesError {
@@ -497,6 +837,7 @@ impl DescribeAffectedEntitiesError {
     }
 }
 impl fmt::Display for DescribeAffectedEntitiesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeAffectedEntitiesError::InvalidPaginationToken(ref cause) => {
@@ -507,6 +848,54 @@ impl fmt::Display for DescribeAffectedEntitiesError {
     }
 }
 impl Error for DescribeAffectedEntitiesError {}
+/// Errors returned by DescribeAffectedEntitiesForOrganization
+#[derive(Debug, PartialEq)]
+pub enum DescribeAffectedEntitiesForOrganizationError {
+    /// <p>The specified pagination token (<code>nextToken</code>) is not valid.</p>
+    InvalidPaginationToken(String),
+    /// <p>The specified locale is not supported.</p>
+    UnsupportedLocale(String),
+}
+
+impl DescribeAffectedEntitiesForOrganizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeAffectedEntitiesForOrganizationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidPaginationToken" => {
+                    return RusotoError::Service(
+                        DescribeAffectedEntitiesForOrganizationError::InvalidPaginationToken(
+                            err.msg,
+                        ),
+                    )
+                }
+                "UnsupportedLocale" => {
+                    return RusotoError::Service(
+                        DescribeAffectedEntitiesForOrganizationError::UnsupportedLocale(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeAffectedEntitiesForOrganizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAffectedEntitiesForOrganizationError::InvalidPaginationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAffectedEntitiesForOrganizationError::UnsupportedLocale(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeAffectedEntitiesForOrganizationError {}
 /// Errors returned by DescribeEntityAggregates
 #[derive(Debug, PartialEq)]
 pub enum DescribeEntityAggregatesError {}
@@ -523,6 +912,7 @@ impl DescribeEntityAggregatesError {
     }
 }
 impl fmt::Display for DescribeEntityAggregatesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {}
     }
@@ -552,6 +942,7 @@ impl DescribeEventAggregatesError {
     }
 }
 impl fmt::Display for DescribeEventAggregatesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeEventAggregatesError::InvalidPaginationToken(ref cause) => {
@@ -585,6 +976,7 @@ impl DescribeEventDetailsError {
     }
 }
 impl fmt::Display for DescribeEventDetailsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeEventDetailsError::UnsupportedLocale(ref cause) => write!(f, "{}", cause),
@@ -592,6 +984,42 @@ impl fmt::Display for DescribeEventDetailsError {
     }
 }
 impl Error for DescribeEventDetailsError {}
+/// Errors returned by DescribeEventDetailsForOrganization
+#[derive(Debug, PartialEq)]
+pub enum DescribeEventDetailsForOrganizationError {
+    /// <p>The specified locale is not supported.</p>
+    UnsupportedLocale(String),
+}
+
+impl DescribeEventDetailsForOrganizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEventDetailsForOrganizationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "UnsupportedLocale" => {
+                    return RusotoError::Service(
+                        DescribeEventDetailsForOrganizationError::UnsupportedLocale(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeEventDetailsForOrganizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeEventDetailsForOrganizationError::UnsupportedLocale(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeEventDetailsForOrganizationError {}
 /// Errors returned by DescribeEventTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventTypesError {
@@ -623,6 +1051,7 @@ impl DescribeEventTypesError {
     }
 }
 impl fmt::Display for DescribeEventTypesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeEventTypesError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
@@ -660,6 +1089,7 @@ impl DescribeEventsError {
     }
 }
 impl fmt::Display for DescribeEventsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeEventsError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
@@ -668,43 +1098,244 @@ impl fmt::Display for DescribeEventsError {
     }
 }
 impl Error for DescribeEventsError {}
+/// Errors returned by DescribeEventsForOrganization
+#[derive(Debug, PartialEq)]
+pub enum DescribeEventsForOrganizationError {
+    /// <p>The specified pagination token (<code>nextToken</code>) is not valid.</p>
+    InvalidPaginationToken(String),
+    /// <p>The specified locale is not supported.</p>
+    UnsupportedLocale(String),
+}
+
+impl DescribeEventsForOrganizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEventsForOrganizationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidPaginationToken" => {
+                    return RusotoError::Service(
+                        DescribeEventsForOrganizationError::InvalidPaginationToken(err.msg),
+                    )
+                }
+                "UnsupportedLocale" => {
+                    return RusotoError::Service(
+                        DescribeEventsForOrganizationError::UnsupportedLocale(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeEventsForOrganizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeEventsForOrganizationError::InvalidPaginationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEventsForOrganizationError::UnsupportedLocale(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeEventsForOrganizationError {}
+/// Errors returned by DescribeHealthServiceStatusForOrganization
+#[derive(Debug, PartialEq)]
+pub enum DescribeHealthServiceStatusForOrganizationError {}
+
+impl DescribeHealthServiceStatusForOrganizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeHealthServiceStatusForOrganizationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeHealthServiceStatusForOrganizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for DescribeHealthServiceStatusForOrganizationError {}
+/// Errors returned by DisableHealthServiceAccessForOrganization
+#[derive(Debug, PartialEq)]
+pub enum DisableHealthServiceAccessForOrganizationError {
+    /// <p> <a>EnableHealthServiceAccessForOrganization</a> is already in progress. Wait for the action to complete before trying again. To get the current status, use the <a>DescribeHealthServiceStatusForOrganization</a> operation.</p>
+    ConcurrentModification(String),
+}
+
+impl DisableHealthServiceAccessForOrganizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisableHealthServiceAccessForOrganizationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        DisableHealthServiceAccessForOrganizationError::ConcurrentModification(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DisableHealthServiceAccessForOrganizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisableHealthServiceAccessForOrganizationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DisableHealthServiceAccessForOrganizationError {}
+/// Errors returned by EnableHealthServiceAccessForOrganization
+#[derive(Debug, PartialEq)]
+pub enum EnableHealthServiceAccessForOrganizationError {
+    /// <p> <a>EnableHealthServiceAccessForOrganization</a> is already in progress. Wait for the action to complete before trying again. To get the current status, use the <a>DescribeHealthServiceStatusForOrganization</a> operation.</p>
+    ConcurrentModification(String),
+}
+
+impl EnableHealthServiceAccessForOrganizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<EnableHealthServiceAccessForOrganizationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        EnableHealthServiceAccessForOrganizationError::ConcurrentModification(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for EnableHealthServiceAccessForOrganizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            EnableHealthServiceAccessForOrganizationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for EnableHealthServiceAccessForOrganizationError {}
 /// Trait representing the capabilities of the AWSHealth API. AWSHealth clients implement this trait.
+#[async_trait]
 pub trait AWSHealth {
+    /// <p>Returns a list of accounts in the organization from AWS Organizations that are affected by the provided event.</p> <p>Before you can call this operation, you must first enable AWS Health to work with AWS Organizations. To do this, call the <a>EnableHealthServiceAccessForOrganization</a> operation from your organization's master account.</p>
+    async fn describe_affected_accounts_for_organization(
+        &self,
+        input: DescribeAffectedAccountsForOrganizationRequest,
+    ) -> Result<
+        DescribeAffectedAccountsForOrganizationResponse,
+        RusotoError<DescribeAffectedAccountsForOrganizationError>,
+    >;
+
     /// <p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p>
-    fn describe_affected_entities(
+    async fn describe_affected_entities(
         &self,
         input: DescribeAffectedEntitiesRequest,
-    ) -> RusotoFuture<DescribeAffectedEntitiesResponse, DescribeAffectedEntitiesError>;
+    ) -> Result<DescribeAffectedEntitiesResponse, RusotoError<DescribeAffectedEntitiesError>>;
+
+    /// <p>Returns a list of entities that have been affected by one or more events for one or more accounts in your organization in AWS Organizations, based on the filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service.</p> <p>At least one event ARN and account ID are required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p> <p>Before you can call this operation, you must first enable AWS Health to work with AWS Organizations. To do this, call the <a>EnableHealthServiceAccessForOrganization</a> operation from your organization's master account. </p>
+    async fn describe_affected_entities_for_organization(
+        &self,
+        input: DescribeAffectedEntitiesForOrganizationRequest,
+    ) -> Result<
+        DescribeAffectedEntitiesForOrganizationResponse,
+        RusotoError<DescribeAffectedEntitiesForOrganizationError>,
+    >;
 
     /// <p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>
-    fn describe_entity_aggregates(
+    async fn describe_entity_aggregates(
         &self,
         input: DescribeEntityAggregatesRequest,
-    ) -> RusotoFuture<DescribeEntityAggregatesResponse, DescribeEntityAggregatesError>;
+    ) -> Result<DescribeEntityAggregatesResponse, RusotoError<DescribeEntityAggregatesError>>;
 
     /// <p>Returns the number of events of each event type (issue, scheduled change, and account notification). If no filter is specified, the counts of all events in each category are returned.</p>
-    fn describe_event_aggregates(
+    async fn describe_event_aggregates(
         &self,
         input: DescribeEventAggregatesRequest,
-    ) -> RusotoFuture<DescribeEventAggregatesResponse, DescribeEventAggregatesError>;
+    ) -> Result<DescribeEventAggregatesResponse, RusotoError<DescribeEventAggregatesError>>;
 
-    /// <p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, etc., as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>
-    fn describe_event_details(
+    /// <p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, and so on, as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>
+    async fn describe_event_details(
         &self,
         input: DescribeEventDetailsRequest,
-    ) -> RusotoFuture<DescribeEventDetailsResponse, DescribeEventDetailsError>;
+    ) -> Result<DescribeEventDetailsResponse, RusotoError<DescribeEventDetailsError>>;
+
+    /// <p>Returns detailed information about one or more specified events for one or more accounts in your organization. Information includes standard event data (Region, service, and so on, as returned by <a>DescribeEventsForOrganization</a>, a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntitiesForOrganization</a> operation.</p> <p>Before you can call this operation, you must first enable AWS Health to work with AWS Organizations. To do this, call the <a>EnableHealthServiceAccessForOrganization</a> operation from your organization's master account.</p>
+    async fn describe_event_details_for_organization(
+        &self,
+        input: DescribeEventDetailsForOrganizationRequest,
+    ) -> Result<
+        DescribeEventDetailsForOrganizationResponse,
+        RusotoError<DescribeEventDetailsForOrganizationError>,
+    >;
 
     /// <p>Returns the event types that meet the specified filter criteria. If no filter criteria are specified, all event types are returned, in no particular order.</p>
-    fn describe_event_types(
+    async fn describe_event_types(
         &self,
         input: DescribeEventTypesRequest,
-    ) -> RusotoFuture<DescribeEventTypesResponse, DescribeEventTypesError>;
+    ) -> Result<DescribeEventTypesResponse, RusotoError<DescribeEventTypesError>>;
 
     /// <p>Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeEventDetails</a> and <a>DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsRequest,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError>;
+    ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>>;
+
+    /// <p>Returns information about events across your organization in AWS Organizations, meeting the specified filter criteria. Events are returned in a summary form and do not include the accounts impacted, detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeAffectedAccountsForOrganization</a>, <a>DescribeEventDetailsForOrganization</a>, and <a>DescribeAffectedEntitiesForOrganization</a> operations.</p> <p>If no filter criteria are specified, all events across your organization are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p> <p>Before you can call this operation, you must first enable Health to work with AWS Organizations. To do this, call the <a>EnableHealthServiceAccessForOrganization</a> operation from your organization's master account.</p>
+    async fn describe_events_for_organization(
+        &self,
+        input: DescribeEventsForOrganizationRequest,
+    ) -> Result<
+        DescribeEventsForOrganizationResponse,
+        RusotoError<DescribeEventsForOrganizationError>,
+    >;
+
+    /// <p>This operation provides status information on enabling or disabling AWS Health to work with your organization. To call this operation, you must sign in as an IAM user, assume an IAM role, or sign in as the root user (not recommended) in the organization's master account.</p>
+    async fn describe_health_service_status_for_organization(
+        &self,
+    ) -> Result<
+        DescribeHealthServiceStatusForOrganizationResponse,
+        RusotoError<DescribeHealthServiceStatusForOrganizationError>,
+    >;
+
+    /// <p>Calling this operation disables Health from working with AWS Organizations. This does not remove the Service Linked Role (SLR) from the the master account in your organization. Use the IAM console, API, or AWS CLI to remove the SLR if desired. To call this operation, you must sign in as an IAM user, assume an IAM role, or sign in as the root user (not recommended) in the organization's master account.</p>
+    async fn disable_health_service_access_for_organization(
+        &self,
+    ) -> Result<(), RusotoError<DisableHealthServiceAccessForOrganizationError>>;
+
+    /// <p>Calling this operation enables AWS Health to work with AWS Organizations. This applies a Service Linked Role (SLR) to the master account in the organization. To learn more about the steps in this process, visit enabling service access for AWS Health in AWS Organizations. To call this operation, you must sign in as an IAM user, assume an IAM role, or sign in as the root user (not recommended) in the organization's master account.</p>
+    async fn enable_health_service_access_for_organization(
+        &self,
+    ) -> Result<(), RusotoError<EnableHealthServiceAccessForOrganizationError>>;
 }
 /// A client for the AWSHealth API.
 #[derive(Clone)]
@@ -718,7 +1349,10 @@ impl AWSHealthClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> AWSHealthClient {
-        Self::new_with_client(Client::shared(), region)
+        AWSHealthClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -728,14 +1362,12 @@ impl AWSHealthClient {
     ) -> AWSHealthClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        AWSHealthClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> AWSHealthClient {
@@ -743,20 +1375,49 @@ impl AWSHealthClient {
     }
 }
 
-impl fmt::Debug for AWSHealthClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("AWSHealthClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl AWSHealth for AWSHealthClient {
+    /// <p>Returns a list of accounts in the organization from AWS Organizations that are affected by the provided event.</p> <p>Before you can call this operation, you must first enable AWS Health to work with AWS Organizations. To do this, call the <a>EnableHealthServiceAccessForOrganization</a> operation from your organization's master account.</p>
+    async fn describe_affected_accounts_for_organization(
+        &self,
+        input: DescribeAffectedAccountsForOrganizationRequest,
+    ) -> Result<
+        DescribeAffectedAccountsForOrganizationResponse,
+        RusotoError<DescribeAffectedAccountsForOrganizationError>,
+    > {
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSHealth_20160804.DescribeAffectedAccountsForOrganization",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAffectedAccountsForOrganizationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAffectedAccountsForOrganizationError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p>
-    fn describe_affected_entities(
+    async fn describe_affected_entities(
         &self,
         input: DescribeAffectedEntitiesRequest,
-    ) -> RusotoFuture<DescribeAffectedEntitiesResponse, DescribeAffectedEntitiesError> {
+    ) -> Result<DescribeAffectedEntitiesResponse, RusotoError<DescribeAffectedEntitiesError>> {
         let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -767,25 +1428,63 @@ impl AWSHealth for AWSHealthClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAffectedEntitiesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAffectedEntitiesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAffectedEntitiesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAffectedEntitiesError::from_response(response))
+        }
+    }
+
+    /// <p>Returns a list of entities that have been affected by one or more events for one or more accounts in your organization in AWS Organizations, based on the filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service.</p> <p>At least one event ARN and account ID are required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p> <p>Before you can call this operation, you must first enable AWS Health to work with AWS Organizations. To do this, call the <a>EnableHealthServiceAccessForOrganization</a> operation from your organization's master account. </p>
+    async fn describe_affected_entities_for_organization(
+        &self,
+        input: DescribeAffectedEntitiesForOrganizationRequest,
+    ) -> Result<
+        DescribeAffectedEntitiesForOrganizationResponse,
+        RusotoError<DescribeAffectedEntitiesForOrganizationError>,
+    > {
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSHealth_20160804.DescribeAffectedEntitiesForOrganization",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAffectedEntitiesForOrganizationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAffectedEntitiesForOrganizationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>
-    fn describe_entity_aggregates(
+    async fn describe_entity_aggregates(
         &self,
         input: DescribeEntityAggregatesRequest,
-    ) -> RusotoFuture<DescribeEntityAggregatesResponse, DescribeEntityAggregatesError> {
+    ) -> Result<DescribeEntityAggregatesResponse, RusotoError<DescribeEntityAggregatesError>> {
         let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -796,25 +1495,27 @@ impl AWSHealth for AWSHealthClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEntityAggregatesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEntityAggregatesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEntityAggregatesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEntityAggregatesError::from_response(response))
+        }
     }
 
     /// <p>Returns the number of events of each event type (issue, scheduled change, and account notification). If no filter is specified, the counts of all events in each category are returned.</p>
-    fn describe_event_aggregates(
+    async fn describe_event_aggregates(
         &self,
         input: DescribeEventAggregatesRequest,
-    ) -> RusotoFuture<DescribeEventAggregatesResponse, DescribeEventAggregatesError> {
+    ) -> Result<DescribeEventAggregatesResponse, RusotoError<DescribeEventAggregatesError>> {
         let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -822,25 +1523,27 @@ impl AWSHealth for AWSHealthClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEventAggregatesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventAggregatesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEventAggregatesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventAggregatesError::from_response(response))
+        }
     }
 
-    /// <p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, etc., as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>
-    fn describe_event_details(
+    /// <p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, and so on, as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>
+    async fn describe_event_details(
         &self,
         input: DescribeEventDetailsRequest,
-    ) -> RusotoFuture<DescribeEventDetailsResponse, DescribeEventDetailsError> {
+    ) -> Result<DescribeEventDetailsResponse, RusotoError<DescribeEventDetailsError>> {
         let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -848,27 +1551,63 @@ impl AWSHealth for AWSHealthClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEventDetailsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeEventDetailsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEventDetailsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventDetailsError::from_response(response))
+        }
+    }
+
+    /// <p>Returns detailed information about one or more specified events for one or more accounts in your organization. Information includes standard event data (Region, service, and so on, as returned by <a>DescribeEventsForOrganization</a>, a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntitiesForOrganization</a> operation.</p> <p>Before you can call this operation, you must first enable AWS Health to work with AWS Organizations. To do this, call the <a>EnableHealthServiceAccessForOrganization</a> operation from your organization's master account.</p>
+    async fn describe_event_details_for_organization(
+        &self,
+        input: DescribeEventDetailsForOrganizationRequest,
+    ) -> Result<
+        DescribeEventDetailsForOrganizationResponse,
+        RusotoError<DescribeEventDetailsForOrganizationError>,
+    > {
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSHealth_20160804.DescribeEventDetailsForOrganization",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEventDetailsForOrganizationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventDetailsForOrganizationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns the event types that meet the specified filter criteria. If no filter criteria are specified, all event types are returned, in no particular order.</p>
-    fn describe_event_types(
+    async fn describe_event_types(
         &self,
         input: DescribeEventTypesRequest,
-    ) -> RusotoFuture<DescribeEventTypesResponse, DescribeEventTypesError> {
+    ) -> Result<DescribeEventTypesResponse, RusotoError<DescribeEventTypesError>> {
         let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -876,28 +1615,27 @@ impl AWSHealth for AWSHealthClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEventTypesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeEventTypesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEventTypesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventTypesError::from_response(response))
+        }
     }
 
     /// <p>Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeEventDetails</a> and <a>DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsRequest,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
+    ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>> {
         let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -905,20 +1643,138 @@ impl AWSHealth for AWSHealthClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEventsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeEventsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeEventsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventsError::from_response(response))
+        }
+    }
+
+    /// <p>Returns information about events across your organization in AWS Organizations, meeting the specified filter criteria. Events are returned in a summary form and do not include the accounts impacted, detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeAffectedAccountsForOrganization</a>, <a>DescribeEventDetailsForOrganization</a>, and <a>DescribeAffectedEntitiesForOrganization</a> operations.</p> <p>If no filter criteria are specified, all events across your organization are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p> <p>Before you can call this operation, you must first enable Health to work with AWS Organizations. To do this, call the <a>EnableHealthServiceAccessForOrganization</a> operation from your organization's master account.</p>
+    async fn describe_events_for_organization(
+        &self,
+        input: DescribeEventsForOrganizationRequest,
+    ) -> Result<
+        DescribeEventsForOrganizationResponse,
+        RusotoError<DescribeEventsForOrganizationError>,
+    > {
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSHealth_20160804.DescribeEventsForOrganization",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEventsForOrganizationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventsForOrganizationError::from_response(response))
+        }
+    }
+
+    /// <p>This operation provides status information on enabling or disabling AWS Health to work with your organization. To call this operation, you must sign in as an IAM user, assume an IAM role, or sign in as the root user (not recommended) in the organization's master account.</p>
+    async fn describe_health_service_status_for_organization(
+        &self,
+    ) -> Result<
+        DescribeHealthServiceStatusForOrganizationResponse,
+        RusotoError<DescribeHealthServiceStatusForOrganizationError>,
+    > {
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSHealth_20160804.DescribeHealthServiceStatusForOrganization",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeHealthServiceStatusForOrganizationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeHealthServiceStatusForOrganizationError::from_response(response))
+        }
+    }
+
+    /// <p>Calling this operation disables Health from working with AWS Organizations. This does not remove the Service Linked Role (SLR) from the the master account in your organization. Use the IAM console, API, or AWS CLI to remove the SLR if desired. To call this operation, you must sign in as an IAM user, assume an IAM role, or sign in as the root user (not recommended) in the organization's master account.</p>
+    async fn disable_health_service_access_for_organization(
+        &self,
+    ) -> Result<(), RusotoError<DisableHealthServiceAccessForOrganizationError>> {
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSHealth_20160804.DisableHealthServiceAccessForOrganization",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisableHealthServiceAccessForOrganizationError::from_response(response))
+        }
+    }
+
+    /// <p>Calling this operation enables AWS Health to work with AWS Organizations. This applies a Service Linked Role (SLR) to the master account in the organization. To learn more about the steps in this process, visit enabling service access for AWS Health in AWS Organizations. To call this operation, you must sign in as an IAM user, assume an IAM role, or sign in as the root user (not recommended) in the organization's master account.</p>
+    async fn enable_health_service_access_for_organization(
+        &self,
+    ) -> Result<(), RusotoError<EnableHealthServiceAccessForOrganizationError>> {
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSHealth_20160804.EnableHealthServiceAccessForOrganization",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(EnableHealthServiceAccessForOrganizationError::from_response(response))
+        }
     }
 }

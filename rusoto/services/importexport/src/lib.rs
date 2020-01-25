@@ -10,26 +10,14 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <p><fullname>AWS Import/Export Service</fullname> AWS Import/Export accelerates transferring large amounts of data between the AWS cloud and portable storage devices that you mail to us. AWS Import/Export transfers data directly onto and off of your storage devices using Amazon&#39;s high-speed internal network and bypassing the Internet. For large data sets, AWS Import/Export is often faster than Internet transfer and more cost effective than upgrading your connectivity.</p>
 //!
 //! If you're using the service, you're probably looking for [ImportExportClient](struct.ImportExportClient.html) and [ImportExport](trait.ImportExport.html).
 
-extern crate bytes;
-extern crate futures;
-extern crate rusoto_core;
-#[cfg(any(feature = "serialize_structs", feature = "deserialize_structs"))]
-extern crate serde;
-#[cfg(any(feature = "serialize_structs", feature = "deserialize_structs"))]
-#[macro_use]
-extern crate serde_derive;
-extern crate serde_urlencoded;
-extern crate xml;
-
-mod generated;
 mod custom;
-
-pub use crate::generated::*;
-pub use crate::custom::*;
-            
+mod generated;
+pub use custom::*;
+pub use generated::*;

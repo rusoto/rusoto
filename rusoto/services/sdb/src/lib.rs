@@ -10,26 +10,14 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <p>Amazon SimpleDB is a web service providing the core database functions of data indexing and querying in the cloud. By offloading the time and effort associated with building and operating a web-scale database, SimpleDB provides developers the freedom to focus on application development. <p> A traditional, clustered relational database requires a sizable upfront capital outlay, is complex to design, and often requires extensive and repetitive database administration. Amazon SimpleDB is dramatically simpler, requiring no schema, automatically indexing your data and providing a simple API for storage and access. This approach eliminates the administrative burden of data modeling, index maintenance, and performance tuning. Developers gain access to this functionality within Amazon&#39;s proven computing environment, are able to scale instantly, and pay only for what they use. </p> <p> Visit <a href="http://aws.amazon.com/simpledb/">http://aws.amazon.com/simpledb/</a> for more information. </p></p>
 //!
 //! If you're using the service, you're probably looking for [SimpleDbClient](struct.SimpleDbClient.html) and [SimpleDb](trait.SimpleDb.html).
 
-extern crate bytes;
-extern crate futures;
-extern crate rusoto_core;
-#[cfg(any(feature = "serialize_structs", feature = "deserialize_structs"))]
-extern crate serde;
-#[cfg(any(feature = "serialize_structs", feature = "deserialize_structs"))]
-#[macro_use]
-extern crate serde_derive;
-extern crate serde_urlencoded;
-extern crate xml;
-
-mod generated;
 mod custom;
-
-pub use crate::generated::*;
-pub use crate::custom::*;
-            
+mod generated;
+pub use custom::*;
+pub use generated::*;

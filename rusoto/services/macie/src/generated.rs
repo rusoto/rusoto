@@ -9,19 +9,21 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -288,6 +290,7 @@ impl AssociateMemberAccountError {
     }
 }
 impl fmt::Display for AssociateMemberAccountError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociateMemberAccountError::Internal(ref cause) => write!(f, "{}", cause),
@@ -334,6 +337,7 @@ impl AssociateS3ResourcesError {
     }
 }
 impl fmt::Display for AssociateS3ResourcesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociateS3ResourcesError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -373,6 +377,7 @@ impl DisassociateMemberAccountError {
     }
 }
 impl fmt::Display for DisassociateMemberAccountError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisassociateMemberAccountError::Internal(ref cause) => write!(f, "{}", cause),
@@ -417,6 +422,7 @@ impl DisassociateS3ResourcesError {
     }
 }
 impl fmt::Display for DisassociateS3ResourcesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisassociateS3ResourcesError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -453,6 +459,7 @@ impl ListMemberAccountsError {
     }
 }
 impl fmt::Display for ListMemberAccountsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListMemberAccountsError::Internal(ref cause) => write!(f, "{}", cause),
@@ -493,6 +500,7 @@ impl ListS3ResourcesError {
     }
 }
 impl fmt::Display for ListS3ResourcesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListS3ResourcesError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -534,6 +542,7 @@ impl UpdateS3ResourcesError {
     }
 }
 impl fmt::Display for UpdateS3ResourcesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateS3ResourcesError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -544,48 +553,49 @@ impl fmt::Display for UpdateS3ResourcesError {
 }
 impl Error for UpdateS3ResourcesError {}
 /// Trait representing the capabilities of the Amazon Macie API. Amazon Macie clients implement this trait.
+#[async_trait]
 pub trait Macie {
     /// <p>Associates a specified AWS account with Amazon Macie as a member account.</p>
-    fn associate_member_account(
+    async fn associate_member_account(
         &self,
         input: AssociateMemberAccountRequest,
-    ) -> RusotoFuture<(), AssociateMemberAccountError>;
+    ) -> Result<(), RusotoError<AssociateMemberAccountError>>;
 
     /// <p>Associates specified S3 resources with Amazon Macie for monitoring and data classification. If memberAccountId isn't specified, the action associates specified S3 resources with Macie for the current master account. If memberAccountId is specified, the action associates specified S3 resources with Macie for the specified member account. </p>
-    fn associate_s3_resources(
+    async fn associate_s3_resources(
         &self,
         input: AssociateS3ResourcesRequest,
-    ) -> RusotoFuture<AssociateS3ResourcesResult, AssociateS3ResourcesError>;
+    ) -> Result<AssociateS3ResourcesResult, RusotoError<AssociateS3ResourcesError>>;
 
     /// <p>Removes the specified member account from Amazon Macie.</p>
-    fn disassociate_member_account(
+    async fn disassociate_member_account(
         &self,
         input: DisassociateMemberAccountRequest,
-    ) -> RusotoFuture<(), DisassociateMemberAccountError>;
+    ) -> Result<(), RusotoError<DisassociateMemberAccountError>>;
 
     /// <p>Removes specified S3 resources from being monitored by Amazon Macie. If memberAccountId isn't specified, the action removes specified S3 resources from Macie for the current master account. If memberAccountId is specified, the action removes specified S3 resources from Macie for the specified member account.</p>
-    fn disassociate_s3_resources(
+    async fn disassociate_s3_resources(
         &self,
         input: DisassociateS3ResourcesRequest,
-    ) -> RusotoFuture<DisassociateS3ResourcesResult, DisassociateS3ResourcesError>;
+    ) -> Result<DisassociateS3ResourcesResult, RusotoError<DisassociateS3ResourcesError>>;
 
     /// <p>Lists all Amazon Macie member accounts for the current Amazon Macie master account.</p>
-    fn list_member_accounts(
+    async fn list_member_accounts(
         &self,
         input: ListMemberAccountsRequest,
-    ) -> RusotoFuture<ListMemberAccountsResult, ListMemberAccountsError>;
+    ) -> Result<ListMemberAccountsResult, RusotoError<ListMemberAccountsError>>;
 
     /// <p>Lists all the S3 resources associated with Amazon Macie. If memberAccountId isn't specified, the action lists the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action lists the S3 resources associated with Amazon Macie for the specified member account. </p>
-    fn list_s3_resources(
+    async fn list_s3_resources(
         &self,
         input: ListS3ResourcesRequest,
-    ) -> RusotoFuture<ListS3ResourcesResult, ListS3ResourcesError>;
+    ) -> Result<ListS3ResourcesResult, RusotoError<ListS3ResourcesError>>;
 
     /// <p>Updates the classification types for the specified S3 resources. If memberAccountId isn't specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the specified member account. </p>
-    fn update_s3_resources(
+    async fn update_s3_resources(
         &self,
         input: UpdateS3ResourcesRequest,
-    ) -> RusotoFuture<UpdateS3ResourcesResult, UpdateS3ResourcesError>;
+    ) -> Result<UpdateS3ResourcesResult, RusotoError<UpdateS3ResourcesError>>;
 }
 /// A client for the Amazon Macie API.
 #[derive(Clone)]
@@ -599,7 +609,10 @@ impl MacieClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> MacieClient {
-        Self::new_with_client(Client::shared(), region)
+        MacieClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -609,14 +622,12 @@ impl MacieClient {
     ) -> MacieClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        MacieClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> MacieClient {
@@ -624,20 +635,13 @@ impl MacieClient {
     }
 }
 
-impl fmt::Debug for MacieClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("MacieClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Macie for MacieClient {
     /// <p>Associates a specified AWS account with Amazon Macie as a member account.</p>
-    fn associate_member_account(
+    async fn associate_member_account(
         &self,
         input: AssociateMemberAccountRequest,
-    ) -> RusotoFuture<(), AssociateMemberAccountError> {
+    ) -> Result<(), RusotoError<AssociateMemberAccountError>> {
         let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -645,24 +649,25 @@ impl Macie for MacieClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AssociateMemberAccountError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateMemberAccountError::from_response(response))
+        }
     }
 
     /// <p>Associates specified S3 resources with Amazon Macie for monitoring and data classification. If memberAccountId isn't specified, the action associates specified S3 resources with Macie for the current master account. If memberAccountId is specified, the action associates specified S3 resources with Macie for the specified member account. </p>
-    fn associate_s3_resources(
+    async fn associate_s3_resources(
         &self,
         input: AssociateS3ResourcesRequest,
-    ) -> RusotoFuture<AssociateS3ResourcesResult, AssociateS3ResourcesError> {
+    ) -> Result<AssociateS3ResourcesResult, RusotoError<AssociateS3ResourcesError>> {
         let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -670,27 +675,27 @@ impl Macie for MacieClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateS3ResourcesResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AssociateS3ResourcesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateS3ResourcesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateS3ResourcesError::from_response(response))
+        }
     }
 
     /// <p>Removes the specified member account from Amazon Macie.</p>
-    fn disassociate_member_account(
+    async fn disassociate_member_account(
         &self,
         input: DisassociateMemberAccountRequest,
-    ) -> RusotoFuture<(), DisassociateMemberAccountError> {
+    ) -> Result<(), RusotoError<DisassociateMemberAccountError>> {
         let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -698,22 +703,25 @@ impl Macie for MacieClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateMemberAccountError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateMemberAccountError::from_response(response))
+        }
     }
 
     /// <p>Removes specified S3 resources from being monitored by Amazon Macie. If memberAccountId isn't specified, the action removes specified S3 resources from Macie for the current master account. If memberAccountId is specified, the action removes specified S3 resources from Macie for the specified member account.</p>
-    fn disassociate_s3_resources(
+    async fn disassociate_s3_resources(
         &self,
         input: DisassociateS3ResourcesRequest,
-    ) -> RusotoFuture<DisassociateS3ResourcesResult, DisassociateS3ResourcesError> {
+    ) -> Result<DisassociateS3ResourcesResult, RusotoError<DisassociateS3ResourcesError>> {
         let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -721,25 +729,27 @@ impl Macie for MacieClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateS3ResourcesResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateS3ResourcesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateS3ResourcesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateS3ResourcesError::from_response(response))
+        }
     }
 
     /// <p>Lists all Amazon Macie member accounts for the current Amazon Macie master account.</p>
-    fn list_member_accounts(
+    async fn list_member_accounts(
         &self,
         input: ListMemberAccountsRequest,
-    ) -> RusotoFuture<ListMemberAccountsResult, ListMemberAccountsError> {
+    ) -> Result<ListMemberAccountsResult, RusotoError<ListMemberAccountsError>> {
         let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -747,28 +757,27 @@ impl Macie for MacieClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListMemberAccountsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListMemberAccountsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListMemberAccountsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListMemberAccountsError::from_response(response))
+        }
     }
 
     /// <p>Lists all the S3 resources associated with Amazon Macie. If memberAccountId isn't specified, the action lists the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action lists the S3 resources associated with Amazon Macie for the specified member account. </p>
-    fn list_s3_resources(
+    async fn list_s3_resources(
         &self,
         input: ListS3ResourcesRequest,
-    ) -> RusotoFuture<ListS3ResourcesResult, ListS3ResourcesError> {
+    ) -> Result<ListS3ResourcesResult, RusotoError<ListS3ResourcesError>> {
         let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -776,28 +785,26 @@ impl Macie for MacieClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListS3ResourcesResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListS3ResourcesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListS3ResourcesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListS3ResourcesError::from_response(response))
+        }
     }
 
     /// <p>Updates the classification types for the specified S3 resources. If memberAccountId isn't specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the specified member account. </p>
-    fn update_s3_resources(
+    async fn update_s3_resources(
         &self,
         input: UpdateS3ResourcesRequest,
-    ) -> RusotoFuture<UpdateS3ResourcesResult, UpdateS3ResourcesError> {
+    ) -> Result<UpdateS3ResourcesResult, RusotoError<UpdateS3ResourcesError>> {
         let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -805,20 +812,18 @@ impl Macie for MacieClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateS3ResourcesResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateS3ResourcesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateS3ResourcesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateS3ResourcesError::from_response(response))
+        }
     }
 }

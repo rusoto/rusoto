@@ -9,19 +9,21 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1987,6 +1989,7 @@ impl AcceptDirectConnectGatewayAssociationProposalError {
     }
 }
 impl fmt::Display for AcceptDirectConnectGatewayAssociationProposalError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AcceptDirectConnectGatewayAssociationProposalError::DirectConnectClient(ref cause) => {
@@ -2032,6 +2035,7 @@ impl AllocateConnectionOnInterconnectError {
     }
 }
 impl fmt::Display for AllocateConnectionOnInterconnectError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AllocateConnectionOnInterconnectError::DirectConnectClient(ref cause) => {
@@ -2089,6 +2093,7 @@ impl AllocateHostedConnectionError {
     }
 }
 impl fmt::Display for AllocateHostedConnectionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AllocateHostedConnectionError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -2146,6 +2151,7 @@ impl AllocatePrivateVirtualInterfaceError {
     }
 }
 impl fmt::Display for AllocatePrivateVirtualInterfaceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AllocatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => {
@@ -2209,6 +2215,7 @@ impl AllocatePublicVirtualInterfaceError {
     }
 }
 impl fmt::Display for AllocatePublicVirtualInterfaceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AllocatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => {
@@ -2272,6 +2279,7 @@ impl AllocateTransitVirtualInterfaceError {
     }
 }
 impl fmt::Display for AllocateTransitVirtualInterfaceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AllocateTransitVirtualInterfaceError::DirectConnectClient(ref cause) => {
@@ -2321,6 +2329,7 @@ impl AssociateConnectionWithLagError {
     }
 }
 impl fmt::Display for AssociateConnectionWithLagError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociateConnectionWithLagError::DirectConnectClient(ref cause) => {
@@ -2364,6 +2373,7 @@ impl AssociateHostedConnectionError {
     }
 }
 impl fmt::Display for AssociateHostedConnectionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociateHostedConnectionError::DirectConnectClient(ref cause) => {
@@ -2407,6 +2417,7 @@ impl AssociateVirtualInterfaceError {
     }
 }
 impl fmt::Display for AssociateVirtualInterfaceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociateVirtualInterfaceError::DirectConnectClient(ref cause) => {
@@ -2450,6 +2461,7 @@ impl ConfirmConnectionError {
     }
 }
 impl fmt::Display for ConfirmConnectionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ConfirmConnectionError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -2491,6 +2503,7 @@ impl ConfirmPrivateVirtualInterfaceError {
     }
 }
 impl fmt::Display for ConfirmPrivateVirtualInterfaceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ConfirmPrivateVirtualInterfaceError::DirectConnectClient(ref cause) => {
@@ -2536,6 +2549,7 @@ impl ConfirmPublicVirtualInterfaceError {
     }
 }
 impl fmt::Display for ConfirmPublicVirtualInterfaceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ConfirmPublicVirtualInterfaceError::DirectConnectClient(ref cause) => {
@@ -2581,6 +2595,7 @@ impl ConfirmTransitVirtualInterfaceError {
     }
 }
 impl fmt::Display for ConfirmTransitVirtualInterfaceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ConfirmTransitVirtualInterfaceError::DirectConnectClient(ref cause) => {
@@ -2620,6 +2635,7 @@ impl CreateBGPPeerError {
     }
 }
 impl fmt::Display for CreateBGPPeerError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateBGPPeerError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -2669,6 +2685,7 @@ impl CreateConnectionError {
     }
 }
 impl fmt::Display for CreateConnectionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateConnectionError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -2712,6 +2729,7 @@ impl CreateDirectConnectGatewayError {
     }
 }
 impl fmt::Display for CreateDirectConnectGatewayError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateDirectConnectGatewayError::DirectConnectClient(ref cause) => {
@@ -2757,6 +2775,7 @@ impl CreateDirectConnectGatewayAssociationError {
     }
 }
 impl fmt::Display for CreateDirectConnectGatewayAssociationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => {
@@ -2806,6 +2825,7 @@ impl CreateDirectConnectGatewayAssociationProposalError {
     }
 }
 impl fmt::Display for CreateDirectConnectGatewayAssociationProposalError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateDirectConnectGatewayAssociationProposalError::DirectConnectClient(ref cause) => {
@@ -2859,6 +2879,7 @@ impl CreateInterconnectError {
     }
 }
 impl fmt::Display for CreateInterconnectError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateInterconnectError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -2906,6 +2927,7 @@ impl CreateLagError {
     }
 }
 impl fmt::Display for CreateLagError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateLagError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -2963,6 +2985,7 @@ impl CreatePrivateVirtualInterfaceError {
     }
 }
 impl fmt::Display for CreatePrivateVirtualInterfaceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => {
@@ -3026,6 +3049,7 @@ impl CreatePublicVirtualInterfaceError {
     }
 }
 impl fmt::Display for CreatePublicVirtualInterfaceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => {
@@ -3089,6 +3113,7 @@ impl CreateTransitVirtualInterfaceError {
     }
 }
 impl fmt::Display for CreateTransitVirtualInterfaceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateTransitVirtualInterfaceError::DirectConnectClient(ref cause) => {
@@ -3132,6 +3157,7 @@ impl DeleteBGPPeerError {
     }
 }
 impl fmt::Display for DeleteBGPPeerError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteBGPPeerError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -3171,6 +3197,7 @@ impl DeleteConnectionError {
     }
 }
 impl fmt::Display for DeleteConnectionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteConnectionError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -3212,6 +3239,7 @@ impl DeleteDirectConnectGatewayError {
     }
 }
 impl fmt::Display for DeleteDirectConnectGatewayError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteDirectConnectGatewayError::DirectConnectClient(ref cause) => {
@@ -3257,6 +3285,7 @@ impl DeleteDirectConnectGatewayAssociationError {
     }
 }
 impl fmt::Display for DeleteDirectConnectGatewayAssociationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => {
@@ -3306,6 +3335,7 @@ impl DeleteDirectConnectGatewayAssociationProposalError {
     }
 }
 impl fmt::Display for DeleteDirectConnectGatewayAssociationProposalError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteDirectConnectGatewayAssociationProposalError::DirectConnectClient(ref cause) => {
@@ -3349,6 +3379,7 @@ impl DeleteInterconnectError {
     }
 }
 impl fmt::Display for DeleteInterconnectError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteInterconnectError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -3384,6 +3415,7 @@ impl DeleteLagError {
     }
 }
 impl fmt::Display for DeleteLagError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteLagError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -3423,6 +3455,7 @@ impl DeleteVirtualInterfaceError {
     }
 }
 impl fmt::Display for DeleteVirtualInterfaceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteVirtualInterfaceError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -3462,6 +3495,7 @@ impl DescribeConnectionLoaError {
     }
 }
 impl fmt::Display for DescribeConnectionLoaError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeConnectionLoaError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -3501,6 +3535,7 @@ impl DescribeConnectionsError {
     }
 }
 impl fmt::Display for DescribeConnectionsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeConnectionsError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -3542,6 +3577,7 @@ impl DescribeConnectionsOnInterconnectError {
     }
 }
 impl fmt::Display for DescribeConnectionsOnInterconnectError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeConnectionsOnInterconnectError::DirectConnectClient(ref cause) => {
@@ -3591,6 +3627,7 @@ impl DescribeDirectConnectGatewayAssociationProposalsError {
     }
 }
 impl fmt::Display for DescribeDirectConnectGatewayAssociationProposalsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeDirectConnectGatewayAssociationProposalsError::DirectConnectClient(
@@ -3636,6 +3673,7 @@ impl DescribeDirectConnectGatewayAssociationsError {
     }
 }
 impl fmt::Display for DescribeDirectConnectGatewayAssociationsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(ref cause) => {
@@ -3681,6 +3719,7 @@ impl DescribeDirectConnectGatewayAttachmentsError {
     }
 }
 impl fmt::Display for DescribeDirectConnectGatewayAttachmentsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(ref cause) => {
@@ -3726,6 +3765,7 @@ impl DescribeDirectConnectGatewaysError {
     }
 }
 impl fmt::Display for DescribeDirectConnectGatewaysError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeDirectConnectGatewaysError::DirectConnectClient(ref cause) => {
@@ -3769,6 +3809,7 @@ impl DescribeHostedConnectionsError {
     }
 }
 impl fmt::Display for DescribeHostedConnectionsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeHostedConnectionsError::DirectConnectClient(ref cause) => {
@@ -3812,6 +3853,7 @@ impl DescribeInterconnectLoaError {
     }
 }
 impl fmt::Display for DescribeInterconnectLoaError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeInterconnectLoaError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -3851,6 +3893,7 @@ impl DescribeInterconnectsError {
     }
 }
 impl fmt::Display for DescribeInterconnectsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeInterconnectsError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -3886,6 +3929,7 @@ impl DescribeLagsError {
     }
 }
 impl fmt::Display for DescribeLagsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeLagsError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -3921,6 +3965,7 @@ impl DescribeLoaError {
     }
 }
 impl fmt::Display for DescribeLoaError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeLoaError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -3960,6 +4005,7 @@ impl DescribeLocationsError {
     }
 }
 impl fmt::Display for DescribeLocationsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeLocationsError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -3995,6 +4041,7 @@ impl DescribeTagsError {
     }
 }
 impl fmt::Display for DescribeTagsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeTagsError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -4034,6 +4081,7 @@ impl DescribeVirtualGatewaysError {
     }
 }
 impl fmt::Display for DescribeVirtualGatewaysError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeVirtualGatewaysError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -4073,6 +4121,7 @@ impl DescribeVirtualInterfacesError {
     }
 }
 impl fmt::Display for DescribeVirtualInterfacesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeVirtualInterfacesError::DirectConnectClient(ref cause) => {
@@ -4118,6 +4167,7 @@ impl DisassociateConnectionFromLagError {
     }
 }
 impl fmt::Display for DisassociateConnectionFromLagError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisassociateConnectionFromLagError::DirectConnectClient(ref cause) => {
@@ -4167,6 +4217,7 @@ impl TagResourceError {
     }
 }
 impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             TagResourceError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -4204,6 +4255,7 @@ impl UntagResourceError {
     }
 }
 impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UntagResourceError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -4245,6 +4297,7 @@ impl UpdateDirectConnectGatewayAssociationError {
     }
 }
 impl fmt::Display for UpdateDirectConnectGatewayAssociationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => {
@@ -4284,6 +4337,7 @@ impl UpdateLagError {
     }
 }
 impl fmt::Display for UpdateLagError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateLagError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
@@ -4325,6 +4379,7 @@ impl UpdateVirtualInterfaceAttributesError {
     }
 }
 impl fmt::Display for UpdateVirtualInterfaceAttributesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateVirtualInterfaceAttributesError::DirectConnectClient(ref cause) => {
@@ -4338,332 +4393,354 @@ impl fmt::Display for UpdateVirtualInterfaceAttributesError {
 }
 impl Error for UpdateVirtualInterfaceAttributesError {}
 /// Trait representing the capabilities of the AWS Direct Connect API. AWS Direct Connect clients implement this trait.
+#[async_trait]
 pub trait DirectConnect {
     /// <p>Accepts a proposal request to attach a virtual private gateway or transit gateway to a Direct Connect gateway.</p>
-    fn accept_direct_connect_gateway_association_proposal(
+    async fn accept_direct_connect_gateway_association_proposal(
         &self,
         input: AcceptDirectConnectGatewayAssociationProposalRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AcceptDirectConnectGatewayAssociationProposalResult,
-        AcceptDirectConnectGatewayAssociationProposalError,
+        RusotoError<AcceptDirectConnectGatewayAssociationProposalError>,
     >;
 
     /// <p><p>Deprecated. Use <a>AllocateHostedConnection</a> instead.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the specified interconnect.</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn allocate_connection_on_interconnect(
+    async fn allocate_connection_on_interconnect(
         &self,
         input: AllocateConnectionOnInterconnectRequest,
-    ) -> RusotoFuture<Connection, AllocateConnectionOnInterconnectError>;
+    ) -> Result<Connection, RusotoError<AllocateConnectionOnInterconnectError>>;
 
     /// <p><p>Creates a hosted connection on the specified interconnect or a link aggregation group (LAG) of interconnects.</p> <p>Allocates a VLAN number and a specified amount of capacity (bandwidth) for use by a hosted connection on the specified interconnect or LAG of interconnects. AWS polices the hosted connection for the specified capacity and the AWS Direct Connect Partner must also police the hosted connection for the specified capacity.</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn allocate_hosted_connection(
+    async fn allocate_hosted_connection(
         &self,
         input: AllocateHostedConnectionRequest,
-    ) -> RusotoFuture<Connection, AllocateHostedConnectionError>;
+    ) -> Result<Connection, RusotoError<AllocateHostedConnectionError>>;
 
     /// <p>Provisions a private virtual interface to be owned by the specified AWS account.</p> <p>Virtual interfaces created using this action must be confirmed by the owner using <a>ConfirmPrivateVirtualInterface</a>. Until then, the virtual interface is in the <code>Confirming</code> state and is not available to handle traffic.</p>
-    fn allocate_private_virtual_interface(
+    async fn allocate_private_virtual_interface(
         &self,
         input: AllocatePrivateVirtualInterfaceRequest,
-    ) -> RusotoFuture<VirtualInterface, AllocatePrivateVirtualInterfaceError>;
+    ) -> Result<VirtualInterface, RusotoError<AllocatePrivateVirtualInterfaceError>>;
 
     /// <p>Provisions a public virtual interface to be owned by the specified AWS account.</p> <p>The owner of a connection calls this function to provision a public virtual interface to be owned by the specified AWS account.</p> <p>Virtual interfaces created using this function must be confirmed by the owner using <a>ConfirmPublicVirtualInterface</a>. Until this step has been completed, the virtual interface is in the <code>confirming</code> state and is not available to handle traffic.</p> <p>When creating an IPv6 public virtual interface, omit the Amazon address and customer address. IPv6 addresses are automatically assigned from the Amazon pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p>
-    fn allocate_public_virtual_interface(
+    async fn allocate_public_virtual_interface(
         &self,
         input: AllocatePublicVirtualInterfaceRequest,
-    ) -> RusotoFuture<VirtualInterface, AllocatePublicVirtualInterfaceError>;
+    ) -> Result<VirtualInterface, RusotoError<AllocatePublicVirtualInterfaceError>>;
 
     /// <p>Provisions a transit virtual interface to be owned by the specified AWS account. Use this type of interface to connect a transit gateway to your Direct Connect gateway.</p> <p>The owner of a connection provisions a transit virtual interface to be owned by the specified AWS account.</p> <p>After you create a transit virtual interface, it must be confirmed by the owner using <a>ConfirmTransitVirtualInterface</a>. Until this step has been completed, the transit virtual interface is in the <code>requested</code> state and is not available to handle traffic.</p>
-    fn allocate_transit_virtual_interface(
+    async fn allocate_transit_virtual_interface(
         &self,
         input: AllocateTransitVirtualInterfaceRequest,
-    ) -> RusotoFuture<AllocateTransitVirtualInterfaceResult, AllocateTransitVirtualInterfaceError>;
+    ) -> Result<
+        AllocateTransitVirtualInterfaceResult,
+        RusotoError<AllocateTransitVirtualInterfaceError>,
+    >;
 
     /// <p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS is interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can re-associate a connection that's currently associated with a different LAG; however, if removing the connection would cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>
-    fn associate_connection_with_lag(
+    async fn associate_connection_with_lag(
         &self,
         input: AssociateConnectionWithLagRequest,
-    ) -> RusotoFuture<Connection, AssociateConnectionWithLagError>;
+    ) -> Result<Connection, RusotoError<AssociateConnectionWithLagError>>;
 
     /// <p><p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection&#39;s connectivity to AWS as it is being migrated.</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn associate_hosted_connection(
+    async fn associate_hosted_connection(
         &self,
         input: AssociateHostedConnectionRequest,
-    ) -> RusotoFuture<Connection, AssociateHostedConnectionError>;
+    ) -> Result<Connection, RusotoError<AssociateHostedConnectionError>>;
 
     /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails.</p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>To reassociate a virtual interface to a new connection or LAG, the requester must own either the virtual interface itself or the connection to which the virtual interface is currently associated. Additionally, the requester must own the connection or LAG for the association.</p>
-    fn associate_virtual_interface(
+    async fn associate_virtual_interface(
         &self,
         input: AssociateVirtualInterfaceRequest,
-    ) -> RusotoFuture<VirtualInterface, AssociateVirtualInterfaceError>;
+    ) -> Result<VirtualInterface, RusotoError<AssociateVirtualInterfaceError>>;
 
     /// <p>Confirms the creation of the specified hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the <code>Ordering</code> state, and remains in this state until the owner confirms creation of the hosted connection.</p>
-    fn confirm_connection(
+    async fn confirm_connection(
         &self,
         input: ConfirmConnectionRequest,
-    ) -> RusotoFuture<ConfirmConnectionResponse, ConfirmConnectionError>;
+    ) -> Result<ConfirmConnectionResponse, RusotoError<ConfirmConnectionError>>;
 
     /// <p>Accepts ownership of a private virtual interface created by another AWS account.</p> <p>After the virtual interface owner makes this call, the virtual interface is created and attached to the specified virtual private gateway or Direct Connect gateway, and is made available to handle traffic.</p>
-    fn confirm_private_virtual_interface(
+    async fn confirm_private_virtual_interface(
         &self,
         input: ConfirmPrivateVirtualInterfaceRequest,
-    ) -> RusotoFuture<ConfirmPrivateVirtualInterfaceResponse, ConfirmPrivateVirtualInterfaceError>;
+    ) -> Result<
+        ConfirmPrivateVirtualInterfaceResponse,
+        RusotoError<ConfirmPrivateVirtualInterfaceError>,
+    >;
 
     /// <p>Accepts ownership of a public virtual interface created by another AWS account.</p> <p>After the virtual interface owner makes this call, the specified virtual interface is created and made available to handle traffic.</p>
-    fn confirm_public_virtual_interface(
+    async fn confirm_public_virtual_interface(
         &self,
         input: ConfirmPublicVirtualInterfaceRequest,
-    ) -> RusotoFuture<ConfirmPublicVirtualInterfaceResponse, ConfirmPublicVirtualInterfaceError>;
+    ) -> Result<
+        ConfirmPublicVirtualInterfaceResponse,
+        RusotoError<ConfirmPublicVirtualInterfaceError>,
+    >;
 
     /// <p>Accepts ownership of a transit virtual interface created by another AWS account.</p> <p> After the owner of the transit virtual interface makes this call, the specified transit virtual interface is created and made available to handle traffic.</p>
-    fn confirm_transit_virtual_interface(
+    async fn confirm_transit_virtual_interface(
         &self,
         input: ConfirmTransitVirtualInterfaceRequest,
-    ) -> RusotoFuture<ConfirmTransitVirtualInterfaceResponse, ConfirmTransitVirtualInterfaceError>;
+    ) -> Result<
+        ConfirmTransitVirtualInterfaceResponse,
+        RusotoError<ConfirmTransitVirtualInterfaceError>,
+    >;
 
     /// <p>Creates a BGP peer on the specified virtual interface.</p> <p>You must create a BGP peer for the corresponding address family (IPv4/IPv6) in order to access AWS resources that also use that address family.</p> <p>If logical redundancy is not supported by the connection, interconnect, or LAG, the BGP peer cannot be in the same address family as an existing BGP peer on the virtual interface.</p> <p>When creating a IPv6 BGP peer, omit the Amazon address and customer address. IPv6 addresses are automatically assigned from the Amazon pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>
-    fn create_bgp_peer(
+    async fn create_bgp_peer(
         &self,
         input: CreateBGPPeerRequest,
-    ) -> RusotoFuture<CreateBGPPeerResponse, CreateBGPPeerError>;
+    ) -> Result<CreateBGPPeerResponse, RusotoError<CreateBGPPeerError>>;
 
     /// <p>Creates a connection between a customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router.</p> <p>To find the locations for your Region, use <a>DescribeLocations</a>.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection is created.</p>
-    fn create_connection(
+    async fn create_connection(
         &self,
         input: CreateConnectionRequest,
-    ) -> RusotoFuture<Connection, CreateConnectionError>;
+    ) -> Result<Connection, RusotoError<CreateConnectionError>>;
 
     /// <p>Creates a Direct Connect gateway, which is an intermediate object that enables you to connect a set of virtual interfaces and virtual private gateways. A Direct Connect gateway is global and visible in any AWS Region after it is created. The virtual interfaces and virtual private gateways that are connected through a Direct Connect gateway can be in different AWS Regions. This enables you to connect to a VPC in any Region, regardless of the Region in which the virtual interfaces are located, and pass traffic between them.</p>
-    fn create_direct_connect_gateway(
+    async fn create_direct_connect_gateway(
         &self,
         input: CreateDirectConnectGatewayRequest,
-    ) -> RusotoFuture<CreateDirectConnectGatewayResult, CreateDirectConnectGatewayError>;
+    ) -> Result<CreateDirectConnectGatewayResult, RusotoError<CreateDirectConnectGatewayError>>;
 
     /// <p>Creates an association between a Direct Connect gateway and a virtual private gateway. The virtual private gateway must be attached to a VPC and must not be associated with another Direct Connect gateway.</p>
-    fn create_direct_connect_gateway_association(
+    async fn create_direct_connect_gateway_association(
         &self,
         input: CreateDirectConnectGatewayAssociationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateDirectConnectGatewayAssociationResult,
-        CreateDirectConnectGatewayAssociationError,
+        RusotoError<CreateDirectConnectGatewayAssociationError>,
     >;
 
     /// <p>Creates a proposal to associate the specified virtual private gateway or transit gateway with the specified Direct Connect gateway.</p> <p>You can only associate a Direct Connect gateway and virtual private gateway or transit gateway when the account that owns the Direct Connect gateway and the account that owns the virtual private gateway or transit gateway have the same AWS Payer ID.</p>
-    fn create_direct_connect_gateway_association_proposal(
+    async fn create_direct_connect_gateway_association_proposal(
         &self,
         input: CreateDirectConnectGatewayAssociationProposalRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateDirectConnectGatewayAssociationProposalResult,
-        CreateDirectConnectGatewayAssociationProposalError,
+        RusotoError<CreateDirectConnectGatewayAssociationProposalError>,
     >;
 
     /// <p><p>Creates an interconnect between an AWS Direct Connect Partner&#39;s network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection that is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide AWS Direct Connect hosted connections to customers through their own network services. Like a standard connection, an interconnect links the partner&#39;s network to an AWS Direct Connect location over a standard Ethernet fiber-optic cable. One end is connected to the partner&#39;s router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect is created.</p> <p>For each end customer, the AWS Direct Connect Partner provisions a connection on their interconnect by calling <a>AllocateHostedConnection</a>. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect Partner.</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn create_interconnect(
+    async fn create_interconnect(
         &self,
         input: CreateInterconnectRequest,
-    ) -> RusotoFuture<Interconnect, CreateInterconnectError>;
+    ) -> Result<Interconnect, RusotoError<CreateInterconnectError>>;
 
     /// <p>Creates a link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple interfaces, enabling you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect Partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
-    fn create_lag(&self, input: CreateLagRequest) -> RusotoFuture<Lag, CreateLagError>;
+    async fn create_lag(&self, input: CreateLagRequest)
+        -> Result<Lag, RusotoError<CreateLagError>>;
 
     /// <p>Creates a private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface can be connected to either a Direct Connect gateway or a Virtual Private Gateway (VGW). Connecting the private virtual interface to a Direct Connect gateway enables the possibility for connecting to multiple VPCs, including VPCs in different AWS Regions. Connecting the private virtual interface to a VGW only provides access to a single VPC within the same Region.</p>
-    fn create_private_virtual_interface(
+    async fn create_private_virtual_interface(
         &self,
         input: CreatePrivateVirtualInterfaceRequest,
-    ) -> RusotoFuture<VirtualInterface, CreatePrivateVirtualInterfaceError>;
+    ) -> Result<VirtualInterface, RusotoError<CreatePrivateVirtualInterfaceError>>;
 
     /// <p>Creates a public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon S3.</p> <p>When creating an IPv6 public virtual interface (<code>addressFamily</code> is <code>ipv6</code>), leave the <code>customer</code> and <code>amazon</code> address fields blank to use auto-assigned IPv6 space. Custom IPv6 addresses are not supported.</p>
-    fn create_public_virtual_interface(
+    async fn create_public_virtual_interface(
         &self,
         input: CreatePublicVirtualInterfaceRequest,
-    ) -> RusotoFuture<VirtualInterface, CreatePublicVirtualInterfaceError>;
+    ) -> Result<VirtualInterface, RusotoError<CreatePublicVirtualInterfaceError>>;
 
     /// <p><p>Creates a transit virtual interface. A transit virtual interface should be used to access one or more transit gateways associated with Direct Connect gateways. A transit virtual interface enables the connection of multiple VPCs attached to a transit gateway to a Direct Connect gateway.</p> <important> <p>If you associate your transit gateway with one or more Direct Connect gateways, the Autonomous System Number (ASN) used by the transit gateway and the Direct Connect gateway must be different. For example, if you use the default ASN 64512 for both your the transit gateway and Direct Connect gateway, the association request fails.</p> </important></p>
-    fn create_transit_virtual_interface(
+    async fn create_transit_virtual_interface(
         &self,
         input: CreateTransitVirtualInterfaceRequest,
-    ) -> RusotoFuture<CreateTransitVirtualInterfaceResult, CreateTransitVirtualInterfaceError>;
+    ) -> Result<CreateTransitVirtualInterfaceResult, RusotoError<CreateTransitVirtualInterfaceError>>;
 
     /// <p>Deletes the specified BGP peer on the specified virtual interface with the specified customer address and ASN.</p> <p>You cannot delete the last BGP peer from a virtual interface.</p>
-    fn delete_bgp_peer(
+    async fn delete_bgp_peer(
         &self,
         input: DeleteBGPPeerRequest,
-    ) -> RusotoFuture<DeleteBGPPeerResponse, DeleteBGPPeerError>;
+    ) -> Result<DeleteBGPPeerResponse, RusotoError<DeleteBGPPeerError>>;
 
     /// <p>Deletes the specified connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. If you are partnering with any third parties to connect with the AWS Direct Connect location, you must cancel your service with them separately.</p>
-    fn delete_connection(
+    async fn delete_connection(
         &self,
         input: DeleteConnectionRequest,
-    ) -> RusotoFuture<Connection, DeleteConnectionError>;
+    ) -> Result<Connection, RusotoError<DeleteConnectionError>>;
 
     /// <p>Deletes the specified Direct Connect gateway. You must first delete all virtual interfaces that are attached to the Direct Connect gateway and disassociate all virtual private gateways associated with the Direct Connect gateway.</p>
-    fn delete_direct_connect_gateway(
+    async fn delete_direct_connect_gateway(
         &self,
         input: DeleteDirectConnectGatewayRequest,
-    ) -> RusotoFuture<DeleteDirectConnectGatewayResult, DeleteDirectConnectGatewayError>;
+    ) -> Result<DeleteDirectConnectGatewayResult, RusotoError<DeleteDirectConnectGatewayError>>;
 
     /// <p>Deletes the association between the specified Direct Connect gateway and virtual private gateway.</p> <p>We recommend that you specify the <code>associationID</code> to delete the association. Alternatively, if you own virtual gateway and a Direct Connect gateway association, you can specify the <code>virtualGatewayId</code> and <code>directConnectGatewayId</code> to delete an association.</p>
-    fn delete_direct_connect_gateway_association(
+    async fn delete_direct_connect_gateway_association(
         &self,
         input: DeleteDirectConnectGatewayAssociationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DeleteDirectConnectGatewayAssociationResult,
-        DeleteDirectConnectGatewayAssociationError,
+        RusotoError<DeleteDirectConnectGatewayAssociationError>,
     >;
 
     /// <p>Deletes the association proposal request between the specified Direct Connect gateway and virtual private gateway or transit gateway.</p>
-    fn delete_direct_connect_gateway_association_proposal(
+    async fn delete_direct_connect_gateway_association_proposal(
         &self,
         input: DeleteDirectConnectGatewayAssociationProposalRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DeleteDirectConnectGatewayAssociationProposalResult,
-        DeleteDirectConnectGatewayAssociationProposalError,
+        RusotoError<DeleteDirectConnectGatewayAssociationProposalError>,
     >;
 
     /// <p><p>Deletes the specified interconnect.</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn delete_interconnect(
+    async fn delete_interconnect(
         &self,
         input: DeleteInterconnectRequest,
-    ) -> RusotoFuture<DeleteInterconnectResponse, DeleteInterconnectError>;
+    ) -> Result<DeleteInterconnectResponse, RusotoError<DeleteInterconnectError>>;
 
     /// <p>Deletes the specified link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>
-    fn delete_lag(&self, input: DeleteLagRequest) -> RusotoFuture<Lag, DeleteLagError>;
+    async fn delete_lag(&self, input: DeleteLagRequest)
+        -> Result<Lag, RusotoError<DeleteLagError>>;
 
     /// <p>Deletes a virtual interface.</p>
-    fn delete_virtual_interface(
+    async fn delete_virtual_interface(
         &self,
         input: DeleteVirtualInterfaceRequest,
-    ) -> RusotoFuture<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError>;
+    ) -> Result<DeleteVirtualInterfaceResponse, RusotoError<DeleteVirtualInterfaceError>>;
 
     /// <p>Deprecated. Use <a>DescribeLoa</a> instead.</p> <p>Gets the LOA-CFA for a connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
-    fn describe_connection_loa(
+    async fn describe_connection_loa(
         &self,
         input: DescribeConnectionLoaRequest,
-    ) -> RusotoFuture<DescribeConnectionLoaResponse, DescribeConnectionLoaError>;
+    ) -> Result<DescribeConnectionLoaResponse, RusotoError<DescribeConnectionLoaError>>;
 
     /// <p>Displays the specified connection or all connections in this Region.</p>
-    fn describe_connections(
+    async fn describe_connections(
         &self,
         input: DescribeConnectionsRequest,
-    ) -> RusotoFuture<Connections, DescribeConnectionsError>;
+    ) -> Result<Connections, RusotoError<DescribeConnectionsError>>;
 
     /// <p><p>Deprecated. Use <a>DescribeHostedConnections</a> instead.</p> <p>Lists the connections that have been provisioned on the specified interconnect.</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn describe_connections_on_interconnect(
+    async fn describe_connections_on_interconnect(
         &self,
         input: DescribeConnectionsOnInterconnectRequest,
-    ) -> RusotoFuture<Connections, DescribeConnectionsOnInterconnectError>;
+    ) -> Result<Connections, RusotoError<DescribeConnectionsOnInterconnectError>>;
 
     /// <p>Describes one or more association proposals for connection between a virtual private gateway or transit gateway and a Direct Connect gateway. </p>
-    fn describe_direct_connect_gateway_association_proposals(
+    async fn describe_direct_connect_gateway_association_proposals(
         &self,
         input: DescribeDirectConnectGatewayAssociationProposalsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeDirectConnectGatewayAssociationProposalsResult,
-        DescribeDirectConnectGatewayAssociationProposalsError,
+        RusotoError<DescribeDirectConnectGatewayAssociationProposalsError>,
     >;
 
     /// <p>Lists the associations between your Direct Connect gateways and virtual private gateways. You must specify a Direct Connect gateway, a virtual private gateway, or both. If you specify a Direct Connect gateway, the response contains all virtual private gateways associated with the Direct Connect gateway. If you specify a virtual private gateway, the response contains all Direct Connect gateways associated with the virtual private gateway. If you specify both, the response contains the association between the Direct Connect gateway and the virtual private gateway.</p>
-    fn describe_direct_connect_gateway_associations(
+    async fn describe_direct_connect_gateway_associations(
         &self,
         input: DescribeDirectConnectGatewayAssociationsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeDirectConnectGatewayAssociationsResult,
-        DescribeDirectConnectGatewayAssociationsError,
+        RusotoError<DescribeDirectConnectGatewayAssociationsError>,
     >;
 
     /// <p>Lists the attachments between your Direct Connect gateways and virtual interfaces. You must specify a Direct Connect gateway, a virtual interface, or both. If you specify a Direct Connect gateway, the response contains all virtual interfaces attached to the Direct Connect gateway. If you specify a virtual interface, the response contains all Direct Connect gateways attached to the virtual interface. If you specify both, the response contains the attachment between the Direct Connect gateway and the virtual interface.</p>
-    fn describe_direct_connect_gateway_attachments(
+    async fn describe_direct_connect_gateway_attachments(
         &self,
         input: DescribeDirectConnectGatewayAttachmentsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeDirectConnectGatewayAttachmentsResult,
-        DescribeDirectConnectGatewayAttachmentsError,
+        RusotoError<DescribeDirectConnectGatewayAttachmentsError>,
     >;
 
     /// <p>Lists all your Direct Connect gateways or only the specified Direct Connect gateway. Deleted Direct Connect gateways are not returned.</p>
-    fn describe_direct_connect_gateways(
+    async fn describe_direct_connect_gateways(
         &self,
         input: DescribeDirectConnectGatewaysRequest,
-    ) -> RusotoFuture<DescribeDirectConnectGatewaysResult, DescribeDirectConnectGatewaysError>;
+    ) -> Result<DescribeDirectConnectGatewaysResult, RusotoError<DescribeDirectConnectGatewaysError>>;
 
     /// <p><p>Lists the hosted connections that have been provisioned on the specified interconnect or link aggregation group (LAG).</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn describe_hosted_connections(
+    async fn describe_hosted_connections(
         &self,
         input: DescribeHostedConnectionsRequest,
-    ) -> RusotoFuture<Connections, DescribeHostedConnectionsError>;
+    ) -> Result<Connections, RusotoError<DescribeHostedConnectionsError>>;
 
     /// <p>Deprecated. Use <a>DescribeLoa</a> instead.</p> <p>Gets the LOA-CFA for the specified interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
-    fn describe_interconnect_loa(
+    async fn describe_interconnect_loa(
         &self,
         input: DescribeInterconnectLoaRequest,
-    ) -> RusotoFuture<DescribeInterconnectLoaResponse, DescribeInterconnectLoaError>;
+    ) -> Result<DescribeInterconnectLoaResponse, RusotoError<DescribeInterconnectLoaError>>;
 
     /// <p>Lists the interconnects owned by the AWS account or only the specified interconnect.</p>
-    fn describe_interconnects(
+    async fn describe_interconnects(
         &self,
         input: DescribeInterconnectsRequest,
-    ) -> RusotoFuture<Interconnects, DescribeInterconnectsError>;
+    ) -> Result<Interconnects, RusotoError<DescribeInterconnectsError>>;
 
     /// <p>Describes all your link aggregation groups (LAG) or the specified LAG.</p>
-    fn describe_lags(&self, input: DescribeLagsRequest) -> RusotoFuture<Lags, DescribeLagsError>;
+    async fn describe_lags(
+        &self,
+        input: DescribeLagsRequest,
+    ) -> Result<Lags, RusotoError<DescribeLagsError>>;
 
     /// <p>Gets the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
-    fn describe_loa(&self, input: DescribeLoaRequest) -> RusotoFuture<Loa, DescribeLoaError>;
+    async fn describe_loa(
+        &self,
+        input: DescribeLoaRequest,
+    ) -> Result<Loa, RusotoError<DescribeLoaError>>;
 
     /// <p>Lists the AWS Direct Connect locations in the current AWS Region. These are the locations that can be selected when calling <a>CreateConnection</a> or <a>CreateInterconnect</a>.</p>
-    fn describe_locations(&self) -> RusotoFuture<Locations, DescribeLocationsError>;
+    async fn describe_locations(&self) -> Result<Locations, RusotoError<DescribeLocationsError>>;
 
     /// <p>Describes the tags associated with the specified AWS Direct Connect resources.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsRequest,
-    ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError>;
+    ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>>;
 
     /// <p>Lists the virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linked to a virtual private gateway.</p>
-    fn describe_virtual_gateways(
+    async fn describe_virtual_gateways(
         &self,
-    ) -> RusotoFuture<VirtualGateways, DescribeVirtualGatewaysError>;
+    ) -> Result<VirtualGateways, RusotoError<DescribeVirtualGatewaysError>>;
 
     /// <p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer network.</p>
-    fn describe_virtual_interfaces(
+    async fn describe_virtual_interfaces(
         &self,
         input: DescribeVirtualInterfacesRequest,
-    ) -> RusotoFuture<VirtualInterfaces, DescribeVirtualInterfacesError>;
+    ) -> Result<VirtualInterfaces, RusotoError<DescribeVirtualInterfacesError>>;
 
     /// <p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect Partner is automatically converted to an interconnect.</p> <p>If disassociating the connection would cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>
-    fn disassociate_connection_from_lag(
+    async fn disassociate_connection_from_lag(
         &self,
         input: DisassociateConnectionFromLagRequest,
-    ) -> RusotoFuture<Connection, DisassociateConnectionFromLagError>;
+    ) -> Result<Connection, RusotoError<DisassociateConnectionFromLagError>>;
 
     /// <p>Adds the specified tags to the specified AWS Direct Connect resource. Each resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the resource, this action updates its value.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
     /// <p>Removes one or more tags from the specified AWS Direct Connect resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Updates the specified attributes of the Direct Connect gateway association.</p> <p>Add or remove prefixes from the association.</p>
-    fn update_direct_connect_gateway_association(
+    async fn update_direct_connect_gateway_association(
         &self,
         input: UpdateDirectConnectGatewayAssociationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateDirectConnectGatewayAssociationResult,
-        UpdateDirectConnectGatewayAssociationError,
+        RusotoError<UpdateDirectConnectGatewayAssociationError>,
     >;
 
     /// <p>Updates the attributes of the specified link aggregation group (LAG).</p> <p>You can update the following attributes:</p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value and the number of operational connections falls below the specified value, the LAG automatically goes down to avoid over-utilization of the remaining connections. Adjust this value with care, as it could force the LAG down if it is set higher than the current number of operational connections.</p>
-    fn update_lag(&self, input: UpdateLagRequest) -> RusotoFuture<Lag, UpdateLagError>;
+    async fn update_lag(&self, input: UpdateLagRequest)
+        -> Result<Lag, RusotoError<UpdateLagError>>;
 
     /// <p>Updates the specified attributes of the specified virtual private interface.</p> <p>Setting the MTU of a virtual interface to 9001 (jumbo frames) can cause an update to the underlying physical connection if it wasn't updated to support jumbo frames. Updating the connection disrupts network connectivity for all virtual interfaces associated with the connection for up to 30 seconds. To check whether your connection supports jumbo frames, call <a>DescribeConnections</a>. To check whether your virtual interface supports jumbo frames, call <a>DescribeVirtualInterfaces</a>.</p>
-    fn update_virtual_interface_attributes(
+    async fn update_virtual_interface_attributes(
         &self,
         input: UpdateVirtualInterfaceAttributesRequest,
-    ) -> RusotoFuture<VirtualInterface, UpdateVirtualInterfaceAttributesError>;
+    ) -> Result<VirtualInterface, RusotoError<UpdateVirtualInterfaceAttributesError>>;
 }
 /// A client for the AWS Direct Connect API.
 #[derive(Clone)]
@@ -4677,7 +4754,10 @@ impl DirectConnectClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DirectConnectClient {
-        Self::new_with_client(Client::shared(), region)
+        DirectConnectClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -4687,14 +4767,12 @@ impl DirectConnectClient {
     ) -> DirectConnectClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        DirectConnectClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> DirectConnectClient {
@@ -4702,22 +4780,15 @@ impl DirectConnectClient {
     }
 }
 
-impl fmt::Debug for DirectConnectClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("DirectConnectClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl DirectConnect for DirectConnectClient {
     /// <p>Accepts a proposal request to attach a virtual private gateway or transit gateway to a Direct Connect gateway.</p>
-    fn accept_direct_connect_gateway_association_proposal(
+    async fn accept_direct_connect_gateway_association_proposal(
         &self,
         input: AcceptDirectConnectGatewayAssociationProposalRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AcceptDirectConnectGatewayAssociationProposalResult,
-        AcceptDirectConnectGatewayAssociationProposalError,
+        RusotoError<AcceptDirectConnectGatewayAssociationProposalError>,
     > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -4729,25 +4800,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AcceptDirectConnectGatewayAssociationProposalResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AcceptDirectConnectGatewayAssociationProposalError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AcceptDirectConnectGatewayAssociationProposalResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AcceptDirectConnectGatewayAssociationProposalError::from_response(response))
+        }
     }
 
     /// <p><p>Deprecated. Use <a>AllocateHostedConnection</a> instead.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the specified interconnect.</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn allocate_connection_on_interconnect(
+    async fn allocate_connection_on_interconnect(
         &self,
         input: AllocateConnectionOnInterconnectRequest,
-    ) -> RusotoFuture<Connection, AllocateConnectionOnInterconnectError> {
+    ) -> Result<Connection, RusotoError<AllocateConnectionOnInterconnectError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4758,26 +4831,28 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AllocateConnectionOnInterconnectError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AllocateConnectionOnInterconnectError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p><p>Creates a hosted connection on the specified interconnect or a link aggregation group (LAG) of interconnects.</p> <p>Allocates a VLAN number and a specified amount of capacity (bandwidth) for use by a hosted connection on the specified interconnect or LAG of interconnects. AWS polices the hosted connection for the specified capacity and the AWS Direct Connect Partner must also police the hosted connection for the specified capacity.</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn allocate_hosted_connection(
+    async fn allocate_hosted_connection(
         &self,
         input: AllocateHostedConnectionRequest,
-    ) -> RusotoFuture<Connection, AllocateHostedConnectionError> {
+    ) -> Result<Connection, RusotoError<AllocateHostedConnectionError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4785,24 +4860,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AllocateHostedConnectionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AllocateHostedConnectionError::from_response(response))
+        }
     }
 
     /// <p>Provisions a private virtual interface to be owned by the specified AWS account.</p> <p>Virtual interfaces created using this action must be confirmed by the owner using <a>ConfirmPrivateVirtualInterface</a>. Until then, the virtual interface is in the <code>Confirming</code> state and is not available to handle traffic.</p>
-    fn allocate_private_virtual_interface(
+    async fn allocate_private_virtual_interface(
         &self,
         input: AllocatePrivateVirtualInterfaceRequest,
-    ) -> RusotoFuture<VirtualInterface, AllocatePrivateVirtualInterfaceError> {
+    ) -> Result<VirtualInterface, RusotoError<AllocatePrivateVirtualInterfaceError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4813,27 +4890,28 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<VirtualInterface, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AllocatePrivateVirtualInterfaceError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<VirtualInterface, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AllocatePrivateVirtualInterfaceError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Provisions a public virtual interface to be owned by the specified AWS account.</p> <p>The owner of a connection calls this function to provision a public virtual interface to be owned by the specified AWS account.</p> <p>Virtual interfaces created using this function must be confirmed by the owner using <a>ConfirmPublicVirtualInterface</a>. Until this step has been completed, the virtual interface is in the <code>confirming</code> state and is not available to handle traffic.</p> <p>When creating an IPv6 public virtual interface, omit the Amazon address and customer address. IPv6 addresses are automatically assigned from the Amazon pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p>
-    fn allocate_public_virtual_interface(
+    async fn allocate_public_virtual_interface(
         &self,
         input: AllocatePublicVirtualInterfaceRequest,
-    ) -> RusotoFuture<VirtualInterface, AllocatePublicVirtualInterfaceError> {
+    ) -> Result<VirtualInterface, RusotoError<AllocatePublicVirtualInterfaceError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4844,26 +4922,29 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<VirtualInterface, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AllocatePublicVirtualInterfaceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<VirtualInterface, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AllocatePublicVirtualInterfaceError::from_response(response))
+        }
     }
 
     /// <p>Provisions a transit virtual interface to be owned by the specified AWS account. Use this type of interface to connect a transit gateway to your Direct Connect gateway.</p> <p>The owner of a connection provisions a transit virtual interface to be owned by the specified AWS account.</p> <p>After you create a transit virtual interface, it must be confirmed by the owner using <a>ConfirmTransitVirtualInterface</a>. Until this step has been completed, the transit virtual interface is in the <code>requested</code> state and is not available to handle traffic.</p>
-    fn allocate_transit_virtual_interface(
+    async fn allocate_transit_virtual_interface(
         &self,
         input: AllocateTransitVirtualInterfaceRequest,
-    ) -> RusotoFuture<AllocateTransitVirtualInterfaceResult, AllocateTransitVirtualInterfaceError>
-    {
+    ) -> Result<
+        AllocateTransitVirtualInterfaceResult,
+        RusotoError<AllocateTransitVirtualInterfaceError>,
+    > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4874,27 +4955,29 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AllocateTransitVirtualInterfaceResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AllocateTransitVirtualInterfaceError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AllocateTransitVirtualInterfaceResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AllocateTransitVirtualInterfaceError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS is interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can re-associate a connection that's currently associated with a different LAG; however, if removing the connection would cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>
-    fn associate_connection_with_lag(
+    async fn associate_connection_with_lag(
         &self,
         input: AssociateConnectionWithLagRequest,
-    ) -> RusotoFuture<Connection, AssociateConnectionWithLagError> {
+    ) -> Result<Connection, RusotoError<AssociateConnectionWithLagError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4902,24 +4985,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateConnectionWithLagError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateConnectionWithLagError::from_response(response))
+        }
     }
 
     /// <p><p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection&#39;s connectivity to AWS as it is being migrated.</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn associate_hosted_connection(
+    async fn associate_hosted_connection(
         &self,
         input: AssociateHostedConnectionRequest,
-    ) -> RusotoFuture<Connection, AssociateHostedConnectionError> {
+    ) -> Result<Connection, RusotoError<AssociateHostedConnectionError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4927,24 +5012,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateHostedConnectionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateHostedConnectionError::from_response(response))
+        }
     }
 
     /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails.</p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>To reassociate a virtual interface to a new connection or LAG, the requester must own either the virtual interface itself or the connection to which the virtual interface is currently associated. Additionally, the requester must own the connection or LAG for the association.</p>
-    fn associate_virtual_interface(
+    async fn associate_virtual_interface(
         &self,
         input: AssociateVirtualInterfaceRequest,
-    ) -> RusotoFuture<VirtualInterface, AssociateVirtualInterfaceError> {
+    ) -> Result<VirtualInterface, RusotoError<AssociateVirtualInterfaceError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4952,25 +5039,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<VirtualInterface, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateVirtualInterfaceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<VirtualInterface, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateVirtualInterfaceError::from_response(response))
+        }
     }
 
     /// <p>Confirms the creation of the specified hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the <code>Ordering</code> state, and remains in this state until the owner confirms creation of the hosted connection.</p>
-    fn confirm_connection(
+    async fn confirm_connection(
         &self,
         input: ConfirmConnectionRequest,
-    ) -> RusotoFuture<ConfirmConnectionResponse, ConfirmConnectionError> {
+    ) -> Result<ConfirmConnectionResponse, RusotoError<ConfirmConnectionError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4978,29 +5066,30 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ConfirmConnectionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ConfirmConnectionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ConfirmConnectionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ConfirmConnectionError::from_response(response))
+        }
     }
 
     /// <p>Accepts ownership of a private virtual interface created by another AWS account.</p> <p>After the virtual interface owner makes this call, the virtual interface is created and attached to the specified virtual private gateway or Direct Connect gateway, and is made available to handle traffic.</p>
-    fn confirm_private_virtual_interface(
+    async fn confirm_private_virtual_interface(
         &self,
         input: ConfirmPrivateVirtualInterfaceRequest,
-    ) -> RusotoFuture<ConfirmPrivateVirtualInterfaceResponse, ConfirmPrivateVirtualInterfaceError>
-    {
+    ) -> Result<
+        ConfirmPrivateVirtualInterfaceResponse,
+        RusotoError<ConfirmPrivateVirtualInterfaceError>,
+    > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5011,26 +5100,30 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ConfirmPrivateVirtualInterfaceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ConfirmPrivateVirtualInterfaceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ConfirmPrivateVirtualInterfaceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ConfirmPrivateVirtualInterfaceError::from_response(response))
+        }
     }
 
     /// <p>Accepts ownership of a public virtual interface created by another AWS account.</p> <p>After the virtual interface owner makes this call, the specified virtual interface is created and made available to handle traffic.</p>
-    fn confirm_public_virtual_interface(
+    async fn confirm_public_virtual_interface(
         &self,
         input: ConfirmPublicVirtualInterfaceRequest,
-    ) -> RusotoFuture<ConfirmPublicVirtualInterfaceResponse, ConfirmPublicVirtualInterfaceError>
-    {
+    ) -> Result<
+        ConfirmPublicVirtualInterfaceResponse,
+        RusotoError<ConfirmPublicVirtualInterfaceError>,
+    > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5041,26 +5134,30 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ConfirmPublicVirtualInterfaceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ConfirmPublicVirtualInterfaceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ConfirmPublicVirtualInterfaceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ConfirmPublicVirtualInterfaceError::from_response(response))
+        }
     }
 
     /// <p>Accepts ownership of a transit virtual interface created by another AWS account.</p> <p> After the owner of the transit virtual interface makes this call, the specified transit virtual interface is created and made available to handle traffic.</p>
-    fn confirm_transit_virtual_interface(
+    async fn confirm_transit_virtual_interface(
         &self,
         input: ConfirmTransitVirtualInterfaceRequest,
-    ) -> RusotoFuture<ConfirmTransitVirtualInterfaceResponse, ConfirmTransitVirtualInterfaceError>
-    {
+    ) -> Result<
+        ConfirmTransitVirtualInterfaceResponse,
+        RusotoError<ConfirmTransitVirtualInterfaceError>,
+    > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5071,25 +5168,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ConfirmTransitVirtualInterfaceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ConfirmTransitVirtualInterfaceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ConfirmTransitVirtualInterfaceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ConfirmTransitVirtualInterfaceError::from_response(response))
+        }
     }
 
     /// <p>Creates a BGP peer on the specified virtual interface.</p> <p>You must create a BGP peer for the corresponding address family (IPv4/IPv6) in order to access AWS resources that also use that address family.</p> <p>If logical redundancy is not supported by the connection, interconnect, or LAG, the BGP peer cannot be in the same address family as an existing BGP peer on the virtual interface.</p> <p>When creating a IPv6 BGP peer, omit the Amazon address and customer address. IPv6 addresses are automatically assigned from the Amazon pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>
-    fn create_bgp_peer(
+    async fn create_bgp_peer(
         &self,
         input: CreateBGPPeerRequest,
-    ) -> RusotoFuture<CreateBGPPeerResponse, CreateBGPPeerError> {
+    ) -> Result<CreateBGPPeerResponse, RusotoError<CreateBGPPeerError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5097,28 +5196,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateBGPPeerResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateBGPPeerError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateBGPPeerResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateBGPPeerError::from_response(response))
+        }
     }
 
     /// <p>Creates a connection between a customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router.</p> <p>To find the locations for your Region, use <a>DescribeLocations</a>.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection is created.</p>
-    fn create_connection(
+    async fn create_connection(
         &self,
         input: CreateConnectionRequest,
-    ) -> RusotoFuture<Connection, CreateConnectionError> {
+    ) -> Result<Connection, RusotoError<CreateConnectionError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5126,27 +5223,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateConnectionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateConnectionError::from_response(response))
+        }
     }
 
     /// <p>Creates a Direct Connect gateway, which is an intermediate object that enables you to connect a set of virtual interfaces and virtual private gateways. A Direct Connect gateway is global and visible in any AWS Region after it is created. The virtual interfaces and virtual private gateways that are connected through a Direct Connect gateway can be in different AWS Regions. This enables you to connect to a VPC in any Region, regardless of the Region in which the virtual interfaces are located, and pass traffic between them.</p>
-    fn create_direct_connect_gateway(
+    async fn create_direct_connect_gateway(
         &self,
         input: CreateDirectConnectGatewayRequest,
-    ) -> RusotoFuture<CreateDirectConnectGatewayResult, CreateDirectConnectGatewayError> {
+    ) -> Result<CreateDirectConnectGatewayResult, RusotoError<CreateDirectConnectGatewayError>>
+    {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5154,27 +5251,29 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDirectConnectGatewayResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDirectConnectGatewayError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDirectConnectGatewayResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDirectConnectGatewayError::from_response(response))
+        }
     }
 
     /// <p>Creates an association between a Direct Connect gateway and a virtual private gateway. The virtual private gateway must be attached to a VPC and must not be associated with another Direct Connect gateway.</p>
-    fn create_direct_connect_gateway_association(
+    async fn create_direct_connect_gateway_association(
         &self,
         input: CreateDirectConnectGatewayAssociationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateDirectConnectGatewayAssociationResult,
-        CreateDirectConnectGatewayAssociationError,
+        RusotoError<CreateDirectConnectGatewayAssociationError>,
     > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -5186,29 +5285,31 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDirectConnectGatewayAssociationResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDirectConnectGatewayAssociationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDirectConnectGatewayAssociationResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDirectConnectGatewayAssociationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Creates a proposal to associate the specified virtual private gateway or transit gateway with the specified Direct Connect gateway.</p> <p>You can only associate a Direct Connect gateway and virtual private gateway or transit gateway when the account that owns the Direct Connect gateway and the account that owns the virtual private gateway or transit gateway have the same AWS Payer ID.</p>
-    fn create_direct_connect_gateway_association_proposal(
+    async fn create_direct_connect_gateway_association_proposal(
         &self,
         input: CreateDirectConnectGatewayAssociationProposalRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateDirectConnectGatewayAssociationProposalResult,
-        CreateDirectConnectGatewayAssociationProposalError,
+        RusotoError<CreateDirectConnectGatewayAssociationProposalError>,
     > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -5220,25 +5321,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDirectConnectGatewayAssociationProposalResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDirectConnectGatewayAssociationProposalError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDirectConnectGatewayAssociationProposalResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDirectConnectGatewayAssociationProposalError::from_response(response))
+        }
     }
 
     /// <p><p>Creates an interconnect between an AWS Direct Connect Partner&#39;s network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection that is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide AWS Direct Connect hosted connections to customers through their own network services. Like a standard connection, an interconnect links the partner&#39;s network to an AWS Direct Connect location over a standard Ethernet fiber-optic cable. One end is connected to the partner&#39;s router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect is created.</p> <p>For each end customer, the AWS Direct Connect Partner provisions a connection on their interconnect by calling <a>AllocateHostedConnection</a>. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect Partner.</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn create_interconnect(
+    async fn create_interconnect(
         &self,
         input: CreateInterconnectRequest,
-    ) -> RusotoFuture<Interconnect, CreateInterconnectError> {
+    ) -> Result<Interconnect, RusotoError<CreateInterconnectError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5246,24 +5349,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Interconnect, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateInterconnectError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Interconnect, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateInterconnectError::from_response(response))
+        }
     }
 
     /// <p>Creates a link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple interfaces, enabling you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect Partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
-    fn create_lag(&self, input: CreateLagRequest) -> RusotoFuture<Lag, CreateLagError> {
+    async fn create_lag(
+        &self,
+        input: CreateLagRequest,
+    ) -> Result<Lag, RusotoError<CreateLagError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5271,27 +5376,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateLagError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateLagError::from_response(response))
+        }
     }
 
     /// <p>Creates a private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface can be connected to either a Direct Connect gateway or a Virtual Private Gateway (VGW). Connecting the private virtual interface to a Direct Connect gateway enables the possibility for connecting to multiple VPCs, including VPCs in different AWS Regions. Connecting the private virtual interface to a VGW only provides access to a single VPC within the same Region.</p>
-    fn create_private_virtual_interface(
+    async fn create_private_virtual_interface(
         &self,
         input: CreatePrivateVirtualInterfaceRequest,
-    ) -> RusotoFuture<VirtualInterface, CreatePrivateVirtualInterfaceError> {
+    ) -> Result<VirtualInterface, RusotoError<CreatePrivateVirtualInterfaceError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5302,25 +5406,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<VirtualInterface, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePrivateVirtualInterfaceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<VirtualInterface, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreatePrivateVirtualInterfaceError::from_response(response))
+        }
     }
 
     /// <p>Creates a public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon S3.</p> <p>When creating an IPv6 public virtual interface (<code>addressFamily</code> is <code>ipv6</code>), leave the <code>customer</code> and <code>amazon</code> address fields blank to use auto-assigned IPv6 space. Custom IPv6 addresses are not supported.</p>
-    fn create_public_virtual_interface(
+    async fn create_public_virtual_interface(
         &self,
         input: CreatePublicVirtualInterfaceRequest,
-    ) -> RusotoFuture<VirtualInterface, CreatePublicVirtualInterfaceError> {
+    ) -> Result<VirtualInterface, RusotoError<CreatePublicVirtualInterfaceError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5331,25 +5436,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<VirtualInterface, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePublicVirtualInterfaceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<VirtualInterface, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreatePublicVirtualInterfaceError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a transit virtual interface. A transit virtual interface should be used to access one or more transit gateways associated with Direct Connect gateways. A transit virtual interface enables the connection of multiple VPCs attached to a transit gateway to a Direct Connect gateway.</p> <important> <p>If you associate your transit gateway with one or more Direct Connect gateways, the Autonomous System Number (ASN) used by the transit gateway and the Direct Connect gateway must be different. For example, if you use the default ASN 64512 for both your the transit gateway and Direct Connect gateway, the association request fails.</p> </important></p>
-    fn create_transit_virtual_interface(
+    async fn create_transit_virtual_interface(
         &self,
         input: CreateTransitVirtualInterfaceRequest,
-    ) -> RusotoFuture<CreateTransitVirtualInterfaceResult, CreateTransitVirtualInterfaceError> {
+    ) -> Result<CreateTransitVirtualInterfaceResult, RusotoError<CreateTransitVirtualInterfaceError>>
+    {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5360,25 +5467,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateTransitVirtualInterfaceResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTransitVirtualInterfaceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateTransitVirtualInterfaceResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTransitVirtualInterfaceError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified BGP peer on the specified virtual interface with the specified customer address and ASN.</p> <p>You cannot delete the last BGP peer from a virtual interface.</p>
-    fn delete_bgp_peer(
+    async fn delete_bgp_peer(
         &self,
         input: DeleteBGPPeerRequest,
-    ) -> RusotoFuture<DeleteBGPPeerResponse, DeleteBGPPeerError> {
+    ) -> Result<DeleteBGPPeerResponse, RusotoError<DeleteBGPPeerError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5386,28 +5495,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteBGPPeerResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteBGPPeerError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteBGPPeerResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteBGPPeerError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. If you are partnering with any third parties to connect with the AWS Direct Connect location, you must cancel your service with them separately.</p>
-    fn delete_connection(
+    async fn delete_connection(
         &self,
         input: DeleteConnectionRequest,
-    ) -> RusotoFuture<Connection, DeleteConnectionError> {
+    ) -> Result<Connection, RusotoError<DeleteConnectionError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5415,27 +5522,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteConnectionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteConnectionError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified Direct Connect gateway. You must first delete all virtual interfaces that are attached to the Direct Connect gateway and disassociate all virtual private gateways associated with the Direct Connect gateway.</p>
-    fn delete_direct_connect_gateway(
+    async fn delete_direct_connect_gateway(
         &self,
         input: DeleteDirectConnectGatewayRequest,
-    ) -> RusotoFuture<DeleteDirectConnectGatewayResult, DeleteDirectConnectGatewayError> {
+    ) -> Result<DeleteDirectConnectGatewayResult, RusotoError<DeleteDirectConnectGatewayError>>
+    {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5443,27 +5550,29 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDirectConnectGatewayResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDirectConnectGatewayError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteDirectConnectGatewayResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDirectConnectGatewayError::from_response(response))
+        }
     }
 
     /// <p>Deletes the association between the specified Direct Connect gateway and virtual private gateway.</p> <p>We recommend that you specify the <code>associationID</code> to delete the association. Alternatively, if you own virtual gateway and a Direct Connect gateway association, you can specify the <code>virtualGatewayId</code> and <code>directConnectGatewayId</code> to delete an association.</p>
-    fn delete_direct_connect_gateway_association(
+    async fn delete_direct_connect_gateway_association(
         &self,
         input: DeleteDirectConnectGatewayAssociationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DeleteDirectConnectGatewayAssociationResult,
-        DeleteDirectConnectGatewayAssociationError,
+        RusotoError<DeleteDirectConnectGatewayAssociationError>,
     > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -5475,29 +5584,31 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDirectConnectGatewayAssociationResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDirectConnectGatewayAssociationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteDirectConnectGatewayAssociationResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDirectConnectGatewayAssociationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Deletes the association proposal request between the specified Direct Connect gateway and virtual private gateway or transit gateway.</p>
-    fn delete_direct_connect_gateway_association_proposal(
+    async fn delete_direct_connect_gateway_association_proposal(
         &self,
         input: DeleteDirectConnectGatewayAssociationProposalRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DeleteDirectConnectGatewayAssociationProposalResult,
-        DeleteDirectConnectGatewayAssociationProposalError,
+        RusotoError<DeleteDirectConnectGatewayAssociationProposalError>,
     > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -5509,25 +5620,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDirectConnectGatewayAssociationProposalResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDirectConnectGatewayAssociationProposalError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteDirectConnectGatewayAssociationProposalResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDirectConnectGatewayAssociationProposalError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes the specified interconnect.</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn delete_interconnect(
+    async fn delete_interconnect(
         &self,
         input: DeleteInterconnectRequest,
-    ) -> RusotoFuture<DeleteInterconnectResponse, DeleteInterconnectError> {
+    ) -> Result<DeleteInterconnectResponse, RusotoError<DeleteInterconnectError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5535,25 +5648,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteInterconnectResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteInterconnectError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteInterconnectResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteInterconnectError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>
-    fn delete_lag(&self, input: DeleteLagRequest) -> RusotoFuture<Lag, DeleteLagError> {
+    async fn delete_lag(
+        &self,
+        input: DeleteLagRequest,
+    ) -> Result<Lag, RusotoError<DeleteLagError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5561,27 +5676,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteLagError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteLagError::from_response(response))
+        }
     }
 
     /// <p>Deletes a virtual interface.</p>
-    fn delete_virtual_interface(
+    async fn delete_virtual_interface(
         &self,
         input: DeleteVirtualInterfaceRequest,
-    ) -> RusotoFuture<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError> {
+    ) -> Result<DeleteVirtualInterfaceResponse, RusotoError<DeleteVirtualInterfaceError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5589,27 +5703,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteVirtualInterfaceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteVirtualInterfaceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteVirtualInterfaceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVirtualInterfaceError::from_response(response))
+        }
     }
 
     /// <p>Deprecated. Use <a>DescribeLoa</a> instead.</p> <p>Gets the LOA-CFA for a connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
-    fn describe_connection_loa(
+    async fn describe_connection_loa(
         &self,
         input: DescribeConnectionLoaRequest,
-    ) -> RusotoFuture<DescribeConnectionLoaResponse, DescribeConnectionLoaError> {
+    ) -> Result<DescribeConnectionLoaResponse, RusotoError<DescribeConnectionLoaError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5617,27 +5731,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeConnectionLoaResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeConnectionLoaError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConnectionLoaResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConnectionLoaError::from_response(response))
+        }
     }
 
     /// <p>Displays the specified connection or all connections in this Region.</p>
-    fn describe_connections(
+    async fn describe_connections(
         &self,
         input: DescribeConnectionsRequest,
-    ) -> RusotoFuture<Connections, DescribeConnectionsError> {
+    ) -> Result<Connections, RusotoError<DescribeConnectionsError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5645,26 +5759,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Connections, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeConnectionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Connections, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConnectionsError::from_response(response))
+        }
     }
 
     /// <p><p>Deprecated. Use <a>DescribeHostedConnections</a> instead.</p> <p>Lists the connections that have been provisioned on the specified interconnect.</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn describe_connections_on_interconnect(
+    async fn describe_connections_on_interconnect(
         &self,
         input: DescribeConnectionsOnInterconnectRequest,
-    ) -> RusotoFuture<Connections, DescribeConnectionsOnInterconnectError> {
+    ) -> Result<Connections, RusotoError<DescribeConnectionsOnInterconnectError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5675,28 +5789,30 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Connections, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConnectionsOnInterconnectError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Connections, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConnectionsOnInterconnectError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Describes one or more association proposals for connection between a virtual private gateway or transit gateway and a Direct Connect gateway. </p>
-    fn describe_direct_connect_gateway_association_proposals(
+    async fn describe_direct_connect_gateway_association_proposals(
         &self,
         input: DescribeDirectConnectGatewayAssociationProposalsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeDirectConnectGatewayAssociationProposalsResult,
-        DescribeDirectConnectGatewayAssociationProposalsError,
+        RusotoError<DescribeDirectConnectGatewayAssociationProposalsError>,
     > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -5708,26 +5824,29 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeDirectConnectGatewayAssociationProposalsResult, _>()
-                }))
-                        } else {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                                Err(DescribeDirectConnectGatewayAssociationProposalsError::from_response(response))
-                            }))
-                        }
-                    })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDirectConnectGatewayAssociationProposalsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDirectConnectGatewayAssociationProposalsError::from_response(response))
+        }
     }
 
     /// <p>Lists the associations between your Direct Connect gateways and virtual private gateways. You must specify a Direct Connect gateway, a virtual private gateway, or both. If you specify a Direct Connect gateway, the response contains all virtual private gateways associated with the Direct Connect gateway. If you specify a virtual private gateway, the response contains all Direct Connect gateways associated with the virtual private gateway. If you specify both, the response contains the association between the Direct Connect gateway and the virtual private gateway.</p>
-    fn describe_direct_connect_gateway_associations(
+    async fn describe_direct_connect_gateway_associations(
         &self,
         input: DescribeDirectConnectGatewayAssociationsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeDirectConnectGatewayAssociationsResult,
-        DescribeDirectConnectGatewayAssociationsError,
+        RusotoError<DescribeDirectConnectGatewayAssociationsError>,
     > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -5739,27 +5858,29 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDirectConnectGatewayAssociationsResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDirectConnectGatewayAssociationsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDirectConnectGatewayAssociationsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDirectConnectGatewayAssociationsError::from_response(response))
+        }
     }
 
     /// <p>Lists the attachments between your Direct Connect gateways and virtual interfaces. You must specify a Direct Connect gateway, a virtual interface, or both. If you specify a Direct Connect gateway, the response contains all virtual interfaces attached to the Direct Connect gateway. If you specify a virtual interface, the response contains all Direct Connect gateways attached to the virtual interface. If you specify both, the response contains the attachment between the Direct Connect gateway and the virtual interface.</p>
-    fn describe_direct_connect_gateway_attachments(
+    async fn describe_direct_connect_gateway_attachments(
         &self,
         input: DescribeDirectConnectGatewayAttachmentsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeDirectConnectGatewayAttachmentsResult,
-        DescribeDirectConnectGatewayAttachmentsError,
+        RusotoError<DescribeDirectConnectGatewayAttachmentsError>,
     > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -5771,27 +5892,30 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDirectConnectGatewayAttachmentsResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDirectConnectGatewayAttachmentsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDirectConnectGatewayAttachmentsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDirectConnectGatewayAttachmentsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Lists all your Direct Connect gateways or only the specified Direct Connect gateway. Deleted Direct Connect gateways are not returned.</p>
-    fn describe_direct_connect_gateways(
+    async fn describe_direct_connect_gateways(
         &self,
         input: DescribeDirectConnectGatewaysRequest,
-    ) -> RusotoFuture<DescribeDirectConnectGatewaysResult, DescribeDirectConnectGatewaysError> {
+    ) -> Result<DescribeDirectConnectGatewaysResult, RusotoError<DescribeDirectConnectGatewaysError>>
+    {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5802,25 +5926,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDirectConnectGatewaysResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDirectConnectGatewaysError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDirectConnectGatewaysResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDirectConnectGatewaysError::from_response(response))
+        }
     }
 
     /// <p><p>Lists the hosted connections that have been provisioned on the specified interconnect or link aggregation group (LAG).</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
-    fn describe_hosted_connections(
+    async fn describe_hosted_connections(
         &self,
         input: DescribeHostedConnectionsRequest,
-    ) -> RusotoFuture<Connections, DescribeHostedConnectionsError> {
+    ) -> Result<Connections, RusotoError<DescribeHostedConnectionsError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5828,24 +5954,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Connections, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeHostedConnectionsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Connections, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeHostedConnectionsError::from_response(response))
+        }
     }
 
     /// <p>Deprecated. Use <a>DescribeLoa</a> instead.</p> <p>Gets the LOA-CFA for the specified interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
-    fn describe_interconnect_loa(
+    async fn describe_interconnect_loa(
         &self,
         input: DescribeInterconnectLoaRequest,
-    ) -> RusotoFuture<DescribeInterconnectLoaResponse, DescribeInterconnectLoaError> {
+    ) -> Result<DescribeInterconnectLoaResponse, RusotoError<DescribeInterconnectLoaError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5853,25 +5981,27 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeInterconnectLoaResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeInterconnectLoaError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeInterconnectLoaResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeInterconnectLoaError::from_response(response))
+        }
     }
 
     /// <p>Lists the interconnects owned by the AWS account or only the specified interconnect.</p>
-    fn describe_interconnects(
+    async fn describe_interconnects(
         &self,
         input: DescribeInterconnectsRequest,
-    ) -> RusotoFuture<Interconnects, DescribeInterconnectsError> {
+    ) -> Result<Interconnects, RusotoError<DescribeInterconnectsError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5879,23 +6009,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Interconnects, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeInterconnectsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Interconnects, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeInterconnectsError::from_response(response))
+        }
     }
 
     /// <p>Describes all your link aggregation groups (LAG) or the specified LAG.</p>
-    fn describe_lags(&self, input: DescribeLagsRequest) -> RusotoFuture<Lags, DescribeLagsError> {
+    async fn describe_lags(
+        &self,
+        input: DescribeLagsRequest,
+    ) -> Result<Lags, RusotoError<DescribeLagsError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5903,24 +6036,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Lags, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeLagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Lags, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeLagsError::from_response(response))
+        }
     }
 
     /// <p>Gets the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
-    fn describe_loa(&self, input: DescribeLoaRequest) -> RusotoFuture<Loa, DescribeLoaError> {
+    async fn describe_loa(
+        &self,
+        input: DescribeLoaRequest,
+    ) -> Result<Loa, RusotoError<DescribeLoaError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5928,51 +6063,49 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Loa, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeLoaError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Loa, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeLoaError::from_response(response))
+        }
     }
 
     /// <p>Lists the AWS Direct Connect locations in the current AWS Region. These are the locations that can be selected when calling <a>CreateConnection</a> or <a>CreateInterconnect</a>.</p>
-    fn describe_locations(&self) -> RusotoFuture<Locations, DescribeLocationsError> {
+    async fn describe_locations(&self) -> Result<Locations, RusotoError<DescribeLocationsError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeLocations");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Locations, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeLocationsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Locations, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeLocationsError::from_response(response))
+        }
     }
 
     /// <p>Describes the tags associated with the specified AWS Direct Connect resources.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsRequest,
-    ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError> {
+    ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5980,51 +6113,51 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTagsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTagsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTagsError::from_response(response))
+        }
     }
 
     /// <p>Lists the virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linked to a virtual private gateway.</p>
-    fn describe_virtual_gateways(
+    async fn describe_virtual_gateways(
         &self,
-    ) -> RusotoFuture<VirtualGateways, DescribeVirtualGatewaysError> {
+    ) -> Result<VirtualGateways, RusotoError<DescribeVirtualGatewaysError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeVirtualGateways");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<VirtualGateways, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeVirtualGatewaysError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<VirtualGateways, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeVirtualGatewaysError::from_response(response))
+        }
     }
 
     /// <p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer network.</p>
-    fn describe_virtual_interfaces(
+    async fn describe_virtual_interfaces(
         &self,
         input: DescribeVirtualInterfacesRequest,
-    ) -> RusotoFuture<VirtualInterfaces, DescribeVirtualInterfacesError> {
+    ) -> Result<VirtualInterfaces, RusotoError<DescribeVirtualInterfacesError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6032,25 +6165,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<VirtualInterfaces, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeVirtualInterfacesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<VirtualInterfaces, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeVirtualInterfacesError::from_response(response))
+        }
     }
 
     /// <p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect Partner is automatically converted to an interconnect.</p> <p>If disassociating the connection would cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>
-    fn disassociate_connection_from_lag(
+    async fn disassociate_connection_from_lag(
         &self,
         input: DisassociateConnectionFromLagRequest,
-    ) -> RusotoFuture<Connection, DisassociateConnectionFromLagError> {
+    ) -> Result<Connection, RusotoError<DisassociateConnectionFromLagError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6061,24 +6195,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateConnectionFromLagError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateConnectionFromLagError::from_response(response))
+        }
     }
 
     /// <p>Adds the specified tags to the specified AWS Direct Connect resource. Each resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the resource, this action updates its value.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6086,28 +6222,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>Removes one or more tags from the specified AWS Direct Connect resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6115,30 +6249,28 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p>Updates the specified attributes of the Direct Connect gateway association.</p> <p>Add or remove prefixes from the association.</p>
-    fn update_direct_connect_gateway_association(
+    async fn update_direct_connect_gateway_association(
         &self,
         input: UpdateDirectConnectGatewayAssociationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateDirectConnectGatewayAssociationResult,
-        UpdateDirectConnectGatewayAssociationError,
+        RusotoError<UpdateDirectConnectGatewayAssociationError>,
     > {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -6150,24 +6282,29 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDirectConnectGatewayAssociationResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateDirectConnectGatewayAssociationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateDirectConnectGatewayAssociationResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDirectConnectGatewayAssociationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Updates the attributes of the specified link aggregation group (LAG).</p> <p>You can update the following attributes:</p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value and the number of operational connections falls below the specified value, the LAG automatically goes down to avoid over-utilization of the remaining connections. Adjust this value with care, as it could force the LAG down if it is set higher than the current number of operational connections.</p>
-    fn update_lag(&self, input: UpdateLagRequest) -> RusotoFuture<Lag, UpdateLagError> {
+    async fn update_lag(
+        &self,
+        input: UpdateLagRequest,
+    ) -> Result<Lag, RusotoError<UpdateLagError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6175,27 +6312,26 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateLagError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateLagError::from_response(response))
+        }
     }
 
     /// <p>Updates the specified attributes of the specified virtual private interface.</p> <p>Setting the MTU of a virtual interface to 9001 (jumbo frames) can cause an update to the underlying physical connection if it wasn't updated to support jumbo frames. Updating the connection disrupts network connectivity for all virtual interfaces associated with the connection for up to 30 seconds. To check whether your connection supports jumbo frames, call <a>DescribeConnections</a>. To check whether your virtual interface supports jumbo frames, call <a>DescribeVirtualInterfaces</a>.</p>
-    fn update_virtual_interface_attributes(
+    async fn update_virtual_interface_attributes(
         &self,
         input: UpdateVirtualInterfaceAttributesRequest,
-    ) -> RusotoFuture<VirtualInterface, UpdateVirtualInterfaceAttributesError> {
+    ) -> Result<VirtualInterface, RusotoError<UpdateVirtualInterfaceAttributesError>> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6206,19 +6342,20 @@ impl DirectConnect for DirectConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<VirtualInterface, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateVirtualInterfaceAttributesError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<VirtualInterface, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateVirtualInterfaceAttributesError::from_response(
+                response,
+            ))
+        }
     }
 }

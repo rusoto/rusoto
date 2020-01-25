@@ -9,20 +9,22 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
+
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Represents an option to be shown on the client platform (Facebook, Slack, etc.)</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -463,6 +465,7 @@ impl DeleteSessionError {
     }
 }
 impl fmt::Display for DeleteSessionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteSessionError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -511,6 +514,7 @@ impl GetSessionError {
     }
 }
 impl fmt::Display for GetSessionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetSessionError::BadRequest(ref cause) => write!(f, "{}", cause),
@@ -593,6 +597,7 @@ impl PostContentError {
     }
 }
 impl fmt::Display for PostContentError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PostContentError::BadGateway(ref cause) => write!(f, "{}", cause),
@@ -667,6 +672,7 @@ impl PostTextError {
     }
 }
 impl fmt::Display for PostTextError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PostTextError::BadGateway(ref cause) => write!(f, "{}", cause),
@@ -738,6 +744,7 @@ impl PutSessionError {
     }
 }
 impl fmt::Display for PutSessionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PutSessionError::BadGateway(ref cause) => write!(f, "{}", cause),
@@ -753,33 +760,37 @@ impl fmt::Display for PutSessionError {
 }
 impl Error for PutSessionError {}
 /// Trait representing the capabilities of the Amazon Lex Runtime Service API. Amazon Lex Runtime Service clients implement this trait.
+#[async_trait]
 pub trait LexRuntime {
     /// <p>Removes session information for a specified bot, alias, and user ID. </p>
-    fn delete_session(
+    async fn delete_session(
         &self,
         input: DeleteSessionRequest,
-    ) -> RusotoFuture<DeleteSessionResponse, DeleteSessionError>;
+    ) -> Result<DeleteSessionResponse, RusotoError<DeleteSessionError>>;
 
     /// <p>Returns session information for a specified bot, alias, and user ID.</p>
-    fn get_session(
+    async fn get_session(
         &self,
         input: GetSessionRequest,
-    ) -> RusotoFuture<GetSessionResponse, GetSessionError>;
+    ) -> Result<GetSessionResponse, RusotoError<GetSessionError>>;
 
     /// <p> Sends user input (text or speech) to Amazon Lex. Clients use this API to send text and audio requests to Amazon Lex at runtime. Amazon Lex interprets the user input using the machine learning model that it built for the bot. </p> <p>The <code>PostContent</code> operation supports audio input at 8kHz and 16kHz. You can use 8kHz audio to achieve higher speech recognition accuracy in telephone audio applications. </p> <p> In response, Amazon Lex returns the next message to convey to the user. Consider the following example messages: </p> <ul> <li> <p> For a user input "I would like a pizza," Amazon Lex might return a response with a message eliciting slot data (for example, <code>PizzaSize</code>): "What size pizza would you like?". </p> </li> <li> <p> After the user provides all of the pizza order information, Amazon Lex might return a response with a message to get user confirmation: "Order the pizza?". </p> </li> <li> <p> After the user replies "Yes" to the confirmation prompt, Amazon Lex might return a conclusion statement: "Thank you, your cheese pizza has been ordered.". </p> </li> </ul> <p> Not all Amazon Lex messages require a response from the user. For example, conclusion statements do not require a response. Some messages require only a yes or no response. In addition to the <code>message</code>, Amazon Lex provides additional context about the message in the response that you can use to enhance client behavior, such as displaying the appropriate client user interface. Consider the following examples: </p> <ul> <li> <p> If the message is to elicit slot data, Amazon Lex returns the following context information: </p> <ul> <li> <p> <code>x-amz-lex-dialog-state</code> header set to <code>ElicitSlot</code> </p> </li> <li> <p> <code>x-amz-lex-intent-name</code> header set to the intent name in the current context </p> </li> <li> <p> <code>x-amz-lex-slot-to-elicit</code> header set to the slot name for which the <code>message</code> is eliciting information </p> </li> <li> <p> <code>x-amz-lex-slots</code> header set to a map of slots configured for the intent with their current values </p> </li> </ul> </li> <li> <p> If the message is a confirmation prompt, the <code>x-amz-lex-dialog-state</code> header is set to <code>Confirmation</code> and the <code>x-amz-lex-slot-to-elicit</code> header is omitted. </p> </li> <li> <p> If the message is a clarification prompt configured for the intent, indicating that the user intent is not understood, the <code>x-amz-dialog-state</code> header is set to <code>ElicitIntent</code> and the <code>x-amz-slot-to-elicit</code> header is omitted. </p> </li> </ul> <p> In addition, Amazon Lex also returns your application-specific <code>sessionAttributes</code>. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html">Managing Conversation Context</a>. </p>
-    fn post_content(
+    async fn post_content(
         &self,
         input: PostContentRequest,
-    ) -> RusotoFuture<PostContentResponse, PostContentError>;
+    ) -> Result<PostContentResponse, RusotoError<PostContentError>>;
 
     /// <p>Sends user input to Amazon Lex. Client applications can use this API to send requests to Amazon Lex at runtime. Amazon Lex then interprets the user input using the machine learning model it built for the bot. </p> <p> In response, Amazon Lex returns the next <code>message</code> to convey to the user an optional <code>responseCard</code> to display. Consider the following example messages: </p> <ul> <li> <p> For a user input "I would like a pizza", Amazon Lex might return a response with a message eliciting slot data (for example, PizzaSize): "What size pizza would you like?" </p> </li> <li> <p> After the user provides all of the pizza order information, Amazon Lex might return a response with a message to obtain user confirmation "Proceed with the pizza order?". </p> </li> <li> <p> After the user replies to a confirmation prompt with a "yes", Amazon Lex might return a conclusion statement: "Thank you, your cheese pizza has been ordered.". </p> </li> </ul> <p> Not all Amazon Lex messages require a user response. For example, a conclusion statement does not require a response. Some messages require only a "yes" or "no" user response. In addition to the <code>message</code>, Amazon Lex provides additional context about the message in the response that you might use to enhance client behavior, for example, to display the appropriate client user interface. These are the <code>slotToElicit</code>, <code>dialogState</code>, <code>intentName</code>, and <code>slots</code> fields in the response. Consider the following examples: </p> <ul> <li> <p>If the message is to elicit slot data, Amazon Lex returns the following context information:</p> <ul> <li> <p> <code>dialogState</code> set to ElicitSlot </p> </li> <li> <p> <code>intentName</code> set to the intent name in the current context </p> </li> <li> <p> <code>slotToElicit</code> set to the slot name for which the <code>message</code> is eliciting information </p> </li> <li> <p> <code>slots</code> set to a map of slots, configured for the intent, with currently known values </p> </li> </ul> </li> <li> <p> If the message is a confirmation prompt, the <code>dialogState</code> is set to ConfirmIntent and <code>SlotToElicit</code> is set to null. </p> </li> <li> <p>If the message is a clarification prompt (configured for the intent) that indicates that user intent is not understood, the <code>dialogState</code> is set to ElicitIntent and <code>slotToElicit</code> is set to null. </p> </li> </ul> <p> In addition, Amazon Lex also returns your application-specific <code>sessionAttributes</code>. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html">Managing Conversation Context</a>. </p>
-    fn post_text(&self, input: PostTextRequest) -> RusotoFuture<PostTextResponse, PostTextError>;
+    async fn post_text(
+        &self,
+        input: PostTextRequest,
+    ) -> Result<PostTextResponse, RusotoError<PostTextError>>;
 
     /// <p>Creates a new session or modifies an existing session with an Amazon Lex bot. Use this operation to enable your application to set the state of the bot.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/how-session-api.html">Managing Sessions</a>.</p>
-    fn put_session(
+    async fn put_session(
         &self,
         input: PutSessionRequest,
-    ) -> RusotoFuture<PutSessionResponse, PutSessionError>;
+    ) -> Result<PutSessionResponse, RusotoError<PutSessionError>>;
 }
 /// A client for the Amazon Lex Runtime Service API.
 #[derive(Clone)]
@@ -793,7 +804,10 @@ impl LexRuntimeClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> LexRuntimeClient {
-        Self::new_with_client(Client::shared(), region)
+        LexRuntimeClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -803,14 +817,12 @@ impl LexRuntimeClient {
     ) -> LexRuntimeClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        LexRuntimeClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> LexRuntimeClient {
@@ -818,20 +830,13 @@ impl LexRuntimeClient {
     }
 }
 
-impl fmt::Debug for LexRuntimeClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("LexRuntimeClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl LexRuntime for LexRuntimeClient {
     /// <p>Removes session information for a specified bot, alias, and user ID. </p>
-    fn delete_session(
+    async fn delete_session(
         &self,
         input: DeleteSessionRequest,
-    ) -> RusotoFuture<DeleteSessionResponse, DeleteSessionError> {
+    ) -> Result<DeleteSessionResponse, RusotoError<DeleteSessionError>> {
         let request_uri = format!(
             "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/session",
             bot_alias = input.bot_alias,
@@ -844,30 +849,28 @@ impl LexRuntime for LexRuntimeClient {
 
         request.set_endpoint_prefix("runtime.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteSessionResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteSessionResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteSessionError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSessionError::from_response(response))
+        }
     }
 
     /// <p>Returns session information for a specified bot, alias, and user ID.</p>
-    fn get_session(
+    async fn get_session(
         &self,
         input: GetSessionRequest,
-    ) -> RusotoFuture<GetSessionResponse, GetSessionError> {
+    ) -> Result<GetSessionResponse, RusotoError<GetSessionError>> {
         let request_uri = format!(
             "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/session/",
             bot_alias = input.bot_alias,
@@ -886,30 +889,28 @@ impl LexRuntime for LexRuntimeClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetSessionResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSessionResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetSessionError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSessionError::from_response(response))
+        }
     }
 
     /// <p> Sends user input (text or speech) to Amazon Lex. Clients use this API to send text and audio requests to Amazon Lex at runtime. Amazon Lex interprets the user input using the machine learning model that it built for the bot. </p> <p>The <code>PostContent</code> operation supports audio input at 8kHz and 16kHz. You can use 8kHz audio to achieve higher speech recognition accuracy in telephone audio applications. </p> <p> In response, Amazon Lex returns the next message to convey to the user. Consider the following example messages: </p> <ul> <li> <p> For a user input "I would like a pizza," Amazon Lex might return a response with a message eliciting slot data (for example, <code>PizzaSize</code>): "What size pizza would you like?". </p> </li> <li> <p> After the user provides all of the pizza order information, Amazon Lex might return a response with a message to get user confirmation: "Order the pizza?". </p> </li> <li> <p> After the user replies "Yes" to the confirmation prompt, Amazon Lex might return a conclusion statement: "Thank you, your cheese pizza has been ordered.". </p> </li> </ul> <p> Not all Amazon Lex messages require a response from the user. For example, conclusion statements do not require a response. Some messages require only a yes or no response. In addition to the <code>message</code>, Amazon Lex provides additional context about the message in the response that you can use to enhance client behavior, such as displaying the appropriate client user interface. Consider the following examples: </p> <ul> <li> <p> If the message is to elicit slot data, Amazon Lex returns the following context information: </p> <ul> <li> <p> <code>x-amz-lex-dialog-state</code> header set to <code>ElicitSlot</code> </p> </li> <li> <p> <code>x-amz-lex-intent-name</code> header set to the intent name in the current context </p> </li> <li> <p> <code>x-amz-lex-slot-to-elicit</code> header set to the slot name for which the <code>message</code> is eliciting information </p> </li> <li> <p> <code>x-amz-lex-slots</code> header set to a map of slots configured for the intent with their current values </p> </li> </ul> </li> <li> <p> If the message is a confirmation prompt, the <code>x-amz-lex-dialog-state</code> header is set to <code>Confirmation</code> and the <code>x-amz-lex-slot-to-elicit</code> header is omitted. </p> </li> <li> <p> If the message is a clarification prompt configured for the intent, indicating that the user intent is not understood, the <code>x-amz-dialog-state</code> header is set to <code>ElicitIntent</code> and the <code>x-amz-slot-to-elicit</code> header is omitted. </p> </li> </ul> <p> In addition, Amazon Lex also returns your application-specific <code>sessionAttributes</code>. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html">Managing Conversation Context</a>. </p>
-    fn post_content(
+    async fn post_content(
         &self,
         input: PostContentRequest,
-    ) -> RusotoFuture<PostContentResponse, PostContentError> {
+    ) -> Result<PostContentResponse, RusotoError<PostContentError>> {
         let request_uri = format!(
             "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/content",
             bot_alias = input.bot_alias,
@@ -943,76 +944,74 @@ impl LexRuntime for LexRuntimeClient {
             );
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let mut result = PostContentResponse::default();
-                    result.audio_stream = Some(response.body);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-                    if let Some(content_type) = response.headers.get("Content-Type") {
-                        let value = content_type.to_owned();
-                        result.content_type = Some(value)
-                    };
-                    if let Some(dialog_state) = response.headers.get("x-amz-lex-dialog-state") {
-                        let value = dialog_state.to_owned();
-                        result.dialog_state = Some(value)
-                    };
-                    if let Some(input_transcript) =
-                        response.headers.get("x-amz-lex-input-transcript")
-                    {
-                        let value = input_transcript.to_owned();
-                        result.input_transcript = Some(value)
-                    };
-                    if let Some(intent_name) = response.headers.get("x-amz-lex-intent-name") {
-                        let value = intent_name.to_owned();
-                        result.intent_name = Some(value)
-                    };
-                    if let Some(message) = response.headers.get("x-amz-lex-message") {
-                        let value = message.to_owned();
-                        result.message = Some(value)
-                    };
-                    if let Some(message_format) = response.headers.get("x-amz-lex-message-format") {
-                        let value = message_format.to_owned();
-                        result.message_format = Some(value)
-                    };
-                    if let Some(sentiment_response) = response.headers.get("x-amz-lex-sentiment") {
-                        let value = sentiment_response.to_owned();
-                        result.sentiment_response = Some(value)
-                    };
-                    if let Some(session_attributes) =
-                        response.headers.get("x-amz-lex-session-attributes")
-                    {
-                        let value = session_attributes.to_owned();
-                        result.session_attributes = Some(value)
-                    };
-                    if let Some(session_id) = response.headers.get("x-amz-lex-session-id") {
-                        let value = session_id.to_owned();
-                        result.session_id = Some(value)
-                    };
-                    if let Some(slot_to_elicit) = response.headers.get("x-amz-lex-slot-to-elicit") {
-                        let value = slot_to_elicit.to_owned();
-                        result.slot_to_elicit = Some(value)
-                    };
-                    if let Some(slots) = response.headers.get("x-amz-lex-slots") {
-                        let value = slots.to_owned();
-                        result.slots = Some(value)
-                    };
+            let mut result = PostContentResponse::default();
+            result.audio_stream = Some(response.body);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PostContentError::from_response(response))),
-                )
-            }
-        })
+            if let Some(content_type) = response.headers.get("Content-Type") {
+                let value = content_type.to_owned();
+                result.content_type = Some(value)
+            };
+            if let Some(dialog_state) = response.headers.get("x-amz-lex-dialog-state") {
+                let value = dialog_state.to_owned();
+                result.dialog_state = Some(value)
+            };
+            if let Some(input_transcript) = response.headers.get("x-amz-lex-input-transcript") {
+                let value = input_transcript.to_owned();
+                result.input_transcript = Some(value)
+            };
+            if let Some(intent_name) = response.headers.get("x-amz-lex-intent-name") {
+                let value = intent_name.to_owned();
+                result.intent_name = Some(value)
+            };
+            if let Some(message) = response.headers.get("x-amz-lex-message") {
+                let value = message.to_owned();
+                result.message = Some(value)
+            };
+            if let Some(message_format) = response.headers.get("x-amz-lex-message-format") {
+                let value = message_format.to_owned();
+                result.message_format = Some(value)
+            };
+            if let Some(sentiment_response) = response.headers.get("x-amz-lex-sentiment") {
+                let value = sentiment_response.to_owned();
+                result.sentiment_response = Some(value)
+            };
+            if let Some(session_attributes) = response.headers.get("x-amz-lex-session-attributes") {
+                let value = session_attributes.to_owned();
+                result.session_attributes = Some(value)
+            };
+            if let Some(session_id) = response.headers.get("x-amz-lex-session-id") {
+                let value = session_id.to_owned();
+                result.session_id = Some(value)
+            };
+            if let Some(slot_to_elicit) = response.headers.get("x-amz-lex-slot-to-elicit") {
+                let value = slot_to_elicit.to_owned();
+                result.slot_to_elicit = Some(value)
+            };
+            if let Some(slots) = response.headers.get("x-amz-lex-slots") {
+                let value = slots.to_owned();
+                result.slots = Some(value)
+            };
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PostContentError::from_response(response))
+        }
     }
 
     /// <p>Sends user input to Amazon Lex. Client applications can use this API to send requests to Amazon Lex at runtime. Amazon Lex then interprets the user input using the machine learning model it built for the bot. </p> <p> In response, Amazon Lex returns the next <code>message</code> to convey to the user an optional <code>responseCard</code> to display. Consider the following example messages: </p> <ul> <li> <p> For a user input "I would like a pizza", Amazon Lex might return a response with a message eliciting slot data (for example, PizzaSize): "What size pizza would you like?" </p> </li> <li> <p> After the user provides all of the pizza order information, Amazon Lex might return a response with a message to obtain user confirmation "Proceed with the pizza order?". </p> </li> <li> <p> After the user replies to a confirmation prompt with a "yes", Amazon Lex might return a conclusion statement: "Thank you, your cheese pizza has been ordered.". </p> </li> </ul> <p> Not all Amazon Lex messages require a user response. For example, a conclusion statement does not require a response. Some messages require only a "yes" or "no" user response. In addition to the <code>message</code>, Amazon Lex provides additional context about the message in the response that you might use to enhance client behavior, for example, to display the appropriate client user interface. These are the <code>slotToElicit</code>, <code>dialogState</code>, <code>intentName</code>, and <code>slots</code> fields in the response. Consider the following examples: </p> <ul> <li> <p>If the message is to elicit slot data, Amazon Lex returns the following context information:</p> <ul> <li> <p> <code>dialogState</code> set to ElicitSlot </p> </li> <li> <p> <code>intentName</code> set to the intent name in the current context </p> </li> <li> <p> <code>slotToElicit</code> set to the slot name for which the <code>message</code> is eliciting information </p> </li> <li> <p> <code>slots</code> set to a map of slots, configured for the intent, with currently known values </p> </li> </ul> </li> <li> <p> If the message is a confirmation prompt, the <code>dialogState</code> is set to ConfirmIntent and <code>SlotToElicit</code> is set to null. </p> </li> <li> <p>If the message is a clarification prompt (configured for the intent) that indicates that user intent is not understood, the <code>dialogState</code> is set to ElicitIntent and <code>slotToElicit</code> is set to null. </p> </li> </ul> <p> In addition, Amazon Lex also returns your application-specific <code>sessionAttributes</code>. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html">Managing Conversation Context</a>. </p>
-    fn post_text(&self, input: PostTextRequest) -> RusotoFuture<PostTextResponse, PostTextError> {
+    async fn post_text(
+        &self,
+        input: PostTextRequest,
+    ) -> Result<PostTextResponse, RusotoError<PostTextError>> {
         let request_uri = format!(
             "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/text",
             bot_alias = input.bot_alias,
@@ -1027,30 +1026,28 @@ impl LexRuntime for LexRuntimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PostTextResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PostTextResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PostTextError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PostTextError::from_response(response))
+        }
     }
 
     /// <p>Creates a new session or modifies an existing session with an Amazon Lex bot. Use this operation to enable your application to set the state of the bot.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/how-session-api.html">Managing Sessions</a>.</p>
-    fn put_session(
+    async fn put_session(
         &self,
         input: PutSessionRequest,
-    ) -> RusotoFuture<PutSessionResponse, PutSessionError> {
+    ) -> Result<PutSessionResponse, RusotoError<PutSessionError>> {
         let request_uri = format!(
             "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/session",
             bot_alias = input.bot_alias,
@@ -1069,61 +1066,58 @@ impl LexRuntime for LexRuntimeClient {
             request.add_header("Accept", &accept.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let mut result = PutSessionResponse::default();
-                    result.audio_stream = Some(response.body);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-                    if let Some(content_type) = response.headers.get("Content-Type") {
-                        let value = content_type.to_owned();
-                        result.content_type = Some(value)
-                    };
-                    if let Some(dialog_state) = response.headers.get("x-amz-lex-dialog-state") {
-                        let value = dialog_state.to_owned();
-                        result.dialog_state = Some(value)
-                    };
-                    if let Some(intent_name) = response.headers.get("x-amz-lex-intent-name") {
-                        let value = intent_name.to_owned();
-                        result.intent_name = Some(value)
-                    };
-                    if let Some(message) = response.headers.get("x-amz-lex-message") {
-                        let value = message.to_owned();
-                        result.message = Some(value)
-                    };
-                    if let Some(message_format) = response.headers.get("x-amz-lex-message-format") {
-                        let value = message_format.to_owned();
-                        result.message_format = Some(value)
-                    };
-                    if let Some(session_attributes) =
-                        response.headers.get("x-amz-lex-session-attributes")
-                    {
-                        let value = session_attributes.to_owned();
-                        result.session_attributes = Some(value)
-                    };
-                    if let Some(session_id) = response.headers.get("x-amz-lex-session-id") {
-                        let value = session_id.to_owned();
-                        result.session_id = Some(value)
-                    };
-                    if let Some(slot_to_elicit) = response.headers.get("x-amz-lex-slot-to-elicit") {
-                        let value = slot_to_elicit.to_owned();
-                        result.slot_to_elicit = Some(value)
-                    };
-                    if let Some(slots) = response.headers.get("x-amz-lex-slots") {
-                        let value = slots.to_owned();
-                        result.slots = Some(value)
-                    };
+            let mut result = PutSessionResponse::default();
+            result.audio_stream = Some(response.body);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutSessionError::from_response(response))),
-                )
-            }
-        })
+            if let Some(content_type) = response.headers.get("Content-Type") {
+                let value = content_type.to_owned();
+                result.content_type = Some(value)
+            };
+            if let Some(dialog_state) = response.headers.get("x-amz-lex-dialog-state") {
+                let value = dialog_state.to_owned();
+                result.dialog_state = Some(value)
+            };
+            if let Some(intent_name) = response.headers.get("x-amz-lex-intent-name") {
+                let value = intent_name.to_owned();
+                result.intent_name = Some(value)
+            };
+            if let Some(message) = response.headers.get("x-amz-lex-message") {
+                let value = message.to_owned();
+                result.message = Some(value)
+            };
+            if let Some(message_format) = response.headers.get("x-amz-lex-message-format") {
+                let value = message_format.to_owned();
+                result.message_format = Some(value)
+            };
+            if let Some(session_attributes) = response.headers.get("x-amz-lex-session-attributes") {
+                let value = session_attributes.to_owned();
+                result.session_attributes = Some(value)
+            };
+            if let Some(session_id) = response.headers.get("x-amz-lex-session-id") {
+                let value = session_id.to_owned();
+                result.session_id = Some(value)
+            };
+            if let Some(slot_to_elicit) = response.headers.get("x-amz-lex-slot-to-elicit") {
+                let value = slot_to_elicit.to_owned();
+                result.slot_to_elicit = Some(value)
+            };
+            if let Some(slots) = response.headers.get("x-amz-lex-slots") {
+                let value = slots.to_owned();
+                result.slots = Some(value)
+            };
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutSessionError::from_response(response))
+        }
     }
 }

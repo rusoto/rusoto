@@ -9,19 +9,21 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Information about agents or connectors that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation, and whether the agent/connector configuration was updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1082,6 +1084,7 @@ impl AssociateConfigurationItemsToApplicationError {
     }
 }
 impl fmt::Display for AssociateConfigurationItemsToApplicationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociateConfigurationItemsToApplicationError::AuthorizationError(ref cause) => {
@@ -1155,6 +1158,7 @@ impl BatchDeleteImportDataError {
     }
 }
 impl fmt::Display for BatchDeleteImportDataError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             BatchDeleteImportDataError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -1214,6 +1218,7 @@ impl CreateApplicationError {
     }
 }
 impl fmt::Display for CreateApplicationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateApplicationError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -1272,6 +1277,7 @@ impl CreateTagsError {
     }
 }
 impl fmt::Display for CreateTagsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateTagsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -1332,6 +1338,7 @@ impl DeleteApplicationsError {
     }
 }
 impl fmt::Display for DeleteApplicationsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteApplicationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -1390,6 +1397,7 @@ impl DeleteTagsError {
     }
 }
 impl fmt::Display for DeleteTagsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteTagsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -1446,6 +1454,7 @@ impl DescribeAgentsError {
     }
 }
 impl fmt::Display for DescribeAgentsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeAgentsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -1509,6 +1518,7 @@ impl DescribeConfigurationsError {
     }
 }
 impl fmt::Display for DescribeConfigurationsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeConfigurationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -1586,6 +1596,7 @@ impl DescribeContinuousExportsError {
     }
 }
 impl fmt::Display for DescribeContinuousExportsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeContinuousExportsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -1666,6 +1677,7 @@ impl DescribeExportConfigurationsError {
     }
 }
 impl fmt::Display for DescribeExportConfigurationsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeExportConfigurationsError::AuthorizationError(ref cause) => {
@@ -1742,6 +1754,7 @@ impl DescribeExportTasksError {
     }
 }
 impl fmt::Display for DescribeExportTasksError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeExportTasksError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -1805,6 +1818,7 @@ impl DescribeImportTasksError {
     }
 }
 impl fmt::Display for DescribeImportTasksError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeImportTasksError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -1863,6 +1877,7 @@ impl DescribeTagsError {
     }
 }
 impl fmt::Display for DescribeTagsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeTagsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -1939,6 +1954,7 @@ impl DisassociateConfigurationItemsFromApplicationError {
     }
 }
 impl fmt::Display for DisassociateConfigurationItemsFromApplicationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisassociateConfigurationItemsFromApplicationError::AuthorizationError(ref cause) => {
@@ -2019,6 +2035,7 @@ impl ExportConfigurationsError {
     }
 }
 impl fmt::Display for ExportConfigurationsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ExportConfigurationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -2083,6 +2100,7 @@ impl GetDiscoverySummaryError {
     }
 }
 impl fmt::Display for GetDiscoverySummaryError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetDiscoverySummaryError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -2147,6 +2165,7 @@ impl ListConfigurationsError {
     }
 }
 impl fmt::Display for ListConfigurationsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListConfigurationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -2211,6 +2230,7 @@ impl ListServerNeighborsError {
     }
 }
 impl fmt::Display for ListServerNeighborsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListServerNeighborsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -2291,6 +2311,7 @@ impl StartContinuousExportError {
     }
 }
 impl fmt::Display for StartContinuousExportError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StartContinuousExportError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -2359,6 +2380,7 @@ impl StartDataCollectionByAgentIdsError {
     }
 }
 impl fmt::Display for StartDataCollectionByAgentIdsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StartDataCollectionByAgentIdsError::AuthorizationError(ref cause) => {
@@ -2431,6 +2453,7 @@ impl StartExportTaskError {
     }
 }
 impl fmt::Display for StartExportTaskError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StartExportTaskError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -2492,6 +2515,7 @@ impl StartImportTaskError {
     }
 }
 impl fmt::Display for StartImportTaskError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StartImportTaskError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -2575,6 +2599,7 @@ impl StopContinuousExportError {
     }
 }
 impl fmt::Display for StopContinuousExportError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StopContinuousExportError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -2643,6 +2668,7 @@ impl StopDataCollectionByAgentIdsError {
     }
 }
 impl fmt::Display for StopDataCollectionByAgentIdsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StopDataCollectionByAgentIdsError::AuthorizationError(ref cause) => {
@@ -2712,6 +2738,7 @@ impl UpdateApplicationError {
     }
 }
 impl fmt::Display for UpdateApplicationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateApplicationError::AuthorizationError(ref cause) => write!(f, "{}", cause),
@@ -2724,159 +2751,163 @@ impl fmt::Display for UpdateApplicationError {
 }
 impl Error for UpdateApplicationError {}
 /// Trait representing the capabilities of the AWS Application Discovery Service API. AWS Application Discovery Service clients implement this trait.
+#[async_trait]
 pub trait Discovery {
     /// <p>Associates one or more configuration items with an application.</p>
-    fn associate_configuration_items_to_application(
+    async fn associate_configuration_items_to_application(
         &self,
         input: AssociateConfigurationItemsToApplicationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociateConfigurationItemsToApplicationResponse,
-        AssociateConfigurationItemsToApplicationError,
+        RusotoError<AssociateConfigurationItemsToApplicationError>,
     >;
 
     /// <p>Deletes one or more import tasks, each identified by their import ID. Each import task has a number of records that can identify servers or applications. </p> <p>AWS Application Discovery Service has built-in matching logic that will identify when discovered servers match existing entries that you've previously discovered, the information for the already-existing discovered server is updated. When you delete an import task that contains records that were used to match, the information in those matched records that comes from the deleted records will also be deleted.</p>
-    fn batch_delete_import_data(
+    async fn batch_delete_import_data(
         &self,
         input: BatchDeleteImportDataRequest,
-    ) -> RusotoFuture<BatchDeleteImportDataResponse, BatchDeleteImportDataError>;
+    ) -> Result<BatchDeleteImportDataResponse, RusotoError<BatchDeleteImportDataError>>;
 
     /// <p>Creates an application with the given name and description.</p>
-    fn create_application(
+    async fn create_application(
         &self,
         input: CreateApplicationRequest,
-    ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError>;
+    ) -> Result<CreateApplicationResponse, RusotoError<CreateApplicationError>>;
 
     /// <p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>
-    fn create_tags(
+    async fn create_tags(
         &self,
         input: CreateTagsRequest,
-    ) -> RusotoFuture<CreateTagsResponse, CreateTagsError>;
+    ) -> Result<CreateTagsResponse, RusotoError<CreateTagsError>>;
 
     /// <p>Deletes a list of applications and their associations with configuration items.</p>
-    fn delete_applications(
+    async fn delete_applications(
         &self,
         input: DeleteApplicationsRequest,
-    ) -> RusotoFuture<DeleteApplicationsResponse, DeleteApplicationsError>;
+    ) -> Result<DeleteApplicationsResponse, RusotoError<DeleteApplicationsError>>;
 
     /// <p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>
-    fn delete_tags(
+    async fn delete_tags(
         &self,
         input: DeleteTagsRequest,
-    ) -> RusotoFuture<DeleteTagsResponse, DeleteTagsError>;
+    ) -> Result<DeleteTagsResponse, RusotoError<DeleteTagsError>>;
 
     /// <p>Lists agents or connectors as specified by ID or other filters. All agents/connectors associated with your user account can be listed if you call <code>DescribeAgents</code> as is without passing any parameters.</p>
-    fn describe_agents(
+    async fn describe_agents(
         &self,
         input: DescribeAgentsRequest,
-    ) -> RusotoFuture<DescribeAgentsResponse, DescribeAgentsError>;
+    ) -> Result<DescribeAgentsResponse, RusotoError<DescribeAgentsError>>;
 
     /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the following:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p> </note></p>
-    fn describe_configurations(
+    async fn describe_configurations(
         &self,
         input: DescribeConfigurationsRequest,
-    ) -> RusotoFuture<DescribeConfigurationsResponse, DescribeConfigurationsError>;
+    ) -> Result<DescribeConfigurationsResponse, RusotoError<DescribeConfigurationsError>>;
 
     /// <p>Lists exports as specified by ID. All continuous exports associated with your user account can be listed if you call <code>DescribeContinuousExports</code> as is without passing any parameters.</p>
-    fn describe_continuous_exports(
+    async fn describe_continuous_exports(
         &self,
         input: DescribeContinuousExportsRequest,
-    ) -> RusotoFuture<DescribeContinuousExportsResponse, DescribeContinuousExportsError>;
+    ) -> Result<DescribeContinuousExportsResponse, RusotoError<DescribeContinuousExportsError>>;
 
     /// <p> <code>DescribeExportConfigurations</code> is deprecated. Use <a href="https://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html">DescribeImportTasks</a>, instead.</p>
-    fn describe_export_configurations(
+    async fn describe_export_configurations(
         &self,
         input: DescribeExportConfigurationsRequest,
-    ) -> RusotoFuture<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError>;
+    ) -> Result<DescribeExportConfigurationsResponse, RusotoError<DescribeExportConfigurationsError>>;
 
     /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
-    fn describe_export_tasks(
+    async fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
-    ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError>;
+    ) -> Result<DescribeExportTasksResponse, RusotoError<DescribeExportTasksError>>;
 
     /// <p>Returns an array of import tasks for your account, including status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
-    fn describe_import_tasks(
+    async fn describe_import_tasks(
         &self,
         input: DescribeImportTasksRequest,
-    ) -> RusotoFuture<DescribeImportTasksResponse, DescribeImportTasksError>;
+    ) -> Result<DescribeImportTasksResponse, RusotoError<DescribeImportTasksError>>;
 
     /// <p>Retrieves a list of configuration items that have tags as specified by the key-value pairs, name and value, passed to the optional parameter <code>filters</code>.</p> <p>There are three valid tag filter names:</p> <ul> <li> <p>tagKey</p> </li> <li> <p>tagValue</p> </li> <li> <p>configurationId</p> </li> </ul> <p>Also, all configuration items associated with your user account that have tags can be listed if you call <code>DescribeTags</code> as is without passing any parameters.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsRequest,
-    ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError>;
+    ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>>;
 
     /// <p>Disassociates one or more configuration items from an application.</p>
-    fn disassociate_configuration_items_from_application(
+    async fn disassociate_configuration_items_from_application(
         &self,
         input: DisassociateConfigurationItemsFromApplicationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateConfigurationItemsFromApplicationResponse,
-        DisassociateConfigurationItemsFromApplicationError,
+        RusotoError<DisassociateConfigurationItemsFromApplicationError>,
     >;
 
     /// <p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>
-    fn export_configurations(
+    async fn export_configurations(
         &self,
-    ) -> RusotoFuture<ExportConfigurationsResponse, ExportConfigurationsError>;
+    ) -> Result<ExportConfigurationsResponse, RusotoError<ExportConfigurationsError>>;
 
     /// <p>Retrieves a short summary of discovered assets.</p> <p>This API operation takes no request parameters and is called as is at the command prompt as shown in the example.</p>
-    fn get_discovery_summary(
+    async fn get_discovery_summary(
         &self,
-    ) -> RusotoFuture<GetDiscoverySummaryResponse, GetDiscoverySummaryError>;
+    ) -> Result<GetDiscoverySummaryResponse, RusotoError<GetDiscoverySummaryError>>;
 
     /// <p>Retrieves a list of configuration items as specified by the value passed to the required paramater <code>configurationType</code>. Optional filtering may be applied to refine search results.</p>
-    fn list_configurations(
+    async fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
-    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError>;
+    ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>>;
 
     /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
-    fn list_server_neighbors(
+    async fn list_server_neighbors(
         &self,
         input: ListServerNeighborsRequest,
-    ) -> RusotoFuture<ListServerNeighborsResponse, ListServerNeighborsError>;
+    ) -> Result<ListServerNeighborsResponse, RusotoError<ListServerNeighborsError>>;
 
     /// <p>Start the continuous flow of agent's discovered data into Amazon Athena.</p>
-    fn start_continuous_export(
+    async fn start_continuous_export(
         &self,
-    ) -> RusotoFuture<StartContinuousExportResponse, StartContinuousExportError>;
+    ) -> Result<StartContinuousExportResponse, RusotoError<StartContinuousExportError>>;
 
     /// <p>Instructs the specified agents or connectors to start collecting data.</p>
-    fn start_data_collection_by_agent_ids(
+    async fn start_data_collection_by_agent_ids(
         &self,
         input: StartDataCollectionByAgentIdsRequest,
-    ) -> RusotoFuture<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>;
+    ) -> Result<
+        StartDataCollectionByAgentIdsResponse,
+        RusotoError<StartDataCollectionByAgentIdsError>,
+    >;
 
     /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
-    fn start_export_task(
+    async fn start_export_task(
         &self,
         input: StartExportTaskRequest,
-    ) -> RusotoFuture<StartExportTaskResponse, StartExportTaskError>;
+    ) -> Result<StartExportTaskResponse, RusotoError<StartExportTaskError>>;
 
     /// <p><p>Starts an import task, which allows you to import details of your on-premises environment directly into AWS without having to use the Application Discovery Service (ADS) tools such as the Discovery Connector or Discovery Agent. This gives you the option to perform migration assessment and planning directly from your imported data, including the ability to group your devices as applications and track their migration status.</p> <p>To start an import request, do this:</p> <ol> <li> <p>Download the specially formatted comma separated value (CSV) import template, which you can find here: <a href="https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import_template.csv">https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import<em>template.csv</a>.</p> </li> <li> <p>Fill out the template with your server and application data.</p> </li> <li> <p>Upload your import file to an Amazon S3 bucket, and make a note of it&#39;s Object URL. Your import file must be in the CSV format.</p> </li> <li> <p>Use the console or the <code>StartImportTask</code> command with the AWS CLI or one of the AWS SDKs to import the records from your file.</p> </li> </ol> <p>For more information, including step-by-step procedures, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-import.html">Migration Hub Import</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> <note> <p>There are limits to the number of import tasks you can create (and delete) in an AWS account. For more information, see &lt;a href=&quot;https://docs.aws.amazon.com/application-discovery/latest/userguide/ads</em>service_limits.html&quot;&gt;AWS Application Discovery Service Limits</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> </note></p>
-    fn start_import_task(
+    async fn start_import_task(
         &self,
         input: StartImportTaskRequest,
-    ) -> RusotoFuture<StartImportTaskResponse, StartImportTaskError>;
+    ) -> Result<StartImportTaskResponse, RusotoError<StartImportTaskError>>;
 
     /// <p>Stop the continuous flow of agent's discovered data into Amazon Athena.</p>
-    fn stop_continuous_export(
+    async fn stop_continuous_export(
         &self,
         input: StopContinuousExportRequest,
-    ) -> RusotoFuture<StopContinuousExportResponse, StopContinuousExportError>;
+    ) -> Result<StopContinuousExportResponse, RusotoError<StopContinuousExportError>>;
 
     /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
-    fn stop_data_collection_by_agent_ids(
+    async fn stop_data_collection_by_agent_ids(
         &self,
         input: StopDataCollectionByAgentIdsRequest,
-    ) -> RusotoFuture<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError>;
+    ) -> Result<StopDataCollectionByAgentIdsResponse, RusotoError<StopDataCollectionByAgentIdsError>>;
 
     /// <p>Updates metadata about an application.</p>
-    fn update_application(
+    async fn update_application(
         &self,
         input: UpdateApplicationRequest,
-    ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError>;
+    ) -> Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>>;
 }
 /// A client for the AWS Application Discovery Service API.
 #[derive(Clone)]
@@ -2890,7 +2921,10 @@ impl DiscoveryClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DiscoveryClient {
-        Self::new_with_client(Client::shared(), region)
+        DiscoveryClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -2900,14 +2934,12 @@ impl DiscoveryClient {
     ) -> DiscoveryClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        DiscoveryClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> DiscoveryClient {
@@ -2915,22 +2947,15 @@ impl DiscoveryClient {
     }
 }
 
-impl fmt::Debug for DiscoveryClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("DiscoveryClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Discovery for DiscoveryClient {
     /// <p>Associates one or more configuration items with an application.</p>
-    fn associate_configuration_items_to_application(
+    async fn associate_configuration_items_to_application(
         &self,
         input: AssociateConfigurationItemsToApplicationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociateConfigurationItemsToApplicationResponse,
-        AssociateConfigurationItemsToApplicationError,
+        RusotoError<AssociateConfigurationItemsToApplicationError>,
     > {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -2942,25 +2967,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateConfigurationItemsToApplicationResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateConfigurationItemsToApplicationError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateConfigurationItemsToApplicationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateConfigurationItemsToApplicationError::from_response(response))
+        }
     }
 
     /// <p>Deletes one or more import tasks, each identified by their import ID. Each import task has a number of records that can identify servers or applications. </p> <p>AWS Application Discovery Service has built-in matching logic that will identify when discovered servers match existing entries that you've previously discovered, the information for the already-existing discovered server is updated. When you delete an import task that contains records that were used to match, the information in those matched records that comes from the deleted records will also be deleted.</p>
-    fn batch_delete_import_data(
+    async fn batch_delete_import_data(
         &self,
         input: BatchDeleteImportDataRequest,
-    ) -> RusotoFuture<BatchDeleteImportDataResponse, BatchDeleteImportDataError> {
+    ) -> Result<BatchDeleteImportDataResponse, RusotoError<BatchDeleteImportDataError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2971,27 +2998,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchDeleteImportDataResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(BatchDeleteImportDataError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchDeleteImportDataResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchDeleteImportDataError::from_response(response))
+        }
     }
 
     /// <p>Creates an application with the given name and description.</p>
-    fn create_application(
+    async fn create_application(
         &self,
         input: CreateApplicationRequest,
-    ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError> {
+    ) -> Result<CreateApplicationResponse, RusotoError<CreateApplicationError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3002,28 +3029,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateApplicationResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateApplicationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateApplicationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateApplicationError::from_response(response))
+        }
     }
 
     /// <p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>
-    fn create_tags(
+    async fn create_tags(
         &self,
         input: CreateTagsRequest,
-    ) -> RusotoFuture<CreateTagsResponse, CreateTagsError> {
+    ) -> Result<CreateTagsResponse, RusotoError<CreateTagsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3031,28 +3057,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateTagsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateTagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateTagsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTagsError::from_response(response))
+        }
     }
 
     /// <p>Deletes a list of applications and their associations with configuration items.</p>
-    fn delete_applications(
+    async fn delete_applications(
         &self,
         input: DeleteApplicationsRequest,
-    ) -> RusotoFuture<DeleteApplicationsResponse, DeleteApplicationsError> {
+    ) -> Result<DeleteApplicationsResponse, RusotoError<DeleteApplicationsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3063,28 +3087,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteApplicationsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteApplicationsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteApplicationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteApplicationsError::from_response(response))
+        }
     }
 
     /// <p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>
-    fn delete_tags(
+    async fn delete_tags(
         &self,
         input: DeleteTagsRequest,
-    ) -> RusotoFuture<DeleteTagsResponse, DeleteTagsError> {
+    ) -> Result<DeleteTagsResponse, RusotoError<DeleteTagsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3092,28 +3115,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteTagsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTagsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTagsError::from_response(response))
+        }
     }
 
     /// <p>Lists agents or connectors as specified by ID or other filters. All agents/connectors associated with your user account can be listed if you call <code>DescribeAgents</code> as is without passing any parameters.</p>
-    fn describe_agents(
+    async fn describe_agents(
         &self,
         input: DescribeAgentsRequest,
-    ) -> RusotoFuture<DescribeAgentsResponse, DescribeAgentsError> {
+    ) -> Result<DescribeAgentsResponse, RusotoError<DescribeAgentsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3124,28 +3145,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAgentsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeAgentsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeAgentsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAgentsError::from_response(response))
+        }
     }
 
     /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the following:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p> </note></p>
-    fn describe_configurations(
+    async fn describe_configurations(
         &self,
         input: DescribeConfigurationsRequest,
-    ) -> RusotoFuture<DescribeConfigurationsResponse, DescribeConfigurationsError> {
+    ) -> Result<DescribeConfigurationsResponse, RusotoError<DescribeConfigurationsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3156,27 +3175,28 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeConfigurationsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeConfigurationsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConfigurationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConfigurationsError::from_response(response))
+        }
     }
 
     /// <p>Lists exports as specified by ID. All continuous exports associated with your user account can be listed if you call <code>DescribeContinuousExports</code> as is without passing any parameters.</p>
-    fn describe_continuous_exports(
+    async fn describe_continuous_exports(
         &self,
         input: DescribeContinuousExportsRequest,
-    ) -> RusotoFuture<DescribeContinuousExportsResponse, DescribeContinuousExportsError> {
+    ) -> Result<DescribeContinuousExportsResponse, RusotoError<DescribeContinuousExportsError>>
+    {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3187,25 +3207,28 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeContinuousExportsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeContinuousExportsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeContinuousExportsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeContinuousExportsError::from_response(response))
+        }
     }
 
     /// <p> <code>DescribeExportConfigurations</code> is deprecated. Use <a href="https://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html">DescribeImportTasks</a>, instead.</p>
-    fn describe_export_configurations(
+    async fn describe_export_configurations(
         &self,
         input: DescribeExportConfigurationsRequest,
-    ) -> RusotoFuture<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError> {
+    ) -> Result<DescribeExportConfigurationsResponse, RusotoError<DescribeExportConfigurationsError>>
+    {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3216,25 +3239,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeExportConfigurationsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeExportConfigurationsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeExportConfigurationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeExportConfigurationsError::from_response(response))
+        }
     }
 
     /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
-    fn describe_export_tasks(
+    async fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
-    ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError> {
+    ) -> Result<DescribeExportTasksResponse, RusotoError<DescribeExportTasksError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3245,27 +3270,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeExportTasksResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeExportTasksError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeExportTasksResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeExportTasksError::from_response(response))
+        }
     }
 
     /// <p>Returns an array of import tasks for your account, including status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
-    fn describe_import_tasks(
+    async fn describe_import_tasks(
         &self,
         input: DescribeImportTasksRequest,
-    ) -> RusotoFuture<DescribeImportTasksResponse, DescribeImportTasksError> {
+    ) -> Result<DescribeImportTasksResponse, RusotoError<DescribeImportTasksError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3276,27 +3301,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeImportTasksResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeImportTasksError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeImportTasksResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeImportTasksError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of configuration items that have tags as specified by the key-value pairs, name and value, passed to the optional parameter <code>filters</code>.</p> <p>There are three valid tag filter names:</p> <ul> <li> <p>tagKey</p> </li> <li> <p>tagValue</p> </li> <li> <p>configurationId</p> </li> </ul> <p>Also, all configuration items associated with your user account that have tags can be listed if you call <code>DescribeTags</code> as is without passing any parameters.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsRequest,
-    ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError> {
+    ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3307,30 +3332,28 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTagsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTagsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTagsError::from_response(response))
+        }
     }
 
     /// <p>Disassociates one or more configuration items from an application.</p>
-    fn disassociate_configuration_items_from_application(
+    async fn disassociate_configuration_items_from_application(
         &self,
         input: DisassociateConfigurationItemsFromApplicationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateConfigurationItemsFromApplicationResponse,
-        DisassociateConfigurationItemsFromApplicationError,
+        RusotoError<DisassociateConfigurationItemsFromApplicationError>,
     > {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -3342,23 +3365,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DisassociateConfigurationItemsFromApplicationResponse, _>()
-                }))
-                        } else {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                                Err(DisassociateConfigurationItemsFromApplicationError::from_response(response))
-                            }))
-                        }
-                    })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateConfigurationItemsFromApplicationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateConfigurationItemsFromApplicationError::from_response(response))
+        }
     }
 
     /// <p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>
-    fn export_configurations(
+    async fn export_configurations(
         &self,
-    ) -> RusotoFuture<ExportConfigurationsResponse, ExportConfigurationsError> {
+    ) -> Result<ExportConfigurationsResponse, RusotoError<ExportConfigurationsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3368,26 +3394,26 @@ impl Discovery for DiscoveryClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ExportConfigurationsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ExportConfigurationsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ExportConfigurationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ExportConfigurationsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a short summary of discovered assets.</p> <p>This API operation takes no request parameters and is called as is at the command prompt as shown in the example.</p>
-    fn get_discovery_summary(
+    async fn get_discovery_summary(
         &self,
-    ) -> RusotoFuture<GetDiscoverySummaryResponse, GetDiscoverySummaryError> {
+    ) -> Result<GetDiscoverySummaryResponse, RusotoError<GetDiscoverySummaryError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3397,27 +3423,27 @@ impl Discovery for DiscoveryClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDiscoverySummaryResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetDiscoverySummaryError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDiscoverySummaryResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDiscoverySummaryError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of configuration items as specified by the value passed to the required paramater <code>configurationType</code>. Optional filtering may be applied to refine search results.</p>
-    fn list_configurations(
+    async fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
-    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError> {
+    ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3428,28 +3454,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListConfigurationsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListConfigurationsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListConfigurationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListConfigurationsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
-    fn list_server_neighbors(
+    async fn list_server_neighbors(
         &self,
         input: ListServerNeighborsRequest,
-    ) -> RusotoFuture<ListServerNeighborsResponse, ListServerNeighborsError> {
+    ) -> Result<ListServerNeighborsResponse, RusotoError<ListServerNeighborsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3460,26 +3485,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListServerNeighborsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListServerNeighborsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListServerNeighborsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListServerNeighborsError::from_response(response))
+        }
     }
 
     /// <p>Start the continuous flow of agent's discovered data into Amazon Athena.</p>
-    fn start_continuous_export(
+    async fn start_continuous_export(
         &self,
-    ) -> RusotoFuture<StartContinuousExportResponse, StartContinuousExportError> {
+    ) -> Result<StartContinuousExportResponse, RusotoError<StartContinuousExportError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3489,28 +3514,30 @@ impl Discovery for DiscoveryClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartContinuousExportResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StartContinuousExportError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartContinuousExportResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartContinuousExportError::from_response(response))
+        }
     }
 
     /// <p>Instructs the specified agents or connectors to start collecting data.</p>
-    fn start_data_collection_by_agent_ids(
+    async fn start_data_collection_by_agent_ids(
         &self,
         input: StartDataCollectionByAgentIdsRequest,
-    ) -> RusotoFuture<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>
-    {
+    ) -> Result<
+        StartDataCollectionByAgentIdsResponse,
+        RusotoError<StartDataCollectionByAgentIdsError>,
+    > {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3521,25 +3548,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartDataCollectionByAgentIdsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartDataCollectionByAgentIdsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartDataCollectionByAgentIdsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartDataCollectionByAgentIdsError::from_response(response))
+        }
     }
 
     /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
-    fn start_export_task(
+    async fn start_export_task(
         &self,
         input: StartExportTaskRequest,
-    ) -> RusotoFuture<StartExportTaskResponse, StartExportTaskError> {
+    ) -> Result<StartExportTaskResponse, RusotoError<StartExportTaskError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3550,28 +3579,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartExportTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartExportTaskError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StartExportTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartExportTaskError::from_response(response))
+        }
     }
 
     /// <p><p>Starts an import task, which allows you to import details of your on-premises environment directly into AWS without having to use the Application Discovery Service (ADS) tools such as the Discovery Connector or Discovery Agent. This gives you the option to perform migration assessment and planning directly from your imported data, including the ability to group your devices as applications and track their migration status.</p> <p>To start an import request, do this:</p> <ol> <li> <p>Download the specially formatted comma separated value (CSV) import template, which you can find here: <a href="https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import_template.csv">https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import<em>template.csv</a>.</p> </li> <li> <p>Fill out the template with your server and application data.</p> </li> <li> <p>Upload your import file to an Amazon S3 bucket, and make a note of it&#39;s Object URL. Your import file must be in the CSV format.</p> </li> <li> <p>Use the console or the <code>StartImportTask</code> command with the AWS CLI or one of the AWS SDKs to import the records from your file.</p> </li> </ol> <p>For more information, including step-by-step procedures, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-import.html">Migration Hub Import</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> <note> <p>There are limits to the number of import tasks you can create (and delete) in an AWS account. For more information, see &lt;a href=&quot;https://docs.aws.amazon.com/application-discovery/latest/userguide/ads</em>service_limits.html&quot;&gt;AWS Application Discovery Service Limits</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> </note></p>
-    fn start_import_task(
+    async fn start_import_task(
         &self,
         input: StartImportTaskRequest,
-    ) -> RusotoFuture<StartImportTaskResponse, StartImportTaskError> {
+    ) -> Result<StartImportTaskResponse, RusotoError<StartImportTaskError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3582,28 +3609,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartImportTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartImportTaskError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StartImportTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartImportTaskError::from_response(response))
+        }
     }
 
     /// <p>Stop the continuous flow of agent's discovered data into Amazon Athena.</p>
-    fn stop_continuous_export(
+    async fn stop_continuous_export(
         &self,
         input: StopContinuousExportRequest,
-    ) -> RusotoFuture<StopContinuousExportResponse, StopContinuousExportError> {
+    ) -> Result<StopContinuousExportResponse, RusotoError<StopContinuousExportError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3614,27 +3639,28 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopContinuousExportResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StopContinuousExportError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopContinuousExportResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopContinuousExportError::from_response(response))
+        }
     }
 
     /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
-    fn stop_data_collection_by_agent_ids(
+    async fn stop_data_collection_by_agent_ids(
         &self,
         input: StopDataCollectionByAgentIdsRequest,
-    ) -> RusotoFuture<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError> {
+    ) -> Result<StopDataCollectionByAgentIdsResponse, RusotoError<StopDataCollectionByAgentIdsError>>
+    {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3645,25 +3671,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopDataCollectionByAgentIdsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopDataCollectionByAgentIdsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopDataCollectionByAgentIdsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopDataCollectionByAgentIdsError::from_response(response))
+        }
     }
 
     /// <p>Updates metadata about an application.</p>
-    fn update_application(
+    async fn update_application(
         &self,
         input: UpdateApplicationRequest,
-    ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError> {
+    ) -> Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3674,20 +3702,19 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateApplicationResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateApplicationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateApplicationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateApplicationError::from_response(response))
+        }
     }
 }

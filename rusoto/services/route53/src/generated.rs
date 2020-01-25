@@ -9,16 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
+
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -7997,6 +7997,7 @@ impl AssociateVPCWithHostedZoneError {
     }
 }
 impl fmt::Display for AssociateVPCWithHostedZoneError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociateVPCWithHostedZoneError::ConflictingDomainExists(ref cause) => {
@@ -8080,6 +8081,7 @@ impl ChangeResourceRecordSetsError {
     }
 }
 impl fmt::Display for ChangeResourceRecordSetsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ChangeResourceRecordSetsError::InvalidChangeBatch(ref cause) => write!(f, "{}", cause),
@@ -8159,6 +8161,7 @@ impl ChangeTagsForResourceError {
     }
 }
 impl fmt::Display for ChangeTagsForResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ChangeTagsForResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -8222,6 +8225,7 @@ impl CreateHealthCheckError {
     }
 }
 impl fmt::Display for CreateHealthCheckError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateHealthCheckError::HealthCheckAlreadyExists(ref cause) => write!(f, "{}", cause),
@@ -8323,6 +8327,7 @@ impl CreateHostedZoneError {
     }
 }
 impl fmt::Display for CreateHostedZoneError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateHostedZoneError::ConflictingDomainExists(ref cause) => write!(f, "{}", cause),
@@ -8417,6 +8422,7 @@ impl CreateQueryLoggingConfigError {
     }
 }
 impl fmt::Display for CreateQueryLoggingConfigError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateQueryLoggingConfigError::ConcurrentModification(ref cause) => {
@@ -8525,6 +8531,7 @@ impl CreateReusableDelegationSetError {
     }
 }
 impl fmt::Display for CreateReusableDelegationSetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateReusableDelegationSetError::DelegationSetAlreadyCreated(ref cause) => {
@@ -8607,6 +8614,7 @@ impl CreateTrafficPolicyError {
     }
 }
 impl fmt::Display for CreateTrafficPolicyError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateTrafficPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -8695,6 +8703,7 @@ impl CreateTrafficPolicyInstanceError {
     }
 }
 impl fmt::Display for CreateTrafficPolicyInstanceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateTrafficPolicyInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -8753,6 +8762,7 @@ impl CreateTrafficPolicyVersionError {
     }
 }
 impl fmt::Display for CreateTrafficPolicyVersionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateTrafficPolicyVersionError::ConcurrentModification(ref cause) => {
@@ -8846,6 +8856,7 @@ impl CreateVPCAssociationAuthorizationError {
     }
 }
 impl fmt::Display for CreateVPCAssociationAuthorizationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateVPCAssociationAuthorizationError::ConcurrentModification(ref cause) => {
@@ -8917,6 +8928,7 @@ impl DeleteHealthCheckError {
     }
 }
 impl fmt::Display for DeleteHealthCheckError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteHealthCheckError::HealthCheckInUse(ref cause) => write!(f, "{}", cause),
@@ -8990,6 +9002,7 @@ impl DeleteHostedZoneError {
     }
 }
 impl fmt::Display for DeleteHostedZoneError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteHostedZoneError::HostedZoneNotEmpty(ref cause) => write!(f, "{}", cause),
@@ -9055,6 +9068,7 @@ impl DeleteQueryLoggingConfigError {
     }
 }
 impl fmt::Display for DeleteQueryLoggingConfigError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteQueryLoggingConfigError::ConcurrentModification(ref cause) => {
@@ -9133,6 +9147,7 @@ impl DeleteReusableDelegationSetError {
     }
 }
 impl fmt::Display for DeleteReusableDelegationSetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteReusableDelegationSetError::DelegationSetInUse(ref cause) => {
@@ -9206,6 +9221,7 @@ impl DeleteTrafficPolicyError {
     }
 }
 impl fmt::Display for DeleteTrafficPolicyError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteTrafficPolicyError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
@@ -9272,6 +9288,7 @@ impl DeleteTrafficPolicyInstanceError {
     }
 }
 impl fmt::Display for DeleteTrafficPolicyInstanceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteTrafficPolicyInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -9359,6 +9376,7 @@ impl DeleteVPCAssociationAuthorizationError {
     }
 }
 impl fmt::Display for DeleteVPCAssociationAuthorizationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteVPCAssociationAuthorizationError::ConcurrentModification(ref cause) => {
@@ -9452,6 +9470,7 @@ impl DisassociateVPCFromHostedZoneError {
     }
 }
 impl fmt::Display for DisassociateVPCFromHostedZoneError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisassociateVPCFromHostedZoneError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -9505,6 +9524,7 @@ impl GetAccountLimitError {
     }
 }
 impl fmt::Display for GetAccountLimitError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetAccountLimitError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -9555,6 +9575,7 @@ impl GetChangeError {
     }
 }
 impl fmt::Display for GetChangeError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetChangeError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -9591,6 +9612,7 @@ impl GetCheckerIpRangesError {
     }
 }
 impl fmt::Display for GetCheckerIpRangesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {}
     }
@@ -9639,6 +9661,7 @@ impl GetGeoLocationError {
     }
 }
 impl fmt::Display for GetGeoLocationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetGeoLocationError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -9697,6 +9720,7 @@ impl GetHealthCheckError {
     }
 }
 impl fmt::Display for GetHealthCheckError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetHealthCheckError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
@@ -9734,6 +9758,7 @@ impl GetHealthCheckCountError {
     }
 }
 impl fmt::Display for GetHealthCheckCountError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {}
     }
@@ -9788,6 +9813,7 @@ impl GetHealthCheckLastFailureReasonError {
     }
 }
 impl fmt::Display for GetHealthCheckLastFailureReasonError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetHealthCheckLastFailureReasonError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -9841,6 +9867,7 @@ impl GetHealthCheckStatusError {
     }
 }
 impl fmt::Display for GetHealthCheckStatusError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetHealthCheckStatusError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -9892,6 +9919,7 @@ impl GetHostedZoneError {
     }
 }
 impl fmt::Display for GetHostedZoneError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetHostedZoneError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -9936,6 +9964,7 @@ impl GetHostedZoneCountError {
     }
 }
 impl fmt::Display for GetHostedZoneCountError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetHostedZoneCountError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -9993,6 +10022,7 @@ impl GetHostedZoneLimitError {
     }
 }
 impl fmt::Display for GetHostedZoneLimitError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetHostedZoneLimitError::HostedZoneNotPrivate(ref cause) => write!(f, "{}", cause),
@@ -10047,6 +10077,7 @@ impl GetQueryLoggingConfigError {
     }
 }
 impl fmt::Display for GetQueryLoggingConfigError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetQueryLoggingConfigError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -10111,6 +10142,7 @@ impl GetReusableDelegationSetError {
     }
 }
 impl fmt::Display for GetReusableDelegationSetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetReusableDelegationSetError::DelegationSetNotReusable(ref cause) => {
@@ -10169,6 +10201,7 @@ impl GetReusableDelegationSetLimitError {
     }
 }
 impl fmt::Display for GetReusableDelegationSetLimitError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetReusableDelegationSetLimitError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -10222,6 +10255,7 @@ impl GetTrafficPolicyError {
     }
 }
 impl fmt::Display for GetTrafficPolicyError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetTrafficPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -10275,6 +10309,7 @@ impl GetTrafficPolicyInstanceError {
     }
 }
 impl fmt::Display for GetTrafficPolicyInstanceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetTrafficPolicyInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -10315,6 +10350,7 @@ impl GetTrafficPolicyInstanceCountError {
     }
 }
 impl fmt::Display for GetTrafficPolicyInstanceCountError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {}
     }
@@ -10356,6 +10392,7 @@ impl ListGeoLocationsError {
     }
 }
 impl fmt::Display for ListGeoLocationsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListGeoLocationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -10406,6 +10443,7 @@ impl ListHealthChecksError {
     }
 }
 impl fmt::Display for ListHealthChecksError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListHealthChecksError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
@@ -10464,6 +10502,7 @@ impl ListHostedZonesError {
     }
 }
 impl fmt::Display for ListHostedZonesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListHostedZonesError::DelegationSetNotReusable(ref cause) => write!(f, "{}", cause),
@@ -10516,6 +10555,7 @@ impl ListHostedZonesByNameError {
     }
 }
 impl fmt::Display for ListHostedZonesByNameError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListHostedZonesByNameError::InvalidDomainName(ref cause) => write!(f, "{}", cause),
@@ -10576,6 +10616,7 @@ impl ListQueryLoggingConfigsError {
     }
 }
 impl fmt::Display for ListQueryLoggingConfigsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListQueryLoggingConfigsError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -10630,6 +10671,7 @@ impl ListResourceRecordSetsError {
     }
 }
 impl fmt::Display for ListResourceRecordSetsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListResourceRecordSetsError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -10676,6 +10718,7 @@ impl ListReusableDelegationSetsError {
     }
 }
 impl fmt::Display for ListReusableDelegationSetsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListReusableDelegationSetsError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -10747,6 +10790,7 @@ impl ListTagsForResourceError {
     }
 }
 impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTagsForResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -10824,6 +10868,7 @@ impl ListTagsForResourcesError {
     }
 }
 impl fmt::Display for ListTagsForResourcesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTagsForResourcesError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -10871,6 +10916,7 @@ impl ListTrafficPoliciesError {
     }
 }
 impl fmt::Display for ListTrafficPoliciesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTrafficPoliciesError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -10925,6 +10971,7 @@ impl ListTrafficPolicyInstancesError {
     }
 }
 impl fmt::Display for ListTrafficPolicyInstancesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTrafficPolicyInstancesError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -10991,6 +11038,7 @@ impl ListTrafficPolicyInstancesByHostedZoneError {
     }
 }
 impl fmt::Display for ListTrafficPolicyInstancesByHostedZoneError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(ref cause) => {
@@ -11064,6 +11112,7 @@ impl ListTrafficPolicyInstancesByPolicyError {
     }
 }
 impl fmt::Display for ListTrafficPolicyInstancesByPolicyError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTrafficPolicyInstancesByPolicyError::InvalidInput(ref cause) => {
@@ -11124,6 +11173,7 @@ impl ListTrafficPolicyVersionsError {
     }
 }
 impl fmt::Display for ListTrafficPolicyVersionsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTrafficPolicyVersionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -11192,6 +11242,7 @@ impl ListVPCAssociationAuthorizationsError {
     }
 }
 impl fmt::Display for ListVPCAssociationAuthorizationsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListVPCAssociationAuthorizationsError::InvalidInput(ref cause) => {
@@ -11250,6 +11301,7 @@ impl TestDNSAnswerError {
     }
 }
 impl fmt::Display for TestDNSAnswerError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             TestDNSAnswerError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -11310,6 +11362,7 @@ impl UpdateHealthCheckError {
     }
 }
 impl fmt::Display for UpdateHealthCheckError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateHealthCheckError::HealthCheckVersionMismatch(ref cause) => write!(f, "{}", cause),
@@ -11362,6 +11415,7 @@ impl UpdateHostedZoneCommentError {
     }
 }
 impl fmt::Display for UpdateHostedZoneCommentError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateHostedZoneCommentError::InvalidInput(ref cause) => write!(f, "{}", cause),
@@ -11426,6 +11480,7 @@ impl UpdateTrafficPolicyCommentError {
     }
 }
 impl fmt::Display for UpdateTrafficPolicyCommentError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateTrafficPolicyCommentError::ConcurrentModification(ref cause) => {
@@ -11513,6 +11568,7 @@ impl UpdateTrafficPolicyInstanceError {
     }
 }
 impl fmt::Display for UpdateTrafficPolicyInstanceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateTrafficPolicyInstanceError::ConflictingTypes(ref cause) => write!(f, "{}", cause),
@@ -11531,355 +11587,371 @@ impl fmt::Display for UpdateTrafficPolicyInstanceError {
 }
 impl Error for UpdateTrafficPolicyInstanceError {}
 /// Trait representing the capabilities of the Route 53 API. Route 53 clients implement this trait.
+#[async_trait]
 pub trait Route53 {
     /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can&#39;t convert a public hosted zone into a private hosted zone.</p> </important> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note></p>
-    fn associate_vpc_with_hosted_zone(
+    async fn associate_vpc_with_hosted_zone(
         &self,
         input: AssociateVPCWithHostedZoneRequest,
-    ) -> RusotoFuture<AssociateVPCWithHostedZoneResponse, AssociateVPCWithHostedZoneError>;
+    ) -> Result<AssociateVPCWithHostedZoneResponse, RusotoError<AssociateVPCWithHostedZoneError>>;
 
     /// For TXT records, see <a href="./util/fn.quote_txt_record.html">util::quote_txt_record</a>
     /// <p>Creates, changes, or deletes a resource record set, which contains authoritative DNS information for a specified domain name or subdomain name. For example, you can use <code>ChangeResourceRecordSets</code> to create a resource record set that routes traffic for test.example.com to a web server that has an IP address of 192.0.2.44.</p> <p> <b>Change Batches and Transactional Changes</b> </p> <p>The request body must include a document with a <code>ChangeResourceRecordSetsRequest</code> element. The request body contains a list of change items, known as a change batch. Change batches are considered transactional changes. When using the Amazon Route 53 API to change resource record sets, Route 53 either makes all or none of the changes in a change batch request. This ensures that Route 53 never partially implements the intended changes to the resource record sets in a hosted zone. </p> <p>For example, a change batch request that deletes the <code>CNAME</code> record for www.example.com and creates an alias resource record set for www.example.com. Route 53 deletes the first resource record set and creates the second resource record set in a single operation. If either the <code>DELETE</code> or the <code>CREATE</code> action fails, then both changes (plus any other changes in the batch) fail, and the original <code>CNAME</code> record continues to exist.</p> <important> <p>Due to the nature of transactional changes, you can't delete the same resource record set more than once in a single change batch. If you attempt to delete the same change batch more than once, Route 53 returns an <code>InvalidChangeBatch</code> error.</p> </important> <p> <b>Traffic Flow</b> </p> <p>To create resource record sets for complex routing configurations, use either the traffic flow visual editor in the Route 53 console or the API actions for traffic policies and traffic policy instances. Save the configuration as a traffic policy, then associate the traffic policy with one or more domain names (such as example.com) or subdomain names (such as www.example.com), in the same hosted zone or in multiple hosted zones. You can roll back the updates if the new configuration isn't performing as expected. For more information, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/traffic-flow.html">Using Traffic Flow to Route DNS Traffic</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p> <b>Create, Delete, and Upsert</b> </p> <p>Use <code>ChangeResourceRecordsSetsRequest</code> to perform the following actions:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes an existing resource record set that has the specified values.</p> </li> <li> <p> <code>UPSERT</code>: If a resource record set does not already exist, AWS creates it. If a resource set does exist, Route 53 updates it with the values in the request. </p> </li> </ul> <p> <b>Syntaxes for Creating, Updating, and Deleting Resource Record Sets</b> </p> <p>The syntax for a request depends on the type of resource record set that you want to create, delete, or update, such as weighted, alias, or failover. The XML elements in your request must appear in the order listed in the syntax. </p> <p>For an example for each type of resource record set, see "Examples."</p> <p>Don't refer to the syntax in the "Parameter Syntax" section, which includes all of the elements for every kind of resource record set that you can create, delete, or update by using <code>ChangeResourceRecordSets</code>. </p> <p> <b>Change Propagation to Route 53 DNS Servers</b> </p> <p>When you submit a <code>ChangeResourceRecordSets</code> request, Route 53 propagates your changes to all of the Route 53 authoritative DNS servers. While your changes are propagating, <code>GetChange</code> returns a status of <code>PENDING</code>. When propagation is complete, <code>GetChange</code> returns a status of <code>INSYNC</code>. Changes generally propagate to all Route 53 name servers within 60 seconds. For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_GetChange.html">GetChange</a>.</p> <p> <b>Limits on ChangeResourceRecordSets Requests</b> </p> <p>For information about the limits on a <code>ChangeResourceRecordSets</code> request, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
-    fn change_resource_record_sets(
+    async fn change_resource_record_sets(
         &self,
         input: ChangeResourceRecordSetsRequest,
-    ) -> RusotoFuture<ChangeResourceRecordSetsResponse, ChangeResourceRecordSetsError>;
+    ) -> Result<ChangeResourceRecordSetsResponse, RusotoError<ChangeResourceRecordSetsError>>;
 
     /// <p>Adds, edits, or deletes tags for a health check or a hosted zone.</p> <p>For information about using tags for cost allocation, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
-    fn change_tags_for_resource(
+    async fn change_tags_for_resource(
         &self,
         input: ChangeTagsForResourceRequest,
-    ) -> RusotoFuture<ChangeTagsForResourceResponse, ChangeTagsForResourceError>;
+    ) -> Result<ChangeTagsForResourceResponse, RusotoError<ChangeTagsForResourceError>>;
 
     /// <p><p>Creates a new health check.</p> <p>For information about adding health checks to resource record sets, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ResourceRecordSet.html#Route53-Type-ResourceRecordSet-HealthCheckId">HealthCheckId</a> in <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html">ChangeResourceRecordSets</a>. </p> <p> <b>ELB Load Balancers</b> </p> <p>If you&#39;re registering EC2 instances with an Elastic Load Balancing (ELB) load balancer, do not create Amazon Route 53 health checks for the EC2 instances. When you register an EC2 instance with a load balancer, you configure settings for an ELB health check, which performs a similar function to a Route 53 health check.</p> <p> <b>Private Hosted Zones</b> </p> <p>You can associate health checks with failover resource record sets in a private hosted zone. Note the following:</p> <ul> <li> <p>Route 53 health checkers are outside the VPC. To check the health of an endpoint within a VPC by IP address, you must assign a public IP address to the instance in the VPC.</p> </li> <li> <p>You can configure a health checker to check the health of an external resource that the instance relies on, such as a database server.</p> </li> <li> <p>You can create a CloudWatch metric, associate an alarm with the metric, and then create a health check that is based on the state of the alarm. For example, you might create a CloudWatch metric that checks the status of the Amazon EC2 <code>StatusCheckFailed</code> metric, add an alarm to the metric, and then create a health check that is based on the state of the alarm. For information about creating CloudWatch metrics and alarms by using the CloudWatch console, see the <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatch.html">Amazon CloudWatch User Guide</a>.</p> </li> </ul></p>
-    fn create_health_check(
+    async fn create_health_check(
         &self,
         input: CreateHealthCheckRequest,
-    ) -> RusotoFuture<CreateHealthCheckResponse, CreateHealthCheckError>;
+    ) -> Result<CreateHealthCheckResponse, RusotoError<CreateHealthCheckError>>;
 
     /// <p>Creates a new public or private hosted zone. You create records in a public hosted zone to define how you want to route traffic on the internet for a domain, such as example.com, and its subdomains (apex.example.com, acme.example.com). You create records in a private hosted zone to define how you want to route traffic for a domain and its subdomains within one or more Amazon Virtual Private Clouds (Amazon VPCs). </p> <important> <p>You can't convert a public hosted zone to a private hosted zone or vice versa. Instead, you must create a new hosted zone with the same name and create new resource record sets.</p> </important> <p>For more information about charges for hosted zones, see <a href="http://aws.amazon.com/route53/pricing/">Amazon Route 53 Pricing</a>.</p> <p>Note the following:</p> <ul> <li> <p>You can't create a hosted zone for a top-level domain (TLD) such as .com.</p> </li> <li> <p>For public hosted zones, Amazon Route 53 automatically creates a default SOA record and four NS records for the zone. For more information about SOA and NS records, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/SOA-NSrecords.html">NS and SOA Records that Route 53 Creates for a Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If you want to use the same name servers for multiple public hosted zones, you can optionally associate a reusable delegation set with the hosted zone. See the <code>DelegationSetId</code> element.</p> </li> <li> <p>If your domain is registered with a registrar other than Route 53, you must update the name servers with your registrar to make Route 53 the DNS service for the domain. For more information, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/MigratingDNS.html">Migrating DNS Service for an Existing Domain to Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>. </p> </li> </ul> <p>When you submit a <code>CreateHostedZone</code> request, the initial status of the hosted zone is <code>PENDING</code>. For public hosted zones, this means that the NS and SOA records are not yet available on all Route 53 DNS servers. When the NS and SOA records are available, the status of the zone changes to <code>INSYNC</code>.</p>
-    fn create_hosted_zone(
+    async fn create_hosted_zone(
         &self,
         input: CreateHostedZoneRequest,
-    ) -> RusotoFuture<CreateHostedZoneResponse, CreateHostedZoneError>;
+    ) -> Result<CreateHostedZoneResponse, RusotoError<CreateHostedZoneError>>;
 
     /// <p><p>Creates a configuration for DNS query logging. After you create a query logging configuration, Amazon Route 53 begins to publish log data to an Amazon CloudWatch Logs log group.</p> <p>DNS query logs contain information about the queries that Route 53 receives for a specified public hosted zone, such as the following:</p> <ul> <li> <p>Route 53 edge location that responded to the DNS query</p> </li> <li> <p>Domain or subdomain that was requested</p> </li> <li> <p>DNS record type, such as A or AAAA</p> </li> <li> <p>DNS response code, such as <code>NoError</code> or <code>ServFail</code> </p> </li> </ul> <dl> <dt>Log Group and Resource Policy</dt> <dd> <p>Before you create a query logging configuration, perform the following operations.</p> <note> <p>If you create a query logging configuration using the Route 53 console, Route 53 performs these operations automatically.</p> </note> <ol> <li> <p>Create a CloudWatch Logs log group, and make note of the ARN, which you specify when you create a query logging configuration. Note the following:</p> <ul> <li> <p>You must create the log group in the us-east-1 region.</p> </li> <li> <p>You must use the same AWS account to create the log group and the hosted zone that you want to configure query logging for.</p> </li> <li> <p>When you create log groups for query logging, we recommend that you use a consistent prefix, for example:</p> <p> <code>/aws/route53/<i>hosted zone name</i> </code> </p> <p>In the next step, you&#39;ll create a resource policy, which controls access to one or more log groups and the associated AWS resources, such as Route 53 hosted zones. There&#39;s a limit on the number of resource policies that you can create, so we recommend that you use a consistent prefix so you can use the same resource policy for all the log groups that you create for query logging.</p> </li> </ul> </li> <li> <p>Create a CloudWatch Logs resource policy, and give it the permissions that Route 53 needs to create log streams and to send query logs to log streams. For the value of <code>Resource</code>, specify the ARN for the log group that you created in the previous step. To use the same resource policy for all the CloudWatch Logs log groups that you created for query logging configurations, replace the hosted zone name with <code><em></code>, for example:</p> <p> <code>arn:aws:logs:us-east-1:123412341234:log-group:/aws/route53/</em></code> </p> <note> <p>You can&#39;t use the CloudWatch console to create or edit a resource policy. You must use the CloudWatch API, one of the AWS SDKs, or the AWS CLI.</p> </note> </li> </ol> </dd> <dt>Log Streams and Edge Locations</dt> <dd> <p>When Route 53 finishes creating the configuration for DNS query logging, it does the following:</p> <ul> <li> <p>Creates a log stream for an edge location the first time that the edge location responds to DNS queries for the specified hosted zone. That log stream is used to log all queries that Route 53 responds to for that edge location.</p> </li> <li> <p>Begins to send query logs to the applicable log stream.</p> </li> </ul> <p>The name of each log stream is in the following format:</p> <p> <code> <i>hosted zone ID</i>/<i>edge location code</i> </code> </p> <p>The edge location code is a three-letter code and an arbitrarily assigned number, for example, DFW3. The three-letter code typically corresponds with the International Air Transport Association airport code for an airport near the edge location. (These abbreviations might change in the future.) For a list of edge locations, see &quot;The Route 53 Global Network&quot; on the <a href="http://aws.amazon.com/route53/details/">Route 53 Product Details</a> page.</p> </dd> <dt>Queries That Are Logged</dt> <dd> <p>Query logs contain only the queries that DNS resolvers forward to Route 53. If a DNS resolver has already cached the response to a query (such as the IP address for a load balancer for example.com), the resolver will continue to return the cached response. It doesn&#39;t forward another query to Route 53 until the TTL for the corresponding resource record set expires. Depending on how many DNS queries are submitted for a resource record set, and depending on the TTL for that resource record set, query logs might contain information about only one query out of every several thousand queries that are submitted to DNS. For more information about how DNS works, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/welcome-dns-service.html">Routing Internet Traffic to Your Website or Web Application</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </dd> <dt>Log File Format</dt> <dd> <p>For a list of the values in each query log and the format of each value, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </dd> <dt>Pricing</dt> <dd> <p>For information about charges for query logs, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </dd> <dt>How to Stop Logging</dt> <dd> <p>If you want Route 53 to stop sending query logs to CloudWatch Logs, delete the query logging configuration. For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteQueryLoggingConfig.html">DeleteQueryLoggingConfig</a>.</p> </dd> </dl></p>
-    fn create_query_logging_config(
+    async fn create_query_logging_config(
         &self,
         input: CreateQueryLoggingConfigRequest,
-    ) -> RusotoFuture<CreateQueryLoggingConfigResponse, CreateQueryLoggingConfigError>;
+    ) -> Result<CreateQueryLoggingConfigResponse, RusotoError<CreateQueryLoggingConfigError>>;
 
     /// <p><p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable.</p> <note> <p>You can&#39;t associate a reusable delegation set with a private hosted zone.</p> </note> <p>For information about using a reusable delegation set to configure white label name servers, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html">Configuring White Label Name Servers</a>.</p> <p>The process for migrating existing hosted zones to use a reusable delegation set is comparable to the process for configuring white label name servers. You need to perform the following steps:</p> <ol> <li> <p>Create a reusable delegation set.</p> </li> <li> <p>Recreate hosted zones, and reduce the TTL to 60 seconds or less.</p> </li> <li> <p>Recreate resource record sets in the new hosted zones.</p> </li> <li> <p>Change the registrar&#39;s name servers to use the name servers for the new hosted zones.</p> </li> <li> <p>Monitor traffic for the website or application.</p> </li> <li> <p>Change TTLs back to their original values.</p> </li> </ol> <p>If you want to migrate existing hosted zones to use a reusable delegation set, the existing hosted zones can&#39;t use any of the name servers that are assigned to the reusable delegation set. If one or more hosted zones do use one or more name servers that are assigned to the reusable delegation set, you can do one of the following:</p> <ul> <li> <p>For small numbers of hosted zones—up to a few hundred—it&#39;s relatively easy to create reusable delegation sets until you get one that has four name servers that don&#39;t overlap with any of the name servers in your hosted zones.</p> </li> <li> <p>For larger numbers of hosted zones, the easiest solution is to use more than one reusable delegation set.</p> </li> <li> <p>For larger numbers of hosted zones, you can also migrate hosted zones that have overlapping name servers to hosted zones that don&#39;t have overlapping name servers, then migrate the hosted zones again to use the reusable delegation set.</p> </li> </ul></p>
-    fn create_reusable_delegation_set(
+    async fn create_reusable_delegation_set(
         &self,
         input: CreateReusableDelegationSetRequest,
-    ) -> RusotoFuture<CreateReusableDelegationSetResponse, CreateReusableDelegationSetError>;
+    ) -> Result<CreateReusableDelegationSetResponse, RusotoError<CreateReusableDelegationSetError>>;
 
     /// <p>Creates a traffic policy, which you use to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com).</p>
-    fn create_traffic_policy(
+    async fn create_traffic_policy(
         &self,
         input: CreateTrafficPolicyRequest,
-    ) -> RusotoFuture<CreateTrafficPolicyResponse, CreateTrafficPolicyError>;
+    ) -> Result<CreateTrafficPolicyResponse, RusotoError<CreateTrafficPolicyError>>;
 
     /// <p>Creates resource record sets in a specified hosted zone based on the settings in a specified traffic policy version. In addition, <code>CreateTrafficPolicyInstance</code> associates the resource record sets with a specified domain name (such as example.com) or subdomain name (such as www.example.com). Amazon Route 53 responds to DNS queries for the domain or subdomain name by using the resource record sets that <code>CreateTrafficPolicyInstance</code> created.</p>
-    fn create_traffic_policy_instance(
+    async fn create_traffic_policy_instance(
         &self,
         input: CreateTrafficPolicyInstanceRequest,
-    ) -> RusotoFuture<CreateTrafficPolicyInstanceResponse, CreateTrafficPolicyInstanceError>;
+    ) -> Result<CreateTrafficPolicyInstanceResponse, RusotoError<CreateTrafficPolicyInstanceError>>;
 
     /// <p>Creates a new version of an existing traffic policy. When you create a new version of a traffic policy, you specify the ID of the traffic policy that you want to update and a JSON-formatted document that describes the new version. You use traffic policies to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com). You can create a maximum of 1000 versions of a traffic policy. If you reach the limit and need to create another version, you'll need to start a new traffic policy.</p>
-    fn create_traffic_policy_version(
+    async fn create_traffic_policy_version(
         &self,
         input: CreateTrafficPolicyVersionRequest,
-    ) -> RusotoFuture<CreateTrafficPolicyVersionResponse, CreateTrafficPolicyVersionError>;
+    ) -> Result<CreateTrafficPolicyVersionResponse, RusotoError<CreateTrafficPolicyVersionError>>;
 
     /// <p><p>Authorizes the AWS account that created a specified VPC to submit an <code>AssociateVPCWithHostedZone</code> request to associate the VPC with a specified hosted zone that was created by a different account. To submit a <code>CreateVPCAssociationAuthorization</code> request, you must use the account that created the hosted zone. After you authorize the association, use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> <note> <p>If you want to associate multiple VPCs that you created by using one account with a hosted zone that you created by using a different account, you must submit one authorization request for each VPC.</p> </note></p>
-    fn create_vpc_association_authorization(
+    async fn create_vpc_association_authorization(
         &self,
         input: CreateVPCAssociationAuthorizationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateVPCAssociationAuthorizationResponse,
-        CreateVPCAssociationAuthorizationError,
+        RusotoError<CreateVPCAssociationAuthorizationError>,
     >;
 
     /// <p><p>Deletes a health check.</p> <important> <p>Amazon Route 53 does not prevent you from deleting a health check even if the health check is associated with one or more resource record sets. If you delete a health check and you don&#39;t update the associated resource record sets, the future status of the health check can&#39;t be predicted and may change. This will affect the routing of DNS queries for your DNS failover configuration. For more information, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html#health-checks-deleting.html">Replacing and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </important></p>
-    fn delete_health_check(
+    async fn delete_health_check(
         &self,
         input: DeleteHealthCheckRequest,
-    ) -> RusotoFuture<DeleteHealthCheckResponse, DeleteHealthCheckError>;
+    ) -> Result<DeleteHealthCheckResponse, RusotoError<DeleteHealthCheckError>>;
 
     /// <p><p>Deletes a hosted zone.</p> <p>If the hosted zone was created by another service, such as AWS Cloud Map, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DeleteHostedZone.html#delete-public-hosted-zone-created-by-another-service">Deleting Public Hosted Zones That Were Created by Another Service</a> in the <i>Amazon Route 53 Developer Guide</i> for information about how to delete it. (The process is the same for public and private hosted zones that were created by another service.)</p> <p>If you want to keep your domain registration but you want to stop routing internet traffic to your website or web application, we recommend that you delete resource record sets in the hosted zone instead of deleting the hosted zone.</p> <important> <p>If you delete a hosted zone, you can&#39;t undelete it. You must create a new hosted zone and update the name servers for your domain registration, which can require up to 48 hours to take effect. (If you delegated responsibility for a subdomain to a hosted zone and you delete the child hosted zone, you must update the name servers in the parent hosted zone.) In addition, if you delete a hosted zone, someone could hijack the domain and route traffic to their own resources using your domain name.</p> </important> <p>If you want to avoid the monthly charge for the hosted zone, you can transfer DNS service for the domain to a free DNS service. When you transfer DNS service, you have to update the name servers for the domain registration. If the domain is registered with Route 53, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_UpdateDomainNameservers.html">UpdateDomainNameservers</a> for information about how to replace Route 53 name servers with name servers for the new DNS service. If the domain is registered with another registrar, use the method provided by the registrar to update name servers for the domain registration. For more information, perform an internet search on &quot;free DNS service.&quot;</p> <p>You can delete a hosted zone only if it contains only the default SOA record and NS resource record sets. If the hosted zone contains other resource record sets, you must delete them before you can delete the hosted zone. If you try to delete a hosted zone that contains other resource record sets, the request fails, and Route 53 returns a <code>HostedZoneNotEmpty</code> error. For information about deleting records from your hosted zone, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html">ChangeResourceRecordSets</a>.</p> <p>To verify that the hosted zone has been deleted, do one of the following:</p> <ul> <li> <p>Use the <code>GetHostedZone</code> action to request information about the hosted zone.</p> </li> <li> <p>Use the <code>ListHostedZones</code> action to get a list of the hosted zones associated with the current AWS account.</p> </li> </ul></p>
-    fn delete_hosted_zone(
+    async fn delete_hosted_zone(
         &self,
         input: DeleteHostedZoneRequest,
-    ) -> RusotoFuture<DeleteHostedZoneResponse, DeleteHostedZoneError>;
+    ) -> Result<DeleteHostedZoneResponse, RusotoError<DeleteHostedZoneError>>;
 
     /// <p>Deletes a configuration for DNS query logging. If you delete a configuration, Amazon Route 53 stops sending query logs to CloudWatch Logs. Route 53 doesn't delete any logs that are already in CloudWatch Logs.</p> <p>For more information about DNS query logs, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateQueryLoggingConfig.html">CreateQueryLoggingConfig</a>.</p>
-    fn delete_query_logging_config(
+    async fn delete_query_logging_config(
         &self,
         input: DeleteQueryLoggingConfigRequest,
-    ) -> RusotoFuture<DeleteQueryLoggingConfigResponse, DeleteQueryLoggingConfigError>;
+    ) -> Result<DeleteQueryLoggingConfigResponse, RusotoError<DeleteQueryLoggingConfigError>>;
 
     /// <p>Deletes a reusable delegation set.</p> <important> <p>You can delete a reusable delegation set only if it isn't associated with any hosted zones.</p> </important> <p>To verify that the reusable delegation set is not associated with any hosted zones, submit a <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_GetReusableDelegationSet.html">GetReusableDelegationSet</a> request and specify the ID of the reusable delegation set that you want to delete.</p>
-    fn delete_reusable_delegation_set(
+    async fn delete_reusable_delegation_set(
         &self,
         input: DeleteReusableDelegationSetRequest,
-    ) -> RusotoFuture<DeleteReusableDelegationSetResponse, DeleteReusableDelegationSetError>;
+    ) -> Result<DeleteReusableDelegationSetResponse, RusotoError<DeleteReusableDelegationSetError>>;
 
     /// <p>Deletes a traffic policy.</p>
-    fn delete_traffic_policy(
+    async fn delete_traffic_policy(
         &self,
         input: DeleteTrafficPolicyRequest,
-    ) -> RusotoFuture<DeleteTrafficPolicyResponse, DeleteTrafficPolicyError>;
+    ) -> Result<DeleteTrafficPolicyResponse, RusotoError<DeleteTrafficPolicyError>>;
 
     /// <p><p>Deletes a traffic policy instance and all of the resource record sets that Amazon Route 53 created when you created the instance.</p> <note> <p>In the Route 53 console, traffic policy instances are known as policy records.</p> </note></p>
-    fn delete_traffic_policy_instance(
+    async fn delete_traffic_policy_instance(
         &self,
         input: DeleteTrafficPolicyInstanceRequest,
-    ) -> RusotoFuture<DeleteTrafficPolicyInstanceResponse, DeleteTrafficPolicyInstanceError>;
+    ) -> Result<DeleteTrafficPolicyInstanceResponse, RusotoError<DeleteTrafficPolicyInstanceError>>;
 
     /// <p><p>Removes authorization to submit an <code>AssociateVPCWithHostedZone</code> request to associate a specified VPC with a hosted zone that was created by a different account. You must use the account that created the hosted zone to submit a <code>DeleteVPCAssociationAuthorization</code> request.</p> <important> <p>Sending this request only prevents the AWS account that created the VPC from associating the VPC with the Amazon Route 53 hosted zone in the future. If the VPC is already associated with the hosted zone, <code>DeleteVPCAssociationAuthorization</code> won&#39;t disassociate the VPC from the hosted zone. If you want to delete an existing association, use <code>DisassociateVPCFromHostedZone</code>.</p> </important></p>
-    fn delete_vpc_association_authorization(
+    async fn delete_vpc_association_authorization(
         &self,
         input: DeleteVPCAssociationAuthorizationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DeleteVPCAssociationAuthorizationResponse,
-        DeleteVPCAssociationAuthorizationError,
+        RusotoError<DeleteVPCAssociationAuthorizationError>,
     >;
 
     /// <p><p>Disassociates a VPC from a Amazon Route 53 private hosted zone. Note the following:</p> <ul> <li> <p>You can&#39;t disassociate the last VPC from a private hosted zone.</p> </li> <li> <p>You can&#39;t convert a private hosted zone into a public hosted zone.</p> </li> <li> <p>You can submit a <code>DisassociateVPCFromHostedZone</code> request using either the account that created the hosted zone or the account that created the VPC.</p> </li> </ul></p>
-    fn disassociate_vpc_from_hosted_zone(
+    async fn disassociate_vpc_from_hosted_zone(
         &self,
         input: DisassociateVPCFromHostedZoneRequest,
-    ) -> RusotoFuture<DisassociateVPCFromHostedZoneResponse, DisassociateVPCFromHostedZoneError>;
+    ) -> Result<
+        DisassociateVPCFromHostedZoneResponse,
+        RusotoError<DisassociateVPCFromHostedZoneError>,
+    >;
 
     /// <p><p>Gets the specified limit for the current account, for example, the maximum number of health checks that you can create using the account.</p> <p>For the default limit, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p> <note> <p>You can also view account limits in AWS Trusted Advisor. Sign in to the AWS Management Console and open the Trusted Advisor console at <a href="https://console.aws.amazon.com/trustedadvisor">https://console.aws.amazon.com/trustedadvisor/</a>. Then choose <b>Service limits</b> in the navigation pane.</p> </note></p>
-    fn get_account_limit(
+    async fn get_account_limit(
         &self,
         input: GetAccountLimitRequest,
-    ) -> RusotoFuture<GetAccountLimitResponse, GetAccountLimitError>;
+    ) -> Result<GetAccountLimitResponse, RusotoError<GetAccountLimitError>>;
 
     /// <p><p>Returns the current status of a change batch request. The status is one of the following values:</p> <ul> <li> <p> <code>PENDING</code> indicates that the changes in this request have not propagated to all Amazon Route 53 DNS servers. This is the initial status of all change batch requests.</p> </li> <li> <p> <code>INSYNC</code> indicates that the changes have propagated to all Route 53 DNS servers. </p> </li> </ul></p>
-    fn get_change(
+    async fn get_change(
         &self,
         input: GetChangeRequest,
-    ) -> RusotoFuture<GetChangeResponse, GetChangeError>;
+    ) -> Result<GetChangeResponse, RusotoError<GetChangeError>>;
 
     /// <p><important> <p> <code>GetCheckerIpRanges</code> still works, but we recommend that you download ip-ranges.json, which includes IP address ranges for all AWS services. For more information, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/route-53-ip-addresses.html">IP Address Ranges of Amazon Route 53 Servers</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </important></p>
-    fn get_checker_ip_ranges(
+    async fn get_checker_ip_ranges(
         &self,
         input: GetCheckerIpRangesRequest,
-    ) -> RusotoFuture<GetCheckerIpRangesResponse, GetCheckerIpRangesError>;
+    ) -> Result<GetCheckerIpRangesResponse, RusotoError<GetCheckerIpRangesError>>;
 
     /// <p>Gets information about whether a specified geographic location is supported for Amazon Route 53 geolocation resource record sets.</p> <p>Use the following syntax to determine whether a continent is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?continentcode=<i>two-letter abbreviation for a continent</i> </code> </p> <p>Use the following syntax to determine whether a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?countrycode=<i>two-character country code</i> </code> </p> <p>Use the following syntax to determine whether a subdivision of a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?countrycode=<i>two-character country code</i>&amp;subdivisioncode=<i>subdivision code</i> </code> </p>
-    fn get_geo_location(
+    async fn get_geo_location(
         &self,
         input: GetGeoLocationRequest,
-    ) -> RusotoFuture<GetGeoLocationResponse, GetGeoLocationError>;
+    ) -> Result<GetGeoLocationResponse, RusotoError<GetGeoLocationError>>;
 
     /// <p>Gets information about a specified health check.</p>
-    fn get_health_check(
+    async fn get_health_check(
         &self,
         input: GetHealthCheckRequest,
-    ) -> RusotoFuture<GetHealthCheckResponse, GetHealthCheckError>;
+    ) -> Result<GetHealthCheckResponse, RusotoError<GetHealthCheckError>>;
 
     /// <p>Retrieves the number of health checks that are associated with the current AWS account.</p>
-    fn get_health_check_count(
+    async fn get_health_check_count(
         &self,
         input: GetHealthCheckCountRequest,
-    ) -> RusotoFuture<GetHealthCheckCountResponse, GetHealthCheckCountError>;
+    ) -> Result<GetHealthCheckCountResponse, RusotoError<GetHealthCheckCountError>>;
 
     /// <p>Gets the reason that a specified health check failed most recently.</p>
-    fn get_health_check_last_failure_reason(
+    async fn get_health_check_last_failure_reason(
         &self,
         input: GetHealthCheckLastFailureReasonRequest,
-    ) -> RusotoFuture<GetHealthCheckLastFailureReasonResponse, GetHealthCheckLastFailureReasonError>;
+    ) -> Result<
+        GetHealthCheckLastFailureReasonResponse,
+        RusotoError<GetHealthCheckLastFailureReasonError>,
+    >;
 
     /// <p>Gets status of a specified health check. </p>
-    fn get_health_check_status(
+    async fn get_health_check_status(
         &self,
         input: GetHealthCheckStatusRequest,
-    ) -> RusotoFuture<GetHealthCheckStatusResponse, GetHealthCheckStatusError>;
+    ) -> Result<GetHealthCheckStatusResponse, RusotoError<GetHealthCheckStatusError>>;
 
     /// <p>Gets information about a specified hosted zone including the four name servers assigned to the hosted zone.</p>
-    fn get_hosted_zone(
+    async fn get_hosted_zone(
         &self,
         input: GetHostedZoneRequest,
-    ) -> RusotoFuture<GetHostedZoneResponse, GetHostedZoneError>;
+    ) -> Result<GetHostedZoneResponse, RusotoError<GetHostedZoneError>>;
 
     /// <p>Retrieves the number of hosted zones that are associated with the current AWS account.</p>
-    fn get_hosted_zone_count(
+    async fn get_hosted_zone_count(
         &self,
         input: GetHostedZoneCountRequest,
-    ) -> RusotoFuture<GetHostedZoneCountResponse, GetHostedZoneCountError>;
+    ) -> Result<GetHostedZoneCountResponse, RusotoError<GetHostedZoneCountError>>;
 
     /// <p>Gets the specified limit for a specified hosted zone, for example, the maximum number of records that you can create in the hosted zone. </p> <p>For the default limit, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p>
-    fn get_hosted_zone_limit(
+    async fn get_hosted_zone_limit(
         &self,
         input: GetHostedZoneLimitRequest,
-    ) -> RusotoFuture<GetHostedZoneLimitResponse, GetHostedZoneLimitError>;
+    ) -> Result<GetHostedZoneLimitResponse, RusotoError<GetHostedZoneLimitError>>;
 
     /// <p>Gets information about a specified configuration for DNS query logging.</p> <p>For more information about DNS query logs, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateQueryLoggingConfig.html">CreateQueryLoggingConfig</a> and <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a>.</p>
-    fn get_query_logging_config(
+    async fn get_query_logging_config(
         &self,
         input: GetQueryLoggingConfigRequest,
-    ) -> RusotoFuture<GetQueryLoggingConfigResponse, GetQueryLoggingConfigError>;
+    ) -> Result<GetQueryLoggingConfigResponse, RusotoError<GetQueryLoggingConfigError>>;
 
     /// <p>Retrieves information about a specified reusable delegation set, including the four name servers that are assigned to the delegation set.</p>
-    fn get_reusable_delegation_set(
+    async fn get_reusable_delegation_set(
         &self,
         input: GetReusableDelegationSetRequest,
-    ) -> RusotoFuture<GetReusableDelegationSetResponse, GetReusableDelegationSetError>;
+    ) -> Result<GetReusableDelegationSetResponse, RusotoError<GetReusableDelegationSetError>>;
 
     /// <p>Gets the maximum number of hosted zones that you can associate with the specified reusable delegation set.</p> <p>For the default limit, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p>
-    fn get_reusable_delegation_set_limit(
+    async fn get_reusable_delegation_set_limit(
         &self,
         input: GetReusableDelegationSetLimitRequest,
-    ) -> RusotoFuture<GetReusableDelegationSetLimitResponse, GetReusableDelegationSetLimitError>;
+    ) -> Result<
+        GetReusableDelegationSetLimitResponse,
+        RusotoError<GetReusableDelegationSetLimitError>,
+    >;
 
     /// <p>Gets information about a specific traffic policy version.</p>
-    fn get_traffic_policy(
+    async fn get_traffic_policy(
         &self,
         input: GetTrafficPolicyRequest,
-    ) -> RusotoFuture<GetTrafficPolicyResponse, GetTrafficPolicyError>;
+    ) -> Result<GetTrafficPolicyResponse, RusotoError<GetTrafficPolicyError>>;
 
     /// <p><p>Gets information about a specified traffic policy instance.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there&#39;s a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <note> <p>In the Route 53 console, traffic policy instances are known as policy records.</p> </note></p>
-    fn get_traffic_policy_instance(
+    async fn get_traffic_policy_instance(
         &self,
         input: GetTrafficPolicyInstanceRequest,
-    ) -> RusotoFuture<GetTrafficPolicyInstanceResponse, GetTrafficPolicyInstanceError>;
+    ) -> Result<GetTrafficPolicyInstanceResponse, RusotoError<GetTrafficPolicyInstanceError>>;
 
     /// <p>Gets the number of traffic policy instances that are associated with the current AWS account.</p>
-    fn get_traffic_policy_instance_count(
+    async fn get_traffic_policy_instance_count(
         &self,
         input: GetTrafficPolicyInstanceCountRequest,
-    ) -> RusotoFuture<GetTrafficPolicyInstanceCountResponse, GetTrafficPolicyInstanceCountError>;
+    ) -> Result<
+        GetTrafficPolicyInstanceCountResponse,
+        RusotoError<GetTrafficPolicyInstanceCountError>,
+    >;
 
     /// <p>Retrieves a list of supported geographic locations.</p> <p>Countries are listed first, and continents are listed last. If Amazon Route 53 supports subdivisions for a country (for example, states or provinces), the subdivisions for that country are listed in alphabetical order immediately after the corresponding country.</p>
-    fn list_geo_locations(
+    async fn list_geo_locations(
         &self,
         input: ListGeoLocationsRequest,
-    ) -> RusotoFuture<ListGeoLocationsResponse, ListGeoLocationsError>;
+    ) -> Result<ListGeoLocationsResponse, RusotoError<ListGeoLocationsError>>;
 
     /// <p>Retrieve a list of the health checks that are associated with the current AWS account. </p>
-    fn list_health_checks(
+    async fn list_health_checks(
         &self,
         input: ListHealthChecksRequest,
-    ) -> RusotoFuture<ListHealthChecksResponse, ListHealthChecksError>;
+    ) -> Result<ListHealthChecksResponse, RusotoError<ListHealthChecksError>>;
 
     /// <p>Retrieves a list of the public and private hosted zones that are associated with the current AWS account. The response includes a <code>HostedZones</code> child element for each hosted zone.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p>
-    fn list_hosted_zones(
+    async fn list_hosted_zones(
         &self,
         input: ListHostedZonesRequest,
-    ) -> RusotoFuture<ListHostedZonesResponse, ListHostedZonesError>;
+    ) -> Result<ListHostedZonesResponse, RusotoError<ListHostedZonesError>>;
 
     /// <p><p>Retrieves a list of your hosted zones in lexicographic order. The response includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account. </p> <p> <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed. For example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for exämple.com, you specify ex\344mple.com for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as:</p> <p> <code>com.ex\344mple.</code> </p> <p>The labels are reversed and alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> <p>If <code>IsTruncated</code> is false, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul></p>
-    fn list_hosted_zones_by_name(
+    async fn list_hosted_zones_by_name(
         &self,
         input: ListHostedZonesByNameRequest,
-    ) -> RusotoFuture<ListHostedZonesByNameResponse, ListHostedZonesByNameError>;
+    ) -> Result<ListHostedZonesByNameResponse, RusotoError<ListHostedZonesByNameError>>;
 
     /// <p>Lists the configurations for DNS query logging that are associated with the current AWS account or the configuration that is associated with a specified hosted zone.</p> <p>For more information about DNS query logs, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateQueryLoggingConfig.html">CreateQueryLoggingConfig</a>. Additional information, including the format of DNS query logs, appears in <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
-    fn list_query_logging_configs(
+    async fn list_query_logging_configs(
         &self,
         input: ListQueryLoggingConfigsRequest,
-    ) -> RusotoFuture<ListQueryLoggingConfigsResponse, ListQueryLoggingConfigsError>;
+    ) -> Result<ListQueryLoggingConfigsResponse, RusotoError<ListQueryLoggingConfigsError>>;
 
     /// <p>Lists the resource record sets in a specified hosted zone.</p> <p> <code>ListResourceRecordSets</code> returns up to 100 resource record sets at a time in ASCII order, beginning at a position specified by the <code>name</code> and <code>type</code> elements.</p> <p> <b>Sort order</b> </p> <p> <code>ListResourceRecordSets</code> sorts results first by DNS name with the labels reversed, for example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order when the record name contains characters that appear before <code>.</code> (decimal 46) in the ASCII table. These characters include the following: <code>! " # $ % &amp; ' ( ) * + , -</code> </p> <p>When multiple records have the same DNS name, <code>ListResourceRecordSets</code> sorts results by the record type.</p> <p> <b>Specifying where to start listing records</b> </p> <p>You can use the name and type elements to specify the resource record set that the list begins with:</p> <dl> <dt>If you do not specify Name or Type</dt> <dd> <p>The results begin with the first resource record set that the hosted zone contains.</p> </dd> <dt>If you specify Name but not Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>.</p> </dd> <dt>If you specify Type but not Name</dt> <dd> <p>Amazon Route 53 returns the <code>InvalidInput</code> error.</p> </dd> <dt>If you specify both Name and Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>, and whose type is greater than or equal to <code>Type</code>.</p> </dd> </dl> <p> <b>Resource record sets that are PENDING</b> </p> <p>This action returns the most current version of the records. This includes records that are <code>PENDING</code>, and that are not yet available on all Route 53 DNS servers.</p> <p> <b>Changing resource record sets</b> </p> <p>To ensure that you get an accurate listing of the resource record sets for a hosted zone at a point in time, do not submit a <code>ChangeResourceRecordSets</code> request while you're paging through the results of a <code>ListResourceRecordSets</code> request. If you do, some pages may display results without the latest changes while other pages display results with the latest changes.</p> <p> <b>Displaying the next page of results</b> </p> <p>If a <code>ListResourceRecordSets</code> command returns more than one page of results, the value of <code>IsTruncated</code> is <code>true</code>. To display the next page of results, get the values of <code>NextRecordName</code>, <code>NextRecordType</code>, and <code>NextRecordIdentifier</code> (if any) from the response. Then submit another <code>ListResourceRecordSets</code> request, and specify those values for <code>StartRecordName</code>, <code>StartRecordType</code>, and <code>StartRecordIdentifier</code>.</p>
-    fn list_resource_record_sets(
+    async fn list_resource_record_sets(
         &self,
         input: ListResourceRecordSetsRequest,
-    ) -> RusotoFuture<ListResourceRecordSetsResponse, ListResourceRecordSetsError>;
+    ) -> Result<ListResourceRecordSetsResponse, RusotoError<ListResourceRecordSetsError>>;
 
     /// <p>Retrieves a list of the reusable delegation sets that are associated with the current AWS account.</p>
-    fn list_reusable_delegation_sets(
+    async fn list_reusable_delegation_sets(
         &self,
         input: ListReusableDelegationSetsRequest,
-    ) -> RusotoFuture<ListReusableDelegationSetsResponse, ListReusableDelegationSetsError>;
+    ) -> Result<ListReusableDelegationSetsResponse, RusotoError<ListReusableDelegationSetsError>>;
 
     /// <p>Lists tags for one health check or hosted zone. </p> <p>For information about using tags for cost allocation, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Lists tags for up to 10 health checks or hosted zones.</p> <p>For information about using tags for cost allocation, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
-    fn list_tags_for_resources(
+    async fn list_tags_for_resources(
         &self,
         input: ListTagsForResourcesRequest,
-    ) -> RusotoFuture<ListTagsForResourcesResponse, ListTagsForResourcesError>;
+    ) -> Result<ListTagsForResourcesResponse, RusotoError<ListTagsForResourcesError>>;
 
     /// <p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order that they were created in. </p>
-    fn list_traffic_policies(
+    async fn list_traffic_policies(
         &self,
         input: ListTrafficPoliciesRequest,
-    ) -> RusotoFuture<ListTrafficPoliciesResponse, ListTrafficPoliciesError>;
+    ) -> Result<ListTrafficPoliciesResponse, RusotoError<ListTrafficPoliciesError>>;
 
     /// <p>Gets information about the traffic policy instances that you created by using the current AWS account.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>
-    fn list_traffic_policy_instances(
+    async fn list_traffic_policy_instances(
         &self,
         input: ListTrafficPolicyInstancesRequest,
-    ) -> RusotoFuture<ListTrafficPolicyInstancesResponse, ListTrafficPolicyInstancesError>;
+    ) -> Result<ListTrafficPolicyInstancesResponse, RusotoError<ListTrafficPolicyInstancesError>>;
 
     /// <p>Gets information about the traffic policy instances that you created in a specified hosted zone.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>
-    fn list_traffic_policy_instances_by_hosted_zone(
+    async fn list_traffic_policy_instances_by_hosted_zone(
         &self,
         input: ListTrafficPolicyInstancesByHostedZoneRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListTrafficPolicyInstancesByHostedZoneResponse,
-        ListTrafficPolicyInstancesByHostedZoneError,
+        RusotoError<ListTrafficPolicyInstancesByHostedZoneError>,
     >;
 
     /// <p>Gets information about the traffic policy instances that you created by using a specify traffic policy version.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>
-    fn list_traffic_policy_instances_by_policy(
+    async fn list_traffic_policy_instances_by_policy(
         &self,
         input: ListTrafficPolicyInstancesByPolicyRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListTrafficPolicyInstancesByPolicyResponse,
-        ListTrafficPolicyInstancesByPolicyError,
+        RusotoError<ListTrafficPolicyInstancesByPolicyError>,
     >;
 
     /// <p>Gets information about all of the versions for a specified traffic policy.</p> <p>Traffic policy versions are listed in numerical order by <code>VersionNumber</code>.</p>
-    fn list_traffic_policy_versions(
+    async fn list_traffic_policy_versions(
         &self,
         input: ListTrafficPolicyVersionsRequest,
-    ) -> RusotoFuture<ListTrafficPolicyVersionsResponse, ListTrafficPolicyVersionsError>;
+    ) -> Result<ListTrafficPolicyVersionsResponse, RusotoError<ListTrafficPolicyVersionsError>>;
 
     /// <p>Gets a list of the VPCs that were created by other accounts and that can be associated with a specified hosted zone because you've submitted one or more <code>CreateVPCAssociationAuthorization</code> requests. </p> <p>The response includes a <code>VPCs</code> element with a <code>VPC</code> child element for each VPC that can be associated with the hosted zone.</p>
-    fn list_vpc_association_authorizations(
+    async fn list_vpc_association_authorizations(
         &self,
         input: ListVPCAssociationAuthorizationsRequest,
-    ) -> RusotoFuture<ListVPCAssociationAuthorizationsResponse, ListVPCAssociationAuthorizationsError>;
+    ) -> Result<
+        ListVPCAssociationAuthorizationsResponse,
+        RusotoError<ListVPCAssociationAuthorizationsError>,
+    >;
 
     /// <p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p>
-    fn test_dns_answer(
+    async fn test_dns_answer(
         &self,
         input: TestDNSAnswerRequest,
-    ) -> RusotoFuture<TestDNSAnswerResponse, TestDNSAnswerError>;
+    ) -> Result<TestDNSAnswerResponse, RusotoError<TestDNSAnswerError>>;
 
     /// <p>Updates an existing health check. Note that some values can't be updated. </p> <p>For more information about updating health checks, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html">Creating, Updating, and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
-    fn update_health_check(
+    async fn update_health_check(
         &self,
         input: UpdateHealthCheckRequest,
-    ) -> RusotoFuture<UpdateHealthCheckResponse, UpdateHealthCheckError>;
+    ) -> Result<UpdateHealthCheckResponse, RusotoError<UpdateHealthCheckError>>;
 
     /// <p>Updates the comment for a specified hosted zone.</p>
-    fn update_hosted_zone_comment(
+    async fn update_hosted_zone_comment(
         &self,
         input: UpdateHostedZoneCommentRequest,
-    ) -> RusotoFuture<UpdateHostedZoneCommentResponse, UpdateHostedZoneCommentError>;
+    ) -> Result<UpdateHostedZoneCommentResponse, RusotoError<UpdateHostedZoneCommentError>>;
 
     /// <p>Updates the comment for a specified traffic policy version.</p>
-    fn update_traffic_policy_comment(
+    async fn update_traffic_policy_comment(
         &self,
         input: UpdateTrafficPolicyCommentRequest,
-    ) -> RusotoFuture<UpdateTrafficPolicyCommentResponse, UpdateTrafficPolicyCommentError>;
+    ) -> Result<UpdateTrafficPolicyCommentResponse, RusotoError<UpdateTrafficPolicyCommentError>>;
 
     /// <p><p>Updates the resource record sets in a specified hosted zone that were created based on the settings in a specified traffic policy version.</p> <p>When you update a traffic policy instance, Amazon Route 53 continues to respond to DNS queries for the root resource record set name (such as example.com) while it replaces one group of resource record sets with another. Route 53 performs the following operations:</p> <ol> <li> <p>Route 53 creates a new group of resource record sets based on the specified traffic policy. This is true regardless of how significant the differences are between the existing resource record sets and the new resource record sets. </p> </li> <li> <p>When all of the new resource record sets have been created, Route 53 starts to respond to DNS queries for the root resource record set name (such as example.com) by using the new resource record sets.</p> </li> <li> <p>Route 53 deletes the old group of resource record sets that are associated with the root resource record set name.</p> </li> </ol></p>
-    fn update_traffic_policy_instance(
+    async fn update_traffic_policy_instance(
         &self,
         input: UpdateTrafficPolicyInstanceRequest,
-    ) -> RusotoFuture<UpdateTrafficPolicyInstanceResponse, UpdateTrafficPolicyInstanceError>;
+    ) -> Result<UpdateTrafficPolicyInstanceResponse, RusotoError<UpdateTrafficPolicyInstanceError>>;
 }
 /// A client for the Route 53 API.
 #[derive(Clone)]
@@ -11893,7 +11965,10 @@ impl Route53Client {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> Route53Client {
-        Self::new_with_client(Client::shared(), region)
+        Route53Client {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -11903,14 +11978,12 @@ impl Route53Client {
     ) -> Route53Client
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        Route53Client {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> Route53Client {
@@ -11918,21 +11991,15 @@ impl Route53Client {
     }
 }
 
-impl fmt::Debug for Route53Client {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Route53Client")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Route53 for Route53Client {
     /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can&#39;t convert a public hosted zone into a private hosted zone.</p> </important> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note></p>
     #[allow(unused_variables, warnings)]
-    fn associate_vpc_with_hosted_zone(
+    async fn associate_vpc_with_hosted_zone(
         &self,
         input: AssociateVPCWithHostedZoneRequest,
-    ) -> RusotoFuture<AssociateVPCWithHostedZoneResponse, AssociateVPCWithHostedZoneError> {
+    ) -> Result<AssociateVPCWithHostedZoneResponse, RusotoError<AssociateVPCWithHostedZoneError>>
+    {
         let request_uri = format!(
             "/2013-04-01/hostedzone/{id}/associatevpc",
             id = input.hosted_zone_id
@@ -11951,44 +12018,45 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateVPCWithHostedZoneError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AssociateVPCWithHostedZoneError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = AssociateVPCWithHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = AssociateVPCWithHostedZoneResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = AssociateVPCWithHostedZoneResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = AssociateVPCWithHostedZoneResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// For TXT records, see <a href="./util/fn.quote_txt_record.html">util::quote_txt_record</a>
     /// <p>Creates, changes, or deletes a resource record set, which contains authoritative DNS information for a specified domain name or subdomain name. For example, you can use <code>ChangeResourceRecordSets</code> to create a resource record set that routes traffic for test.example.com to a web server that has an IP address of 192.0.2.44.</p> <p> <b>Change Batches and Transactional Changes</b> </p> <p>The request body must include a document with a <code>ChangeResourceRecordSetsRequest</code> element. The request body contains a list of change items, known as a change batch. Change batches are considered transactional changes. When using the Amazon Route 53 API to change resource record sets, Route 53 either makes all or none of the changes in a change batch request. This ensures that Route 53 never partially implements the intended changes to the resource record sets in a hosted zone. </p> <p>For example, a change batch request that deletes the <code>CNAME</code> record for www.example.com and creates an alias resource record set for www.example.com. Route 53 deletes the first resource record set and creates the second resource record set in a single operation. If either the <code>DELETE</code> or the <code>CREATE</code> action fails, then both changes (plus any other changes in the batch) fail, and the original <code>CNAME</code> record continues to exist.</p> <important> <p>Due to the nature of transactional changes, you can't delete the same resource record set more than once in a single change batch. If you attempt to delete the same change batch more than once, Route 53 returns an <code>InvalidChangeBatch</code> error.</p> </important> <p> <b>Traffic Flow</b> </p> <p>To create resource record sets for complex routing configurations, use either the traffic flow visual editor in the Route 53 console or the API actions for traffic policies and traffic policy instances. Save the configuration as a traffic policy, then associate the traffic policy with one or more domain names (such as example.com) or subdomain names (such as www.example.com), in the same hosted zone or in multiple hosted zones. You can roll back the updates if the new configuration isn't performing as expected. For more information, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/traffic-flow.html">Using Traffic Flow to Route DNS Traffic</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p> <b>Create, Delete, and Upsert</b> </p> <p>Use <code>ChangeResourceRecordsSetsRequest</code> to perform the following actions:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes an existing resource record set that has the specified values.</p> </li> <li> <p> <code>UPSERT</code>: If a resource record set does not already exist, AWS creates it. If a resource set does exist, Route 53 updates it with the values in the request. </p> </li> </ul> <p> <b>Syntaxes for Creating, Updating, and Deleting Resource Record Sets</b> </p> <p>The syntax for a request depends on the type of resource record set that you want to create, delete, or update, such as weighted, alias, or failover. The XML elements in your request must appear in the order listed in the syntax. </p> <p>For an example for each type of resource record set, see "Examples."</p> <p>Don't refer to the syntax in the "Parameter Syntax" section, which includes all of the elements for every kind of resource record set that you can create, delete, or update by using <code>ChangeResourceRecordSets</code>. </p> <p> <b>Change Propagation to Route 53 DNS Servers</b> </p> <p>When you submit a <code>ChangeResourceRecordSets</code> request, Route 53 propagates your changes to all of the Route 53 authoritative DNS servers. While your changes are propagating, <code>GetChange</code> returns a status of <code>PENDING</code>. When propagation is complete, <code>GetChange</code> returns a status of <code>INSYNC</code>. Changes generally propagate to all Route 53 name servers within 60 seconds. For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_GetChange.html">GetChange</a>.</p> <p> <b>Limits on ChangeResourceRecordSets Requests</b> </p> <p>For information about the limits on a <code>ChangeResourceRecordSets</code> request, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
     #[allow(unused_variables, warnings)]
-    fn change_resource_record_sets(
+    async fn change_resource_record_sets(
         &self,
         input: ChangeResourceRecordSetsRequest,
-    ) -> RusotoFuture<ChangeResourceRecordSetsResponse, ChangeResourceRecordSetsError> {
+    ) -> Result<ChangeResourceRecordSetsResponse, RusotoError<ChangeResourceRecordSetsError>> {
         let request_uri = format!(
             "/2013-04-01/hostedzone/{id}/rrset/",
             id = input.hosted_zone_id
@@ -12007,43 +12075,44 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ChangeResourceRecordSetsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ChangeResourceRecordSetsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ChangeResourceRecordSetsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ChangeResourceRecordSetsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ChangeResourceRecordSetsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ChangeResourceRecordSetsResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Adds, edits, or deletes tags for a health check or a hosted zone.</p> <p>For information about using tags for cost allocation, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
     #[allow(unused_variables, warnings)]
-    fn change_tags_for_resource(
+    async fn change_tags_for_resource(
         &self,
         input: ChangeTagsForResourceRequest,
-    ) -> RusotoFuture<ChangeTagsForResourceResponse, ChangeTagsForResourceError> {
+    ) -> Result<ChangeTagsForResourceResponse, RusotoError<ChangeTagsForResourceError>> {
         let request_uri = format!(
             "/2013-04-01/tags/{resource_type}/{resource_id}",
             resource_id = input.resource_id,
@@ -12063,43 +12132,44 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ChangeTagsForResourceError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ChangeTagsForResourceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ChangeTagsForResourceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ChangeTagsForResourceResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ChangeTagsForResourceResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ChangeTagsForResourceResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Creates a new health check.</p> <p>For information about adding health checks to resource record sets, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ResourceRecordSet.html#Route53-Type-ResourceRecordSet-HealthCheckId">HealthCheckId</a> in <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html">ChangeResourceRecordSets</a>. </p> <p> <b>ELB Load Balancers</b> </p> <p>If you&#39;re registering EC2 instances with an Elastic Load Balancing (ELB) load balancer, do not create Amazon Route 53 health checks for the EC2 instances. When you register an EC2 instance with a load balancer, you configure settings for an ELB health check, which performs a similar function to a Route 53 health check.</p> <p> <b>Private Hosted Zones</b> </p> <p>You can associate health checks with failover resource record sets in a private hosted zone. Note the following:</p> <ul> <li> <p>Route 53 health checkers are outside the VPC. To check the health of an endpoint within a VPC by IP address, you must assign a public IP address to the instance in the VPC.</p> </li> <li> <p>You can configure a health checker to check the health of an external resource that the instance relies on, such as a database server.</p> </li> <li> <p>You can create a CloudWatch metric, associate an alarm with the metric, and then create a health check that is based on the state of the alarm. For example, you might create a CloudWatch metric that checks the status of the Amazon EC2 <code>StatusCheckFailed</code> metric, add an alarm to the metric, and then create a health check that is based on the state of the alarm. For information about creating CloudWatch metrics and alarms by using the CloudWatch console, see the <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatch.html">Amazon CloudWatch User Guide</a>.</p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
-    fn create_health_check(
+    async fn create_health_check(
         &self,
         input: CreateHealthCheckRequest,
-    ) -> RusotoFuture<CreateHealthCheckResponse, CreateHealthCheckError> {
+    ) -> Result<CreateHealthCheckResponse, RusotoError<CreateHealthCheckError>> {
         let request_uri = "/2013-04-01/healthcheck";
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12113,47 +12183,43 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateHealthCheckError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateHealthCheckError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateHealthCheckResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateHealthCheckResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateHealthCheckResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                CreateHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        let value = response.headers.get("Location").unwrap().to_owned();
+        result.location = value; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a new public or private hosted zone. You create records in a public hosted zone to define how you want to route traffic on the internet for a domain, such as example.com, and its subdomains (apex.example.com, acme.example.com). You create records in a private hosted zone to define how you want to route traffic for a domain and its subdomains within one or more Amazon Virtual Private Clouds (Amazon VPCs). </p> <important> <p>You can't convert a public hosted zone to a private hosted zone or vice versa. Instead, you must create a new hosted zone with the same name and create new resource record sets.</p> </important> <p>For more information about charges for hosted zones, see <a href="http://aws.amazon.com/route53/pricing/">Amazon Route 53 Pricing</a>.</p> <p>Note the following:</p> <ul> <li> <p>You can't create a hosted zone for a top-level domain (TLD) such as .com.</p> </li> <li> <p>For public hosted zones, Amazon Route 53 automatically creates a default SOA record and four NS records for the zone. For more information about SOA and NS records, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/SOA-NSrecords.html">NS and SOA Records that Route 53 Creates for a Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If you want to use the same name servers for multiple public hosted zones, you can optionally associate a reusable delegation set with the hosted zone. See the <code>DelegationSetId</code> element.</p> </li> <li> <p>If your domain is registered with a registrar other than Route 53, you must update the name servers with your registrar to make Route 53 the DNS service for the domain. For more information, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/MigratingDNS.html">Migrating DNS Service for an Existing Domain to Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>. </p> </li> </ul> <p>When you submit a <code>CreateHostedZone</code> request, the initial status of the hosted zone is <code>PENDING</code>. For public hosted zones, this means that the NS and SOA records are not yet available on all Route 53 DNS servers. When the NS and SOA records are available, the status of the zone changes to <code>INSYNC</code>.</p>
     #[allow(unused_variables, warnings)]
-    fn create_hosted_zone(
+    async fn create_hosted_zone(
         &self,
         input: CreateHostedZoneRequest,
-    ) -> RusotoFuture<CreateHostedZoneResponse, CreateHostedZoneError> {
+    ) -> Result<CreateHostedZoneResponse, RusotoError<CreateHostedZoneError>> {
         let request_uri = "/2013-04-01/hostedzone";
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12167,47 +12233,43 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateHostedZoneError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateHostedZoneError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateHostedZoneResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateHostedZoneResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                CreateHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        let value = response.headers.get("Location").unwrap().to_owned();
+        result.location = value; // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Creates a configuration for DNS query logging. After you create a query logging configuration, Amazon Route 53 begins to publish log data to an Amazon CloudWatch Logs log group.</p> <p>DNS query logs contain information about the queries that Route 53 receives for a specified public hosted zone, such as the following:</p> <ul> <li> <p>Route 53 edge location that responded to the DNS query</p> </li> <li> <p>Domain or subdomain that was requested</p> </li> <li> <p>DNS record type, such as A or AAAA</p> </li> <li> <p>DNS response code, such as <code>NoError</code> or <code>ServFail</code> </p> </li> </ul> <dl> <dt>Log Group and Resource Policy</dt> <dd> <p>Before you create a query logging configuration, perform the following operations.</p> <note> <p>If you create a query logging configuration using the Route 53 console, Route 53 performs these operations automatically.</p> </note> <ol> <li> <p>Create a CloudWatch Logs log group, and make note of the ARN, which you specify when you create a query logging configuration. Note the following:</p> <ul> <li> <p>You must create the log group in the us-east-1 region.</p> </li> <li> <p>You must use the same AWS account to create the log group and the hosted zone that you want to configure query logging for.</p> </li> <li> <p>When you create log groups for query logging, we recommend that you use a consistent prefix, for example:</p> <p> <code>/aws/route53/<i>hosted zone name</i> </code> </p> <p>In the next step, you&#39;ll create a resource policy, which controls access to one or more log groups and the associated AWS resources, such as Route 53 hosted zones. There&#39;s a limit on the number of resource policies that you can create, so we recommend that you use a consistent prefix so you can use the same resource policy for all the log groups that you create for query logging.</p> </li> </ul> </li> <li> <p>Create a CloudWatch Logs resource policy, and give it the permissions that Route 53 needs to create log streams and to send query logs to log streams. For the value of <code>Resource</code>, specify the ARN for the log group that you created in the previous step. To use the same resource policy for all the CloudWatch Logs log groups that you created for query logging configurations, replace the hosted zone name with <code><em></code>, for example:</p> <p> <code>arn:aws:logs:us-east-1:123412341234:log-group:/aws/route53/</em></code> </p> <note> <p>You can&#39;t use the CloudWatch console to create or edit a resource policy. You must use the CloudWatch API, one of the AWS SDKs, or the AWS CLI.</p> </note> </li> </ol> </dd> <dt>Log Streams and Edge Locations</dt> <dd> <p>When Route 53 finishes creating the configuration for DNS query logging, it does the following:</p> <ul> <li> <p>Creates a log stream for an edge location the first time that the edge location responds to DNS queries for the specified hosted zone. That log stream is used to log all queries that Route 53 responds to for that edge location.</p> </li> <li> <p>Begins to send query logs to the applicable log stream.</p> </li> </ul> <p>The name of each log stream is in the following format:</p> <p> <code> <i>hosted zone ID</i>/<i>edge location code</i> </code> </p> <p>The edge location code is a three-letter code and an arbitrarily assigned number, for example, DFW3. The three-letter code typically corresponds with the International Air Transport Association airport code for an airport near the edge location. (These abbreviations might change in the future.) For a list of edge locations, see &quot;The Route 53 Global Network&quot; on the <a href="http://aws.amazon.com/route53/details/">Route 53 Product Details</a> page.</p> </dd> <dt>Queries That Are Logged</dt> <dd> <p>Query logs contain only the queries that DNS resolvers forward to Route 53. If a DNS resolver has already cached the response to a query (such as the IP address for a load balancer for example.com), the resolver will continue to return the cached response. It doesn&#39;t forward another query to Route 53 until the TTL for the corresponding resource record set expires. Depending on how many DNS queries are submitted for a resource record set, and depending on the TTL for that resource record set, query logs might contain information about only one query out of every several thousand queries that are submitted to DNS. For more information about how DNS works, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/welcome-dns-service.html">Routing Internet Traffic to Your Website or Web Application</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </dd> <dt>Log File Format</dt> <dd> <p>For a list of the values in each query log and the format of each value, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </dd> <dt>Pricing</dt> <dd> <p>For information about charges for query logs, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </dd> <dt>How to Stop Logging</dt> <dd> <p>If you want Route 53 to stop sending query logs to CloudWatch Logs, delete the query logging configuration. For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteQueryLoggingConfig.html">DeleteQueryLoggingConfig</a>.</p> </dd> </dl></p>
     #[allow(unused_variables, warnings)]
-    fn create_query_logging_config(
+    async fn create_query_logging_config(
         &self,
         input: CreateQueryLoggingConfigRequest,
-    ) -> RusotoFuture<CreateQueryLoggingConfigResponse, CreateQueryLoggingConfigError> {
+    ) -> Result<CreateQueryLoggingConfigResponse, RusotoError<CreateQueryLoggingConfigError>> {
         let request_uri = "/2013-04-01/queryloggingconfig";
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12221,44 +12283,46 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateQueryLoggingConfigError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateQueryLoggingConfigError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateQueryLoggingConfigResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateQueryLoggingConfigResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateQueryLoggingConfigResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreateQueryLoggingConfigResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        let value = response.headers.get("Location").unwrap().to_owned();
+        result.location = value; // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable.</p> <note> <p>You can&#39;t associate a reusable delegation set with a private hosted zone.</p> </note> <p>For information about using a reusable delegation set to configure white label name servers, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html">Configuring White Label Name Servers</a>.</p> <p>The process for migrating existing hosted zones to use a reusable delegation set is comparable to the process for configuring white label name servers. You need to perform the following steps:</p> <ol> <li> <p>Create a reusable delegation set.</p> </li> <li> <p>Recreate hosted zones, and reduce the TTL to 60 seconds or less.</p> </li> <li> <p>Recreate resource record sets in the new hosted zones.</p> </li> <li> <p>Change the registrar&#39;s name servers to use the name servers for the new hosted zones.</p> </li> <li> <p>Monitor traffic for the website or application.</p> </li> <li> <p>Change TTLs back to their original values.</p> </li> </ol> <p>If you want to migrate existing hosted zones to use a reusable delegation set, the existing hosted zones can&#39;t use any of the name servers that are assigned to the reusable delegation set. If one or more hosted zones do use one or more name servers that are assigned to the reusable delegation set, you can do one of the following:</p> <ul> <li> <p>For small numbers of hosted zones—up to a few hundred—it&#39;s relatively easy to create reusable delegation sets until you get one that has four name servers that don&#39;t overlap with any of the name servers in your hosted zones.</p> </li> <li> <p>For larger numbers of hosted zones, the easiest solution is to use more than one reusable delegation set.</p> </li> <li> <p>For larger numbers of hosted zones, you can also migrate hosted zones that have overlapping name servers to hosted zones that don&#39;t have overlapping name servers, then migrate the hosted zones again to use the reusable delegation set.</p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
-    fn create_reusable_delegation_set(
+    async fn create_reusable_delegation_set(
         &self,
         input: CreateReusableDelegationSetRequest,
-    ) -> RusotoFuture<CreateReusableDelegationSetResponse, CreateReusableDelegationSetError> {
+    ) -> Result<CreateReusableDelegationSetResponse, RusotoError<CreateReusableDelegationSetError>>
+    {
         let request_uri = "/2013-04-01/delegationset";
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12272,44 +12336,45 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReusableDelegationSetError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateReusableDelegationSetError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateReusableDelegationSetResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateReusableDelegationSetResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateReusableDelegationSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreateReusableDelegationSetResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        let value = response.headers.get("Location").unwrap().to_owned();
+        result.location = value; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a traffic policy, which you use to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com).</p>
     #[allow(unused_variables, warnings)]
-    fn create_traffic_policy(
+    async fn create_traffic_policy(
         &self,
         input: CreateTrafficPolicyRequest,
-    ) -> RusotoFuture<CreateTrafficPolicyResponse, CreateTrafficPolicyError> {
+    ) -> Result<CreateTrafficPolicyResponse, RusotoError<CreateTrafficPolicyError>> {
         let request_uri = "/2013-04-01/trafficpolicy";
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12323,46 +12388,44 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateTrafficPolicyError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateTrafficPolicyError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateTrafficPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateTrafficPolicyResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateTrafficPolicyResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                CreateTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        let value = response.headers.get("Location").unwrap().to_owned();
+        result.location = value; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates resource record sets in a specified hosted zone based on the settings in a specified traffic policy version. In addition, <code>CreateTrafficPolicyInstance</code> associates the resource record sets with a specified domain name (such as example.com) or subdomain name (such as www.example.com). Amazon Route 53 responds to DNS queries for the domain or subdomain name by using the resource record sets that <code>CreateTrafficPolicyInstance</code> created.</p>
     #[allow(unused_variables, warnings)]
-    fn create_traffic_policy_instance(
+    async fn create_traffic_policy_instance(
         &self,
         input: CreateTrafficPolicyInstanceRequest,
-    ) -> RusotoFuture<CreateTrafficPolicyInstanceResponse, CreateTrafficPolicyInstanceError> {
+    ) -> Result<CreateTrafficPolicyInstanceResponse, RusotoError<CreateTrafficPolicyInstanceError>>
+    {
         let request_uri = "/2013-04-01/trafficpolicyinstance";
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12376,44 +12439,46 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTrafficPolicyInstanceError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateTrafficPolicyInstanceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateTrafficPolicyInstanceResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateTrafficPolicyInstanceResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreateTrafficPolicyInstanceResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        let value = response.headers.get("Location").unwrap().to_owned();
+        result.location = value; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a new version of an existing traffic policy. When you create a new version of a traffic policy, you specify the ID of the traffic policy that you want to update and a JSON-formatted document that describes the new version. You use traffic policies to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com). You can create a maximum of 1000 versions of a traffic policy. If you reach the limit and need to create another version, you'll need to start a new traffic policy.</p>
     #[allow(unused_variables, warnings)]
-    fn create_traffic_policy_version(
+    async fn create_traffic_policy_version(
         &self,
         input: CreateTrafficPolicyVersionRequest,
-    ) -> RusotoFuture<CreateTrafficPolicyVersionResponse, CreateTrafficPolicyVersionError> {
+    ) -> Result<CreateTrafficPolicyVersionResponse, RusotoError<CreateTrafficPolicyVersionError>>
+    {
         let request_uri = format!("/2013-04-01/trafficpolicy/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
@@ -12429,46 +12494,47 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTrafficPolicyVersionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateTrafficPolicyVersionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateTrafficPolicyVersionResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateTrafficPolicyVersionResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateTrafficPolicyVersionResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreateTrafficPolicyVersionResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        let value = response.headers.get("Location").unwrap().to_owned();
+        result.location = value; // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Authorizes the AWS account that created a specified VPC to submit an <code>AssociateVPCWithHostedZone</code> request to associate the VPC with a specified hosted zone that was created by a different account. To submit a <code>CreateVPCAssociationAuthorization</code> request, you must use the account that created the hosted zone. After you authorize the association, use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> <note> <p>If you want to associate multiple VPCs that you created by using one account with a hosted zone that you created by using a different account, you must submit one authorization request for each VPC.</p> </note></p>
     #[allow(unused_variables, warnings)]
-    fn create_vpc_association_authorization(
+    async fn create_vpc_association_authorization(
         &self,
         input: CreateVPCAssociationAuthorizationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateVPCAssociationAuthorizationResponse,
-        CreateVPCAssociationAuthorizationError,
+        RusotoError<CreateVPCAssociationAuthorizationError>,
     > {
         let request_uri = format!(
             "/2013-04-01/hostedzone/{id}/authorizevpcassociation",
@@ -12488,45 +12554,46 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateVPCAssociationAuthorizationError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateVPCAssociationAuthorizationError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateVPCAssociationAuthorizationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateVPCAssociationAuthorizationResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Deletes a health check.</p> <important> <p>Amazon Route 53 does not prevent you from deleting a health check even if the health check is associated with one or more resource record sets. If you delete a health check and you don&#39;t update the associated resource record sets, the future status of the health check can&#39;t be predicted and may change. This will affect the routing of DNS queries for your DNS failover configuration. For more information, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html#health-checks-deleting.html">Replacing and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </important></p>
     #[allow(unused_variables, warnings)]
-    fn delete_health_check(
+    async fn delete_health_check(
         &self,
         input: DeleteHealthCheckRequest,
-    ) -> RusotoFuture<DeleteHealthCheckResponse, DeleteHealthCheckError> {
+    ) -> Result<DeleteHealthCheckResponse, RusotoError<DeleteHealthCheckError>> {
         let request_uri = format!(
             "/2013-04-01/healthcheck/{health_check_id}",
             health_check_id = input.health_check_id
@@ -12536,178 +12603,173 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteHealthCheckError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteHealthCheckError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteHealthCheckResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteHealthCheckResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteHealthCheckResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                DeleteHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Deletes a hosted zone.</p> <p>If the hosted zone was created by another service, such as AWS Cloud Map, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DeleteHostedZone.html#delete-public-hosted-zone-created-by-another-service">Deleting Public Hosted Zones That Were Created by Another Service</a> in the <i>Amazon Route 53 Developer Guide</i> for information about how to delete it. (The process is the same for public and private hosted zones that were created by another service.)</p> <p>If you want to keep your domain registration but you want to stop routing internet traffic to your website or web application, we recommend that you delete resource record sets in the hosted zone instead of deleting the hosted zone.</p> <important> <p>If you delete a hosted zone, you can&#39;t undelete it. You must create a new hosted zone and update the name servers for your domain registration, which can require up to 48 hours to take effect. (If you delegated responsibility for a subdomain to a hosted zone and you delete the child hosted zone, you must update the name servers in the parent hosted zone.) In addition, if you delete a hosted zone, someone could hijack the domain and route traffic to their own resources using your domain name.</p> </important> <p>If you want to avoid the monthly charge for the hosted zone, you can transfer DNS service for the domain to a free DNS service. When you transfer DNS service, you have to update the name servers for the domain registration. If the domain is registered with Route 53, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_UpdateDomainNameservers.html">UpdateDomainNameservers</a> for information about how to replace Route 53 name servers with name servers for the new DNS service. If the domain is registered with another registrar, use the method provided by the registrar to update name servers for the domain registration. For more information, perform an internet search on &quot;free DNS service.&quot;</p> <p>You can delete a hosted zone only if it contains only the default SOA record and NS resource record sets. If the hosted zone contains other resource record sets, you must delete them before you can delete the hosted zone. If you try to delete a hosted zone that contains other resource record sets, the request fails, and Route 53 returns a <code>HostedZoneNotEmpty</code> error. For information about deleting records from your hosted zone, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html">ChangeResourceRecordSets</a>.</p> <p>To verify that the hosted zone has been deleted, do one of the following:</p> <ul> <li> <p>Use the <code>GetHostedZone</code> action to request information about the hosted zone.</p> </li> <li> <p>Use the <code>ListHostedZones</code> action to get a list of the hosted zones associated with the current AWS account.</p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
-    fn delete_hosted_zone(
+    async fn delete_hosted_zone(
         &self,
         input: DeleteHostedZoneRequest,
-    ) -> RusotoFuture<DeleteHostedZoneResponse, DeleteHostedZoneError> {
+    ) -> Result<DeleteHostedZoneResponse, RusotoError<DeleteHostedZoneError>> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteHostedZoneError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteHostedZoneError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteHostedZoneResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteHostedZoneResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                DeleteHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes a configuration for DNS query logging. If you delete a configuration, Amazon Route 53 stops sending query logs to CloudWatch Logs. Route 53 doesn't delete any logs that are already in CloudWatch Logs.</p> <p>For more information about DNS query logs, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateQueryLoggingConfig.html">CreateQueryLoggingConfig</a>.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_query_logging_config(
+    async fn delete_query_logging_config(
         &self,
         input: DeleteQueryLoggingConfigRequest,
-    ) -> RusotoFuture<DeleteQueryLoggingConfigResponse, DeleteQueryLoggingConfigError> {
+    ) -> Result<DeleteQueryLoggingConfigResponse, RusotoError<DeleteQueryLoggingConfigError>> {
         let request_uri = format!("/2013-04-01/queryloggingconfig/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteQueryLoggingConfigError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteQueryLoggingConfigError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteQueryLoggingConfigResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteQueryLoggingConfigResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteQueryLoggingConfigResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = DeleteQueryLoggingConfigResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes a reusable delegation set.</p> <important> <p>You can delete a reusable delegation set only if it isn't associated with any hosted zones.</p> </important> <p>To verify that the reusable delegation set is not associated with any hosted zones, submit a <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_GetReusableDelegationSet.html">GetReusableDelegationSet</a> request and specify the ID of the reusable delegation set that you want to delete.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_reusable_delegation_set(
+    async fn delete_reusable_delegation_set(
         &self,
         input: DeleteReusableDelegationSetRequest,
-    ) -> RusotoFuture<DeleteReusableDelegationSetResponse, DeleteReusableDelegationSetError> {
+    ) -> Result<DeleteReusableDelegationSetResponse, RusotoError<DeleteReusableDelegationSetError>>
+    {
         let request_uri = format!("/2013-04-01/delegationset/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReusableDelegationSetError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteReusableDelegationSetError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteReusableDelegationSetResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteReusableDelegationSetResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteReusableDelegationSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = DeleteReusableDelegationSetResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes a traffic policy.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_traffic_policy(
+    async fn delete_traffic_policy(
         &self,
         input: DeleteTrafficPolicyRequest,
-    ) -> RusotoFuture<DeleteTrafficPolicyResponse, DeleteTrafficPolicyError> {
+    ) -> Result<DeleteTrafficPolicyResponse, RusotoError<DeleteTrafficPolicyError>> {
         let request_uri = format!(
             "/2013-04-01/trafficpolicy/{id}/{version}",
             id = input.id,
@@ -12718,90 +12780,89 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteTrafficPolicyError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteTrafficPolicyError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteTrafficPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteTrafficPolicyResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteTrafficPolicyResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                DeleteTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Deletes a traffic policy instance and all of the resource record sets that Amazon Route 53 created when you created the instance.</p> <note> <p>In the Route 53 console, traffic policy instances are known as policy records.</p> </note></p>
     #[allow(unused_variables, warnings)]
-    fn delete_traffic_policy_instance(
+    async fn delete_traffic_policy_instance(
         &self,
         input: DeleteTrafficPolicyInstanceRequest,
-    ) -> RusotoFuture<DeleteTrafficPolicyInstanceResponse, DeleteTrafficPolicyInstanceError> {
+    ) -> Result<DeleteTrafficPolicyInstanceResponse, RusotoError<DeleteTrafficPolicyInstanceError>>
+    {
         let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTrafficPolicyInstanceError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteTrafficPolicyInstanceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteTrafficPolicyInstanceResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteTrafficPolicyInstanceResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = DeleteTrafficPolicyInstanceResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Removes authorization to submit an <code>AssociateVPCWithHostedZone</code> request to associate a specified VPC with a hosted zone that was created by a different account. You must use the account that created the hosted zone to submit a <code>DeleteVPCAssociationAuthorization</code> request.</p> <important> <p>Sending this request only prevents the AWS account that created the VPC from associating the VPC with the Amazon Route 53 hosted zone in the future. If the VPC is already associated with the hosted zone, <code>DeleteVPCAssociationAuthorization</code> won&#39;t disassociate the VPC from the hosted zone. If you want to delete an existing association, use <code>DisassociateVPCFromHostedZone</code>.</p> </important></p>
     #[allow(unused_variables, warnings)]
-    fn delete_vpc_association_authorization(
+    async fn delete_vpc_association_authorization(
         &self,
         input: DeleteVPCAssociationAuthorizationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DeleteVPCAssociationAuthorizationResponse,
-        DeleteVPCAssociationAuthorizationError,
+        RusotoError<DeleteVPCAssociationAuthorizationError>,
     > {
         let request_uri = format!(
             "/2013-04-01/hostedzone/{id}/deauthorizevpcassociation",
@@ -12821,46 +12882,49 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVPCAssociationAuthorizationError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteVPCAssociationAuthorizationError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteVPCAssociationAuthorizationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteVPCAssociationAuthorizationResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteVPCAssociationAuthorizationResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = DeleteVPCAssociationAuthorizationResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Disassociates a VPC from a Amazon Route 53 private hosted zone. Note the following:</p> <ul> <li> <p>You can&#39;t disassociate the last VPC from a private hosted zone.</p> </li> <li> <p>You can&#39;t convert a private hosted zone into a public hosted zone.</p> </li> <li> <p>You can submit a <code>DisassociateVPCFromHostedZone</code> request using either the account that created the hosted zone or the account that created the VPC.</p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
-    fn disassociate_vpc_from_hosted_zone(
+    async fn disassociate_vpc_from_hosted_zone(
         &self,
         input: DisassociateVPCFromHostedZoneRequest,
-    ) -> RusotoFuture<DisassociateVPCFromHostedZoneResponse, DisassociateVPCFromHostedZoneError>
-    {
+    ) -> Result<
+        DisassociateVPCFromHostedZoneResponse,
+        RusotoError<DisassociateVPCFromHostedZoneError>,
+    > {
         let request_uri = format!(
             "/2013-04-01/hostedzone/{id}/disassociatevpc",
             id = input.hosted_zone_id
@@ -12879,177 +12943,167 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateVPCFromHostedZoneError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DisassociateVPCFromHostedZoneError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = DisassociateVPCFromHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DisassociateVPCFromHostedZoneResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Gets the specified limit for the current account, for example, the maximum number of health checks that you can create using the account.</p> <p>For the default limit, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p> <note> <p>You can also view account limits in AWS Trusted Advisor. Sign in to the AWS Management Console and open the Trusted Advisor console at <a href="https://console.aws.amazon.com/trustedadvisor">https://console.aws.amazon.com/trustedadvisor/</a>. Then choose <b>Service limits</b> in the navigation pane.</p> </note></p>
     #[allow(unused_variables, warnings)]
-    fn get_account_limit(
+    async fn get_account_limit(
         &self,
         input: GetAccountLimitRequest,
-    ) -> RusotoFuture<GetAccountLimitResponse, GetAccountLimitError> {
+    ) -> Result<GetAccountLimitResponse, RusotoError<GetAccountLimitError>> {
         let request_uri = format!("/2013-04-01/accountlimit/{type}", type = input.type_)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetAccountLimitError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetAccountLimitError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetAccountLimitResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetAccountLimitResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetAccountLimitResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetAccountLimitResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Returns the current status of a change batch request. The status is one of the following values:</p> <ul> <li> <p> <code>PENDING</code> indicates that the changes in this request have not propagated to all Amazon Route 53 DNS servers. This is the initial status of all change batch requests.</p> </li> <li> <p> <code>INSYNC</code> indicates that the changes have propagated to all Route 53 DNS servers. </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
-    fn get_change(
+    async fn get_change(
         &self,
         input: GetChangeRequest,
-    ) -> RusotoFuture<GetChangeResponse, GetChangeError> {
+    ) -> Result<GetChangeResponse, RusotoError<GetChangeError>> {
         let request_uri = format!("/2013-04-01/change/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetChangeError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetChangeError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetChangeResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        GetChangeResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetChangeResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetChangeResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><important> <p> <code>GetCheckerIpRanges</code> still works, but we recommend that you download ip-ranges.json, which includes IP address ranges for all AWS services. For more information, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/route-53-ip-addresses.html">IP Address Ranges of Amazon Route 53 Servers</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </important></p>
     #[allow(unused_variables, warnings)]
-    fn get_checker_ip_ranges(
+    async fn get_checker_ip_ranges(
         &self,
         input: GetCheckerIpRangesRequest,
-    ) -> RusotoFuture<GetCheckerIpRangesResponse, GetCheckerIpRangesError> {
+    ) -> Result<GetCheckerIpRangesResponse, RusotoError<GetCheckerIpRangesError>> {
         let request_uri = "/2013-04-01/checkeripranges";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetCheckerIpRangesError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetCheckerIpRangesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetCheckerIpRangesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetCheckerIpRangesResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetCheckerIpRangesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetCheckerIpRangesResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets information about whether a specified geographic location is supported for Amazon Route 53 geolocation resource record sets.</p> <p>Use the following syntax to determine whether a continent is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?continentcode=<i>two-letter abbreviation for a continent</i> </code> </p> <p>Use the following syntax to determine whether a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?countrycode=<i>two-character country code</i> </code> </p> <p>Use the following syntax to determine whether a subdivision of a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?countrycode=<i>two-character country code</i>&amp;subdivisioncode=<i>subdivision code</i> </code> </p>
     #[allow(unused_variables, warnings)]
-    fn get_geo_location(
+    async fn get_geo_location(
         &self,
         input: GetGeoLocationRequest,
-    ) -> RusotoFuture<GetGeoLocationResponse, GetGeoLocationError> {
+    ) -> Result<GetGeoLocationResponse, RusotoError<GetGeoLocationError>> {
         let request_uri = "/2013-04-01/geolocation";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13066,46 +13120,41 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetGeoLocationError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetGeoLocationError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetGeoLocationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetGeoLocationResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetGeoLocationResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetGeoLocationResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets information about a specified health check.</p>
     #[allow(unused_variables, warnings)]
-    fn get_health_check(
+    async fn get_health_check(
         &self,
         input: GetHealthCheckRequest,
-    ) -> RusotoFuture<GetHealthCheckResponse, GetHealthCheckError> {
+    ) -> Result<GetHealthCheckResponse, RusotoError<GetHealthCheckError>> {
         let request_uri = format!(
             "/2013-04-01/healthcheck/{health_check_id}",
             health_check_id = input.health_check_id
@@ -13115,90 +13164,84 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetHealthCheckError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetHealthCheckError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHealthCheckResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHealthCheckResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetHealthCheckResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Retrieves the number of health checks that are associated with the current AWS account.</p>
     #[allow(unused_variables, warnings)]
-    fn get_health_check_count(
+    async fn get_health_check_count(
         &self,
         input: GetHealthCheckCountRequest,
-    ) -> RusotoFuture<GetHealthCheckCountResponse, GetHealthCheckCountError> {
+    ) -> Result<GetHealthCheckCountResponse, RusotoError<GetHealthCheckCountError>> {
         let request_uri = "/2013-04-01/healthcheckcount";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetHealthCheckCountError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetHealthCheckCountError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHealthCheckCountResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHealthCheckCountResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetHealthCheckCountResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetHealthCheckCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets the reason that a specified health check failed most recently.</p>
     #[allow(unused_variables, warnings)]
-    fn get_health_check_last_failure_reason(
+    async fn get_health_check_last_failure_reason(
         &self,
         input: GetHealthCheckLastFailureReasonRequest,
-    ) -> RusotoFuture<GetHealthCheckLastFailureReasonResponse, GetHealthCheckLastFailureReasonError>
-    {
+    ) -> Result<
+        GetHealthCheckLastFailureReasonResponse,
+        RusotoError<GetHealthCheckLastFailureReasonError>,
+    > {
         let request_uri = format!(
             "/2013-04-01/healthcheck/{health_check_id}/lastfailurereason",
             health_check_id = input.health_check_id
@@ -13208,45 +13251,46 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetHealthCheckLastFailureReasonError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetHealthCheckLastFailureReasonError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHealthCheckLastFailureReasonResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetHealthCheckLastFailureReasonResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets status of a specified health check. </p>
     #[allow(unused_variables, warnings)]
-    fn get_health_check_status(
+    async fn get_health_check_status(
         &self,
         input: GetHealthCheckStatusRequest,
-    ) -> RusotoFuture<GetHealthCheckStatusResponse, GetHealthCheckStatusError> {
+    ) -> Result<GetHealthCheckStatusResponse, RusotoError<GetHealthCheckStatusError>> {
         let request_uri = format!(
             "/2013-04-01/healthcheck/{health_check_id}/status",
             health_check_id = input.health_check_id
@@ -13256,307 +13300,298 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetHealthCheckStatusError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetHealthCheckStatusError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHealthCheckStatusResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHealthCheckStatusResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetHealthCheckStatusResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetHealthCheckStatusResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets information about a specified hosted zone including the four name servers assigned to the hosted zone.</p>
     #[allow(unused_variables, warnings)]
-    fn get_hosted_zone(
+    async fn get_hosted_zone(
         &self,
         input: GetHostedZoneRequest,
-    ) -> RusotoFuture<GetHostedZoneResponse, GetHostedZoneError> {
+    ) -> Result<GetHostedZoneResponse, RusotoError<GetHostedZoneError>> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetHostedZoneError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetHostedZoneError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHostedZoneResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetHostedZoneResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Retrieves the number of hosted zones that are associated with the current AWS account.</p>
     #[allow(unused_variables, warnings)]
-    fn get_hosted_zone_count(
+    async fn get_hosted_zone_count(
         &self,
         input: GetHostedZoneCountRequest,
-    ) -> RusotoFuture<GetHostedZoneCountResponse, GetHostedZoneCountError> {
+    ) -> Result<GetHostedZoneCountResponse, RusotoError<GetHostedZoneCountError>> {
         let request_uri = "/2013-04-01/hostedzonecount";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetHostedZoneCountError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetHostedZoneCountError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHostedZoneCountResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHostedZoneCountResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetHostedZoneCountResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetHostedZoneCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets the specified limit for a specified hosted zone, for example, the maximum number of records that you can create in the hosted zone. </p> <p>For the default limit, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p>
     #[allow(unused_variables, warnings)]
-    fn get_hosted_zone_limit(
+    async fn get_hosted_zone_limit(
         &self,
         input: GetHostedZoneLimitRequest,
-    ) -> RusotoFuture<GetHostedZoneLimitResponse, GetHostedZoneLimitError> {
+    ) -> Result<GetHostedZoneLimitResponse, RusotoError<GetHostedZoneLimitError>> {
         let request_uri = format!("/2013-04-01/hostedzonelimit/{id}/{type}", id = input.hosted_zone_id, type = input.type_).replace("/hostedzone/hostedzone/", "/hostedzone/").replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetHostedZoneLimitError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetHostedZoneLimitError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHostedZoneLimitResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHostedZoneLimitResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetHostedZoneLimitResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetHostedZoneLimitResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets information about a specified configuration for DNS query logging.</p> <p>For more information about DNS query logs, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateQueryLoggingConfig.html">CreateQueryLoggingConfig</a> and <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a>.</p>
     #[allow(unused_variables, warnings)]
-    fn get_query_logging_config(
+    async fn get_query_logging_config(
         &self,
         input: GetQueryLoggingConfigRequest,
-    ) -> RusotoFuture<GetQueryLoggingConfigResponse, GetQueryLoggingConfigError> {
+    ) -> Result<GetQueryLoggingConfigResponse, RusotoError<GetQueryLoggingConfigError>> {
         let request_uri = format!("/2013-04-01/queryloggingconfig/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetQueryLoggingConfigError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetQueryLoggingConfigError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetQueryLoggingConfigResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetQueryLoggingConfigResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetQueryLoggingConfigResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetQueryLoggingConfigResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Retrieves information about a specified reusable delegation set, including the four name servers that are assigned to the delegation set.</p>
     #[allow(unused_variables, warnings)]
-    fn get_reusable_delegation_set(
+    async fn get_reusable_delegation_set(
         &self,
         input: GetReusableDelegationSetRequest,
-    ) -> RusotoFuture<GetReusableDelegationSetResponse, GetReusableDelegationSetError> {
+    ) -> Result<GetReusableDelegationSetResponse, RusotoError<GetReusableDelegationSetError>> {
         let request_uri = format!("/2013-04-01/delegationset/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReusableDelegationSetError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetReusableDelegationSetError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetReusableDelegationSetResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetReusableDelegationSetResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetReusableDelegationSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetReusableDelegationSetResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets the maximum number of hosted zones that you can associate with the specified reusable delegation set.</p> <p>For the default limit, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p>
     #[allow(unused_variables, warnings)]
-    fn get_reusable_delegation_set_limit(
+    async fn get_reusable_delegation_set_limit(
         &self,
         input: GetReusableDelegationSetLimitRequest,
-    ) -> RusotoFuture<GetReusableDelegationSetLimitResponse, GetReusableDelegationSetLimitError>
-    {
+    ) -> Result<
+        GetReusableDelegationSetLimitResponse,
+        RusotoError<GetReusableDelegationSetLimitError>,
+    > {
         let request_uri = format!("/2013-04-01/reusabledelegationsetlimit/{id}/{type}", id = input.delegation_set_id, type = input.type_).replace("/hostedzone/hostedzone/", "/hostedzone/").replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReusableDelegationSetLimitError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetReusableDelegationSetLimitError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetReusableDelegationSetLimitResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetReusableDelegationSetLimitResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetReusableDelegationSetLimitResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetReusableDelegationSetLimitResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets information about a specific traffic policy version.</p>
     #[allow(unused_variables, warnings)]
-    fn get_traffic_policy(
+    async fn get_traffic_policy(
         &self,
         input: GetTrafficPolicyRequest,
-    ) -> RusotoFuture<GetTrafficPolicyResponse, GetTrafficPolicyError> {
+    ) -> Result<GetTrafficPolicyResponse, RusotoError<GetTrafficPolicyError>> {
         let request_uri = format!(
             "/2013-04-01/trafficpolicy/{id}/{version}",
             id = input.id,
@@ -13567,131 +13602,131 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetTrafficPolicyError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetTrafficPolicyError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetTrafficPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetTrafficPolicyResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetTrafficPolicyResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Gets information about a specified traffic policy instance.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there&#39;s a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <note> <p>In the Route 53 console, traffic policy instances are known as policy records.</p> </note></p>
     #[allow(unused_variables, warnings)]
-    fn get_traffic_policy_instance(
+    async fn get_traffic_policy_instance(
         &self,
         input: GetTrafficPolicyInstanceRequest,
-    ) -> RusotoFuture<GetTrafficPolicyInstanceResponse, GetTrafficPolicyInstanceError> {
+    ) -> Result<GetTrafficPolicyInstanceResponse, RusotoError<GetTrafficPolicyInstanceError>> {
         let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTrafficPolicyInstanceError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetTrafficPolicyInstanceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetTrafficPolicyInstanceResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetTrafficPolicyInstanceResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetTrafficPolicyInstanceResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets the number of traffic policy instances that are associated with the current AWS account.</p>
     #[allow(unused_variables, warnings)]
-    fn get_traffic_policy_instance_count(
+    async fn get_traffic_policy_instance_count(
         &self,
         input: GetTrafficPolicyInstanceCountRequest,
-    ) -> RusotoFuture<GetTrafficPolicyInstanceCountResponse, GetTrafficPolicyInstanceCountError>
-    {
+    ) -> Result<
+        GetTrafficPolicyInstanceCountResponse,
+        RusotoError<GetTrafficPolicyInstanceCountError>,
+    > {
         let request_uri = "/2013-04-01/trafficpolicyinstancecount";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTrafficPolicyInstanceCountError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetTrafficPolicyInstanceCountError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetTrafficPolicyInstanceCountResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetTrafficPolicyInstanceCountResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Retrieves a list of supported geographic locations.</p> <p>Countries are listed first, and continents are listed last. If Amazon Route 53 supports subdivisions for a country (for example, states or provinces), the subdivisions for that country are listed in alphabetical order immediately after the corresponding country.</p>
     #[allow(unused_variables, warnings)]
-    fn list_geo_locations(
+    async fn list_geo_locations(
         &self,
         input: ListGeoLocationsRequest,
-    ) -> RusotoFuture<ListGeoLocationsResponse, ListGeoLocationsError> {
+    ) -> Result<ListGeoLocationsResponse, RusotoError<ListGeoLocationsError>> {
         let request_uri = "/2013-04-01/geolocations";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13711,46 +13746,42 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListGeoLocationsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListGeoLocationsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListGeoLocationsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListGeoLocationsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListGeoLocationsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                ListGeoLocationsResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Retrieve a list of the health checks that are associated with the current AWS account. </p>
     #[allow(unused_variables, warnings)]
-    fn list_health_checks(
+    async fn list_health_checks(
         &self,
         input: ListHealthChecksRequest,
-    ) -> RusotoFuture<ListHealthChecksResponse, ListHealthChecksError> {
+    ) -> Result<ListHealthChecksResponse, RusotoError<ListHealthChecksError>> {
         let request_uri = "/2013-04-01/healthcheck";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13764,46 +13795,42 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListHealthChecksError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListHealthChecksError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListHealthChecksResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListHealthChecksResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListHealthChecksResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                ListHealthChecksResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Retrieves a list of the public and private hosted zones that are associated with the current AWS account. The response includes a <code>HostedZones</code> child element for each hosted zone.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p>
     #[allow(unused_variables, warnings)]
-    fn list_hosted_zones(
+    async fn list_hosted_zones(
         &self,
         input: ListHostedZonesRequest,
-    ) -> RusotoFuture<ListHostedZonesResponse, ListHostedZonesError> {
+    ) -> Result<ListHostedZonesResponse, RusotoError<ListHostedZonesError>> {
         let request_uri = "/2013-04-01/hostedzone";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13820,46 +13847,42 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListHostedZonesError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListHostedZonesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListHostedZonesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListHostedZonesResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListHostedZonesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                ListHostedZonesResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Retrieves a list of your hosted zones in lexicographic order. The response includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account. </p> <p> <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed. For example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for exämple.com, you specify ex\344mple.com for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as:</p> <p> <code>com.ex\344mple.</code> </p> <p>The labels are reversed and alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> <p>If <code>IsTruncated</code> is false, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
-    fn list_hosted_zones_by_name(
+    async fn list_hosted_zones_by_name(
         &self,
         input: ListHostedZonesByNameRequest,
-    ) -> RusotoFuture<ListHostedZonesByNameResponse, ListHostedZonesByNameError> {
+    ) -> Result<ListHostedZonesByNameResponse, RusotoError<ListHostedZonesByNameError>> {
         let request_uri = "/2013-04-01/hostedzonesbyname";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13876,43 +13899,44 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListHostedZonesByNameError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListHostedZonesByNameError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListHostedZonesByNameResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListHostedZonesByNameResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListHostedZonesByNameResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListHostedZonesByNameResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists the configurations for DNS query logging that are associated with the current AWS account or the configuration that is associated with a specified hosted zone.</p> <p>For more information about DNS query logs, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateQueryLoggingConfig.html">CreateQueryLoggingConfig</a>. Additional information, including the format of DNS query logs, appears in <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
     #[allow(unused_variables, warnings)]
-    fn list_query_logging_configs(
+    async fn list_query_logging_configs(
         &self,
         input: ListQueryLoggingConfigsRequest,
-    ) -> RusotoFuture<ListQueryLoggingConfigsResponse, ListQueryLoggingConfigsError> {
+    ) -> Result<ListQueryLoggingConfigsResponse, RusotoError<ListQueryLoggingConfigsError>> {
         let request_uri = "/2013-04-01/queryloggingconfig";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13929,43 +13953,44 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListQueryLoggingConfigsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListQueryLoggingConfigsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListQueryLoggingConfigsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListQueryLoggingConfigsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListQueryLoggingConfigsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListQueryLoggingConfigsResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists the resource record sets in a specified hosted zone.</p> <p> <code>ListResourceRecordSets</code> returns up to 100 resource record sets at a time in ASCII order, beginning at a position specified by the <code>name</code> and <code>type</code> elements.</p> <p> <b>Sort order</b> </p> <p> <code>ListResourceRecordSets</code> sorts results first by DNS name with the labels reversed, for example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order when the record name contains characters that appear before <code>.</code> (decimal 46) in the ASCII table. These characters include the following: <code>! " # $ % &amp; ' ( ) * + , -</code> </p> <p>When multiple records have the same DNS name, <code>ListResourceRecordSets</code> sorts results by the record type.</p> <p> <b>Specifying where to start listing records</b> </p> <p>You can use the name and type elements to specify the resource record set that the list begins with:</p> <dl> <dt>If you do not specify Name or Type</dt> <dd> <p>The results begin with the first resource record set that the hosted zone contains.</p> </dd> <dt>If you specify Name but not Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>.</p> </dd> <dt>If you specify Type but not Name</dt> <dd> <p>Amazon Route 53 returns the <code>InvalidInput</code> error.</p> </dd> <dt>If you specify both Name and Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>, and whose type is greater than or equal to <code>Type</code>.</p> </dd> </dl> <p> <b>Resource record sets that are PENDING</b> </p> <p>This action returns the most current version of the records. This includes records that are <code>PENDING</code>, and that are not yet available on all Route 53 DNS servers.</p> <p> <b>Changing resource record sets</b> </p> <p>To ensure that you get an accurate listing of the resource record sets for a hosted zone at a point in time, do not submit a <code>ChangeResourceRecordSets</code> request while you're paging through the results of a <code>ListResourceRecordSets</code> request. If you do, some pages may display results without the latest changes while other pages display results with the latest changes.</p> <p> <b>Displaying the next page of results</b> </p> <p>If a <code>ListResourceRecordSets</code> command returns more than one page of results, the value of <code>IsTruncated</code> is <code>true</code>. To display the next page of results, get the values of <code>NextRecordName</code>, <code>NextRecordType</code>, and <code>NextRecordIdentifier</code> (if any) from the response. Then submit another <code>ListResourceRecordSets</code> request, and specify those values for <code>StartRecordName</code>, <code>StartRecordType</code>, and <code>StartRecordIdentifier</code>.</p>
     #[allow(unused_variables, warnings)]
-    fn list_resource_record_sets(
+    async fn list_resource_record_sets(
         &self,
         input: ListResourceRecordSetsRequest,
-    ) -> RusotoFuture<ListResourceRecordSetsResponse, ListResourceRecordSetsError> {
+    ) -> Result<ListResourceRecordSetsResponse, RusotoError<ListResourceRecordSetsError>> {
         let request_uri = format!(
             "/2013-04-01/hostedzone/{id}/rrset",
             id = input.hosted_zone_id
@@ -13990,43 +14015,45 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListResourceRecordSetsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListResourceRecordSetsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListResourceRecordSetsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListResourceRecordSetsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListResourceRecordSetsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListResourceRecordSetsResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Retrieves a list of the reusable delegation sets that are associated with the current AWS account.</p>
     #[allow(unused_variables, warnings)]
-    fn list_reusable_delegation_sets(
+    async fn list_reusable_delegation_sets(
         &self,
         input: ListReusableDelegationSetsRequest,
-    ) -> RusotoFuture<ListReusableDelegationSetsResponse, ListReusableDelegationSetsError> {
+    ) -> Result<ListReusableDelegationSetsResponse, RusotoError<ListReusableDelegationSetsError>>
+    {
         let request_uri = "/2013-04-01/delegationset";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14040,43 +14067,44 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListReusableDelegationSetsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListReusableDelegationSetsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListReusableDelegationSetsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListReusableDelegationSetsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListReusableDelegationSetsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListReusableDelegationSetsResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists tags for one health check or hosted zone. </p> <p>For information about using tags for cost allocation, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
     #[allow(unused_variables, warnings)]
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let request_uri = format!(
             "/2013-04-01/tags/{resource_type}/{resource_id}",
             resource_id = input.resource_id,
@@ -14087,45 +14115,42 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTagsForResourceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTagsForResourceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTagsForResourceResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListTagsForResourceResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                ListTagsForResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists tags for up to 10 health checks or hosted zones.</p> <p>For information about using tags for cost allocation, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
     #[allow(unused_variables, warnings)]
-    fn list_tags_for_resources(
+    async fn list_tags_for_resources(
         &self,
         input: ListTagsForResourcesRequest,
-    ) -> RusotoFuture<ListTagsForResourcesResponse, ListTagsForResourcesError> {
+    ) -> Result<ListTagsForResourcesResponse, RusotoError<ListTagsForResourcesError>> {
         let request_uri = format!(
             "/2013-04-01/tags/{resource_type}",
             resource_type = input.resource_type
@@ -14144,45 +14169,44 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourcesError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTagsForResourcesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTagsForResourcesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTagsForResourcesResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListTagsForResourcesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListTagsForResourcesResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order that they were created in. </p>
     #[allow(unused_variables, warnings)]
-    fn list_traffic_policies(
+    async fn list_traffic_policies(
         &self,
         input: ListTrafficPoliciesRequest,
-    ) -> RusotoFuture<ListTrafficPoliciesResponse, ListTrafficPoliciesError> {
+    ) -> Result<ListTrafficPoliciesResponse, RusotoError<ListTrafficPoliciesError>> {
         let request_uri = "/2013-04-01/trafficpolicies";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14196,45 +14220,43 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTrafficPoliciesError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTrafficPoliciesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTrafficPoliciesResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListTrafficPoliciesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                ListTrafficPoliciesResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets information about the traffic policy instances that you created by using the current AWS account.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>
     #[allow(unused_variables, warnings)]
-    fn list_traffic_policy_instances(
+    async fn list_traffic_policy_instances(
         &self,
         input: ListTrafficPolicyInstancesRequest,
-    ) -> RusotoFuture<ListTrafficPolicyInstancesResponse, ListTrafficPolicyInstancesError> {
+    ) -> Result<ListTrafficPolicyInstancesResponse, RusotoError<ListTrafficPolicyInstancesError>>
+    {
         let request_uri = "/2013-04-01/trafficpolicyinstances";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14254,45 +14276,46 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPolicyInstancesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTrafficPolicyInstancesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPolicyInstancesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTrafficPolicyInstancesResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListTrafficPolicyInstancesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListTrafficPolicyInstancesResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets information about the traffic policy instances that you created in a specified hosted zone.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>
     #[allow(unused_variables, warnings)]
-    fn list_traffic_policy_instances_by_hosted_zone(
+    async fn list_traffic_policy_instances_by_hosted_zone(
         &self,
         input: ListTrafficPolicyInstancesByHostedZoneRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListTrafficPolicyInstancesByHostedZoneResponse,
-        ListTrafficPolicyInstancesByHostedZoneError,
+        RusotoError<ListTrafficPolicyInstancesByHostedZoneError>,
     > {
         let request_uri = "/2013-04-01/trafficpolicyinstances/hostedzone";
 
@@ -14311,48 +14334,48 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPolicyInstancesByHostedZoneError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTrafficPolicyInstancesByHostedZoneError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPolicyInstancesByHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListTrafficPolicyInstancesByHostedZoneResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets information about the traffic policy instances that you created by using a specify traffic policy version.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>
     #[allow(unused_variables, warnings)]
-    fn list_traffic_policy_instances_by_policy(
+    async fn list_traffic_policy_instances_by_policy(
         &self,
         input: ListTrafficPolicyInstancesByPolicyRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListTrafficPolicyInstancesByPolicyResponse,
-        ListTrafficPolicyInstancesByPolicyError,
+        RusotoError<ListTrafficPolicyInstancesByPolicyError>,
     > {
         let request_uri = "/2013-04-01/trafficpolicyinstances/trafficpolicy";
 
@@ -14375,45 +14398,47 @@ impl Route53 for Route53Client {
         params.put("version", &input.traffic_policy_version);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPolicyInstancesByPolicyError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTrafficPolicyInstancesByPolicyError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPolicyInstancesByPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListTrafficPolicyInstancesByPolicyResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets information about all of the versions for a specified traffic policy.</p> <p>Traffic policy versions are listed in numerical order by <code>VersionNumber</code>.</p>
     #[allow(unused_variables, warnings)]
-    fn list_traffic_policy_versions(
+    async fn list_traffic_policy_versions(
         &self,
         input: ListTrafficPolicyVersionsRequest,
-    ) -> RusotoFuture<ListTrafficPolicyVersionsResponse, ListTrafficPolicyVersionsError> {
+    ) -> Result<ListTrafficPolicyVersionsResponse, RusotoError<ListTrafficPolicyVersionsError>>
+    {
         let request_uri = format!("/2013-04-01/trafficpolicies/{id}/versions", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
@@ -14429,44 +14454,47 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPolicyVersionsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTrafficPolicyVersionsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPolicyVersionsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTrafficPolicyVersionsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListTrafficPolicyVersionsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListTrafficPolicyVersionsResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets a list of the VPCs that were created by other accounts and that can be associated with a specified hosted zone because you've submitted one or more <code>CreateVPCAssociationAuthorization</code> requests. </p> <p>The response includes a <code>VPCs</code> element with a <code>VPC</code> child element for each VPC that can be associated with the hosted zone.</p>
     #[allow(unused_variables, warnings)]
-    fn list_vpc_association_authorizations(
+    async fn list_vpc_association_authorizations(
         &self,
         input: ListVPCAssociationAuthorizationsRequest,
-    ) -> RusotoFuture<ListVPCAssociationAuthorizationsResponse, ListVPCAssociationAuthorizationsError>
-    {
+    ) -> Result<
+        ListVPCAssociationAuthorizationsResponse,
+        RusotoError<ListVPCAssociationAuthorizationsError>,
+    > {
         let request_uri = format!(
             "/2013-04-01/hostedzone/{id}/authorizevpcassociation",
             id = input.hosted_zone_id
@@ -14485,45 +14513,46 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVPCAssociationAuthorizationsError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListVPCAssociationAuthorizationsError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListVPCAssociationAuthorizationsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListVPCAssociationAuthorizationsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p>
     #[allow(unused_variables, warnings)]
-    fn test_dns_answer(
+    async fn test_dns_answer(
         &self,
         input: TestDNSAnswerRequest,
-    ) -> RusotoFuture<TestDNSAnswerResponse, TestDNSAnswerError> {
+    ) -> Result<TestDNSAnswerResponse, RusotoError<TestDNSAnswerError>> {
         let request_uri = "/2013-04-01/testdnsanswer";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14543,46 +14572,41 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TestDNSAnswerError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(TestDNSAnswerError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = TestDNSAnswerResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = TestDNSAnswerResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = TestDNSAnswerResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = TestDNSAnswerResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Updates an existing health check. Note that some values can't be updated. </p> <p>For more information about updating health checks, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html">Creating, Updating, and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
     #[allow(unused_variables, warnings)]
-    fn update_health_check(
+    async fn update_health_check(
         &self,
         input: UpdateHealthCheckRequest,
-    ) -> RusotoFuture<UpdateHealthCheckResponse, UpdateHealthCheckError> {
+    ) -> Result<UpdateHealthCheckResponse, RusotoError<UpdateHealthCheckError>> {
         let request_uri = format!(
             "/2013-04-01/healthcheck/{health_check_id}",
             health_check_id = input.health_check_id
@@ -14601,46 +14625,42 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateHealthCheckError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateHealthCheckError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateHealthCheckResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateHealthCheckResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateHealthCheckResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                UpdateHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Updates the comment for a specified hosted zone.</p>
     #[allow(unused_variables, warnings)]
-    fn update_hosted_zone_comment(
+    async fn update_hosted_zone_comment(
         &self,
         input: UpdateHostedZoneCommentRequest,
-    ) -> RusotoFuture<UpdateHostedZoneCommentResponse, UpdateHostedZoneCommentError> {
+    ) -> Result<UpdateHostedZoneCommentResponse, RusotoError<UpdateHostedZoneCommentError>> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
@@ -14656,43 +14676,45 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateHostedZoneCommentError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateHostedZoneCommentError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateHostedZoneCommentResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateHostedZoneCommentResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateHostedZoneCommentResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = UpdateHostedZoneCommentResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Updates the comment for a specified traffic policy version.</p>
     #[allow(unused_variables, warnings)]
-    fn update_traffic_policy_comment(
+    async fn update_traffic_policy_comment(
         &self,
         input: UpdateTrafficPolicyCommentRequest,
-    ) -> RusotoFuture<UpdateTrafficPolicyCommentResponse, UpdateTrafficPolicyCommentError> {
+    ) -> Result<UpdateTrafficPolicyCommentResponse, RusotoError<UpdateTrafficPolicyCommentError>>
+    {
         let request_uri = format!(
             "/2013-04-01/trafficpolicy/{id}/{version}",
             id = input.id,
@@ -14712,43 +14734,45 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTrafficPolicyCommentError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateTrafficPolicyCommentError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateTrafficPolicyCommentResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateTrafficPolicyCommentResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateTrafficPolicyCommentResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = UpdateTrafficPolicyCommentResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Updates the resource record sets in a specified hosted zone that were created based on the settings in a specified traffic policy version.</p> <p>When you update a traffic policy instance, Amazon Route 53 continues to respond to DNS queries for the root resource record set name (such as example.com) while it replaces one group of resource record sets with another. Route 53 performs the following operations:</p> <ol> <li> <p>Route 53 creates a new group of resource record sets based on the specified traffic policy. This is true regardless of how significant the differences are between the existing resource record sets and the new resource record sets. </p> </li> <li> <p>When all of the new resource record sets have been created, Route 53 starts to respond to DNS queries for the root resource record set name (such as example.com) by using the new resource record sets.</p> </li> <li> <p>Route 53 deletes the old group of resource record sets that are associated with the root resource record set name.</p> </li> </ol></p>
     #[allow(unused_variables, warnings)]
-    fn update_traffic_policy_instance(
+    async fn update_traffic_policy_instance(
         &self,
         input: UpdateTrafficPolicyInstanceRequest,
-    ) -> RusotoFuture<UpdateTrafficPolicyInstanceResponse, UpdateTrafficPolicyInstanceError> {
+    ) -> Result<UpdateTrafficPolicyInstanceResponse, RusotoError<UpdateTrafficPolicyInstanceError>>
+    {
         let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
@@ -14764,35 +14788,36 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTrafficPolicyInstanceError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateTrafficPolicyInstanceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateTrafficPolicyInstanceResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 }
 
@@ -14805,8 +14830,8 @@ mod protocol_tests {
     use super::*;
     use rusoto_core::Region as rusoto_region;
 
-    #[test]
-    fn test_parse_error_route_53_get_hosted_zone() {
+    #[tokio::test]
+    async fn test_parse_error_route_53_get_hosted_zone() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/error",
             "route53-get-hosted-zone.xml",
@@ -14814,7 +14839,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = Route53Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetHostedZoneRequest::default();
-        let result = client.get_hosted_zone(request).sync();
+        let result = client.get_hosted_zone(request).await;
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 }

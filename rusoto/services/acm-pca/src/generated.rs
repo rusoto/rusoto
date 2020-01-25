@@ -9,19 +9,21 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Contains information about the certificate subject. The certificate can be one issued by your private certificate authority (CA) or it can be your private CA certificate. The <b>Subject</b> field in the certificate identifies the entity that owns or controls the public key in the certificate. The entity can be a user, computer, device, or service. The <b>Subject</b> must contain an X.500 distinguished name (DN). A DN is a sequence of relative distinguished names (RDNs). The RDNs are separated by commas in the certificate. The DN must be unique for each entity, but your private CA can issue more than one certificate with the same DN to the same entity. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -705,6 +707,7 @@ impl CreateCertificateAuthorityError {
     }
 }
 impl fmt::Display for CreateCertificateAuthorityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateCertificateAuthorityError::InvalidArgs(ref cause) => write!(f, "{}", cause),
@@ -776,6 +779,7 @@ impl CreateCertificateAuthorityAuditReportError {
     }
 }
 impl fmt::Display for CreateCertificateAuthorityAuditReportError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateCertificateAuthorityAuditReportError::InvalidArgs(ref cause) => {
@@ -849,6 +853,7 @@ impl CreatePermissionError {
     }
 }
 impl fmt::Display for CreatePermissionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreatePermissionError::InvalidArn(ref cause) => write!(f, "{}", cause),
@@ -908,6 +913,7 @@ impl DeleteCertificateAuthorityError {
     }
 }
 impl fmt::Display for DeleteCertificateAuthorityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteCertificateAuthorityError::ConcurrentModification(ref cause) => {
@@ -957,6 +963,7 @@ impl DeletePermissionError {
     }
 }
 impl fmt::Display for DeletePermissionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeletePermissionError::InvalidArn(ref cause) => write!(f, "{}", cause),
@@ -1000,6 +1007,7 @@ impl DescribeCertificateAuthorityError {
     }
 }
 impl fmt::Display for DescribeCertificateAuthorityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeCertificateAuthorityError::InvalidArn(ref cause) => write!(f, "{}", cause),
@@ -1050,6 +1058,7 @@ impl DescribeCertificateAuthorityAuditReportError {
     }
 }
 impl fmt::Display for DescribeCertificateAuthorityAuditReportError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeCertificateAuthorityAuditReportError::InvalidArgs(ref cause) => {
@@ -1107,6 +1116,7 @@ impl GetCertificateError {
     }
 }
 impl fmt::Display for GetCertificateError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
@@ -1158,6 +1168,7 @@ impl GetCertificateAuthorityCertificateError {
     }
 }
 impl fmt::Display for GetCertificateAuthorityCertificateError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetCertificateAuthorityCertificateError::InvalidArn(ref cause) => {
@@ -1227,6 +1238,7 @@ impl GetCertificateAuthorityCsrError {
     }
 }
 impl fmt::Display for GetCertificateAuthorityCsrError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetCertificateAuthorityCsrError::InvalidArn(ref cause) => write!(f, "{}", cause),
@@ -1320,6 +1332,7 @@ impl ImportCertificateAuthorityCertificateError {
     }
 }
 impl fmt::Display for ImportCertificateAuthorityCertificateError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ImportCertificateAuthorityCertificateError::CertificateMismatch(ref cause) => {
@@ -1400,6 +1413,7 @@ impl IssueCertificateError {
     }
 }
 impl fmt::Display for IssueCertificateError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             IssueCertificateError::InvalidArgs(ref cause) => write!(f, "{}", cause),
@@ -1438,6 +1452,7 @@ impl ListCertificateAuthoritiesError {
     }
 }
 impl fmt::Display for ListCertificateAuthoritiesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListCertificateAuthoritiesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
@@ -1487,6 +1502,7 @@ impl ListPermissionsError {
     }
 }
 impl fmt::Display for ListPermissionsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListPermissionsError::InvalidArn(ref cause) => write!(f, "{}", cause),
@@ -1530,6 +1546,7 @@ impl ListTagsError {
     }
 }
 impl fmt::Display for ListTagsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTagsError::InvalidArn(ref cause) => write!(f, "{}", cause),
@@ -1579,6 +1596,7 @@ impl RestoreCertificateAuthorityError {
     }
 }
 impl fmt::Display for RestoreCertificateAuthorityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             RestoreCertificateAuthorityError::InvalidArn(ref cause) => write!(f, "{}", cause),
@@ -1654,6 +1672,7 @@ impl RevokeCertificateError {
     }
 }
 impl fmt::Display for RevokeCertificateError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             RevokeCertificateError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
@@ -1715,6 +1734,7 @@ impl TagCertificateAuthorityError {
     }
 }
 impl fmt::Display for TagCertificateAuthorityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             TagCertificateAuthorityError::InvalidArn(ref cause) => write!(f, "{}", cause),
@@ -1771,6 +1791,7 @@ impl UntagCertificateAuthorityError {
     }
 }
 impl fmt::Display for UntagCertificateAuthorityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UntagCertificateAuthorityError::InvalidArn(ref cause) => write!(f, "{}", cause),
@@ -1842,6 +1863,7 @@ impl UpdateCertificateAuthorityError {
     }
 }
 impl fmt::Display for UpdateCertificateAuthorityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateCertificateAuthorityError::ConcurrentModification(ref cause) => {
@@ -1857,132 +1879,136 @@ impl fmt::Display for UpdateCertificateAuthorityError {
 }
 impl Error for UpdateCertificateAuthorityError {}
 /// Trait representing the capabilities of the ACM-PCA API. ACM-PCA clients implement this trait.
+#[async_trait]
 pub trait AcmPca {
     /// <p>Creates a root or subordinate private certificate authority (CA). You must specify the CA configuration, the certificate revocation list (CRL) configuration, the CA type, and an optional idempotency token to avoid accidental creation of multiple CAs. The CA configuration specifies the name of the algorithm and key size to be used to create the CA private key, the type of signing algorithm that the CA uses, and X.500 subject information. The CRL configuration specifies the CRL expiration period in days (the validity period of the CRL), the Amazon S3 bucket that will contain the CRL, and a CNAME alias for the S3 bucket that is included in certificates issued by the CA. If successful, this action returns the Amazon Resource Name (ARN) of the CA.</p>
-    fn create_certificate_authority(
+    async fn create_certificate_authority(
         &self,
         input: CreateCertificateAuthorityRequest,
-    ) -> RusotoFuture<CreateCertificateAuthorityResponse, CreateCertificateAuthorityError>;
+    ) -> Result<CreateCertificateAuthorityResponse, RusotoError<CreateCertificateAuthorityError>>;
 
     /// <p>Creates an audit report that lists every time that your CA private key is used. The report is saved in the Amazon S3 bucket that you specify on input. The <a>IssueCertificate</a> and <a>RevokeCertificate</a> actions use the private key.</p>
-    fn create_certificate_authority_audit_report(
+    async fn create_certificate_authority_audit_report(
         &self,
         input: CreateCertificateAuthorityAuditReportRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateCertificateAuthorityAuditReportResponse,
-        CreateCertificateAuthorityAuditReportError,
+        RusotoError<CreateCertificateAuthorityAuditReportError>,
     >;
 
     /// <p>Assigns permissions from a private CA to a designated AWS service. Services are specified by their service principals and can be given permission to create and retrieve certificates on a private CA. Services can also be given permission to list the active permissions that the private CA has granted. For ACM to automatically renew your private CA's certificates, you must assign all possible permissions from the CA to the ACM service principal.</p> <p>At this time, you can only assign permissions to ACM (<code>acm.amazonaws.com</code>). Permissions can be revoked with the <a>DeletePermission</a> action and listed with the <a>ListPermissions</a> action.</p>
-    fn create_permission(
+    async fn create_permission(
         &self,
         input: CreatePermissionRequest,
-    ) -> RusotoFuture<(), CreatePermissionError>;
+    ) -> Result<(), RusotoError<CreatePermissionError>>;
 
     /// <p>Deletes a private certificate authority (CA). You must provide the Amazon Resource Name (ARN) of the private CA that you want to delete. You can find the ARN by calling the <a>ListCertificateAuthorities</a> action. </p> <note> <p>Deleting a CA will invalidate other CAs and certificates below it in your CA hierarchy.</p> </note> <p>Before you can delete a CA that you have created and activated, you must disable it. To do this, call the <a>UpdateCertificateAuthority</a> action and set the <b>CertificateAuthorityStatus</b> parameter to <code>DISABLED</code>. </p> <p>Additionally, you can delete a CA if you are waiting for it to be created (that is, the status of the CA is <code>CREATING</code>). You can also delete it if the CA has been created but you haven't yet imported the signed certificate into ACM Private CA (that is, the status of the CA is <code>PENDING_CERTIFICATE</code>). </p> <p>When you successfully call <a>DeleteCertificateAuthority</a>, the CA's status changes to <code>DELETED</code>. However, the CA won't be permanently deleted until the restoration period has passed. By default, if you do not set the <code>PermanentDeletionTimeInDays</code> parameter, the CA remains restorable for 30 days. You can set the parameter from 7 to 30 days. The <a>DescribeCertificateAuthority</a> action returns the time remaining in the restoration window of a private CA in the <code>DELETED</code> state. To restore an eligible CA, call the <a>RestoreCertificateAuthority</a> action.</p>
-    fn delete_certificate_authority(
+    async fn delete_certificate_authority(
         &self,
         input: DeleteCertificateAuthorityRequest,
-    ) -> RusotoFuture<(), DeleteCertificateAuthorityError>;
+    ) -> Result<(), RusotoError<DeleteCertificateAuthorityError>>;
 
     /// <p>Revokes permissions that a private CA assigned to a designated AWS service. Permissions can be created with the <a>CreatePermission</a> action and listed with the <a>ListPermissions</a> action. </p>
-    fn delete_permission(
+    async fn delete_permission(
         &self,
         input: DeletePermissionRequest,
-    ) -> RusotoFuture<(), DeletePermissionError>;
+    ) -> Result<(), RusotoError<DeletePermissionError>>;
 
     /// <p><p>Lists information about your private certificate authority (CA). You specify the private CA on input by its ARN (Amazon Resource Name). The output contains the status of your CA. This can be any of the following: </p> <ul> <li> <p> <code>CREATING</code> - ACM Private CA is creating your private certificate authority.</p> </li> <li> <p> <code>PENDING_CERTIFICATE</code> - The certificate is pending. You must use your ACM Private CA-hosted or on-premises root or subordinate CA to sign your private CA CSR and then import it into PCA. </p> </li> <li> <p> <code>ACTIVE</code> - Your private CA is active.</p> </li> <li> <p> <code>DISABLED</code> - Your private CA has been disabled.</p> </li> <li> <p> <code>EXPIRED</code> - Your private CA certificate has expired.</p> </li> <li> <p> <code>FAILED</code> - Your private CA has failed. Your CA can fail because of problems such a network outage or backend AWS failure or other errors. A failed CA can never return to the pending state. You must create a new CA. </p> </li> <li> <p> <code>DELETED</code> - Your private CA is within the restoration period, after which it is permanently deleted. The length of time remaining in the CA&#39;s restoration period is also included in this action&#39;s output.</p> </li> </ul></p>
-    fn describe_certificate_authority(
+    async fn describe_certificate_authority(
         &self,
         input: DescribeCertificateAuthorityRequest,
-    ) -> RusotoFuture<DescribeCertificateAuthorityResponse, DescribeCertificateAuthorityError>;
+    ) -> Result<DescribeCertificateAuthorityResponse, RusotoError<DescribeCertificateAuthorityError>>;
 
     /// <p>Lists information about a specific audit report created by calling the <a>CreateCertificateAuthorityAuditReport</a> action. Audit information is created every time the certificate authority (CA) private key is used. The private key is used when you call the <a>IssueCertificate</a> action or the <a>RevokeCertificate</a> action. </p>
-    fn describe_certificate_authority_audit_report(
+    async fn describe_certificate_authority_audit_report(
         &self,
         input: DescribeCertificateAuthorityAuditReportRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeCertificateAuthorityAuditReportResponse,
-        DescribeCertificateAuthorityAuditReportError,
+        RusotoError<DescribeCertificateAuthorityAuditReportError>,
     >;
 
     /// <p>Retrieves a certificate from your private CA. The ARN of the certificate is returned when you call the <a>IssueCertificate</a> action. You must specify both the ARN of your private CA and the ARN of the issued certificate when calling the <b>GetCertificate</b> action. You can retrieve the certificate if it is in the <b>ISSUED</b> state. You can call the <a>CreateCertificateAuthorityAuditReport</a> action to create a report that contains information about all of the certificates issued and revoked by your private CA. </p>
-    fn get_certificate(
+    async fn get_certificate(
         &self,
         input: GetCertificateRequest,
-    ) -> RusotoFuture<GetCertificateResponse, GetCertificateError>;
+    ) -> Result<GetCertificateResponse, RusotoError<GetCertificateError>>;
 
     /// <p>Retrieves the certificate and certificate chain for your private certificate authority (CA). Both the certificate and the chain are base64 PEM-encoded. The chain does not include the CA certificate. Each certificate in the chain signs the one before it. </p>
-    fn get_certificate_authority_certificate(
+    async fn get_certificate_authority_certificate(
         &self,
         input: GetCertificateAuthorityCertificateRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetCertificateAuthorityCertificateResponse,
-        GetCertificateAuthorityCertificateError,
+        RusotoError<GetCertificateAuthorityCertificateError>,
     >;
 
     /// <p>Retrieves the certificate signing request (CSR) for your private certificate authority (CA). The CSR is created when you call the <a>CreateCertificateAuthority</a> action. Sign the CSR with your ACM Private CA-hosted or on-premises root or subordinate CA. Then import the signed certificate back into ACM Private CA by calling the <a>ImportCertificateAuthorityCertificate</a> action. The CSR is returned as a base64 PEM-encoded string. </p>
-    fn get_certificate_authority_csr(
+    async fn get_certificate_authority_csr(
         &self,
         input: GetCertificateAuthorityCsrRequest,
-    ) -> RusotoFuture<GetCertificateAuthorityCsrResponse, GetCertificateAuthorityCsrError>;
+    ) -> Result<GetCertificateAuthorityCsrResponse, RusotoError<GetCertificateAuthorityCsrError>>;
 
     /// <p><p>Imports a signed private CA certificate into ACM Private CA. This action is used when you are using a chain of trust whose root is located outside ACM Private CA. Before you can call this action, the following preparations must in place:</p> <ol> <li> <p>In ACM Private CA, call the <a>CreateCertificateAuthority</a> action to create the private CA that that you plan to back with the imported certificate.</p> </li> <li> <p>Call the <a>GetCertificateAuthorityCsr</a> action to generate a certificate signing request (CSR).</p> </li> <li> <p>Sign the CSR using a root or intermediate CA hosted either by an on-premises PKI hierarchy or a commercial CA..</p> </li> <li> <p>Create a certificate chain and copy the signed certificate and the certificate chain to your working directory.</p> </li> </ol> <p>The following requirements apply when you import a CA certificate.</p> <ul> <li> <p>You cannot import a non-self-signed certificate for use as a root CA.</p> </li> <li> <p>You cannot import a self-signed certificate for use as a subordinate CA.</p> </li> <li> <p>Your certificate chain must not include the private CA certificate that you are importing.</p> </li> <li> <p>Your ACM Private CA-hosted or on-premises CA certificate must be the last certificate in your chain. The subordinate certificate, if any, that your root CA signed must be next to last. The subordinate certificate signed by the preceding subordinate CA must come next, and so on until your chain is built. </p> </li> <li> <p>The chain must be PEM-encoded.</p> </li> </ul></p>
-    fn import_certificate_authority_certificate(
+    async fn import_certificate_authority_certificate(
         &self,
         input: ImportCertificateAuthorityCertificateRequest,
-    ) -> RusotoFuture<(), ImportCertificateAuthorityCertificateError>;
+    ) -> Result<(), RusotoError<ImportCertificateAuthorityCertificateError>>;
 
     /// <p><p>Uses your private certificate authority (CA) to issue a client certificate. This action returns the Amazon Resource Name (ARN) of the certificate. You can retrieve the certificate by calling the <a>GetCertificate</a> action and specifying the ARN. </p> <note> <p>You cannot use the ACM <b>ListCertificateAuthorities</b> action to retrieve the ARNs of the certificates that you issue by using ACM Private CA.</p> </note></p>
-    fn issue_certificate(
+    async fn issue_certificate(
         &self,
         input: IssueCertificateRequest,
-    ) -> RusotoFuture<IssueCertificateResponse, IssueCertificateError>;
+    ) -> Result<IssueCertificateResponse, RusotoError<IssueCertificateError>>;
 
     /// <p>Lists the private certificate authorities that you created by using the <a>CreateCertificateAuthority</a> action.</p>
-    fn list_certificate_authorities(
+    async fn list_certificate_authorities(
         &self,
         input: ListCertificateAuthoritiesRequest,
-    ) -> RusotoFuture<ListCertificateAuthoritiesResponse, ListCertificateAuthoritiesError>;
+    ) -> Result<ListCertificateAuthoritiesResponse, RusotoError<ListCertificateAuthoritiesError>>;
 
     /// <p>Lists all the permissions, if any, that have been assigned by a private CA. Permissions can be granted with the <a>CreatePermission</a> action and revoked with the <a>DeletePermission</a> action.</p>
-    fn list_permissions(
+    async fn list_permissions(
         &self,
         input: ListPermissionsRequest,
-    ) -> RusotoFuture<ListPermissionsResponse, ListPermissionsError>;
+    ) -> Result<ListPermissionsResponse, RusotoError<ListPermissionsError>>;
 
     /// <p>Lists the tags, if any, that are associated with your private CA. Tags are labels that you can use to identify and organize your CAs. Each tag consists of a key and an optional value. Call the <a>TagCertificateAuthority</a> action to add one or more tags to your CA. Call the <a>UntagCertificateAuthority</a> action to remove tags. </p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
+    async fn list_tags(
+        &self,
+        input: ListTagsRequest,
+    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
 
     /// <p>Restores a certificate authority (CA) that is in the <code>DELETED</code> state. You can restore a CA during the period that you defined in the <b>PermanentDeletionTimeInDays</b> parameter of the <a>DeleteCertificateAuthority</a> action. Currently, you can specify 7 to 30 days. If you did not specify a <b>PermanentDeletionTimeInDays</b> value, by default you can restore the CA at any time in a 30 day period. You can check the time remaining in the restoration period of a private CA in the <code>DELETED</code> state by calling the <a>DescribeCertificateAuthority</a> or <a>ListCertificateAuthorities</a> actions. The status of a restored CA is set to its pre-deletion status when the <b>RestoreCertificateAuthority</b> action returns. To change its status to <code>ACTIVE</code>, call the <a>UpdateCertificateAuthority</a> action. If the private CA was in the <code>PENDING_CERTIFICATE</code> state at deletion, you must use the <a>ImportCertificateAuthorityCertificate</a> action to import a certificate authority into the private CA before it can be activated. You cannot restore a CA after the restoration period has ended.</p>
-    fn restore_certificate_authority(
+    async fn restore_certificate_authority(
         &self,
         input: RestoreCertificateAuthorityRequest,
-    ) -> RusotoFuture<(), RestoreCertificateAuthorityError>;
+    ) -> Result<(), RusotoError<RestoreCertificateAuthorityError>>;
 
     /// <p><p>Revokes a certificate that was issued inside ACM Private CA. If you enable a certificate revocation list (CRL) when you create or update your private CA, information about the revoked certificates will be included in the CRL. ACM Private CA writes the CRL to an S3 bucket that you specify. For more information about revocation, see the <a>CrlConfiguration</a> structure. ACM Private CA also writes revocation information to the audit report. For more information, see <a>CreateCertificateAuthorityAuditReport</a>. </p> <note> <p>You cannot revoke a root CA self-signed certificate.</p> </note></p>
-    fn revoke_certificate(
+    async fn revoke_certificate(
         &self,
         input: RevokeCertificateRequest,
-    ) -> RusotoFuture<(), RevokeCertificateError>;
+    ) -> Result<(), RusotoError<RevokeCertificateError>>;
 
     /// <p>Adds one or more tags to your private CA. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a key and an optional value. You specify the private CA on input by its Amazon Resource Name (ARN). You specify the tag by using a key-value pair. You can apply a tag to just one private CA if you want to identify a specific characteristic of that CA, or you can apply the same tag to multiple private CAs if you want to filter for a common relationship among those CAs. To remove one or more tags, use the <a>UntagCertificateAuthority</a> action. Call the <a>ListTags</a> action to see what tags are associated with your CA. </p>
-    fn tag_certificate_authority(
+    async fn tag_certificate_authority(
         &self,
         input: TagCertificateAuthorityRequest,
-    ) -> RusotoFuture<(), TagCertificateAuthorityError>;
+    ) -> Result<(), RusotoError<TagCertificateAuthorityError>>;
 
     /// <p>Remove one or more tags from your private CA. A tag consists of a key-value pair. If you do not specify the value portion of the tag when calling this action, the tag will be removed regardless of value. If you specify a value, the tag is removed only if it is associated with the specified value. To add tags to a private CA, use the <a>TagCertificateAuthority</a>. Call the <a>ListTags</a> action to see what tags are associated with your CA. </p>
-    fn untag_certificate_authority(
+    async fn untag_certificate_authority(
         &self,
         input: UntagCertificateAuthorityRequest,
-    ) -> RusotoFuture<(), UntagCertificateAuthorityError>;
+    ) -> Result<(), RusotoError<UntagCertificateAuthorityError>>;
 
     /// <p>Updates the status or configuration of a private certificate authority (CA). Your private CA must be in the <code>ACTIVE</code> or <code>DISABLED</code> state before you can update it. You can disable a private CA that is in the <code>ACTIVE</code> state or make a CA that is in the <code>DISABLED</code> state active again.</p>
-    fn update_certificate_authority(
+    async fn update_certificate_authority(
         &self,
         input: UpdateCertificateAuthorityRequest,
-    ) -> RusotoFuture<(), UpdateCertificateAuthorityError>;
+    ) -> Result<(), RusotoError<UpdateCertificateAuthorityError>>;
 }
 /// A client for the ACM-PCA API.
 #[derive(Clone)]
@@ -1996,7 +2022,10 @@ impl AcmPcaClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> AcmPcaClient {
-        Self::new_with_client(Client::shared(), region)
+        AcmPcaClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -2006,14 +2035,12 @@ impl AcmPcaClient {
     ) -> AcmPcaClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        AcmPcaClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> AcmPcaClient {
@@ -2021,20 +2048,14 @@ impl AcmPcaClient {
     }
 }
 
-impl fmt::Debug for AcmPcaClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("AcmPcaClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl AcmPca for AcmPcaClient {
     /// <p>Creates a root or subordinate private certificate authority (CA). You must specify the CA configuration, the certificate revocation list (CRL) configuration, the CA type, and an optional idempotency token to avoid accidental creation of multiple CAs. The CA configuration specifies the name of the algorithm and key size to be used to create the CA private key, the type of signing algorithm that the CA uses, and X.500 subject information. The CRL configuration specifies the CRL expiration period in days (the validity period of the CRL), the Amazon S3 bucket that will contain the CRL, and a CNAME alias for the S3 bucket that is included in certificates issued by the CA. If successful, this action returns the Amazon Resource Name (ARN) of the CA.</p>
-    fn create_certificate_authority(
+    async fn create_certificate_authority(
         &self,
         input: CreateCertificateAuthorityRequest,
-    ) -> RusotoFuture<CreateCertificateAuthorityResponse, CreateCertificateAuthorityError> {
+    ) -> Result<CreateCertificateAuthorityResponse, RusotoError<CreateCertificateAuthorityError>>
+    {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2042,27 +2063,29 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCertificateAuthorityResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCertificateAuthorityError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateCertificateAuthorityResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateCertificateAuthorityError::from_response(response))
+        }
     }
 
     /// <p>Creates an audit report that lists every time that your CA private key is used. The report is saved in the Amazon S3 bucket that you specify on input. The <a>IssueCertificate</a> and <a>RevokeCertificate</a> actions use the private key.</p>
-    fn create_certificate_authority_audit_report(
+    async fn create_certificate_authority_audit_report(
         &self,
         input: CreateCertificateAuthorityAuditReportRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateCertificateAuthorityAuditReportResponse,
-        CreateCertificateAuthorityAuditReportError,
+        RusotoError<CreateCertificateAuthorityAuditReportError>,
     > {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
@@ -2074,27 +2097,29 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCertificateAuthorityAuditReportResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCertificateAuthorityAuditReportError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateCertificateAuthorityAuditReportResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateCertificateAuthorityAuditReportError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Assigns permissions from a private CA to a designated AWS service. Services are specified by their service principals and can be given permission to create and retrieve certificates on a private CA. Services can also be given permission to list the active permissions that the private CA has granted. For ACM to automatically renew your private CA's certificates, you must assign all possible permissions from the CA to the ACM service principal.</p> <p>At this time, you can only assign permissions to ACM (<code>acm.amazonaws.com</code>). Permissions can be revoked with the <a>DeletePermission</a> action and listed with the <a>ListPermissions</a> action.</p>
-    fn create_permission(
+    async fn create_permission(
         &self,
         input: CreatePermissionRequest,
-    ) -> RusotoFuture<(), CreatePermissionError> {
+    ) -> Result<(), RusotoError<CreatePermissionError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2102,25 +2127,25 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreatePermissionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreatePermissionError::from_response(response))
+        }
     }
 
     /// <p>Deletes a private certificate authority (CA). You must provide the Amazon Resource Name (ARN) of the private CA that you want to delete. You can find the ARN by calling the <a>ListCertificateAuthorities</a> action. </p> <note> <p>Deleting a CA will invalidate other CAs and certificates below it in your CA hierarchy.</p> </note> <p>Before you can delete a CA that you have created and activated, you must disable it. To do this, call the <a>UpdateCertificateAuthority</a> action and set the <b>CertificateAuthorityStatus</b> parameter to <code>DISABLED</code>. </p> <p>Additionally, you can delete a CA if you are waiting for it to be created (that is, the status of the CA is <code>CREATING</code>). You can also delete it if the CA has been created but you haven't yet imported the signed certificate into ACM Private CA (that is, the status of the CA is <code>PENDING_CERTIFICATE</code>). </p> <p>When you successfully call <a>DeleteCertificateAuthority</a>, the CA's status changes to <code>DELETED</code>. However, the CA won't be permanently deleted until the restoration period has passed. By default, if you do not set the <code>PermanentDeletionTimeInDays</code> parameter, the CA remains restorable for 30 days. You can set the parameter from 7 to 30 days. The <a>DescribeCertificateAuthority</a> action returns the time remaining in the restoration window of a private CA in the <code>DELETED</code> state. To restore an eligible CA, call the <a>RestoreCertificateAuthority</a> action.</p>
-    fn delete_certificate_authority(
+    async fn delete_certificate_authority(
         &self,
         input: DeleteCertificateAuthorityRequest,
-    ) -> RusotoFuture<(), DeleteCertificateAuthorityError> {
+    ) -> Result<(), RusotoError<DeleteCertificateAuthorityError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2128,22 +2153,25 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCertificateAuthorityError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCertificateAuthorityError::from_response(response))
+        }
     }
 
     /// <p>Revokes permissions that a private CA assigned to a designated AWS service. Permissions can be created with the <a>CreatePermission</a> action and listed with the <a>ListPermissions</a> action. </p>
-    fn delete_permission(
+    async fn delete_permission(
         &self,
         input: DeletePermissionRequest,
-    ) -> RusotoFuture<(), DeletePermissionError> {
+    ) -> Result<(), RusotoError<DeletePermissionError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2151,25 +2179,26 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeletePermissionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeletePermissionError::from_response(response))
+        }
     }
 
     /// <p><p>Lists information about your private certificate authority (CA). You specify the private CA on input by its ARN (Amazon Resource Name). The output contains the status of your CA. This can be any of the following: </p> <ul> <li> <p> <code>CREATING</code> - ACM Private CA is creating your private certificate authority.</p> </li> <li> <p> <code>PENDING_CERTIFICATE</code> - The certificate is pending. You must use your ACM Private CA-hosted or on-premises root or subordinate CA to sign your private CA CSR and then import it into PCA. </p> </li> <li> <p> <code>ACTIVE</code> - Your private CA is active.</p> </li> <li> <p> <code>DISABLED</code> - Your private CA has been disabled.</p> </li> <li> <p> <code>EXPIRED</code> - Your private CA certificate has expired.</p> </li> <li> <p> <code>FAILED</code> - Your private CA has failed. Your CA can fail because of problems such a network outage or backend AWS failure or other errors. A failed CA can never return to the pending state. You must create a new CA. </p> </li> <li> <p> <code>DELETED</code> - Your private CA is within the restoration period, after which it is permanently deleted. The length of time remaining in the CA&#39;s restoration period is also included in this action&#39;s output.</p> </li> </ul></p>
-    fn describe_certificate_authority(
+    async fn describe_certificate_authority(
         &self,
         input: DescribeCertificateAuthorityRequest,
-    ) -> RusotoFuture<DescribeCertificateAuthorityResponse, DescribeCertificateAuthorityError> {
+    ) -> Result<DescribeCertificateAuthorityResponse, RusotoError<DescribeCertificateAuthorityError>>
+    {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2177,27 +2206,29 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCertificateAuthorityResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCertificateAuthorityError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeCertificateAuthorityResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeCertificateAuthorityError::from_response(response))
+        }
     }
 
     /// <p>Lists information about a specific audit report created by calling the <a>CreateCertificateAuthorityAuditReport</a> action. Audit information is created every time the certificate authority (CA) private key is used. The private key is used when you call the <a>IssueCertificate</a> action or the <a>RevokeCertificate</a> action. </p>
-    fn describe_certificate_authority_audit_report(
+    async fn describe_certificate_authority_audit_report(
         &self,
         input: DescribeCertificateAuthorityAuditReportRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeCertificateAuthorityAuditReportResponse,
-        DescribeCertificateAuthorityAuditReportError,
+        RusotoError<DescribeCertificateAuthorityAuditReportError>,
     > {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
@@ -2209,27 +2240,29 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCertificateAuthorityAuditReportResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCertificateAuthorityAuditReportError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeCertificateAuthorityAuditReportResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeCertificateAuthorityAuditReportError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Retrieves a certificate from your private CA. The ARN of the certificate is returned when you call the <a>IssueCertificate</a> action. You must specify both the ARN of your private CA and the ARN of the issued certificate when calling the <b>GetCertificate</b> action. You can retrieve the certificate if it is in the <b>ISSUED</b> state. You can call the <a>CreateCertificateAuthorityAuditReport</a> action to create a report that contains information about all of the certificates issued and revoked by your private CA. </p>
-    fn get_certificate(
+    async fn get_certificate(
         &self,
         input: GetCertificateRequest,
-    ) -> RusotoFuture<GetCertificateResponse, GetCertificateError> {
+    ) -> Result<GetCertificateResponse, RusotoError<GetCertificateError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2237,30 +2270,28 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCertificateResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetCertificateError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetCertificateResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCertificateError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the certificate and certificate chain for your private certificate authority (CA). Both the certificate and the chain are base64 PEM-encoded. The chain does not include the CA certificate. Each certificate in the chain signs the one before it. </p>
-    fn get_certificate_authority_certificate(
+    async fn get_certificate_authority_certificate(
         &self,
         input: GetCertificateAuthorityCertificateRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetCertificateAuthorityCertificateResponse,
-        GetCertificateAuthorityCertificateError,
+        RusotoError<GetCertificateAuthorityCertificateError>,
     > {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
@@ -2272,27 +2303,30 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCertificateAuthorityCertificateResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCertificateAuthorityCertificateError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetCertificateAuthorityCertificateResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCertificateAuthorityCertificateError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Retrieves the certificate signing request (CSR) for your private certificate authority (CA). The CSR is created when you call the <a>CreateCertificateAuthority</a> action. Sign the CSR with your ACM Private CA-hosted or on-premises root or subordinate CA. Then import the signed certificate back into ACM Private CA by calling the <a>ImportCertificateAuthorityCertificate</a> action. The CSR is returned as a base64 PEM-encoded string. </p>
-    fn get_certificate_authority_csr(
+    async fn get_certificate_authority_csr(
         &self,
         input: GetCertificateAuthorityCsrRequest,
-    ) -> RusotoFuture<GetCertificateAuthorityCsrResponse, GetCertificateAuthorityCsrError> {
+    ) -> Result<GetCertificateAuthorityCsrResponse, RusotoError<GetCertificateAuthorityCsrError>>
+    {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2300,25 +2334,27 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCertificateAuthorityCsrResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCertificateAuthorityCsrError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetCertificateAuthorityCsrResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCertificateAuthorityCsrError::from_response(response))
+        }
     }
 
     /// <p><p>Imports a signed private CA certificate into ACM Private CA. This action is used when you are using a chain of trust whose root is located outside ACM Private CA. Before you can call this action, the following preparations must in place:</p> <ol> <li> <p>In ACM Private CA, call the <a>CreateCertificateAuthority</a> action to create the private CA that that you plan to back with the imported certificate.</p> </li> <li> <p>Call the <a>GetCertificateAuthorityCsr</a> action to generate a certificate signing request (CSR).</p> </li> <li> <p>Sign the CSR using a root or intermediate CA hosted either by an on-premises PKI hierarchy or a commercial CA..</p> </li> <li> <p>Create a certificate chain and copy the signed certificate and the certificate chain to your working directory.</p> </li> </ol> <p>The following requirements apply when you import a CA certificate.</p> <ul> <li> <p>You cannot import a non-self-signed certificate for use as a root CA.</p> </li> <li> <p>You cannot import a self-signed certificate for use as a subordinate CA.</p> </li> <li> <p>Your certificate chain must not include the private CA certificate that you are importing.</p> </li> <li> <p>Your ACM Private CA-hosted or on-premises CA certificate must be the last certificate in your chain. The subordinate certificate, if any, that your root CA signed must be next to last. The subordinate certificate signed by the preceding subordinate CA must come next, and so on until your chain is built. </p> </li> <li> <p>The chain must be PEM-encoded.</p> </li> </ul></p>
-    fn import_certificate_authority_certificate(
+    async fn import_certificate_authority_certificate(
         &self,
         input: ImportCertificateAuthorityCertificateRequest,
-    ) -> RusotoFuture<(), ImportCertificateAuthorityCertificateError> {
+    ) -> Result<(), RusotoError<ImportCertificateAuthorityCertificateError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2329,24 +2365,27 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ImportCertificateAuthorityCertificateError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ImportCertificateAuthorityCertificateError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p><p>Uses your private certificate authority (CA) to issue a client certificate. This action returns the Amazon Resource Name (ARN) of the certificate. You can retrieve the certificate by calling the <a>GetCertificate</a> action and specifying the ARN. </p> <note> <p>You cannot use the ACM <b>ListCertificateAuthorities</b> action to retrieve the ARNs of the certificates that you issue by using ACM Private CA.</p> </note></p>
-    fn issue_certificate(
+    async fn issue_certificate(
         &self,
         input: IssueCertificateRequest,
-    ) -> RusotoFuture<IssueCertificateResponse, IssueCertificateError> {
+    ) -> Result<IssueCertificateResponse, RusotoError<IssueCertificateError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2354,28 +2393,28 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<IssueCertificateResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(IssueCertificateError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<IssueCertificateResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(IssueCertificateError::from_response(response))
+        }
     }
 
     /// <p>Lists the private certificate authorities that you created by using the <a>CreateCertificateAuthority</a> action.</p>
-    fn list_certificate_authorities(
+    async fn list_certificate_authorities(
         &self,
         input: ListCertificateAuthoritiesRequest,
-    ) -> RusotoFuture<ListCertificateAuthoritiesResponse, ListCertificateAuthoritiesError> {
+    ) -> Result<ListCertificateAuthoritiesResponse, RusotoError<ListCertificateAuthoritiesError>>
+    {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2383,25 +2422,27 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListCertificateAuthoritiesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListCertificateAuthoritiesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListCertificateAuthoritiesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListCertificateAuthoritiesError::from_response(response))
+        }
     }
 
     /// <p>Lists all the permissions, if any, that have been assigned by a private CA. Permissions can be granted with the <a>CreatePermission</a> action and revoked with the <a>DeletePermission</a> action.</p>
-    fn list_permissions(
+    async fn list_permissions(
         &self,
         input: ListPermissionsRequest,
-    ) -> RusotoFuture<ListPermissionsResponse, ListPermissionsError> {
+    ) -> Result<ListPermissionsResponse, RusotoError<ListPermissionsError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2409,25 +2450,26 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPermissionsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListPermissionsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListPermissionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPermissionsError::from_response(response))
+        }
     }
 
     /// <p>Lists the tags, if any, that are associated with your private CA. Tags are labels that you can use to identify and organize your CAs. Each tag consists of a key and an optional value. Call the <a>TagCertificateAuthority</a> action to add one or more tags to your CA. Call the <a>UntagCertificateAuthority</a> action to remove tags. </p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
+    async fn list_tags(
+        &self,
+        input: ListTagsRequest,
+    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2435,28 +2477,26 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListTagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsError::from_response(response))
+        }
     }
 
     /// <p>Restores a certificate authority (CA) that is in the <code>DELETED</code> state. You can restore a CA during the period that you defined in the <b>PermanentDeletionTimeInDays</b> parameter of the <a>DeleteCertificateAuthority</a> action. Currently, you can specify 7 to 30 days. If you did not specify a <b>PermanentDeletionTimeInDays</b> value, by default you can restore the CA at any time in a 30 day period. You can check the time remaining in the restoration period of a private CA in the <code>DELETED</code> state by calling the <a>DescribeCertificateAuthority</a> or <a>ListCertificateAuthorities</a> actions. The status of a restored CA is set to its pre-deletion status when the <b>RestoreCertificateAuthority</b> action returns. To change its status to <code>ACTIVE</code>, call the <a>UpdateCertificateAuthority</a> action. If the private CA was in the <code>PENDING_CERTIFICATE</code> state at deletion, you must use the <a>ImportCertificateAuthorityCertificate</a> action to import a certificate authority into the private CA before it can be activated. You cannot restore a CA after the restoration period has ended.</p>
-    fn restore_certificate_authority(
+    async fn restore_certificate_authority(
         &self,
         input: RestoreCertificateAuthorityRequest,
-    ) -> RusotoFuture<(), RestoreCertificateAuthorityError> {
+    ) -> Result<(), RusotoError<RestoreCertificateAuthorityError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2464,22 +2504,25 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreCertificateAuthorityError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RestoreCertificateAuthorityError::from_response(response))
+        }
     }
 
     /// <p><p>Revokes a certificate that was issued inside ACM Private CA. If you enable a certificate revocation list (CRL) when you create or update your private CA, information about the revoked certificates will be included in the CRL. ACM Private CA writes the CRL to an S3 bucket that you specify. For more information about revocation, see the <a>CrlConfiguration</a> structure. ACM Private CA also writes revocation information to the audit report. For more information, see <a>CreateCertificateAuthorityAuditReport</a>. </p> <note> <p>You cannot revoke a root CA self-signed certificate.</p> </note></p>
-    fn revoke_certificate(
+    async fn revoke_certificate(
         &self,
         input: RevokeCertificateRequest,
-    ) -> RusotoFuture<(), RevokeCertificateError> {
+    ) -> Result<(), RusotoError<RevokeCertificateError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2487,25 +2530,25 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RevokeCertificateError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RevokeCertificateError::from_response(response))
+        }
     }
 
     /// <p>Adds one or more tags to your private CA. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a key and an optional value. You specify the private CA on input by its Amazon Resource Name (ARN). You specify the tag by using a key-value pair. You can apply a tag to just one private CA if you want to identify a specific characteristic of that CA, or you can apply the same tag to multiple private CAs if you want to filter for a common relationship among those CAs. To remove one or more tags, use the <a>UntagCertificateAuthority</a> action. Call the <a>ListTags</a> action to see what tags are associated with your CA. </p>
-    fn tag_certificate_authority(
+    async fn tag_certificate_authority(
         &self,
         input: TagCertificateAuthorityRequest,
-    ) -> RusotoFuture<(), TagCertificateAuthorityError> {
+    ) -> Result<(), RusotoError<TagCertificateAuthorityError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2513,22 +2556,25 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagCertificateAuthorityError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagCertificateAuthorityError::from_response(response))
+        }
     }
 
     /// <p>Remove one or more tags from your private CA. A tag consists of a key-value pair. If you do not specify the value portion of the tag when calling this action, the tag will be removed regardless of value. If you specify a value, the tag is removed only if it is associated with the specified value. To add tags to a private CA, use the <a>TagCertificateAuthority</a>. Call the <a>ListTags</a> action to see what tags are associated with your CA. </p>
-    fn untag_certificate_authority(
+    async fn untag_certificate_authority(
         &self,
         input: UntagCertificateAuthorityRequest,
-    ) -> RusotoFuture<(), UntagCertificateAuthorityError> {
+    ) -> Result<(), RusotoError<UntagCertificateAuthorityError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2536,22 +2582,25 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagCertificateAuthorityError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagCertificateAuthorityError::from_response(response))
+        }
     }
 
     /// <p>Updates the status or configuration of a private certificate authority (CA). Your private CA must be in the <code>ACTIVE</code> or <code>DISABLED</code> state before you can update it. You can disable a private CA that is in the <code>ACTIVE</code> state or make a CA that is in the <code>DISABLED</code> state active again.</p>
-    fn update_certificate_authority(
+    async fn update_certificate_authority(
         &self,
         input: UpdateCertificateAuthorityRequest,
-    ) -> RusotoFuture<(), UpdateCertificateAuthorityError> {
+    ) -> Result<(), RusotoError<UpdateCertificateAuthorityError>> {
         let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2559,14 +2608,17 @@ impl AcmPca for AcmPcaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateCertificateAuthorityError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateCertificateAuthorityError::from_response(response))
+        }
     }
 }

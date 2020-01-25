@@ -9,16 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
+
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -8618,6 +8618,7 @@ impl CreateCloudFrontOriginAccessIdentityError {
     }
 }
 impl fmt::Display for CreateCloudFrontOriginAccessIdentityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
                             CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(ref cause) => write!(f, "{}", cause),
@@ -8746,6 +8747,7 @@ impl CreateDistributionError {
     }
 }
 impl fmt::Display for CreateDistributionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
                             CreateDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -8917,6 +8919,7 @@ impl CreateDistributionWithTagsError {
     }
 }
 impl fmt::Display for CreateDistributionWithTagsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
                             CreateDistributionWithTagsError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -9015,6 +9018,7 @@ impl CreateFieldLevelEncryptionConfigError {
     }
 }
 impl fmt::Display for CreateFieldLevelEncryptionConfigError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
                             CreateFieldLevelEncryptionConfigError::FieldLevelEncryptionConfigAlreadyExists(ref cause) => write!(f, "{}", cause),
@@ -9076,6 +9080,7 @@ impl CreateFieldLevelEncryptionProfileError {
     }
 }
 impl fmt::Display for CreateFieldLevelEncryptionProfileError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
                             CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(ref cause) => write!(f, "{}", cause),
@@ -9170,6 +9175,7 @@ impl CreateInvalidationError {
     }
 }
 impl fmt::Display for CreateInvalidationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateInvalidationError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -9235,6 +9241,7 @@ impl CreatePublicKeyError {
     }
 }
 impl fmt::Display for CreatePublicKeyError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreatePublicKeyError::InvalidArgument(ref cause) => write!(f, "{}", cause),
@@ -9375,6 +9382,7 @@ impl CreateStreamingDistributionError {
     }
 }
 impl fmt::Display for CreateStreamingDistributionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateStreamingDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -9466,6 +9474,7 @@ impl CreateStreamingDistributionWithTagsError {
     }
 }
 impl fmt::Display for CreateStreamingDistributionWithTagsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateStreamingDistributionWithTagsError::AccessDenied(ref cause) => {
@@ -9552,6 +9561,7 @@ impl DeleteCloudFrontOriginAccessIdentityError {
     }
 }
 impl fmt::Display for DeleteCloudFrontOriginAccessIdentityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => {
@@ -9637,6 +9647,7 @@ impl DeleteDistributionError {
     }
 }
 impl fmt::Display for DeleteDistributionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -9724,6 +9735,7 @@ impl DeleteFieldLevelEncryptionConfigError {
     }
 }
 impl fmt::Display for DeleteFieldLevelEncryptionConfigError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteFieldLevelEncryptionConfigError::AccessDenied(ref cause) => {
@@ -9817,6 +9829,7 @@ impl DeleteFieldLevelEncryptionProfileError {
     }
 }
 impl fmt::Display for DeleteFieldLevelEncryptionProfileError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteFieldLevelEncryptionProfileError::AccessDenied(ref cause) => {
@@ -9902,6 +9915,7 @@ impl DeletePublicKeyError {
     }
 }
 impl fmt::Display for DeletePublicKeyError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeletePublicKeyError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -9987,6 +10001,7 @@ impl DeleteStreamingDistributionError {
     }
 }
 impl fmt::Display for DeleteStreamingDistributionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteStreamingDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -10041,6 +10056,7 @@ impl GetCloudFrontOriginAccessIdentityError {
     }
 }
 impl fmt::Display for GetCloudFrontOriginAccessIdentityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => {
@@ -10088,6 +10104,7 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
     }
 }
 impl fmt::Display for GetCloudFrontOriginAccessIdentityConfigError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(ref cause) => {
@@ -10143,6 +10160,7 @@ impl GetDistributionError {
     }
 }
 impl fmt::Display for GetDistributionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -10194,6 +10212,7 @@ impl GetDistributionConfigError {
     }
 }
 impl fmt::Display for GetDistributionConfigError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetDistributionConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -10247,6 +10266,7 @@ impl GetFieldLevelEncryptionError {
     }
 }
 impl fmt::Display for GetFieldLevelEncryptionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetFieldLevelEncryptionError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -10304,6 +10324,7 @@ impl GetFieldLevelEncryptionConfigError {
     }
 }
 impl fmt::Display for GetFieldLevelEncryptionConfigError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetFieldLevelEncryptionConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -10361,6 +10382,7 @@ impl GetFieldLevelEncryptionProfileError {
     }
 }
 impl fmt::Display for GetFieldLevelEncryptionProfileError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetFieldLevelEncryptionProfileError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -10406,6 +10428,7 @@ impl GetFieldLevelEncryptionProfileConfigError {
     }
 }
 impl fmt::Display for GetFieldLevelEncryptionProfileConfigError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetFieldLevelEncryptionProfileConfigError::AccessDenied(ref cause) => {
@@ -10468,6 +10491,7 @@ impl GetInvalidationError {
     }
 }
 impl fmt::Display for GetInvalidationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetInvalidationError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -10520,6 +10544,7 @@ impl GetPublicKeyError {
     }
 }
 impl fmt::Display for GetPublicKeyError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetPublicKeyError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -10571,6 +10596,7 @@ impl GetPublicKeyConfigError {
     }
 }
 impl fmt::Display for GetPublicKeyConfigError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetPublicKeyConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -10624,6 +10650,7 @@ impl GetStreamingDistributionError {
     }
 }
 impl fmt::Display for GetStreamingDistributionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetStreamingDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -10681,6 +10708,7 @@ impl GetStreamingDistributionConfigError {
     }
 }
 impl fmt::Display for GetStreamingDistributionConfigError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetStreamingDistributionConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -10731,6 +10759,7 @@ impl ListCloudFrontOriginAccessIdentitiesError {
     }
 }
 impl fmt::Display for ListCloudFrontOriginAccessIdentitiesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(ref cause) => {
@@ -10776,6 +10805,7 @@ impl ListDistributionsError {
     }
 }
 impl fmt::Display for ListDistributionsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListDistributionsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
@@ -10828,6 +10858,7 @@ impl ListDistributionsByWebACLIdError {
     }
 }
 impl fmt::Display for ListDistributionsByWebACLIdError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListDistributionsByWebACLIdError::InvalidArgument(ref cause) => write!(f, "{}", cause),
@@ -10876,6 +10907,7 @@ impl ListFieldLevelEncryptionConfigsError {
     }
 }
 impl fmt::Display for ListFieldLevelEncryptionConfigsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListFieldLevelEncryptionConfigsError::InvalidArgument(ref cause) => {
@@ -10925,6 +10957,7 @@ impl ListFieldLevelEncryptionProfilesError {
     }
 }
 impl fmt::Display for ListFieldLevelEncryptionProfilesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListFieldLevelEncryptionProfilesError::InvalidArgument(ref cause) => {
@@ -10984,6 +11017,7 @@ impl ListInvalidationsError {
     }
 }
 impl fmt::Display for ListInvalidationsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListInvalidationsError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -11029,6 +11063,7 @@ impl ListPublicKeysError {
     }
 }
 impl fmt::Display for ListPublicKeysError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListPublicKeysError::InvalidArgument(ref cause) => write!(f, "{}", cause),
@@ -11074,6 +11109,7 @@ impl ListStreamingDistributionsError {
     }
 }
 impl fmt::Display for ListStreamingDistributionsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListStreamingDistributionsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
@@ -11138,6 +11174,7 @@ impl ListTagsForResourceError {
     }
 }
 impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -11205,6 +11242,7 @@ impl TagResourceError {
     }
 }
 impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -11272,6 +11310,7 @@ impl UntagResourceError {
     }
 }
 impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -11329,6 +11368,7 @@ impl UpdateCloudFrontOriginAccessIdentityError {
     }
 }
 impl fmt::Display for UpdateCloudFrontOriginAccessIdentityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => {
@@ -11476,6 +11516,7 @@ impl UpdateDistributionError {
     }
 }
 impl fmt::Display for UpdateDistributionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
                             UpdateDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -11579,6 +11620,7 @@ impl UpdateFieldLevelEncryptionConfigError {
     }
 }
 impl fmt::Display for UpdateFieldLevelEncryptionConfigError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
                             UpdateFieldLevelEncryptionConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -11651,6 +11693,7 @@ impl UpdateFieldLevelEncryptionProfileError {
     }
 }
 impl fmt::Display for UpdateFieldLevelEncryptionProfileError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
                             UpdateFieldLevelEncryptionProfileError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -11749,6 +11792,7 @@ impl UpdatePublicKeyError {
     }
 }
 impl fmt::Display for UpdatePublicKeyError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdatePublicKeyError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -11904,6 +11948,7 @@ impl UpdateStreamingDistributionError {
     }
 }
 impl fmt::Display for UpdateStreamingDistributionError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateStreamingDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -11942,288 +11987,322 @@ impl fmt::Display for UpdateStreamingDistributionError {
 }
 impl Error for UpdateStreamingDistributionError {}
 /// Trait representing the capabilities of the CloudFront API. CloudFront clients implement this trait.
+#[async_trait]
 pub trait CloudFront {
     /// <p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-    fn create_cloud_front_origin_access_identity(
+    async fn create_cloud_front_origin_access_identity(
         &self,
         input: CreateCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateCloudFrontOriginAccessIdentityResult,
-        CreateCloudFrontOriginAccessIdentityError,
+        RusotoError<CreateCloudFrontOriginAccessIdentityError>,
     >;
 
     /// <p>Creates a new web distribution. You create a CloudFront distribution to tell CloudFront where you want content to be delivered from, and the details about how to track and manage content delivery. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p> <important> <p>When you update a distribution, there are more required fields than when you create a distribution. When you update your distribution by using <a>UpdateDistribution</a>, follow the steps included in the documentation to get the current configuration and then make your updates. This helps to make sure that you include all of the required fields. To view a summary, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-overview-required-fields.html">Required Fields for Create Distribution and Update Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </important> <p>If you are using Adobe Flash Media Server's RTMP protocol, you set up a different kind of CloudFront distribution. For more information, see <a>CreateStreamingDistribution</a>.</p>
-    fn create_distribution(
+    async fn create_distribution(
         &self,
         input: CreateDistributionRequest,
-    ) -> RusotoFuture<CreateDistributionResult, CreateDistributionError>;
+    ) -> Result<CreateDistributionResult, RusotoError<CreateDistributionError>>;
 
     /// <p>Create a new distribution with tags.</p>
-    fn create_distribution_with_tags(
+    async fn create_distribution_with_tags(
         &self,
         input: CreateDistributionWithTagsRequest,
-    ) -> RusotoFuture<CreateDistributionWithTagsResult, CreateDistributionWithTagsError>;
+    ) -> Result<CreateDistributionWithTagsResult, RusotoError<CreateDistributionWithTagsError>>;
 
     /// <p>Create a new field-level encryption configuration.</p>
-    fn create_field_level_encryption_config(
+    async fn create_field_level_encryption_config(
         &self,
         input: CreateFieldLevelEncryptionConfigRequest,
-    ) -> RusotoFuture<CreateFieldLevelEncryptionConfigResult, CreateFieldLevelEncryptionConfigError>;
+    ) -> Result<
+        CreateFieldLevelEncryptionConfigResult,
+        RusotoError<CreateFieldLevelEncryptionConfigError>,
+    >;
 
     /// <p>Create a field-level encryption profile.</p>
-    fn create_field_level_encryption_profile(
+    async fn create_field_level_encryption_profile(
         &self,
         input: CreateFieldLevelEncryptionProfileRequest,
-    ) -> RusotoFuture<CreateFieldLevelEncryptionProfileResult, CreateFieldLevelEncryptionProfileError>;
+    ) -> Result<
+        CreateFieldLevelEncryptionProfileResult,
+        RusotoError<CreateFieldLevelEncryptionProfileError>,
+    >;
 
     /// <p>Create a new invalidation. </p>
-    fn create_invalidation(
+    async fn create_invalidation(
         &self,
         input: CreateInvalidationRequest,
-    ) -> RusotoFuture<CreateInvalidationResult, CreateInvalidationError>;
+    ) -> Result<CreateInvalidationResult, RusotoError<CreateInvalidationError>>;
 
     /// <p>Add a new public key to CloudFront to use, for example, for field-level encryption. You can add a maximum of 10 public keys with one AWS account.</p>
-    fn create_public_key(
+    async fn create_public_key(
         &self,
         input: CreatePublicKeyRequest,
-    ) -> RusotoFuture<CreatePublicKeyResult, CreatePublicKeyError>;
+    ) -> Result<CreatePublicKeyResult, RusotoError<CreatePublicKeyError>>;
 
     /// <p><p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values specified.</p> </important></p>
-    fn create_streaming_distribution(
+    async fn create_streaming_distribution(
         &self,
         input: CreateStreamingDistributionRequest,
-    ) -> RusotoFuture<CreateStreamingDistributionResult, CreateStreamingDistributionError>;
+    ) -> Result<CreateStreamingDistributionResult, RusotoError<CreateStreamingDistributionError>>;
 
     /// <p>Create a new streaming distribution with tags.</p>
-    fn create_streaming_distribution_with_tags(
+    async fn create_streaming_distribution_with_tags(
         &self,
         input: CreateStreamingDistributionWithTagsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateStreamingDistributionWithTagsResult,
-        CreateStreamingDistributionWithTagsError,
+        RusotoError<CreateStreamingDistributionWithTagsError>,
     >;
 
     /// <p>Delete an origin access identity. </p>
-    fn delete_cloud_front_origin_access_identity(
+    async fn delete_cloud_front_origin_access_identity(
         &self,
         input: DeleteCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<(), DeleteCloudFrontOriginAccessIdentityError>;
+    ) -> Result<(), RusotoError<DeleteCloudFrontOriginAccessIdentityError>>;
 
     /// <p>Delete a distribution. </p>
-    fn delete_distribution(
+    async fn delete_distribution(
         &self,
         input: DeleteDistributionRequest,
-    ) -> RusotoFuture<(), DeleteDistributionError>;
+    ) -> Result<(), RusotoError<DeleteDistributionError>>;
 
     /// <p>Remove a field-level encryption configuration.</p>
-    fn delete_field_level_encryption_config(
+    async fn delete_field_level_encryption_config(
         &self,
         input: DeleteFieldLevelEncryptionConfigRequest,
-    ) -> RusotoFuture<(), DeleteFieldLevelEncryptionConfigError>;
+    ) -> Result<(), RusotoError<DeleteFieldLevelEncryptionConfigError>>;
 
     /// <p>Remove a field-level encryption profile.</p>
-    fn delete_field_level_encryption_profile(
+    async fn delete_field_level_encryption_profile(
         &self,
         input: DeleteFieldLevelEncryptionProfileRequest,
-    ) -> RusotoFuture<(), DeleteFieldLevelEncryptionProfileError>;
+    ) -> Result<(), RusotoError<DeleteFieldLevelEncryptionProfileError>>;
 
     /// <p>Remove a public key you previously added to CloudFront.</p>
-    fn delete_public_key(
+    async fn delete_public_key(
         &self,
         input: DeletePublicKeyRequest,
-    ) -> RusotoFuture<(), DeletePublicKeyError>;
+    ) -> Result<(), RusotoError<DeletePublicKeyError>>;
 
     /// <p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-    fn delete_streaming_distribution(
+    async fn delete_streaming_distribution(
         &self,
         input: DeleteStreamingDistributionRequest,
-    ) -> RusotoFuture<(), DeleteStreamingDistributionError>;
+    ) -> Result<(), RusotoError<DeleteStreamingDistributionError>>;
 
     /// <p>Get the information about an origin access identity. </p>
-    fn get_cloud_front_origin_access_identity(
+    async fn get_cloud_front_origin_access_identity(
         &self,
         input: GetCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError>;
+    ) -> Result<
+        GetCloudFrontOriginAccessIdentityResult,
+        RusotoError<GetCloudFrontOriginAccessIdentityError>,
+    >;
 
     /// <p>Get the configuration information about an origin access identity. </p>
-    fn get_cloud_front_origin_access_identity_config(
+    async fn get_cloud_front_origin_access_identity_config(
         &self,
         input: GetCloudFrontOriginAccessIdentityConfigRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetCloudFrontOriginAccessIdentityConfigResult,
-        GetCloudFrontOriginAccessIdentityConfigError,
+        RusotoError<GetCloudFrontOriginAccessIdentityConfigError>,
     >;
 
     /// <p>Get the information about a distribution. </p>
-    fn get_distribution(
+    async fn get_distribution(
         &self,
         input: GetDistributionRequest,
-    ) -> RusotoFuture<GetDistributionResult, GetDistributionError>;
+    ) -> Result<GetDistributionResult, RusotoError<GetDistributionError>>;
 
     /// <p>Get the configuration information about a distribution. </p>
-    fn get_distribution_config(
+    async fn get_distribution_config(
         &self,
         input: GetDistributionConfigRequest,
-    ) -> RusotoFuture<GetDistributionConfigResult, GetDistributionConfigError>;
+    ) -> Result<GetDistributionConfigResult, RusotoError<GetDistributionConfigError>>;
 
     /// <p>Get the field-level encryption configuration information.</p>
-    fn get_field_level_encryption(
+    async fn get_field_level_encryption(
         &self,
         input: GetFieldLevelEncryptionRequest,
-    ) -> RusotoFuture<GetFieldLevelEncryptionResult, GetFieldLevelEncryptionError>;
+    ) -> Result<GetFieldLevelEncryptionResult, RusotoError<GetFieldLevelEncryptionError>>;
 
     /// <p>Get the field-level encryption configuration information.</p>
-    fn get_field_level_encryption_config(
+    async fn get_field_level_encryption_config(
         &self,
         input: GetFieldLevelEncryptionConfigRequest,
-    ) -> RusotoFuture<GetFieldLevelEncryptionConfigResult, GetFieldLevelEncryptionConfigError>;
+    ) -> Result<GetFieldLevelEncryptionConfigResult, RusotoError<GetFieldLevelEncryptionConfigError>>;
 
     /// <p>Get the field-level encryption profile information.</p>
-    fn get_field_level_encryption_profile(
+    async fn get_field_level_encryption_profile(
         &self,
         input: GetFieldLevelEncryptionProfileRequest,
-    ) -> RusotoFuture<GetFieldLevelEncryptionProfileResult, GetFieldLevelEncryptionProfileError>;
+    ) -> Result<
+        GetFieldLevelEncryptionProfileResult,
+        RusotoError<GetFieldLevelEncryptionProfileError>,
+    >;
 
     /// <p>Get the field-level encryption profile configuration information.</p>
-    fn get_field_level_encryption_profile_config(
+    async fn get_field_level_encryption_profile_config(
         &self,
         input: GetFieldLevelEncryptionProfileConfigRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetFieldLevelEncryptionProfileConfigResult,
-        GetFieldLevelEncryptionProfileConfigError,
+        RusotoError<GetFieldLevelEncryptionProfileConfigError>,
     >;
 
     /// <p>Get the information about an invalidation. </p>
-    fn get_invalidation(
+    async fn get_invalidation(
         &self,
         input: GetInvalidationRequest,
-    ) -> RusotoFuture<GetInvalidationResult, GetInvalidationError>;
+    ) -> Result<GetInvalidationResult, RusotoError<GetInvalidationError>>;
 
     /// <p>Get the public key information.</p>
-    fn get_public_key(
+    async fn get_public_key(
         &self,
         input: GetPublicKeyRequest,
-    ) -> RusotoFuture<GetPublicKeyResult, GetPublicKeyError>;
+    ) -> Result<GetPublicKeyResult, RusotoError<GetPublicKeyError>>;
 
     /// <p>Return public key configuration informaation</p>
-    fn get_public_key_config(
+    async fn get_public_key_config(
         &self,
         input: GetPublicKeyConfigRequest,
-    ) -> RusotoFuture<GetPublicKeyConfigResult, GetPublicKeyConfigError>;
+    ) -> Result<GetPublicKeyConfigResult, RusotoError<GetPublicKeyConfigError>>;
 
     /// <p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>
-    fn get_streaming_distribution(
+    async fn get_streaming_distribution(
         &self,
         input: GetStreamingDistributionRequest,
-    ) -> RusotoFuture<GetStreamingDistributionResult, GetStreamingDistributionError>;
+    ) -> Result<GetStreamingDistributionResult, RusotoError<GetStreamingDistributionError>>;
 
     /// <p>Get the configuration information about a streaming distribution. </p>
-    fn get_streaming_distribution_config(
+    async fn get_streaming_distribution_config(
         &self,
         input: GetStreamingDistributionConfigRequest,
-    ) -> RusotoFuture<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError>;
+    ) -> Result<
+        GetStreamingDistributionConfigResult,
+        RusotoError<GetStreamingDistributionConfigError>,
+    >;
 
     /// <p>Lists origin access identities.</p>
-    fn list_cloud_front_origin_access_identities(
+    async fn list_cloud_front_origin_access_identities(
         &self,
         input: ListCloudFrontOriginAccessIdentitiesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListCloudFrontOriginAccessIdentitiesResult,
-        ListCloudFrontOriginAccessIdentitiesError,
+        RusotoError<ListCloudFrontOriginAccessIdentitiesError>,
     >;
 
     /// <p>List distributions. </p>
-    fn list_distributions(
+    async fn list_distributions(
         &self,
         input: ListDistributionsRequest,
-    ) -> RusotoFuture<ListDistributionsResult, ListDistributionsError>;
+    ) -> Result<ListDistributionsResult, RusotoError<ListDistributionsError>>;
 
     /// <p>List the distributions that are associated with a specified AWS WAF web ACL. </p>
-    fn list_distributions_by_web_acl_id(
+    async fn list_distributions_by_web_acl_id(
         &self,
         input: ListDistributionsByWebACLIdRequest,
-    ) -> RusotoFuture<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError>;
+    ) -> Result<ListDistributionsByWebACLIdResult, RusotoError<ListDistributionsByWebACLIdError>>;
 
     /// <p>List all field-level encryption configurations that have been created in CloudFront for this account.</p>
-    fn list_field_level_encryption_configs(
+    async fn list_field_level_encryption_configs(
         &self,
         input: ListFieldLevelEncryptionConfigsRequest,
-    ) -> RusotoFuture<ListFieldLevelEncryptionConfigsResult, ListFieldLevelEncryptionConfigsError>;
+    ) -> Result<
+        ListFieldLevelEncryptionConfigsResult,
+        RusotoError<ListFieldLevelEncryptionConfigsError>,
+    >;
 
     /// <p>Request a list of field-level encryption profiles that have been created in CloudFront for this account.</p>
-    fn list_field_level_encryption_profiles(
+    async fn list_field_level_encryption_profiles(
         &self,
         input: ListFieldLevelEncryptionProfilesRequest,
-    ) -> RusotoFuture<ListFieldLevelEncryptionProfilesResult, ListFieldLevelEncryptionProfilesError>;
+    ) -> Result<
+        ListFieldLevelEncryptionProfilesResult,
+        RusotoError<ListFieldLevelEncryptionProfilesError>,
+    >;
 
     /// <p>Lists invalidation batches. </p>
-    fn list_invalidations(
+    async fn list_invalidations(
         &self,
         input: ListInvalidationsRequest,
-    ) -> RusotoFuture<ListInvalidationsResult, ListInvalidationsError>;
+    ) -> Result<ListInvalidationsResult, RusotoError<ListInvalidationsError>>;
 
     /// <p>List all public keys that have been added to CloudFront for this account.</p>
-    fn list_public_keys(
+    async fn list_public_keys(
         &self,
         input: ListPublicKeysRequest,
-    ) -> RusotoFuture<ListPublicKeysResult, ListPublicKeysError>;
+    ) -> Result<ListPublicKeysResult, RusotoError<ListPublicKeysError>>;
 
     /// <p>List streaming distributions. </p>
-    fn list_streaming_distributions(
+    async fn list_streaming_distributions(
         &self,
         input: ListStreamingDistributionsRequest,
-    ) -> RusotoFuture<ListStreamingDistributionsResult, ListStreamingDistributionsError>;
+    ) -> Result<ListStreamingDistributionsResult, RusotoError<ListStreamingDistributionsError>>;
 
     /// <p>List tags for a CloudFront resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Add tags to a CloudFront resource.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>>;
 
     /// <p>Remove tags from a CloudFront resource.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>>;
 
     /// <p>Update an origin access identity. </p>
-    fn update_cloud_front_origin_access_identity(
+    async fn update_cloud_front_origin_access_identity(
         &self,
         input: UpdateCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateCloudFrontOriginAccessIdentityResult,
-        UpdateCloudFrontOriginAccessIdentityError,
+        RusotoError<UpdateCloudFrontOriginAccessIdentityError>,
     >;
 
     /// <p><p>Updates the configuration for a web distribution. </p> <important> <p>When you update a distribution, there are more required fields than when you create a distribution. When you update your distribution by using this API action, follow the steps here to get the current configuration and then make your updates, to make sure that you include all of the required fields. To view a summary, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-overview-required-fields.html">Required Fields for Create Distribution and Update Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </important> <p>The update process includes getting the current distribution configuration, updating the XML document that is returned to make your changes, and then submitting an <code>UpdateDistribution</code> request to make the updates.</p> <p>For information about updating a distribution using the CloudFront console instead, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html">Creating a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you must get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include your changes. </p> <important> <p>When you edit the XML file, be aware of the following:</p> <ul> <li> <p>You must strip out the ETag parameter that is returned.</p> </li> <li> <p>Additional fields are required when you update a distribution. There may be fields included in the XML file for features that you haven&#39;t configured for your distribution. This is expected and required to successfully update the distribution.</p> </li> <li> <p>You can&#39;t change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error. </p> </li> <li> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into your existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </li> </ul> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> </ol></p>
-    fn update_distribution(
+    async fn update_distribution(
         &self,
         input: UpdateDistributionRequest,
-    ) -> RusotoFuture<UpdateDistributionResult, UpdateDistributionError>;
+    ) -> Result<UpdateDistributionResult, RusotoError<UpdateDistributionError>>;
 
     /// <p>Update a field-level encryption configuration. </p>
-    fn update_field_level_encryption_config(
+    async fn update_field_level_encryption_config(
         &self,
         input: UpdateFieldLevelEncryptionConfigRequest,
-    ) -> RusotoFuture<UpdateFieldLevelEncryptionConfigResult, UpdateFieldLevelEncryptionConfigError>;
+    ) -> Result<
+        UpdateFieldLevelEncryptionConfigResult,
+        RusotoError<UpdateFieldLevelEncryptionConfigError>,
+    >;
 
     /// <p>Update a field-level encryption profile. </p>
-    fn update_field_level_encryption_profile(
+    async fn update_field_level_encryption_profile(
         &self,
         input: UpdateFieldLevelEncryptionProfileRequest,
-    ) -> RusotoFuture<UpdateFieldLevelEncryptionProfileResult, UpdateFieldLevelEncryptionProfileError>;
+    ) -> Result<
+        UpdateFieldLevelEncryptionProfileResult,
+        RusotoError<UpdateFieldLevelEncryptionProfileError>,
+    >;
 
     /// <p>Update public key information. Note that the only value you can change is the comment.</p>
-    fn update_public_key(
+    async fn update_public_key(
         &self,
         input: UpdatePublicKeyRequest,
-    ) -> RusotoFuture<UpdatePublicKeyResult, UpdatePublicKeyError>;
+    ) -> Result<UpdatePublicKeyResult, RusotoError<UpdatePublicKeyError>>;
 
     /// <p>Update a streaming distribution. </p>
-    fn update_streaming_distribution(
+    async fn update_streaming_distribution(
         &self,
         input: UpdateStreamingDistributionRequest,
-    ) -> RusotoFuture<UpdateStreamingDistributionResult, UpdateStreamingDistributionError>;
+    ) -> Result<UpdateStreamingDistributionResult, RusotoError<UpdateStreamingDistributionError>>;
 }
 /// A client for the CloudFront API.
 #[derive(Clone)]
@@ -12237,7 +12316,10 @@ impl CloudFrontClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CloudFrontClient {
-        Self::new_with_client(Client::shared(), region)
+        CloudFrontClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -12247,14 +12329,12 @@ impl CloudFrontClient {
     ) -> CloudFrontClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        CloudFrontClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> CloudFrontClient {
@@ -12262,23 +12342,16 @@ impl CloudFrontClient {
     }
 }
 
-impl fmt::Debug for CloudFrontClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("CloudFrontClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl CloudFront for CloudFrontClient {
     /// <p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     #[allow(unused_variables, warnings)]
-    fn create_cloud_front_origin_access_identity(
+    async fn create_cloud_front_origin_access_identity(
         &self,
         input: CreateCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateCloudFrontOriginAccessIdentityResult,
-        CreateCloudFrontOriginAccessIdentityError,
+        RusotoError<CreateCloudFrontOriginAccessIdentityError>,
     > {
         let request_uri = "/2018-11-05/origin-access-identity/cloudfront";
 
@@ -12292,52 +12365,53 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCloudFrontOriginAccessIdentityError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateCloudFrontOriginAccessIdentityError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateCloudFrontOriginAccessIdentityResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateCloudFrontOriginAccessIdentityResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        };
+        if let Some(location) = response.headers.get("Location") {
+            let value = location.to_owned();
+            result.location = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a new web distribution. You create a CloudFront distribution to tell CloudFront where you want content to be delivered from, and the details about how to track and manage content delivery. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p> <important> <p>When you update a distribution, there are more required fields than when you create a distribution. When you update your distribution by using <a>UpdateDistribution</a>, follow the steps included in the documentation to get the current configuration and then make your updates. This helps to make sure that you include all of the required fields. To view a summary, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-overview-required-fields.html">Required Fields for Create Distribution and Update Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </important> <p>If you are using Adobe Flash Media Server's RTMP protocol, you set up a different kind of CloudFront distribution. For more information, see <a>CreateStreamingDistribution</a>.</p>
     #[allow(unused_variables, warnings)]
-    fn create_distribution(
+    async fn create_distribution(
         &self,
         input: CreateDistributionRequest,
-    ) -> RusotoFuture<CreateDistributionResult, CreateDistributionError> {
+    ) -> Result<CreateDistributionResult, RusotoError<CreateDistributionError>> {
         let request_uri = "/2018-11-05/distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
@@ -12350,53 +12424,50 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateDistributionError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateDistributionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateDistributionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateDistributionResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateDistributionResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                CreateDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        };
+        if let Some(location) = response.headers.get("Location") {
+            let value = location.to_owned();
+            result.location = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Create a new distribution with tags.</p>
     #[allow(unused_variables, warnings)]
-    fn create_distribution_with_tags(
+    async fn create_distribution_with_tags(
         &self,
         input: CreateDistributionWithTagsRequest,
-    ) -> RusotoFuture<CreateDistributionWithTagsResult, CreateDistributionWithTagsError> {
+    ) -> Result<CreateDistributionWithTagsResult, RusotoError<CreateDistributionWithTagsError>>
+    {
         let request_uri = "/2018-11-05/distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
@@ -12412,51 +12483,54 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDistributionWithTagsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateDistributionWithTagsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateDistributionWithTagsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateDistributionWithTagsResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateDistributionWithTagsResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreateDistributionWithTagsResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        };
+        if let Some(location) = response.headers.get("Location") {
+            let value = location.to_owned();
+            result.location = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Create a new field-level encryption configuration.</p>
     #[allow(unused_variables, warnings)]
-    fn create_field_level_encryption_config(
+    async fn create_field_level_encryption_config(
         &self,
         input: CreateFieldLevelEncryptionConfigRequest,
-    ) -> RusotoFuture<CreateFieldLevelEncryptionConfigResult, CreateFieldLevelEncryptionConfigError>
-    {
+    ) -> Result<
+        CreateFieldLevelEncryptionConfigResult,
+        RusotoError<CreateFieldLevelEncryptionConfigError>,
+    > {
         let request_uri = "/2018-11-05/field-level-encryption";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
@@ -12469,53 +12543,56 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateFieldLevelEncryptionConfigError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateFieldLevelEncryptionConfigError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateFieldLevelEncryptionConfigResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateFieldLevelEncryptionConfigResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateFieldLevelEncryptionConfigResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreateFieldLevelEncryptionConfigResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        };
+        if let Some(location) = response.headers.get("Location") {
+            let value = location.to_owned();
+            result.location = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Create a field-level encryption profile.</p>
     #[allow(unused_variables, warnings)]
-    fn create_field_level_encryption_profile(
+    async fn create_field_level_encryption_profile(
         &self,
         input: CreateFieldLevelEncryptionProfileRequest,
-    ) -> RusotoFuture<CreateFieldLevelEncryptionProfileResult, CreateFieldLevelEncryptionProfileError>
-    {
+    ) -> Result<
+        CreateFieldLevelEncryptionProfileResult,
+        RusotoError<CreateFieldLevelEncryptionProfileError>,
+    > {
         let request_uri = "/2018-11-05/field-level-encryption-profile";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
@@ -12528,52 +12605,53 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateFieldLevelEncryptionProfileError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateFieldLevelEncryptionProfileError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateFieldLevelEncryptionProfileResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateFieldLevelEncryptionProfileResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateFieldLevelEncryptionProfileResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreateFieldLevelEncryptionProfileResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        };
+        if let Some(location) = response.headers.get("Location") {
+            let value = location.to_owned();
+            result.location = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Create a new invalidation. </p>
     #[allow(unused_variables, warnings)]
-    fn create_invalidation(
+    async fn create_invalidation(
         &self,
         input: CreateInvalidationRequest,
-    ) -> RusotoFuture<CreateInvalidationResult, CreateInvalidationError> {
+    ) -> Result<CreateInvalidationResult, RusotoError<CreateInvalidationError>> {
         let request_uri = format!(
             "/2018-11-05/distribution/{distribution_id}/invalidation",
             distribution_id = input.distribution_id
@@ -12589,49 +12667,45 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateInvalidationError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateInvalidationError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateInvalidationResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateInvalidationResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateInvalidationResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                CreateInvalidationResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(location) = response.headers.get("Location") {
+            let value = location.to_owned();
+            result.location = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Add a new public key to CloudFront to use, for example, for field-level encryption. You can add a maximum of 10 public keys with one AWS account.</p>
     #[allow(unused_variables, warnings)]
-    fn create_public_key(
+    async fn create_public_key(
         &self,
         input: CreatePublicKeyRequest,
-    ) -> RusotoFuture<CreatePublicKeyResult, CreatePublicKeyError> {
+    ) -> Result<CreatePublicKeyResult, RusotoError<CreatePublicKeyError>> {
         let request_uri = "/2018-11-05/public-key";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
@@ -12644,53 +12718,49 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreatePublicKeyError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreatePublicKeyError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreatePublicKeyResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreatePublicKeyResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreatePublicKeyResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreatePublicKeyResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        };
+        if let Some(location) = response.headers.get("Location") {
+            let value = location.to_owned();
+            result.location = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values specified.</p> </important></p>
     #[allow(unused_variables, warnings)]
-    fn create_streaming_distribution(
+    async fn create_streaming_distribution(
         &self,
         input: CreateStreamingDistributionRequest,
-    ) -> RusotoFuture<CreateStreamingDistributionResult, CreateStreamingDistributionError> {
+    ) -> Result<CreateStreamingDistributionResult, RusotoError<CreateStreamingDistributionError>>
+    {
         let request_uri = "/2018-11-05/streaming-distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
@@ -12703,52 +12773,53 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStreamingDistributionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateStreamingDistributionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateStreamingDistributionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateStreamingDistributionResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateStreamingDistributionResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreateStreamingDistributionResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        };
+        if let Some(location) = response.headers.get("Location") {
+            let value = location.to_owned();
+            result.location = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Create a new streaming distribution with tags.</p>
     #[allow(unused_variables, warnings)]
-    fn create_streaming_distribution_with_tags(
+    async fn create_streaming_distribution_with_tags(
         &self,
         input: CreateStreamingDistributionWithTagsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateStreamingDistributionWithTagsResult,
-        CreateStreamingDistributionWithTagsError,
+        RusotoError<CreateStreamingDistributionWithTagsError>,
     > {
         let request_uri = "/2018-11-05/streaming-distribution";
 
@@ -12765,52 +12836,53 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStreamingDistributionWithTagsError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateStreamingDistributionWithTagsError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateStreamingDistributionWithTagsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateStreamingDistributionWithTagsResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateStreamingDistributionWithTagsResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreateStreamingDistributionWithTagsResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        };
+        if let Some(location) = response.headers.get("Location") {
+            let value = location.to_owned();
+            result.location = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Delete an origin access identity. </p>
     #[allow(unused_variables, warnings)]
-    fn delete_cloud_front_origin_access_identity(
+    async fn delete_cloud_front_origin_access_identity(
         &self,
         input: DeleteCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<(), DeleteCloudFrontOriginAccessIdentityError> {
+    ) -> Result<(), RusotoError<DeleteCloudFrontOriginAccessIdentityError>> {
         let request_uri = format!(
             "/2018-11-05/origin-access-identity/cloudfront/{id}",
             id = input.id
@@ -12822,25 +12894,27 @@ impl CloudFront for CloudFrontClient {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCloudFrontOriginAccessIdentityError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteCloudFrontOriginAccessIdentityError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Delete a distribution. </p>
     #[allow(unused_variables, warnings)]
-    fn delete_distribution(
+    async fn delete_distribution(
         &self,
         input: DeleteDistributionRequest,
-    ) -> RusotoFuture<(), DeleteDistributionError> {
+    ) -> Result<(), RusotoError<DeleteDistributionError>> {
         let request_uri = format!("/2018-11-05/distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
@@ -12849,26 +12923,25 @@ impl CloudFront for CloudFrontClient {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteDistributionError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteDistributionError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Remove a field-level encryption configuration.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_field_level_encryption_config(
+    async fn delete_field_level_encryption_config(
         &self,
         input: DeleteFieldLevelEncryptionConfigRequest,
-    ) -> RusotoFuture<(), DeleteFieldLevelEncryptionConfigError> {
+    ) -> Result<(), RusotoError<DeleteFieldLevelEncryptionConfigError>> {
         let request_uri = format!("/2018-11-05/field-level-encryption/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
@@ -12877,25 +12950,27 @@ impl CloudFront for CloudFrontClient {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteFieldLevelEncryptionConfigError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteFieldLevelEncryptionConfigError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Remove a field-level encryption profile.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_field_level_encryption_profile(
+    async fn delete_field_level_encryption_profile(
         &self,
         input: DeleteFieldLevelEncryptionProfileRequest,
-    ) -> RusotoFuture<(), DeleteFieldLevelEncryptionProfileError> {
+    ) -> Result<(), RusotoError<DeleteFieldLevelEncryptionProfileError>> {
         let request_uri = format!(
             "/2018-11-05/field-level-encryption-profile/{id}",
             id = input.id
@@ -12907,25 +12982,27 @@ impl CloudFront for CloudFrontClient {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteFieldLevelEncryptionProfileError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteFieldLevelEncryptionProfileError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Remove a public key you previously added to CloudFront.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_public_key(
+    async fn delete_public_key(
         &self,
         input: DeletePublicKeyRequest,
-    ) -> RusotoFuture<(), DeletePublicKeyError> {
+    ) -> Result<(), RusotoError<DeletePublicKeyError>> {
         let request_uri = format!("/2018-11-05/public-key/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
@@ -12934,26 +13011,25 @@ impl CloudFront for CloudFrontClient {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeletePublicKeyError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeletePublicKeyError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_streaming_distribution(
+    async fn delete_streaming_distribution(
         &self,
         input: DeleteStreamingDistributionRequest,
-    ) -> RusotoFuture<(), DeleteStreamingDistributionError> {
+    ) -> Result<(), RusotoError<DeleteStreamingDistributionError>> {
         let request_uri = format!("/2018-11-05/streaming-distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
@@ -12962,24 +13038,28 @@ impl CloudFront for CloudFrontClient {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteStreamingDistributionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteStreamingDistributionError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Get the information about an origin access identity. </p>
     #[allow(unused_variables, warnings)]
-    fn get_cloud_front_origin_access_identity(
+    async fn get_cloud_front_origin_access_identity(
         &self,
         input: GetCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError>
-    {
+    ) -> Result<
+        GetCloudFrontOriginAccessIdentityResult,
+        RusotoError<GetCloudFrontOriginAccessIdentityError>,
+    > {
         let request_uri = format!(
             "/2018-11-05/origin-access-identity/cloudfront/{id}",
             id = input.id
@@ -12987,50 +13067,51 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCloudFrontOriginAccessIdentityError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetCloudFrontOriginAccessIdentityError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetCloudFrontOriginAccessIdentityResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetCloudFrontOriginAccessIdentityResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Get the configuration information about an origin access identity. </p>
     #[allow(unused_variables, warnings)]
-    fn get_cloud_front_origin_access_identity_config(
+    async fn get_cloud_front_origin_access_identity_config(
         &self,
         input: GetCloudFrontOriginAccessIdentityConfigRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetCloudFrontOriginAccessIdentityConfigResult,
-        GetCloudFrontOriginAccessIdentityConfigError,
+        RusotoError<GetCloudFrontOriginAccessIdentityConfigError>,
     > {
         let request_uri = format!(
             "/2018-11-05/origin-access-identity/cloudfront/{id}/config",
@@ -13039,184 +13120,180 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCloudFrontOriginAccessIdentityConfigError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetCloudFrontOriginAccessIdentityConfigError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetCloudFrontOriginAccessIdentityConfigResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetCloudFrontOriginAccessIdentityConfigResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Get the information about a distribution. </p>
     #[allow(unused_variables, warnings)]
-    fn get_distribution(
+    async fn get_distribution(
         &self,
         input: GetDistributionRequest,
-    ) -> RusotoFuture<GetDistributionResult, GetDistributionError> {
+    ) -> Result<GetDistributionResult, RusotoError<GetDistributionError>> {
         let request_uri = format!("/2018-11-05/distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetDistributionError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetDistributionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetDistributionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetDistributionResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetDistributionResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Get the configuration information about a distribution. </p>
     #[allow(unused_variables, warnings)]
-    fn get_distribution_config(
+    async fn get_distribution_config(
         &self,
         input: GetDistributionConfigRequest,
-    ) -> RusotoFuture<GetDistributionConfigResult, GetDistributionConfigError> {
+    ) -> Result<GetDistributionConfigResult, RusotoError<GetDistributionConfigError>> {
         let request_uri = format!("/2018-11-05/distribution/{id}/config", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDistributionConfigError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetDistributionConfigError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetDistributionConfigResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetDistributionConfigResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetDistributionConfigResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetDistributionConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Get the field-level encryption configuration information.</p>
     #[allow(unused_variables, warnings)]
-    fn get_field_level_encryption(
+    async fn get_field_level_encryption(
         &self,
         input: GetFieldLevelEncryptionRequest,
-    ) -> RusotoFuture<GetFieldLevelEncryptionResult, GetFieldLevelEncryptionError> {
+    ) -> Result<GetFieldLevelEncryptionResult, RusotoError<GetFieldLevelEncryptionError>> {
         let request_uri = format!("/2018-11-05/field-level-encryption/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFieldLevelEncryptionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetFieldLevelEncryptionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetFieldLevelEncryptionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetFieldLevelEncryptionResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetFieldLevelEncryptionResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetFieldLevelEncryptionResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Get the field-level encryption configuration information.</p>
     #[allow(unused_variables, warnings)]
-    fn get_field_level_encryption_config(
+    async fn get_field_level_encryption_config(
         &self,
         input: GetFieldLevelEncryptionConfigRequest,
-    ) -> RusotoFuture<GetFieldLevelEncryptionConfigResult, GetFieldLevelEncryptionConfigError> {
+    ) -> Result<GetFieldLevelEncryptionConfigResult, RusotoError<GetFieldLevelEncryptionConfigError>>
+    {
         let request_uri = format!(
             "/2018-11-05/field-level-encryption/{id}/config",
             id = input.id
@@ -13224,47 +13301,50 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFieldLevelEncryptionConfigError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetFieldLevelEncryptionConfigError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetFieldLevelEncryptionConfigResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetFieldLevelEncryptionConfigResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetFieldLevelEncryptionConfigResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetFieldLevelEncryptionConfigResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Get the field-level encryption profile information.</p>
     #[allow(unused_variables, warnings)]
-    fn get_field_level_encryption_profile(
+    async fn get_field_level_encryption_profile(
         &self,
         input: GetFieldLevelEncryptionProfileRequest,
-    ) -> RusotoFuture<GetFieldLevelEncryptionProfileResult, GetFieldLevelEncryptionProfileError>
-    {
+    ) -> Result<
+        GetFieldLevelEncryptionProfileResult,
+        RusotoError<GetFieldLevelEncryptionProfileError>,
+    > {
         let request_uri = format!(
             "/2018-11-05/field-level-encryption-profile/{id}",
             id = input.id
@@ -13272,48 +13352,49 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFieldLevelEncryptionProfileError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetFieldLevelEncryptionProfileError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetFieldLevelEncryptionProfileResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetFieldLevelEncryptionProfileResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetFieldLevelEncryptionProfileResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetFieldLevelEncryptionProfileResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Get the field-level encryption profile configuration information.</p>
     #[allow(unused_variables, warnings)]
-    fn get_field_level_encryption_profile_config(
+    async fn get_field_level_encryption_profile_config(
         &self,
         input: GetFieldLevelEncryptionProfileConfigRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetFieldLevelEncryptionProfileConfigResult,
-        GetFieldLevelEncryptionProfileConfigError,
+        RusotoError<GetFieldLevelEncryptionProfileConfigError>,
     > {
         let request_uri = format!(
             "/2018-11-05/field-level-encryption-profile/{id}/config",
@@ -13322,48 +13403,49 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFieldLevelEncryptionProfileConfigError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetFieldLevelEncryptionProfileConfigError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetFieldLevelEncryptionProfileConfigResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetFieldLevelEncryptionProfileConfigResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetFieldLevelEncryptionProfileConfigResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetFieldLevelEncryptionProfileConfigResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Get the information about an invalidation. </p>
     #[allow(unused_variables, warnings)]
-    fn get_invalidation(
+    async fn get_invalidation(
         &self,
         input: GetInvalidationRequest,
-    ) -> RusotoFuture<GetInvalidationResult, GetInvalidationError> {
+    ) -> Result<GetInvalidationResult, RusotoError<GetInvalidationError>> {
         let request_uri = format!(
             "/2018-11-05/distribution/{distribution_id}/invalidation/{id}",
             distribution_id = input.distribution_id,
@@ -13372,183 +13454,174 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetInvalidationError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetInvalidationError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetInvalidationResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetInvalidationResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetInvalidationResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetInvalidationResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Get the public key information.</p>
     #[allow(unused_variables, warnings)]
-    fn get_public_key(
+    async fn get_public_key(
         &self,
         input: GetPublicKeyRequest,
-    ) -> RusotoFuture<GetPublicKeyResult, GetPublicKeyError> {
+    ) -> Result<GetPublicKeyResult, RusotoError<GetPublicKeyError>> {
         let request_uri = format!("/2018-11-05/public-key/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetPublicKeyError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetPublicKeyError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetPublicKeyResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        GetPublicKeyResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetPublicKeyResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetPublicKeyResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Return public key configuration informaation</p>
     #[allow(unused_variables, warnings)]
-    fn get_public_key_config(
+    async fn get_public_key_config(
         &self,
         input: GetPublicKeyConfigRequest,
-    ) -> RusotoFuture<GetPublicKeyConfigResult, GetPublicKeyConfigError> {
+    ) -> Result<GetPublicKeyConfigResult, RusotoError<GetPublicKeyConfigError>> {
         let request_uri = format!("/2018-11-05/public-key/{id}/config", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetPublicKeyConfigError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetPublicKeyConfigError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetPublicKeyConfigResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetPublicKeyConfigResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetPublicKeyConfigResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetPublicKeyConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>
     #[allow(unused_variables, warnings)]
-    fn get_streaming_distribution(
+    async fn get_streaming_distribution(
         &self,
         input: GetStreamingDistributionRequest,
-    ) -> RusotoFuture<GetStreamingDistributionResult, GetStreamingDistributionError> {
+    ) -> Result<GetStreamingDistributionResult, RusotoError<GetStreamingDistributionError>> {
         let request_uri = format!("/2018-11-05/streaming-distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetStreamingDistributionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetStreamingDistributionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetStreamingDistributionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetStreamingDistributionResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetStreamingDistributionResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetStreamingDistributionResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Get the configuration information about a streaming distribution. </p>
     #[allow(unused_variables, warnings)]
-    fn get_streaming_distribution_config(
+    async fn get_streaming_distribution_config(
         &self,
         input: GetStreamingDistributionConfigRequest,
-    ) -> RusotoFuture<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError>
-    {
+    ) -> Result<
+        GetStreamingDistributionConfigResult,
+        RusotoError<GetStreamingDistributionConfigError>,
+    > {
         let request_uri = format!(
             "/2018-11-05/streaming-distribution/{id}/config",
             id = input.id
@@ -13556,48 +13629,49 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetStreamingDistributionConfigError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetStreamingDistributionConfigError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = GetStreamingDistributionConfigResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetStreamingDistributionConfigResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = GetStreamingDistributionConfigResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetStreamingDistributionConfigResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists origin access identities.</p>
     #[allow(unused_variables, warnings)]
-    fn list_cloud_front_origin_access_identities(
+    async fn list_cloud_front_origin_access_identities(
         &self,
         input: ListCloudFrontOriginAccessIdentitiesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListCloudFrontOriginAccessIdentitiesResult,
-        ListCloudFrontOriginAccessIdentitiesError,
+        RusotoError<ListCloudFrontOriginAccessIdentitiesError>,
     > {
         let request_uri = "/2018-11-05/origin-access-identity/cloudfront";
 
@@ -13612,45 +13686,46 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListCloudFrontOriginAccessIdentitiesError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListCloudFrontOriginAccessIdentitiesError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListCloudFrontOriginAccessIdentitiesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListCloudFrontOriginAccessIdentitiesResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>List distributions. </p>
     #[allow(unused_variables, warnings)]
-    fn list_distributions(
+    async fn list_distributions(
         &self,
         input: ListDistributionsRequest,
-    ) -> RusotoFuture<ListDistributionsResult, ListDistributionsError> {
+    ) -> Result<ListDistributionsResult, RusotoError<ListDistributionsError>> {
         let request_uri = "/2018-11-05/distribution";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
@@ -13664,46 +13739,43 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListDistributionsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListDistributionsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListDistributionsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListDistributionsResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListDistributionsResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                ListDistributionsResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>List the distributions that are associated with a specified AWS WAF web ACL. </p>
     #[allow(unused_variables, warnings)]
-    fn list_distributions_by_web_acl_id(
+    async fn list_distributions_by_web_acl_id(
         &self,
         input: ListDistributionsByWebACLIdRequest,
-    ) -> RusotoFuture<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError> {
+    ) -> Result<ListDistributionsByWebACLIdResult, RusotoError<ListDistributionsByWebACLIdError>>
+    {
         let request_uri = format!(
             "/2018-11-05/distributionsByWebACLId/{web_acl_id}",
             web_acl_id = input.web_acl_id
@@ -13720,44 +13792,47 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDistributionsByWebACLIdError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListDistributionsByWebACLIdError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListDistributionsByWebACLIdResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListDistributionsByWebACLIdResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListDistributionsByWebACLIdResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListDistributionsByWebACLIdResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>List all field-level encryption configurations that have been created in CloudFront for this account.</p>
     #[allow(unused_variables, warnings)]
-    fn list_field_level_encryption_configs(
+    async fn list_field_level_encryption_configs(
         &self,
         input: ListFieldLevelEncryptionConfigsRequest,
-    ) -> RusotoFuture<ListFieldLevelEncryptionConfigsResult, ListFieldLevelEncryptionConfigsError>
-    {
+    ) -> Result<
+        ListFieldLevelEncryptionConfigsResult,
+        RusotoError<ListFieldLevelEncryptionConfigsError>,
+    > {
         let request_uri = "/2018-11-05/field-level-encryption";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
@@ -13771,46 +13846,49 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListFieldLevelEncryptionConfigsError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListFieldLevelEncryptionConfigsError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListFieldLevelEncryptionConfigsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListFieldLevelEncryptionConfigsResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListFieldLevelEncryptionConfigsResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListFieldLevelEncryptionConfigsResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Request a list of field-level encryption profiles that have been created in CloudFront for this account.</p>
     #[allow(unused_variables, warnings)]
-    fn list_field_level_encryption_profiles(
+    async fn list_field_level_encryption_profiles(
         &self,
         input: ListFieldLevelEncryptionProfilesRequest,
-    ) -> RusotoFuture<ListFieldLevelEncryptionProfilesResult, ListFieldLevelEncryptionProfilesError>
-    {
+    ) -> Result<
+        ListFieldLevelEncryptionProfilesResult,
+        RusotoError<ListFieldLevelEncryptionProfilesError>,
+    > {
         let request_uri = "/2018-11-05/field-level-encryption-profile";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
@@ -13824,45 +13902,46 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListFieldLevelEncryptionProfilesError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListFieldLevelEncryptionProfilesError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListFieldLevelEncryptionProfilesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListFieldLevelEncryptionProfilesResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListFieldLevelEncryptionProfilesResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListFieldLevelEncryptionProfilesResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists invalidation batches. </p>
     #[allow(unused_variables, warnings)]
-    fn list_invalidations(
+    async fn list_invalidations(
         &self,
         input: ListInvalidationsRequest,
-    ) -> RusotoFuture<ListInvalidationsResult, ListInvalidationsError> {
+    ) -> Result<ListInvalidationsResult, RusotoError<ListInvalidationsError>> {
         let request_uri = format!(
             "/2018-11-05/distribution/{distribution_id}/invalidation",
             distribution_id = input.distribution_id
@@ -13879,46 +13958,42 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListInvalidationsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListInvalidationsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListInvalidationsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListInvalidationsResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListInvalidationsResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                ListInvalidationsResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>List all public keys that have been added to CloudFront for this account.</p>
     #[allow(unused_variables, warnings)]
-    fn list_public_keys(
+    async fn list_public_keys(
         &self,
         input: ListPublicKeysRequest,
-    ) -> RusotoFuture<ListPublicKeysResult, ListPublicKeysError> {
+    ) -> Result<ListPublicKeysResult, RusotoError<ListPublicKeysError>> {
         let request_uri = "/2018-11-05/public-key";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
@@ -13932,46 +14007,42 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListPublicKeysError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListPublicKeysError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListPublicKeysResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListPublicKeysResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListPublicKeysResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListPublicKeysResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>List streaming distributions. </p>
     #[allow(unused_variables, warnings)]
-    fn list_streaming_distributions(
+    async fn list_streaming_distributions(
         &self,
         input: ListStreamingDistributionsRequest,
-    ) -> RusotoFuture<ListStreamingDistributionsResult, ListStreamingDistributionsError> {
+    ) -> Result<ListStreamingDistributionsResult, RusotoError<ListStreamingDistributionsError>>
+    {
         let request_uri = "/2018-11-05/streaming-distribution";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
@@ -13985,43 +14056,44 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStreamingDistributionsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListStreamingDistributionsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListStreamingDistributionsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListStreamingDistributionsResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListStreamingDistributionsResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListStreamingDistributionsResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>List tags for a CloudFront resource.</p>
     #[allow(unused_variables, warnings)]
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>> {
         let request_uri = "/2018-11-05/tagging";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
@@ -14030,42 +14102,42 @@ impl CloudFront for CloudFrontClient {
         params.put("Resource", &input.resource);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTagsForResourceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTagsForResourceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTagsForResourceResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ListTagsForResourceResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                ListTagsForResourceResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Add tags to a CloudFront resource.</p>
     #[allow(unused_variables, warnings)]
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>> {
         let request_uri = "/2018-11-05/tagging";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
@@ -14078,23 +14150,25 @@ impl CloudFront for CloudFrontClient {
         TagsSerializer::serialize(&mut writer, "Tags", &input.tags);
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourceError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(TagResourceError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Remove tags from a CloudFront resource.</p>
     #[allow(unused_variables, warnings)]
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>> {
         let request_uri = "/2018-11-05/tagging";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
@@ -14107,28 +14181,27 @@ impl CloudFront for CloudFrontClient {
         TagKeysSerializer::serialize(&mut writer, "TagKeys", &input.tag_keys);
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourceError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UntagResourceError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Update an origin access identity. </p>
     #[allow(unused_variables, warnings)]
-    fn update_cloud_front_origin_access_identity(
+    async fn update_cloud_front_origin_access_identity(
         &self,
         input: UpdateCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateCloudFrontOriginAccessIdentityResult,
-        UpdateCloudFrontOriginAccessIdentityError,
+        RusotoError<UpdateCloudFrontOriginAccessIdentityError>,
     > {
         let request_uri = format!(
             "/2018-11-05/origin-access-identity/cloudfront/{id}/config",
@@ -14149,48 +14222,49 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateCloudFrontOriginAccessIdentityError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateCloudFrontOriginAccessIdentityError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateCloudFrontOriginAccessIdentityResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateCloudFrontOriginAccessIdentityResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Updates the configuration for a web distribution. </p> <important> <p>When you update a distribution, there are more required fields than when you create a distribution. When you update your distribution by using this API action, follow the steps here to get the current configuration and then make your updates, to make sure that you include all of the required fields. To view a summary, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-overview-required-fields.html">Required Fields for Create Distribution and Update Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </important> <p>The update process includes getting the current distribution configuration, updating the XML document that is returned to make your changes, and then submitting an <code>UpdateDistribution</code> request to make the updates.</p> <p>For information about updating a distribution using the CloudFront console instead, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html">Creating a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you must get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include your changes. </p> <important> <p>When you edit the XML file, be aware of the following:</p> <ul> <li> <p>You must strip out the ETag parameter that is returned.</p> </li> <li> <p>Additional fields are required when you update a distribution. There may be fields included in the XML file for features that you haven&#39;t configured for your distribution. This is expected and required to successfully update the distribution.</p> </li> <li> <p>You can&#39;t change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error. </p> </li> <li> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into your existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </li> </ul> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> </ol></p>
     #[allow(unused_variables, warnings)]
-    fn update_distribution(
+    async fn update_distribution(
         &self,
         input: UpdateDistributionRequest,
-    ) -> RusotoFuture<UpdateDistributionResult, UpdateDistributionError> {
+    ) -> Result<UpdateDistributionResult, RusotoError<UpdateDistributionError>> {
         let request_uri = format!("/2018-11-05/distribution/{id}/config", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
@@ -14207,50 +14281,48 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateDistributionError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateDistributionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateDistributionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateDistributionResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateDistributionResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                UpdateDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Update a field-level encryption configuration. </p>
     #[allow(unused_variables, warnings)]
-    fn update_field_level_encryption_config(
+    async fn update_field_level_encryption_config(
         &self,
         input: UpdateFieldLevelEncryptionConfigRequest,
-    ) -> RusotoFuture<UpdateFieldLevelEncryptionConfigResult, UpdateFieldLevelEncryptionConfigError>
-    {
+    ) -> Result<
+        UpdateFieldLevelEncryptionConfigResult,
+        RusotoError<UpdateFieldLevelEncryptionConfigError>,
+    > {
         let request_uri = format!(
             "/2018-11-05/field-level-encryption/{id}/config",
             id = input.id
@@ -14270,49 +14342,52 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateFieldLevelEncryptionConfigError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateFieldLevelEncryptionConfigError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateFieldLevelEncryptionConfigResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateFieldLevelEncryptionConfigResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateFieldLevelEncryptionConfigResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = UpdateFieldLevelEncryptionConfigResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Update a field-level encryption profile. </p>
     #[allow(unused_variables, warnings)]
-    fn update_field_level_encryption_profile(
+    async fn update_field_level_encryption_profile(
         &self,
         input: UpdateFieldLevelEncryptionProfileRequest,
-    ) -> RusotoFuture<UpdateFieldLevelEncryptionProfileResult, UpdateFieldLevelEncryptionProfileError>
-    {
+    ) -> Result<
+        UpdateFieldLevelEncryptionProfileResult,
+        RusotoError<UpdateFieldLevelEncryptionProfileError>,
+    > {
         let request_uri = format!(
             "/2018-11-05/field-level-encryption-profile/{id}/config",
             id = input.id
@@ -14332,48 +14407,49 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateFieldLevelEncryptionProfileError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateFieldLevelEncryptionProfileError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateFieldLevelEncryptionProfileResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateFieldLevelEncryptionProfileResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateFieldLevelEncryptionProfileResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = UpdateFieldLevelEncryptionProfileResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Update public key information. Note that the only value you can change is the comment.</p>
     #[allow(unused_variables, warnings)]
-    fn update_public_key(
+    async fn update_public_key(
         &self,
         input: UpdatePublicKeyRequest,
-    ) -> RusotoFuture<UpdatePublicKeyResult, UpdatePublicKeyError> {
+    ) -> Result<UpdatePublicKeyResult, RusotoError<UpdatePublicKeyError>> {
         let request_uri = format!("/2018-11-05/public-key/{id}/config", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
@@ -14390,49 +14466,45 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdatePublicKeyError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdatePublicKeyError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdatePublicKeyResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdatePublicKeyResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdatePublicKeyResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = UpdatePublicKeyResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Update a streaming distribution. </p>
     #[allow(unused_variables, warnings)]
-    fn update_streaming_distribution(
+    async fn update_streaming_distribution(
         &self,
         input: UpdateStreamingDistributionRequest,
-    ) -> RusotoFuture<UpdateStreamingDistributionResult, UpdateStreamingDistributionError> {
+    ) -> Result<UpdateStreamingDistributionResult, RusotoError<UpdateStreamingDistributionError>>
+    {
         let request_uri = format!(
             "/2018-11-05/streaming-distribution/{id}/config",
             id = input.id
@@ -14452,38 +14524,39 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateStreamingDistributionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateStreamingDistributionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateStreamingDistributionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateStreamingDistributionResultDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                }; // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateStreamingDistributionResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = UpdateStreamingDistributionResultDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 }
 
@@ -14496,8 +14569,8 @@ mod protocol_tests {
     use super::*;
     use rusoto_core::Region as rusoto_region;
 
-    #[test]
-    fn test_parse_valid_cloudfront_get_cloud_front_origin_access_identity() {
+    #[tokio::test]
+    async fn test_parse_valid_cloudfront_get_cloud_front_origin_access_identity() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "cloudfront-get-cloud-front-origin-access-identity.xml",
@@ -14506,14 +14579,12 @@ mod protocol_tests {
         let client =
             CloudFrontClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetCloudFrontOriginAccessIdentityRequest::default();
-        let result = client
-            .get_cloud_front_origin_access_identity(request)
-            .sync();
+        let result = client.get_cloud_front_origin_access_identity(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_cloudfront_get_distribution() {
+    #[tokio::test]
+    async fn test_parse_valid_cloudfront_get_distribution() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "cloudfront-get-distribution.xml",
@@ -14522,12 +14593,12 @@ mod protocol_tests {
         let client =
             CloudFrontClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetDistributionRequest::default();
-        let result = client.get_distribution(request).sync();
+        let result = client.get_distribution(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_cloudfront_get_invalidation() {
+    #[tokio::test]
+    async fn test_parse_valid_cloudfront_get_invalidation() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "cloudfront-get-invalidation.xml",
@@ -14536,12 +14607,12 @@ mod protocol_tests {
         let client =
             CloudFrontClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetInvalidationRequest::default();
-        let result = client.get_invalidation(request).sync();
+        let result = client.get_invalidation(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_cloudfront_get_streaming_distribution() {
+    #[tokio::test]
+    async fn test_parse_valid_cloudfront_get_streaming_distribution() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "cloudfront-get-streaming-distribution.xml",
@@ -14550,12 +14621,12 @@ mod protocol_tests {
         let client =
             CloudFrontClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetStreamingDistributionRequest::default();
-        let result = client.get_streaming_distribution(request).sync();
+        let result = client.get_streaming_distribution(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_cloudfront_list_cloud_front_origin_access_identities() {
+    #[tokio::test]
+    async fn test_parse_valid_cloudfront_list_cloud_front_origin_access_identities() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "cloudfront-list-cloud-front-origin-access-identities.xml",
@@ -14566,12 +14637,12 @@ mod protocol_tests {
         let request = ListCloudFrontOriginAccessIdentitiesRequest::default();
         let result = client
             .list_cloud_front_origin_access_identities(request)
-            .sync();
+            .await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_cloudfront_list_distributions() {
+    #[tokio::test]
+    async fn test_parse_valid_cloudfront_list_distributions() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "cloudfront-list-distributions.xml",
@@ -14580,12 +14651,12 @@ mod protocol_tests {
         let client =
             CloudFrontClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListDistributionsRequest::default();
-        let result = client.list_distributions(request).sync();
+        let result = client.list_distributions(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_cloudfront_list_invalidations() {
+    #[tokio::test]
+    async fn test_parse_valid_cloudfront_list_invalidations() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "cloudfront-list-invalidations.xml",
@@ -14594,12 +14665,12 @@ mod protocol_tests {
         let client =
             CloudFrontClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListInvalidationsRequest::default();
-        let result = client.list_invalidations(request).sync();
+        let result = client.list_invalidations(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_cloudfront_list_streaming_distributions() {
+    #[tokio::test]
+    async fn test_parse_valid_cloudfront_list_streaming_distributions() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "cloudfront-list-streaming-distributions.xml",
@@ -14608,7 +14679,7 @@ mod protocol_tests {
         let client =
             CloudFrontClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListStreamingDistributionsRequest::default();
-        let result = client.list_streaming_distributions(request).sync();
+        let result = client.list_streaming_distributions(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

@@ -9,19 +9,21 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p> An extracted segment of the text that is an attribute of an entity, or otherwise related to an entity, such as the dosage of a medication taken. It contains information about the attribute such as id, begin and end offset within the input text, and the segment of the input text. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -31,7 +33,7 @@ pub struct Attribute {
     #[serde(rename = "BeginOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub begin_offset: Option<i64>,
-    /// <p> The 0-based character offset in the input text that shows where the attribute ends. The offset returns the UTF-8 code point in the string. </p>
+    /// <p> The 0-based character offset in the input text that shows where the attribute ends. The offset returns the UTF-8 code point in the string.</p>
     #[serde(rename = "EndOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_offset: Option<i64>,
@@ -236,7 +238,7 @@ pub struct DetectEntitiesV2Response {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectPHIRequest {
-    /// <p> A UTF-8 text string containing the clinical content being examined for PHI entities. Each string must contain fewer than 20,000 bytes of characters. </p>
+    /// <p> A UTF-8 text string containing the clinical content being examined for PHI entities. Each string must contain fewer than 20,000 bytes of characters.</p>
     #[serde(rename = "Text")]
     pub text: String,
 }
@@ -288,14 +290,178 @@ pub struct Entity {
     #[serde(rename = "Text")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
-    /// <p>Contextual information for the entity</p>
+    /// <p>Contextual information for the entity.</p>
     #[serde(rename = "Traits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub traits: Option<Vec<Trait>>,
-    /// <p> Describes the specific type of entity with category of entities. </p>
+    /// <p> Describes the specific type of entity with category of entities.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>The detected attributes that relate to an entity. This includes an extracted segment of the text that is an attribute of an entity, or otherwise related to an entity. InferICD10CM detects the following attributes: <code>Direction</code>, <code>System, Organ or Site</code>, and <code>Acuity</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ICD10CMAttribute {
+    /// <p>The 0-based character offset in the input text that shows where the attribute begins. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "BeginOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub begin_offset: Option<i64>,
+    /// <p>The 0-based character offset in the input text that shows where the attribute ends. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "EndOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_offset: Option<i64>,
+    /// <p>The numeric identifier for this attribute. This is a monotonically increasing id unique within this response rather than a global unique identifier.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has that this attribute is correctly related to this entity.</p>
+    #[serde(rename = "RelationshipScore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relationship_score: Option<f32>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has that the segment of text is correctly recognized as an attribute.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+    /// <p>The segment of input text which contains the detected attribute.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    /// <p>The contextual information for the attribute. The traits recognized by InferICD10CM are <code>DIAGNOSIS</code>, <code>SIGN</code>, <code>SYMPTOM</code>, and <code>NEGATION</code>.</p>
+    #[serde(rename = "Traits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub traits: Option<Vec<ICD10CMTrait>>,
+    /// <p>The type of attribute. InferICD10CM detects entities of the type <code>DX_NAME</code>. </p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p> The ICD-10-CM concepts that the entity could refer to, along with a score indicating the likelihood of the match.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ICD10CMConcept {
+    /// <p>The ICD-10-CM code that identifies the concept found in the knowledge base from the Centers for Disease Control.</p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// <p>The long description of the ICD-10-CM code in the ontology.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has that the entity is accurately linked to an ICD-10-CM concept.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+}
+
+/// <p>The collection of medical entities extracted from the input text and their associated information. For each entity, the response provides the entity text, the entity category, where the entity text begins and ends, and the level of confidence that Amazon Comprehend Medical has in the detection and analysis. Attributes and traits of the entity are also returned. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ICD10CMEntity {
+    /// <p>The detected attributes that relate to the entity. An extracted segment of the text that is an attribute of an entity, or otherwise related to an entity, such as the nature of a medical condition.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<ICD10CMAttribute>>,
+    /// <p>The 0-based character offset in the input text that shows where the entity begins. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "BeginOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub begin_offset: Option<i64>,
+    /// <p> The category of the entity. InferICD10CM detects entities in the <code>MEDICAL_CONDITION</code> category. </p>
+    #[serde(rename = "Category")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
+    /// <p>The 0-based character offset in the input text that shows where the entity ends. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "EndOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_offset: Option<i64>,
+    /// <p>The ICD-10-CM concepts that the entity could refer to, along with a score indicating the likelihood of the match.</p>
+    #[serde(rename = "ICD10CMConcepts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub icd10cm_concepts: Option<Vec<ICD10CMConcept>>,
+    /// <p>The numeric identifier for the entity. This is a monotonically increasing id unique within this response rather than a global unique identifier.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has in the accuracy of the detection.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+    /// <p>The segment of input text that is matched to the detected entity.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    /// <p>Provides Contextual information for the entity. The traits recognized by InferICD10CM are <code>DIAGNOSIS</code>, <code>SIGN</code>, <code>SYMPTOM</code>, and <code>NEGATION.</code> </p>
+    #[serde(rename = "Traits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub traits: Option<Vec<ICD10CMTrait>>,
+    /// <p>Describes the specific type of entity with category of entities. InferICD10CM detects entities of the type <code>DX_NAME</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Contextual information for the entity. The traits recognized by InferICD10CM are <code>DIAGNOSIS</code>, <code>SIGN</code>, <code>SYMPTOM</code>, and <code>NEGATION</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ICD10CMTrait {
+    /// <p>Provides a name or contextual description about the trait.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has that the segment of text is correctly recognized as a trait.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct InferICD10CMRequest {
+    /// <p>The input text used for analysis. The input for InferICD10CM is a string from 1 to 10000 characters.</p>
+    #[serde(rename = "Text")]
+    pub text: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct InferICD10CMResponse {
+    /// <p>The medical conditions detected in the text linked to ICD-10-CM concepts. If the action is successful, the service sends back an HTTP 200 response, as well as the entities detected.</p>
+    #[serde(rename = "Entities")]
+    pub entities: Vec<ICD10CMEntity>,
+    /// <p>The version of the model used to analyze the documents, in the format <i>n</i>.<i>n</i>.<i>n</i> You can use this information to track the model used for a particular batch of documents.</p>
+    #[serde(rename = "ModelVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_version: Option<String>,
+    /// <p>If the result of the previous request to <code>InferICD10CM</code> was truncated, include the <code>PaginationToken</code> to fetch the next page of medical condition entities. </p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pagination_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct InferRxNormRequest {
+    /// <p>The input text used for analysis. The input for InferRxNorm is a string from 1 to 10000 characters.</p>
+    #[serde(rename = "Text")]
+    pub text: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct InferRxNormResponse {
+    /// <p>The medication entities detected in the text linked to RxNorm concepts. If the action is successful, the service sends back an HTTP 200 response, as well as the entities detected.</p>
+    #[serde(rename = "Entities")]
+    pub entities: Vec<RxNormEntity>,
+    /// <p>The version of the model used to analyze the documents, in the format <i>n</i>.<i>n</i>.<i>n</i> You can use this information to track the model used for a particular batch of documents.</p>
+    #[serde(rename = "ModelVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_version: Option<String>,
+    /// <p>If the result of the previous request to <code>InferRxNorm</code> was truncated, include the <code>PaginationToken</code> to fetch the next page of medication entities.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pagination_token: Option<String>,
 }
 
 /// <p>The input properties for an entities detection job</p>
@@ -382,6 +548,122 @@ pub struct OutputDataConfig {
     #[serde(rename = "S3Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key: Option<String>,
+}
+
+/// <p>The extracted attributes that relate to this entity. The attributes recognized by InferRxNorm are <code>DOSAGE</code>, <code>DURATION</code>, <code>FORM</code>, <code>FREQUENCY</code>, <code>RATE</code>, <code>ROUTE_OR_MODE</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RxNormAttribute {
+    /// <p>The 0-based character offset in the input text that shows where the attribute begins. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "BeginOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub begin_offset: Option<i64>,
+    /// <p>The 0-based character offset in the input text that shows where the attribute ends. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "EndOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_offset: Option<i64>,
+    /// <p>The numeric identifier for this attribute. This is a monotonically increasing id unique within this response rather than a global unique identifier.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has that the attribute is accurately linked to an entity.</p>
+    #[serde(rename = "RelationshipScore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relationship_score: Option<f32>,
+    /// <p>The level of confidence that Comprehend Medical has that the segment of text is correctly recognized as an attribute.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+    /// <p>The segment of input text which corresponds to the detected attribute.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    /// <p>Contextual information for the attribute. InferRxNorm recognizes the trait <code>NEGATION</code> for attributes, i.e. that the patient is not taking a specific dose or form of a medication.</p>
+    #[serde(rename = "Traits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub traits: Option<Vec<RxNormTrait>>,
+    /// <p>The type of attribute. The types of attributes recognized by InferRxNorm are <code>BRAND_NAME</code> and <code>GENERIC_NAME</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>The RxNorm concept that the entity could refer to, along with a score indicating the likelihood of the match.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RxNormConcept {
+    /// <p>RxNorm concept ID, also known as the RxCUI.</p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// <p>The description of the RxNorm concept.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has that the entity is accurately linked to the reported RxNorm concept.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+}
+
+/// <p>The collection of medical entities extracted from the input text and their associated information. For each entity, the response provides the entity text, the entity category, where the entity text begins and ends, and the level of confidence that Amazon Comprehend Medical has in the detection and analysis. Attributes and traits of the entity are also returned. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RxNormEntity {
+    /// <p>The extracted attributes that relate to the entity. The attributes recognized by InferRxNorm are <code>DOSAGE</code>, <code>DURATION</code>, <code>FORM</code>, <code>FREQUENCY</code>, <code>RATE</code>, <code>ROUTE_OR_MODE</code>, and <code>STRENGTH</code>.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<RxNormAttribute>>,
+    /// <p>The 0-based character offset in the input text that shows where the entity begins. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "BeginOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub begin_offset: Option<i64>,
+    /// <p>The category of the entity. The recognized categories are <code>GENERIC</code> or <code>BRAND_NAME</code>.</p>
+    #[serde(rename = "Category")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
+    /// <p>The 0-based character offset in the input text that shows where the entity ends. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "EndOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_offset: Option<i64>,
+    /// <p>The numeric identifier for the entity. This is a monotonically increasing id unique within this response rather than a global unique identifier.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    /// <p> The RxNorm concepts that the entity could refer to, along with a score indicating the likelihood of the match.</p>
+    #[serde(rename = "RxNormConcepts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rx_norm_concepts: Option<Vec<RxNormConcept>>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has in the accuracy of the detected entity.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+    /// <p>The segment of input text extracted from which the entity was detected.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    /// <p> Contextual information for the entity.</p>
+    #[serde(rename = "Traits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub traits: Option<Vec<RxNormTrait>>,
+    /// <p> Describes the specific type of entity. For InferRxNorm, the recognized entity type is <code>MEDICATION</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>The contextual information for the entity. InferRxNorm recognizes the trait <code>NEGATION</code>, which is any indication that the patient is not taking a medication. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RxNormTrait {
+    /// <p>Provides a name or contextual description about the trait.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has in the accuracy of the detected trait.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -569,6 +851,7 @@ impl DescribeEntitiesDetectionV2JobError {
     }
 }
 impl fmt::Display for DescribeEntitiesDetectionV2JobError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeEntitiesDetectionV2JobError::InternalServer(ref cause) => {
@@ -632,6 +915,7 @@ impl DescribePHIDetectionJobError {
     }
 }
 impl fmt::Display for DescribePHIDetectionJobError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribePHIDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
@@ -691,6 +975,7 @@ impl DetectEntitiesError {
     }
 }
 impl fmt::Display for DetectEntitiesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DetectEntitiesError::InternalServer(ref cause) => write!(f, "{}", cause),
@@ -752,6 +1037,7 @@ impl DetectEntitiesV2Error {
     }
 }
 impl fmt::Display for DetectEntitiesV2Error {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DetectEntitiesV2Error::InternalServer(ref cause) => write!(f, "{}", cause),
@@ -811,6 +1097,7 @@ impl DetectPHIError {
     }
 }
 impl fmt::Display for DetectPHIError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DetectPHIError::InternalServer(ref cause) => write!(f, "{}", cause),
@@ -823,6 +1110,126 @@ impl fmt::Display for DetectPHIError {
     }
 }
 impl Error for DetectPHIError {}
+/// Errors returned by InferICD10CM
+#[derive(Debug, PartialEq)]
+pub enum InferICD10CMError {
+    /// <p> An internal server error occurred. Retry your request. </p>
+    InternalServer(String),
+    /// <p> The input text was not in valid UTF-8 character encoding. Check your text then retry your request.</p>
+    InvalidEncoding(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request.</p>
+    InvalidRequest(String),
+    /// <p> The Amazon Comprehend Medical service is temporarily unavailable. Please wait and then retry your request. </p>
+    ServiceUnavailable(String),
+    /// <p> The size of the text you submitted exceeds the size limit. Reduce the size of the text or use a smaller document and then retry your request. </p>
+    TextSizeLimitExceeded(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again. Contact customer support for more information about a service limit increase. </p>
+    TooManyRequests(String),
+}
+
+impl InferICD10CMError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InferICD10CMError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(InferICD10CMError::InternalServer(err.msg))
+                }
+                "InvalidEncodingException" => {
+                    return RusotoError::Service(InferICD10CMError::InvalidEncoding(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(InferICD10CMError::InvalidRequest(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(InferICD10CMError::ServiceUnavailable(err.msg))
+                }
+                "TextSizeLimitExceededException" => {
+                    return RusotoError::Service(InferICD10CMError::TextSizeLimitExceeded(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(InferICD10CMError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for InferICD10CMError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            InferICD10CMError::InternalServer(ref cause) => write!(f, "{}", cause),
+            InferICD10CMError::InvalidEncoding(ref cause) => write!(f, "{}", cause),
+            InferICD10CMError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            InferICD10CMError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            InferICD10CMError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            InferICD10CMError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for InferICD10CMError {}
+/// Errors returned by InferRxNorm
+#[derive(Debug, PartialEq)]
+pub enum InferRxNormError {
+    /// <p> An internal server error occurred. Retry your request. </p>
+    InternalServer(String),
+    /// <p> The input text was not in valid UTF-8 character encoding. Check your text then retry your request.</p>
+    InvalidEncoding(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request.</p>
+    InvalidRequest(String),
+    /// <p> The Amazon Comprehend Medical service is temporarily unavailable. Please wait and then retry your request. </p>
+    ServiceUnavailable(String),
+    /// <p> The size of the text you submitted exceeds the size limit. Reduce the size of the text or use a smaller document and then retry your request. </p>
+    TextSizeLimitExceeded(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again. Contact customer support for more information about a service limit increase. </p>
+    TooManyRequests(String),
+}
+
+impl InferRxNormError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InferRxNormError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(InferRxNormError::InternalServer(err.msg))
+                }
+                "InvalidEncodingException" => {
+                    return RusotoError::Service(InferRxNormError::InvalidEncoding(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(InferRxNormError::InvalidRequest(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(InferRxNormError::ServiceUnavailable(err.msg))
+                }
+                "TextSizeLimitExceededException" => {
+                    return RusotoError::Service(InferRxNormError::TextSizeLimitExceeded(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(InferRxNormError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for InferRxNormError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            InferRxNormError::InternalServer(ref cause) => write!(f, "{}", cause),
+            InferRxNormError::InvalidEncoding(ref cause) => write!(f, "{}", cause),
+            InferRxNormError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            InferRxNormError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            InferRxNormError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            InferRxNormError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for InferRxNormError {}
 /// Errors returned by ListEntitiesDetectionV2Jobs
 #[derive(Debug, PartialEq)]
 pub enum ListEntitiesDetectionV2JobsError {
@@ -863,6 +1270,7 @@ impl ListEntitiesDetectionV2JobsError {
     }
 }
 impl fmt::Display for ListEntitiesDetectionV2JobsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListEntitiesDetectionV2JobsError::InternalServer(ref cause) => write!(f, "{}", cause),
@@ -906,6 +1314,7 @@ impl ListPHIDetectionJobsError {
     }
 }
 impl fmt::Display for ListPHIDetectionJobsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListPHIDetectionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
@@ -962,6 +1371,7 @@ impl StartEntitiesDetectionV2JobError {
     }
 }
 impl fmt::Display for StartEntitiesDetectionV2JobError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StartEntitiesDetectionV2JobError::InternalServer(ref cause) => write!(f, "{}", cause),
@@ -1013,6 +1423,7 @@ impl StartPHIDetectionJobError {
     }
 }
 impl fmt::Display for StartPHIDetectionJobError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StartPHIDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
@@ -1063,6 +1474,7 @@ impl StopEntitiesDetectionV2JobError {
     }
 }
 impl fmt::Display for StopEntitiesDetectionV2JobError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StopEntitiesDetectionV2JobError::InternalServer(ref cause) => write!(f, "{}", cause),
@@ -1106,6 +1518,7 @@ impl StopPHIDetectionJobError {
     }
 }
 impl fmt::Display for StopPHIDetectionJobError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StopPHIDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
@@ -1116,72 +1529,88 @@ impl fmt::Display for StopPHIDetectionJobError {
 }
 impl Error for StopPHIDetectionJobError {}
 /// Trait representing the capabilities of the ComprehendMedical API. ComprehendMedical clients implement this trait.
+#[async_trait]
 pub trait ComprehendMedical {
     /// <p>Gets the properties associated with a medical entities detection job. Use this operation to get the status of a detection job.</p>
-    fn describe_entities_detection_v2_job(
+    async fn describe_entities_detection_v2_job(
         &self,
         input: DescribeEntitiesDetectionV2JobRequest,
-    ) -> RusotoFuture<DescribeEntitiesDetectionV2JobResponse, DescribeEntitiesDetectionV2JobError>;
+    ) -> Result<
+        DescribeEntitiesDetectionV2JobResponse,
+        RusotoError<DescribeEntitiesDetectionV2JobError>,
+    >;
 
     /// <p>Gets the properties associated with a protected health information (PHI) detection job. Use this operation to get the status of a detection job.</p>
-    fn describe_phi_detection_job(
+    async fn describe_phi_detection_job(
         &self,
         input: DescribePHIDetectionJobRequest,
-    ) -> RusotoFuture<DescribePHIDetectionJobResponse, DescribePHIDetectionJobError>;
+    ) -> Result<DescribePHIDetectionJobResponse, RusotoError<DescribePHIDetectionJobError>>;
 
     /// <p>The <code>DetectEntities</code> operation is deprecated. You should use the <a>DetectEntitiesV2</a> operation instead.</p> <p> Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information .</p>
-    fn detect_entities(
+    async fn detect_entities(
         &self,
         input: DetectEntitiesRequest,
-    ) -> RusotoFuture<DetectEntitiesResponse, DetectEntitiesError>;
+    ) -> Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>>;
 
-    /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. It does not return the <code>Quality</code> or <code>Quantity</code> entities.</p>
-    fn detect_entities_v2(
+    /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. </p>
+    async fn detect_entities_v2(
         &self,
         input: DetectEntitiesV2Request,
-    ) -> RusotoFuture<DetectEntitiesV2Response, DetectEntitiesV2Error>;
+    ) -> Result<DetectEntitiesV2Response, RusotoError<DetectEntitiesV2Error>>;
 
     /// <p> Inspects the clinical text for protected health information (PHI) entities and entity category, location, and confidence score on that information.</p>
-    fn detect_phi(
+    async fn detect_phi(
         &self,
         input: DetectPHIRequest,
-    ) -> RusotoFuture<DetectPHIResponse, DetectPHIError>;
+    ) -> Result<DetectPHIResponse, RusotoError<DetectPHIError>>;
+
+    /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control.</p>
+    async fn infer_icd10cm(
+        &self,
+        input: InferICD10CMRequest,
+    ) -> Result<InferICD10CMResponse, RusotoError<InferICD10CMError>>;
+
+    /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine.</p>
+    async fn infer_rx_norm(
+        &self,
+        input: InferRxNormRequest,
+    ) -> Result<InferRxNormResponse, RusotoError<InferRxNormError>>;
 
     /// <p>Gets a list of medical entity detection jobs that you have submitted.</p>
-    fn list_entities_detection_v2_jobs(
+    async fn list_entities_detection_v2_jobs(
         &self,
         input: ListEntitiesDetectionV2JobsRequest,
-    ) -> RusotoFuture<ListEntitiesDetectionV2JobsResponse, ListEntitiesDetectionV2JobsError>;
+    ) -> Result<ListEntitiesDetectionV2JobsResponse, RusotoError<ListEntitiesDetectionV2JobsError>>;
 
     /// <p>Gets a list of protected health information (PHI) detection jobs that you have submitted.</p>
-    fn list_phi_detection_jobs(
+    async fn list_phi_detection_jobs(
         &self,
         input: ListPHIDetectionJobsRequest,
-    ) -> RusotoFuture<ListPHIDetectionJobsResponse, ListPHIDetectionJobsError>;
+    ) -> Result<ListPHIDetectionJobsResponse, RusotoError<ListPHIDetectionJobsError>>;
 
     /// <p>Starts an asynchronous medical entity detection job for a collection of documents. Use the <code>DescribeEntitiesDetectionV2Job</code> operation to track the status of a job.</p>
-    fn start_entities_detection_v2_job(
+    async fn start_entities_detection_v2_job(
         &self,
         input: StartEntitiesDetectionV2JobRequest,
-    ) -> RusotoFuture<StartEntitiesDetectionV2JobResponse, StartEntitiesDetectionV2JobError>;
+    ) -> Result<StartEntitiesDetectionV2JobResponse, RusotoError<StartEntitiesDetectionV2JobError>>;
 
     /// <p>Starts an asynchronous job to detect protected health information (PHI). Use the <code>DescribePHIDetectionJob</code> operation to track the status of a job.</p>
-    fn start_phi_detection_job(
+    async fn start_phi_detection_job(
         &self,
         input: StartPHIDetectionJobRequest,
-    ) -> RusotoFuture<StartPHIDetectionJobResponse, StartPHIDetectionJobError>;
+    ) -> Result<StartPHIDetectionJobResponse, RusotoError<StartPHIDetectionJobError>>;
 
     /// <p>Stops a medical entities detection job in progress.</p>
-    fn stop_entities_detection_v2_job(
+    async fn stop_entities_detection_v2_job(
         &self,
         input: StopEntitiesDetectionV2JobRequest,
-    ) -> RusotoFuture<StopEntitiesDetectionV2JobResponse, StopEntitiesDetectionV2JobError>;
+    ) -> Result<StopEntitiesDetectionV2JobResponse, RusotoError<StopEntitiesDetectionV2JobError>>;
 
     /// <p>Stops a protected health information (PHI) detection job in progress.</p>
-    fn stop_phi_detection_job(
+    async fn stop_phi_detection_job(
         &self,
         input: StopPHIDetectionJobRequest,
-    ) -> RusotoFuture<StopPHIDetectionJobResponse, StopPHIDetectionJobError>;
+    ) -> Result<StopPHIDetectionJobResponse, RusotoError<StopPHIDetectionJobError>>;
 }
 /// A client for the ComprehendMedical API.
 #[derive(Clone)]
@@ -1195,7 +1624,10 @@ impl ComprehendMedicalClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ComprehendMedicalClient {
-        Self::new_with_client(Client::shared(), region)
+        ComprehendMedicalClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -1205,14 +1637,12 @@ impl ComprehendMedicalClient {
     ) -> ComprehendMedicalClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        ComprehendMedicalClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> ComprehendMedicalClient {
@@ -1220,21 +1650,16 @@ impl ComprehendMedicalClient {
     }
 }
 
-impl fmt::Debug for ComprehendMedicalClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("ComprehendMedicalClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl ComprehendMedical for ComprehendMedicalClient {
     /// <p>Gets the properties associated with a medical entities detection job. Use this operation to get the status of a detection job.</p>
-    fn describe_entities_detection_v2_job(
+    async fn describe_entities_detection_v2_job(
         &self,
         input: DescribeEntitiesDetectionV2JobRequest,
-    ) -> RusotoFuture<DescribeEntitiesDetectionV2JobResponse, DescribeEntitiesDetectionV2JobError>
-    {
+    ) -> Result<
+        DescribeEntitiesDetectionV2JobResponse,
+        RusotoError<DescribeEntitiesDetectionV2JobError>,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1245,25 +1670,27 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEntitiesDetectionV2JobResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEntitiesDetectionV2JobError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEntitiesDetectionV2JobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEntitiesDetectionV2JobError::from_response(response))
+        }
     }
 
     /// <p>Gets the properties associated with a protected health information (PHI) detection job. Use this operation to get the status of a detection job.</p>
-    fn describe_phi_detection_job(
+    async fn describe_phi_detection_job(
         &self,
         input: DescribePHIDetectionJobRequest,
-    ) -> RusotoFuture<DescribePHIDetectionJobResponse, DescribePHIDetectionJobError> {
+    ) -> Result<DescribePHIDetectionJobResponse, RusotoError<DescribePHIDetectionJobError>> {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1274,25 +1701,27 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribePHIDetectionJobResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribePHIDetectionJobError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribePHIDetectionJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribePHIDetectionJobError::from_response(response))
+        }
     }
 
     /// <p>The <code>DetectEntities</code> operation is deprecated. You should use the <a>DetectEntitiesV2</a> operation instead.</p> <p> Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information .</p>
-    fn detect_entities(
+    async fn detect_entities(
         &self,
         input: DetectEntitiesRequest,
-    ) -> RusotoFuture<DetectEntitiesResponse, DetectEntitiesError> {
+    ) -> Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>> {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1300,28 +1729,26 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DetectEntitiesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DetectEntitiesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DetectEntitiesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DetectEntitiesError::from_response(response))
+        }
     }
 
-    /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. It does not return the <code>Quality</code> or <code>Quantity</code> entities.</p>
-    fn detect_entities_v2(
+    /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. </p>
+    async fn detect_entities_v2(
         &self,
         input: DetectEntitiesV2Request,
-    ) -> RusotoFuture<DetectEntitiesV2Response, DetectEntitiesV2Error> {
+    ) -> Result<DetectEntitiesV2Response, RusotoError<DetectEntitiesV2Error>> {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1332,28 +1759,27 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DetectEntitiesV2Response, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DetectEntitiesV2Error::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DetectEntitiesV2Response, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DetectEntitiesV2Error::from_response(response))
+        }
     }
 
     /// <p> Inspects the clinical text for protected health information (PHI) entities and entity category, location, and confidence score on that information.</p>
-    fn detect_phi(
+    async fn detect_phi(
         &self,
         input: DetectPHIRequest,
-    ) -> RusotoFuture<DetectPHIResponse, DetectPHIError> {
+    ) -> Result<DetectPHIResponse, RusotoError<DetectPHIError>> {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1361,28 +1787,81 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DetectPHIResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DetectPHIError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DetectPHIResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DetectPHIError::from_response(response))
+        }
+    }
+
+    /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control.</p>
+    async fn infer_icd10cm(
+        &self,
+        input: InferICD10CMRequest,
+    ) -> Result<InferICD10CMResponse, RusotoError<InferICD10CMError>> {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "ComprehendMedical_20181030.InferICD10CM");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<InferICD10CMResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(InferICD10CMError::from_response(response))
+        }
+    }
+
+    /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine.</p>
+    async fn infer_rx_norm(
+        &self,
+        input: InferRxNormRequest,
+    ) -> Result<InferRxNormResponse, RusotoError<InferRxNormError>> {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "ComprehendMedical_20181030.InferRxNorm");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<InferRxNormResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(InferRxNormError::from_response(response))
+        }
     }
 
     /// <p>Gets a list of medical entity detection jobs that you have submitted.</p>
-    fn list_entities_detection_v2_jobs(
+    async fn list_entities_detection_v2_jobs(
         &self,
         input: ListEntitiesDetectionV2JobsRequest,
-    ) -> RusotoFuture<ListEntitiesDetectionV2JobsResponse, ListEntitiesDetectionV2JobsError> {
+    ) -> Result<ListEntitiesDetectionV2JobsResponse, RusotoError<ListEntitiesDetectionV2JobsError>>
+    {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1393,25 +1872,27 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListEntitiesDetectionV2JobsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListEntitiesDetectionV2JobsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListEntitiesDetectionV2JobsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListEntitiesDetectionV2JobsError::from_response(response))
+        }
     }
 
     /// <p>Gets a list of protected health information (PHI) detection jobs that you have submitted.</p>
-    fn list_phi_detection_jobs(
+    async fn list_phi_detection_jobs(
         &self,
         input: ListPHIDetectionJobsRequest,
-    ) -> RusotoFuture<ListPHIDetectionJobsResponse, ListPHIDetectionJobsError> {
+    ) -> Result<ListPHIDetectionJobsResponse, RusotoError<ListPHIDetectionJobsError>> {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1422,27 +1903,28 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPHIDetectionJobsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListPHIDetectionJobsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPHIDetectionJobsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPHIDetectionJobsError::from_response(response))
+        }
     }
 
     /// <p>Starts an asynchronous medical entity detection job for a collection of documents. Use the <code>DescribeEntitiesDetectionV2Job</code> operation to track the status of a job.</p>
-    fn start_entities_detection_v2_job(
+    async fn start_entities_detection_v2_job(
         &self,
         input: StartEntitiesDetectionV2JobRequest,
-    ) -> RusotoFuture<StartEntitiesDetectionV2JobResponse, StartEntitiesDetectionV2JobError> {
+    ) -> Result<StartEntitiesDetectionV2JobResponse, RusotoError<StartEntitiesDetectionV2JobError>>
+    {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1453,25 +1935,27 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartEntitiesDetectionV2JobResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartEntitiesDetectionV2JobError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartEntitiesDetectionV2JobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartEntitiesDetectionV2JobError::from_response(response))
+        }
     }
 
     /// <p>Starts an asynchronous job to detect protected health information (PHI). Use the <code>DescribePHIDetectionJob</code> operation to track the status of a job.</p>
-    fn start_phi_detection_job(
+    async fn start_phi_detection_job(
         &self,
         input: StartPHIDetectionJobRequest,
-    ) -> RusotoFuture<StartPHIDetectionJobResponse, StartPHIDetectionJobError> {
+    ) -> Result<StartPHIDetectionJobResponse, RusotoError<StartPHIDetectionJobError>> {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1482,27 +1966,28 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartPHIDetectionJobResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StartPHIDetectionJobError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartPHIDetectionJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartPHIDetectionJobError::from_response(response))
+        }
     }
 
     /// <p>Stops a medical entities detection job in progress.</p>
-    fn stop_entities_detection_v2_job(
+    async fn stop_entities_detection_v2_job(
         &self,
         input: StopEntitiesDetectionV2JobRequest,
-    ) -> RusotoFuture<StopEntitiesDetectionV2JobResponse, StopEntitiesDetectionV2JobError> {
+    ) -> Result<StopEntitiesDetectionV2JobResponse, RusotoError<StopEntitiesDetectionV2JobError>>
+    {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1513,25 +1998,27 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopEntitiesDetectionV2JobResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopEntitiesDetectionV2JobError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopEntitiesDetectionV2JobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopEntitiesDetectionV2JobError::from_response(response))
+        }
     }
 
     /// <p>Stops a protected health information (PHI) detection job in progress.</p>
-    fn stop_phi_detection_job(
+    async fn stop_phi_detection_job(
         &self,
         input: StopPHIDetectionJobRequest,
-    ) -> RusotoFuture<StopPHIDetectionJobResponse, StopPHIDetectionJobError> {
+    ) -> Result<StopPHIDetectionJobResponse, RusotoError<StopPHIDetectionJobError>> {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1542,19 +2029,19 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopPHIDetectionJobResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StopPHIDetectionJobError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopPHIDetectionJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopPHIDetectionJobError::from_response(response))
+        }
     }
 }

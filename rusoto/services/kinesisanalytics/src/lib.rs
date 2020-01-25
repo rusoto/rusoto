@@ -10,23 +10,14 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <p><fullname>Amazon Kinesis Analytics</fullname> <p> <b>Overview</b> </p> <note> <p>This documentation is for version 1 of the Amazon Kinesis Data Analytics API, which only supports SQL applications. Version 2 of the API supports SQL and Java applications. For more information about version 2, see <a href="/kinesisanalytics/latest/apiv2/Welcome.html">Amazon Kinesis Data Analytics API V2 Documentation</a>.</p> </note> <p>This is the <i>Amazon Kinesis Analytics v1 API Reference</i>. The Amazon Kinesis Analytics Developer Guide provides additional information. </p></p>
 //!
 //! If you're using the service, you're probably looking for [KinesisAnalyticsClient](struct.KinesisAnalyticsClient.html) and [KinesisAnalytics](trait.KinesisAnalytics.html).
 
-extern crate bytes;
-extern crate futures;
-extern crate rusoto_core;
-extern crate serde;
-#[macro_use]
-extern crate serde_derive;
-extern crate serde_json;
-
-mod generated;
 mod custom;
-
-pub use crate::generated::*;
-pub use crate::custom::*;
-            
+mod generated;
+pub use custom::*;
+pub use generated::*;

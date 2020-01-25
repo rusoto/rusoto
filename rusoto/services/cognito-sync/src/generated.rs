@@ -9,20 +9,22 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
+
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>The input for the BulkPublish operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -735,6 +737,7 @@ impl BulkPublishError {
     }
 }
 impl fmt::Display for BulkPublishError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             BulkPublishError::AlreadyStreamed(ref cause) => write!(f, "{}", cause),
@@ -794,6 +797,7 @@ impl DeleteDatasetError {
     }
 }
 impl fmt::Display for DeleteDatasetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteDatasetError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -848,6 +852,7 @@ impl DescribeDatasetError {
     }
 }
 impl fmt::Display for DescribeDatasetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeDatasetError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -911,6 +916,7 @@ impl DescribeIdentityPoolUsageError {
     }
 }
 impl fmt::Display for DescribeIdentityPoolUsageError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeIdentityPoolUsageError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -970,6 +976,7 @@ impl DescribeIdentityUsageError {
     }
 }
 impl fmt::Display for DescribeIdentityUsageError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeIdentityUsageError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -1022,6 +1029,7 @@ impl GetBulkPublishDetailsError {
     }
 }
 impl fmt::Display for GetBulkPublishDetailsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetBulkPublishDetailsError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -1074,6 +1082,7 @@ impl GetCognitoEventsError {
     }
 }
 impl fmt::Display for GetCognitoEventsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetCognitoEventsError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -1139,6 +1148,7 @@ impl GetIdentityPoolConfigurationError {
     }
 }
 impl fmt::Display for GetIdentityPoolConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetIdentityPoolConfigurationError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -1191,6 +1201,7 @@ impl ListDatasetsError {
     }
 }
 impl fmt::Display for ListDatasetsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListDatasetsError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -1242,6 +1253,7 @@ impl ListIdentityPoolUsageError {
     }
 }
 impl fmt::Display for ListIdentityPoolUsageError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListIdentityPoolUsageError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -1289,6 +1301,7 @@ impl ListRecordsError {
     }
 }
 impl fmt::Display for ListRecordsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListRecordsError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -1346,6 +1359,7 @@ impl RegisterDeviceError {
     }
 }
 impl fmt::Display for RegisterDeviceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             RegisterDeviceError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -1400,6 +1414,7 @@ impl SetCognitoEventsError {
     }
 }
 impl fmt::Display for SetCognitoEventsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             SetCognitoEventsError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -1472,6 +1487,7 @@ impl SetIdentityPoolConfigurationError {
     }
 }
 impl fmt::Display for SetIdentityPoolConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             SetIdentityPoolConfigurationError::ConcurrentModification(ref cause) => {
@@ -1539,6 +1555,7 @@ impl SubscribeToDatasetError {
     }
 }
 impl fmt::Display for SubscribeToDatasetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             SubscribeToDatasetError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -1610,6 +1627,7 @@ impl UnsubscribeFromDatasetError {
     }
 }
 impl fmt::Display for UnsubscribeFromDatasetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UnsubscribeFromDatasetError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -1686,6 +1704,7 @@ impl UpdateRecordsError {
     }
 }
 impl fmt::Display for UpdateRecordsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateRecordsError::InternalError(ref cause) => write!(f, "{}", cause),
@@ -1702,108 +1721,109 @@ impl fmt::Display for UpdateRecordsError {
 }
 impl Error for UpdateRecordsError {}
 /// Trait representing the capabilities of the Amazon Cognito Sync API. Amazon Cognito Sync clients implement this trait.
+#[async_trait]
 pub trait CognitoSync {
     /// <p>Initiates a bulk publish of all existing datasets for an Identity Pool to the configured stream. Customers are limited to one successful bulk publish per 24 hours. Bulk publish is an asynchronous request, customers can see the status of the request via the GetBulkPublishDetails operation.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn bulk_publish(
+    async fn bulk_publish(
         &self,
         input: BulkPublishRequest,
-    ) -> RusotoFuture<BulkPublishResponse, BulkPublishError>;
+    ) -> Result<BulkPublishResponse, RusotoError<BulkPublishError>>;
 
     /// <p>Deletes the specific dataset. The dataset will be deleted permanently, and the action can't be undone. Datasets that this dataset was merged with will no longer report the merge. Any subsequent operation on this dataset will result in a ResourceNotFoundException.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
-    fn delete_dataset(
+    async fn delete_dataset(
         &self,
         input: DeleteDatasetRequest,
-    ) -> RusotoFuture<DeleteDatasetResponse, DeleteDatasetError>;
+    ) -> Result<DeleteDatasetResponse, RusotoError<DeleteDatasetError>>;
 
     /// <p>Gets meta data about a dataset by identity and dataset name. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>
-    fn describe_dataset(
+    async fn describe_dataset(
         &self,
         input: DescribeDatasetRequest,
-    ) -> RusotoFuture<DescribeDatasetResponse, DescribeDatasetError>;
+    ) -> Result<DescribeDatasetResponse, RusotoError<DescribeDatasetError>>;
 
     /// <p>Gets usage details (for example, data storage) about a particular identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn describe_identity_pool_usage(
+    async fn describe_identity_pool_usage(
         &self,
         input: DescribeIdentityPoolUsageRequest,
-    ) -> RusotoFuture<DescribeIdentityPoolUsageResponse, DescribeIdentityPoolUsageError>;
+    ) -> Result<DescribeIdentityPoolUsageResponse, RusotoError<DescribeIdentityPoolUsageError>>;
 
     /// <p>Gets usage information for an identity, including number of datasets and data usage.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
-    fn describe_identity_usage(
+    async fn describe_identity_usage(
         &self,
         input: DescribeIdentityUsageRequest,
-    ) -> RusotoFuture<DescribeIdentityUsageResponse, DescribeIdentityUsageError>;
+    ) -> Result<DescribeIdentityUsageResponse, RusotoError<DescribeIdentityUsageError>>;
 
     /// <p>Get the status of the last BulkPublish operation for an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn get_bulk_publish_details(
+    async fn get_bulk_publish_details(
         &self,
         input: GetBulkPublishDetailsRequest,
-    ) -> RusotoFuture<GetBulkPublishDetailsResponse, GetBulkPublishDetailsError>;
+    ) -> Result<GetBulkPublishDetailsResponse, RusotoError<GetBulkPublishDetailsError>>;
 
     /// <p>Gets the events and the corresponding Lambda functions associated with an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn get_cognito_events(
+    async fn get_cognito_events(
         &self,
         input: GetCognitoEventsRequest,
-    ) -> RusotoFuture<GetCognitoEventsResponse, GetCognitoEventsError>;
+    ) -> Result<GetCognitoEventsResponse, RusotoError<GetCognitoEventsError>>;
 
     /// <p>Gets the configuration settings of an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn get_identity_pool_configuration(
+    async fn get_identity_pool_configuration(
         &self,
         input: GetIdentityPoolConfigurationRequest,
-    ) -> RusotoFuture<GetIdentityPoolConfigurationResponse, GetIdentityPoolConfigurationError>;
+    ) -> Result<GetIdentityPoolConfigurationResponse, RusotoError<GetIdentityPoolConfigurationError>>;
 
     /// <p>Lists datasets for an identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListDatasets can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use the Cognito Identity credentials to make this API call.</p>
-    fn list_datasets(
+    async fn list_datasets(
         &self,
         input: ListDatasetsRequest,
-    ) -> RusotoFuture<ListDatasetsResponse, ListDatasetsError>;
+    ) -> Result<ListDatasetsResponse, RusotoError<ListDatasetsError>>;
 
     /// <p>Gets a list of identity pools registered with Cognito.</p> <p>ListIdentityPoolUsage can only be called with developer credentials. You cannot make this API call with the temporary user credentials provided by Cognito Identity.</p>
-    fn list_identity_pool_usage(
+    async fn list_identity_pool_usage(
         &self,
         input: ListIdentityPoolUsageRequest,
-    ) -> RusotoFuture<ListIdentityPoolUsageResponse, ListIdentityPoolUsageError>;
+    ) -> Result<ListIdentityPoolUsageResponse, RusotoError<ListIdentityPoolUsageError>>;
 
     /// <p>Gets paginated records, optionally changed after a particular sync count for a dataset and identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListRecords can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>
-    fn list_records(
+    async fn list_records(
         &self,
         input: ListRecordsRequest,
-    ) -> RusotoFuture<ListRecordsResponse, ListRecordsError>;
+    ) -> Result<ListRecordsResponse, RusotoError<ListRecordsError>>;
 
     /// <p>Registers a device to receive push sync notifications.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
-    fn register_device(
+    async fn register_device(
         &self,
         input: RegisterDeviceRequest,
-    ) -> RusotoFuture<RegisterDeviceResponse, RegisterDeviceError>;
+    ) -> Result<RegisterDeviceResponse, RusotoError<RegisterDeviceError>>;
 
     /// <p>Sets the AWS Lambda function for a given event type for an identity pool. This request only updates the key/value pair specified. Other key/values pairs are not updated. To remove a key value pair, pass a empty value for the particular key.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn set_cognito_events(
+    async fn set_cognito_events(
         &self,
         input: SetCognitoEventsRequest,
-    ) -> RusotoFuture<(), SetCognitoEventsError>;
+    ) -> Result<(), RusotoError<SetCognitoEventsError>>;
 
     /// <p>Sets the necessary configuration for push sync.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn set_identity_pool_configuration(
+    async fn set_identity_pool_configuration(
         &self,
         input: SetIdentityPoolConfigurationRequest,
-    ) -> RusotoFuture<SetIdentityPoolConfigurationResponse, SetIdentityPoolConfigurationError>;
+    ) -> Result<SetIdentityPoolConfigurationResponse, RusotoError<SetIdentityPoolConfigurationError>>;
 
     /// <p>Subscribes to receive notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
-    fn subscribe_to_dataset(
+    async fn subscribe_to_dataset(
         &self,
         input: SubscribeToDatasetRequest,
-    ) -> RusotoFuture<SubscribeToDatasetResponse, SubscribeToDatasetError>;
+    ) -> Result<SubscribeToDatasetResponse, RusotoError<SubscribeToDatasetError>>;
 
     /// <p>Unsubscribes from receiving notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
-    fn unsubscribe_from_dataset(
+    async fn unsubscribe_from_dataset(
         &self,
         input: UnsubscribeFromDatasetRequest,
-    ) -> RusotoFuture<UnsubscribeFromDatasetResponse, UnsubscribeFromDatasetError>;
+    ) -> Result<UnsubscribeFromDatasetResponse, RusotoError<UnsubscribeFromDatasetError>>;
 
     /// <p>Posts updates to records and adds and deletes records for a dataset and user.</p> <p>The sync count in the record patch is your last known sync count for that record. The server will reject an UpdateRecords request with a ResourceConflictException if you try to patch a record with a new value but a stale sync count.</p> <p>For example, if the sync count on the server is 5 for a key called highScore and you try and submit a new highScore with sync count of 4, the request will be rejected. To obtain the current sync count for a record, call ListRecords. On a successful update of the record, the response returns the new sync count for that record. You should present that sync count the next time you try to update that same record. When the record does not exist, specify the sync count as 0.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
-    fn update_records(
+    async fn update_records(
         &self,
         input: UpdateRecordsRequest,
-    ) -> RusotoFuture<UpdateRecordsResponse, UpdateRecordsError>;
+    ) -> Result<UpdateRecordsResponse, RusotoError<UpdateRecordsError>>;
 }
 /// A client for the Amazon Cognito Sync API.
 #[derive(Clone)]
@@ -1817,7 +1837,10 @@ impl CognitoSyncClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CognitoSyncClient {
-        Self::new_with_client(Client::shared(), region)
+        CognitoSyncClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -1827,14 +1850,12 @@ impl CognitoSyncClient {
     ) -> CognitoSyncClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        CognitoSyncClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> CognitoSyncClient {
@@ -1842,20 +1863,13 @@ impl CognitoSyncClient {
     }
 }
 
-impl fmt::Debug for CognitoSyncClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("CognitoSyncClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl CognitoSync for CognitoSyncClient {
     /// <p>Initiates a bulk publish of all existing datasets for an Identity Pool to the configured stream. Customers are limited to one successful bulk publish per 24 hours. Bulk publish is an asynchronous request, customers can see the status of the request via the GetBulkPublishDetails operation.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn bulk_publish(
+    async fn bulk_publish(
         &self,
         input: BulkPublishRequest,
-    ) -> RusotoFuture<BulkPublishResponse, BulkPublishError> {
+    ) -> Result<BulkPublishResponse, RusotoError<BulkPublishError>> {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/bulkpublish",
             identity_pool_id = input.identity_pool_id
@@ -1864,30 +1878,28 @@ impl CognitoSync for CognitoSyncClient {
         let mut request = SignedRequest::new("POST", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BulkPublishResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BulkPublishResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(BulkPublishError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BulkPublishError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specific dataset. The dataset will be deleted permanently, and the action can't be undone. Datasets that this dataset was merged with will no longer report the merge. Any subsequent operation on this dataset will result in a ResourceNotFoundException.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
-    fn delete_dataset(
+    async fn delete_dataset(
         &self,
         input: DeleteDatasetRequest,
-    ) -> RusotoFuture<DeleteDatasetResponse, DeleteDatasetError> {
+    ) -> Result<DeleteDatasetResponse, RusotoError<DeleteDatasetError>> {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/identities/{identity_id}/datasets/{dataset_name}",
             dataset_name = input.dataset_name,
@@ -1898,30 +1910,28 @@ impl CognitoSync for CognitoSyncClient {
         let mut request = SignedRequest::new("DELETE", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDatasetResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteDatasetResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteDatasetError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDatasetError::from_response(response))
+        }
     }
 
     /// <p>Gets meta data about a dataset by identity and dataset name. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>
-    fn describe_dataset(
+    async fn describe_dataset(
         &self,
         input: DescribeDatasetRequest,
-    ) -> RusotoFuture<DescribeDatasetResponse, DescribeDatasetError> {
+    ) -> Result<DescribeDatasetResponse, RusotoError<DescribeDatasetError>> {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/identities/{identity_id}/datasets/{dataset_name}",
             dataset_name = input.dataset_name,
@@ -1932,30 +1942,29 @@ impl CognitoSync for CognitoSyncClient {
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDatasetResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDatasetResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeDatasetError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDatasetError::from_response(response))
+        }
     }
 
     /// <p>Gets usage details (for example, data storage) about a particular identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn describe_identity_pool_usage(
+    async fn describe_identity_pool_usage(
         &self,
         input: DescribeIdentityPoolUsageRequest,
-    ) -> RusotoFuture<DescribeIdentityPoolUsageResponse, DescribeIdentityPoolUsageError> {
+    ) -> Result<DescribeIdentityPoolUsageResponse, RusotoError<DescribeIdentityPoolUsageError>>
+    {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}",
             identity_pool_id = input.identity_pool_id
@@ -1964,27 +1973,28 @@ impl CognitoSync for CognitoSyncClient {
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeIdentityPoolUsageResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeIdentityPoolUsageResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeIdentityPoolUsageError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeIdentityPoolUsageError::from_response(response))
+        }
     }
 
     /// <p>Gets usage information for an identity, including number of datasets and data usage.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
-    fn describe_identity_usage(
+    async fn describe_identity_usage(
         &self,
         input: DescribeIdentityUsageRequest,
-    ) -> RusotoFuture<DescribeIdentityUsageResponse, DescribeIdentityUsageError> {
+    ) -> Result<DescribeIdentityUsageResponse, RusotoError<DescribeIdentityUsageError>> {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/identities/{identity_id}",
             identity_id = input.identity_id,
@@ -1994,29 +2004,28 @@ impl CognitoSync for CognitoSyncClient {
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeIdentityUsageResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeIdentityUsageResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeIdentityUsageError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeIdentityUsageError::from_response(response))
+        }
     }
 
     /// <p>Get the status of the last BulkPublish operation for an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn get_bulk_publish_details(
+    async fn get_bulk_publish_details(
         &self,
         input: GetBulkPublishDetailsRequest,
-    ) -> RusotoFuture<GetBulkPublishDetailsResponse, GetBulkPublishDetailsError> {
+    ) -> Result<GetBulkPublishDetailsResponse, RusotoError<GetBulkPublishDetailsError>> {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/getBulkPublishDetails",
             identity_pool_id = input.identity_pool_id
@@ -2025,29 +2034,28 @@ impl CognitoSync for CognitoSyncClient {
         let mut request = SignedRequest::new("POST", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetBulkPublishDetailsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetBulkPublishDetailsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetBulkPublishDetailsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetBulkPublishDetailsError::from_response(response))
+        }
     }
 
     /// <p>Gets the events and the corresponding Lambda functions associated with an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn get_cognito_events(
+    async fn get_cognito_events(
         &self,
         input: GetCognitoEventsRequest,
-    ) -> RusotoFuture<GetCognitoEventsResponse, GetCognitoEventsError> {
+    ) -> Result<GetCognitoEventsResponse, RusotoError<GetCognitoEventsError>> {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/events",
             identity_pool_id = input.identity_pool_id
@@ -2056,30 +2064,29 @@ impl CognitoSync for CognitoSyncClient {
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCognitoEventsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetCognitoEventsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetCognitoEventsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCognitoEventsError::from_response(response))
+        }
     }
 
     /// <p>Gets the configuration settings of an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn get_identity_pool_configuration(
+    async fn get_identity_pool_configuration(
         &self,
         input: GetIdentityPoolConfigurationRequest,
-    ) -> RusotoFuture<GetIdentityPoolConfigurationResponse, GetIdentityPoolConfigurationError> {
+    ) -> Result<GetIdentityPoolConfigurationResponse, RusotoError<GetIdentityPoolConfigurationError>>
+    {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/configuration",
             identity_pool_id = input.identity_pool_id
@@ -2088,27 +2095,28 @@ impl CognitoSync for CognitoSyncClient {
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetIdentityPoolConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetIdentityPoolConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetIdentityPoolConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetIdentityPoolConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Lists datasets for an identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListDatasets can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use the Cognito Identity credentials to make this API call.</p>
-    fn list_datasets(
+    async fn list_datasets(
         &self,
         input: ListDatasetsRequest,
-    ) -> RusotoFuture<ListDatasetsResponse, ListDatasetsError> {
+    ) -> Result<ListDatasetsResponse, RusotoError<ListDatasetsError>> {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/identities/{identity_id}/datasets",
             identity_id = input.identity_id,
@@ -2127,30 +2135,28 @@ impl CognitoSync for CognitoSyncClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDatasetsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDatasetsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListDatasetsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDatasetsError::from_response(response))
+        }
     }
 
     /// <p>Gets a list of identity pools registered with Cognito.</p> <p>ListIdentityPoolUsage can only be called with developer credentials. You cannot make this API call with the temporary user credentials provided by Cognito Identity.</p>
-    fn list_identity_pool_usage(
+    async fn list_identity_pool_usage(
         &self,
         input: ListIdentityPoolUsageRequest,
-    ) -> RusotoFuture<ListIdentityPoolUsageResponse, ListIdentityPoolUsageError> {
+    ) -> Result<ListIdentityPoolUsageResponse, RusotoError<ListIdentityPoolUsageError>> {
         let request_uri = "/identitypools";
 
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
@@ -2165,29 +2171,28 @@ impl CognitoSync for CognitoSyncClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListIdentityPoolUsageResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListIdentityPoolUsageResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListIdentityPoolUsageError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListIdentityPoolUsageError::from_response(response))
+        }
     }
 
     /// <p>Gets paginated records, optionally changed after a particular sync count for a dataset and identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListRecords can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>
-    fn list_records(
+    async fn list_records(
         &self,
         input: ListRecordsRequest,
-    ) -> RusotoFuture<ListRecordsResponse, ListRecordsError> {
+    ) -> Result<ListRecordsResponse, RusotoError<ListRecordsError>> {
         let request_uri = format!("/identitypools/{identity_pool_id}/identities/{identity_id}/datasets/{dataset_name}/records", dataset_name = input.dataset_name, identity_id = input.identity_id, identity_pool_id = input.identity_pool_id);
 
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
@@ -2208,30 +2213,28 @@ impl CognitoSync for CognitoSyncClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListRecordsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListRecordsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListRecordsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListRecordsError::from_response(response))
+        }
     }
 
     /// <p>Registers a device to receive push sync notifications.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
-    fn register_device(
+    async fn register_device(
         &self,
         input: RegisterDeviceRequest,
-    ) -> RusotoFuture<RegisterDeviceResponse, RegisterDeviceError> {
+    ) -> Result<RegisterDeviceResponse, RusotoError<RegisterDeviceError>> {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/identity/{identity_id}/device",
             identity_id = input.identity_id,
@@ -2244,30 +2247,28 @@ impl CognitoSync for CognitoSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterDeviceResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterDeviceResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RegisterDeviceError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterDeviceError::from_response(response))
+        }
     }
 
     /// <p>Sets the AWS Lambda function for a given event type for an identity pool. This request only updates the key/value pair specified. Other key/values pairs are not updated. To remove a key value pair, pass a empty value for the particular key.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn set_cognito_events(
+    async fn set_cognito_events(
         &self,
         input: SetCognitoEventsRequest,
-    ) -> RusotoFuture<(), SetCognitoEventsError> {
+    ) -> Result<(), RusotoError<SetCognitoEventsError>> {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/events",
             identity_pool_id = input.identity_pool_id
@@ -2279,29 +2280,28 @@ impl CognitoSync for CognitoSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SetCognitoEventsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SetCognitoEventsError::from_response(response))
+        }
     }
 
     /// <p>Sets the necessary configuration for push sync.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
-    fn set_identity_pool_configuration(
+    async fn set_identity_pool_configuration(
         &self,
         input: SetIdentityPoolConfigurationRequest,
-    ) -> RusotoFuture<SetIdentityPoolConfigurationResponse, SetIdentityPoolConfigurationError> {
+    ) -> Result<SetIdentityPoolConfigurationResponse, RusotoError<SetIdentityPoolConfigurationError>>
+    {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/configuration",
             identity_pool_id = input.identity_pool_id
@@ -2313,84 +2313,82 @@ impl CognitoSync for CognitoSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SetIdentityPoolConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SetIdentityPoolConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetIdentityPoolConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SetIdentityPoolConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Subscribes to receive notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
-    fn subscribe_to_dataset(
+    async fn subscribe_to_dataset(
         &self,
         input: SubscribeToDatasetRequest,
-    ) -> RusotoFuture<SubscribeToDatasetResponse, SubscribeToDatasetError> {
+    ) -> Result<SubscribeToDatasetResponse, RusotoError<SubscribeToDatasetError>> {
         let request_uri = format!("/identitypools/{identity_pool_id}/identities/{identity_id}/datasets/{dataset_name}/subscriptions/{device_id}", dataset_name = input.dataset_name, device_id = input.device_id, identity_id = input.identity_id, identity_pool_id = input.identity_pool_id);
 
         let mut request = SignedRequest::new("POST", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SubscribeToDatasetResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SubscribeToDatasetResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SubscribeToDatasetError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SubscribeToDatasetError::from_response(response))
+        }
     }
 
     /// <p>Unsubscribes from receiving notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
-    fn unsubscribe_from_dataset(
+    async fn unsubscribe_from_dataset(
         &self,
         input: UnsubscribeFromDatasetRequest,
-    ) -> RusotoFuture<UnsubscribeFromDatasetResponse, UnsubscribeFromDatasetError> {
+    ) -> Result<UnsubscribeFromDatasetResponse, RusotoError<UnsubscribeFromDatasetError>> {
         let request_uri = format!("/identitypools/{identity_pool_id}/identities/{identity_id}/datasets/{dataset_name}/subscriptions/{device_id}", dataset_name = input.dataset_name, device_id = input.device_id, identity_id = input.identity_id, identity_pool_id = input.identity_pool_id);
 
         let mut request = SignedRequest::new("DELETE", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UnsubscribeFromDatasetResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UnsubscribeFromDatasetResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UnsubscribeFromDatasetError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UnsubscribeFromDatasetError::from_response(response))
+        }
     }
 
     /// <p>Posts updates to records and adds and deletes records for a dataset and user.</p> <p>The sync count in the record patch is your last known sync count for that record. The server will reject an UpdateRecords request with a ResourceConflictException if you try to patch a record with a new value but a stale sync count.</p> <p>For example, if the sync count on the server is 5 for a key called highScore and you try and submit a new highScore with sync count of 4, the request will be rejected. To obtain the current sync count for a record, call ListRecords. On a successful update of the record, the response returns the new sync count for that record. You should present that sync count the next time you try to update that same record. When the record does not exist, specify the sync count as 0.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
-    fn update_records(
+    async fn update_records(
         &self,
         input: UpdateRecordsRequest,
-    ) -> RusotoFuture<UpdateRecordsResponse, UpdateRecordsError> {
+    ) -> Result<UpdateRecordsResponse, RusotoError<UpdateRecordsError>> {
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/identities/{identity_id}/datasets/{dataset_name}",
             dataset_name = input.dataset_name,
@@ -2408,22 +2406,20 @@ impl CognitoSync for CognitoSyncClient {
             request.add_header("x-amz-Client-Context", &client_context.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateRecordsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateRecordsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateRecordsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateRecordsError::from_response(response))
+        }
     }
 }
