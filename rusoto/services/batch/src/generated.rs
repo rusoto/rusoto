@@ -187,7 +187,7 @@ pub struct ComputeEnvironmentOrder {
 /// <p>An object representing an AWS Batch compute resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComputeResource {
-    /// <p>The allocation strategy to use for the compute resource in case not enough instances of the best fitting instance type can be allocated. This could be due to availability of the instance type in the region or <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-resource-limits.html">Amazon EC2 service limits</a>. If this is not specified, the default is <code>BEST_FIT</code>, which will use only the best fitting instance type, waiting for additional capacity if it's not available. This allocation strategy keeps costs lower but can limit scaling. <code>BEST_FIT_PROGRESSIVE</code> will select an additional instance type that is large enough to meet the requirements of the jobs in the queue, with a preference for an instance type with a lower cost. <code>SPOT_CAPACITY_OPTIMIZED</code> is only available for Spot Instance compute resources and will select an additional instance type that is large enough to meet the requirements of the jobs in the queue, with a preference for an instance type that is less likely to be interrupted.</p>
+    /// <p>The allocation strategy to use for the compute resource in case not enough instances of the best fitting instance type can be allocated. This could be due to availability of the instance type in the region or <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-resource-limits.html">Amazon EC2 service limits</a>. If this is not specified, the default is <code>BEST_FIT</code>, which will use only the best fitting instance type, waiting for additional capacity if it's not available. This allocation strategy keeps costs lower but can limit scaling. If you are using Spot Fleets with <code>BEST_FIT</code> then the Spot Fleet IAM Role must be specified. <code>BEST_FIT_PROGRESSIVE</code> will select additional instance types that are large enough to meet the requirements of the jobs in the queue, with a preference for instance types with a lower cost per vCPU. <code>SPOT_CAPACITY_OPTIMIZED</code> is only available for Spot Instance compute resources and will select additional instance types that are large enough to meet the requirements of the jobs in the queue, with a preference for instance types that are less likely to be interrupted. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/allocation-strategies.html ">Allocation Strategies</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "allocationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocation_strategy: Option<String>,
@@ -231,7 +231,7 @@ pub struct ComputeResource {
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon EC2 Spot Fleet IAM role applied to a <code>SPOT</code> compute environment. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/spot_fleet_IAM_role.html">Amazon EC2 Spot Fleet Role</a> in the <i>AWS Batch User Guide</i>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon EC2 Spot Fleet IAM role applied to a <code>SPOT</code> compute environment. This role is required if the allocation strategy set to <code>BEST_FIT</code> or if the allocation strategy is not specified. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/spot_fleet_IAM_role.html">Amazon EC2 Spot Fleet Role</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "spotIamFleetRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spot_iam_fleet_role: Option<String>,
@@ -779,7 +779,7 @@ pub struct JobDetail {
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-    /// <p>A list of job names or IDs on which this job depends.</p>
+    /// <p>A list of job IDs on which this job depends.</p>
     #[serde(rename = "dependsOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub depends_on: Option<Vec<JobDependency>>,
@@ -1193,7 +1193,7 @@ pub struct SubmitJobRequest {
     #[serde(rename = "dependsOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub depends_on: Option<Vec<JobDependency>>,
-    /// <p>The job definition used by this job. This value can be either a <code>name:revision</code> or the Amazon Resource Name (ARN) for the job definition.</p>
+    /// <p>The job definition used by this job. This value can be one of <code>name</code>, <code>name:revision</code>, or the Amazon Resource Name (ARN) for the job definition. If <code>name</code> is specified without a revision then the latest active revision is used.</p>
     #[serde(rename = "jobDefinition")]
     pub job_definition: String,
     /// <p>The name of the job. The first character must be alphanumeric, and up to 128 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p>
@@ -1938,7 +1938,7 @@ pub trait Batch {
         input: DeleteJobQueueRequest,
     ) -> Result<DeleteJobQueueResponse, RusotoError<DeleteJobQueueError>>;
 
-    /// <p>Deregisters an AWS Batch job definition.</p>
+    /// <p>Deregisters an AWS Batch job definition. Job definitions will be permanently deleted after 180 days.</p>
     async fn deregister_job_definition(
         &self,
         input: DeregisterJobDefinitionRequest,
@@ -2194,7 +2194,7 @@ impl Batch for BatchClient {
         }
     }
 
-    /// <p>Deregisters an AWS Batch job definition.</p>
+    /// <p>Deregisters an AWS Batch job definition. Job definitions will be permanently deleted after 180 days.</p>
     async fn deregister_job_definition(
         &self,
         input: DeregisterJobDefinitionRequest,

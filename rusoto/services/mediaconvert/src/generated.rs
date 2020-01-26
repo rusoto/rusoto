@@ -158,7 +158,7 @@ pub struct AssociateCertificateRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateCertificateResponse {}
 
-/// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings</p>
+/// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * MP3, Mp3Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioCodecSettings {
     /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value AAC. The service accepts one of two mutually exclusive groups of AAC settings--VBR and CBR. To select one of these modes, set the value of Bitrate control mode (rateControlMode) to &quot;VBR&quot; or &quot;CBR&quot;.  In VBR mode, you control the audio quality with the setting VBR quality (vbrQuality). In CBR mode, you use the setting Bitrate (bitrate). Defaults and valid values depend on the rate control mode.</p>
@@ -189,6 +189,10 @@ pub struct AudioCodecSettings {
     #[serde(rename = "Mp2Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mp_2_settings: Option<Mp2Settings>,
+    /// <p>Required when you set Codec, under AudioDescriptions&gt;CodecSettings, to the value MP3.</p>
+    #[serde(rename = "Mp3Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mp_3_settings: Option<Mp3Settings>,
     /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value WAV.</p>
     #[serde(rename = "WavSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -214,7 +218,7 @@ pub struct AudioDescription {
     #[serde(rename = "AudioTypeControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_type_control: Option<String>,
-    /// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings</p>
+    /// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * MP3, Mp3Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings</p>
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<AudioCodecSettings>,
@@ -680,6 +684,23 @@ pub struct CmafGroupSettings {
     #[serde(rename = "WriteHlsManifest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub write_hls_manifest: Option<String>,
+    /// <p>When you enable Precise segment duration in DASH manifests (writeSegmentTimelineInRepresentation), your DASH manifest shows precise segment durations. The segment duration information appears inside the SegmentTimeline element, inside SegmentTemplate at the Representation level. When this feature isn&#39;t enabled, the segment durations in your DASH manifest are approximate. The segment duration information appears in the duration attribute of the SegmentTemplate element.</p>
+    #[serde(rename = "WriteSegmentTimelineInRepresentation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub write_segment_timeline_in_representation: Option<String>,
+}
+
+/// <p>Settings for MP4 segments in CMAF</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CmfcSettings {
+    /// <p>Use this setting only when you specify SCTE-35 markers from ESAM. Choose INSERT to put SCTE-35 markers in this output at the insertion points that you specify in an ESAM XML document. Provide the document in the setting SCC XML (sccXml).</p>
+    #[serde(rename = "Scte35Esam")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scte_35_esam: Option<String>,
+    /// <p>Ignore this setting unless you have SCTE-35 markers in your input video file. Choose Passthrough (PASSTHROUGH) if you want SCTE-35 markers that appear in your input to also appear in this output. Choose None (NONE) if you don&#39;t want those SCTE-35 markers in this output.</p>
+    #[serde(rename = "Scte35Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scte_35_source: Option<String>,
 }
 
 /// <p>Settings for color correction.</p>
@@ -714,6 +735,10 @@ pub struct ColorCorrector {
 /// <p>Container specific settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContainerSettings {
+    /// <p>Settings for MP4 segments in CMAF</p>
+    #[serde(rename = "CmfcSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cmfc_settings: Option<CmfcSettings>,
     /// <p>Container for this output. Some containers require a container settings object. If not specified, the default object will be created.</p>
     #[serde(rename = "Container")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3240,6 +3265,31 @@ pub struct Mp2Settings {
     pub sample_rate: Option<i64>,
 }
 
+/// <p>Required when you set Codec, under AudioDescriptions&gt;CodecSettings, to the value MP3.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Mp3Settings {
+    /// <p>Specify the average bitrate in bits per second.</p>
+    #[serde(rename = "Bitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bitrate: Option<i64>,
+    /// <p>Specify the number of channels in this output audio track. Choosing Mono on the console gives you 1 output channel; choosing Stereo gives you 2. In the API, valid values are 1 and 2.</p>
+    #[serde(rename = "Channels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channels: Option<i64>,
+    /// <p>Specify whether the service encodes this MP3 audio output with a constant bitrate (CBR) or a variable bitrate (VBR).</p>
+    #[serde(rename = "RateControlMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rate_control_mode: Option<String>,
+    /// <p>Sample rate in hz.</p>
+    #[serde(rename = "SampleRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_rate: Option<i64>,
+    /// <p>Required when you set Bitrate control mode (rateControlMode) to VBR. Specify the audio quality of this MP3 output from 0 (highest quality) to 9 (lowest quality).</p>
+    #[serde(rename = "VbrQuality")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vbr_quality: Option<i64>,
+}
+
 /// <p>Settings for MP4 container. You can create audio-only AAC outputs with this container.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Mp4Settings {
@@ -3247,6 +3297,10 @@ pub struct Mp4Settings {
     #[serde(rename = "CslgAtom")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cslg_atom: Option<String>,
+    /// <p>Ignore this setting unless compliance to the CTTS box version specification matters in your workflow. Specify a value of 1 to set your CTTS box version to 1 and make your output compliant with the specification. When you specify a value of 1, you must also set CSLG atom (cslgAtom) to the value INCLUDE. Keep the default value 0 to set your CTTS box version to 0. This can provide backward compatibility for some players and packagers.</p>
+    #[serde(rename = "CttsVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ctts_version: Option<i64>,
     /// <p>Inserts a free-space box immediately after the moov box.</p>
     #[serde(rename = "FreeSpaceBox")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4275,7 +4329,7 @@ pub struct UpdateQueueResponse {
     pub queue: Option<Queue>,
 }
 
-/// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * FRAME_CAPTURE, FrameCaptureSettings</p>
+/// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * FRAME<em>CAPTURE, FrameCaptureSettings * H</em>264, H264Settings * H_265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoCodecSettings {
     /// <p>Specifies the video codec. This must be equal to one of the enum values defined by the object  VideoCodec.</p>
@@ -4315,7 +4369,7 @@ pub struct VideoDescription {
     #[serde(rename = "AntiAlias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub anti_alias: Option<String>,
-    /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * FRAME_CAPTURE, FrameCaptureSettings</p>
+    /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * FRAME<em>CAPTURE, FrameCaptureSettings * H</em>264, H264Settings * H_265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings</p>
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<VideoCodecSettings>,
@@ -4415,7 +4469,7 @@ pub struct VideoPreprocessor {
 /// <p>Selector for video.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoSelector {
-    /// <p>Ignore this setting unless this input is a QuickTime animation. Specify which part of this input MediaConvert uses for your outputs. Leave this setting set to DISCARD in order to delete the alpha channel and preserve the video. Use REMAP<em>TO</em>LUMA for this setting to delete the video and map the alpha channel to the luma channel of your outputs.</p>
+    /// <p>Ignore this setting unless this input is a QuickTime animation with an alpha channel. Use this setting to create separate Key and Fill outputs. In each output, specify which part of the input MediaConvert uses. Leave this setting at the default value DISCARD to delete the alpha channel and preserve the video. Set it to REMAP<em>TO</em>LUMA to delete the video and map the alpha channel to the luma channel of your outputs.</p>
     #[serde(rename = "AlphaBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alpha_behavior: Option<String>,

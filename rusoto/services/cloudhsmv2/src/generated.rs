@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-/// <p>Contains information about a backup of an AWS CloudHSM cluster.</p>
+/// <p>Contains information about a backup of an AWS CloudHSM cluster. All backup objects contain the BackupId, BackupState, ClusterId, and CreateTimestamp parameters. Backups that were copied into a destination region additionally contain the CopyTimestamp, SourceBackup, SourceCluster, and SourceRegion paramters. A backup that is pending deletion will include the DeleteTimestamp parameter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Backup {
@@ -40,6 +40,7 @@ pub struct Backup {
     #[serde(rename = "ClusterId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_id: Option<String>,
+    /// <p>The date and time when the backup was copied from a source backup.</p>
     #[serde(rename = "CopyTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub copy_timestamp: Option<f64>,
@@ -51,15 +52,21 @@ pub struct Backup {
     #[serde(rename = "DeleteTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_timestamp: Option<f64>,
+    /// <p>The identifier (ID) of the source backup from which the new backup was copied.</p>
     #[serde(rename = "SourceBackup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_backup: Option<String>,
+    /// <p>The identifier (ID) of the cluster containing the source backup from which the new backup was copied. .</p>
     #[serde(rename = "SourceCluster")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_cluster: Option<String>,
+    /// <p>The AWS region that contains the source backup from which the new backup was copied.</p>
     #[serde(rename = "SourceRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_region: Option<String>,
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_list: Option<Vec<Tag>>,
 }
 
 /// <p>Contains one or more certificates or a certificate signing request (CSR).</p>
@@ -136,10 +143,13 @@ pub struct Cluster {
     #[serde(rename = "StateMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_message: Option<String>,
-    /// <p>A map of the cluster's subnets and their corresponding Availability Zones.</p>
+    /// <p>A map from availability zone to the cluster’s subnet in that availability zone.</p>
     #[serde(rename = "SubnetMapping")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_mapping: Option<::std::collections::HashMap<String, String>>,
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_list: Option<Vec<Tag>>,
     /// <p>The identifier (ID) of the virtual private cloud (VPC) that contains the cluster.</p>
     #[serde(rename = "VpcId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -155,6 +165,9 @@ pub struct CopyBackupToRegionRequest {
     /// <p>The AWS region that will contain your copied CloudHSM cluster backup.</p>
     #[serde(rename = "DestinationRegion")]
     pub destination_region: String,
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_list: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -179,6 +192,9 @@ pub struct CreateClusterRequest {
     /// <p><p>The identifiers (IDs) of the subnets where you are creating the cluster. You must specify at least one subnet. If you specify multiple subnets, they must meet the following criteria:</p> <ul> <li> <p>All subnets must be in the same virtual private cloud (VPC).</p> </li> <li> <p>You can specify only one subnet per Availability Zone.</p> </li> </ul></p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_list: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -292,6 +308,7 @@ pub struct DescribeBackupsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>Designates whether or not to sort the return backups by ascending chronological order of generation.</p>
     #[serde(rename = "SortAscending")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_ascending: Option<bool>,
@@ -340,18 +357,23 @@ pub struct DescribeClustersResponse {
     pub next_token: Option<String>,
 }
 
+/// <p>Contains information about the backup that will be copied and created by the <a>CopyBackupToRegion</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DestinationBackup {
+    /// <p>The date and time when both the source backup was created.</p>
     #[serde(rename = "CreateTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_timestamp: Option<f64>,
+    /// <p>The identifier (ID) of the source backup from which the new backup was copied.</p>
     #[serde(rename = "SourceBackup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_backup: Option<String>,
+    /// <p>The identifier (ID) of the cluster containing the source backup from which the new backup was copied.</p>
     #[serde(rename = "SourceCluster")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_cluster: Option<String>,
+    /// <p>The AWS region that contains the source backup from which the new backup was copied.</p>
     #[serde(rename = "SourceRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_region: Option<String>,
@@ -403,7 +425,7 @@ pub struct InitializeClusterRequest {
     /// <p>The cluster certificate issued (signed) by your issuing certificate authority (CA). The certificate must be in PEM format and can contain a maximum of 5000 characters.</p>
     #[serde(rename = "SignedCert")]
     pub signed_cert: String,
-    /// <p>The issuing certificate of the issuing certificate authority (CA) that issued (signed) the cluster certificate. This can be a root (self-signed) certificate or a certificate chain that begins with the certificate that issued the cluster certificate and ends with a root certificate. The certificate or certificate chain must be in PEM format and can contain a maximum of 5000 characters.</p>
+    /// <p>The issuing certificate of the issuing certificate authority (CA) that issued (signed) the cluster certificate. You must use a self-signed certificate. The certificate used to sign the HSM CSR must be directly available, and thus must be the root certificate. The certificate must be in PEM format and can contain a maximum of 5000 characters.</p>
     #[serde(rename = "TrustAnchor")]
     pub trust_anchor: String,
 }
@@ -520,6 +542,8 @@ pub enum CopyBackupToRegionError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
+
+    CloudHsmTag(String),
 }
 
 impl CopyBackupToRegionError {
@@ -549,6 +573,9 @@ impl CopyBackupToRegionError {
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(CopyBackupToRegionError::CloudHsmService(err.msg))
                 }
+                "CloudHsmTagException" => {
+                    return RusotoError::Service(CopyBackupToRegionError::CloudHsmTag(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -565,6 +592,7 @@ impl fmt::Display for CopyBackupToRegionError {
             CopyBackupToRegionError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
             CopyBackupToRegionError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
             CopyBackupToRegionError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            CopyBackupToRegionError::CloudHsmTag(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -582,6 +610,8 @@ pub enum CreateClusterError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
+
+    CloudHsmTag(String),
 }
 
 impl CreateClusterError {
@@ -609,6 +639,9 @@ impl CreateClusterError {
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(CreateClusterError::CloudHsmService(err.msg))
                 }
+                "CloudHsmTagException" => {
+                    return RusotoError::Service(CreateClusterError::CloudHsmTag(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -625,6 +658,7 @@ impl fmt::Display for CreateClusterError {
             CreateClusterError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
             CreateClusterError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
             CreateClusterError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::CloudHsmTag(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -754,6 +788,8 @@ pub enum DeleteClusterError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
+
+    CloudHsmTag(String),
 }
 
 impl DeleteClusterError {
@@ -781,6 +817,9 @@ impl DeleteClusterError {
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DeleteClusterError::CloudHsmService(err.msg))
                 }
+                "CloudHsmTagException" => {
+                    return RusotoError::Service(DeleteClusterError::CloudHsmTag(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -797,6 +836,7 @@ impl fmt::Display for DeleteClusterError {
             DeleteClusterError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
             DeleteClusterError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
             DeleteClusterError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::CloudHsmTag(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -868,6 +908,8 @@ pub enum DescribeBackupsError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
+
+    CloudHsmTag(String),
 }
 
 impl DescribeBackupsError {
@@ -897,6 +939,9 @@ impl DescribeBackupsError {
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DescribeBackupsError::CloudHsmService(err.msg))
                 }
+                "CloudHsmTagException" => {
+                    return RusotoError::Service(DescribeBackupsError::CloudHsmTag(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -913,6 +958,7 @@ impl fmt::Display for DescribeBackupsError {
             DescribeBackupsError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
             DescribeBackupsError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
             DescribeBackupsError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::CloudHsmTag(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -928,6 +974,8 @@ pub enum DescribeClustersError {
     CloudHsmInvalidRequest(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
+
+    CloudHsmTag(String),
 }
 
 impl DescribeClustersError {
@@ -952,6 +1000,9 @@ impl DescribeClustersError {
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DescribeClustersError::CloudHsmService(err.msg))
                 }
+                "CloudHsmTagException" => {
+                    return RusotoError::Service(DescribeClustersError::CloudHsmTag(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -967,6 +1018,7 @@ impl fmt::Display for DescribeClustersError {
             DescribeClustersError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
             DescribeClustersError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
             DescribeClustersError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            DescribeClustersError::CloudHsmTag(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1046,6 +1098,8 @@ pub enum ListTagsError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
+
+    CloudHsmTag(String),
 }
 
 impl ListTagsError {
@@ -1067,6 +1121,9 @@ impl ListTagsError {
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(ListTagsError::CloudHsmService(err.msg))
                 }
+                "CloudHsmTagException" => {
+                    return RusotoError::Service(ListTagsError::CloudHsmTag(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1083,6 +1140,7 @@ impl fmt::Display for ListTagsError {
             ListTagsError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
             ListTagsError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
             ListTagsError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            ListTagsError::CloudHsmTag(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1160,6 +1218,8 @@ pub enum TagResourceError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
+
+    CloudHsmTag(String),
 }
 
 impl TagResourceError {
@@ -1183,6 +1243,9 @@ impl TagResourceError {
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(TagResourceError::CloudHsmService(err.msg))
                 }
+                "CloudHsmTagException" => {
+                    return RusotoError::Service(TagResourceError::CloudHsmTag(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1199,6 +1262,7 @@ impl fmt::Display for TagResourceError {
             TagResourceError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
             TagResourceError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
             TagResourceError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            TagResourceError::CloudHsmTag(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1216,6 +1280,8 @@ pub enum UntagResourceError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
+
+    CloudHsmTag(String),
 }
 
 impl UntagResourceError {
@@ -1243,6 +1309,9 @@ impl UntagResourceError {
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(UntagResourceError::CloudHsmService(err.msg))
                 }
+                "CloudHsmTagException" => {
+                    return RusotoError::Service(UntagResourceError::CloudHsmTag(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1259,6 +1328,7 @@ impl fmt::Display for UntagResourceError {
             UntagResourceError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
             UntagResourceError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
             UntagResourceError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::CloudHsmTag(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1284,7 +1354,7 @@ pub trait CloudHsmv2 {
         input: CreateHsmRequest,
     ) -> Result<CreateHsmResponse, RusotoError<CreateHsmError>>;
 
-    /// <p>Deletes a specified AWS CloudHSM backup. A backup can be restored up to 7 days after the DeleteBackup request. For more information on restoring a backup, see <a>RestoreBackup</a> </p>
+    /// <p>Deletes a specified AWS CloudHSM backup. A backup can be restored up to 7 days after the DeleteBackup request is made. For more information on restoring a backup, see <a>RestoreBackup</a>.</p>
     async fn delete_backup(
         &self,
         input: DeleteBackupRequest,
@@ -1326,7 +1396,7 @@ pub trait CloudHsmv2 {
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
 
-    /// <p>Restores a specified AWS CloudHSM backup that is in the <code>PENDING_DELETION</code> state. For more information on deleting a backup, see <a>DeleteBackup</a>.</p>
+    /// <p>Restores a specified AWS CloudHSM backup that is in the <code>PENDING_DELETION</code> state. For mor information on deleting a backup, see <a>DeleteBackup</a>.</p>
     async fn restore_backup(
         &self,
         input: RestoreBackupRequest,
@@ -1466,7 +1536,7 @@ impl CloudHsmv2 for CloudHsmv2Client {
         }
     }
 
-    /// <p>Deletes a specified AWS CloudHSM backup. A backup can be restored up to 7 days after the DeleteBackup request. For more information on restoring a backup, see <a>RestoreBackup</a> </p>
+    /// <p>Deletes a specified AWS CloudHSM backup. A backup can be restored up to 7 days after the DeleteBackup request is made. For more information on restoring a backup, see <a>RestoreBackup</a>.</p>
     async fn delete_backup(
         &self,
         input: DeleteBackupRequest,
@@ -1657,7 +1727,7 @@ impl CloudHsmv2 for CloudHsmv2Client {
         }
     }
 
-    /// <p>Restores a specified AWS CloudHSM backup that is in the <code>PENDING_DELETION</code> state. For more information on deleting a backup, see <a>DeleteBackup</a>.</p>
+    /// <p>Restores a specified AWS CloudHSM backup that is in the <code>PENDING_DELETION</code> state. For mor information on deleting a backup, see <a>DeleteBackup</a>.</p>
     async fn restore_backup(
         &self,
         input: RestoreBackupRequest,

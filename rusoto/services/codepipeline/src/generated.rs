@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-/// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>
+/// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AWSSessionCredentials {
@@ -506,7 +506,7 @@ pub struct ArtifactDetails {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ArtifactLocation {
-    /// <p>The Amazon S3 bucket that contains the artifact.</p>
+    /// <p>The S3 bucket that contains the artifact.</p>
     #[serde(rename = "s3Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_location: Option<S3ArtifactLocation>,
@@ -546,14 +546,14 @@ pub struct ArtifactRevision {
     pub revision_url: Option<String>,
 }
 
-/// <p><p>The Amazon S3 bucket where artifacts for the pipeline are stored.</p> <note> <p>You must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
+/// <p><p>The S3 bucket where artifacts for the pipeline are stored.</p> <note> <p>You must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArtifactStore {
     /// <p>The encryption key used to encrypt the data in the artifact store, such as an AWS Key Management Service (AWS KMS) key. If this is undefined, the default key for Amazon S3 is used.</p>
     #[serde(rename = "encryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_key: Option<EncryptionKey>,
-    /// <p>The Amazon S3 bucket used for storing the artifacts for a pipeline. You can specify the name of an S3 bucket but not a folder in the bucket. A folder to contain the pipeline artifacts is created for you based on the name of the pipeline. You can use any Amazon S3 bucket in the same AWS Region as the pipeline to store your pipeline artifacts.</p>
+    /// <p>The S3 bucket used for storing the artifacts for a pipeline. You can specify the name of an S3 bucket but not a folder in the bucket. A folder to contain the pipeline artifacts is created for you based on the name of the pipeline. You can use any S3 bucket in the same AWS Region as the pipeline to store your pipeline artifacts.</p>
     #[serde(rename = "location")]
     pub location: String,
     /// <p>The type of the artifact store, such as S3.</p>
@@ -987,7 +987,7 @@ pub struct JobData {
     #[serde(rename = "actionTypeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_type_id: Option<ActionTypeId>,
-    /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifacts for the pipeline in AWS CodePipeline.</p>
+    /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the S3 bucket used to store artifacts for the pipeline in AWS CodePipeline.</p>
     #[serde(rename = "artifactCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_credentials: Option<AWSSessionCredentials>,
@@ -1270,7 +1270,7 @@ pub struct PipelineContext {
 /// <p>Represents the structure of actions and stages to be performed in the pipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PipelineDeclaration {
-    /// <p><p>Represents information about the Amazon S3 bucket where artifacts are stored for the pipeline.</p> <note> <p>You must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
+    /// <p><p>Represents information about the S3 bucket where artifacts are stored for the pipeline.</p> <note> <p>You must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
     #[serde(rename = "artifactStore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_store: Option<ArtifactStore>,
@@ -1305,15 +1305,15 @@ pub struct PipelineExecution {
     #[serde(rename = "pipelineExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_execution_id: Option<String>,
-    /// <p>The name of the pipeline that was executed.</p>
+    /// <p>The name of the pipeline with the specified pipeline execution.</p>
     #[serde(rename = "pipelineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_name: Option<String>,
-    /// <p>The version number of the pipeline that was executed.</p>
+    /// <p>The version number of the pipeline with the specified pipeline execution.</p>
     #[serde(rename = "pipelineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_version: Option<i64>,
-    /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Succeeded: The pipeline execution was completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution advanced and continued through the pipeline instead. </p> </li> <li> <p>Failed: The pipeline execution was not completed successfully.</p> </li> </ul></p>
+    /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Stopped: The pipeline execution was manually stopped. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-executions-stopped">Stopped Executions</a>.</p> </li> <li> <p>Stopping: The pipeline execution received a request to be manually stopped. Depending on the selected stop mode, the execution is either completing or abandoning in-progress actions. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-executions-stopped">Stopped Executions</a>.</p> </li> <li> <p>Succeeded: The pipeline execution was completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution advanced and continued through the pipeline instead. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-superseded">Superseded Executions</a>.</p> </li> <li> <p>Failed: The pipeline execution was not completed successfully.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1339,10 +1339,14 @@ pub struct PipelineExecutionSummary {
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Succeeded: The pipeline execution was completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution advanced and continued through the pipeline instead. </p> </li> <li> <p>Failed: The pipeline execution was not completed successfully.</p> </li> </ul></p>
+    /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Stopped: The pipeline execution was manually stopped. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-executions-stopped">Stopped Executions</a>.</p> </li> <li> <p>Stopping: The pipeline execution received a request to be manually stopped. Depending on the selected stop mode, the execution is either completing or abandoning in-progress actions. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-executions-stopped">Stopped Executions</a>.</p> </li> <li> <p>Succeeded: The pipeline execution was completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution advanced and continued through the pipeline instead. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-superseded">Superseded Executions</a>.</p> </li> <li> <p>Failed: The pipeline execution was not completed successfully.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>The interaction that stopped a pipeline execution.</p>
+    #[serde(rename = "stopTrigger")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stop_trigger: Option<StopExecutionTrigger>,
     /// <p>The interaction or event that started a pipeline execution, such as automated change detection or a <code>StartPipelineExecution</code> API call.</p>
     #[serde(rename = "trigger")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1640,14 +1644,14 @@ pub struct RetryStageExecutionOutput {
     pub pipeline_execution_id: Option<String>,
 }
 
-/// <p>The location of the Amazon S3 bucket that contains a revision.</p>
+/// <p>The location of the S3 bucket that contains a revision.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct S3ArtifactLocation {
-    /// <p>The name of the Amazon S3 bucket.</p>
+    /// <p>The name of the S3 bucket.</p>
     #[serde(rename = "bucketName")]
     pub bucket_name: String,
-    /// <p>The key of the object in the Amazon S3 bucket, which uniquely identifies the object in the bucket.</p>
+    /// <p>The key of the object in the S3 bucket, which uniquely identifies the object in the bucket.</p>
     #[serde(rename = "objectKey")]
     pub object_key: String,
 }
@@ -1769,6 +1773,44 @@ pub struct StartPipelineExecutionOutput {
     pub pipeline_execution_id: Option<String>,
 }
 
+/// <p>The interaction that stopped a pipeline execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopExecutionTrigger {
+    /// <p>The user-specified reason the pipeline was stopped.</p>
+    #[serde(rename = "reason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopPipelineExecutionInput {
+    /// <p><p>Use this option to stop the pipeline execution by abandoning, rather than finishing, in-progress actions.</p> <note> <p>This option can lead to failed or out-of-sequence tasks.</p> </note></p>
+    #[serde(rename = "abandon")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub abandon: Option<bool>,
+    /// <p>The ID of the pipeline execution to be stopped in the current stage. Use the <code>GetPipelineState</code> action to retrieve the current pipelineExecutionId.</p>
+    #[serde(rename = "pipelineExecutionId")]
+    pub pipeline_execution_id: String,
+    /// <p>The name of the pipeline to stop.</p>
+    #[serde(rename = "pipelineName")]
+    pub pipeline_name: String,
+    /// <p>Use this option to enter comments, such as the reason the pipeline was stopped.</p>
+    #[serde(rename = "reason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopPipelineExecutionOutput {
+    /// <p>The unique system-generated ID of the pipeline execution that was stopped.</p>
+    #[serde(rename = "pipelineExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_id: Option<String>,
+}
+
 /// <p>A tag is a key-value pair that is used to manage the resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
@@ -1821,7 +1863,7 @@ pub struct ThirdPartyJobData {
     #[serde(rename = "actionTypeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_type_id: Option<ActionTypeId>,
-    /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifact for the pipeline in AWS CodePipeline. </p>
+    /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the S3 bucket used to store artifact for the pipeline in AWS CodePipeline. </p>
     #[serde(rename = "artifactCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_credentials: Option<AWSSessionCredentials>,
@@ -3361,6 +3403,56 @@ impl fmt::Display for StartPipelineExecutionError {
     }
 }
 impl Error for StartPipelineExecutionError {}
+/// Errors returned by StopPipelineExecution
+#[derive(Debug, PartialEq)]
+pub enum StopPipelineExecutionError {
+    /// <p>The pipeline execution is already in a <code>Stopping</code> state. If you already chose to stop and wait, you cannot make that request again. You can choose to stop and abandon now, but be aware that this option can lead to failed tasks or out of sequence tasks. If you already chose to stop and abandon, you cannot make that request again.</p>
+    DuplicatedStopRequest(String),
+    /// <p>Unable to stop the pipeline execution. The execution might already be in a <code>Stopped</code> state, or it might no longer be in progress.</p>
+    PipelineExecutionNotStoppable(String),
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
+    PipelineNotFound(String),
+}
+
+impl StopPipelineExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopPipelineExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DuplicatedStopRequestException" => {
+                    return RusotoError::Service(StopPipelineExecutionError::DuplicatedStopRequest(
+                        err.msg,
+                    ))
+                }
+                "PipelineExecutionNotStoppableException" => {
+                    return RusotoError::Service(
+                        StopPipelineExecutionError::PipelineExecutionNotStoppable(err.msg),
+                    )
+                }
+                "PipelineNotFoundException" => {
+                    return RusotoError::Service(StopPipelineExecutionError::PipelineNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StopPipelineExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopPipelineExecutionError::DuplicatedStopRequest(ref cause) => write!(f, "{}", cause),
+            StopPipelineExecutionError::PipelineExecutionNotStoppable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopPipelineExecutionError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopPipelineExecutionError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -3591,7 +3683,7 @@ pub trait CodePipeline {
         input: EnableStageTransitionInput,
     ) -> Result<(), RusotoError<EnableStageTransitionError>>;
 
-    /// <p><p>Returns information about a job. Used for custom actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Returns information about a job. Used for custom actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the S3 bucket used to store artifacts for the pipeline, if the action requires access to that S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn get_job_details(
         &self,
         input: GetJobDetailsInput,
@@ -3615,7 +3707,7 @@ pub trait CodePipeline {
         input: GetPipelineStateInput,
     ) -> Result<GetPipelineStateOutput, RusotoError<GetPipelineStateError>>;
 
-    /// <p><p>Requests the details of a job for a third party action. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Requests the details of a job for a third party action. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the S3 bucket used to store artifacts for the pipeline, if the action requires access to that S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn get_third_party_job_details(
         &self,
         input: GetThirdPartyJobDetailsInput,
@@ -3657,13 +3749,13 @@ pub trait CodePipeline {
         input: ListWebhooksInput,
     ) -> Result<ListWebhooksOutput, RusotoError<ListWebhooksError>>;
 
-    /// <p><p>Returns information about any jobs for AWS CodePipeline to act on. <code>PollForJobs</code> is valid only for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Returns information about any jobs for AWS CodePipeline to act on. <code>PollForJobs</code> is valid only for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the S3 bucket used to store artifacts for the pipeline, if the action requires access to that S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn poll_for_jobs(
         &self,
         input: PollForJobsInput,
     ) -> Result<PollForJobsOutput, RusotoError<PollForJobsError>>;
 
-    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
+    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the S3 bucket used to store artifacts for the pipeline, if the action requires access to that S3 bucket for input or output artifacts.</p> </important></p>
     async fn poll_for_third_party_jobs(
         &self,
         input: PollForThirdPartyJobsInput,
@@ -3728,6 +3820,12 @@ pub trait CodePipeline {
         &self,
         input: StartPipelineExecutionInput,
     ) -> Result<StartPipelineExecutionOutput, RusotoError<StartPipelineExecutionError>>;
+
+    /// <p>Stops the specified pipeline execution. You choose to either stop the pipeline execution by completing in-progress actions without starting subsequent actions, or by abandoning in-progress actions. While completing or abandoning in-progress actions, the pipeline execution is in a <code>Stopping</code> state. After all in-progress actions are completed or abandoned, the pipeline execution is in a <code>Stopped</code> state.</p>
+    async fn stop_pipeline_execution(
+        &self,
+        input: StopPipelineExecutionInput,
+    ) -> Result<StopPipelineExecutionOutput, RusotoError<StopPipelineExecutionError>>;
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource. </p>
     async fn tag_resource(
@@ -4079,7 +4177,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p><p>Returns information about a job. Used for custom actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Returns information about a job. Used for custom actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the S3 bucket used to store artifacts for the pipeline, if the action requires access to that S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn get_job_details(
         &self,
         input: GetJobDetailsInput,
@@ -4188,7 +4286,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p><p>Requests the details of a job for a third party action. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Requests the details of a job for a third party action. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the S3 bucket used to store artifacts for the pipeline, if the action requires access to that S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn get_third_party_job_details(
         &self,
         input: GetThirdPartyJobDetailsInput,
@@ -4387,7 +4485,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p><p>Returns information about any jobs for AWS CodePipeline to act on. <code>PollForJobs</code> is valid only for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Returns information about any jobs for AWS CodePipeline to act on. <code>PollForJobs</code> is valid only for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the S3 bucket used to store artifacts for the pipeline, if the action requires access to that S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn poll_for_jobs(
         &self,
         input: PollForJobsInput,
@@ -4414,7 +4512,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
+    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the S3 bucket used to store artifacts for the pipeline, if the action requires access to that S3 bucket for input or output artifacts.</p> </important></p>
     async fn poll_for_third_party_jobs(
         &self,
         input: PollForThirdPartyJobsInput,
@@ -4724,6 +4822,37 @@ impl CodePipeline for CodePipelineClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(StartPipelineExecutionError::from_response(response))
+        }
+    }
+
+    /// <p>Stops the specified pipeline execution. You choose to either stop the pipeline execution by completing in-progress actions without starting subsequent actions, or by abandoning in-progress actions. While completing or abandoning in-progress actions, the pipeline execution is in a <code>Stopping</code> state. After all in-progress actions are completed or abandoned, the pipeline execution is in a <code>Stopped</code> state.</p>
+    async fn stop_pipeline_execution(
+        &self,
+        input: StopPipelineExecutionInput,
+    ) -> Result<StopPipelineExecutionOutput, RusotoError<StopPipelineExecutionError>> {
+        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodePipeline_20150709.StopPipelineExecution",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopPipelineExecutionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopPipelineExecutionError::from_response(response))
         }
     }
 

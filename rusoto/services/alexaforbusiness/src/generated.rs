@@ -1102,6 +1102,10 @@ pub struct Device {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceData {
+    /// <p>The time (in epoch) when the device data was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
     /// <p>The ARN of a device.</p>
     #[serde(rename = "DeviceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1210,6 +1214,10 @@ pub struct DeviceStatusInfo {
     #[serde(rename = "ConnectionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_status: Option<String>,
+    /// <p>The time (in epoch) when the device connection status changed.</p>
+    #[serde(rename = "ConnectionStatusUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_status_updated_time: Option<f64>,
     /// <p>One or more device status detail descriptions.</p>
     #[serde(rename = "DeviceStatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]

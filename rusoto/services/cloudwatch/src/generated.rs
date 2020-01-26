@@ -173,6 +173,8 @@ pub struct AnomalyDetector {
     pub namespace: Option<String>,
     /// <p>The statistic associated with the anomaly detection model.</p>
     pub stat: Option<String>,
+    /// <p>The current status of the anomaly detector's training. The possible values are <code>TRAINED | PENDING_TRAINING | TRAINED_INSUFFICIENT_DATA</code> </p>
+    pub state_value: Option<String>,
 }
 
 struct AnomalyDetectorDeserializer;
@@ -205,6 +207,12 @@ impl AnomalyDetectorDeserializer {
                 }
                 "Stat" => {
                     obj.stat = Some(StatDeserializer::deserialize("Stat", stack)?);
+                }
+                "StateValue" => {
+                    obj.state_value = Some(AnomalyDetectorStateValueDeserializer::deserialize(
+                        "StateValue",
+                        stack,
+                    )?);
                 }
                 _ => skip_tree(stack),
             }
@@ -311,6 +319,17 @@ impl AnomalyDetectorExcludedTimeRangesSerializer {
 
 struct AnomalyDetectorMetricTimezoneDeserializer;
 impl AnomalyDetectorMetricTimezoneDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct AnomalyDetectorStateValueDeserializer;
+impl AnomalyDetectorStateValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;

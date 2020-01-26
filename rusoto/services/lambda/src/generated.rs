@@ -618,7 +618,7 @@ pub struct FunctionConfiguration {
     #[serde(rename = "LastModified")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified: Option<String>,
-    /// <p>The status of the last update that was performed on the function.</p>
+    /// <p>The status of the last update that was performed on the function. This is first set to <code>Successful</code> after function creation completes.</p>
     #[serde(rename = "LastUpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_status: Option<String>,
@@ -1001,7 +1001,7 @@ pub struct InvocationRequest {
 pub struct InvocationResponse {
     /// <p>The version of the function that executed. When you invoke a function with an alias, this indicates which version the alias resolved to.</p>
     pub executed_version: Option<String>,
-    /// <p><p>If present, indicates that an error occurred during function execution. Details about the error are included in the response payload.</p> <ul> <li> <p> <code>Handled</code> - The runtime caught an error thrown by the function and formatted it into a JSON document.</p> </li> <li> <p> <code>Unhandled</code> - The runtime didn&#39;t handle the error. For example, the function ran out of memory or timed out.</p> </li> </ul></p>
+    /// <p>If present, indicates that an error occurred during function execution. Details about the error are included in the response payload.</p>
     pub function_error: Option<String>,
     /// <p>The last 4 KB of the execution log, which is base64 encoded.</p>
     pub log_result: Option<String>,
@@ -1251,7 +1251,7 @@ pub struct ListFunctionsRequest {
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    /// <p>For Lambda@Edge functions, the AWS Region of the master function. For example, <code>us-east-2</code> or <code>ALL</code>. If specified, you must set <code>FunctionVersion</code> to <code>ALL</code>.</p>
+    /// <p>For Lambda@Edge functions, the AWS Region of the master function. For example, <code>us-east-1</code> filters the list of functions to only include Lambda@Edge functions replicated from a master function in US East (N. Virginia). If specified, you must set <code>FunctionVersion</code> to <code>ALL</code>.</p>
     #[serde(rename = "MasterRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub master_region: Option<String>,
@@ -1671,7 +1671,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-/// <p>The function's AWS X-Ray tracing configuration.</p>
+/// <p>The function's AWS X-Ray tracing configuration. To sample and record incoming requests, set <code>Mode</code> to <code>Active</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TracingConfig {
@@ -4435,6 +4435,8 @@ impl Error for RemovePermissionError {}
 pub enum TagResourceError {
     /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
+    /// <p>The resource already exists, or another operation is in progress.</p>
+    ResourceConflict(String),
     /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
@@ -4449,6 +4451,9 @@ impl TagResourceError {
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameterValue(err.msg))
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(TagResourceError::ResourceConflict(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
@@ -4471,6 +4476,7 @@ impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             TagResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceConflict(ref cause) => write!(f, "{}", cause),
             TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             TagResourceError::Service(ref cause) => write!(f, "{}", cause),
             TagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
@@ -4483,6 +4489,8 @@ impl Error for TagResourceError {}
 pub enum UntagResourceError {
     /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
+    /// <p>The resource already exists, or another operation is in progress.</p>
+    ResourceConflict(String),
     /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
@@ -4497,6 +4505,9 @@ impl UntagResourceError {
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UntagResourceError::InvalidParameterValue(err.msg))
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceConflict(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
@@ -4519,6 +4530,7 @@ impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UntagResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceConflict(ref cause) => write!(f, "{}", cause),
             UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             UntagResourceError::Service(ref cause) => write!(f, "{}", cause),
             UntagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
@@ -4891,7 +4903,7 @@ pub trait Lambda {
         input: CreateAliasRequest,
     ) -> Result<AliasConfiguration, RusotoError<CreateAliasError>>;
 
-    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> </ul></p>
+    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
     async fn create_event_source_mapping(
         &self,
         input: CreateEventSourceMappingRequest,
@@ -5154,7 +5166,7 @@ pub trait Lambda {
         input: UpdateAliasRequest,
     ) -> Result<AliasConfiguration, RusotoError<UpdateAliasError>>;
 
-    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> </ul></p>
+    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
     async fn update_event_source_mapping(
         &self,
         input: UpdateEventSourceMappingRequest,
@@ -5331,7 +5343,7 @@ impl Lambda for LambdaClient {
         }
     }
 
-    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> </ul></p>
+    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
     async fn create_event_source_mapping(
         &self,
         input: CreateEventSourceMappingRequest,
@@ -6824,7 +6836,7 @@ impl Lambda for LambdaClient {
         }
     }
 
-    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> </ul></p>
+    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
     async fn update_event_source_mapping(
         &self,
         input: UpdateEventSourceMappingRequest,
