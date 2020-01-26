@@ -659,6 +659,7 @@ time = "0.2"
 reqwest = { version = "0.10", features = ["json"] }
 http = "0.2"
 tokio = { version = "0.2", features = ["time", "rt-core", "fs"] }
+chrono = "0.4.10"
 
 [features]
 all = [
@@ -850,7 +851,7 @@ codecommit = ["rusoto_codecommit"]
 codedeploy = ["rusoto_codedeploy"]
 codepipeline = ["rusoto_codepipeline"]
 codestar = ["rusoto_codestar"]
-cognito-identity = ["rusoto_cognito_identity"]
+cognito-identity = ["rusoto_cognito_identity", "rusoto_iam"]
 cognito-idp = ["rusoto_cognito_idp"]
 cognito-sync = ["rusoto_cognito_sync"]
 comprehend = ["rusoto_comprehend"]
