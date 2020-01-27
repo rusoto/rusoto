@@ -276,7 +276,6 @@ impl SignedRequest {
 
         let current_time = PrimitiveDateTime::now();
         let current_time_fmted = current_time.format("%Y%m%dT%H%M%SZ");
-        let current_time_fmted = format!("{}", &current_time_fmted);
         let current_date = current_time.format("%Y%m%d");
 
         self.remove_header("X-Amz-Content-Sha256");
