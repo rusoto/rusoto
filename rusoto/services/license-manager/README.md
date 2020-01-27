@@ -15,7 +15,7 @@ On Linux, OpenSSL is required.
 To use `rusoto_license_manager` in your application, add it as a dependency in your `Cargo.toml`:
 ```toml
 [dependencies]
-rusoto_license_manager = "0.42.0"
+rusoto_license_manager = "0.43.0-beta1"
 ```
 ## Crate Features
 - `native-tls` - use platform-specific TLS implementation.

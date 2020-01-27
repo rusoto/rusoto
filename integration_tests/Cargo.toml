@@ -1,7 +1,7 @@
 [package]
 name = "rusoto_tests"
 description = "AWS SDK for Rust - Integration Tests"
-version = "0.25.0"
+version = "0.43.0-beta1"
 authors = [
     "Anthony DiMarco <ocramida@gmail.com>",
     "Jimmy Cuadra <jimmy@jimmycuadra.com>",

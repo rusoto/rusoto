@@ -1,6 +1,6 @@
 [package]
 name = "credential_service_mock"
-version = "0.1.0"
+version = "0.43.0-beta1"
 authors = ["Matthew Mayer <matthewkmayer@gmail.com>"]
 edition = "2018"
 

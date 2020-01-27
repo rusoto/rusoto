@@ -1,16 +1,16 @@
 [package]
 name = "skeptical"
-version = "0.1.0"
+version = "0.43.0-beta1"
 authors = ["Matthew Mayer <matthewkmayer@gmail.com>"]
 build = "build.rs"
 edition = "2018"
 
 [dependencies]
-rusoto_core = "0.42"
-rusoto_dynamodb = "0.42"
-rusoto_s3 = "0.42"
-rusoto_ec2 = "0.42"
-rusoto_sts = "0.42"
+rusoto_core = { path = "../rusoto/core" }
+rusoto_dynamodb = { path = "../rusoto/services/dynamodb" }
+rusoto_s3 = { path = "../rusoto/services/s3" }
+rusoto_ec2 = { path = "../rusoto/services/ec2" }
+rusoto_sts = { path = "../rusoto/services/sts" }
 env_logger = "0.5"
 
 [build-dependencies]

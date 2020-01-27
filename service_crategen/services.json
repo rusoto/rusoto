@@ -1,577 +1,577 @@
 {
   "acm": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-12-08",
     "baseTypeName": "Acm"
   },
   "acm-pca": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-08-22",
     "baseTypeName": "AcmPca"
   },
   "alexaforbusiness": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-11-09",
     "baseTypeName": "AlexaForBusiness"
   },
   "amplify": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-07-25",
     "baseTypeName": "Amplify"
   },
   "apigateway": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-07-09",
     "baseTypeName": "ApiGateway"
   },
   "apigatewaymanagementapi": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-11-29",
     "baseTypeName": "ApiGatewayManagementApi"
   },
   "apigatewayv2": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-11-29",
     "baseTypeName": "ApiGatewayV2"
   },
   "application-autoscaling": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-02-06",
     "baseTypeName": "ApplicationAutoScaling"
   },
   "appmesh": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2019-01-25",
     "baseTypeName": "AppMesh"
   },
   "appstream": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-12-01",
     "baseTypeName": "AppStream"
   },
   "appsync": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-07-25",
     "baseTypeName": "AppSync"
   },
   "athena": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-05-18",
     "baseTypeName": "Athena"
   },
   "autoscaling": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2011-01-01",
     "baseTypeName": "Autoscaling"
   },
   "autoscaling-plans": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-01-06",
     "baseTypeName": "AutoscalingPlans"
   },
   "batch": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-08-10",
     "baseTypeName": "Batch"
   },
   "budgets": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-10-20",
     "baseTypeName": "Budgets"
   },
   "ce": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-10-25",
     "baseTypeName": "CostExplorer"
   },
   "chime": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-05-01",
     "baseTypeName": "Chime"
   },
   "cloud9": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-09-23",
     "baseTypeName": "Cloud9"
   },
   "clouddirectory": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-01-11",
     "baseTypeName": "CloudDirectory"
   },
   "cloudformation": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2010-05-15",
     "baseTypeName": "CloudFormation"
   },
   "cloudfront": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-11-05",
     "baseTypeName": "CloudFront"
   },
   "cloudhsm": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-05-30",
     "baseTypeName": "CloudHsm"
   },
   "cloudhsmv2": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-04-28",
     "baseTypeName": "CloudHsmv2"
   },
   "cloudsearch": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2013-01-01",
     "baseTypeName": "CloudSearch"
   },
   "cloudsearchdomain": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2013-01-01",
     "baseTypeName": "CloudSearchDomain"
   },
   "cloudtrail": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2013-11-01",
     "baseTypeName": "CloudTrail"
   },
   "cloudwatch": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2010-08-01",
     "baseTypeName": "CloudWatch"
   },
   "codebuild": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-10-06",
     "baseTypeName": "CodeBuild"
   },
   "codecommit": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-04-13",
     "baseTypeName": "CodeCommit"
   },
   "codedeploy": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-10-06",
     "baseTypeName": "CodeDeploy"
   },
   "codepipeline": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-07-09",
     "baseTypeName": "CodePipeline"
   },
   "codestar": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-04-19",
     "baseTypeName": "CodeStar"
   },
   "cognito-identity": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-06-30",
     "baseTypeName": "CognitoIdentity"
   },
   "cognito-idp": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-04-18",
     "baseTypeName": "CognitoIdentityProvider"
   },
   "cognito-sync": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-06-30",
     "baseTypeName": "CognitoSync"
   },
   "comprehend": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-11-27",
     "baseTypeName": "Comprehend"
   },
   "comprehendmedical": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-10-30",
     "baseTypeName": "ComprehendMedical"
   },
   "config": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-11-12",
     "baseTypeName": "ConfigService"
   },
   "connect": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-08-08",
     "baseTypeName": "Connect"
   },
   "cur": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-01-06",
     "baseTypeName": "CostAndUsageReport"
   },
   "datapipeline": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2012-10-29",
     "baseTypeName": "DataPipeline"
   },
   "dax": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-04-19",
     "baseTypeName": "DynamodbAccelerator"
   },
   "devicefarm": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-06-23",
     "baseTypeName": "DeviceFarm"
   },
   "directconnect": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2012-10-25",
     "baseTypeName": "DirectConnect"
   },
   "discovery": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-11-01",
     "baseTypeName": "Discovery"
   },
   "dms": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-01-01",
     "baseTypeName": "DatabaseMigrationService"
   },
   "docdb": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-10-31",
     "baseTypeName": "Docdb"
   },
   "ds": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-04-16",
     "baseTypeName": "DirectoryService"
   },
   "dynamodb": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2012-08-10",
     "baseTypeName": "DynamoDb"
   },
   "dynamodbstreams": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2012-08-10",
     "baseTypeName": "DynamoDbStreams"
   },
   "ec2": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-11-15",
     "baseTypeName": "Ec2"
   },
   "ec2-instance-connect": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-04-02",
     "baseTypeName": "Ec2InstanceConnect"
   },
   "ecr": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-09-21",
     "baseTypeName": "Ecr"
   },
   "ecs": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-11-13",
     "baseTypeName": "Ecs"
   },
   "elasticache": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-02-02",
     "baseTypeName": "ElastiCache"
   },
   "elasticbeanstalk": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2010-12-01",
     "baseTypeName": "ElasticBeanstalk"
   },
   "efs": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-02-01",
     "baseTypeName": "Efs"
   },
   "eks": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-11-01",
     "baseTypeName": "Eks"
   },
   "elastictranscoder": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2012-09-25",
     "baseTypeName": "Ets"
   },
   "elb": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2012-06-01",
     "baseTypeName": "Elb"
   },
   "elbv2": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-12-01",
     "baseTypeName": "Elb"
   },
   "emr": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2009-03-31",
     "baseTypeName": "Emr"
   },
   "events": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-10-07",
     "baseTypeName": "EventBridge"
   },
   "firehose": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-08-04",
     "baseTypeName": "KinesisFirehose"
   },
   "fms": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-01-01",
     "baseTypeName": "Fms"
   },
   "fsx": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-03-01",
     "baseTypeName": "Fsx"
   },
   "gamelift": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-10-01",
     "baseTypeName": "GameLift"
   },
   "glacier": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2012-06-01",
     "baseTypeName": "Glacier"
   },
   "glue": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-03-31",
     "baseTypeName": "Glue"
   },
   "greengrass": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-06-07",
     "baseTypeName": "GreenGrass"
   },
   "guardduty": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-11-28",
     "baseTypeName": "GuardDuty"
   },
   "health": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-08-04",
     "baseTypeName": "AWSHealth"
   },
   "iam": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2010-05-08",
     "baseTypeName": "Iam"
   },
   "importexport": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2010-06-01",
     "baseTypeName": "ImportExport"
   },
   "inspector": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-02-16",
     "baseTypeName": "Inspector"
   },
   "iot": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-05-28",
     "baseTypeName": "Iot"
   },
   "iotanalytics": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-11-27",
     "baseTypeName": "IotAnalytics"
   },
   "iot-data": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-05-28",
     "baseTypeName": "IotData"
   },
   "iot-jobs-data": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-09-29",
     "baseTypeName": "IotJobsData"
   },
   "iotsecuretunneling": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-10-05",
     "baseTypeName": "IoTSecureTunneling"
   },
   "iot1click-devices": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-05-14",
     "baseTypeName": "Iot1ClickDevices"
   },
   "iot1click-projects": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-05-14",
     "baseTypeName": "Iot1ClickProjects"
   },
   "kafka": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-11-14",
     "baseTypeName": "Kafka"
   },
   "kinesis": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2013-12-02",
     "baseTypeName": "Kinesis"
   },
   "kinesisanalytics": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-08-14",
     "baseTypeName": "KinesisAnalytics"
   },
   "kinesisvideo": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-09-30",
     "baseTypeName": "KinesisVideo"
   },
   "kinesis-video-media": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-09-30",
     "baseTypeName": "KinesisVideoMedia"
   },
   "kinesis-video-archived-media": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-09-30",
     "baseTypeName": "KinesisVideoArchivedMedia"
   },
   "kms": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-11-01",
     "baseTypeName": "Kms"
   },
   "lambda": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-03-31",
     "baseTypeName": "Lambda"
   },
   "lex-models": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-04-19",
     "baseTypeName": "LexModels"
   },
   "lex-runtime": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-11-28",
     "baseTypeName": "LexRuntime"
   },
   "license-manager": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-08-01",
     "baseTypeName": "LicenseManager"
   },
   "lightsail": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-11-28",
     "baseTypeName": "Lightsail"
   },
   "logs": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-03-28",
     "baseTypeName": "CloudWatchLogs",
     "customDevDependencies": {
@@ -579,308 +579,308 @@
     }
   },
   "machinelearning": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-12-12",
     "baseTypeName": "MachineLearning"
   },
   "macie": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-12-19",
     "baseTypeName": "Macie"
   },
   "marketplacecommerceanalytics": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-07-01",
     "baseTypeName": "MarketplaceCommerceAnalytics"
   },
   "marketplace-entitlement": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-01-11",
     "baseTypeName": "MarketplaceEntitlement"
   },
   "mediaconvert": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-08-29",
     "baseTypeName": "MediaConvert"
   },
   "medialive": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-10-14",
     "baseTypeName": "MediaLive"
   },
   "mediapackage": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-10-12",
     "baseTypeName": "MediaPackage"
   },
   "mediastore": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-09-01",
     "baseTypeName": "MediaStore"
   },
   "mediatailor": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-04-23",
     "baseTypeName": "MediaTailor"
   },
   "meteringmarketplace": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-01-14",
     "baseTypeName": "MarketplaceMetering"
   },
   "mgh": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-05-31",
     "baseTypeName": "MigrationHub"
   },
   "mobile": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-07-01",
     "baseTypeName": "Mobile"
   },
   "mq": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-11-27",
     "baseTypeName": "MQ"
   },
   "mturk": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-01-17",
     "baseTypeName": "MechanicalTurk"
   },
   "neptune": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-10-31",
     "baseTypeName": "Neptune"
   },
   "opsworks": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2013-02-18",
     "baseTypeName": "OpsWorks"
   },
   "opsworkscm": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-11-01",
     "baseTypeName": "OpsWorksCM"
   },
   "organizations": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-11-28",
     "baseTypeName": "Organizations"
   },
   "pi": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-02-27",
     "baseTypeName": "PerformanceInsights"
   },
   "polly": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-06-10",
     "baseTypeName": "Polly"
   },
   "pricing": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-10-15",
     "baseTypeName": "Pricing"
   },
   "qldb": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2019-01-02",
     "baseTypeName": "Qldb"
   },
   "qldb-session": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2019-07-11",
     "baseTypeName": "QldbSession"
   },
   "ram": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-01-04",
     "baseTypeName": "Ram"
   },
   "rds": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-10-31",
     "baseTypeName": "Rds"
   },
   "rds-data": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-08-01",
     "baseTypeName": "RdsData"
   },
   "redshift": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2012-12-01",
     "baseTypeName": "Redshift"
   },
   "rekognition": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-06-27",
     "baseTypeName": "Rekognition"
   },
   "resource-groups": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-11-27",
     "baseTypeName": "ResourceGroups"
   },
   "resourcegroupstaggingapi": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-01-26",
     "baseTypeName": "ResourceGroupsTaggingApi"
   },
   "route53": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2013-04-01",
     "baseTypeName": "Route53"
   },
   "route53domains": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-05-15",
     "baseTypeName": "Route53Domains"
   },
   "s3": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2006-03-01",
     "baseTypeName": "S3"
   },
   "sagemaker": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-07-24",
     "baseTypeName": "SageMaker"
   },
   "sagemaker-runtime": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-05-13",
     "baseTypeName": "SageMakerRuntime"
   },
   "sdb": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2009-04-15",
     "baseTypeName": "SimpleDb"
   },
   "secretsmanager": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-10-17",
     "baseTypeName": "SecretsManager"
   },
   "securityhub": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-10-26",
     "baseTypeName": "SecurityHub"
   },
   "serverlessrepo": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-09-08",
     "baseTypeName": "ServerlessRepo"
   },
   "servicecatalog": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-12-10",
     "baseTypeName": "ServiceCatalog"
   },
   "servicediscovery": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-03-14",
     "baseTypeName": "ServiceDiscovery"
   },
   "ses": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2010-12-01",
     "baseTypeName": "Ses"
   },
   "shield": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-06-02",
     "baseTypeName": "Shield"
   },
   "sms": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-10-24",
     "baseTypeName": "ServerMigrationService"
   },
   "snowball": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-06-30",
     "baseTypeName": "Snowball"
   },
   "sns": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2010-03-31",
     "baseTypeName": "Sns"
   },
   "sqs": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2012-11-05",
     "baseTypeName": "Sqs"
   },
   "ssm": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2014-11-06",
     "baseTypeName": "Ssm"
   },
   "stepfunctions": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-11-23",
     "baseTypeName": "StepFunctions"
   },
   "storagegateway": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2013-06-30",
     "baseTypeName": "StorageGateway"
   },
   "sts": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2011-06-15",
     "customDependencies": {
       "chrono": "0.4.0",
@@ -889,80 +889,80 @@
     "baseTypeName": "Sts"
   },
   "support": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2013-04-15",
     "baseTypeName": "AWSSupport"
   },
   "swf": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2012-01-25",
     "baseTypeName": "Swf"
   },
   "textract": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-06-27",
     "baseTypeName": "Textract"
   },
   "transcribe": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-10-26",
     "baseTypeName": "Transcribe"
   },
   "transfer": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-11-05",
     "baseTypeName": "Transfer"
   },
   "translate": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-07-01",
     "baseTypeName": "Translate"
   },
   "waf": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-08-24",
     "baseTypeName": "Waf"
   },
   "waf-regional": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-11-28",
     "baseTypeName": "WAFRegional"
   },
   "workdocs": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-05-01",
     "baseTypeName": "Workdocs"
   },
   "worklink": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2018-09-25",
     "baseTypeName": "Worklink"
   },
   "workmail": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2017-10-01",
     "baseTypeName": "Workmail"
   },
   "workspaces": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2015-04-08",
     "baseTypeName": "Workspaces"
   },
   "xray": {
-    "version": "0.42.0",
-    "coreVersion": "0.42.0",
+    "version": "0.43.0-beta1",
+    "coreVersion": "0.43.0-beta1",
     "protocolVersion": "2016-04-12",
     "baseTypeName": "XRay"
   }

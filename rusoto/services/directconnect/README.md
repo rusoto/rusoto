@@ -15,7 +15,7 @@ On Linux, OpenSSL is required.
 To use `rusoto_directconnect` in your application, add it as a dependency in your `Cargo.toml`:
 ```toml
 [dependencies]
-rusoto_directconnect = "0.42.0"
+rusoto_directconnect = "0.43.0-beta1"
 ```
 ## Crate Features
 - `native-tls` - use platform-specific TLS implementation.

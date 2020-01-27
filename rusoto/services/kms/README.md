@@ -15,7 +15,7 @@ On Linux, OpenSSL is required.
 To use `rusoto_kms` in your application, add it as a dependency in your `Cargo.toml`:
 ```toml
 [dependencies]
-rusoto_kms = "0.42.0"
+rusoto_kms = "0.43.0-beta1"
 ```
 ## Crate Features
 - `native-tls` - use platform-specific TLS implementation.
