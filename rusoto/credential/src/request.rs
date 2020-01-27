@@ -40,7 +40,7 @@ impl HttpClient {
                 })?;
                 let body = resp.body_mut();
                 let mut text = vec![];
-                for chunk in body.next().await {
+                while let Some(chunk) = body.next().await {
                     let chunk = chunk.map_err(|err| {
                         IoError::new(ErrorKind::Other, format!("Could not get chunk: {}", err))
                     })?;

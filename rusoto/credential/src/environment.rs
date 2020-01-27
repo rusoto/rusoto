@@ -28,8 +28,6 @@ use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCrede
 /// # Example
 ///
 /// ```rust
-/// # #[tokio::main]
-/// # async fn main() {
 /// use futures::future::Future;
 /// use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
 /// use std::env;
@@ -48,7 +46,6 @@ use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCrede
 /// env::set_var("AWS_CREDENTIAL_EXPIRATION", "2018-04-21T01:13:02Z");
 /// let creds = EnvironmentProvider::default().credentials().await.unwrap();
 /// assert_eq!(creds.expires_at().unwrap().to_rfc3339(), "2018-04-21T01:13:02+00:00");
-/// # }
 /// ```
 #[derive(Debug, Clone)]
 pub struct EnvironmentProvider {
@@ -67,9 +64,6 @@ impl EnvironmentProvider {
     /// Create an EnvironmentProvider with a non-standard variable prefix.
     ///
     /// ```rust
-    /// #
-    /// #[tokio::main]
-    /// # async fn main() {
     /// use std::future::Future;
     /// use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
     /// use std::env;
@@ -88,7 +82,6 @@ impl EnvironmentProvider {
     /// env::set_var("MYAPP_CREDENTIAL_EXPIRATION", "2018-04-21T01:13:02Z");
     /// let creds = EnvironmentProvider::with_prefix("MYAPP").credentials().await.unwrap();
     /// assert_eq!(creds.expires_at().unwrap().to_rfc3339(), "2018-04-21T01:13:02+00:00");
-    /// # }
     /// ```
     pub fn with_prefix(prefix: &str) -> Self {
         EnvironmentProvider {

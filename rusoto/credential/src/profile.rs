@@ -51,9 +51,9 @@ impl ProfileProvider {
     /// Create a new `ProfileProvider` for the credentials file at the given path, using
     /// the given profile.
     pub fn with_configuration<F, P>(file_path: F, profile: P) -> ProfileProvider
-    where
-        F: Into<PathBuf>,
-        P: Into<String>,
+        where
+            F: Into<PathBuf>,
+            P: Into<String>,
     {
         ProfileProvider {
             file_path: file_path.into(),
@@ -65,8 +65,8 @@ impl ProfileProvider {
     /// the profile name from environment variable ```AWS_PROFILE``` or fall-back to ```"default"```
     /// if ```AWS_PROFILE``` is not set.
     pub fn with_default_configuration<F>(file_path: F) -> ProfileProvider
-    where
-        F: Into<PathBuf>,
+        where
+            F: Into<PathBuf>,
     {
         ProfileProvider::with_configuration(file_path, ProfileProvider::default_profile_name())
     }
@@ -152,16 +152,16 @@ impl ProfileProvider {
 
     /// Set the credentials file path.
     pub fn set_file_path<F>(&mut self, file_path: F)
-    where
-        F: Into<PathBuf>,
+        where
+            F: Into<PathBuf>,
     {
         self.file_path = file_path.into();
     }
 
     /// Set the profile name.
     pub fn set_profile<P>(&mut self, profile: P)
-    where
-        P: Into<String>,
+        where
+            P: Into<String>,
     {
         self.profile = profile.into();
     }
@@ -286,7 +286,7 @@ fn parse_credentials_file(
             return Err(CredentialsError::new(format!(
                 "Couldn't stat credentials file: [ {:?} ]. Non existant, or no permission.",
                 file_path
-            )))
+            )));
         }
         Ok(metadata) => {
             if !metadata.is_file() {
@@ -324,10 +324,9 @@ fn parse_credentials_file(
 
         // handle the opening of named profile blocks
         if profile_regex.is_match(&unwrapped_line) {
-            if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
-                let creds =
-                    AwsCredentials::new(access_key.unwrap(), secret_key.unwrap(), token, None);
-                profiles.insert(profile_name.unwrap(), creds);
+            if let (Some(profile), Some(access), Some(secret)) = (profile_name, access_key, secret_key) {
+                let creds = AwsCredentials::new(access, secret, token, None);
+                profiles.insert(profile, creds);
             }
 
             access_key = None;
@@ -370,9 +369,9 @@ fn parse_credentials_file(
         }
     }
 
-    if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
-        let creds = AwsCredentials::new(access_key.unwrap(), secret_key.unwrap(), token, None);
-        profiles.insert(profile_name.unwrap(), creds);
+    if let (Some(profile), Some(access), Some(secret)) = (profile_name, access_key, secret_key) {
+        let creds = AwsCredentials::new(access, secret, token, None);
+        profiles.insert(profile, creds);
     }
 
     if profiles.is_empty() {
@@ -396,7 +395,6 @@ fn parse_command_str(s: &str) -> Result<Command, CredentialsError> {
 
 #[cfg(test)]
 mod tests {
-
     use std::env;
     use std::path::Path;
 

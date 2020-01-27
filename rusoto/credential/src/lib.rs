@@ -331,19 +331,13 @@ impl ProvideAwsCredentials for DefaultCredentialsProvider {
 /// # Example
 ///
 /// ```rust
-/// extern crate rusoto_credential;
-///
 /// use std::time::Duration;
 ///
 /// use rusoto_credential::ChainProvider;
 ///
-/// fn main() {
-///   let mut provider = ChainProvider::new();
-///   // you can overwrite the default timeout like this:
-///   provider.set_timeout(Duration::from_secs(60));
-///
-///   // ...
-/// }
+/// let mut provider = ChainProvider::new();
+/// // you can overwrite the default timeout like this:
+/// provider.set_timeout(Duration::from_secs(60));
 /// ```
 ///
 /// # Warning

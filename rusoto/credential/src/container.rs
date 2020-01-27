@@ -37,19 +37,13 @@ const AWS_CONTAINER_AUTHORIZATION_TOKEN: &str = "AWS_CONTAINER_AUTHORIZATION_TOK
 /// # Example
 ///
 /// ```rust
-/// extern crate rusoto_credential;
-///
 /// use std::time::Duration;
 ///
 /// use rusoto_credential::ContainerProvider;
 ///
-/// fn main() {
-///   let mut provider = ContainerProvider::new();
-///   // you can overwrite the default timeout like this:
-///   provider.set_timeout(Duration::from_secs(60));
-///
-///   // ...
-/// }
+/// let mut provider = ContainerProvider::new();
+/// // you can overwrite the default timeout like this:
+/// provider.set_timeout(Duration::from_secs(60));
 /// ```
 #[derive(Clone, Debug)]
 pub struct ContainerProvider {
