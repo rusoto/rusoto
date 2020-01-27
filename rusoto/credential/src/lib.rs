@@ -11,7 +11,9 @@ pub use crate::container::ContainerProvider;
 pub use crate::environment::EnvironmentProvider;
 pub use crate::instance_metadata::InstanceMetadataProvider;
 pub use crate::profile::ProfileProvider;
+pub use crate::secrets::Secret;
 pub use crate::static_provider::StaticProvider;
+pub use crate::variable::Variable;
 
 pub mod claims;
 mod container;
@@ -19,9 +21,11 @@ mod environment;
 mod instance_metadata;
 mod profile;
 mod request;
+mod secrets;
 mod static_provider;
 #[cfg(test)]
 pub(crate) mod test_utils;
+mod variable;
 
 use async_trait::async_trait;
 use std::collections::BTreeMap;
