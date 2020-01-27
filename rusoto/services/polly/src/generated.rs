@@ -464,7 +464,7 @@ impl DeleteLexiconError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLexiconError {
@@ -500,7 +500,7 @@ impl DescribeVoicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeVoicesError {
@@ -536,7 +536,7 @@ impl GetLexiconError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLexiconError {
@@ -583,7 +583,7 @@ impl GetSpeechSynthesisTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSpeechSynthesisTaskError {
@@ -620,7 +620,7 @@ impl ListLexiconsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListLexiconsError {
@@ -660,7 +660,7 @@ impl ListSpeechSynthesisTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSpeechSynthesisTasksError {
@@ -723,7 +723,7 @@ impl PutLexiconError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutLexiconError {
@@ -838,7 +838,7 @@ impl StartSpeechSynthesisTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartSpeechSynthesisTaskError {
@@ -931,7 +931,7 @@ impl SynthesizeSpeechError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SynthesizeSpeechError {

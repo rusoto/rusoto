@@ -1228,7 +1228,7 @@ impl CreateAppError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAppError {
@@ -1318,7 +1318,7 @@ impl CreateReplicationJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateReplicationJobError {
@@ -1382,7 +1382,7 @@ impl DeleteAppError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAppError {
@@ -1448,7 +1448,7 @@ impl DeleteAppLaunchConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAppLaunchConfigurationError {
@@ -1522,7 +1522,7 @@ impl DeleteAppReplicationConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAppReplicationConfigurationError {
@@ -1596,7 +1596,7 @@ impl DeleteReplicationJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteReplicationJobError {
@@ -1655,7 +1655,7 @@ impl DeleteServerCatalogError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteServerCatalogError {
@@ -1711,7 +1711,7 @@ impl DisassociateConnectorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateConnectorError {
@@ -1772,7 +1772,7 @@ impl GenerateChangeSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GenerateChangeSetError {
@@ -1832,7 +1832,7 @@ impl GenerateTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GenerateTemplateError {
@@ -1886,7 +1886,7 @@ impl GetAppError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAppError {
@@ -1950,7 +1950,7 @@ impl GetAppLaunchConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAppLaunchConfigurationError {
@@ -2022,7 +2022,7 @@ impl GetAppReplicationConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAppReplicationConfigurationError {
@@ -2064,7 +2064,7 @@ impl GetConnectorsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetConnectorsError {
@@ -2108,7 +2108,7 @@ impl GetReplicationJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetReplicationJobsError {
@@ -2154,7 +2154,7 @@ impl GetReplicationRunsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetReplicationRunsError {
@@ -2186,7 +2186,7 @@ impl GetServersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetServersError {
@@ -2246,7 +2246,7 @@ impl ImportServerCatalogError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportServerCatalogError {
@@ -2300,7 +2300,7 @@ impl LaunchAppError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for LaunchAppError {
@@ -2354,7 +2354,7 @@ impl ListAppsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAppsError {
@@ -2418,7 +2418,7 @@ impl PutAppLaunchConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutAppLaunchConfigurationError {
@@ -2490,7 +2490,7 @@ impl PutAppReplicationConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutAppReplicationConfigurationError {
@@ -2560,7 +2560,7 @@ impl StartAppReplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartAppReplicationError {
@@ -2626,7 +2626,7 @@ impl StartOnDemandReplicationRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartOnDemandReplicationRunError {
@@ -2694,7 +2694,7 @@ impl StopAppReplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopAppReplicationError {
@@ -2750,7 +2750,7 @@ impl TerminateAppError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TerminateAppError {
@@ -2804,7 +2804,7 @@ impl UpdateAppError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAppError {
@@ -2887,7 +2887,7 @@ impl UpdateReplicationJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateReplicationJobError {

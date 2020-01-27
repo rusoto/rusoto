@@ -1846,7 +1846,7 @@ impl AbortDocumentVersionUploadError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AbortDocumentVersionUploadError {
@@ -1909,7 +1909,7 @@ impl ActivateUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ActivateUserError {
@@ -1966,7 +1966,7 @@ impl AddResourcePermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddResourcePermissionsError {
@@ -2042,7 +2042,7 @@ impl CreateCommentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCommentError {
@@ -2123,7 +2123,7 @@ impl CreateCustomMetadataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCustomMetadataError {
@@ -2205,7 +2205,7 @@ impl CreateFolderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateFolderError {
@@ -2270,7 +2270,7 @@ impl CreateLabelsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateLabelsError {
@@ -2323,7 +2323,7 @@ impl CreateNotificationSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateNotificationSubscriptionError {
@@ -2383,7 +2383,7 @@ impl CreateUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserError {
@@ -2441,7 +2441,7 @@ impl DeactivateUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeactivateUserError {
@@ -2509,7 +2509,7 @@ impl DeleteCommentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCommentError {
@@ -2582,7 +2582,7 @@ impl DeleteCustomMetadataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCustomMetadataError {
@@ -2660,7 +2660,7 @@ impl DeleteDocumentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDocumentError {
@@ -2734,7 +2734,7 @@ impl DeleteFolderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFolderError {
@@ -2815,7 +2815,7 @@ impl DeleteFolderContentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFolderContentsError {
@@ -2875,7 +2875,7 @@ impl DeleteLabelsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLabelsError {
@@ -2934,7 +2934,7 @@ impl DeleteNotificationSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteNotificationSubscriptionError {
@@ -2997,7 +2997,7 @@ impl DeleteUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserError {
@@ -3057,7 +3057,7 @@ impl DescribeActivitiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeActivitiesError {
@@ -3122,7 +3122,7 @@ impl DescribeCommentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCommentsError {
@@ -3201,7 +3201,7 @@ impl DescribeDocumentVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDocumentVersionsError {
@@ -3278,7 +3278,7 @@ impl DescribeFolderContentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFolderContentsError {
@@ -3334,7 +3334,7 @@ impl DescribeGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeGroupsError {
@@ -3385,7 +3385,7 @@ impl DescribeNotificationSubscriptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeNotificationSubscriptionsError {
@@ -3448,7 +3448,7 @@ impl DescribeResourcePermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeResourcePermissionsError {
@@ -3515,7 +3515,7 @@ impl DescribeRootFoldersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRootFoldersError {
@@ -3585,7 +3585,7 @@ impl DescribeUsersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUsersError {
@@ -3645,7 +3645,7 @@ impl GetCurrentUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCurrentUserError {
@@ -3711,7 +3711,7 @@ impl GetDocumentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDocumentError {
@@ -3771,7 +3771,7 @@ impl GetDocumentPathError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDocumentPathError {
@@ -3841,7 +3841,7 @@ impl GetDocumentVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDocumentVersionError {
@@ -3911,7 +3911,7 @@ impl GetFolderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFolderError {
@@ -3969,7 +3969,7 @@ impl GetFolderPathError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFolderPathError {
@@ -4025,7 +4025,7 @@ impl GetResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourcesError {
@@ -4133,7 +4133,7 @@ impl InitiateDocumentVersionUploadError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InitiateDocumentVersionUploadError {
@@ -4220,7 +4220,7 @@ impl RemoveAllResourcePermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveAllResourcePermissionsError {
@@ -4284,7 +4284,7 @@ impl RemoveResourcePermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveResourcePermissionError {
@@ -4372,7 +4372,7 @@ impl UpdateDocumentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDocumentError {
@@ -4462,7 +4462,7 @@ impl UpdateDocumentVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDocumentVersionError {
@@ -4548,7 +4548,7 @@ impl UpdateFolderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFolderError {
@@ -4626,7 +4626,7 @@ impl UpdateUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserError {

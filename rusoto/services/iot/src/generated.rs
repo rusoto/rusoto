@@ -8561,7 +8561,7 @@ impl AcceptCertificateTransferError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AcceptCertificateTransferError {
@@ -8620,7 +8620,7 @@ impl AddThingToBillingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddThingToBillingGroupError {
@@ -8672,7 +8672,7 @@ impl AddThingToThingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddThingToThingGroupError {
@@ -8733,7 +8733,7 @@ impl AssociateTargetsWithJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateTargetsWithJobError {
@@ -8797,7 +8797,7 @@ impl AttachPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachPolicyError {
@@ -8871,7 +8871,7 @@ impl AttachPrincipalPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachPrincipalPolicyError {
@@ -8940,7 +8940,7 @@ impl AttachSecurityProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachSecurityProfileError {
@@ -9006,7 +9006,7 @@ impl AttachThingPrincipalError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachThingPrincipalError {
@@ -9066,7 +9066,7 @@ impl CancelAuditMitigationActionsTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelAuditMitigationActionsTaskError {
@@ -9120,7 +9120,7 @@ impl CancelAuditTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelAuditTaskError {
@@ -9197,7 +9197,7 @@ impl CancelCertificateTransferError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelCertificateTransferError {
@@ -9250,7 +9250,7 @@ impl CancelJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelJobError {
@@ -9312,7 +9312,7 @@ impl CancelJobExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelJobExecutionError {
@@ -9380,7 +9380,7 @@ impl ClearDefaultAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ClearDefaultAuthorizerError {
@@ -9447,7 +9447,7 @@ impl ConfirmTopicRuleDestinationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ConfirmTopicRuleDestinationError {
@@ -9517,7 +9517,7 @@ impl CreateAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAuthorizerError {
@@ -9570,7 +9570,7 @@ impl CreateBillingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateBillingGroupError {
@@ -9631,7 +9631,7 @@ impl CreateCertificateFromCsrError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCertificateFromCsrError {
@@ -9716,7 +9716,7 @@ impl CreateDomainConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDomainConfigurationError {
@@ -9799,7 +9799,7 @@ impl CreateDynamicThingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDynamicThingGroupError {
@@ -9862,7 +9862,7 @@ impl CreateJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateJobError {
@@ -9925,7 +9925,7 @@ impl CreateKeysAndCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateKeysAndCertificateError {
@@ -9987,7 +9987,7 @@ impl CreateMitigationActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMitigationActionError {
@@ -10058,7 +10058,7 @@ impl CreateOTAUpdateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateOTAUpdateError {
@@ -10125,7 +10125,7 @@ impl CreatePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePolicyError {
@@ -10202,7 +10202,7 @@ impl CreatePolicyVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePolicyVersionError {
@@ -10274,7 +10274,7 @@ impl CreateProvisioningClaimError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProvisioningClaimError {
@@ -10348,7 +10348,7 @@ impl CreateProvisioningTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProvisioningTemplateError {
@@ -10431,7 +10431,7 @@ impl CreateProvisioningTemplateVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProvisioningTemplateVersionError {
@@ -10511,7 +10511,7 @@ impl CreateRoleAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRoleAliasError {
@@ -10571,7 +10571,7 @@ impl CreateScheduledAuditError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateScheduledAuditError {
@@ -10626,7 +10626,7 @@ impl CreateSecurityProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSecurityProfileError {
@@ -10694,7 +10694,7 @@ impl CreateStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateStreamError {
@@ -10761,7 +10761,7 @@ impl CreateThingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateThingError {
@@ -10814,7 +10814,7 @@ impl CreateThingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateThingGroupError {
@@ -10874,7 +10874,7 @@ impl CreateThingTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateThingTypeError {
@@ -10938,7 +10938,7 @@ impl CreateTopicRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTopicRuleError {
@@ -11003,7 +11003,7 @@ impl CreateTopicRuleDestinationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTopicRuleDestinationError {
@@ -11068,7 +11068,7 @@ impl DeleteAccountAuditConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAccountAuditConfigurationError {
@@ -11137,7 +11137,7 @@ impl DeleteAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAuthorizerError {
@@ -11188,7 +11188,7 @@ impl DeleteBillingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBillingGroupError {
@@ -11257,7 +11257,7 @@ impl DeleteCACertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCACertificateError {
@@ -11330,7 +11330,7 @@ impl DeleteCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCertificateError {
@@ -11404,7 +11404,7 @@ impl DeleteDomainConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDomainConfigurationError {
@@ -11460,7 +11460,7 @@ impl DeleteDynamicThingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDynamicThingGroupError {
@@ -11518,7 +11518,7 @@ impl DeleteJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteJobError {
@@ -11577,7 +11577,7 @@ impl DeleteJobExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteJobExecutionError {
@@ -11625,7 +11625,7 @@ impl DeleteMitigationActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMitigationActionError {
@@ -11687,7 +11687,7 @@ impl DeleteOTAUpdateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteOTAUpdateError {
@@ -11753,7 +11753,7 @@ impl DeletePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePolicyError {
@@ -11823,7 +11823,7 @@ impl DeletePolicyVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePolicyVersionError {
@@ -11898,7 +11898,7 @@ impl DeleteProvisioningTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProvisioningTemplateError {
@@ -11972,7 +11972,7 @@ impl DeleteProvisioningTemplateVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProvisioningTemplateVersionError {
@@ -12043,7 +12043,7 @@ impl DeleteRegistrationCodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRegistrationCodeError {
@@ -12107,7 +12107,7 @@ impl DeleteRoleAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRoleAliasError {
@@ -12162,7 +12162,7 @@ impl DeleteScheduledAuditError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteScheduledAuditError {
@@ -12216,7 +12216,7 @@ impl DeleteSecurityProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSecurityProfileError {
@@ -12279,7 +12279,7 @@ impl DeleteStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteStreamError {
@@ -12345,7 +12345,7 @@ impl DeleteThingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteThingError {
@@ -12396,7 +12396,7 @@ impl DeleteThingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteThingGroupError {
@@ -12454,7 +12454,7 @@ impl DeleteThingTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteThingTypeError {
@@ -12511,7 +12511,7 @@ impl DeleteTopicRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTopicRuleError {
@@ -12575,7 +12575,7 @@ impl DeleteTopicRuleDestinationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTopicRuleDestinationError {
@@ -12625,7 +12625,7 @@ impl DeleteV2LoggingLevelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteV2LoggingLevelError {
@@ -12684,7 +12684,7 @@ impl DeprecateThingTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeprecateThingTypeError {
@@ -12730,7 +12730,7 @@ impl DescribeAccountAuditConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAccountAuditConfigurationError {
@@ -12782,7 +12782,7 @@ impl DescribeAuditFindingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAuditFindingError {
@@ -12840,7 +12840,7 @@ impl DescribeAuditMitigationActionsTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAuditMitigationActionsTaskError {
@@ -12896,7 +12896,7 @@ impl DescribeAuditTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAuditTaskError {
@@ -12956,7 +12956,7 @@ impl DescribeAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAuthorizerError {
@@ -13010,7 +13010,7 @@ impl DescribeBillingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeBillingGroupError {
@@ -13076,7 +13076,7 @@ impl DescribeCACertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCACertificateError {
@@ -13140,7 +13140,7 @@ impl DescribeCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCertificateError {
@@ -13212,7 +13212,7 @@ impl DescribeDefaultAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDefaultAuthorizerError {
@@ -13279,7 +13279,7 @@ impl DescribeDomainConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDomainConfigurationError {
@@ -13330,7 +13330,7 @@ impl DescribeEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEndpointError {
@@ -13374,7 +13374,7 @@ impl DescribeEventConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventConfigurationsError {
@@ -13430,7 +13430,7 @@ impl DescribeIndexError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeIndexError {
@@ -13480,7 +13480,7 @@ impl DescribeJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeJobError {
@@ -13532,7 +13532,7 @@ impl DescribeJobExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeJobExecutionError {
@@ -13586,7 +13586,7 @@ impl DescribeMitigationActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMitigationActionError {
@@ -13651,7 +13651,7 @@ impl DescribeProvisioningTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProvisioningTemplateError {
@@ -13719,7 +13719,7 @@ impl DescribeProvisioningTemplateVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProvisioningTemplateVersionError {
@@ -13790,7 +13790,7 @@ impl DescribeRoleAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRoleAliasError {
@@ -13846,7 +13846,7 @@ impl DescribeScheduledAuditError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeScheduledAuditError {
@@ -13900,7 +13900,7 @@ impl DescribeSecurityProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSecurityProfileError {
@@ -13958,7 +13958,7 @@ impl DescribeStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStreamError {
@@ -14018,7 +14018,7 @@ impl DescribeThingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeThingError {
@@ -14068,7 +14068,7 @@ impl DescribeThingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeThingGroupError {
@@ -14133,7 +14133,7 @@ impl DescribeThingRegistrationTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeThingRegistrationTaskError {
@@ -14198,7 +14198,7 @@ impl DescribeThingTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeThingTypeError {
@@ -14258,7 +14258,7 @@ impl DetachPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachPolicyError {
@@ -14326,7 +14326,7 @@ impl DetachPrincipalPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachPrincipalPolicyError {
@@ -14382,7 +14382,7 @@ impl DetachSecurityProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachSecurityProfileError {
@@ -14446,7 +14446,7 @@ impl DetachThingPrincipalError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachThingPrincipalError {
@@ -14503,7 +14503,7 @@ impl DisableTopicRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableTopicRuleError {
@@ -14559,7 +14559,7 @@ impl EnableTopicRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableTopicRuleError {
@@ -14633,7 +14633,7 @@ impl GetCardinalityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCardinalityError {
@@ -14707,7 +14707,7 @@ impl GetEffectivePoliciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetEffectivePoliciesError {
@@ -14771,7 +14771,7 @@ impl GetIndexingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIndexingConfigurationError {
@@ -14820,7 +14820,7 @@ impl GetJobDocumentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetJobDocumentError {
@@ -14865,7 +14865,7 @@ impl GetLoggingOptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLoggingOptionsError {
@@ -14922,7 +14922,7 @@ impl GetOTAUpdateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetOTAUpdateError {
@@ -14997,7 +14997,7 @@ impl GetPercentilesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPercentilesError {
@@ -15060,7 +15060,7 @@ impl GetPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPolicyError {
@@ -15120,7 +15120,7 @@ impl GetPolicyVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPolicyVersionError {
@@ -15177,7 +15177,7 @@ impl GetRegistrationCodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRegistrationCodeError {
@@ -15251,7 +15251,7 @@ impl GetStatisticsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetStatisticsError {
@@ -15304,7 +15304,7 @@ impl GetTopicRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTopicRuleError {
@@ -15358,7 +15358,7 @@ impl GetTopicRuleDestinationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTopicRuleDestinationError {
@@ -15403,7 +15403,7 @@ impl GetV2LoggingOptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetV2LoggingOptionsError {
@@ -15454,7 +15454,7 @@ impl ListActiveViolationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListActiveViolationsError {
@@ -15523,7 +15523,7 @@ impl ListAttachedPoliciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAttachedPoliciesError {
@@ -15569,7 +15569,7 @@ impl ListAuditFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAuditFindingsError {
@@ -15619,7 +15619,7 @@ impl ListAuditMitigationActionsExecutionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAuditMitigationActionsExecutionsError {
@@ -15675,7 +15675,7 @@ impl ListAuditMitigationActionsTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAuditMitigationActionsTasksError {
@@ -15721,7 +15721,7 @@ impl ListAuditTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAuditTasksError {
@@ -15773,7 +15773,7 @@ impl ListAuthorizersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAuthorizersError {
@@ -15822,7 +15822,7 @@ impl ListBillingGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBillingGroupsError {
@@ -15877,7 +15877,7 @@ impl ListCACertificatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCACertificatesError {
@@ -15931,7 +15931,7 @@ impl ListCertificatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCertificatesError {
@@ -15989,7 +15989,7 @@ impl ListCertificatesByCAError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCertificatesByCAError {
@@ -16051,7 +16051,7 @@ impl ListDomainConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDomainConfigurationsError {
@@ -16105,7 +16105,7 @@ impl ListIndicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListIndicesError {
@@ -16160,7 +16160,7 @@ impl ListJobExecutionsForJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListJobExecutionsForJobError {
@@ -16216,7 +16216,7 @@ impl ListJobExecutionsForThingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListJobExecutionsForThingError {
@@ -16264,7 +16264,7 @@ impl ListJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListJobsError {
@@ -16311,7 +16311,7 @@ impl ListMitigationActionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListMitigationActionsError {
@@ -16363,7 +16363,7 @@ impl ListOTAUpdatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOTAUpdatesError {
@@ -16425,7 +16425,7 @@ impl ListOutgoingCertificatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOutgoingCertificatesError {
@@ -16479,7 +16479,7 @@ impl ListPoliciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPoliciesError {
@@ -16544,7 +16544,7 @@ impl ListPolicyPrincipalsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPolicyPrincipalsError {
@@ -16606,7 +16606,7 @@ impl ListPolicyVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPolicyVersionsError {
@@ -16674,7 +16674,7 @@ impl ListPrincipalPoliciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPrincipalPoliciesError {
@@ -16738,7 +16738,7 @@ impl ListPrincipalThingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPrincipalThingsError {
@@ -16805,7 +16805,7 @@ impl ListProvisioningTemplateVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProvisioningTemplateVersionsError {
@@ -16870,7 +16870,7 @@ impl ListProvisioningTemplatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProvisioningTemplatesError {
@@ -16923,7 +16923,7 @@ impl ListRoleAliasesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRoleAliasesError {
@@ -16967,7 +16967,7 @@ impl ListScheduledAuditsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListScheduledAuditsError {
@@ -17011,7 +17011,7 @@ impl ListSecurityProfilesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSecurityProfilesError {
@@ -17068,7 +17068,7 @@ impl ListSecurityProfilesForTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSecurityProfilesForTargetError {
@@ -17125,7 +17125,7 @@ impl ListStreamsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListStreamsError {
@@ -17176,7 +17176,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -17245,7 +17245,7 @@ impl ListTargetsForPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTargetsForPolicyError {
@@ -17306,7 +17306,7 @@ impl ListTargetsForSecurityProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTargetsForSecurityProfileError {
@@ -17353,7 +17353,7 @@ impl ListThingGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListThingGroupsError {
@@ -17401,7 +17401,7 @@ impl ListThingGroupsForThingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListThingGroupsForThingError {
@@ -17462,7 +17462,7 @@ impl ListThingPrincipalsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListThingPrincipalsError {
@@ -17522,7 +17522,7 @@ impl ListThingRegistrationTaskReportsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListThingRegistrationTaskReportsError {
@@ -17586,7 +17586,7 @@ impl ListThingRegistrationTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListThingRegistrationTasksError {
@@ -17639,7 +17639,7 @@ impl ListThingTypesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListThingTypesError {
@@ -17693,7 +17693,7 @@ impl ListThingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListThingsError {
@@ -17748,7 +17748,7 @@ impl ListThingsInBillingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListThingsInBillingGroupError {
@@ -17797,7 +17797,7 @@ impl ListThingsInThingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListThingsInThingGroupError {
@@ -17850,7 +17850,7 @@ impl ListTopicRuleDestinationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTopicRuleDestinationsError {
@@ -17893,7 +17893,7 @@ impl ListTopicRulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTopicRulesError {
@@ -17942,7 +17942,7 @@ impl ListV2LoggingLevelsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListV2LoggingLevelsError {
@@ -17985,7 +17985,7 @@ impl ListViolationEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListViolationEventsError {
@@ -18069,7 +18069,7 @@ impl RegisterCACertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterCACertificateError {
@@ -18159,7 +18159,7 @@ impl RegisterCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterCertificateError {
@@ -18231,7 +18231,7 @@ impl RegisterThingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterThingError {
@@ -18311,7 +18311,7 @@ impl RejectCertificateTransferError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RejectCertificateTransferError {
@@ -18374,7 +18374,7 @@ impl RemoveThingFromBillingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveThingFromBillingGroupError {
@@ -18430,7 +18430,7 @@ impl RemoveThingFromThingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveThingFromThingGroupError {
@@ -18490,7 +18490,7 @@ impl ReplaceTopicRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ReplaceTopicRuleError {
@@ -18560,7 +18560,7 @@ impl SearchIndexError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchIndexError {
@@ -18635,7 +18635,7 @@ impl SetDefaultAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetDefaultAuthorizerError {
@@ -18706,7 +18706,7 @@ impl SetDefaultPolicyVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetDefaultPolicyVersionError {
@@ -18753,7 +18753,7 @@ impl SetLoggingOptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetLoggingOptionsError {
@@ -18802,7 +18802,7 @@ impl SetV2LoggingLevelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetV2LoggingLevelError {
@@ -18847,7 +18847,7 @@ impl SetV2LoggingOptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetV2LoggingOptionsError {
@@ -18911,7 +18911,7 @@ impl StartAuditMitigationActionsTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartAuditMitigationActionsTaskError {
@@ -18974,7 +18974,7 @@ impl StartOnDemandAuditTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartOnDemandAuditTaskError {
@@ -19032,7 +19032,7 @@ impl StartThingRegistrationTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartThingRegistrationTaskError {
@@ -19095,7 +19095,7 @@ impl StopThingRegistrationTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopThingRegistrationTaskError {
@@ -19149,7 +19149,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -19215,7 +19215,7 @@ impl TestAuthorizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TestAuthorizationError {
@@ -19289,7 +19289,7 @@ impl TestInvokeAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TestInvokeAuthorizerError {
@@ -19368,7 +19368,7 @@ impl TransferCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TransferCertificateError {
@@ -19420,7 +19420,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -19471,7 +19471,7 @@ impl UpdateAccountAuditConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAccountAuditConfigurationError {
@@ -19537,7 +19537,7 @@ impl UpdateAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAuthorizerError {
@@ -19593,7 +19593,7 @@ impl UpdateBillingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateBillingGroupError {
@@ -19656,7 +19656,7 @@ impl UpdateCACertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateCACertificateError {
@@ -19723,7 +19723,7 @@ impl UpdateCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateCertificateError {
@@ -19803,7 +19803,7 @@ impl UpdateDomainConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDomainConfigurationError {
@@ -19876,7 +19876,7 @@ impl UpdateDynamicThingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDynamicThingGroupError {
@@ -19927,7 +19927,7 @@ impl UpdateEventConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateEventConfigurationsError {
@@ -19991,7 +19991,7 @@ impl UpdateIndexingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateIndexingConfigurationError {
@@ -20042,7 +20042,7 @@ impl UpdateJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateJobError {
@@ -20096,7 +20096,7 @@ impl UpdateMitigationActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateMitigationActionError {
@@ -20161,7 +20161,7 @@ impl UpdateProvisioningTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateProvisioningTemplateError {
@@ -20222,7 +20222,7 @@ impl UpdateRoleAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRoleAliasError {
@@ -20276,7 +20276,7 @@ impl UpdateScheduledAuditError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateScheduledAuditError {
@@ -20337,7 +20337,7 @@ impl UpdateSecurityProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSecurityProfileError {
@@ -20396,7 +20396,7 @@ impl UpdateStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateStreamError {
@@ -20461,7 +20461,7 @@ impl UpdateThingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateThingError {
@@ -20517,7 +20517,7 @@ impl UpdateThingGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateThingGroupError {
@@ -20574,7 +20574,7 @@ impl UpdateThingGroupsForThingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateThingGroupsForThingError {
@@ -20637,7 +20637,7 @@ impl UpdateTopicRuleDestinationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTopicRuleDestinationError {
@@ -20693,7 +20693,7 @@ impl ValidateSecurityProfileBehaviorsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ValidateSecurityProfileBehaviorsError {

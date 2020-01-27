@@ -402,7 +402,7 @@ impl CreateProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProjectError {
@@ -458,7 +458,7 @@ impl DeleteProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProjectError {
@@ -517,7 +517,7 @@ impl DescribeBundleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeBundleError {
@@ -577,7 +577,7 @@ impl DescribeProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProjectError {
@@ -637,7 +637,7 @@ impl ExportBundleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ExportBundleError {
@@ -697,7 +697,7 @@ impl ExportProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ExportProjectError {
@@ -752,7 +752,7 @@ impl ListBundlesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBundlesError {
@@ -806,7 +806,7 @@ impl ListProjectsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProjectsError {
@@ -875,7 +875,7 @@ impl UpdateProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateProjectError {

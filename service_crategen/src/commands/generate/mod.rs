@@ -209,8 +209,7 @@ See [LICENSE][license] for details.
                     .expect("Unable to write lib.rs")
             );
 
-            writeln!(lib_file, r#"
-// =================================================================
+            writeln!(lib_file, r#"// =================================================================
 //
 //                           * WARNING *
 //

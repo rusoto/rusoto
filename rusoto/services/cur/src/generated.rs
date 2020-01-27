@@ -149,7 +149,7 @@ impl DeleteReportDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteReportDefinitionError {
@@ -181,7 +181,7 @@ impl DescribeReportDefinitionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeReportDefinitionsError {
@@ -213,7 +213,7 @@ impl ModifyReportDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyReportDefinitionError {
@@ -257,7 +257,7 @@ impl PutReportDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutReportDefinitionError {

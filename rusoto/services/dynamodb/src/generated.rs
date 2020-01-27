@@ -3149,7 +3149,7 @@ impl BatchGetItemError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetItemError {
@@ -3206,7 +3206,7 @@ impl BatchWriteItemError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchWriteItemError {
@@ -3269,7 +3269,7 @@ impl CreateBackupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateBackupError {
@@ -3323,7 +3323,7 @@ impl CreateGlobalTableError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGlobalTableError {
@@ -3366,7 +3366,7 @@ impl CreateTableError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTableError {
@@ -3413,7 +3413,7 @@ impl DeleteBackupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBackupError {
@@ -3480,7 +3480,7 @@ impl DeleteItemError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteItemError {
@@ -3531,7 +3531,7 @@ impl DeleteTableError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTableError {
@@ -3569,7 +3569,7 @@ impl DescribeBackupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeBackupError {
@@ -3609,7 +3609,7 @@ impl DescribeContinuousBackupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeContinuousBackupsError {
@@ -3653,7 +3653,7 @@ impl DescribeContributorInsightsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeContributorInsightsError {
@@ -3680,7 +3680,7 @@ impl DescribeEndpointsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEndpointsError {
@@ -3717,7 +3717,7 @@ impl DescribeGlobalTableError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeGlobalTableError {
@@ -3759,7 +3759,7 @@ impl DescribeGlobalTableSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeGlobalTableSettingsError {
@@ -3794,7 +3794,7 @@ impl DescribeLimitsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLimitsError {
@@ -3829,7 +3829,7 @@ impl DescribeTableError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTableError {
@@ -3871,7 +3871,7 @@ impl DescribeTableReplicaAutoScalingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTableReplicaAutoScalingError {
@@ -3913,7 +3913,7 @@ impl DescribeTimeToLiveError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTimeToLiveError {
@@ -3961,7 +3961,7 @@ impl GetItemError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetItemError {
@@ -3994,7 +3994,7 @@ impl ListBackupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBackupsError {
@@ -4033,7 +4033,7 @@ impl ListContributorInsightsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListContributorInsightsError {
@@ -4066,7 +4066,7 @@ impl ListGlobalTablesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGlobalTablesError {
@@ -4096,7 +4096,7 @@ impl ListTablesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTablesError {
@@ -4133,7 +4133,7 @@ impl ListTagsOfResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsOfResourceError {
@@ -4198,7 +4198,7 @@ impl PutItemError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutItemError {
@@ -4249,7 +4249,7 @@ impl QueryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for QueryError {
@@ -4315,7 +4315,7 @@ impl RestoreTableFromBackupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RestoreTableFromBackupError {
@@ -4394,7 +4394,7 @@ impl RestoreTableToPointInTimeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RestoreTableToPointInTimeError {
@@ -4449,7 +4449,7 @@ impl ScanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ScanError {
@@ -4497,7 +4497,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -4558,7 +4558,7 @@ impl TransactGetItemsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TransactGetItemsError {
@@ -4636,7 +4636,7 @@ impl TransactWriteItemsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TransactWriteItemsError {
@@ -4691,7 +4691,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -4740,7 +4740,7 @@ impl UpdateContinuousBackupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateContinuousBackupsError {
@@ -4783,7 +4783,7 @@ impl UpdateContributorInsightsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateContributorInsightsError {
@@ -4842,7 +4842,7 @@ impl UpdateGlobalTableError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGlobalTableError {
@@ -4913,7 +4913,7 @@ impl UpdateGlobalTableSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGlobalTableSettingsError {
@@ -4986,7 +4986,7 @@ impl UpdateItemError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateItemError {
@@ -5037,7 +5037,7 @@ impl UpdateTableError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTableError {
@@ -5095,7 +5095,7 @@ impl UpdateTableReplicaAutoScalingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTableReplicaAutoScalingError {
@@ -5149,7 +5149,7 @@ impl UpdateTimeToLiveError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTimeToLiveError {

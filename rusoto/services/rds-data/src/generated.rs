@@ -564,7 +564,7 @@ impl BatchExecuteStatementError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchExecuteStatementError {
@@ -624,7 +624,7 @@ impl BeginTransactionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BeginTransactionError {
@@ -687,7 +687,7 @@ impl CommitTransactionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CommitTransactionError {
@@ -737,7 +737,7 @@ impl ExecuteSqlError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ExecuteSqlError {
@@ -794,7 +794,7 @@ impl ExecuteStatementError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ExecuteStatementError {
@@ -859,7 +859,7 @@ impl RollbackTransactionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RollbackTransactionError {

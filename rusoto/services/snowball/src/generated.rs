@@ -974,7 +974,7 @@ impl CancelClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelClusterError {
@@ -1016,7 +1016,7 @@ impl CancelJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelJobError {
@@ -1053,7 +1053,7 @@ impl CreateAddressError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAddressError {
@@ -1101,7 +1101,7 @@ impl CreateClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateClusterError {
@@ -1154,7 +1154,7 @@ impl CreateJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateJobError {
@@ -1188,7 +1188,7 @@ impl DescribeAddressError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAddressError {
@@ -1223,7 +1223,7 @@ impl DescribeAddressesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAddressesError {
@@ -1254,7 +1254,7 @@ impl DescribeClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeClusterError {
@@ -1284,7 +1284,7 @@ impl DescribeJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeJobError {
@@ -1319,7 +1319,7 @@ impl GetJobManifestError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetJobManifestError {
@@ -1355,7 +1355,7 @@ impl GetJobUnlockCodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetJobUnlockCodeError {
@@ -1380,7 +1380,7 @@ impl GetSnowballUsageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSnowballUsageError {
@@ -1413,7 +1413,7 @@ impl GetSoftwareUpdatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSoftwareUpdatesError {
@@ -1449,7 +1449,7 @@ impl ListClusterJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListClusterJobsError {
@@ -1480,7 +1480,7 @@ impl ListClustersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListClustersError {
@@ -1519,7 +1519,7 @@ impl ListCompatibleImagesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCompatibleImagesError {
@@ -1550,7 +1550,7 @@ impl ListJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListJobsError {
@@ -1602,7 +1602,7 @@ impl UpdateClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateClusterError {
@@ -1661,7 +1661,7 @@ impl UpdateJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateJobError {

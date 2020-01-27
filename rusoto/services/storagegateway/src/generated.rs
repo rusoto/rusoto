@@ -2951,7 +2951,7 @@ impl ActivateGatewayError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ActivateGatewayError {
@@ -2987,7 +2987,7 @@ impl AddCacheError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddCacheError {
@@ -3027,7 +3027,7 @@ impl AddTagsToResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddTagsToResourceError {
@@ -3065,7 +3065,7 @@ impl AddUploadBufferError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddUploadBufferError {
@@ -3105,7 +3105,7 @@ impl AddWorkingStorageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddWorkingStorageError {
@@ -3143,7 +3143,7 @@ impl AssignTapePoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssignTapePoolError {
@@ -3179,7 +3179,7 @@ impl AttachVolumeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachVolumeError {
@@ -3217,7 +3217,7 @@ impl CancelArchivalError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelArchivalError {
@@ -3255,7 +3255,7 @@ impl CancelRetrievalError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelRetrievalError {
@@ -3295,7 +3295,7 @@ impl CreateCachediSCSIVolumeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCachediSCSIVolumeError {
@@ -3337,7 +3337,7 @@ impl CreateNFSFileShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateNFSFileShareError {
@@ -3377,7 +3377,7 @@ impl CreateSMBFileShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSMBFileShareError {
@@ -3422,7 +3422,7 @@ impl CreateSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSnapshotError {
@@ -3474,7 +3474,7 @@ impl CreateSnapshotFromVolumeRecoveryPointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSnapshotFromVolumeRecoveryPointError {
@@ -3521,7 +3521,7 @@ impl CreateStorediSCSIVolumeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateStorediSCSIVolumeError {
@@ -3563,7 +3563,7 @@ impl CreateTapeWithBarcodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTapeWithBarcodeError {
@@ -3599,7 +3599,7 @@ impl CreateTapesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTapesError {
@@ -3639,7 +3639,7 @@ impl DeleteBandwidthRateLimitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBandwidthRateLimitError {
@@ -3681,7 +3681,7 @@ impl DeleteChapCredentialsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteChapCredentialsError {
@@ -3719,7 +3719,7 @@ impl DeleteFileShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFileShareError {
@@ -3755,7 +3755,7 @@ impl DeleteGatewayError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteGatewayError {
@@ -3795,7 +3795,7 @@ impl DeleteSnapshotScheduleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSnapshotScheduleError {
@@ -3831,7 +3831,7 @@ impl DeleteTapeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTapeError {
@@ -3871,7 +3871,7 @@ impl DeleteTapeArchiveError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTapeArchiveError {
@@ -3907,7 +3907,7 @@ impl DeleteVolumeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVolumeError {
@@ -3949,7 +3949,7 @@ impl DescribeAvailabilityMonitorTestError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAvailabilityMonitorTestError {
@@ -3995,7 +3995,7 @@ impl DescribeBandwidthRateLimitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeBandwidthRateLimitError {
@@ -4035,7 +4035,7 @@ impl DescribeCacheError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCacheError {
@@ -4077,7 +4077,7 @@ impl DescribeCachediSCSIVolumesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCachediSCSIVolumesError {
@@ -4121,7 +4121,7 @@ impl DescribeChapCredentialsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeChapCredentialsError {
@@ -4165,7 +4165,7 @@ impl DescribeGatewayInformationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeGatewayInformationError {
@@ -4211,7 +4211,7 @@ impl DescribeMaintenanceStartTimeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMaintenanceStartTimeError {
@@ -4255,7 +4255,7 @@ impl DescribeNFSFileSharesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeNFSFileSharesError {
@@ -4295,7 +4295,7 @@ impl DescribeSMBFileSharesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSMBFileSharesError {
@@ -4335,7 +4335,7 @@ impl DescribeSMBSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSMBSettingsError {
@@ -4375,7 +4375,7 @@ impl DescribeSnapshotScheduleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSnapshotScheduleError {
@@ -4419,7 +4419,7 @@ impl DescribeStorediSCSIVolumesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStorediSCSIVolumesError {
@@ -4463,7 +4463,7 @@ impl DescribeTapeArchivesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTapeArchivesError {
@@ -4505,7 +4505,7 @@ impl DescribeTapeRecoveryPointsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTapeRecoveryPointsError {
@@ -4545,7 +4545,7 @@ impl DescribeTapesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTapesError {
@@ -4585,7 +4585,7 @@ impl DescribeUploadBufferError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUploadBufferError {
@@ -4625,7 +4625,7 @@ impl DescribeVTLDevicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeVTLDevicesError {
@@ -4665,7 +4665,7 @@ impl DescribeWorkingStorageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeWorkingStorageError {
@@ -4701,7 +4701,7 @@ impl DetachVolumeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachVolumeError {
@@ -4739,7 +4739,7 @@ impl DisableGatewayError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableGatewayError {
@@ -4775,7 +4775,7 @@ impl JoinDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for JoinDomainError {
@@ -4813,7 +4813,7 @@ impl ListFileSharesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFileSharesError {
@@ -4849,7 +4849,7 @@ impl ListGatewaysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGatewaysError {
@@ -4887,7 +4887,7 @@ impl ListLocalDisksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListLocalDisksError {
@@ -4927,7 +4927,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -4963,7 +4963,7 @@ impl ListTapesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTapesError {
@@ -5003,7 +5003,7 @@ impl ListVolumeInitiatorsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVolumeInitiatorsError {
@@ -5043,7 +5043,7 @@ impl ListVolumeRecoveryPointsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVolumeRecoveryPointsError {
@@ -5081,7 +5081,7 @@ impl ListVolumesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVolumesError {
@@ -5121,7 +5121,7 @@ impl NotifyWhenUploadedError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for NotifyWhenUploadedError {
@@ -5157,7 +5157,7 @@ impl RefreshCacheError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RefreshCacheError {
@@ -5197,7 +5197,7 @@ impl RemoveTagsFromResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {
@@ -5233,7 +5233,7 @@ impl ResetCacheError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResetCacheError {
@@ -5273,7 +5273,7 @@ impl RetrieveTapeArchiveError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RetrieveTapeArchiveError {
@@ -5313,7 +5313,7 @@ impl RetrieveTapeRecoveryPointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RetrieveTapeRecoveryPointError {
@@ -5357,7 +5357,7 @@ impl SetLocalConsolePasswordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetLocalConsolePasswordError {
@@ -5399,7 +5399,7 @@ impl SetSMBGuestPasswordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetSMBGuestPasswordError {
@@ -5437,7 +5437,7 @@ impl ShutdownGatewayError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ShutdownGatewayError {
@@ -5479,7 +5479,7 @@ impl StartAvailabilityMonitorTestError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartAvailabilityMonitorTestError {
@@ -5519,7 +5519,7 @@ impl StartGatewayError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartGatewayError {
@@ -5559,7 +5559,7 @@ impl UpdateBandwidthRateLimitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateBandwidthRateLimitError {
@@ -5601,7 +5601,7 @@ impl UpdateChapCredentialsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateChapCredentialsError {
@@ -5641,7 +5641,7 @@ impl UpdateGatewayInformationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGatewayInformationError {
@@ -5683,7 +5683,7 @@ impl UpdateGatewaySoftwareNowError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGatewaySoftwareNowError {
@@ -5727,7 +5727,7 @@ impl UpdateMaintenanceStartTimeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateMaintenanceStartTimeError {
@@ -5771,7 +5771,7 @@ impl UpdateNFSFileShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateNFSFileShareError {
@@ -5811,7 +5811,7 @@ impl UpdateSMBFileShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSMBFileShareError {
@@ -5851,7 +5851,7 @@ impl UpdateSMBSecurityStrategyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSMBSecurityStrategyError {
@@ -5895,7 +5895,7 @@ impl UpdateSnapshotScheduleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSnapshotScheduleError {
@@ -5935,7 +5935,7 @@ impl UpdateVTLDeviceTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateVTLDeviceTypeError {

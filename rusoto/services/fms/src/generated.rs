@@ -591,7 +591,7 @@ impl AssociateAdminAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateAdminAccountError {
@@ -640,7 +640,7 @@ impl DeleteNotificationChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteNotificationChannelError {
@@ -682,7 +682,7 @@ impl DeletePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePolicyError {
@@ -730,7 +730,7 @@ impl DisassociateAdminAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateAdminAccountError {
@@ -772,7 +772,7 @@ impl GetAdminAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAdminAccountError {
@@ -811,7 +811,7 @@ impl GetComplianceDetailError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetComplianceDetailError {
@@ -858,7 +858,7 @@ impl GetNotificationChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetNotificationChannelError {
@@ -905,7 +905,7 @@ impl GetPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPolicyError {
@@ -950,7 +950,7 @@ impl GetProtectionStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetProtectionStatusError {
@@ -989,7 +989,7 @@ impl ListComplianceStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListComplianceStatusError {
@@ -1025,7 +1025,7 @@ impl ListMemberAccountsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListMemberAccountsError {
@@ -1071,7 +1071,7 @@ impl ListPoliciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPoliciesError {
@@ -1123,7 +1123,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -1172,7 +1172,7 @@ impl PutNotificationChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutNotificationChannelError {
@@ -1229,7 +1229,7 @@ impl PutPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutPolicyError {
@@ -1284,7 +1284,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -1333,7 +1333,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {

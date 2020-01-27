@@ -733,7 +733,7 @@ impl BulkPublishError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BulkPublishError {
@@ -793,7 +793,7 @@ impl DeleteDatasetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDatasetError {
@@ -848,7 +848,7 @@ impl DescribeDatasetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDatasetError {
@@ -912,7 +912,7 @@ impl DescribeIdentityPoolUsageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeIdentityPoolUsageError {
@@ -972,7 +972,7 @@ impl DescribeIdentityUsageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeIdentityUsageError {
@@ -1025,7 +1025,7 @@ impl GetBulkPublishDetailsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBulkPublishDetailsError {
@@ -1078,7 +1078,7 @@ impl GetCognitoEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCognitoEventsError {
@@ -1144,7 +1144,7 @@ impl GetIdentityPoolConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIdentityPoolConfigurationError {
@@ -1197,7 +1197,7 @@ impl ListDatasetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDatasetsError {
@@ -1249,7 +1249,7 @@ impl ListIdentityPoolUsageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListIdentityPoolUsageError {
@@ -1297,7 +1297,7 @@ impl ListRecordsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRecordsError {
@@ -1355,7 +1355,7 @@ impl RegisterDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterDeviceError {
@@ -1410,7 +1410,7 @@ impl SetCognitoEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetCognitoEventsError {
@@ -1483,7 +1483,7 @@ impl SetIdentityPoolConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetIdentityPoolConfigurationError {
@@ -1551,7 +1551,7 @@ impl SubscribeToDatasetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SubscribeToDatasetError {
@@ -1623,7 +1623,7 @@ impl UnsubscribeFromDatasetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UnsubscribeFromDatasetError {
@@ -1700,7 +1700,7 @@ impl UpdateRecordsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRecordsError {

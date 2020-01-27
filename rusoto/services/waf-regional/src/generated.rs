@@ -2610,7 +2610,7 @@ impl AssociateWebACLError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateWebACLError {
@@ -2677,7 +2677,7 @@ impl CreateByteMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateByteMatchSetError {
@@ -2739,7 +2739,7 @@ impl CreateGeoMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGeoMatchSetError {
@@ -2799,7 +2799,7 @@ impl CreateIPSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateIPSetError {
@@ -2878,7 +2878,7 @@ impl CreateRateBasedRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRateBasedRuleError {
@@ -2938,7 +2938,7 @@ impl CreateRegexMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRegexMatchSetError {
@@ -2992,7 +2992,7 @@ impl CreateRegexPatternSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRegexPatternSetError {
@@ -3061,7 +3061,7 @@ impl CreateRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRuleError {
@@ -3129,7 +3129,7 @@ impl CreateRuleGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRuleGroupError {
@@ -3202,7 +3202,7 @@ impl CreateSizeConstraintSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSizeConstraintSetError {
@@ -3276,7 +3276,7 @@ impl CreateSqlInjectionMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSqlInjectionMatchSetError {
@@ -3354,7 +3354,7 @@ impl CreateWebACLError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateWebACLError {
@@ -3419,7 +3419,7 @@ impl CreateXssMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateXssMatchSetError {
@@ -3487,7 +3487,7 @@ impl DeleteByteMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteByteMatchSetError {
@@ -3549,7 +3549,7 @@ impl DeleteGeoMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteGeoMatchSetError {
@@ -3609,7 +3609,7 @@ impl DeleteIPSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteIPSetError {
@@ -3662,7 +3662,7 @@ impl DeleteLoggingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLoggingConfigurationError {
@@ -3710,7 +3710,7 @@ impl DeletePermissionPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePermissionPolicyError {
@@ -3789,7 +3789,7 @@ impl DeleteRateBasedRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRateBasedRuleError {
@@ -3863,7 +3863,7 @@ impl DeleteRegexMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRegexMatchSetError {
@@ -3933,7 +3933,7 @@ impl DeleteRegexPatternSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRegexPatternSetError {
@@ -4005,7 +4005,7 @@ impl DeleteRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRuleError {
@@ -4079,7 +4079,7 @@ impl DeleteRuleGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRuleGroupError {
@@ -4153,7 +4153,7 @@ impl DeleteSizeConstraintSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSizeConstraintSetError {
@@ -4227,7 +4227,7 @@ impl DeleteSqlInjectionMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSqlInjectionMatchSetError {
@@ -4301,7 +4301,7 @@ impl DeleteWebACLError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteWebACLError {
@@ -4365,7 +4365,7 @@ impl DeleteXssMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteXssMatchSetError {
@@ -4421,7 +4421,7 @@ impl DisassociateWebACLError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateWebACLError {
@@ -4464,7 +4464,7 @@ impl GetByteMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetByteMatchSetError {
@@ -4496,7 +4496,7 @@ impl GetChangeTokenError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetChangeTokenError {
@@ -4535,7 +4535,7 @@ impl GetChangeTokenStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetChangeTokenStatusError {
@@ -4576,7 +4576,7 @@ impl GetGeoMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGeoMatchSetError {
@@ -4618,7 +4618,7 @@ impl GetIPSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIPSetError {
@@ -4659,7 +4659,7 @@ impl GetLoggingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLoggingConfigurationError {
@@ -4699,7 +4699,7 @@ impl GetPermissionPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPermissionPolicyError {
@@ -4740,7 +4740,7 @@ impl GetRateBasedRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRateBasedRuleError {
@@ -4797,7 +4797,7 @@ impl GetRateBasedRuleManagedKeysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRateBasedRuleManagedKeysError {
@@ -4846,7 +4846,7 @@ impl GetRegexMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRegexMatchSetError {
@@ -4892,7 +4892,7 @@ impl GetRegexPatternSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRegexPatternSetError {
@@ -4934,7 +4934,7 @@ impl GetRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRuleError {
@@ -4971,7 +4971,7 @@ impl GetRuleGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRuleGroupError {
@@ -5009,7 +5009,7 @@ impl GetSampledRequestsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSampledRequestsError {
@@ -5056,7 +5056,7 @@ impl GetSizeConstraintSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSizeConstraintSetError {
@@ -5104,7 +5104,7 @@ impl GetSqlInjectionMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSqlInjectionMatchSetError {
@@ -5146,7 +5146,7 @@ impl GetWebACLError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetWebACLError {
@@ -5208,7 +5208,7 @@ impl GetWebACLForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetWebACLForResourceError {
@@ -5252,7 +5252,7 @@ impl GetXssMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetXssMatchSetError {
@@ -5302,7 +5302,7 @@ impl ListActivatedRulesInRuleGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListActivatedRulesInRuleGroupError {
@@ -5345,7 +5345,7 @@ impl ListByteMatchSetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListByteMatchSetsError {
@@ -5381,7 +5381,7 @@ impl ListGeoMatchSetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGeoMatchSetsError {
@@ -5417,7 +5417,7 @@ impl ListIPSetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListIPSetsError {
@@ -5464,7 +5464,7 @@ impl ListLoggingConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListLoggingConfigurationsError {
@@ -5505,7 +5505,7 @@ impl ListRateBasedRulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRateBasedRulesError {
@@ -5543,7 +5543,7 @@ impl ListRegexMatchSetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRegexMatchSetsError {
@@ -5583,7 +5583,7 @@ impl ListRegexPatternSetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRegexPatternSetsError {
@@ -5637,7 +5637,7 @@ impl ListResourcesForWebACLError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResourcesForWebACLError {
@@ -5670,7 +5670,7 @@ impl ListRuleGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRuleGroupsError {
@@ -5705,7 +5705,7 @@ impl ListRulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRulesError {
@@ -5745,7 +5745,7 @@ impl ListSizeConstraintSetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSizeConstraintSetsError {
@@ -5785,7 +5785,7 @@ impl ListSqlInjectionMatchSetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSqlInjectionMatchSetsError {
@@ -5825,7 +5825,7 @@ impl ListSubscribedRuleGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSubscribedRuleGroupsError {
@@ -5888,7 +5888,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -5930,7 +5930,7 @@ impl ListWebACLsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListWebACLsError {
@@ -5966,7 +5966,7 @@ impl ListXssMatchSetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListXssMatchSetsError {
@@ -6020,7 +6020,7 @@ impl PutLoggingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutLoggingConfigurationError {
@@ -6076,7 +6076,7 @@ impl PutPermissionPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutPermissionPolicyError {
@@ -6142,7 +6142,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -6204,7 +6204,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -6286,7 +6286,7 @@ impl UpdateByteMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateByteMatchSetError {
@@ -6371,7 +6371,7 @@ impl UpdateGeoMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGeoMatchSetError {
@@ -6449,7 +6449,7 @@ impl UpdateIPSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateIPSetError {
@@ -6543,7 +6543,7 @@ impl UpdateRateBasedRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRateBasedRuleError {
@@ -6630,7 +6630,7 @@ impl UpdateRegexMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRegexMatchSetError {
@@ -6716,7 +6716,7 @@ impl UpdateRegexPatternSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRegexPatternSetError {
@@ -6795,7 +6795,7 @@ impl UpdateRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRuleError {
@@ -6865,7 +6865,7 @@ impl UpdateRuleGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRuleGroupError {
@@ -6959,7 +6959,7 @@ impl UpdateSizeConstraintSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSizeConstraintSetError {
@@ -7052,7 +7052,7 @@ impl UpdateSqlInjectionMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSqlInjectionMatchSetError {
@@ -7146,7 +7146,7 @@ impl UpdateWebACLError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateWebACLError {
@@ -7228,7 +7228,7 @@ impl UpdateXssMatchSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateXssMatchSetError {

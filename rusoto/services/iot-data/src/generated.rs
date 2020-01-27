@@ -160,7 +160,7 @@ impl DeleteThingShadowError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteThingShadowError {
@@ -236,7 +236,7 @@ impl GetThingShadowError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetThingShadowError {
@@ -288,7 +288,7 @@ impl PublishError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PublishError {
@@ -367,7 +367,7 @@ impl UpdateThingShadowError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateThingShadowError {

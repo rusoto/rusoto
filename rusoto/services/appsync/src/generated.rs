@@ -1670,7 +1670,7 @@ impl CreateApiCacheError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateApiCacheError {
@@ -1736,7 +1736,7 @@ impl CreateApiKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateApiKeyError {
@@ -1794,7 +1794,7 @@ impl CreateDataSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDataSourceError {
@@ -1845,7 +1845,7 @@ impl CreateFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateFunctionError {
@@ -1905,7 +1905,7 @@ impl CreateGraphqlApiError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGraphqlApiError {
@@ -1957,7 +1957,7 @@ impl CreateResolverError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateResolverError {
@@ -2010,7 +2010,7 @@ impl CreateTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTypeError {
@@ -2066,7 +2066,7 @@ impl DeleteApiCacheError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteApiCacheError {
@@ -2115,7 +2115,7 @@ impl DeleteApiKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteApiKeyError {
@@ -2170,7 +2170,7 @@ impl DeleteDataSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDataSourceError {
@@ -2221,7 +2221,7 @@ impl DeleteFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFunctionError {
@@ -2281,7 +2281,7 @@ impl DeleteGraphqlApiError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteGraphqlApiError {
@@ -2333,7 +2333,7 @@ impl DeleteResolverError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteResolverError {
@@ -2386,7 +2386,7 @@ impl DeleteTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTypeError {
@@ -2442,7 +2442,7 @@ impl FlushApiCacheError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for FlushApiCacheError {
@@ -2496,7 +2496,7 @@ impl GetApiCacheError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetApiCacheError {
@@ -2552,7 +2552,7 @@ impl GetDataSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDataSourceError {
@@ -2596,7 +2596,7 @@ impl GetFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFunctionError {
@@ -2648,7 +2648,7 @@ impl GetGraphqlApiError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGraphqlApiError {
@@ -2701,7 +2701,7 @@ impl GetIntrospectionSchemaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIntrospectionSchemaError {
@@ -2744,7 +2744,7 @@ impl GetResolverError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResolverError {
@@ -2795,7 +2795,7 @@ impl GetSchemaCreationStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSchemaCreationStatusError {
@@ -2848,7 +2848,7 @@ impl GetTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTypeError {
@@ -2897,7 +2897,7 @@ impl ListApiKeysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListApiKeysError {
@@ -2945,7 +2945,7 @@ impl ListDataSourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDataSourcesError {
@@ -2993,7 +2993,7 @@ impl ListFunctionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFunctionsError {
@@ -3036,7 +3036,7 @@ impl ListGraphqlApisError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGraphqlApisError {
@@ -3083,7 +3083,7 @@ impl ListResolversError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResolversError {
@@ -3135,7 +3135,7 @@ impl ListResolversByFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResolversByFunctionError {
@@ -3193,7 +3193,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -3248,7 +3248,7 @@ impl ListTypesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTypesError {
@@ -3304,7 +3304,7 @@ impl StartSchemaCreationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartSchemaCreationError {
@@ -3363,7 +3363,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -3423,7 +3423,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -3480,7 +3480,7 @@ impl UpdateApiCacheError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateApiCacheError {
@@ -3541,7 +3541,7 @@ impl UpdateApiKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateApiKeyError {
@@ -3598,7 +3598,7 @@ impl UpdateDataSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDataSourceError {
@@ -3649,7 +3649,7 @@ impl UpdateFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFunctionError {
@@ -3709,7 +3709,7 @@ impl UpdateGraphqlApiError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGraphqlApiError {
@@ -3761,7 +3761,7 @@ impl UpdateResolverError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateResolverError {
@@ -3814,7 +3814,7 @@ impl UpdateTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTypeError {

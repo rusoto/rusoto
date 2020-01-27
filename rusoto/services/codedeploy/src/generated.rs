@@ -2393,7 +2393,7 @@ impl AddTagsToOnPremisesInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddTagsToOnPremisesInstancesError {
@@ -2478,7 +2478,7 @@ impl BatchGetApplicationRevisionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetApplicationRevisionsError {
@@ -2546,7 +2546,7 @@ impl BatchGetApplicationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetApplicationsError {
@@ -2623,7 +2623,7 @@ impl BatchGetDeploymentGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetDeploymentGroupsError {
@@ -2717,7 +2717,7 @@ impl BatchGetDeploymentInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetDeploymentInstancesError {
@@ -2818,7 +2818,7 @@ impl BatchGetDeploymentTargetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetDeploymentTargetsError {
@@ -2887,7 +2887,7 @@ impl BatchGetDeploymentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetDeploymentsError {
@@ -2937,7 +2937,7 @@ impl BatchGetOnPremisesInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetOnPremisesInstancesError {
@@ -3026,7 +3026,7 @@ impl ContinueDeploymentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ContinueDeploymentError {
@@ -3104,7 +3104,7 @@ impl CreateApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateApplicationError {
@@ -3285,7 +3285,7 @@ impl CreateDeploymentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDeploymentError {
@@ -3387,7 +3387,7 @@ impl CreateDeploymentConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDeploymentConfigError {
@@ -3646,7 +3646,7 @@ impl CreateDeploymentGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDeploymentGroupError {
@@ -3757,7 +3757,7 @@ impl DeleteApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteApplicationError {
@@ -3812,7 +3812,7 @@ impl DeleteDeploymentConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDeploymentConfigError {
@@ -3877,7 +3877,7 @@ impl DeleteDeploymentGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDeploymentGroupError {
@@ -3947,7 +3947,7 @@ impl DeleteGitHubAccountTokenError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteGitHubAccountTokenError {
@@ -4000,7 +4000,7 @@ impl DeregisterOnPremisesInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterOnPremisesInstanceError {
@@ -4051,7 +4051,7 @@ impl GetApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetApplicationError {
@@ -4120,7 +4120,7 @@ impl GetApplicationRevisionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetApplicationRevisionError {
@@ -4173,7 +4173,7 @@ impl GetDeploymentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeploymentError {
@@ -4228,7 +4228,7 @@ impl GetDeploymentConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeploymentConfigError {
@@ -4311,7 +4311,7 @@ impl GetDeploymentGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeploymentGroupError {
@@ -4399,7 +4399,7 @@ impl GetDeploymentInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeploymentInstanceError {
@@ -4486,7 +4486,7 @@ impl GetDeploymentTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeploymentTargetError {
@@ -4545,7 +4545,7 @@ impl GetOnPremisesInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetOnPremisesInstanceError {
@@ -4642,7 +4642,7 @@ impl ListApplicationRevisionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListApplicationRevisionsError {
@@ -4695,7 +4695,7 @@ impl ListApplicationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListApplicationsError {
@@ -4727,7 +4727,7 @@ impl ListDeploymentConfigsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDeploymentConfigsError {
@@ -4780,7 +4780,7 @@ impl ListDeploymentGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDeploymentGroupsError {
@@ -4878,7 +4878,7 @@ impl ListDeploymentInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDeploymentInstancesError {
@@ -4978,7 +4978,7 @@ impl ListDeploymentTargetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDeploymentTargetsError {
@@ -5071,7 +5071,7 @@ impl ListDeploymentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDeploymentsError {
@@ -5127,7 +5127,7 @@ impl ListGitHubAccountTokenNamesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGitHubAccountTokenNamesError {
@@ -5179,7 +5179,7 @@ impl ListOnPremisesInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOnPremisesInstancesError {
@@ -5225,7 +5225,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -5275,7 +5275,7 @@ impl PutLifecycleEventHookExecutionStatusError {
 _ => {}
                             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutLifecycleEventHookExecutionStatusError {
@@ -5364,7 +5364,7 @@ impl RegisterApplicationRevisionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterApplicationRevisionError {
@@ -5474,7 +5474,7 @@ impl RegisterOnPremisesInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterOnPremisesInstanceError {
@@ -5575,7 +5575,7 @@ impl RemoveTagsFromOnPremisesInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveTagsFromOnPremisesInstancesError {
@@ -5666,7 +5666,7 @@ impl SkipWaitTimeForInstanceTerminationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SkipWaitTimeForInstanceTerminationError {
@@ -5739,7 +5739,7 @@ impl StopDeploymentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopDeploymentError {
@@ -5812,7 +5812,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -5890,7 +5890,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -5950,7 +5950,7 @@ impl UpdateApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateApplicationError {
@@ -6180,7 +6180,7 @@ impl UpdateDeploymentGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDeploymentGroupError {

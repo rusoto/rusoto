@@ -1366,7 +1366,7 @@ impl AbortMultipartUploadError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AbortMultipartUploadError {
@@ -1418,7 +1418,7 @@ impl AbortVaultLockError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AbortVaultLockError {
@@ -1475,7 +1475,7 @@ impl AddTagsToVaultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddTagsToVaultError {
@@ -1532,7 +1532,7 @@ impl CompleteMultipartUploadError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CompleteMultipartUploadError {
@@ -1590,7 +1590,7 @@ impl CompleteVaultLockError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CompleteVaultLockError {
@@ -1638,7 +1638,7 @@ impl CreateVaultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateVaultError {
@@ -1686,7 +1686,7 @@ impl DeleteArchiveError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteArchiveError {
@@ -1734,7 +1734,7 @@ impl DeleteVaultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVaultError {
@@ -1790,7 +1790,7 @@ impl DeleteVaultAccessPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVaultAccessPolicyError {
@@ -1850,7 +1850,7 @@ impl DeleteVaultNotificationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVaultNotificationsError {
@@ -1902,7 +1902,7 @@ impl DescribeJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeJobError {
@@ -1950,7 +1950,7 @@ impl DescribeVaultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeVaultError {
@@ -1999,7 +1999,7 @@ impl GetDataRetrievalPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDataRetrievalPolicyError {
@@ -2046,7 +2046,7 @@ impl GetJobOutputError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetJobOutputError {
@@ -2102,7 +2102,7 @@ impl GetVaultAccessPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVaultAccessPolicyError {
@@ -2150,7 +2150,7 @@ impl GetVaultLockError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVaultLockError {
@@ -2206,7 +2206,7 @@ impl GetVaultNotificationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVaultNotificationsError {
@@ -2264,7 +2264,7 @@ impl InitiateJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InitiateJobError {
@@ -2322,7 +2322,7 @@ impl InitiateMultipartUploadError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InitiateMultipartUploadError {
@@ -2380,7 +2380,7 @@ impl InitiateVaultLockError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InitiateVaultLockError {
@@ -2428,7 +2428,7 @@ impl ListJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListJobsError {
@@ -2484,7 +2484,7 @@ impl ListMultipartUploadsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListMultipartUploadsError {
@@ -2532,7 +2532,7 @@ impl ListPartsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPartsError {
@@ -2581,7 +2581,7 @@ impl ListProvisionedCapacityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProvisionedCapacityError {
@@ -2636,7 +2636,7 @@ impl ListTagsForVaultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForVaultError {
@@ -2684,7 +2684,7 @@ impl ListVaultsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVaultsError {
@@ -2742,7 +2742,7 @@ impl PurchaseProvisionedCapacityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PurchaseProvisionedCapacityError {
@@ -2804,7 +2804,7 @@ impl RemoveTagsFromVaultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveTagsFromVaultError {
@@ -2853,7 +2853,7 @@ impl SetDataRetrievalPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetDataRetrievalPolicyError {
@@ -2908,7 +2908,7 @@ impl SetVaultAccessPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetVaultAccessPolicyError {
@@ -2964,7 +2964,7 @@ impl SetVaultNotificationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetVaultNotificationsError {
@@ -3017,7 +3017,7 @@ impl UploadArchiveError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UploadArchiveError {
@@ -3079,7 +3079,7 @@ impl UploadMultipartPartError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UploadMultipartPartError {

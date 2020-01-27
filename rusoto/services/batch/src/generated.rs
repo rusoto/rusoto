@@ -1358,7 +1358,7 @@ impl CancelJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelJobError {
@@ -1394,7 +1394,7 @@ impl CreateComputeEnvironmentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateComputeEnvironmentError {
@@ -1430,7 +1430,7 @@ impl CreateJobQueueError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateJobQueueError {
@@ -1466,7 +1466,7 @@ impl DeleteComputeEnvironmentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteComputeEnvironmentError {
@@ -1502,7 +1502,7 @@ impl DeleteJobQueueError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteJobQueueError {
@@ -1538,7 +1538,7 @@ impl DeregisterJobDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterJobDefinitionError {
@@ -1576,7 +1576,7 @@ impl DescribeComputeEnvironmentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeComputeEnvironmentsError {
@@ -1612,7 +1612,7 @@ impl DescribeJobDefinitionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeJobDefinitionsError {
@@ -1648,7 +1648,7 @@ impl DescribeJobQueuesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeJobQueuesError {
@@ -1684,7 +1684,7 @@ impl DescribeJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeJobsError {
@@ -1716,7 +1716,7 @@ impl ListJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListJobsError {
@@ -1752,7 +1752,7 @@ impl RegisterJobDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterJobDefinitionError {
@@ -1784,7 +1784,7 @@ impl SubmitJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SubmitJobError {
@@ -1820,7 +1820,7 @@ impl TerminateJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TerminateJobError {
@@ -1856,7 +1856,7 @@ impl UpdateComputeEnvironmentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateComputeEnvironmentError {
@@ -1892,7 +1892,7 @@ impl UpdateJobQueueError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateJobQueueError {

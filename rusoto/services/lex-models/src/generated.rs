@@ -2027,7 +2027,7 @@ impl CreateBotVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateBotVersionError {
@@ -2089,7 +2089,7 @@ impl CreateIntentVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateIntentVersionError {
@@ -2153,7 +2153,7 @@ impl CreateSlotTypeVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSlotTypeVersionError {
@@ -2213,7 +2213,7 @@ impl DeleteBotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBotError {
@@ -2273,7 +2273,7 @@ impl DeleteBotAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBotAliasError {
@@ -2340,7 +2340,7 @@ impl DeleteBotChannelAssociationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBotChannelAssociationError {
@@ -2399,7 +2399,7 @@ impl DeleteBotVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBotVersionError {
@@ -2459,7 +2459,7 @@ impl DeleteIntentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteIntentError {
@@ -2519,7 +2519,7 @@ impl DeleteIntentVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteIntentVersionError {
@@ -2579,7 +2579,7 @@ impl DeleteSlotTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSlotTypeError {
@@ -2641,7 +2641,7 @@ impl DeleteSlotTypeVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSlotTypeVersionError {
@@ -2691,7 +2691,7 @@ impl DeleteUtterancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUtterancesError {
@@ -2737,7 +2737,7 @@ impl GetBotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBotError {
@@ -2785,7 +2785,7 @@ impl GetBotAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBotAliasError {
@@ -2828,7 +2828,7 @@ impl GetBotAliasesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBotAliasesError {
@@ -2879,7 +2879,7 @@ impl GetBotChannelAssociationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBotChannelAssociationError {
@@ -2928,7 +2928,7 @@ impl GetBotChannelAssociationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBotChannelAssociationsError {
@@ -2975,7 +2975,7 @@ impl GetBotVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBotVersionsError {
@@ -3023,7 +3023,7 @@ impl GetBotsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBotsError {
@@ -3071,7 +3071,7 @@ impl GetBuiltinIntentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBuiltinIntentError {
@@ -3114,7 +3114,7 @@ impl GetBuiltinIntentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBuiltinIntentsError {
@@ -3156,7 +3156,7 @@ impl GetBuiltinSlotTypesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBuiltinSlotTypesError {
@@ -3203,7 +3203,7 @@ impl GetExportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetExportError {
@@ -3251,7 +3251,7 @@ impl GetImportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetImportError {
@@ -3299,7 +3299,7 @@ impl GetIntentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIntentError {
@@ -3347,7 +3347,7 @@ impl GetIntentVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIntentVersionsError {
@@ -3395,7 +3395,7 @@ impl GetIntentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIntentsError {
@@ -3443,7 +3443,7 @@ impl GetSlotTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSlotTypeError {
@@ -3491,7 +3491,7 @@ impl GetSlotTypeVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSlotTypeVersionsError {
@@ -3539,7 +3539,7 @@ impl GetSlotTypesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSlotTypesError {
@@ -3582,7 +3582,7 @@ impl GetUtterancesViewError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUtterancesViewError {
@@ -3632,7 +3632,7 @@ impl PutBotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutBotError {
@@ -3686,7 +3686,7 @@ impl PutBotAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutBotAliasError {
@@ -3740,7 +3740,7 @@ impl PutIntentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutIntentError {
@@ -3794,7 +3794,7 @@ impl PutSlotTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutSlotTypeError {
@@ -3838,7 +3838,7 @@ impl StartImportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartImportError {

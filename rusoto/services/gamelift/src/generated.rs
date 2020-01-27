@@ -3407,7 +3407,7 @@ impl AcceptMatchError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AcceptMatchError {
@@ -3465,7 +3465,7 @@ impl CreateAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAliasError {
@@ -3520,7 +3520,7 @@ impl CreateBuildError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateBuildError {
@@ -3584,7 +3584,7 @@ impl CreateFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateFleetError {
@@ -3673,7 +3673,7 @@ impl CreateGameSessionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGameSessionError {
@@ -3742,7 +3742,7 @@ impl CreateGameSessionQueueError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGameSessionQueueError {
@@ -3815,7 +3815,7 @@ impl CreateMatchmakingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMatchmakingConfigurationError {
@@ -3879,7 +3879,7 @@ impl CreateMatchmakingRuleSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMatchmakingRuleSetError {
@@ -3946,7 +3946,7 @@ impl CreatePlayerSessionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePlayerSessionError {
@@ -4020,7 +4020,7 @@ impl CreatePlayerSessionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePlayerSessionsError {
@@ -4078,7 +4078,7 @@ impl CreateScriptError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateScriptError {
@@ -4137,7 +4137,7 @@ impl CreateVpcPeeringAuthorizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateVpcPeeringAuthorizationError {
@@ -4195,7 +4195,7 @@ impl CreateVpcPeeringConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateVpcPeeringConnectionError {
@@ -4248,7 +4248,7 @@ impl DeleteAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAliasError {
@@ -4302,7 +4302,7 @@ impl DeleteBuildError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBuildError {
@@ -4361,7 +4361,7 @@ impl DeleteFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFleetError {
@@ -4422,7 +4422,7 @@ impl DeleteGameSessionQueueError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteGameSessionQueueError {
@@ -4488,7 +4488,7 @@ impl DeleteMatchmakingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMatchmakingConfigurationError {
@@ -4556,7 +4556,7 @@ impl DeleteMatchmakingRuleSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMatchmakingRuleSetError {
@@ -4605,7 +4605,7 @@ impl DeleteScalingPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteScalingPolicyError {
@@ -4658,7 +4658,7 @@ impl DeleteScriptError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteScriptError {
@@ -4717,7 +4717,7 @@ impl DeleteVpcPeeringAuthorizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVpcPeeringAuthorizationError {
@@ -4775,7 +4775,7 @@ impl DeleteVpcPeeringConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVpcPeeringConnectionError {
@@ -4823,7 +4823,7 @@ impl DescribeAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAliasError {
@@ -4871,7 +4871,7 @@ impl DescribeBuildError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeBuildError {
@@ -4920,7 +4920,7 @@ impl DescribeEC2InstanceLimitsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEC2InstanceLimitsError {
@@ -4973,7 +4973,7 @@ impl DescribeFleetAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFleetAttributesError {
@@ -5025,7 +5025,7 @@ impl DescribeFleetCapacityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFleetCapacityError {
@@ -5073,7 +5073,7 @@ impl DescribeFleetEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFleetEventsError {
@@ -5127,7 +5127,7 @@ impl DescribeFleetPortSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFleetPortSettingsError {
@@ -5181,7 +5181,7 @@ impl DescribeFleetUtilizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFleetUtilizationError {
@@ -5244,7 +5244,7 @@ impl DescribeGameSessionDetailsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeGameSessionDetailsError {
@@ -5305,7 +5305,7 @@ impl DescribeGameSessionPlacementError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeGameSessionPlacementError {
@@ -5359,7 +5359,7 @@ impl DescribeGameSessionQueuesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeGameSessionQueuesError {
@@ -5416,7 +5416,7 @@ impl DescribeGameSessionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeGameSessionsError {
@@ -5465,7 +5465,7 @@ impl DescribeInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeInstancesError {
@@ -5510,7 +5510,7 @@ impl DescribeMatchmakingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMatchmakingError {
@@ -5560,7 +5560,7 @@ impl DescribeMatchmakingConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMatchmakingConfigurationsError {
@@ -5623,7 +5623,7 @@ impl DescribeMatchmakingRuleSetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMatchmakingRuleSetsError {
@@ -5677,7 +5677,7 @@ impl DescribePlayerSessionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePlayerSessionsError {
@@ -5735,7 +5735,7 @@ impl DescribeRuntimeConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRuntimeConfigurationError {
@@ -5789,7 +5789,7 @@ impl DescribeScalingPoliciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeScalingPoliciesError {
@@ -5837,7 +5837,7 @@ impl DescribeScriptError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeScriptError {
@@ -5888,7 +5888,7 @@ impl DescribeVpcPeeringAuthorizationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeVpcPeeringAuthorizationsError {
@@ -5951,7 +5951,7 @@ impl DescribeVpcPeeringConnectionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeVpcPeeringConnectionsError {
@@ -6003,7 +6003,7 @@ impl GetGameSessionLogUrlError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGameSessionLogUrlError {
@@ -6051,7 +6051,7 @@ impl GetInstanceAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInstanceAccessError {
@@ -6094,7 +6094,7 @@ impl ListAliasesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAliasesError {
@@ -6136,7 +6136,7 @@ impl ListBuildsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBuildsError {
@@ -6183,7 +6183,7 @@ impl ListFleetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFleetsError {
@@ -6226,7 +6226,7 @@ impl ListScriptsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListScriptsError {
@@ -6273,7 +6273,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -6321,7 +6321,7 @@ impl PutScalingPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutScalingPolicyError {
@@ -6375,7 +6375,7 @@ impl RequestUploadCredentialsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RequestUploadCredentialsError {
@@ -6430,7 +6430,7 @@ impl ResolveAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResolveAliasError {
@@ -6486,7 +6486,7 @@ impl SearchGameSessionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchGameSessionsError {
@@ -6535,7 +6535,7 @@ impl StartFleetActionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartFleetActionsError {
@@ -6589,7 +6589,7 @@ impl StartGameSessionPlacementError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartGameSessionPlacementError {
@@ -6639,7 +6639,7 @@ impl StartMatchBackfillError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartMatchBackfillError {
@@ -6687,7 +6687,7 @@ impl StartMatchmakingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartMatchmakingError {
@@ -6735,7 +6735,7 @@ impl StopFleetActionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopFleetActionsError {
@@ -6789,7 +6789,7 @@ impl StopGameSessionPlacementError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopGameSessionPlacementError {
@@ -6837,7 +6837,7 @@ impl StopMatchmakingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopMatchmakingError {
@@ -6885,7 +6885,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -6933,7 +6933,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -6981,7 +6981,7 @@ impl UpdateAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAliasError {
@@ -7029,7 +7029,7 @@ impl UpdateBuildError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateBuildError {
@@ -7098,7 +7098,7 @@ impl UpdateFleetAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFleetAttributesError {
@@ -7166,7 +7166,7 @@ impl UpdateFleetCapacityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFleetCapacityError {
@@ -7242,7 +7242,7 @@ impl UpdateFleetPortSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFleetPortSettingsError {
@@ -7305,7 +7305,7 @@ impl UpdateGameSessionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGameSessionError {
@@ -7359,7 +7359,7 @@ impl UpdateGameSessionQueueError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGameSessionQueueError {
@@ -7417,7 +7417,7 @@ impl UpdateMatchmakingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateMatchmakingConfigurationError {
@@ -7486,7 +7486,7 @@ impl UpdateRuntimeConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRuntimeConfigurationError {
@@ -7537,7 +7537,7 @@ impl UpdateScriptError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateScriptError {
@@ -7588,7 +7588,7 @@ impl ValidateMatchmakingRuleSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ValidateMatchmakingRuleSetError {

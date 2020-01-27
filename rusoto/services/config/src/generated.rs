@@ -3647,7 +3647,7 @@ impl BatchGetAggregateResourceConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetAggregateResourceConfigError {
@@ -3681,7 +3681,7 @@ impl BatchGetResourceConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetResourceConfigError {
@@ -3717,7 +3717,7 @@ impl DeleteAggregationAuthorizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAggregationAuthorizationError {
@@ -3754,7 +3754,7 @@ impl DeleteConfigRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteConfigRuleError {
@@ -3789,7 +3789,7 @@ impl DeleteConfigurationAggregatorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteConfigurationAggregatorError {
@@ -3825,7 +3825,7 @@ impl DeleteConfigurationRecorderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteConfigurationRecorderError {
@@ -3864,7 +3864,7 @@ impl DeleteConformancePackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteConformancePackError {
@@ -3904,7 +3904,7 @@ impl DeleteDeliveryChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDeliveryChannelError {
@@ -3946,7 +3946,7 @@ impl DeleteEvaluationResultsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteEvaluationResultsError {
@@ -3995,7 +3995,7 @@ impl DeleteOrganizationConfigRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteOrganizationConfigRuleError {
@@ -4051,7 +4051,7 @@ impl DeleteOrganizationConformancePackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteOrganizationConformancePackError {
@@ -4093,7 +4093,7 @@ impl DeletePendingAggregationRequestError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePendingAggregationRequestError {
@@ -4138,7 +4138,7 @@ impl DeleteRemediationConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRemediationConfigurationError {
@@ -4177,7 +4177,7 @@ impl DeleteRemediationExceptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRemediationExceptionsError {
@@ -4211,7 +4211,7 @@ impl DeleteResourceConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteResourceConfigError {
@@ -4254,7 +4254,7 @@ impl DeleteRetentionConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRetentionConfigurationError {
@@ -4305,7 +4305,7 @@ impl DeliverConfigSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeliverConfigSnapshotError {
@@ -4359,7 +4359,7 @@ impl DescribeAggregateComplianceByConfigRulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAggregateComplianceByConfigRulesError {
@@ -4415,7 +4415,7 @@ impl DescribeAggregationAuthorizationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAggregationAuthorizationsError {
@@ -4471,7 +4471,7 @@ impl DescribeComplianceByConfigRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeComplianceByConfigRuleError {
@@ -4520,7 +4520,7 @@ impl DescribeComplianceByResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeComplianceByResourceError {
@@ -4573,7 +4573,7 @@ impl DescribeConfigRuleEvaluationStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConfigRuleEvaluationStatusError {
@@ -4620,7 +4620,7 @@ impl DescribeConfigRulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConfigRulesError {
@@ -4660,7 +4660,7 @@ impl DescribeConfigurationAggregatorSourcesStatusError {
 _ => {}
                             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConfigurationAggregatorSourcesStatusError {
@@ -4728,7 +4728,7 @@ impl DescribeConfigurationAggregatorsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConfigurationAggregatorsError {
@@ -4775,7 +4775,7 @@ impl DescribeConfigurationRecorderStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConfigurationRecorderStatusError {
@@ -4811,7 +4811,7 @@ impl DescribeConfigurationRecordersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConfigurationRecordersError {
@@ -4877,7 +4877,7 @@ impl DescribeConformancePackComplianceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConformancePackComplianceError {
@@ -4932,7 +4932,7 @@ impl DescribeConformancePackStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConformancePackStatusError {
@@ -4981,7 +4981,7 @@ impl DescribeConformancePacksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConformancePacksError {
@@ -5019,7 +5019,7 @@ impl DescribeDeliveryChannelStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDeliveryChannelStatusError {
@@ -5053,7 +5053,7 @@ impl DescribeDeliveryChannelsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDeliveryChannelsError {
@@ -5114,7 +5114,7 @@ impl DescribeOrganizationConfigRuleStatusesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeOrganizationConfigRuleStatusesError {
@@ -5180,7 +5180,7 @@ impl DescribeOrganizationConfigRulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeOrganizationConfigRulesError {
@@ -5228,7 +5228,7 @@ impl DescribeOrganizationConformancePackStatusesError {
 _ => {}
                             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeOrganizationConformancePackStatusesError {
@@ -5296,7 +5296,7 @@ impl DescribeOrganizationConformancePacksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeOrganizationConformancePacksError {
@@ -5355,7 +5355,7 @@ impl DescribePendingAggregationRequestsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePendingAggregationRequestsError {
@@ -5389,7 +5389,7 @@ impl DescribeRemediationConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRemediationConfigurationsError {
@@ -5428,7 +5428,7 @@ impl DescribeRemediationExceptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRemediationExceptionsError {
@@ -5476,7 +5476,7 @@ impl DescribeRemediationExecutionStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRemediationExecutionStatusError {
@@ -5529,7 +5529,7 @@ impl DescribeRetentionConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRetentionConfigurationsError {
@@ -5585,7 +5585,7 @@ impl GetAggregateComplianceDetailsByConfigRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAggregateComplianceDetailsByConfigRuleError {
@@ -5643,7 +5643,7 @@ impl GetAggregateConfigRuleComplianceSummaryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAggregateConfigRuleComplianceSummaryError {
@@ -5701,7 +5701,7 @@ impl GetAggregateDiscoveredResourceCountsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAggregateDiscoveredResourceCountsError {
@@ -5757,7 +5757,7 @@ impl GetAggregateResourceConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAggregateResourceConfigError {
@@ -5813,7 +5813,7 @@ impl GetComplianceDetailsByConfigRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetComplianceDetailsByConfigRuleError {
@@ -5855,7 +5855,7 @@ impl GetComplianceDetailsByResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetComplianceDetailsByResourceError {
@@ -5883,7 +5883,7 @@ impl GetComplianceSummaryByConfigRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetComplianceSummaryByConfigRuleError {
@@ -5915,7 +5915,7 @@ impl GetComplianceSummaryByResourceTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetComplianceSummaryByResourceTypeError {
@@ -5981,7 +5981,7 @@ impl GetConformancePackComplianceDetailsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetConformancePackComplianceDetailsError {
@@ -6043,7 +6043,7 @@ impl GetConformancePackComplianceSummaryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetConformancePackComplianceSummaryError {
@@ -6092,7 +6092,7 @@ impl GetDiscoveredResourceCountsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDiscoveredResourceCountsError {
@@ -6152,7 +6152,7 @@ impl GetOrganizationConfigRuleDetailedStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetOrganizationConfigRuleDetailedStatusError {
@@ -6202,7 +6202,7 @@ impl GetOrganizationConformancePackDetailedStatusError {
 _ => {}
                             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetOrganizationConformancePackDetailedStatusError {
@@ -6265,7 +6265,7 @@ impl GetResourceConfigHistoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourceConfigHistoryError {
@@ -6323,7 +6323,7 @@ impl ListAggregateDiscoveredResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAggregateDiscoveredResourcesError {
@@ -6377,7 +6377,7 @@ impl ListDiscoveredResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDiscoveredResourcesError {
@@ -6425,7 +6425,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -6461,7 +6461,7 @@ impl PutAggregationAuthorizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutAggregationAuthorizationError {
@@ -6519,7 +6519,7 @@ impl PutConfigRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutConfigRuleError {
@@ -6594,7 +6594,7 @@ impl PutConfigurationAggregatorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutConfigurationAggregatorError {
@@ -6662,7 +6662,7 @@ impl PutConfigurationRecorderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutConfigurationRecorderError {
@@ -6729,7 +6729,7 @@ impl PutConformancePackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutConformancePackError {
@@ -6809,7 +6809,7 @@ impl PutDeliveryChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutDeliveryChannelError {
@@ -6865,7 +6865,7 @@ impl PutEvaluationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutEvaluationsError {
@@ -6943,7 +6943,7 @@ impl PutOrganizationConfigRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutOrganizationConfigRuleError {
@@ -7009,7 +7009,7 @@ impl PutOrganizationConformancePackError {
 _ => {}
                             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutOrganizationConformancePackError {
@@ -7056,7 +7056,7 @@ impl PutRemediationConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutRemediationConfigurationsError {
@@ -7093,7 +7093,7 @@ impl PutRemediationExceptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutRemediationExceptionsError {
@@ -7141,7 +7141,7 @@ impl PutResourceConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutResourceConfigError {
@@ -7186,7 +7186,7 @@ impl PutRetentionConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutRetentionConfigurationError {
@@ -7235,7 +7235,7 @@ impl SelectResourceConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SelectResourceConfigError {
@@ -7292,7 +7292,7 @@ impl StartConfigRulesEvaluationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartConfigRulesEvaluationError {
@@ -7338,7 +7338,7 @@ impl StartConfigurationRecorderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartConfigurationRecorderError {
@@ -7389,7 +7389,7 @@ impl StartRemediationExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartRemediationExecutionError {
@@ -7429,7 +7429,7 @@ impl StopConfigurationRecorderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopConfigurationRecorderError {
@@ -7466,7 +7466,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -7497,7 +7497,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {

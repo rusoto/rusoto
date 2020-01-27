@@ -1090,7 +1090,7 @@ impl AssociateDelegateToResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateDelegateToResourceError {
@@ -1177,7 +1177,7 @@ impl AssociateMemberToGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateMemberToGroupError {
@@ -1251,7 +1251,7 @@ impl CreateAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAliasError {
@@ -1325,7 +1325,7 @@ impl CreateGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGroupError {
@@ -1396,7 +1396,7 @@ impl CreateResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateResourceError {
@@ -1476,7 +1476,7 @@ impl CreateUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserError {
@@ -1536,7 +1536,7 @@ impl DeleteAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAliasError {
@@ -1602,7 +1602,7 @@ impl DeleteGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteGroupError {
@@ -1670,7 +1670,7 @@ impl DeleteMailboxPermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMailboxPermissionsError {
@@ -1721,7 +1721,7 @@ impl DeleteResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteResourceError {
@@ -1786,7 +1786,7 @@ impl DeleteUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserError {
@@ -1852,7 +1852,7 @@ impl DeregisterFromWorkMailError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterFromWorkMailError {
@@ -1901,7 +1901,7 @@ impl DescribeGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeGroupError {
@@ -1943,7 +1943,7 @@ impl DescribeOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeOrganizationError {
@@ -1991,7 +1991,7 @@ impl DescribeResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeResourceError {
@@ -2039,7 +2039,7 @@ impl DescribeUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUserError {
@@ -2104,7 +2104,7 @@ impl DisassociateDelegateFromResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateDelegateFromResourceError {
@@ -2201,7 +2201,7 @@ impl DisassociateMemberFromGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateMemberFromGroupError {
@@ -2260,7 +2260,7 @@ impl GetMailboxDetailsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMailboxDetailsError {
@@ -2312,7 +2312,7 @@ impl ListAliasesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAliasesError {
@@ -2368,7 +2368,7 @@ impl ListGroupMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGroupMembersError {
@@ -2417,7 +2417,7 @@ impl ListGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGroupsError {
@@ -2473,7 +2473,7 @@ impl ListMailboxPermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListMailboxPermissionsError {
@@ -2506,7 +2506,7 @@ impl ListOrganizationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOrganizationsError {
@@ -2564,7 +2564,7 @@ impl ListResourceDelegatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResourceDelegatesError {
@@ -2608,7 +2608,7 @@ impl ListResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResourcesError {
@@ -2650,7 +2650,7 @@ impl ListUsersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUsersError {
@@ -2710,7 +2710,7 @@ impl PutMailboxPermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutMailboxPermissionsError {
@@ -2808,7 +2808,7 @@ impl RegisterToWorkMailError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterToWorkMailError {
@@ -2892,7 +2892,7 @@ impl ResetPasswordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResetPasswordError {
@@ -2956,7 +2956,7 @@ impl UpdateMailboxQuotaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateMailboxQuotaError {
@@ -3064,7 +3064,7 @@ impl UpdatePrimaryEmailAddressError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePrimaryEmailAddressError {
@@ -3157,7 +3157,7 @@ impl UpdateResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateResourceError {

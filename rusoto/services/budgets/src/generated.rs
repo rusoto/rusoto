@@ -628,7 +628,7 @@ impl CreateBudgetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateBudgetError {
@@ -689,7 +689,7 @@ impl CreateNotificationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateNotificationError {
@@ -751,7 +751,7 @@ impl CreateSubscriberError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSubscriberError {
@@ -801,7 +801,7 @@ impl DeleteBudgetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBudgetError {
@@ -849,7 +849,7 @@ impl DeleteNotificationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteNotificationError {
@@ -897,7 +897,7 @@ impl DeleteSubscriberError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSubscriberError {
@@ -945,7 +945,7 @@ impl DescribeBudgetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeBudgetError {
@@ -1017,7 +1017,7 @@ impl DescribeBudgetPerformanceHistoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeBudgetPerformanceHistoryError {
@@ -1087,7 +1087,7 @@ impl DescribeBudgetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeBudgetsError {
@@ -1161,7 +1161,7 @@ impl DescribeNotificationsForBudgetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeNotificationsForBudgetError {
@@ -1241,7 +1241,7 @@ impl DescribeSubscribersForNotificationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSubscribersForNotificationError {
@@ -1301,7 +1301,7 @@ impl UpdateBudgetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateBudgetError {
@@ -1354,7 +1354,7 @@ impl UpdateNotificationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateNotificationError {
@@ -1408,7 +1408,7 @@ impl UpdateSubscriberError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSubscriberError {

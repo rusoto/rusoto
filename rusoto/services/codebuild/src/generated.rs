@@ -1978,7 +1978,7 @@ impl BatchDeleteBuildsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDeleteBuildsError {
@@ -2008,7 +2008,7 @@ impl BatchGetBuildsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetBuildsError {
@@ -2038,7 +2038,7 @@ impl BatchGetProjectsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetProjectsError {
@@ -2068,7 +2068,7 @@ impl BatchGetReportGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetReportGroupsError {
@@ -2098,7 +2098,7 @@ impl BatchGetReportsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetReportsError {
@@ -2138,7 +2138,7 @@ impl CreateProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProjectError {
@@ -2184,7 +2184,7 @@ impl CreateReportGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateReportGroupError {
@@ -2231,7 +2231,7 @@ impl CreateWebhookError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateWebhookError {
@@ -2264,7 +2264,7 @@ impl DeleteProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProjectError {
@@ -2294,7 +2294,7 @@ impl DeleteReportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteReportError {
@@ -2324,7 +2324,7 @@ impl DeleteReportGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteReportGroupError {
@@ -2354,7 +2354,7 @@ impl DeleteResourcePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteResourcePolicyError {
@@ -2393,7 +2393,7 @@ impl DeleteSourceCredentialsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSourceCredentialsError {
@@ -2434,7 +2434,7 @@ impl DeleteWebhookError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteWebhookError {
@@ -2471,7 +2471,7 @@ impl DescribeTestCasesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTestCasesError {
@@ -2507,7 +2507,7 @@ impl GetResourcePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourcePolicyError {
@@ -2554,7 +2554,7 @@ impl ImportSourceCredentialsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportSourceCredentialsError {
@@ -2595,7 +2595,7 @@ impl InvalidateProjectCacheError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InvalidateProjectCacheError {
@@ -2626,7 +2626,7 @@ impl ListBuildsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBuildsError {
@@ -2663,7 +2663,7 @@ impl ListBuildsForProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBuildsForProjectError {
@@ -2690,7 +2690,7 @@ impl ListCuratedEnvironmentImagesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCuratedEnvironmentImagesError {
@@ -2718,7 +2718,7 @@ impl ListProjectsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProjectsError {
@@ -2748,7 +2748,7 @@ impl ListReportGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListReportGroupsError {
@@ -2778,7 +2778,7 @@ impl ListReportsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListReportsError {
@@ -2817,7 +2817,7 @@ impl ListReportsForReportGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListReportsForReportGroupError {
@@ -2848,7 +2848,7 @@ impl ListSharedProjectsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSharedProjectsError {
@@ -2878,7 +2878,7 @@ impl ListSharedReportGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSharedReportGroupsError {
@@ -2902,7 +2902,7 @@ impl ListSourceCredentialsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSourceCredentialsError {
@@ -2935,7 +2935,7 @@ impl PutResourcePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutResourcePolicyError {
@@ -2976,7 +2976,7 @@ impl StartBuildError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartBuildError {
@@ -3013,7 +3013,7 @@ impl StopBuildError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopBuildError {
@@ -3049,7 +3049,7 @@ impl UpdateProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateProjectError {
@@ -3085,7 +3085,7 @@ impl UpdateReportGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateReportGroupError {
@@ -3126,7 +3126,7 @@ impl UpdateWebhookError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateWebhookError {

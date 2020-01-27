@@ -1567,7 +1567,7 @@ impl CreateDeliveryStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDeliveryStreamError {
@@ -1607,7 +1607,7 @@ impl DeleteDeliveryStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDeliveryStreamError {
@@ -1640,7 +1640,7 @@ impl DescribeDeliveryStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDeliveryStreamError {
@@ -1664,7 +1664,7 @@ impl ListDeliveryStreamsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDeliveryStreamsError {
@@ -1708,7 +1708,7 @@ impl ListTagsForDeliveryStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForDeliveryStreamError {
@@ -1755,7 +1755,7 @@ impl PutRecordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutRecordError {
@@ -1803,7 +1803,7 @@ impl PutRecordBatchError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutRecordBatchError {
@@ -1868,7 +1868,7 @@ impl StartDeliveryStreamEncryptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartDeliveryStreamEncryptionError {
@@ -1933,7 +1933,7 @@ impl StopDeliveryStreamEncryptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopDeliveryStreamEncryptionError {
@@ -1983,7 +1983,7 @@ impl TagDeliveryStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagDeliveryStreamError {
@@ -2033,7 +2033,7 @@ impl UntagDeliveryStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagDeliveryStreamError {
@@ -2083,7 +2083,7 @@ impl UpdateDestinationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDestinationError {

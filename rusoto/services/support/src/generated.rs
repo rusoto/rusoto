@@ -768,7 +768,7 @@ impl AddAttachmentsToSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddAttachmentsToSetError {
@@ -827,7 +827,7 @@ impl AddCommunicationToCaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddCommunicationToCaseError {
@@ -879,7 +879,7 @@ impl CreateCaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCaseError {
@@ -928,7 +928,7 @@ impl DescribeAttachmentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAttachmentError {
@@ -967,7 +967,7 @@ impl DescribeCasesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCasesError {
@@ -1007,7 +1007,7 @@ impl DescribeCommunicationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCommunicationsError {
@@ -1040,7 +1040,7 @@ impl DescribeServicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeServicesError {
@@ -1072,7 +1072,7 @@ impl DescribeSeverityLevelsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSeverityLevelsError {
@@ -1108,7 +1108,7 @@ impl DescribeTrustedAdvisorCheckRefreshStatusesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckRefreshStatusesError {
@@ -1144,7 +1144,7 @@ impl DescribeTrustedAdvisorCheckResultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckResultError {
@@ -1180,7 +1180,7 @@ impl DescribeTrustedAdvisorCheckSummariesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckSummariesError {
@@ -1216,7 +1216,7 @@ impl DescribeTrustedAdvisorChecksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTrustedAdvisorChecksError {
@@ -1252,7 +1252,7 @@ impl RefreshTrustedAdvisorCheckError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RefreshTrustedAdvisorCheckError {
@@ -1289,7 +1289,7 @@ impl ResolveCaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResolveCaseError {

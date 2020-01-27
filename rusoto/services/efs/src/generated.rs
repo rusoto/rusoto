@@ -738,7 +738,7 @@ impl CreateAccessPointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAccessPointError {
@@ -807,7 +807,7 @@ impl CreateFileSystemError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateFileSystemError {
@@ -917,7 +917,7 @@ impl CreateMountTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMountTargetError {
@@ -972,7 +972,7 @@ impl CreateTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTagsError {
@@ -1018,7 +1018,7 @@ impl DeleteAccessPointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAccessPointError {
@@ -1067,7 +1067,7 @@ impl DeleteFileSystemError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFileSystemError {
@@ -1116,7 +1116,7 @@ impl DeleteFileSystemPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFileSystemPolicyError {
@@ -1169,7 +1169,7 @@ impl DeleteMountTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMountTargetError {
@@ -1210,7 +1210,7 @@ impl DeleteTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTagsError {
@@ -1263,7 +1263,7 @@ impl DescribeAccessPointsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAccessPointsError {
@@ -1312,7 +1312,7 @@ impl DescribeFileSystemPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFileSystemPolicyError {
@@ -1358,7 +1358,7 @@ impl DescribeFileSystemsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFileSystemsError {
@@ -1408,7 +1408,7 @@ impl DescribeLifecycleConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLifecycleConfigurationError {
@@ -1469,7 +1469,7 @@ impl DescribeMountTargetSecurityGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMountTargetSecurityGroupsError {
@@ -1536,7 +1536,7 @@ impl DescribeMountTargetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMountTargetsError {
@@ -1580,7 +1580,7 @@ impl DescribeTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTagsError {
@@ -1633,7 +1633,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -1705,7 +1705,7 @@ impl ModifyMountTargetSecurityGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyMountTargetSecurityGroupsError {
@@ -1771,7 +1771,7 @@ impl PutFileSystemPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutFileSystemPolicyError {
@@ -1829,7 +1829,7 @@ impl PutLifecycleConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutLifecycleConfigurationError {
@@ -1879,7 +1879,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -1927,7 +1927,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -1998,7 +1998,7 @@ impl UpdateFileSystemError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFileSystemError {

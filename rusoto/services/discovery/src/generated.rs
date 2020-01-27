@@ -1080,7 +1080,7 @@ impl AssociateConfigurationItemsToApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateConfigurationItemsToApplicationError {
@@ -1154,7 +1154,7 @@ impl BatchDeleteImportDataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDeleteImportDataError {
@@ -1214,7 +1214,7 @@ impl CreateApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateApplicationError {
@@ -1273,7 +1273,7 @@ impl CreateTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTagsError {
@@ -1334,7 +1334,7 @@ impl DeleteApplicationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteApplicationsError {
@@ -1393,7 +1393,7 @@ impl DeleteTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTagsError {
@@ -1450,7 +1450,7 @@ impl DescribeAgentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAgentsError {
@@ -1514,7 +1514,7 @@ impl DescribeConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConfigurationsError {
@@ -1592,7 +1592,7 @@ impl DescribeContinuousExportsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeContinuousExportsError {
@@ -1673,7 +1673,7 @@ impl DescribeExportConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeExportConfigurationsError {
@@ -1750,7 +1750,7 @@ impl DescribeExportTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeExportTasksError {
@@ -1814,7 +1814,7 @@ impl DescribeImportTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeImportTasksError {
@@ -1873,7 +1873,7 @@ impl DescribeTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTagsError {
@@ -1950,7 +1950,7 @@ impl DisassociateConfigurationItemsFromApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateConfigurationItemsFromApplicationError {
@@ -2031,7 +2031,7 @@ impl ExportConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ExportConfigurationsError {
@@ -2096,7 +2096,7 @@ impl GetDiscoverySummaryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDiscoverySummaryError {
@@ -2161,7 +2161,7 @@ impl ListConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListConfigurationsError {
@@ -2226,7 +2226,7 @@ impl ListServerNeighborsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListServerNeighborsError {
@@ -2307,7 +2307,7 @@ impl StartContinuousExportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartContinuousExportError {
@@ -2376,7 +2376,7 @@ impl StartDataCollectionByAgentIdsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartDataCollectionByAgentIdsError {
@@ -2449,7 +2449,7 @@ impl StartExportTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartExportTaskError {
@@ -2511,7 +2511,7 @@ impl StartImportTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartImportTaskError {
@@ -2595,7 +2595,7 @@ impl StopContinuousExportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopContinuousExportError {
@@ -2664,7 +2664,7 @@ impl StopDataCollectionByAgentIdsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopDataCollectionByAgentIdsError {
@@ -2734,7 +2734,7 @@ impl UpdateApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateApplicationError {

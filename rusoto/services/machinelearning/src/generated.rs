@@ -1683,7 +1683,7 @@ impl AddTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddTagsError {
@@ -1731,7 +1731,7 @@ impl CreateBatchPredictionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateBatchPredictionError {
@@ -1781,7 +1781,7 @@ impl CreateDataSourceFromRDSError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDataSourceFromRDSError {
@@ -1833,7 +1833,7 @@ impl CreateDataSourceFromRedshiftError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDataSourceFromRedshiftError {
@@ -1881,7 +1881,7 @@ impl CreateDataSourceFromS3Error {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDataSourceFromS3Error {
@@ -1927,7 +1927,7 @@ impl CreateEvaluationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateEvaluationError {
@@ -1971,7 +1971,7 @@ impl CreateMLModelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMLModelError {
@@ -2017,7 +2017,7 @@ impl CreateRealtimeEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRealtimeEndpointError {
@@ -2063,7 +2063,7 @@ impl DeleteBatchPredictionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBatchPredictionError {
@@ -2105,7 +2105,7 @@ impl DeleteDataSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDataSourceError {
@@ -2147,7 +2147,7 @@ impl DeleteEvaluationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteEvaluationError {
@@ -2189,7 +2189,7 @@ impl DeleteMLModelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMLModelError {
@@ -2235,7 +2235,7 @@ impl DeleteRealtimeEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRealtimeEndpointError {
@@ -2282,7 +2282,7 @@ impl DeleteTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTagsError {
@@ -2324,7 +2324,7 @@ impl DescribeBatchPredictionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeBatchPredictionsError {
@@ -2360,7 +2360,7 @@ impl DescribeDataSourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDataSourcesError {
@@ -2396,7 +2396,7 @@ impl DescribeEvaluationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEvaluationsError {
@@ -2432,7 +2432,7 @@ impl DescribeMLModelsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMLModelsError {
@@ -2473,7 +2473,7 @@ impl DescribeTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTagsError {
@@ -2515,7 +2515,7 @@ impl GetBatchPredictionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBatchPredictionError {
@@ -2557,7 +2557,7 @@ impl GetDataSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDataSourceError {
@@ -2599,7 +2599,7 @@ impl GetEvaluationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetEvaluationError {
@@ -2641,7 +2641,7 @@ impl GetMLModelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMLModelError {
@@ -2693,7 +2693,7 @@ impl PredictError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PredictError {
@@ -2741,7 +2741,7 @@ impl UpdateBatchPredictionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateBatchPredictionError {
@@ -2783,7 +2783,7 @@ impl UpdateDataSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDataSourceError {
@@ -2825,7 +2825,7 @@ impl UpdateEvaluationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateEvaluationError {
@@ -2867,7 +2867,7 @@ impl UpdateMLModelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateMLModelError {

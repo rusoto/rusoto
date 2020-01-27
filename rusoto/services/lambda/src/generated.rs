@@ -1990,7 +1990,7 @@ impl AddLayerVersionPermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddLayerVersionPermissionError {
@@ -2060,7 +2060,7 @@ impl AddPermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddPermissionError {
@@ -2116,7 +2116,7 @@ impl CreateAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAliasError {
@@ -2178,7 +2178,7 @@ impl CreateEventSourceMappingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateEventSourceMappingError {
@@ -2241,7 +2241,7 @@ impl CreateFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateFunctionError {
@@ -2291,7 +2291,7 @@ impl DeleteAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAliasError {
@@ -2352,7 +2352,7 @@ impl DeleteEventSourceMappingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteEventSourceMappingError {
@@ -2410,7 +2410,7 @@ impl DeleteFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFunctionError {
@@ -2472,7 +2472,7 @@ impl DeleteFunctionConcurrencyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFunctionConcurrencyError {
@@ -2533,7 +2533,7 @@ impl DeleteFunctionEventInvokeConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFunctionEventInvokeConfigError {
@@ -2577,7 +2577,7 @@ impl DeleteLayerVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLayerVersionError {
@@ -2640,7 +2640,7 @@ impl DeleteProvisionedConcurrencyConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProvisionedConcurrencyConfigError {
@@ -2687,7 +2687,7 @@ impl GetAccountSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAccountSettingsError {
@@ -2731,7 +2731,7 @@ impl GetAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAliasError {
@@ -2785,7 +2785,7 @@ impl GetEventSourceMappingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetEventSourceMappingError {
@@ -2833,7 +2833,7 @@ impl GetFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFunctionError {
@@ -2887,7 +2887,7 @@ impl GetFunctionConcurrencyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFunctionConcurrencyError {
@@ -2941,7 +2941,7 @@ impl GetFunctionConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFunctionConfigurationError {
@@ -3001,7 +3001,7 @@ impl GetFunctionEventInvokeConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFunctionEventInvokeConfigError {
@@ -3055,7 +3055,7 @@ impl GetLayerVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLayerVersionError {
@@ -3109,7 +3109,7 @@ impl GetLayerVersionByArnError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLayerVersionByArnError {
@@ -3163,7 +3163,7 @@ impl GetLayerVersionPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLayerVersionPolicyError {
@@ -3211,7 +3211,7 @@ impl GetPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPolicyError {
@@ -3278,7 +3278,7 @@ impl GetProvisionedConcurrencyConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetProvisionedConcurrencyConfigError {
@@ -3423,7 +3423,7 @@ impl InvokeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InvokeError {
@@ -3494,7 +3494,7 @@ impl InvokeAsyncError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InvokeAsyncError {
@@ -3543,7 +3543,7 @@ impl ListAliasesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAliasesError {
@@ -3597,7 +3597,7 @@ impl ListEventSourceMappingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListEventSourceMappingsError {
@@ -3657,7 +3657,7 @@ impl ListFunctionEventInvokeConfigsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFunctionEventInvokeConfigsError {
@@ -3706,7 +3706,7 @@ impl ListFunctionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFunctionsError {
@@ -3755,7 +3755,7 @@ impl ListLayerVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListLayerVersionsError {
@@ -3798,7 +3798,7 @@ impl ListLayersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListLayersError {
@@ -3855,7 +3855,7 @@ impl ListProvisionedConcurrencyConfigsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProvisionedConcurrencyConfigsError {
@@ -3907,7 +3907,7 @@ impl ListTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsError {
@@ -3961,7 +3961,7 @@ impl ListVersionsByFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVersionsByFunctionError {
@@ -4020,7 +4020,7 @@ impl PublishLayerVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PublishLayerVersionError {
@@ -4086,7 +4086,7 @@ impl PublishVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PublishVersionError {
@@ -4150,7 +4150,7 @@ impl PutFunctionConcurrencyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutFunctionConcurrencyError {
@@ -4209,7 +4209,7 @@ impl PutFunctionEventInvokeConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutFunctionEventInvokeConfigError {
@@ -4278,7 +4278,7 @@ impl PutProvisionedConcurrencyConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutProvisionedConcurrencyConfigError {
@@ -4352,7 +4352,7 @@ impl RemoveLayerVersionPermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveLayerVersionPermissionError {
@@ -4414,7 +4414,7 @@ impl RemovePermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemovePermissionError {
@@ -4468,7 +4468,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -4522,7 +4522,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -4581,7 +4581,7 @@ impl UpdateAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAliasError {
@@ -4651,7 +4651,7 @@ impl UpdateEventSourceMappingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateEventSourceMappingError {
@@ -4724,7 +4724,7 @@ impl UpdateFunctionCodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFunctionCodeError {
@@ -4797,7 +4797,7 @@ impl UpdateFunctionConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFunctionConfigurationError {
@@ -4861,7 +4861,7 @@ impl UpdateFunctionEventInvokeConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFunctionEventInvokeConfigError {

@@ -101,7 +101,7 @@ impl InvokeEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InvokeEndpointError {

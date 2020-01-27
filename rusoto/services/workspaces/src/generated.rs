@@ -1556,7 +1556,7 @@ impl AssociateIpGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateIpGroupsError {
@@ -1617,7 +1617,7 @@ impl AuthorizeIpRulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AuthorizeIpRulesError {
@@ -1691,7 +1691,7 @@ impl CopyWorkspaceImageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CopyWorkspaceImageError {
@@ -1751,7 +1751,7 @@ impl CreateIpGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateIpGroupError {
@@ -1795,7 +1795,7 @@ impl CreateTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTagsError {
@@ -1836,7 +1836,7 @@ impl CreateWorkspacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateWorkspacesError {
@@ -1884,7 +1884,7 @@ impl DeleteIpGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteIpGroupError {
@@ -1922,7 +1922,7 @@ impl DeleteTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTagsError {
@@ -1967,7 +1967,7 @@ impl DeleteWorkspaceImageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteWorkspaceImageError {
@@ -2031,7 +2031,7 @@ impl DeregisterWorkspaceDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterWorkspaceDirectoryError {
@@ -2073,7 +2073,7 @@ impl DescribeAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAccountError {
@@ -2107,7 +2107,7 @@ impl DescribeAccountModificationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAccountModificationsError {
@@ -2153,7 +2153,7 @@ impl DescribeClientPropertiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeClientPropertiesError {
@@ -2194,7 +2194,7 @@ impl DescribeIpGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeIpGroupsError {
@@ -2225,7 +2225,7 @@ impl DescribeTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTagsError {
@@ -2257,7 +2257,7 @@ impl DescribeWorkspaceBundlesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeWorkspaceBundlesError {
@@ -2293,7 +2293,7 @@ impl DescribeWorkspaceDirectoriesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeWorkspaceDirectoriesError {
@@ -2327,7 +2327,7 @@ impl DescribeWorkspaceImagesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeWorkspaceImagesError {
@@ -2375,7 +2375,7 @@ impl DescribeWorkspaceSnapshotsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeWorkspaceSnapshotsError {
@@ -2418,7 +2418,7 @@ impl DescribeWorkspacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeWorkspacesError {
@@ -2453,7 +2453,7 @@ impl DescribeWorkspacesConnectionStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeWorkspacesConnectionStatusError {
@@ -2506,7 +2506,7 @@ impl DisassociateIpGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateIpGroupsError {
@@ -2574,7 +2574,7 @@ impl ImportWorkspaceImageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportWorkspaceImageError {
@@ -2620,7 +2620,7 @@ impl ListAvailableManagementCidrRangesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAvailableManagementCidrRangesError {
@@ -2688,7 +2688,7 @@ impl MigrateWorkspaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for MigrateWorkspaceError {
@@ -2745,7 +2745,7 @@ impl ModifyAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyAccountError {
@@ -2793,7 +2793,7 @@ impl ModifyClientPropertiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyClientPropertiesError {
@@ -2845,7 +2845,7 @@ impl ModifySelfservicePermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifySelfservicePermissionsError {
@@ -2892,7 +2892,7 @@ impl ModifyWorkspaceAccessPropertiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyWorkspaceAccessPropertiesError {
@@ -2943,7 +2943,7 @@ impl ModifyWorkspaceCreationPropertiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyWorkspaceCreationPropertiesError {
@@ -3025,7 +3025,7 @@ impl ModifyWorkspacePropertiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyWorkspacePropertiesError {
@@ -3087,7 +3087,7 @@ impl ModifyWorkspaceStateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyWorkspaceStateError {
@@ -3113,7 +3113,7 @@ impl RebootWorkspacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RebootWorkspacesError {
@@ -3135,7 +3135,7 @@ impl RebuildWorkspacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RebuildWorkspacesError {
@@ -3216,7 +3216,7 @@ impl RegisterWorkspaceDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterWorkspaceDirectoryError {
@@ -3277,7 +3277,7 @@ impl RestoreWorkspaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RestoreWorkspaceError {
@@ -3326,7 +3326,7 @@ impl RevokeIpRulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RevokeIpRulesError {
@@ -3353,7 +3353,7 @@ impl StartWorkspacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartWorkspacesError {
@@ -3375,7 +3375,7 @@ impl StopWorkspacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopWorkspacesError {
@@ -3397,7 +3397,7 @@ impl TerminateWorkspacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TerminateWorkspacesError {
@@ -3453,7 +3453,7 @@ impl UpdateRulesOfIpGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRulesOfIpGroupError {

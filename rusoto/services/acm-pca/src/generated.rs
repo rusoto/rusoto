@@ -703,7 +703,7 @@ impl CreateCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCertificateAuthorityError {
@@ -775,7 +775,7 @@ impl CreateCertificateAuthorityAuditReportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCertificateAuthorityAuditReportError {
@@ -849,7 +849,7 @@ impl CreatePermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePermissionError {
@@ -909,7 +909,7 @@ impl DeleteCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCertificateAuthorityError {
@@ -959,7 +959,7 @@ impl DeletePermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePermissionError {
@@ -1003,7 +1003,7 @@ impl DescribeCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCertificateAuthorityError {
@@ -1054,7 +1054,7 @@ impl DescribeCertificateAuthorityAuditReportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCertificateAuthorityAuditReportError {
@@ -1112,7 +1112,7 @@ impl GetCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCertificateError {
@@ -1164,7 +1164,7 @@ impl GetCertificateAuthorityCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCertificateAuthorityCertificateError {
@@ -1234,7 +1234,7 @@ impl GetCertificateAuthorityCsrError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCertificateAuthorityCsrError {
@@ -1328,7 +1328,7 @@ impl ImportCertificateAuthorityCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportCertificateAuthorityCertificateError {
@@ -1409,7 +1409,7 @@ impl IssueCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for IssueCertificateError {
@@ -1448,7 +1448,7 @@ impl ListCertificateAuthoritiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCertificateAuthoritiesError {
@@ -1498,7 +1498,7 @@ impl ListPermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPermissionsError {
@@ -1542,7 +1542,7 @@ impl ListTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsError {
@@ -1592,7 +1592,7 @@ impl RestoreCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RestoreCertificateAuthorityError {
@@ -1668,7 +1668,7 @@ impl RevokeCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RevokeCertificateError {
@@ -1730,7 +1730,7 @@ impl TagCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagCertificateAuthorityError {
@@ -1787,7 +1787,7 @@ impl UntagCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagCertificateAuthorityError {
@@ -1859,7 +1859,7 @@ impl UpdateCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateCertificateAuthorityError {

@@ -1587,7 +1587,7 @@ impl AddAttributesToFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddAttributesToFindingsError {
@@ -1659,7 +1659,7 @@ impl CreateAssessmentTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAssessmentTargetError {
@@ -1734,7 +1734,7 @@ impl CreateAssessmentTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAssessmentTemplateError {
@@ -1806,7 +1806,7 @@ impl CreateExclusionsPreviewError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateExclusionsPreviewError {
@@ -1867,7 +1867,7 @@ impl CreateResourceGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateResourceGroupError {
@@ -1932,7 +1932,7 @@ impl DeleteAssessmentRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAssessmentRunError {
@@ -1998,7 +1998,7 @@ impl DeleteAssessmentTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAssessmentTargetError {
@@ -2072,7 +2072,7 @@ impl DeleteAssessmentTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAssessmentTemplateError {
@@ -2116,7 +2116,7 @@ impl DescribeAssessmentRunsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAssessmentRunsError {
@@ -2154,7 +2154,7 @@ impl DescribeAssessmentTargetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAssessmentTargetsError {
@@ -2196,7 +2196,7 @@ impl DescribeAssessmentTemplatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAssessmentTemplatesError {
@@ -2231,7 +2231,7 @@ impl DescribeCrossAccountAccessRoleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCrossAccountAccessRoleError {
@@ -2266,7 +2266,7 @@ impl DescribeExclusionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeExclusionsError {
@@ -2302,7 +2302,7 @@ impl DescribeFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFindingsError {
@@ -2338,7 +2338,7 @@ impl DescribeResourceGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeResourceGroupsError {
@@ -2374,7 +2374,7 @@ impl DescribeRulesPackagesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRulesPackagesError {
@@ -2441,7 +2441,7 @@ impl GetAssessmentReportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAssessmentReportError {
@@ -2494,7 +2494,7 @@ impl GetExclusionsPreviewError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetExclusionsPreviewError {
@@ -2542,7 +2542,7 @@ impl GetTelemetryMetadataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTelemetryMetadataError {
@@ -2596,7 +2596,7 @@ impl ListAssessmentRunAgentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssessmentRunAgentsError {
@@ -2644,7 +2644,7 @@ impl ListAssessmentRunsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssessmentRunsError {
@@ -2687,7 +2687,7 @@ impl ListAssessmentTargetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssessmentTargetsError {
@@ -2740,7 +2740,7 @@ impl ListAssessmentTemplatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssessmentTemplatesError {
@@ -2788,7 +2788,7 @@ impl ListEventSubscriptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListEventSubscriptionsError {
@@ -2836,7 +2836,7 @@ impl ListExclusionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListExclusionsError {
@@ -2884,7 +2884,7 @@ impl ListFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFindingsError {
@@ -2927,7 +2927,7 @@ impl ListRulesPackagesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRulesPackagesError {
@@ -2974,7 +2974,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -3029,7 +3029,7 @@ impl PreviewAgentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PreviewAgentsError {
@@ -3095,7 +3095,7 @@ impl RegisterCrossAccountAccessRoleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterCrossAccountAccessRoleError {
@@ -3165,7 +3165,7 @@ impl RemoveAttributesFromFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveAttributesFromFindingsError {
@@ -3223,7 +3223,7 @@ impl SetTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetTagsForResourceError {
@@ -3300,7 +3300,7 @@ impl StartAssessmentRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartAssessmentRunError {
@@ -3363,7 +3363,7 @@ impl StopAssessmentRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopAssessmentRunError {
@@ -3426,7 +3426,7 @@ impl SubscribeToEventError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SubscribeToEventError {
@@ -3485,7 +3485,7 @@ impl UnsubscribeFromEventError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UnsubscribeFromEventError {
@@ -3543,7 +3543,7 @@ impl UpdateAssessmentTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAssessmentTargetError {

@@ -794,7 +794,7 @@ impl CancelRotateSecretError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelRotateSecretError {
@@ -869,7 +869,7 @@ impl CreateSecretError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSecretError {
@@ -921,7 +921,7 @@ impl DeleteResourcePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteResourcePolicyError {
@@ -968,7 +968,7 @@ impl DeleteSecretError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSecretError {
@@ -1006,7 +1006,7 @@ impl DescribeSecretError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSecretError {
@@ -1049,7 +1049,7 @@ impl GetRandomPasswordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRandomPasswordError {
@@ -1093,7 +1093,7 @@ impl GetResourcePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourcePolicyError {
@@ -1145,7 +1145,7 @@ impl GetSecretValueError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSecretValueError {
@@ -1195,7 +1195,7 @@ impl ListSecretVersionIdsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSecretVersionIdsError {
@@ -1237,7 +1237,7 @@ impl ListSecretsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSecretsError {
@@ -1293,7 +1293,7 @@ impl PutResourcePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutResourcePolicyError {
@@ -1357,7 +1357,7 @@ impl PutSecretValueError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutSecretValueError {
@@ -1408,7 +1408,7 @@ impl RestoreSecretError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RestoreSecretError {
@@ -1456,7 +1456,7 @@ impl RotateSecretError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RotateSecretError {
@@ -1504,7 +1504,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -1552,7 +1552,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -1627,7 +1627,7 @@ impl UpdateSecretError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSecretError {
@@ -1695,7 +1695,7 @@ impl UpdateSecretVersionStageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSecretVersionStageError {

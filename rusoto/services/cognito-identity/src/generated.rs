@@ -704,7 +704,7 @@ impl CreateIdentityPoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateIdentityPoolError {
@@ -749,7 +749,7 @@ impl DeleteIdentitiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteIdentitiesError {
@@ -801,7 +801,7 @@ impl DeleteIdentityPoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteIdentityPoolError {
@@ -855,7 +855,7 @@ impl DescribeIdentityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeIdentityError {
@@ -915,7 +915,7 @@ impl DescribeIdentityPoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeIdentityPoolError {
@@ -1000,7 +1000,7 @@ impl GetCredentialsForIdentityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCredentialsForIdentityError {
@@ -1074,7 +1074,7 @@ impl GetIdError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIdError {
@@ -1144,7 +1144,7 @@ impl GetIdentityPoolRolesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIdentityPoolRolesError {
@@ -1209,7 +1209,7 @@ impl GetOpenIdTokenError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetOpenIdTokenError {
@@ -1293,7 +1293,7 @@ impl GetOpenIdTokenForDeveloperIdentityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetOpenIdTokenForDeveloperIdentityError {
@@ -1363,7 +1363,7 @@ impl ListIdentitiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListIdentitiesError {
@@ -1417,7 +1417,7 @@ impl ListIdentityPoolsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListIdentityPoolsError {
@@ -1475,7 +1475,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -1546,7 +1546,7 @@ impl LookupDeveloperIdentityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for LookupDeveloperIdentityError {
@@ -1618,7 +1618,7 @@ impl MergeDeveloperIdentitiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for MergeDeveloperIdentitiesError {
@@ -1693,7 +1693,7 @@ impl SetIdentityPoolRolesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetIdentityPoolRolesError {
@@ -1749,7 +1749,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -1820,7 +1820,7 @@ impl UnlinkDeveloperIdentityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UnlinkDeveloperIdentityError {
@@ -1885,7 +1885,7 @@ impl UnlinkIdentityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UnlinkIdentityError {
@@ -1941,7 +1941,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -2012,7 +2012,7 @@ impl UpdateIdentityPoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateIdentityPoolError {

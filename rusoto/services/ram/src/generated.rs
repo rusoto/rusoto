@@ -1101,7 +1101,7 @@ impl AcceptResourceShareInvitationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AcceptResourceShareInvitationError {
@@ -1219,7 +1219,7 @@ impl AssociateResourceShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateResourceShareError {
@@ -1310,7 +1310,7 @@ impl AssociateResourceSharePermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateResourceSharePermissionError {
@@ -1426,7 +1426,7 @@ impl CreateResourceShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateResourceShareError {
@@ -1522,7 +1522,7 @@ impl DeleteResourceShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteResourceShareError {
@@ -1627,7 +1627,7 @@ impl DisassociateResourceShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateResourceShareError {
@@ -1720,7 +1720,7 @@ impl DisassociateResourceSharePermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateResourceSharePermissionError {
@@ -1788,7 +1788,7 @@ impl EnableSharingWithAwsOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableSharingWithAwsOrganizationError {
@@ -1851,7 +1851,7 @@ impl GetPermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPermissionError {
@@ -1912,7 +1912,7 @@ impl GetResourcePoliciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourcePoliciesError {
@@ -1992,7 +1992,7 @@ impl GetResourceShareAssociationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourceShareAssociationsError {
@@ -2084,7 +2084,7 @@ impl GetResourceShareInvitationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourceShareInvitationsError {
@@ -2153,7 +2153,7 @@ impl GetResourceSharesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourceSharesError {
@@ -2254,7 +2254,7 @@ impl ListPendingInvitationResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPendingInvitationResourcesError {
@@ -2330,7 +2330,7 @@ impl ListPermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPermissionsError {
@@ -2389,7 +2389,7 @@ impl ListPrincipalsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPrincipalsError {
@@ -2470,7 +2470,7 @@ impl ListResourceSharePermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResourceSharePermissionsError {
@@ -2544,7 +2544,7 @@ impl ListResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResourcesError {
@@ -2621,7 +2621,7 @@ impl PromoteResourceShareCreatedFromPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PromoteResourceShareCreatedFromPolicyError {
@@ -2741,7 +2741,7 @@ impl RejectResourceShareInvitationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RejectResourceShareInvitationError {
@@ -2826,7 +2826,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -2872,7 +2872,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -2956,7 +2956,7 @@ impl UpdateResourceShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateResourceShareError {

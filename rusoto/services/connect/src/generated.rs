@@ -1320,7 +1320,7 @@ impl CreateUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserError {
@@ -1376,7 +1376,7 @@ impl DeleteUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserError {
@@ -1430,7 +1430,7 @@ impl DescribeUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUserError {
@@ -1496,7 +1496,7 @@ impl DescribeUserHierarchyGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUserHierarchyGroupError {
@@ -1562,7 +1562,7 @@ impl DescribeUserHierarchyStructureError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUserHierarchyStructureError {
@@ -1618,7 +1618,7 @@ impl GetContactAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetContactAttributesError {
@@ -1676,7 +1676,7 @@ impl GetCurrentMetricDataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCurrentMetricDataError {
@@ -1737,7 +1737,7 @@ impl GetFederationTokenError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFederationTokenError {
@@ -1792,7 +1792,7 @@ impl GetMetricDataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMetricDataError {
@@ -1846,7 +1846,7 @@ impl ListContactFlowsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListContactFlowsError {
@@ -1908,7 +1908,7 @@ impl ListHoursOfOperationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListHoursOfOperationsError {
@@ -1962,7 +1962,7 @@ impl ListPhoneNumbersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPhoneNumbersError {
@@ -2016,7 +2016,7 @@ impl ListQueuesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListQueuesError {
@@ -2074,7 +2074,7 @@ impl ListRoutingProfilesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRoutingProfilesError {
@@ -2134,7 +2134,7 @@ impl ListSecurityProfilesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSecurityProfilesError {
@@ -2192,7 +2192,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -2254,7 +2254,7 @@ impl ListUserHierarchyGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUserHierarchyGroupsError {
@@ -2308,7 +2308,7 @@ impl ListUsersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUsersError {
@@ -2362,7 +2362,7 @@ impl StartChatContactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartChatContactError {
@@ -2440,7 +2440,7 @@ impl StartOutboundVoiceContactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartOutboundVoiceContactError {
@@ -2500,7 +2500,7 @@ impl StopContactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopContactError {
@@ -2554,7 +2554,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -2608,7 +2608,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -2665,7 +2665,7 @@ impl UpdateContactAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateContactAttributesError {
@@ -2722,7 +2722,7 @@ impl UpdateUserHierarchyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserHierarchyError {
@@ -2784,7 +2784,7 @@ impl UpdateUserIdentityInfoError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserIdentityInfoError {
@@ -2846,7 +2846,7 @@ impl UpdateUserPhoneConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserPhoneConfigError {
@@ -2908,7 +2908,7 @@ impl UpdateUserRoutingProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserRoutingProfileError {
@@ -2974,7 +2974,7 @@ impl UpdateUserSecurityProfilesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserSecurityProfilesError {

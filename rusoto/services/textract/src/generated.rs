@@ -561,7 +561,7 @@ impl AnalyzeDocumentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AnalyzeDocumentError {
@@ -648,7 +648,7 @@ impl DetectDocumentTextError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectDocumentTextError {
@@ -719,7 +719,7 @@ impl GetDocumentAnalysisError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDocumentAnalysisError {
@@ -791,7 +791,7 @@ impl GetDocumentTextDetectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDocumentTextDetectionError {
@@ -892,7 +892,7 @@ impl StartDocumentAnalysisError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartDocumentAnalysisError {
@@ -1010,7 +1010,7 @@ impl StartDocumentTextDetectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartDocumentTextDetectionError {

@@ -2836,7 +2836,7 @@ impl AssociatePhoneNumberWithUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociatePhoneNumberWithUserError {
@@ -2930,7 +2930,7 @@ impl AssociatePhoneNumbersWithVoiceConnectorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociatePhoneNumbersWithVoiceConnectorError {
@@ -3040,7 +3040,7 @@ impl AssociatePhoneNumbersWithVoiceConnectorGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociatePhoneNumbersWithVoiceConnectorGroupError {
@@ -3139,7 +3139,7 @@ impl AssociateSigninDelegateGroupsWithAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateSigninDelegateGroupsWithAccountError {
@@ -3230,7 +3230,7 @@ impl BatchCreateAttendeeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchCreateAttendeeError {
@@ -3307,7 +3307,7 @@ impl BatchCreateRoomMembershipError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchCreateRoomMembershipError {
@@ -3381,7 +3381,7 @@ impl BatchDeletePhoneNumberError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDeletePhoneNumberError {
@@ -3447,7 +3447,7 @@ impl BatchSuspendUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchSuspendUserError {
@@ -3517,7 +3517,7 @@ impl BatchUnsuspendUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchUnsuspendUserError {
@@ -3591,7 +3591,7 @@ impl BatchUpdatePhoneNumberError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchUpdatePhoneNumberError {
@@ -3657,7 +3657,7 @@ impl BatchUpdateUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchUpdateUserError {
@@ -3723,7 +3723,7 @@ impl CreateAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAccountError {
@@ -3796,7 +3796,7 @@ impl CreateAttendeeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAttendeeError {
@@ -3868,7 +3868,7 @@ impl CreateBotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateBotError {
@@ -3935,7 +3935,7 @@ impl CreateMeetingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMeetingError {
@@ -4016,7 +4016,7 @@ impl CreatePhoneNumberOrderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePhoneNumberOrderError {
@@ -4088,7 +4088,7 @@ impl CreateRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRoomError {
@@ -4173,7 +4173,7 @@ impl CreateRoomMembershipError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRoomMembershipError {
@@ -4246,7 +4246,7 @@ impl CreateUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserError {
@@ -4326,7 +4326,7 @@ impl CreateVoiceConnectorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateVoiceConnectorError {
@@ -4412,7 +4412,7 @@ impl CreateVoiceConnectorGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateVoiceConnectorGroupError {
@@ -4486,7 +4486,7 @@ impl DeleteAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAccountError {
@@ -4553,7 +4553,7 @@ impl DeleteAttendeeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAttendeeError {
@@ -4624,7 +4624,7 @@ impl DeleteEventsConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteEventsConfigurationError {
@@ -4691,7 +4691,7 @@ impl DeleteMeetingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMeetingError {
@@ -4761,7 +4761,7 @@ impl DeletePhoneNumberError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePhoneNumberError {
@@ -4827,7 +4827,7 @@ impl DeleteRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRoomError {
@@ -4899,7 +4899,7 @@ impl DeleteRoomMembershipError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRoomMembershipError {
@@ -4976,7 +4976,7 @@ impl DeleteVoiceConnectorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVoiceConnectorError {
@@ -5058,7 +5058,7 @@ impl DeleteVoiceConnectorGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVoiceConnectorGroupError {
@@ -5141,7 +5141,7 @@ impl DeleteVoiceConnectorOriginationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVoiceConnectorOriginationError {
@@ -5235,7 +5235,7 @@ impl DeleteVoiceConnectorStreamingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVoiceConnectorStreamingConfigurationError {
@@ -5331,7 +5331,7 @@ impl DeleteVoiceConnectorTerminationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVoiceConnectorTerminationError {
@@ -5425,7 +5425,7 @@ impl DeleteVoiceConnectorTerminationCredentialsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVoiceConnectorTerminationCredentialsError {
@@ -5521,7 +5521,7 @@ impl DisassociatePhoneNumberFromUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociatePhoneNumberFromUserError {
@@ -5615,7 +5615,7 @@ impl DisassociatePhoneNumbersFromVoiceConnectorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociatePhoneNumbersFromVoiceConnectorError {
@@ -5719,7 +5719,7 @@ impl DisassociatePhoneNumbersFromVoiceConnectorGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociatePhoneNumbersFromVoiceConnectorGroupError {
@@ -5819,7 +5819,7 @@ impl DisassociateSigninDelegateGroupsFromAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateSigninDelegateGroupsFromAccountError {
@@ -5899,7 +5899,7 @@ impl GetAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAccountError {
@@ -5969,7 +5969,7 @@ impl GetAccountSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAccountSettingsError {
@@ -6035,7 +6035,7 @@ impl GetAttendeeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAttendeeError {
@@ -6099,7 +6099,7 @@ impl GetBotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBotError {
@@ -6173,7 +6173,7 @@ impl GetEventsConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetEventsConfigurationError {
@@ -6238,7 +6238,7 @@ impl GetGlobalSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGlobalSettingsError {
@@ -6303,7 +6303,7 @@ impl GetMeetingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMeetingError {
@@ -6369,7 +6369,7 @@ impl GetPhoneNumberError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPhoneNumberError {
@@ -6439,7 +6439,7 @@ impl GetPhoneNumberOrderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPhoneNumberOrderError {
@@ -6508,7 +6508,7 @@ impl GetPhoneNumberSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPhoneNumberSettingsError {
@@ -6573,7 +6573,7 @@ impl GetRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRoomError {
@@ -6639,7 +6639,7 @@ impl GetUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUserError {
@@ -6705,7 +6705,7 @@ impl GetUserSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUserSettingsError {
@@ -6775,7 +6775,7 @@ impl GetVoiceConnectorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVoiceConnectorError {
@@ -6849,7 +6849,7 @@ impl GetVoiceConnectorGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVoiceConnectorGroupError {
@@ -6931,7 +6931,7 @@ impl GetVoiceConnectorLoggingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVoiceConnectorLoggingConfigurationError {
@@ -7027,7 +7027,7 @@ impl GetVoiceConnectorOriginationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVoiceConnectorOriginationError {
@@ -7113,7 +7113,7 @@ impl GetVoiceConnectorStreamingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVoiceConnectorStreamingConfigurationError {
@@ -7209,7 +7209,7 @@ impl GetVoiceConnectorTerminationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVoiceConnectorTerminationError {
@@ -7295,7 +7295,7 @@ impl GetVoiceConnectorTerminationHealthError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVoiceConnectorTerminationHealthError {
@@ -7371,7 +7371,7 @@ impl InviteUsersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InviteUsersError {
@@ -7437,7 +7437,7 @@ impl ListAccountsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAccountsError {
@@ -7503,7 +7503,7 @@ impl ListAttendeesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAttendeesError {
@@ -7569,7 +7569,7 @@ impl ListBotsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBotsError {
@@ -7630,7 +7630,7 @@ impl ListMeetingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListMeetingsError {
@@ -7698,7 +7698,7 @@ impl ListPhoneNumberOrdersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPhoneNumberOrdersError {
@@ -7758,7 +7758,7 @@ impl ListPhoneNumbersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPhoneNumbersError {
@@ -7827,7 +7827,7 @@ impl ListRoomMembershipsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRoomMembershipsError {
@@ -7893,7 +7893,7 @@ impl ListRoomsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRoomsError {
@@ -7959,7 +7959,7 @@ impl ListUsersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUsersError {
@@ -8028,7 +8028,7 @@ impl ListVoiceConnectorGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVoiceConnectorGroupsError {
@@ -8109,7 +8109,7 @@ impl ListVoiceConnectorTerminationCredentialsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVoiceConnectorTerminationCredentialsError {
@@ -8188,7 +8188,7 @@ impl ListVoiceConnectorsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVoiceConnectorsError {
@@ -8253,7 +8253,7 @@ impl LogoutUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for LogoutUserError {
@@ -8327,7 +8327,7 @@ impl PutEventsConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutEventsConfigurationError {
@@ -8409,7 +8409,7 @@ impl PutVoiceConnectorLoggingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutVoiceConnectorLoggingConfigurationError {
@@ -8505,7 +8505,7 @@ impl PutVoiceConnectorOriginationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutVoiceConnectorOriginationError {
@@ -8591,7 +8591,7 @@ impl PutVoiceConnectorStreamingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutVoiceConnectorStreamingConfigurationError {
@@ -8694,7 +8694,7 @@ impl PutVoiceConnectorTerminationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutVoiceConnectorTerminationError {
@@ -8781,7 +8781,7 @@ impl PutVoiceConnectorTerminationCredentialsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutVoiceConnectorTerminationCredentialsError {
@@ -8869,7 +8869,7 @@ impl RegenerateSecurityTokenError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegenerateSecurityTokenError {
@@ -8935,7 +8935,7 @@ impl ResetPersonalPINError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResetPersonalPINError {
@@ -9012,7 +9012,7 @@ impl RestorePhoneNumberError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RestorePhoneNumberError {
@@ -9095,7 +9095,7 @@ impl SearchAvailablePhoneNumbersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchAvailablePhoneNumbersError {
@@ -9165,7 +9165,7 @@ impl UpdateAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAccountError {
@@ -9244,7 +9244,7 @@ impl UpdateAccountSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAccountSettingsError {
@@ -9311,7 +9311,7 @@ impl UpdateBotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateBotError {
@@ -9378,7 +9378,7 @@ impl UpdateGlobalSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGlobalSettingsError {
@@ -9447,7 +9447,7 @@ impl UpdatePhoneNumberError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePhoneNumberError {
@@ -9518,7 +9518,7 @@ impl UpdatePhoneNumberSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePhoneNumberSettingsError {
@@ -9583,7 +9583,7 @@ impl UpdateRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRoomError {
@@ -9655,7 +9655,7 @@ impl UpdateRoomMembershipError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRoomMembershipError {
@@ -9721,7 +9721,7 @@ impl UpdateUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserError {
@@ -9791,7 +9791,7 @@ impl UpdateUserSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserSettingsError {
@@ -9863,7 +9863,7 @@ impl UpdateVoiceConnectorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateVoiceConnectorError {
@@ -9944,7 +9944,7 @@ impl UpdateVoiceConnectorGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateVoiceConnectorGroupError {

@@ -867,7 +867,7 @@ impl AssociateDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateDomainError {
@@ -941,7 +941,7 @@ impl AssociateWebsiteAuthorizationProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateWebsiteAuthorizationProviderError {
@@ -1027,7 +1027,7 @@ impl AssociateWebsiteCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateWebsiteCertificateAuthorityError {
@@ -1099,7 +1099,7 @@ impl CreateFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateFleetError {
@@ -1154,7 +1154,7 @@ impl DeleteFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFleetError {
@@ -1220,7 +1220,7 @@ impl DescribeAuditStreamConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAuditStreamConfigurationError {
@@ -1296,7 +1296,7 @@ impl DescribeCompanyNetworkConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCompanyNetworkConfigurationError {
@@ -1360,7 +1360,7 @@ impl DescribeDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDeviceError {
@@ -1426,7 +1426,7 @@ impl DescribeDevicePolicyConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDevicePolicyConfigurationError {
@@ -1490,7 +1490,7 @@ impl DescribeDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDomainError {
@@ -1552,7 +1552,7 @@ impl DescribeFleetMetadataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFleetMetadataError {
@@ -1618,7 +1618,7 @@ impl DescribeIdentityProviderConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeIdentityProviderConfigurationError {
@@ -1694,7 +1694,7 @@ impl DescribeWebsiteCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeWebsiteCertificateAuthorityError {
@@ -1760,7 +1760,7 @@ impl DisassociateDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateDomainError {
@@ -1835,7 +1835,7 @@ impl DisassociateWebsiteAuthorizationProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateWebsiteAuthorizationProviderError {
@@ -1914,7 +1914,7 @@ impl DisassociateWebsiteCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateWebsiteCertificateAuthorityError {
@@ -1978,7 +1978,7 @@ impl ListDevicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDevicesError {
@@ -2027,7 +2027,7 @@ impl ListDomainsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDomainsError {
@@ -2075,7 +2075,7 @@ impl ListFleetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFleetsError {
@@ -2140,7 +2140,7 @@ impl ListWebsiteAuthorizationProvidersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListWebsiteAuthorizationProvidersError {
@@ -2209,7 +2209,7 @@ impl ListWebsiteCertificateAuthoritiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListWebsiteCertificateAuthoritiesError {
@@ -2274,7 +2274,7 @@ impl RestoreDomainAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RestoreDomainAccessError {
@@ -2330,7 +2330,7 @@ impl RevokeDomainAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RevokeDomainAccessError {
@@ -2384,7 +2384,7 @@ impl SignOutUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SignOutUserError {
@@ -2450,7 +2450,7 @@ impl UpdateAuditStreamConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAuditStreamConfigurationError {
@@ -2524,7 +2524,7 @@ impl UpdateCompanyNetworkConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateCompanyNetworkConfigurationError {
@@ -2600,7 +2600,7 @@ impl UpdateDevicePolicyConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDevicePolicyConfigurationError {
@@ -2668,7 +2668,7 @@ impl UpdateDomainMetadataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDomainMetadataError {
@@ -2726,7 +2726,7 @@ impl UpdateFleetMetadataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFleetMetadataError {
@@ -2792,7 +2792,7 @@ impl UpdateIdentityProviderConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateIdentityProviderConfigurationError {

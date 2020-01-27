@@ -1733,7 +1733,7 @@ impl CreateMeshError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMeshError {
@@ -1810,7 +1810,7 @@ impl CreateRouteError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRouteError {
@@ -1891,7 +1891,7 @@ impl CreateVirtualNodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateVirtualNodeError {
@@ -1972,7 +1972,7 @@ impl CreateVirtualRouterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateVirtualRouterError {
@@ -2055,7 +2055,7 @@ impl CreateVirtualServiceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateVirtualServiceError {
@@ -2126,7 +2126,7 @@ impl DeleteMeshError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMeshError {
@@ -2196,7 +2196,7 @@ impl DeleteRouteError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRouteError {
@@ -2270,7 +2270,7 @@ impl DeleteVirtualNodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVirtualNodeError {
@@ -2344,7 +2344,7 @@ impl DeleteVirtualRouterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVirtualRouterError {
@@ -2414,7 +2414,7 @@ impl DeleteVirtualServiceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVirtualServiceError {
@@ -2477,7 +2477,7 @@ impl DescribeMeshError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMeshError {
@@ -2540,7 +2540,7 @@ impl DescribeRouteError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRouteError {
@@ -2607,7 +2607,7 @@ impl DescribeVirtualNodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeVirtualNodeError {
@@ -2676,7 +2676,7 @@ impl DescribeVirtualRouterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeVirtualRouterError {
@@ -2745,7 +2745,7 @@ impl DescribeVirtualServiceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeVirtualServiceError {
@@ -2808,7 +2808,7 @@ impl ListMeshesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListMeshesError {
@@ -2871,7 +2871,7 @@ impl ListRoutesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRoutesError {
@@ -2938,7 +2938,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -3003,7 +3003,7 @@ impl ListVirtualNodesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVirtualNodesError {
@@ -3070,7 +3070,7 @@ impl ListVirtualRoutersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVirtualRoutersError {
@@ -3137,7 +3137,7 @@ impl ListVirtualServicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVirtualServicesError {
@@ -3207,7 +3207,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -3271,7 +3271,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -3340,7 +3340,7 @@ impl UpdateMeshError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateMeshError {
@@ -3416,7 +3416,7 @@ impl UpdateRouteError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRouteError {
@@ -3497,7 +3497,7 @@ impl UpdateVirtualNodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateVirtualNodeError {
@@ -3578,7 +3578,7 @@ impl UpdateVirtualRouterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateVirtualRouterError {
@@ -3661,7 +3661,7 @@ impl UpdateVirtualServiceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateVirtualServiceError {

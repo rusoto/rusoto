@@ -1105,7 +1105,7 @@ impl AddTagsToStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddTagsToStreamError {
@@ -1148,7 +1148,7 @@ impl CreateStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateStreamError {
@@ -1205,7 +1205,7 @@ impl DecreaseStreamRetentionPeriodError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DecreaseStreamRetentionPeriodError {
@@ -1252,7 +1252,7 @@ impl DeleteStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteStreamError {
@@ -1300,7 +1300,7 @@ impl DeregisterStreamConsumerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterStreamConsumerError {
@@ -1332,7 +1332,7 @@ impl DescribeLimitsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLimitsError {
@@ -1367,7 +1367,7 @@ impl DescribeStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStreamError {
@@ -1414,7 +1414,7 @@ impl DescribeStreamConsumerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStreamConsumerError {
@@ -1453,7 +1453,7 @@ impl DescribeStreamSummaryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStreamSummaryError {
@@ -1507,7 +1507,7 @@ impl DisableEnhancedMonitoringError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableEnhancedMonitoringError {
@@ -1563,7 +1563,7 @@ impl EnableEnhancedMonitoringError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableEnhancedMonitoringError {
@@ -1643,7 +1643,7 @@ impl GetRecordsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRecordsError {
@@ -1694,7 +1694,7 @@ impl GetShardIteratorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetShardIteratorError {
@@ -1753,7 +1753,7 @@ impl IncreaseStreamRetentionPeriodError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for IncreaseStreamRetentionPeriodError {
@@ -1810,7 +1810,7 @@ impl ListShardsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListShardsError {
@@ -1868,7 +1868,7 @@ impl ListStreamConsumersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListStreamConsumersError {
@@ -1902,7 +1902,7 @@ impl ListStreamsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListStreamsError {
@@ -1942,7 +1942,7 @@ impl ListTagsForStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForStreamError {
@@ -1989,7 +1989,7 @@ impl MergeShardsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for MergeShardsError {
@@ -2064,7 +2064,7 @@ impl PutRecordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutRecordError {
@@ -2144,7 +2144,7 @@ impl PutRecordsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutRecordsError {
@@ -2205,7 +2205,7 @@ impl RegisterStreamConsumerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterStreamConsumerError {
@@ -2257,7 +2257,7 @@ impl RemoveTagsFromStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveTagsFromStreamError {
@@ -2305,7 +2305,7 @@ impl SplitShardError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SplitShardError {
@@ -2393,7 +2393,7 @@ impl StartStreamEncryptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartStreamEncryptionError {
@@ -2451,7 +2451,7 @@ impl StopStreamEncryptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopStreamEncryptionError {
@@ -2499,7 +2499,7 @@ impl SubscribeToShardError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SubscribeToShardError {
@@ -2547,7 +2547,7 @@ impl UpdateShardCountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateShardCountError {

@@ -636,7 +636,7 @@ impl AssociateDRTLogBucketError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateDRTLogBucketError {
@@ -702,7 +702,7 @@ impl AssociateDRTRoleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateDRTRoleError {
@@ -769,7 +769,7 @@ impl CreateProtectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProtectionError {
@@ -812,7 +812,7 @@ impl CreateSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSubscriptionError {
@@ -853,7 +853,7 @@ impl DeleteProtectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProtectionError {
@@ -897,7 +897,7 @@ impl DeleteSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSubscriptionError {
@@ -934,7 +934,7 @@ impl DescribeAttackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAttackError {
@@ -970,7 +970,7 @@ impl DescribeDRTAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDRTAccessError {
@@ -1012,7 +1012,7 @@ impl DescribeEmergencyContactSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEmergencyContactSettingsError {
@@ -1057,7 +1057,7 @@ impl DescribeProtectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProtectionError {
@@ -1096,7 +1096,7 @@ impl DescribeSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSubscriptionError {
@@ -1164,7 +1164,7 @@ impl DisassociateDRTLogBucketError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateDRTLogBucketError {
@@ -1220,7 +1220,7 @@ impl DisassociateDRTRoleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateDRTRoleError {
@@ -1253,7 +1253,7 @@ impl GetSubscriptionStateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSubscriptionStateError {
@@ -1293,7 +1293,7 @@ impl ListAttacksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAttacksError {
@@ -1337,7 +1337,7 @@ impl ListProtectionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProtectionsError {
@@ -1394,7 +1394,7 @@ impl UpdateEmergencyContactSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateEmergencyContactSettingsError {
@@ -1455,7 +1455,7 @@ impl UpdateSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSubscriptionError {

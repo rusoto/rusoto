@@ -282,7 +282,7 @@ impl DescribeDimensionKeysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDimensionKeysError {
@@ -326,7 +326,7 @@ impl GetResourceMetricsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourceMetricsError {

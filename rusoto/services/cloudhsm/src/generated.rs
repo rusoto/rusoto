@@ -641,7 +641,7 @@ impl AddTagsToResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddTagsToResourceError {
@@ -683,7 +683,7 @@ impl CreateHapgError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateHapgError {
@@ -725,7 +725,7 @@ impl CreateHsmError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateHsmError {
@@ -767,7 +767,7 @@ impl CreateLunaClientError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateLunaClientError {
@@ -809,7 +809,7 @@ impl DeleteHapgError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteHapgError {
@@ -851,7 +851,7 @@ impl DeleteHsmError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteHsmError {
@@ -893,7 +893,7 @@ impl DeleteLunaClientError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLunaClientError {
@@ -935,7 +935,7 @@ impl DescribeHapgError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeHapgError {
@@ -977,7 +977,7 @@ impl DescribeHsmError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeHsmError {
@@ -1019,7 +1019,7 @@ impl DescribeLunaClientError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLunaClientError {
@@ -1061,7 +1061,7 @@ impl GetConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetConfigError {
@@ -1103,7 +1103,7 @@ impl ListAvailableZonesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAvailableZonesError {
@@ -1145,7 +1145,7 @@ impl ListHapgsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListHapgsError {
@@ -1187,7 +1187,7 @@ impl ListHsmsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListHsmsError {
@@ -1229,7 +1229,7 @@ impl ListLunaClientsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListLunaClientsError {
@@ -1273,7 +1273,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -1315,7 +1315,7 @@ impl ModifyHapgError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyHapgError {
@@ -1357,7 +1357,7 @@ impl ModifyHsmError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyHsmError {
@@ -1389,7 +1389,7 @@ impl ModifyLunaClientError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyLunaClientError {
@@ -1435,7 +1435,7 @@ impl RemoveTagsFromResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {

@@ -807,7 +807,7 @@ impl AssociateTeamMemberError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateTeamMemberError {
@@ -871,7 +871,7 @@ impl CreateProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProjectError {
@@ -908,7 +908,7 @@ impl CreateUserProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserProfileError {
@@ -945,7 +945,7 @@ impl DeleteProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProjectError {
@@ -970,7 +970,7 @@ impl DeleteUserProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserProfileError {
@@ -1017,7 +1017,7 @@ impl DescribeProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProjectError {
@@ -1052,7 +1052,7 @@ impl DescribeUserProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUserProfileError {
@@ -1098,7 +1098,7 @@ impl DisassociateTeamMemberError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateTeamMemberError {
@@ -1132,7 +1132,7 @@ impl ListProjectsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProjectsError {
@@ -1167,7 +1167,7 @@ impl ListResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResourcesError {
@@ -1203,7 +1203,7 @@ impl ListTagsForProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForProjectError {
@@ -1239,7 +1239,7 @@ impl ListTeamMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTeamMembersError {
@@ -1270,7 +1270,7 @@ impl ListUserProfilesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUserProfilesError {
@@ -1310,7 +1310,7 @@ impl TagProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagProjectError {
@@ -1352,7 +1352,7 @@ impl UntagProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagProjectError {
@@ -1384,7 +1384,7 @@ impl UpdateProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateProjectError {
@@ -1443,7 +1443,7 @@ impl UpdateTeamMemberError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTeamMemberError {
@@ -1480,7 +1480,7 @@ impl UpdateUserProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserProfileError {

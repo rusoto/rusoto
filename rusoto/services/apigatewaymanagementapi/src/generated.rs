@@ -109,7 +109,7 @@ impl DeleteConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteConnectionError {
@@ -149,7 +149,7 @@ impl GetConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetConnectionError {
@@ -196,7 +196,7 @@ impl PostToConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PostToConnectionError {

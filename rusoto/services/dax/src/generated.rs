@@ -1052,7 +1052,7 @@ impl CreateClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateClusterError {
@@ -1142,7 +1142,7 @@ impl CreateParameterGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateParameterGroupError {
@@ -1215,7 +1215,7 @@ impl CreateSubnetGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSubnetGroupError {
@@ -1292,7 +1292,7 @@ impl DecreaseReplicationFactorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DecreaseReplicationFactorError {
@@ -1363,7 +1363,7 @@ impl DeleteClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteClusterError {
@@ -1427,7 +1427,7 @@ impl DeleteParameterGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteParameterGroupError {
@@ -1485,7 +1485,7 @@ impl DeleteSubnetGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSubnetGroupError {
@@ -1542,7 +1542,7 @@ impl DescribeClustersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeClustersError {
@@ -1593,7 +1593,7 @@ impl DescribeDefaultParametersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDefaultParametersError {
@@ -1647,7 +1647,7 @@ impl DescribeEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventsError {
@@ -1704,7 +1704,7 @@ impl DescribeParameterGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeParameterGroupsError {
@@ -1768,7 +1768,7 @@ impl DescribeParametersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeParametersError {
@@ -1816,7 +1816,7 @@ impl DescribeSubnetGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSubnetGroupsError {
@@ -1909,7 +1909,7 @@ impl IncreaseReplicationFactorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for IncreaseReplicationFactorError {
@@ -1994,7 +1994,7 @@ impl ListTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsError {
@@ -2058,7 +2058,7 @@ impl RebootNodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RebootNodeError {
@@ -2131,7 +2131,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -2203,7 +2203,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -2279,7 +2279,7 @@ impl UpdateClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateClusterError {
@@ -2347,7 +2347,7 @@ impl UpdateParameterGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateParameterGroupError {
@@ -2415,7 +2415,7 @@ impl UpdateSubnetGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSubnetGroupError {

@@ -1345,7 +1345,7 @@ impl AssociateKmsKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateKmsKeyError {
@@ -1393,7 +1393,7 @@ impl CancelExportTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelExportTaskError {
@@ -1453,7 +1453,7 @@ impl CreateExportTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateExportTaskError {
@@ -1510,7 +1510,7 @@ impl CreateLogGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateLogGroupError {
@@ -1561,7 +1561,7 @@ impl CreateLogStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateLogStreamError {
@@ -1611,7 +1611,7 @@ impl DeleteDestinationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDestinationError {
@@ -1659,7 +1659,7 @@ impl DeleteLogGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLogGroupError {
@@ -1707,7 +1707,7 @@ impl DeleteLogStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLogStreamError {
@@ -1757,7 +1757,7 @@ impl DeleteMetricFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMetricFilterError {
@@ -1806,7 +1806,7 @@ impl DeleteResourcePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteResourcePolicyError {
@@ -1861,7 +1861,7 @@ impl DeleteRetentionPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRetentionPolicyError {
@@ -1917,7 +1917,7 @@ impl DeleteSubscriptionFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSubscriptionFilterError {
@@ -1959,7 +1959,7 @@ impl DescribeDestinationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDestinationsError {
@@ -1999,7 +1999,7 @@ impl DescribeExportTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeExportTasksError {
@@ -2037,7 +2037,7 @@ impl DescribeLogGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLogGroupsError {
@@ -2080,7 +2080,7 @@ impl DescribeLogStreamsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLogStreamsError {
@@ -2128,7 +2128,7 @@ impl DescribeMetricFiltersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMetricFiltersError {
@@ -2170,7 +2170,7 @@ impl DescribeQueriesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeQueriesError {
@@ -2211,7 +2211,7 @@ impl DescribeResourcePoliciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeResourcePoliciesError {
@@ -2260,7 +2260,7 @@ impl DescribeSubscriptionFiltersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSubscriptionFiltersError {
@@ -2311,7 +2311,7 @@ impl DisassociateKmsKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateKmsKeyError {
@@ -2354,7 +2354,7 @@ impl FilterLogEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for FilterLogEventsError {
@@ -2396,7 +2396,7 @@ impl GetLogEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLogEventsError {
@@ -2445,7 +2445,7 @@ impl GetLogGroupFieldsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLogGroupFieldsError {
@@ -2493,7 +2493,7 @@ impl GetLogRecordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLogRecordError {
@@ -2536,7 +2536,7 @@ impl GetQueryResultsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetQueryResultsError {
@@ -2573,7 +2573,7 @@ impl ListTagsLogGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsLogGroupError {
@@ -2614,7 +2614,7 @@ impl PutDestinationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutDestinationError {
@@ -2662,7 +2662,7 @@ impl PutDestinationPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutDestinationPolicyError {
@@ -2719,7 +2719,7 @@ impl PutLogEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutLogEventsError {
@@ -2774,7 +2774,7 @@ impl PutMetricFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutMetricFilterError {
@@ -2820,7 +2820,7 @@ impl PutResourcePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutResourcePolicyError {
@@ -2869,7 +2869,7 @@ impl PutRetentionPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutRetentionPolicyError {
@@ -2930,7 +2930,7 @@ impl PutSubscriptionFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutSubscriptionFilterError {
@@ -2984,7 +2984,7 @@ impl StartQueryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartQueryError {
@@ -3028,7 +3028,7 @@ impl StopQueryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopQueryError {
@@ -3065,7 +3065,7 @@ impl TagLogGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagLogGroupError {
@@ -3101,7 +3101,7 @@ impl TestMetricFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TestMetricFilterError {
@@ -3132,7 +3132,7 @@ impl UntagLogGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagLogGroupError {

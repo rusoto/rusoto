@@ -3459,7 +3459,7 @@ impl CreateCapacityProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCapacityProviderError {
@@ -3502,7 +3502,7 @@ impl CreateClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateClusterError {
@@ -3571,7 +3571,7 @@ impl CreateServiceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateServiceError {
@@ -3657,7 +3657,7 @@ impl CreateTaskSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTaskSetError {
@@ -3710,7 +3710,7 @@ impl DeleteAccountSettingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAccountSettingError {
@@ -3752,7 +3752,7 @@ impl DeleteAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAttributesError {
@@ -3823,7 +3823,7 @@ impl DeleteClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteClusterError {
@@ -3882,7 +3882,7 @@ impl DeleteServiceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteServiceError {
@@ -3956,7 +3956,7 @@ impl DeleteTaskSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTaskSetError {
@@ -4015,7 +4015,7 @@ impl DeregisterContainerInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterContainerInstanceError {
@@ -4060,7 +4060,7 @@ impl DeregisterTaskDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterTaskDefinitionError {
@@ -4104,7 +4104,7 @@ impl DescribeCapacityProvidersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCapacityProvidersError {
@@ -4146,7 +4146,7 @@ impl DescribeClustersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeClustersError {
@@ -4199,7 +4199,7 @@ impl DescribeContainerInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeContainerInstancesError {
@@ -4247,7 +4247,7 @@ impl DescribeServicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeServicesError {
@@ -4292,7 +4292,7 @@ impl DescribeTaskDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTaskDefinitionError {
@@ -4359,7 +4359,7 @@ impl DescribeTaskSetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTaskSetsError {
@@ -4411,7 +4411,7 @@ impl DescribeTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTasksError {
@@ -4449,7 +4449,7 @@ impl DiscoverPollEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DiscoverPollEndpointError {
@@ -4492,7 +4492,7 @@ impl ListAccountSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAccountSettingsError {
@@ -4529,7 +4529,7 @@ impl ListAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAttributesError {
@@ -4570,7 +4570,7 @@ impl ListClustersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListClustersError {
@@ -4621,7 +4621,7 @@ impl ListContainerInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListContainerInstancesError {
@@ -4669,7 +4669,7 @@ impl ListServicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListServicesError {
@@ -4719,7 +4719,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -4766,7 +4766,7 @@ impl ListTaskDefinitionFamiliesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTaskDefinitionFamiliesError {
@@ -4810,7 +4810,7 @@ impl ListTaskDefinitionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTaskDefinitionsError {
@@ -4858,7 +4858,7 @@ impl ListTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTasksError {
@@ -4902,7 +4902,7 @@ impl PutAccountSettingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutAccountSettingError {
@@ -4946,7 +4946,7 @@ impl PutAccountSettingDefaultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutAccountSettingDefaultError {
@@ -4995,7 +4995,7 @@ impl PutAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutAttributesError {
@@ -5063,7 +5063,7 @@ impl PutClusterCapacityProvidersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutClusterCapacityProvidersError {
@@ -5110,7 +5110,7 @@ impl RegisterContainerInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterContainerInstanceError {
@@ -5154,7 +5154,7 @@ impl RegisterTaskDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterTaskDefinitionError {
@@ -5222,7 +5222,7 @@ impl RunTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RunTaskError {
@@ -5273,7 +5273,7 @@ impl StartTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartTaskError {
@@ -5317,7 +5317,7 @@ impl StopTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopTaskError {
@@ -5371,7 +5371,7 @@ impl SubmitAttachmentStateChangesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SubmitAttachmentStateChangesError {
@@ -5420,7 +5420,7 @@ impl SubmitContainerStateChangeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SubmitContainerStateChangeError {
@@ -5469,7 +5469,7 @@ impl SubmitTaskStateChangeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SubmitTaskStateChangeError {
@@ -5522,7 +5522,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -5576,7 +5576,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -5629,7 +5629,7 @@ impl UpdateClusterSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateClusterSettingsError {
@@ -5700,7 +5700,7 @@ impl UpdateContainerAgentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateContainerAgentError {
@@ -5761,7 +5761,7 @@ impl UpdateContainerInstancesStateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateContainerInstancesStateError {
@@ -5840,7 +5840,7 @@ impl UpdateServiceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateServiceError {
@@ -5936,7 +5936,7 @@ impl UpdateServicePrimaryTaskSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateServicePrimaryTaskSetError {
@@ -6016,7 +6016,7 @@ impl UpdateTaskSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTaskSetError {

@@ -262,10 +262,10 @@ impl<'a> Shape {
     pub fn required(&self, field: &'a str) -> bool {
         self.required.is_some()
             && self
-            .required
-            .as_ref()
-            .unwrap()
-            .contains(&String::from(field))
+                .required
+                .as_ref()
+                .unwrap()
+                .contains(&String::from(field))
     }
 
     pub fn exception(&self) -> bool {
@@ -385,8 +385,8 @@ pub struct Metadata {
 // "camelCase" instead of "CamelCase".
 pub trait ShapeName<'de>: Sized {
     fn deserialize_shape_name<D>(deserializer: D) -> Result<Self, D::Error>
-        where
-            D: Deserializer<'de>;
+    where
+        D: Deserializer<'de>;
 }
 
 struct ShapeNameVisitor;
@@ -399,8 +399,8 @@ impl<'de> Visitor<'de> for ShapeNameVisitor {
     }
 
     fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
-        where
-            E: SerdeError,
+    where
+        E: SerdeError,
     {
         Ok(util::capitalize_first(v))
     }
@@ -408,8 +408,8 @@ impl<'de> Visitor<'de> for ShapeNameVisitor {
 
 impl<'de> ShapeName<'de> for String {
     fn deserialize_shape_name<D>(deserializer: D) -> Result<String, D::Error>
-        where
-            D: Deserializer<'de>,
+    where
+        D: Deserializer<'de>,
     {
         deserializer.deserialize_string(ShapeNameVisitor)
     }
@@ -417,8 +417,8 @@ impl<'de> ShapeName<'de> for String {
 
 pub trait ShapesMap<'de>: Sized {
     fn deserialize_shapes_map<D>(deserializer: D) -> Result<Self, D::Error>
-        where
-            D: Deserializer<'de>;
+    where
+        D: Deserializer<'de>;
 }
 
 struct ShapesMapVisitor<V> {
@@ -434,8 +434,8 @@ impl<V> ShapesMapVisitor<V> {
 }
 
 impl<'de, V> Visitor<'de> for ShapesMapVisitor<V>
-    where
-        V: Deserialize<'de>,
+where
+    V: Deserialize<'de>,
 {
     type Value = BTreeMap<String, V>;
 
@@ -444,15 +444,15 @@ impl<'de, V> Visitor<'de> for ShapesMapVisitor<V>
     }
 
     fn visit_unit<E>(self) -> Result<BTreeMap<String, V>, E>
-        where
-            E: SerdeError,
+    where
+        E: SerdeError,
     {
         Ok(BTreeMap::new())
     }
 
     fn visit_map<Visitor>(self, mut visitor: Visitor) -> Result<Self::Value, Visitor::Error>
-        where
-            Visitor: MapAccess<'de>,
+    where
+        Visitor: MapAccess<'de>,
     {
         let mut values = BTreeMap::new();
 
@@ -466,13 +466,13 @@ impl<'de, V> Visitor<'de> for ShapesMapVisitor<V>
 }
 
 impl<'de, V> ShapesMap<'de> for BTreeMap<String, V>
-    where
-        String: Deserialize<'de>,
-        V: Deserialize<'de>,
+where
+    String: Deserialize<'de>,
+    V: Deserialize<'de>,
 {
     fn deserialize_shapes_map<D>(deserializer: D) -> Result<BTreeMap<String, V>, D::Error>
-        where
-            D: Deserializer<'de>,
+    where
+        D: Deserializer<'de>,
     {
         deserializer.deserialize_map(ShapesMapVisitor::new())
     }

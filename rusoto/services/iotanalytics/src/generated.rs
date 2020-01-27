@@ -1809,7 +1809,7 @@ impl BatchPutMessageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchPutMessageError {
@@ -1875,7 +1875,7 @@ impl CancelPipelineReprocessingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelPipelineReprocessingError {
@@ -1936,7 +1936,7 @@ impl CreateChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateChannelError {
@@ -1996,7 +1996,7 @@ impl CreateDatasetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDatasetError {
@@ -2057,7 +2057,7 @@ impl CreateDatasetContentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDatasetContentError {
@@ -2118,7 +2118,7 @@ impl CreateDatastoreError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDatastoreError {
@@ -2180,7 +2180,7 @@ impl CreatePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePipelineError {
@@ -2235,7 +2235,7 @@ impl DeleteChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteChannelError {
@@ -2289,7 +2289,7 @@ impl DeleteDatasetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDatasetError {
@@ -2349,7 +2349,7 @@ impl DeleteDatasetContentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDatasetContentError {
@@ -2403,7 +2403,7 @@ impl DeleteDatastoreError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDatastoreError {
@@ -2457,7 +2457,7 @@ impl DeletePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePipelineError {
@@ -2511,7 +2511,7 @@ impl DescribeChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeChannelError {
@@ -2565,7 +2565,7 @@ impl DescribeDatasetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDatasetError {
@@ -2621,7 +2621,7 @@ impl DescribeDatastoreError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDatastoreError {
@@ -2683,7 +2683,7 @@ impl DescribeLoggingOptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLoggingOptionsError {
@@ -2737,7 +2737,7 @@ impl DescribePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePipelineError {
@@ -2793,7 +2793,7 @@ impl GetDatasetContentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDatasetContentError {
@@ -2842,7 +2842,7 @@ impl ListChannelsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListChannelsError {
@@ -2899,7 +2899,7 @@ impl ListDatasetContentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDatasetContentsError {
@@ -2948,7 +2948,7 @@ impl ListDatasetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDatasetsError {
@@ -2996,7 +2996,7 @@ impl ListDatastoresError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDatastoresError {
@@ -3044,7 +3044,7 @@ impl ListPipelinesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPipelinesError {
@@ -3106,7 +3106,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -3158,7 +3158,7 @@ impl PutLoggingOptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutLoggingOptionsError {
@@ -3208,7 +3208,7 @@ impl RunPipelineActivityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RunPipelineActivityError {
@@ -3263,7 +3263,7 @@ impl SampleChannelDataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SampleChannelDataError {
@@ -3334,7 +3334,7 @@ impl StartPipelineReprocessingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartPipelineReprocessingError {
@@ -3396,7 +3396,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -3456,7 +3456,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -3511,7 +3511,7 @@ impl UpdateChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateChannelError {
@@ -3565,7 +3565,7 @@ impl UpdateDatasetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDatasetError {
@@ -3619,7 +3619,7 @@ impl UpdateDatastoreError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDatastoreError {
@@ -3678,7 +3678,7 @@ impl UpdatePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePipelineError {

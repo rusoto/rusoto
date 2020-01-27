@@ -214,7 +214,7 @@ impl DescribeServicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeServicesError {
@@ -268,7 +268,7 @@ impl GetAttributeValuesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAttributeValuesError {
@@ -322,7 +322,7 @@ impl GetProductsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetProductsError {

@@ -405,7 +405,7 @@ impl DescribeStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStreamError {
@@ -456,7 +456,7 @@ impl GetRecordsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRecordsError {
@@ -502,7 +502,7 @@ impl GetShardIteratorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetShardIteratorError {
@@ -539,7 +539,7 @@ impl ListStreamsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListStreamsError {

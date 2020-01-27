@@ -2570,7 +2570,7 @@ impl AddInstanceFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddInstanceFleetError {
@@ -2603,7 +2603,7 @@ impl AddInstanceGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddInstanceGroupsError {
@@ -2633,7 +2633,7 @@ impl AddJobFlowStepsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddJobFlowStepsError {
@@ -2668,7 +2668,7 @@ impl AddTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddTagsError {
@@ -2704,7 +2704,7 @@ impl CancelStepsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelStepsError {
@@ -2746,7 +2746,7 @@ impl CreateSecurityConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSecurityConfigurationError {
@@ -2788,7 +2788,7 @@ impl DeleteSecurityConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSecurityConfigurationError {
@@ -2824,7 +2824,7 @@ impl DescribeClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeClusterError {
@@ -2857,7 +2857,7 @@ impl DescribeJobFlowsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeJobFlowsError {
@@ -2898,7 +2898,7 @@ impl DescribeSecurityConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSecurityConfigurationError {
@@ -2934,7 +2934,7 @@ impl DescribeStepError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStepError {
@@ -2976,7 +2976,7 @@ impl GetBlockPublicAccessConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBlockPublicAccessConfigurationError {
@@ -3016,7 +3016,7 @@ impl ListBootstrapActionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBootstrapActionsError {
@@ -3052,7 +3052,7 @@ impl ListClustersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListClustersError {
@@ -3088,7 +3088,7 @@ impl ListInstanceFleetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListInstanceFleetsError {
@@ -3124,7 +3124,7 @@ impl ListInstanceGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListInstanceGroupsError {
@@ -3160,7 +3160,7 @@ impl ListInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListInstancesError {
@@ -3202,7 +3202,7 @@ impl ListSecurityConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSecurityConfigurationsError {
@@ -3238,7 +3238,7 @@ impl ListStepsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListStepsError {
@@ -3274,7 +3274,7 @@ impl ModifyClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyClusterError {
@@ -3310,7 +3310,7 @@ impl ModifyInstanceFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyInstanceFleetError {
@@ -3343,7 +3343,7 @@ impl ModifyInstanceGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyInstanceGroupsError {
@@ -3367,7 +3367,7 @@ impl PutAutoScalingPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutAutoScalingPolicyError {
@@ -3406,7 +3406,7 @@ impl PutBlockPublicAccessConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutBlockPublicAccessConfigurationError {
@@ -3435,7 +3435,7 @@ impl RemoveAutoScalingPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveAutoScalingPolicyError {
@@ -3468,7 +3468,7 @@ impl RemoveTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveTagsError {
@@ -3499,7 +3499,7 @@ impl RunJobFlowError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RunJobFlowError {
@@ -3531,7 +3531,7 @@ impl SetTerminationProtectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetTerminationProtectionError {
@@ -3563,7 +3563,7 @@ impl SetVisibleToAllUsersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetVisibleToAllUsersError {
@@ -3595,7 +3595,7 @@ impl TerminateJobFlowsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TerminateJobFlowsError {

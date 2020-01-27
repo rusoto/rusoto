@@ -3679,7 +3679,7 @@ impl CreateApiKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateApiKeyError {
@@ -3734,7 +3734,7 @@ impl CreateAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAuthorizerError {
@@ -3790,7 +3790,7 @@ impl CreateBasePathMappingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateBasePathMappingError {
@@ -3854,7 +3854,7 @@ impl CreateDeploymentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDeploymentError {
@@ -3921,7 +3921,7 @@ impl CreateDocumentationPartError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDocumentationPartError {
@@ -3991,7 +3991,7 @@ impl CreateDocumentationVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDocumentationVersionError {
@@ -4041,7 +4041,7 @@ impl CreateDomainNameError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDomainNameError {
@@ -4099,7 +4099,7 @@ impl CreateModelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateModelError {
@@ -4158,7 +4158,7 @@ impl CreateRequestValidatorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRequestValidatorError {
@@ -4217,7 +4217,7 @@ impl CreateResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateResourceError {
@@ -4267,7 +4267,7 @@ impl CreateRestApiError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRestApiError {
@@ -4325,7 +4325,7 @@ impl CreateStageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateStageError {
@@ -4385,7 +4385,7 @@ impl CreateUsagePlanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUsagePlanError {
@@ -4440,7 +4440,7 @@ impl CreateUsagePlanKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUsagePlanKeyError {
@@ -4484,7 +4484,7 @@ impl CreateVpcLinkError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateVpcLinkError {
@@ -4526,7 +4526,7 @@ impl DeleteApiKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteApiKeyError {
@@ -4578,7 +4578,7 @@ impl DeleteAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAuthorizerError {
@@ -4634,7 +4634,7 @@ impl DeleteBasePathMappingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBasePathMappingError {
@@ -4687,7 +4687,7 @@ impl DeleteClientCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteClientCertificateError {
@@ -4735,7 +4735,7 @@ impl DeleteDeploymentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDeploymentError {
@@ -4792,7 +4792,7 @@ impl DeleteDocumentationPartError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDocumentationPartError {
@@ -4854,7 +4854,7 @@ impl DeleteDocumentationVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDocumentationVersionError {
@@ -4903,7 +4903,7 @@ impl DeleteDomainNameError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDomainNameError {
@@ -4958,7 +4958,7 @@ impl DeleteGatewayResponseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteGatewayResponseError {
@@ -5007,7 +5007,7 @@ impl DeleteIntegrationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteIntegrationError {
@@ -5066,7 +5066,7 @@ impl DeleteIntegrationResponseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteIntegrationResponseError {
@@ -5115,7 +5115,7 @@ impl DeleteMethodError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMethodError {
@@ -5170,7 +5170,7 @@ impl DeleteMethodResponseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMethodResponseError {
@@ -5224,7 +5224,7 @@ impl DeleteModelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteModelError {
@@ -5280,7 +5280,7 @@ impl DeleteRequestValidatorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRequestValidatorError {
@@ -5334,7 +5334,7 @@ impl DeleteResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteResourceError {
@@ -5383,7 +5383,7 @@ impl DeleteRestApiError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRestApiError {
@@ -5431,7 +5431,7 @@ impl DeleteStageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteStageError {
@@ -5479,7 +5479,7 @@ impl DeleteUsagePlanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUsagePlanError {
@@ -5532,7 +5532,7 @@ impl DeleteUsagePlanKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUsagePlanKeyError {
@@ -5581,7 +5581,7 @@ impl DeleteVpcLinkError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVpcLinkError {
@@ -5637,7 +5637,7 @@ impl FlushStageAuthorizersCacheError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for FlushStageAuthorizersCacheError {
@@ -5685,7 +5685,7 @@ impl FlushStageCacheError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for FlushStageCacheError {
@@ -5734,7 +5734,7 @@ impl GenerateClientCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GenerateClientCertificateError {
@@ -5776,7 +5776,7 @@ impl GetAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAccountError {
@@ -5818,7 +5818,7 @@ impl GetApiKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetApiKeyError {
@@ -5860,7 +5860,7 @@ impl GetApiKeysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetApiKeysError {
@@ -5902,7 +5902,7 @@ impl GetAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAuthorizerError {
@@ -5949,7 +5949,7 @@ impl GetAuthorizersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAuthorizersError {
@@ -5992,7 +5992,7 @@ impl GetBasePathMappingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBasePathMappingError {
@@ -6034,7 +6034,7 @@ impl GetBasePathMappingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBasePathMappingsError {
@@ -6078,7 +6078,7 @@ impl GetClientCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetClientCertificateError {
@@ -6122,7 +6122,7 @@ impl GetClientCertificatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetClientCertificatesError {
@@ -6169,7 +6169,7 @@ impl GetDeploymentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeploymentError {
@@ -6217,7 +6217,7 @@ impl GetDeploymentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeploymentsError {
@@ -6262,7 +6262,7 @@ impl GetDocumentationPartError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDocumentationPartError {
@@ -6311,7 +6311,7 @@ impl GetDocumentationPartsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDocumentationPartsError {
@@ -6358,7 +6358,7 @@ impl GetDocumentationVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDocumentationVersionError {
@@ -6409,7 +6409,7 @@ impl GetDocumentationVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDocumentationVersionsError {
@@ -6457,7 +6457,7 @@ impl GetDomainNameError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDomainNameError {
@@ -6500,7 +6500,7 @@ impl GetDomainNamesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDomainNamesError {
@@ -6552,7 +6552,7 @@ impl GetExportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetExportError {
@@ -6596,7 +6596,7 @@ impl GetGatewayResponseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGatewayResponseError {
@@ -6643,7 +6643,7 @@ impl GetGatewayResponsesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGatewayResponsesError {
@@ -6686,7 +6686,7 @@ impl GetIntegrationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIntegrationError {
@@ -6730,7 +6730,7 @@ impl GetIntegrationResponseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIntegrationResponseError {
@@ -6772,7 +6772,7 @@ impl GetMethodError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMethodError {
@@ -6814,7 +6814,7 @@ impl GetMethodResponseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMethodResponseError {
@@ -6856,7 +6856,7 @@ impl GetModelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetModelError {
@@ -6903,7 +6903,7 @@ impl GetModelTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetModelTemplateError {
@@ -6951,7 +6951,7 @@ impl GetModelsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetModelsError {
@@ -6994,7 +6994,7 @@ impl GetRequestValidatorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRequestValidatorError {
@@ -7043,7 +7043,7 @@ impl GetRequestValidatorsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRequestValidatorsError {
@@ -7086,7 +7086,7 @@ impl GetResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourceError {
@@ -7133,7 +7133,7 @@ impl GetResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourcesError {
@@ -7176,7 +7176,7 @@ impl GetRestApiError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRestApiError {
@@ -7218,7 +7218,7 @@ impl GetRestApisError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRestApisError {
@@ -7266,7 +7266,7 @@ impl GetSdkError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSdkError {
@@ -7310,7 +7310,7 @@ impl GetSdkTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSdkTypeError {
@@ -7347,7 +7347,7 @@ impl GetSdkTypesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSdkTypesError {
@@ -7388,7 +7388,7 @@ impl GetStageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetStageError {
@@ -7430,7 +7430,7 @@ impl GetStagesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetStagesError {
@@ -7482,7 +7482,7 @@ impl GetTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTagsError {
@@ -7531,7 +7531,7 @@ impl GetUsageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUsageError {
@@ -7579,7 +7579,7 @@ impl GetUsagePlanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUsagePlanError {
@@ -7627,7 +7627,7 @@ impl GetUsagePlanKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUsagePlanKeyError {
@@ -7675,7 +7675,7 @@ impl GetUsagePlanKeysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUsagePlanKeysError {
@@ -7728,7 +7728,7 @@ impl GetUsagePlansError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUsagePlansError {
@@ -7772,7 +7772,7 @@ impl GetVpcLinkError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVpcLinkError {
@@ -7814,7 +7814,7 @@ impl GetVpcLinksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVpcLinksError {
@@ -7871,7 +7871,7 @@ impl ImportApiKeysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportApiKeysError {
@@ -7932,7 +7932,7 @@ impl ImportDocumentationPartsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportDocumentationPartsError {
@@ -7986,7 +7986,7 @@ impl ImportRestApiError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportRestApiError {
@@ -8040,7 +8040,7 @@ impl PutGatewayResponseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutGatewayResponseError {
@@ -8094,7 +8094,7 @@ impl PutIntegrationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutIntegrationError {
@@ -8157,7 +8157,7 @@ impl PutIntegrationResponseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutIntegrationResponseError {
@@ -8217,7 +8217,7 @@ impl PutMethodError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutMethodError {
@@ -8277,7 +8277,7 @@ impl PutMethodResponseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutMethodResponseError {
@@ -8337,7 +8337,7 @@ impl PutRestApiError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutRestApiError {
@@ -8397,7 +8397,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -8449,7 +8449,7 @@ impl TestInvokeAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TestInvokeAuthorizerError {
@@ -8497,7 +8497,7 @@ impl TestInvokeMethodError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TestInvokeMethodError {
@@ -8550,7 +8550,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -8599,7 +8599,7 @@ impl UpdateAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAccountError {
@@ -8652,7 +8652,7 @@ impl UpdateApiKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateApiKeyError {
@@ -8701,7 +8701,7 @@ impl UpdateAuthorizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAuthorizerError {
@@ -8756,7 +8756,7 @@ impl UpdateBasePathMappingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateBasePathMappingError {
@@ -8809,7 +8809,7 @@ impl UpdateClientCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateClientCertificateError {
@@ -8862,7 +8862,7 @@ impl UpdateDeploymentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDeploymentError {
@@ -8927,7 +8927,7 @@ impl UpdateDocumentationPartError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDocumentationPartError {
@@ -8990,7 +8990,7 @@ impl UpdateDocumentationVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDocumentationVersionError {
@@ -9044,7 +9044,7 @@ impl UpdateDomainNameError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDomainNameError {
@@ -9095,7 +9095,7 @@ impl UpdateGatewayResponseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGatewayResponseError {
@@ -9148,7 +9148,7 @@ impl UpdateIntegrationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateIntegrationError {
@@ -9208,7 +9208,7 @@ impl UpdateIntegrationResponseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateIntegrationResponseError {
@@ -9262,7 +9262,7 @@ impl UpdateMethodError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateMethodError {
@@ -9323,7 +9323,7 @@ impl UpdateMethodResponseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateMethodResponseError {
@@ -9378,7 +9378,7 @@ impl UpdateModelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateModelError {
@@ -9429,7 +9429,7 @@ impl UpdateRequestValidatorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRequestValidatorError {
@@ -9482,7 +9482,7 @@ impl UpdateResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateResourceError {
@@ -9536,7 +9536,7 @@ impl UpdateRestApiError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRestApiError {
@@ -9590,7 +9590,7 @@ impl UpdateStageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateStageError {
@@ -9639,7 +9639,7 @@ impl UpdateUsageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUsageError {
@@ -9692,7 +9692,7 @@ impl UpdateUsagePlanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUsagePlanError {
@@ -9746,7 +9746,7 @@ impl UpdateVpcLinkError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateVpcLinkError {

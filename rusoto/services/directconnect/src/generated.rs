@@ -1985,7 +1985,7 @@ impl AcceptDirectConnectGatewayAssociationProposalError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AcceptDirectConnectGatewayAssociationProposalError {
@@ -2031,7 +2031,7 @@ impl AllocateConnectionOnInterconnectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AllocateConnectionOnInterconnectError {
@@ -2089,7 +2089,7 @@ impl AllocateHostedConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AllocateHostedConnectionError {
@@ -2147,7 +2147,7 @@ impl AllocatePrivateVirtualInterfaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AllocatePrivateVirtualInterfaceError {
@@ -2211,7 +2211,7 @@ impl AllocatePublicVirtualInterfaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AllocatePublicVirtualInterfaceError {
@@ -2275,7 +2275,7 @@ impl AllocateTransitVirtualInterfaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AllocateTransitVirtualInterfaceError {
@@ -2325,7 +2325,7 @@ impl AssociateConnectionWithLagError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateConnectionWithLagError {
@@ -2369,7 +2369,7 @@ impl AssociateHostedConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateHostedConnectionError {
@@ -2413,7 +2413,7 @@ impl AssociateVirtualInterfaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateVirtualInterfaceError {
@@ -2457,7 +2457,7 @@ impl ConfirmConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ConfirmConnectionError {
@@ -2499,7 +2499,7 @@ impl ConfirmPrivateVirtualInterfaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ConfirmPrivateVirtualInterfaceError {
@@ -2545,7 +2545,7 @@ impl ConfirmPublicVirtualInterfaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ConfirmPublicVirtualInterfaceError {
@@ -2591,7 +2591,7 @@ impl ConfirmTransitVirtualInterfaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ConfirmTransitVirtualInterfaceError {
@@ -2631,7 +2631,7 @@ impl CreateBGPPeerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateBGPPeerError {
@@ -2681,7 +2681,7 @@ impl CreateConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateConnectionError {
@@ -2725,7 +2725,7 @@ impl CreateDirectConnectGatewayError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDirectConnectGatewayError {
@@ -2771,7 +2771,7 @@ impl CreateDirectConnectGatewayAssociationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDirectConnectGatewayAssociationError {
@@ -2821,7 +2821,7 @@ impl CreateDirectConnectGatewayAssociationProposalError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDirectConnectGatewayAssociationProposalError {
@@ -2875,7 +2875,7 @@ impl CreateInterconnectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateInterconnectError {
@@ -2923,7 +2923,7 @@ impl CreateLagError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateLagError {
@@ -2981,7 +2981,7 @@ impl CreatePrivateVirtualInterfaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePrivateVirtualInterfaceError {
@@ -3045,7 +3045,7 @@ impl CreatePublicVirtualInterfaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePublicVirtualInterfaceError {
@@ -3109,7 +3109,7 @@ impl CreateTransitVirtualInterfaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTransitVirtualInterfaceError {
@@ -3153,7 +3153,7 @@ impl DeleteBGPPeerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBGPPeerError {
@@ -3193,7 +3193,7 @@ impl DeleteConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteConnectionError {
@@ -3235,7 +3235,7 @@ impl DeleteDirectConnectGatewayError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDirectConnectGatewayError {
@@ -3281,7 +3281,7 @@ impl DeleteDirectConnectGatewayAssociationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDirectConnectGatewayAssociationError {
@@ -3331,7 +3331,7 @@ impl DeleteDirectConnectGatewayAssociationProposalError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDirectConnectGatewayAssociationProposalError {
@@ -3375,7 +3375,7 @@ impl DeleteInterconnectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteInterconnectError {
@@ -3411,7 +3411,7 @@ impl DeleteLagError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLagError {
@@ -3451,7 +3451,7 @@ impl DeleteVirtualInterfaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVirtualInterfaceError {
@@ -3491,7 +3491,7 @@ impl DescribeConnectionLoaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConnectionLoaError {
@@ -3531,7 +3531,7 @@ impl DescribeConnectionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConnectionsError {
@@ -3573,7 +3573,7 @@ impl DescribeConnectionsOnInterconnectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConnectionsOnInterconnectError {
@@ -3623,7 +3623,7 @@ impl DescribeDirectConnectGatewayAssociationProposalsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDirectConnectGatewayAssociationProposalsError {
@@ -3669,7 +3669,7 @@ impl DescribeDirectConnectGatewayAssociationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDirectConnectGatewayAssociationsError {
@@ -3715,7 +3715,7 @@ impl DescribeDirectConnectGatewayAttachmentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDirectConnectGatewayAttachmentsError {
@@ -3761,7 +3761,7 @@ impl DescribeDirectConnectGatewaysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDirectConnectGatewaysError {
@@ -3805,7 +3805,7 @@ impl DescribeHostedConnectionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeHostedConnectionsError {
@@ -3849,7 +3849,7 @@ impl DescribeInterconnectLoaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeInterconnectLoaError {
@@ -3889,7 +3889,7 @@ impl DescribeInterconnectsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeInterconnectsError {
@@ -3925,7 +3925,7 @@ impl DescribeLagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLagsError {
@@ -3961,7 +3961,7 @@ impl DescribeLoaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLoaError {
@@ -4001,7 +4001,7 @@ impl DescribeLocationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLocationsError {
@@ -4037,7 +4037,7 @@ impl DescribeTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTagsError {
@@ -4077,7 +4077,7 @@ impl DescribeVirtualGatewaysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeVirtualGatewaysError {
@@ -4117,7 +4117,7 @@ impl DescribeVirtualInterfacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeVirtualInterfacesError {
@@ -4163,7 +4163,7 @@ impl DisassociateConnectionFromLagError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateConnectionFromLagError {
@@ -4213,7 +4213,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -4251,7 +4251,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -4293,7 +4293,7 @@ impl UpdateDirectConnectGatewayAssociationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDirectConnectGatewayAssociationError {
@@ -4333,7 +4333,7 @@ impl UpdateLagError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateLagError {
@@ -4375,7 +4375,7 @@ impl UpdateVirtualInterfaceAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateVirtualInterfaceAttributesError {

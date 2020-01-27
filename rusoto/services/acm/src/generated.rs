@@ -611,7 +611,7 @@ impl AddTagsToCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddTagsToCertificateError {
@@ -656,7 +656,7 @@ impl DeleteCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCertificateError {
@@ -695,7 +695,7 @@ impl DescribeCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCertificateError {
@@ -736,7 +736,7 @@ impl ExportCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ExportCertificateError {
@@ -778,7 +778,7 @@ impl GetCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCertificateError {
@@ -835,7 +835,7 @@ impl ImportCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportCertificateError {
@@ -870,7 +870,7 @@ impl ListCertificatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCertificatesError {
@@ -907,7 +907,7 @@ impl ListTagsForCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForCertificateError {
@@ -966,7 +966,7 @@ impl RemoveTagsFromCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveTagsFromCertificateError {
@@ -1005,7 +1005,7 @@ impl RenewCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RenewCertificateError {
@@ -1068,7 +1068,7 @@ impl RequestCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RequestCertificateError {
@@ -1125,7 +1125,7 @@ impl ResendValidationEmailError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResendValidationEmailError {
@@ -1181,7 +1181,7 @@ impl UpdateCertificateOptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateCertificateOptionsError {

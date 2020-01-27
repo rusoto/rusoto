@@ -2121,7 +2121,7 @@ impl CreateCostCategoryDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCostCategoryDefinitionError {
@@ -2165,7 +2165,7 @@ impl DeleteCostCategoryDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCostCategoryDefinitionError {
@@ -2209,7 +2209,7 @@ impl DescribeCostCategoryDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCostCategoryDefinitionError {
@@ -2262,7 +2262,7 @@ impl GetCostAndUsageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCostAndUsageError {
@@ -2328,7 +2328,7 @@ impl GetCostAndUsageWithResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCostAndUsageWithResourcesError {
@@ -2369,7 +2369,7 @@ impl GetCostForecastError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCostForecastError {
@@ -2420,7 +2420,7 @@ impl GetDimensionValuesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDimensionValuesError {
@@ -2470,7 +2470,7 @@ impl GetReservationCoverageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetReservationCoverageError {
@@ -2520,7 +2520,7 @@ impl GetReservationPurchaseRecommendationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetReservationPurchaseRecommendationError {
@@ -2574,7 +2574,7 @@ impl GetReservationUtilizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetReservationUtilizationError {
@@ -2617,7 +2617,7 @@ impl GetRightsizingRecommendationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRightsizingRecommendationError {
@@ -2666,7 +2666,7 @@ impl GetSavingsPlansCoverageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSavingsPlansCoverageError {
@@ -2709,7 +2709,7 @@ impl GetSavingsPlansPurchaseRecommendationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSavingsPlansPurchaseRecommendationError {
@@ -2755,7 +2755,7 @@ impl GetSavingsPlansUtilizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSavingsPlansUtilizationError {
@@ -2804,7 +2804,7 @@ impl GetSavingsPlansUtilizationDetailsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSavingsPlansUtilizationDetailsError {
@@ -2862,7 +2862,7 @@ impl GetTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTagsError {
@@ -2908,7 +2908,7 @@ impl GetUsageForecastError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUsageForecastError {
@@ -2944,7 +2944,7 @@ impl ListCostCategoryDefinitionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCostCategoryDefinitionsError {
@@ -2992,7 +2992,7 @@ impl UpdateCostCategoryDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateCostCategoryDefinitionError {

@@ -692,7 +692,7 @@ impl DeleteScalingPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteScalingPolicyError {
@@ -740,7 +740,7 @@ impl DeleteScheduledActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteScheduledActionError {
@@ -788,7 +788,7 @@ impl DeregisterScalableTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterScalableTargetError {
@@ -836,7 +836,7 @@ impl DescribeScalableTargetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeScalableTargetsError {
@@ -884,7 +884,7 @@ impl DescribeScalingActivitiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeScalingActivitiesError {
@@ -939,7 +939,7 @@ impl DescribeScalingPoliciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeScalingPoliciesError {
@@ -988,7 +988,7 @@ impl DescribeScheduledActionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeScheduledActionsError {
@@ -1042,7 +1042,7 @@ impl PutScalingPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutScalingPolicyError {
@@ -1091,7 +1091,7 @@ impl PutScheduledActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutScheduledActionError {
@@ -1140,7 +1140,7 @@ impl RegisterScalableTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterScalableTargetError {

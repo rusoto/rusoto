@@ -4194,7 +4194,7 @@ impl AddCustomAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddCustomAttributesError {
@@ -4258,7 +4258,7 @@ impl AdminAddUserToGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminAddUserToGroupError {
@@ -4349,7 +4349,7 @@ impl AdminConfirmSignUpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminConfirmSignUpError {
@@ -4474,7 +4474,7 @@ impl AdminCreateUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminCreateUserError {
@@ -4546,7 +4546,7 @@ impl AdminDeleteUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminDeleteUserError {
@@ -4618,7 +4618,7 @@ impl AdminDeleteUserAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminDeleteUserAttributesError {
@@ -4699,7 +4699,7 @@ impl AdminDisableProviderForUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminDisableProviderForUserError {
@@ -4760,7 +4760,7 @@ impl AdminDisableUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminDisableUserError {
@@ -4820,7 +4820,7 @@ impl AdminEnableUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminEnableUserError {
@@ -4887,7 +4887,7 @@ impl AdminForgetDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminForgetDeviceError {
@@ -4952,7 +4952,7 @@ impl AdminGetDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminGetDeviceError {
@@ -5012,7 +5012,7 @@ impl AdminGetUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminGetUserError {
@@ -5129,7 +5129,7 @@ impl AdminInitiateAuthError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminInitiateAuthError {
@@ -5221,7 +5221,7 @@ impl AdminLinkProviderForUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminLinkProviderForUserError {
@@ -5284,7 +5284,7 @@ impl AdminListDevicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminListDevicesError {
@@ -5356,7 +5356,7 @@ impl AdminListGroupsForUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminListGroupsForUserError {
@@ -5435,7 +5435,7 @@ impl AdminListUserAuthEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminListUserAuthEventsError {
@@ -5510,7 +5510,7 @@ impl AdminRemoveUserFromGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminRemoveUserFromGroupError {
@@ -5629,7 +5629,7 @@ impl AdminResetUserPasswordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminResetUserPasswordError {
@@ -5814,7 +5814,7 @@ impl AdminRespondToAuthChallengeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminRespondToAuthChallengeError {
@@ -5923,7 +5923,7 @@ impl AdminSetUserMFAPreferenceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminSetUserMFAPreferenceError {
@@ -5999,7 +5999,7 @@ impl AdminSetUserPasswordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminSetUserPasswordError {
@@ -6059,7 +6059,7 @@ impl AdminSetUserSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminSetUserSettingsError {
@@ -6139,7 +6139,7 @@ impl AdminUpdateAuthEventFeedbackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminUpdateAuthEventFeedbackError {
@@ -6225,7 +6225,7 @@ impl AdminUpdateDeviceStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminUpdateDeviceStatusError {
@@ -6349,7 +6349,7 @@ impl AdminUpdateUserAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminUpdateUserAttributesError {
@@ -6436,7 +6436,7 @@ impl AdminUserGlobalSignOutError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AdminUserGlobalSignOutError {
@@ -6501,7 +6501,7 @@ impl AssociateSoftwareTokenError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateSoftwareTokenError {
@@ -6584,7 +6584,7 @@ impl ChangePasswordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ChangePasswordError {
@@ -6680,7 +6680,7 @@ impl ConfirmDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ConfirmDeviceError {
@@ -6809,7 +6809,7 @@ impl ConfirmForgotPasswordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ConfirmForgotPasswordError {
@@ -6918,7 +6918,7 @@ impl ConfirmSignUpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ConfirmSignUpError {
@@ -6991,7 +6991,7 @@ impl CreateGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGroupError {
@@ -7071,7 +7071,7 @@ impl CreateIdentityProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateIdentityProviderError {
@@ -7138,7 +7138,7 @@ impl CreateResourceServerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateResourceServerError {
@@ -7209,7 +7209,7 @@ impl CreateUserImportJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserImportJobError {
@@ -7291,7 +7291,7 @@ impl CreateUserPoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserPoolError {
@@ -7376,7 +7376,7 @@ impl CreateUserPoolClientError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserPoolClientError {
@@ -7437,7 +7437,7 @@ impl CreateUserPoolDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserPoolDomainError {
@@ -7491,7 +7491,7 @@ impl DeleteGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteGroupError {
@@ -7562,7 +7562,7 @@ impl DeleteIdentityProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteIdentityProviderError {
@@ -7625,7 +7625,7 @@ impl DeleteResourceServerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteResourceServerError {
@@ -7694,7 +7694,7 @@ impl DeleteUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserError {
@@ -7776,7 +7776,7 @@ impl DeleteUserAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserAttributesError {
@@ -7838,7 +7838,7 @@ impl DeleteUserPoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserPoolError {
@@ -7899,7 +7899,7 @@ impl DeleteUserPoolClientError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserPoolClientError {
@@ -7952,7 +7952,7 @@ impl DeleteUserPoolDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserPoolDomainError {
@@ -8015,7 +8015,7 @@ impl DescribeIdentityProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeIdentityProviderError {
@@ -8079,7 +8079,7 @@ impl DescribeResourceServerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeResourceServerError {
@@ -8150,7 +8150,7 @@ impl DescribeRiskConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRiskConfigurationError {
@@ -8213,7 +8213,7 @@ impl DescribeUserImportJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUserImportJobError {
@@ -8272,7 +8272,7 @@ impl DescribeUserPoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUserPoolError {
@@ -8337,7 +8337,7 @@ impl DescribeUserPoolClientError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUserPoolClientError {
@@ -8394,7 +8394,7 @@ impl DescribeUserPoolDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUserPoolDomainError {
@@ -8469,7 +8469,7 @@ impl ForgetDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ForgetDeviceError {
@@ -8585,7 +8585,7 @@ impl ForgotPasswordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ForgotPasswordError {
@@ -8651,7 +8651,7 @@ impl GetCSVHeaderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCSVHeaderError {
@@ -8727,7 +8727,7 @@ impl GetDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeviceError {
@@ -8785,7 +8785,7 @@ impl GetGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGroupError {
@@ -8851,7 +8851,7 @@ impl GetIdentityProviderByIdentifierError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIdentityProviderByIdentifierError {
@@ -8909,7 +8909,7 @@ impl GetSigningCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSigningCertificateError {
@@ -8961,7 +8961,7 @@ impl GetUICustomizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUICustomizationError {
@@ -9030,7 +9030,7 @@ impl GetUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUserError {
@@ -9180,7 +9180,7 @@ impl GetUserAttributeVerificationCodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUserAttributeVerificationCodeError {
@@ -9283,7 +9283,7 @@ impl GetUserPoolMfaConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUserPoolMfaConfigError {
@@ -9347,7 +9347,7 @@ impl GlobalSignOutError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GlobalSignOutError {
@@ -9454,7 +9454,7 @@ impl InitiateAuthError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InitiateAuthError {
@@ -9539,7 +9539,7 @@ impl ListDevicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDevicesError {
@@ -9597,7 +9597,7 @@ impl ListGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGroupsError {
@@ -9657,7 +9657,7 @@ impl ListIdentityProvidersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListIdentityProvidersError {
@@ -9715,7 +9715,7 @@ impl ListResourceServersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResourceServersError {
@@ -9773,7 +9773,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -9827,7 +9827,7 @@ impl ListUserImportJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUserImportJobsError {
@@ -9885,7 +9885,7 @@ impl ListUserPoolClientsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUserPoolClientsError {
@@ -9934,7 +9934,7 @@ impl ListUserPoolsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUserPoolsError {
@@ -9987,7 +9987,7 @@ impl ListUsersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUsersError {
@@ -10041,7 +10041,7 @@ impl ListUsersInGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUsersInGroupError {
@@ -10166,7 +10166,7 @@ impl ResendConfirmationCodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResendConfirmationCodeError {
@@ -10342,7 +10342,7 @@ impl RespondToAuthChallengeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RespondToAuthChallengeError {
@@ -10446,7 +10446,7 @@ impl SetRiskConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetRiskConfigurationError {
@@ -10505,7 +10505,7 @@ impl SetUICustomizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetUICustomizationError {
@@ -10577,7 +10577,7 @@ impl SetUserMFAPreferenceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetUserMFAPreferenceError {
@@ -10653,7 +10653,7 @@ impl SetUserPoolMfaConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetUserPoolMfaConfigError {
@@ -10725,7 +10725,7 @@ impl SetUserSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetUserSettingsError {
@@ -10828,7 +10828,7 @@ impl SignUpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SignUpError {
@@ -10898,7 +10898,7 @@ impl StartUserImportJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartUserImportJobError {
@@ -10960,7 +10960,7 @@ impl StopUserImportJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopUserImportJobError {
@@ -11015,7 +11015,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -11069,7 +11069,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -11147,7 +11147,7 @@ impl UpdateAuthEventFeedbackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAuthEventFeedbackError {
@@ -11229,7 +11229,7 @@ impl UpdateDeviceStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDeviceStatusError {
@@ -11289,7 +11289,7 @@ impl UpdateGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGroupError {
@@ -11360,7 +11360,7 @@ impl UpdateIdentityProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateIdentityProviderError {
@@ -11423,7 +11423,7 @@ impl UpdateResourceServerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateResourceServerError {
@@ -11566,7 +11566,7 @@ impl UpdateUserAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserAttributesError {
@@ -11677,7 +11677,7 @@ impl UpdateUserPoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserPoolError {
@@ -11766,7 +11766,7 @@ impl UpdateUserPoolClientError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserPoolClientError {
@@ -11829,7 +11829,7 @@ impl UpdateUserPoolDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserPoolDomainError {
@@ -11932,7 +11932,7 @@ impl VerifySoftwareTokenError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for VerifySoftwareTokenError {
@@ -12033,7 +12033,7 @@ impl VerifyUserAttributeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for VerifyUserAttributeError {

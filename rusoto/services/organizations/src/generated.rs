@@ -1396,7 +1396,7 @@ impl AcceptHandshakeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AcceptHandshakeError {
@@ -1502,7 +1502,7 @@ impl AttachPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachPolicyError {
@@ -1585,7 +1585,7 @@ impl CancelHandshakeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelHandshakeError {
@@ -1670,7 +1670,7 @@ impl CreateAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAccountError {
@@ -1760,7 +1760,7 @@ impl CreateGovCloudAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGovCloudAccountError {
@@ -1843,7 +1843,7 @@ impl CreateOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateOrganizationError {
@@ -1936,7 +1936,7 @@ impl CreateOrganizationalUnitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateOrganizationalUnitError {
@@ -2036,7 +2036,7 @@ impl CreatePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePolicyError {
@@ -2119,7 +2119,7 @@ impl DeclineHandshakeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeclineHandshakeError {
@@ -2192,7 +2192,7 @@ impl DeleteOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteOrganizationError {
@@ -2277,7 +2277,7 @@ impl DeleteOrganizationalUnitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteOrganizationalUnitError {
@@ -2364,7 +2364,7 @@ impl DeletePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePolicyError {
@@ -2429,7 +2429,7 @@ impl DescribeAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAccountError {
@@ -2508,7 +2508,7 @@ impl DescribeCreateAccountStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCreateAccountStatusError {
@@ -2606,7 +2606,7 @@ impl DescribeEffectivePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEffectivePolicyError {
@@ -2677,7 +2677,7 @@ impl DescribeHandshakeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeHandshakeError {
@@ -2738,7 +2738,7 @@ impl DescribeOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeOrganizationError {
@@ -2811,7 +2811,7 @@ impl DescribeOrganizationalUnitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeOrganizationalUnitError {
@@ -2884,7 +2884,7 @@ impl DescribePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePolicyError {
@@ -2979,7 +2979,7 @@ impl DetachPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachPolicyError {
@@ -3062,7 +3062,7 @@ impl DisableAWSServiceAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableAWSServiceAccessError {
@@ -3164,7 +3164,7 @@ impl DisablePolicyTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisablePolicyTypeError {
@@ -3242,7 +3242,7 @@ impl EnableAWSServiceAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableAWSServiceAccessError {
@@ -3318,7 +3318,7 @@ impl EnableAllFeaturesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableAllFeaturesError {
@@ -3425,7 +3425,7 @@ impl EnablePolicyTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnablePolicyTypeError {
@@ -3533,7 +3533,7 @@ impl InviteAccountToOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InviteAccountToOrganizationError {
@@ -3632,7 +3632,7 @@ impl LeaveOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for LeaveOrganizationError {
@@ -3711,7 +3711,7 @@ impl ListAWSServiceAccessForOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAWSServiceAccessForOrganizationError {
@@ -3778,7 +3778,7 @@ impl ListAccountsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAccountsError {
@@ -3843,7 +3843,7 @@ impl ListAccountsForParentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAccountsForParentError {
@@ -3907,7 +3907,7 @@ impl ListChildrenError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListChildrenError {
@@ -3977,7 +3977,7 @@ impl ListCreateAccountStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCreateAccountStatusError {
@@ -4044,7 +4044,7 @@ impl ListHandshakesForAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListHandshakesForAccountError {
@@ -4119,7 +4119,7 @@ impl ListHandshakesForOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListHandshakesForOrganizationError {
@@ -4199,7 +4199,7 @@ impl ListOrganizationalUnitsForParentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOrganizationalUnitsForParentError {
@@ -4271,7 +4271,7 @@ impl ListParentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListParentsError {
@@ -4333,7 +4333,7 @@ impl ListPoliciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPoliciesError {
@@ -4406,7 +4406,7 @@ impl ListPoliciesForTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPoliciesForTargetError {
@@ -4464,7 +4464,7 @@ impl ListRootsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRootsError {
@@ -4525,7 +4525,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -4596,7 +4596,7 @@ impl ListTargetsForPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTargetsForPolicyError {
@@ -4683,7 +4683,7 @@ impl MoveAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for MoveAccountError {
@@ -4782,7 +4782,7 @@ impl RemoveAccountFromOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveAccountFromOrganizationError {
@@ -4869,7 +4869,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -4945,7 +4945,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -5031,7 +5031,7 @@ impl UpdateOrganizationalUnitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateOrganizationalUnitError {
@@ -5137,7 +5137,7 @@ impl UpdatePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePolicyError {

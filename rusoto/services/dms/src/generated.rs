@@ -2772,7 +2772,7 @@ impl AddTagsToResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddTagsToResourceError {
@@ -2806,7 +2806,7 @@ impl ApplyPendingMaintenanceActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ApplyPendingMaintenanceActionError {
@@ -2873,7 +2873,7 @@ impl CreateEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateEndpointError {
@@ -2973,7 +2973,7 @@ impl CreateEventSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateEventSubscriptionError {
@@ -3087,7 +3087,7 @@ impl CreateReplicationInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateReplicationInstanceError {
@@ -3181,7 +3181,7 @@ impl CreateReplicationSubnetGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateReplicationSubnetGroupError {
@@ -3263,7 +3263,7 @@ impl CreateReplicationTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateReplicationTaskError {
@@ -3315,7 +3315,7 @@ impl DeleteCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCertificateError {
@@ -3360,7 +3360,7 @@ impl DeleteConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteConnectionError {
@@ -3401,7 +3401,7 @@ impl DeleteEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteEndpointError {
@@ -3441,7 +3441,7 @@ impl DeleteEventSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteEventSubscriptionError {
@@ -3485,7 +3485,7 @@ impl DeleteReplicationInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteReplicationInstanceError {
@@ -3531,7 +3531,7 @@ impl DeleteReplicationSubnetGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteReplicationSubnetGroupError {
@@ -3575,7 +3575,7 @@ impl DeleteReplicationTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteReplicationTaskError {
@@ -3602,7 +3602,7 @@ impl DescribeAccountAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAccountAttributesError {
@@ -3632,7 +3632,7 @@ impl DescribeCertificatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCertificatesError {
@@ -3664,7 +3664,7 @@ impl DescribeConnectionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConnectionsError {
@@ -3688,7 +3688,7 @@ impl DescribeEndpointTypesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEndpointTypesError {
@@ -3718,7 +3718,7 @@ impl DescribeEndpointsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEndpointsError {
@@ -3742,7 +3742,7 @@ impl DescribeEventCategoriesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventCategoriesError {
@@ -3774,7 +3774,7 @@ impl DescribeEventSubscriptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventSubscriptionsError {
@@ -3800,7 +3800,7 @@ impl DescribeEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventsError {
@@ -3824,7 +3824,7 @@ impl DescribeOrderableReplicationInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeOrderableReplicationInstancesError {
@@ -3856,7 +3856,7 @@ impl DescribePendingMaintenanceActionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePendingMaintenanceActionsError {
@@ -3899,7 +3899,7 @@ impl DescribeRefreshSchemasStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRefreshSchemasStatusError {
@@ -3947,7 +3947,7 @@ impl DescribeReplicationInstanceTaskLogsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeReplicationInstanceTaskLogsError {
@@ -3986,7 +3986,7 @@ impl DescribeReplicationInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeReplicationInstancesError {
@@ -4022,7 +4022,7 @@ impl DescribeReplicationSubnetGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeReplicationSubnetGroupsError {
@@ -4060,7 +4060,7 @@ impl DescribeReplicationTaskAssessmentResultsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeReplicationTaskAssessmentResultsError {
@@ -4094,7 +4094,7 @@ impl DescribeReplicationTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeReplicationTasksError {
@@ -4135,7 +4135,7 @@ impl DescribeSchemasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSchemasError {
@@ -4175,7 +4175,7 @@ impl DescribeTableStatisticsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTableStatisticsError {
@@ -4226,7 +4226,7 @@ impl ImportCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportCertificateError {
@@ -4260,7 +4260,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -4318,7 +4318,7 @@ impl ModifyEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyEndpointError {
@@ -4410,7 +4410,7 @@ impl ModifyEventSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyEventSubscriptionError {
@@ -4498,7 +4498,7 @@ impl ModifyReplicationInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyReplicationInstanceError {
@@ -4585,7 +4585,7 @@ impl ModifyReplicationSubnetGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyReplicationSubnetGroupError {
@@ -4653,7 +4653,7 @@ impl ModifyReplicationTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ModifyReplicationTaskError {
@@ -4701,7 +4701,7 @@ impl RebootReplicationInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RebootReplicationInstanceError {
@@ -4759,7 +4759,7 @@ impl RefreshSchemasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RefreshSchemasError {
@@ -4799,7 +4799,7 @@ impl ReloadTablesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ReloadTablesError {
@@ -4832,7 +4832,7 @@ impl RemoveTagsFromResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {
@@ -4878,7 +4878,7 @@ impl StartReplicationTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartReplicationTaskError {
@@ -4923,7 +4923,7 @@ impl StartReplicationTaskAssessmentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartReplicationTaskAssessmentError {
@@ -4967,7 +4967,7 @@ impl StopReplicationTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopReplicationTaskError {
@@ -5023,7 +5023,7 @@ impl TestConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TestConnectionError {

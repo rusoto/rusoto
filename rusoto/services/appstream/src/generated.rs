@@ -2027,7 +2027,7 @@ impl AssociateFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateFleetError {
@@ -2064,7 +2064,7 @@ impl BatchAssociateUserStackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchAssociateUserStackError {
@@ -2092,7 +2092,7 @@ impl BatchDisassociateUserStackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDisassociateUserStackError {
@@ -2145,7 +2145,7 @@ impl CopyImageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CopyImageError {
@@ -2194,7 +2194,7 @@ impl CreateDirectoryConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDirectoryConfigError {
@@ -2273,7 +2273,7 @@ impl CreateFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateFleetError {
@@ -2371,7 +2371,7 @@ impl CreateImageBuilderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateImageBuilderError {
@@ -2423,7 +2423,7 @@ impl CreateImageBuilderStreamingURLError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateImageBuilderStreamingURLError {
@@ -2490,7 +2490,7 @@ impl CreateStackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateStackError {
@@ -2547,7 +2547,7 @@ impl CreateStreamingURLError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateStreamingURLError {
@@ -2600,7 +2600,7 @@ impl CreateUsageReportSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUsageReportSubscriptionError {
@@ -2656,7 +2656,7 @@ impl CreateUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserError {
@@ -2697,7 +2697,7 @@ impl DeleteDirectoryConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDirectoryConfigError {
@@ -2738,7 +2738,7 @@ impl DeleteFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFleetError {
@@ -2785,7 +2785,7 @@ impl DeleteImageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteImageError {
@@ -2832,7 +2832,7 @@ impl DeleteImageBuilderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteImageBuilderError {
@@ -2873,7 +2873,7 @@ impl DeleteImagePermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteImagePermissionsError {
@@ -2914,7 +2914,7 @@ impl DeleteStackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteStackError {
@@ -2957,7 +2957,7 @@ impl DeleteUsageReportSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUsageReportSubscriptionError {
@@ -2992,7 +2992,7 @@ impl DeleteUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserError {
@@ -3024,7 +3024,7 @@ impl DescribeDirectoryConfigsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDirectoryConfigsError {
@@ -3054,7 +3054,7 @@ impl DescribeFleetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFleetsError {
@@ -3086,7 +3086,7 @@ impl DescribeImageBuildersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeImageBuildersError {
@@ -3118,7 +3118,7 @@ impl DescribeImagePermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeImagePermissionsError {
@@ -3155,7 +3155,7 @@ impl DescribeImagesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeImagesError {
@@ -3188,7 +3188,7 @@ impl DescribeSessionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSessionsError {
@@ -3218,7 +3218,7 @@ impl DescribeStacksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStacksError {
@@ -3259,7 +3259,7 @@ impl DescribeUsageReportSubscriptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUsageReportSubscriptionsError {
@@ -3298,7 +3298,7 @@ impl DescribeUserStackAssociationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUserStackAssociationsError {
@@ -3337,7 +3337,7 @@ impl DescribeUsersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUsersError {
@@ -3368,7 +3368,7 @@ impl DisableUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableUserError {
@@ -3410,7 +3410,7 @@ impl DisassociateFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateFleetError {
@@ -3447,7 +3447,7 @@ impl EnableUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableUserError {
@@ -3472,7 +3472,7 @@ impl ExpireSessionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ExpireSessionError {
@@ -3494,7 +3494,7 @@ impl ListAssociatedFleetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssociatedFleetsError {
@@ -3516,7 +3516,7 @@ impl ListAssociatedStacksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssociatedStacksError {
@@ -3546,7 +3546,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -3606,7 +3606,7 @@ impl StartFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartFleetError {
@@ -3668,7 +3668,7 @@ impl StartImageBuilderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartImageBuilderError {
@@ -3707,7 +3707,7 @@ impl StopFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopFleetError {
@@ -3752,7 +3752,7 @@ impl StopImageBuilderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopImageBuilderError {
@@ -3794,7 +3794,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -3826,7 +3826,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -3870,7 +3870,7 @@ impl UpdateDirectoryConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDirectoryConfigError {
@@ -3949,7 +3949,7 @@ impl UpdateFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFleetError {
@@ -4004,7 +4004,7 @@ impl UpdateImagePermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateImagePermissionsError {
@@ -4078,7 +4078,7 @@ impl UpdateStackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateStackError {

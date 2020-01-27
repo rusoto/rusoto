@@ -980,7 +980,7 @@ impl CreateHttpNamespaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateHttpNamespaceError {
@@ -1036,7 +1036,7 @@ impl CreatePrivateDnsNamespaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePrivateDnsNamespaceError {
@@ -1096,7 +1096,7 @@ impl CreatePublicDnsNamespaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePublicDnsNamespaceError {
@@ -1148,7 +1148,7 @@ impl CreateServiceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateServiceError {
@@ -1196,7 +1196,7 @@ impl DeleteNamespaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteNamespaceError {
@@ -1239,7 +1239,7 @@ impl DeleteServiceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteServiceError {
@@ -1291,7 +1291,7 @@ impl DeregisterInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterInstanceError {
@@ -1335,7 +1335,7 @@ impl DiscoverInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DiscoverInstancesError {
@@ -1377,7 +1377,7 @@ impl GetInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInstanceError {
@@ -1425,7 +1425,7 @@ impl GetInstancesHealthStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInstancesHealthStatusError {
@@ -1462,7 +1462,7 @@ impl GetNamespaceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetNamespaceError {
@@ -1498,7 +1498,7 @@ impl GetOperationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetOperationError {
@@ -1534,7 +1534,7 @@ impl GetServiceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetServiceError {
@@ -1570,7 +1570,7 @@ impl ListInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListInstancesError {
@@ -1601,7 +1601,7 @@ impl ListNamespacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListNamespacesError {
@@ -1631,7 +1631,7 @@ impl ListOperationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOperationsError {
@@ -1661,7 +1661,7 @@ impl ListServicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListServicesError {
@@ -1713,7 +1713,7 @@ impl RegisterInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterInstanceError {
@@ -1772,7 +1772,7 @@ impl UpdateInstanceCustomHealthStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateInstanceCustomHealthStatusError {
@@ -1823,7 +1823,7 @@ impl UpdateServiceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateServiceError {

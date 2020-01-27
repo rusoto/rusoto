@@ -1571,7 +1571,7 @@ impl BatchGetTracesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetTracesError {
@@ -1607,7 +1607,7 @@ impl CreateGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGroupError {
@@ -1650,7 +1650,7 @@ impl CreateSamplingRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSamplingRuleError {
@@ -1687,7 +1687,7 @@ impl DeleteGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteGroupError {
@@ -1723,7 +1723,7 @@ impl DeleteSamplingRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSamplingRuleError {
@@ -1759,7 +1759,7 @@ impl GetEncryptionConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetEncryptionConfigError {
@@ -1795,7 +1795,7 @@ impl GetGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGroupError {
@@ -1831,7 +1831,7 @@ impl GetGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGroupsError {
@@ -1867,7 +1867,7 @@ impl GetSamplingRulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSamplingRulesError {
@@ -1909,7 +1909,7 @@ impl GetSamplingStatisticSummariesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSamplingStatisticSummariesError {
@@ -1945,7 +1945,7 @@ impl GetSamplingTargetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSamplingTargetsError {
@@ -1981,7 +1981,7 @@ impl GetServiceGraphError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetServiceGraphError {
@@ -2023,7 +2023,7 @@ impl GetTimeSeriesServiceStatisticsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTimeSeriesServiceStatisticsError {
@@ -2061,7 +2061,7 @@ impl GetTraceGraphError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTraceGraphError {
@@ -2097,7 +2097,7 @@ impl GetTraceSummariesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTraceSummariesError {
@@ -2133,7 +2133,7 @@ impl PutEncryptionConfigError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutEncryptionConfigError {
@@ -2169,7 +2169,7 @@ impl PutTelemetryRecordsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutTelemetryRecordsError {
@@ -2205,7 +2205,7 @@ impl PutTraceSegmentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutTraceSegmentsError {
@@ -2241,7 +2241,7 @@ impl UpdateGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGroupError {
@@ -2277,7 +2277,7 @@ impl UpdateSamplingRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSamplingRuleError {

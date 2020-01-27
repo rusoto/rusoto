@@ -521,7 +521,7 @@ impl DeleteTerminologyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTerminologyError {
@@ -571,7 +571,7 @@ impl DescribeTextTranslationJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTextTranslationJobError {
@@ -620,7 +620,7 @@ impl GetTerminologyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTerminologyError {
@@ -670,7 +670,7 @@ impl ImportTerminologyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportTerminologyError {
@@ -715,7 +715,7 @@ impl ListTerminologiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTerminologiesError {
@@ -770,7 +770,7 @@ impl ListTextTranslationJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTextTranslationJobsError {
@@ -833,7 +833,7 @@ impl StartTextTranslationJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartTextTranslationJobError {
@@ -885,7 +885,7 @@ impl StopTextTranslationJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopTextTranslationJobError {
@@ -956,7 +956,7 @@ impl TranslateTextError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TranslateTextError {

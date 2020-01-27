@@ -792,7 +792,7 @@ impl DescribeAffectedAccountsForOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAffectedAccountsForOrganizationError {
@@ -833,7 +833,7 @@ impl DescribeAffectedEntitiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAffectedEntitiesError {
@@ -879,7 +879,7 @@ impl DescribeAffectedEntitiesForOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAffectedEntitiesForOrganizationError {
@@ -908,7 +908,7 @@ impl DescribeEntityAggregatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEntityAggregatesError {
@@ -938,7 +938,7 @@ impl DescribeEventAggregatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventAggregatesError {
@@ -972,7 +972,7 @@ impl DescribeEventDetailsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventDetailsError {
@@ -1006,7 +1006,7 @@ impl DescribeEventDetailsForOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventDetailsForOrganizationError {
@@ -1047,7 +1047,7 @@ impl DescribeEventTypesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventTypesError {
@@ -1085,7 +1085,7 @@ impl DescribeEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventsError {
@@ -1127,7 +1127,7 @@ impl DescribeEventsForOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventsForOrganizationError {
@@ -1158,7 +1158,7 @@ impl DescribeHealthServiceStatusForOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeHealthServiceStatusForOrganizationError {
@@ -1192,7 +1192,7 @@ impl DisableHealthServiceAccessForOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableHealthServiceAccessForOrganizationError {
@@ -1230,7 +1230,7 @@ impl EnableHealthServiceAccessForOrganizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableHealthServiceAccessForOrganizationError {

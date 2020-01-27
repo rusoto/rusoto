@@ -2491,7 +2491,7 @@ impl AcceptInvitationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AcceptInvitationError {
@@ -2540,7 +2540,7 @@ impl BatchDisableStandardsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDisableStandardsError {
@@ -2588,7 +2588,7 @@ impl BatchEnableStandardsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchEnableStandardsError {
@@ -2636,7 +2636,7 @@ impl BatchImportFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchImportFindingsError {
@@ -2689,7 +2689,7 @@ impl CreateActionTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateActionTargetError {
@@ -2743,7 +2743,7 @@ impl CreateInsightError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateInsightError {
@@ -2797,7 +2797,7 @@ impl CreateMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMembersError {
@@ -2846,7 +2846,7 @@ impl DeclineInvitationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeclineInvitationsError {
@@ -2894,7 +2894,7 @@ impl DeleteActionTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteActionTargetError {
@@ -2947,7 +2947,7 @@ impl DeleteInsightError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteInsightError {
@@ -3001,7 +3001,7 @@ impl DeleteInvitationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteInvitationsError {
@@ -3055,7 +3055,7 @@ impl DeleteMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMembersError {
@@ -3106,7 +3106,7 @@ impl DescribeActionTargetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeActionTargetsError {
@@ -3159,7 +3159,7 @@ impl DescribeHubError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeHubError {
@@ -3208,7 +3208,7 @@ impl DescribeProductsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProductsError {
@@ -3262,7 +3262,7 @@ impl DescribeStandardsControlsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStandardsControlsError {
@@ -3327,7 +3327,7 @@ impl DisableImportFindingsForProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableImportFindingsForProductError {
@@ -3382,7 +3382,7 @@ impl DisableSecurityHubError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableSecurityHubError {
@@ -3447,7 +3447,7 @@ impl DisassociateFromMasterAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateFromMasterAccountError {
@@ -3505,7 +3505,7 @@ impl DisassociateMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateMembersError {
@@ -3571,7 +3571,7 @@ impl EnableImportFindingsForProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableImportFindingsForProductError {
@@ -3627,7 +3627,7 @@ impl EnableSecurityHubError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableSecurityHubError {
@@ -3676,7 +3676,7 @@ impl GetEnabledStandardsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetEnabledStandardsError {
@@ -3724,7 +3724,7 @@ impl GetFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFindingsError {
@@ -3777,7 +3777,7 @@ impl GetInsightResultsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInsightResultsError {
@@ -3831,7 +3831,7 @@ impl GetInsightsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInsightsError {
@@ -3880,7 +3880,7 @@ impl GetInvitationsCountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInvitationsCountError {
@@ -3933,7 +3933,7 @@ impl GetMasterAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMasterAccountError {
@@ -3987,7 +3987,7 @@ impl GetMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMembersError {
@@ -4041,7 +4041,7 @@ impl InviteMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InviteMembersError {
@@ -4093,7 +4093,7 @@ impl ListEnabledProductsForImportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListEnabledProductsForImportError {
@@ -4140,7 +4140,7 @@ impl ListInvitationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListInvitationsError {
@@ -4188,7 +4188,7 @@ impl ListMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListMembersError {
@@ -4233,7 +4233,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -4275,7 +4275,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -4317,7 +4317,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -4364,7 +4364,7 @@ impl UpdateActionTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateActionTargetError {
@@ -4417,7 +4417,7 @@ impl UpdateFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFindingsError {
@@ -4471,7 +4471,7 @@ impl UpdateInsightError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateInsightError {
@@ -4524,7 +4524,7 @@ impl UpdateStandardsControlError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateStandardsControlError {

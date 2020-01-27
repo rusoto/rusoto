@@ -1239,7 +1239,7 @@ impl ActivateEventSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ActivateEventSourceError {
@@ -1300,7 +1300,7 @@ impl CreateEventBusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateEventBusError {
@@ -1356,7 +1356,7 @@ impl CreatePartnerEventSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePartnerEventSourceError {
@@ -1405,7 +1405,7 @@ impl DeactivateEventSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeactivateEventSourceError {
@@ -1437,7 +1437,7 @@ impl DeleteEventBusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteEventBusError {
@@ -1467,7 +1467,7 @@ impl DeletePartnerEventSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePartnerEventSourceError {
@@ -1512,7 +1512,7 @@ impl DeleteRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRuleError {
@@ -1550,7 +1550,7 @@ impl DescribeEventBusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventBusError {
@@ -1588,7 +1588,7 @@ impl DescribeEventSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventSourceError {
@@ -1628,7 +1628,7 @@ impl DescribePartnerEventSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePartnerEventSourceError {
@@ -1664,7 +1664,7 @@ impl DescribeRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRuleError {
@@ -1710,7 +1710,7 @@ impl DisableRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableRuleError {
@@ -1758,7 +1758,7 @@ impl EnableRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableRuleError {
@@ -1791,7 +1791,7 @@ impl ListEventBusesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListEventBusesError {
@@ -1821,7 +1821,7 @@ impl ListEventSourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListEventSourcesError {
@@ -1862,7 +1862,7 @@ impl ListPartnerEventSourceAccountsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPartnerEventSourceAccountsError {
@@ -1895,7 +1895,7 @@ impl ListPartnerEventSourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPartnerEventSourcesError {
@@ -1932,7 +1932,7 @@ impl ListRuleNamesByTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRuleNamesByTargetError {
@@ -1968,7 +1968,7 @@ impl ListRulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRulesError {
@@ -2006,7 +2006,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -2042,7 +2042,7 @@ impl ListTargetsByRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTargetsByRuleError {
@@ -2073,7 +2073,7 @@ impl PutEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutEventsError {
@@ -2103,7 +2103,7 @@ impl PutPartnerEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutPartnerEventsError {
@@ -2150,7 +2150,7 @@ impl PutPermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutPermissionError {
@@ -2208,7 +2208,7 @@ impl PutRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutRuleError {
@@ -2263,7 +2263,7 @@ impl PutTargetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutTargetsError {
@@ -2309,7 +2309,7 @@ impl RemovePermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemovePermissionError {
@@ -2358,7 +2358,7 @@ impl RemoveTargetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveTargetsError {
@@ -2406,7 +2406,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -2446,7 +2446,7 @@ impl TestEventPatternError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TestEventPatternError {
@@ -2494,7 +2494,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {

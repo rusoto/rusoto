@@ -390,7 +390,7 @@ impl CreateEnvironmentEC2Error {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateEnvironmentEC2Error {
@@ -472,7 +472,7 @@ impl CreateEnvironmentMembershipError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateEnvironmentMembershipError {
@@ -542,7 +542,7 @@ impl DeleteEnvironmentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteEnvironmentError {
@@ -624,7 +624,7 @@ impl DeleteEnvironmentMembershipError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteEnvironmentMembershipError {
@@ -708,7 +708,7 @@ impl DescribeEnvironmentMembershipsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEnvironmentMembershipsError {
@@ -786,7 +786,7 @@ impl DescribeEnvironmentStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEnvironmentStatusError {
@@ -858,7 +858,7 @@ impl DescribeEnvironmentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEnvironmentsError {
@@ -926,7 +926,7 @@ impl ListEnvironmentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListEnvironmentsError {
@@ -994,7 +994,7 @@ impl UpdateEnvironmentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateEnvironmentError {
@@ -1076,7 +1076,7 @@ impl UpdateEnvironmentMembershipError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateEnvironmentMembershipError {

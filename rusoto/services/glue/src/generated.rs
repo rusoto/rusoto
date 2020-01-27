@@ -6051,7 +6051,7 @@ impl BatchCreatePartitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchCreatePartitionError {
@@ -6098,7 +6098,7 @@ impl BatchDeleteConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDeleteConnectionError {
@@ -6148,7 +6148,7 @@ impl BatchDeletePartitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDeletePartitionError {
@@ -6196,7 +6196,7 @@ impl BatchDeleteTableError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDeleteTableError {
@@ -6252,7 +6252,7 @@ impl BatchDeleteTableVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDeleteTableVersionError {
@@ -6290,7 +6290,7 @@ impl BatchGetCrawlersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetCrawlersError {
@@ -6340,7 +6340,7 @@ impl BatchGetDevEndpointsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetDevEndpointsError {
@@ -6383,7 +6383,7 @@ impl BatchGetJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetJobsError {
@@ -6435,7 +6435,7 @@ impl BatchGetPartitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetPartitionError {
@@ -6479,7 +6479,7 @@ impl BatchGetTriggersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetTriggersError {
@@ -6521,7 +6521,7 @@ impl BatchGetWorkflowsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetWorkflowsError {
@@ -6565,7 +6565,7 @@ impl GlueBatchStopJobRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GlueBatchStopJobRunError {
@@ -6612,7 +6612,7 @@ impl CancelMLTaskRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelMLTaskRunError {
@@ -6655,7 +6655,7 @@ impl CreateClassifierError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateClassifierError {
@@ -6709,7 +6709,7 @@ impl CreateConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateConnectionError {
@@ -6760,7 +6760,7 @@ impl CreateCrawlerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCrawlerError {
@@ -6820,7 +6820,7 @@ impl CreateDatabaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDatabaseError {
@@ -6889,7 +6889,7 @@ impl CreateDevEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDevEndpointError {
@@ -6963,7 +6963,7 @@ impl CreateJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateJobError {
@@ -7033,7 +7033,7 @@ impl CreateMLTransformError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMLTransformError {
@@ -7105,7 +7105,7 @@ impl CreatePartitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePartitionError {
@@ -7151,7 +7151,7 @@ impl CreateScriptError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateScriptError {
@@ -7215,7 +7215,7 @@ impl CreateSecurityConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSecurityConfigurationError {
@@ -7283,7 +7283,7 @@ impl CreateTableError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTableError {
@@ -7360,7 +7360,7 @@ impl CreateTriggerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTriggerError {
@@ -7441,7 +7441,7 @@ impl CreateUserDefinedFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserDefinedFunctionError {
@@ -7508,7 +7508,7 @@ impl CreateWorkflowError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateWorkflowError {
@@ -7548,7 +7548,7 @@ impl DeleteClassifierError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteClassifierError {
@@ -7584,7 +7584,7 @@ impl DeleteConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteConnectionError {
@@ -7632,7 +7632,7 @@ impl DeleteCrawlerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCrawlerError {
@@ -7680,7 +7680,7 @@ impl DeleteDatabaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDatabaseError {
@@ -7728,7 +7728,7 @@ impl DeleteDevEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDevEndpointError {
@@ -7771,7 +7771,7 @@ impl DeleteJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteJobError {
@@ -7818,7 +7818,7 @@ impl DeleteMLTransformError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMLTransformError {
@@ -7866,7 +7866,7 @@ impl DeletePartitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePartitionError {
@@ -7925,7 +7925,7 @@ impl DeleteResourcePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteResourcePolicyError {
@@ -7984,7 +7984,7 @@ impl DeleteSecurityConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSecurityConfigurationError {
@@ -8032,7 +8032,7 @@ impl DeleteTableError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTableError {
@@ -8080,7 +8080,7 @@ impl DeleteTableVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTableVersionError {
@@ -8130,7 +8130,7 @@ impl DeleteTriggerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTriggerError {
@@ -8186,7 +8186,7 @@ impl DeleteUserDefinedFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserDefinedFunctionError {
@@ -8236,7 +8236,7 @@ impl DeleteWorkflowError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteWorkflowError {
@@ -8278,7 +8278,7 @@ impl GetCatalogImportStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCatalogImportStatusError {
@@ -8314,7 +8314,7 @@ impl GetClassifierError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetClassifierError {
@@ -8345,7 +8345,7 @@ impl GetClassifiersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetClassifiersError {
@@ -8390,7 +8390,7 @@ impl GetConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetConnectionError {
@@ -8438,7 +8438,7 @@ impl GetConnectionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetConnectionsError {
@@ -8476,7 +8476,7 @@ impl GetCrawlerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCrawlerError {
@@ -8507,7 +8507,7 @@ impl GetCrawlerMetricsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCrawlerMetricsError {
@@ -8537,7 +8537,7 @@ impl GetCrawlersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCrawlersError {
@@ -8585,7 +8585,7 @@ impl GetDataCatalogEncryptionSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDataCatalogEncryptionSettingsError {
@@ -8643,7 +8643,7 @@ impl GetDatabaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDatabaseError {
@@ -8692,7 +8692,7 @@ impl GetDatabasesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDatabasesError {
@@ -8735,7 +8735,7 @@ impl GetDataflowGraphError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDataflowGraphError {
@@ -8782,7 +8782,7 @@ impl GetDevEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDevEndpointError {
@@ -8830,7 +8830,7 @@ impl GetDevEndpointsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDevEndpointsError {
@@ -8878,7 +8878,7 @@ impl GetJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetJobError {
@@ -8926,7 +8926,7 @@ impl GetJobBookmarkError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetJobBookmarkError {
@@ -8974,7 +8974,7 @@ impl GetJobRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetJobRunError {
@@ -9022,7 +9022,7 @@ impl GetJobRunsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetJobRunsError {
@@ -9070,7 +9070,7 @@ impl GetJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetJobsError {
@@ -9118,7 +9118,7 @@ impl GetMLTaskRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMLTaskRunError {
@@ -9166,7 +9166,7 @@ impl GetMLTaskRunsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMLTaskRunsError {
@@ -9214,7 +9214,7 @@ impl GetMLTransformError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMLTransformError {
@@ -9262,7 +9262,7 @@ impl GetMLTransformsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMLTransformsError {
@@ -9310,7 +9310,7 @@ impl GetMappingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMappingError {
@@ -9363,7 +9363,7 @@ impl GetPartitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPartitionError {
@@ -9417,7 +9417,7 @@ impl GetPartitionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPartitionsError {
@@ -9461,7 +9461,7 @@ impl GetPlanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPlanError {
@@ -9508,7 +9508,7 @@ impl GetResourcePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourcePolicyError {
@@ -9564,7 +9564,7 @@ impl GetSecurityConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSecurityConfigurationError {
@@ -9620,7 +9620,7 @@ impl GetSecurityConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSecurityConfigurationsError {
@@ -9673,7 +9673,7 @@ impl GetTableError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTableError {
@@ -9727,7 +9727,7 @@ impl GetTableVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTableVersionError {
@@ -9781,7 +9781,7 @@ impl GetTableVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTableVersionsError {
@@ -9835,7 +9835,7 @@ impl GetTablesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTablesError {
@@ -9884,7 +9884,7 @@ impl GetTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTagsError {
@@ -9932,7 +9932,7 @@ impl GetTriggerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTriggerError {
@@ -9980,7 +9980,7 @@ impl GetTriggersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTriggersError {
@@ -10041,7 +10041,7 @@ impl GetUserDefinedFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUserDefinedFunctionError {
@@ -10105,7 +10105,7 @@ impl GetUserDefinedFunctionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUserDefinedFunctionsError {
@@ -10154,7 +10154,7 @@ impl GetWorkflowError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetWorkflowError {
@@ -10202,7 +10202,7 @@ impl GetWorkflowRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetWorkflowRunError {
@@ -10258,7 +10258,7 @@ impl GetWorkflowRunPropertiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetWorkflowRunPropertiesError {
@@ -10306,7 +10306,7 @@ impl GetWorkflowRunsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetWorkflowRunsError {
@@ -10346,7 +10346,7 @@ impl ImportCatalogToGlueError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportCatalogToGlueError {
@@ -10377,7 +10377,7 @@ impl ListCrawlersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCrawlersError {
@@ -10422,7 +10422,7 @@ impl ListDevEndpointsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDevEndpointsError {
@@ -10470,7 +10470,7 @@ impl ListJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListJobsError {
@@ -10518,7 +10518,7 @@ impl ListTriggersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTriggersError {
@@ -10561,7 +10561,7 @@ impl ListWorkflowsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListWorkflowsError {
@@ -10611,7 +10611,7 @@ impl PutDataCatalogEncryptionSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutDataCatalogEncryptionSettingsError {
@@ -10671,7 +10671,7 @@ impl PutResourcePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutResourcePolicyError {
@@ -10749,7 +10749,7 @@ impl PutWorkflowRunPropertiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutWorkflowRunPropertiesError {
@@ -10804,7 +10804,7 @@ impl ResetJobBookmarkError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResetJobBookmarkError {
@@ -10847,7 +10847,7 @@ impl SearchTablesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchTablesError {
@@ -10889,7 +10889,7 @@ impl StartCrawlerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartCrawlerError {
@@ -10947,7 +10947,7 @@ impl StartCrawlerScheduleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartCrawlerScheduleError {
@@ -11004,7 +11004,7 @@ impl StartExportLabelsTaskRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartExportLabelsTaskRunError {
@@ -11067,7 +11067,7 @@ impl StartImportLabelsTaskRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartImportLabelsTaskRunError {
@@ -11130,7 +11130,7 @@ impl StartJobRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartJobRunError {
@@ -11202,7 +11202,7 @@ impl StartMLEvaluationTaskRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartMLEvaluationTaskRunError {
@@ -11271,7 +11271,7 @@ impl StartMLLabelingSetGenerationTaskRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartMLLabelingSetGenerationTaskRunError {
@@ -11342,7 +11342,7 @@ impl StartTriggerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartTriggerError {
@@ -11406,7 +11406,7 @@ impl StartWorkflowRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartWorkflowRunError {
@@ -11456,7 +11456,7 @@ impl StopCrawlerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopCrawlerError {
@@ -11510,7 +11510,7 @@ impl StopCrawlerScheduleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopCrawlerScheduleError {
@@ -11563,7 +11563,7 @@ impl StopTriggerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopTriggerError {
@@ -11612,7 +11612,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -11660,7 +11660,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -11708,7 +11708,7 @@ impl UpdateClassifierError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateClassifierError {
@@ -11756,7 +11756,7 @@ impl UpdateConnectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateConnectionError {
@@ -11809,7 +11809,7 @@ impl UpdateCrawlerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateCrawlerError {
@@ -11871,7 +11871,7 @@ impl UpdateCrawlerScheduleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateCrawlerScheduleError {
@@ -11925,7 +11925,7 @@ impl UpdateDatabaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDatabaseError {
@@ -11974,7 +11974,7 @@ impl UpdateDevEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDevEndpointError {
@@ -12027,7 +12027,7 @@ impl UpdateJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateJobError {
@@ -12081,7 +12081,7 @@ impl UpdateMLTransformError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateMLTransformError {
@@ -12135,7 +12135,7 @@ impl UpdatePartitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePartitionError {
@@ -12201,7 +12201,7 @@ impl UpdateTableError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTableError {
@@ -12259,7 +12259,7 @@ impl UpdateTriggerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTriggerError {
@@ -12323,7 +12323,7 @@ impl UpdateUserDefinedFunctionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserDefinedFunctionError {
@@ -12379,7 +12379,7 @@ impl UpdateWorkflowError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateWorkflowError {

@@ -2984,7 +2984,7 @@ impl CountClosedWorkflowExecutionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CountClosedWorkflowExecutionsError {
@@ -3030,7 +3030,7 @@ impl CountOpenWorkflowExecutionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CountOpenWorkflowExecutionsError {
@@ -3074,7 +3074,7 @@ impl CountPendingActivityTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CountPendingActivityTasksError {
@@ -3118,7 +3118,7 @@ impl CountPendingDecisionTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CountPendingDecisionTasksError {
@@ -3169,7 +3169,7 @@ impl DeprecateActivityTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeprecateActivityTypeError {
@@ -3219,7 +3219,7 @@ impl DeprecateDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeprecateDomainError {
@@ -3267,7 +3267,7 @@ impl DeprecateWorkflowTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeprecateWorkflowTypeError {
@@ -3310,7 +3310,7 @@ impl DescribeActivityTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeActivityTypeError {
@@ -3350,7 +3350,7 @@ impl DescribeDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDomainError {
@@ -3390,7 +3390,7 @@ impl DescribeWorkflowExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeWorkflowExecutionError {
@@ -3434,7 +3434,7 @@ impl DescribeWorkflowTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeWorkflowTypeError {
@@ -3478,7 +3478,7 @@ impl GetWorkflowExecutionHistoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetWorkflowExecutionHistoryError {
@@ -3522,7 +3522,7 @@ impl ListActivityTypesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListActivityTypesError {
@@ -3564,7 +3564,7 @@ impl ListClosedWorkflowExecutionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListClosedWorkflowExecutionsError {
@@ -3601,7 +3601,7 @@ impl ListDomainsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDomainsError {
@@ -3642,7 +3642,7 @@ impl ListOpenWorkflowExecutionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOpenWorkflowExecutionsError {
@@ -3693,7 +3693,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -3736,7 +3736,7 @@ impl ListWorkflowTypesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListWorkflowTypesError {
@@ -3783,7 +3783,7 @@ impl PollForActivityTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PollForActivityTaskError {
@@ -3833,7 +3833,7 @@ impl PollForDecisionTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PollForDecisionTaskError {
@@ -3878,7 +3878,7 @@ impl RecordActivityTaskHeartbeatError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RecordActivityTaskHeartbeatError {
@@ -3936,7 +3936,7 @@ impl RegisterActivityTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterActivityTypeError {
@@ -3990,7 +3990,7 @@ impl RegisterDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterDomainError {
@@ -4046,7 +4046,7 @@ impl RegisterWorkflowTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterWorkflowTypeError {
@@ -4092,7 +4092,7 @@ impl RequestCancelWorkflowExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RequestCancelWorkflowExecutionError {
@@ -4138,7 +4138,7 @@ impl RespondActivityTaskCanceledError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RespondActivityTaskCanceledError {
@@ -4184,7 +4184,7 @@ impl RespondActivityTaskCompletedError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RespondActivityTaskCompletedError {
@@ -4228,7 +4228,7 @@ impl RespondActivityTaskFailedError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RespondActivityTaskFailedError {
@@ -4274,7 +4274,7 @@ impl RespondDecisionTaskCompletedError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RespondDecisionTaskCompletedError {
@@ -4318,7 +4318,7 @@ impl SignalWorkflowExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SignalWorkflowExecutionError {
@@ -4388,7 +4388,7 @@ impl StartWorkflowExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartWorkflowExecutionError {
@@ -4444,7 +4444,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -4488,7 +4488,7 @@ impl TerminateWorkflowExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TerminateWorkflowExecutionError {
@@ -4539,7 +4539,7 @@ impl UndeprecateActivityTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UndeprecateActivityTypeError {
@@ -4591,7 +4591,7 @@ impl UndeprecateDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UndeprecateDomainError {
@@ -4639,7 +4639,7 @@ impl UndeprecateWorkflowTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UndeprecateWorkflowTypeError {
@@ -4687,7 +4687,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {

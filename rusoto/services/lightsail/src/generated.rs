@@ -4393,7 +4393,7 @@ impl AllocateStaticIpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AllocateStaticIpError {
@@ -4459,7 +4459,7 @@ impl AttachDiskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachDiskError {
@@ -4541,7 +4541,7 @@ impl AttachInstancesToLoadBalancerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachInstancesToLoadBalancerError {
@@ -4629,7 +4629,7 @@ impl AttachLoadBalancerTlsCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachLoadBalancerTlsCertificateError {
@@ -4707,7 +4707,7 @@ impl AttachStaticIpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachStaticIpError {
@@ -4783,7 +4783,7 @@ impl CloseInstancePublicPortsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CloseInstancePublicPortsError {
@@ -4851,7 +4851,7 @@ impl CopySnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CopySnapshotError {
@@ -4927,7 +4927,7 @@ impl CreateCloudFormationStackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCloudFormationStackError {
@@ -4995,7 +4995,7 @@ impl CreateDiskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDiskError {
@@ -5067,7 +5067,7 @@ impl CreateDiskFromSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDiskFromSnapshotError {
@@ -5137,7 +5137,7 @@ impl CreateDiskSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDiskSnapshotError {
@@ -5203,7 +5203,7 @@ impl CreateDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDomainError {
@@ -5271,7 +5271,7 @@ impl CreateDomainEntryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDomainEntryError {
@@ -5343,7 +5343,7 @@ impl CreateInstanceSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateInstanceSnapshotError {
@@ -5413,7 +5413,7 @@ impl CreateInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateInstancesError {
@@ -5493,7 +5493,7 @@ impl CreateInstancesFromSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateInstancesFromSnapshotError {
@@ -5563,7 +5563,7 @@ impl CreateKeyPairError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateKeyPairError {
@@ -5631,7 +5631,7 @@ impl CreateLoadBalancerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateLoadBalancerError {
@@ -5713,7 +5713,7 @@ impl CreateLoadBalancerTlsCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateLoadBalancerTlsCertificateError {
@@ -5799,7 +5799,7 @@ impl CreateRelationalDatabaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRelationalDatabaseError {
@@ -5883,7 +5883,7 @@ impl CreateRelationalDatabaseFromSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRelationalDatabaseFromSnapshotError {
@@ -5977,7 +5977,7 @@ impl CreateRelationalDatabaseSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRelationalDatabaseSnapshotError {
@@ -6048,7 +6048,7 @@ impl DeleteAutoSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAutoSnapshotError {
@@ -6113,7 +6113,7 @@ impl DeleteDiskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDiskError {
@@ -6181,7 +6181,7 @@ impl DeleteDiskSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDiskSnapshotError {
@@ -6247,7 +6247,7 @@ impl DeleteDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDomainError {
@@ -6315,7 +6315,7 @@ impl DeleteDomainEntryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDomainEntryError {
@@ -6383,7 +6383,7 @@ impl DeleteInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteInstanceError {
@@ -6455,7 +6455,7 @@ impl DeleteInstanceSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteInstanceSnapshotError {
@@ -6525,7 +6525,7 @@ impl DeleteKeyPairError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteKeyPairError {
@@ -6595,7 +6595,7 @@ impl DeleteKnownHostKeysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteKnownHostKeysError {
@@ -6663,7 +6663,7 @@ impl DeleteLoadBalancerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLoadBalancerError {
@@ -6745,7 +6745,7 @@ impl DeleteLoadBalancerTlsCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLoadBalancerTlsCertificateError {
@@ -6831,7 +6831,7 @@ impl DeleteRelationalDatabaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRelationalDatabaseError {
@@ -6915,7 +6915,7 @@ impl DeleteRelationalDatabaseSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRelationalDatabaseSnapshotError {
@@ -6991,7 +6991,7 @@ impl DetachDiskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachDiskError {
@@ -7073,7 +7073,7 @@ impl DetachInstancesFromLoadBalancerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachInstancesFromLoadBalancerError {
@@ -7147,7 +7147,7 @@ impl DetachStaticIpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachStaticIpError {
@@ -7208,7 +7208,7 @@ impl DisableAddOnError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableAddOnError {
@@ -7279,7 +7279,7 @@ impl DownloadDefaultKeyPairError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DownloadDefaultKeyPairError {
@@ -7342,7 +7342,7 @@ impl EnableAddOnError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableAddOnError {
@@ -7409,7 +7409,7 @@ impl ExportSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ExportSnapshotError {
@@ -7477,7 +7477,7 @@ impl GetActiveNamesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetActiveNamesError {
@@ -7538,7 +7538,7 @@ impl GetAutoSnapshotsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAutoSnapshotsError {
@@ -7605,7 +7605,7 @@ impl GetBlueprintsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBlueprintsError {
@@ -7671,7 +7671,7 @@ impl GetBundlesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBundlesError {
@@ -7753,7 +7753,7 @@ impl GetCloudFormationStackRecordsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCloudFormationStackRecordsError {
@@ -7823,7 +7823,7 @@ impl GetDiskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDiskError {
@@ -7891,7 +7891,7 @@ impl GetDiskSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDiskSnapshotError {
@@ -7959,7 +7959,7 @@ impl GetDiskSnapshotsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDiskSnapshotsError {
@@ -8023,7 +8023,7 @@ impl GetDisksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDisksError {
@@ -8089,7 +8089,7 @@ impl GetDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDomainError {
@@ -8155,7 +8155,7 @@ impl GetDomainsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDomainsError {
@@ -8231,7 +8231,7 @@ impl GetExportSnapshotRecordsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetExportSnapshotRecordsError {
@@ -8299,7 +8299,7 @@ impl GetInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInstanceError {
@@ -8375,7 +8375,7 @@ impl GetInstanceAccessDetailsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInstanceAccessDetailsError {
@@ -8449,7 +8449,7 @@ impl GetInstanceMetricDataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInstanceMetricDataError {
@@ -8521,7 +8521,7 @@ impl GetInstancePortStatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInstancePortStatesError {
@@ -8591,7 +8591,7 @@ impl GetInstanceSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInstanceSnapshotError {
@@ -8663,7 +8663,7 @@ impl GetInstanceSnapshotsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInstanceSnapshotsError {
@@ -8731,7 +8731,7 @@ impl GetInstanceStateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInstanceStateError {
@@ -8797,7 +8797,7 @@ impl GetInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInstancesError {
@@ -8863,7 +8863,7 @@ impl GetKeyPairError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetKeyPairError {
@@ -8929,7 +8929,7 @@ impl GetKeyPairsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetKeyPairsError {
@@ -8997,7 +8997,7 @@ impl GetLoadBalancerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLoadBalancerError {
@@ -9073,7 +9073,7 @@ impl GetLoadBalancerMetricDataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLoadBalancerMetricDataError {
@@ -9157,7 +9157,7 @@ impl GetLoadBalancerTlsCertificatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLoadBalancerTlsCertificatesError {
@@ -9231,7 +9231,7 @@ impl GetLoadBalancersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLoadBalancersError {
@@ -9297,7 +9297,7 @@ impl GetOperationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetOperationError {
@@ -9365,7 +9365,7 @@ impl GetOperationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetOperationsError {
@@ -9441,7 +9441,7 @@ impl GetOperationsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetOperationsForResourceError {
@@ -9509,7 +9509,7 @@ impl GetRegionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRegionsError {
@@ -9581,7 +9581,7 @@ impl GetRelationalDatabaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRelationalDatabaseError {
@@ -9663,7 +9663,7 @@ impl GetRelationalDatabaseBlueprintsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRelationalDatabaseBlueprintsError {
@@ -9751,7 +9751,7 @@ impl GetRelationalDatabaseBundlesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRelationalDatabaseBundlesError {
@@ -9835,7 +9835,7 @@ impl GetRelationalDatabaseEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRelationalDatabaseEventsError {
@@ -9919,7 +9919,7 @@ impl GetRelationalDatabaseLogEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRelationalDatabaseLogEventsError {
@@ -10007,7 +10007,7 @@ impl GetRelationalDatabaseLogStreamsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRelationalDatabaseLogStreamsError {
@@ -10097,7 +10097,7 @@ impl GetRelationalDatabaseMasterUserPasswordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRelationalDatabaseMasterUserPasswordError {
@@ -10193,7 +10193,7 @@ impl GetRelationalDatabaseMetricDataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRelationalDatabaseMetricDataError {
@@ -10281,7 +10281,7 @@ impl GetRelationalDatabaseParametersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRelationalDatabaseParametersError {
@@ -10369,7 +10369,7 @@ impl GetRelationalDatabaseSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRelationalDatabaseSnapshotError {
@@ -10457,7 +10457,7 @@ impl GetRelationalDatabaseSnapshotsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRelationalDatabaseSnapshotsError {
@@ -10535,7 +10535,7 @@ impl GetRelationalDatabasesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRelationalDatabasesError {
@@ -10603,7 +10603,7 @@ impl GetStaticIpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetStaticIpError {
@@ -10669,7 +10669,7 @@ impl GetStaticIpsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetStaticIpsError {
@@ -10737,7 +10737,7 @@ impl ImportKeyPairError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportKeyPairError {
@@ -10803,7 +10803,7 @@ impl IsVpcPeeredError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for IsVpcPeeredError {
@@ -10879,7 +10879,7 @@ impl OpenInstancePublicPortsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for OpenInstancePublicPortsError {
@@ -10945,7 +10945,7 @@ impl PeerVpcError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PeerVpcError {
@@ -11017,7 +11017,7 @@ impl PutInstancePublicPortsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutInstancePublicPortsError {
@@ -11087,7 +11087,7 @@ impl RebootInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RebootInstanceError {
@@ -11163,7 +11163,7 @@ impl RebootRelationalDatabaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RebootRelationalDatabaseError {
@@ -11233,7 +11233,7 @@ impl ReleaseStaticIpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ReleaseStaticIpError {
@@ -11301,7 +11301,7 @@ impl StartInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartInstanceError {
@@ -11377,7 +11377,7 @@ impl StartRelationalDatabaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartRelationalDatabaseError {
@@ -11445,7 +11445,7 @@ impl StopInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopInstanceError {
@@ -11517,7 +11517,7 @@ impl StopRelationalDatabaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopRelationalDatabaseError {
@@ -11585,7 +11585,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -11651,7 +11651,7 @@ impl UnpeerVpcError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UnpeerVpcError {
@@ -11719,7 +11719,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -11787,7 +11787,7 @@ impl UpdateDomainEntryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDomainEntryError {
@@ -11867,7 +11867,7 @@ impl UpdateLoadBalancerAttributeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateLoadBalancerAttributeError {
@@ -11945,7 +11945,7 @@ impl UpdateRelationalDatabaseError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRelationalDatabaseError {
@@ -12029,7 +12029,7 @@ impl UpdateRelationalDatabaseParametersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRelationalDatabaseParametersError {

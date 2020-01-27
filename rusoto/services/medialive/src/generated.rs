@@ -5811,7 +5811,7 @@ impl BatchUpdateScheduleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchUpdateScheduleError {
@@ -5883,7 +5883,7 @@ impl CreateChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateChannelError {
@@ -5945,7 +5945,7 @@ impl CreateInputError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateInputError {
@@ -6011,7 +6011,7 @@ impl CreateInputSecurityGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateInputSecurityGroupError {
@@ -6081,7 +6081,7 @@ impl CreateMultiplexError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMultiplexError {
@@ -6161,7 +6161,7 @@ impl CreateMultiplexProgramError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMultiplexProgramError {
@@ -6213,7 +6213,7 @@ impl CreateTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTagsError {
@@ -6281,7 +6281,7 @@ impl DeleteChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteChannelError {
@@ -6353,7 +6353,7 @@ impl DeleteInputError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteInputError {
@@ -6426,7 +6426,7 @@ impl DeleteInputSecurityGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteInputSecurityGroupError {
@@ -6497,7 +6497,7 @@ impl DeleteMultiplexError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMultiplexError {
@@ -6575,7 +6575,7 @@ impl DeleteMultiplexProgramError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMultiplexProgramError {
@@ -6649,7 +6649,7 @@ impl DeleteReservationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteReservationError {
@@ -6716,7 +6716,7 @@ impl DeleteScheduleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteScheduleError {
@@ -6767,7 +6767,7 @@ impl DeleteTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTagsError {
@@ -6830,7 +6830,7 @@ impl DescribeChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeChannelError {
@@ -6896,7 +6896,7 @@ impl DescribeInputError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeInputError {
@@ -6976,7 +6976,7 @@ impl DescribeInputSecurityGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeInputSecurityGroupError {
@@ -7046,7 +7046,7 @@ impl DescribeMultiplexError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMultiplexError {
@@ -7118,7 +7118,7 @@ impl DescribeMultiplexProgramError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMultiplexProgramError {
@@ -7186,7 +7186,7 @@ impl DescribeOfferingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeOfferingError {
@@ -7254,7 +7254,7 @@ impl DescribeReservationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeReservationError {
@@ -7322,7 +7322,7 @@ impl DescribeScheduleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeScheduleError {
@@ -7383,7 +7383,7 @@ impl ListChannelsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListChannelsError {
@@ -7449,7 +7449,7 @@ impl ListInputSecurityGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListInputSecurityGroupsError {
@@ -7509,7 +7509,7 @@ impl ListInputsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListInputsError {
@@ -7580,7 +7580,7 @@ impl ListMultiplexProgramsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListMultiplexProgramsError {
@@ -7641,7 +7641,7 @@ impl ListMultiplexesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListMultiplexesError {
@@ -7701,7 +7701,7 @@ impl ListOfferingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOfferingsError {
@@ -7763,7 +7763,7 @@ impl ListReservationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListReservationsError {
@@ -7815,7 +7815,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -7885,7 +7885,7 @@ impl PurchaseOfferingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PurchaseOfferingError {
@@ -7957,7 +7957,7 @@ impl StartChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartChannelError {
@@ -8029,7 +8029,7 @@ impl StartMultiplexError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartMultiplexError {
@@ -8101,7 +8101,7 @@ impl StopChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopChannelError {
@@ -8173,7 +8173,7 @@ impl StopMultiplexError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopMultiplexError {
@@ -8240,7 +8240,7 @@ impl UpdateChannelError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateChannelError {
@@ -8320,7 +8320,7 @@ impl UpdateChannelClassError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateChannelClassError {
@@ -8388,7 +8388,7 @@ impl UpdateInputError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateInputError {
@@ -8458,7 +8458,7 @@ impl UpdateInputSecurityGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateInputSecurityGroupError {
@@ -8529,7 +8529,7 @@ impl UpdateMultiplexError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateMultiplexError {
@@ -8607,7 +8607,7 @@ impl UpdateMultiplexProgramError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateMultiplexProgramError {
@@ -8681,7 +8681,7 @@ impl UpdateReservationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateReservationError {

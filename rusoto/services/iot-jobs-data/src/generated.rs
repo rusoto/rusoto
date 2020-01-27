@@ -298,7 +298,7 @@ impl DescribeJobExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeJobExecutionError {
@@ -361,7 +361,7 @@ impl GetPendingJobExecutionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPendingJobExecutionsError {
@@ -429,7 +429,7 @@ impl StartNextPendingJobExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartNextPendingJobExecutionError {
@@ -500,7 +500,7 @@ impl UpdateJobExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateJobExecutionError {

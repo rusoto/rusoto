@@ -3491,7 +3491,7 @@ impl AssociateApprovalRuleTemplateWithRepositoryError {
 _ => {}
                             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateApprovalRuleTemplateWithRepositoryError {
@@ -3559,7 +3559,7 @@ impl BatchAssociateApprovalRuleTemplateWithRepositoriesError {
 _ => {}
                             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchAssociateApprovalRuleTemplateWithRepositoriesError {
@@ -3744,7 +3744,7 @@ impl BatchDescribeMergeConflictsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDescribeMergeConflictsError {
@@ -3859,7 +3859,7 @@ impl BatchDisassociateApprovalRuleTemplateFromRepositoriesError {
 _ => {}
                             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDisassociateApprovalRuleTemplateFromRepositoriesError {
@@ -3963,7 +3963,7 @@ impl BatchGetCommitsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetCommitsError {
@@ -4055,7 +4055,7 @@ impl BatchGetRepositoriesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetRepositoriesError {
@@ -4154,7 +4154,7 @@ impl CreateApprovalRuleTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateApprovalRuleTemplateError {
@@ -4275,7 +4275,7 @@ impl CreateBranchError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateBranchError {
@@ -4531,7 +4531,7 @@ impl CreateCommitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCommitError {
@@ -4764,7 +4764,7 @@ impl CreatePullRequestError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePullRequestError {
@@ -4932,7 +4932,7 @@ impl CreatePullRequestApprovalRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePullRequestApprovalRuleError {
@@ -5093,7 +5093,7 @@ impl CreateRepositoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRepositoryError {
@@ -5397,7 +5397,7 @@ impl CreateUnreferencedMergeCommitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUnreferencedMergeCommitError {
@@ -5542,7 +5542,7 @@ impl DeleteApprovalRuleTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteApprovalRuleTemplateError {
@@ -5638,7 +5638,7 @@ impl DeleteBranchError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBranchError {
@@ -5699,7 +5699,7 @@ impl DeleteCommentContentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCommentContentError {
@@ -5843,7 +5843,7 @@ impl DeleteFileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFileError {
@@ -5979,7 +5979,7 @@ impl DeletePullRequestApprovalRuleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePullRequestApprovalRuleError {
@@ -6088,7 +6088,7 @@ impl DeleteRepositoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRepositoryError {
@@ -6278,7 +6278,7 @@ impl DescribeMergeConflictsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMergeConflictsError {
@@ -6438,7 +6438,7 @@ impl DescribePullRequestEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePullRequestEventsError {
@@ -6530,7 +6530,7 @@ impl DisassociateApprovalRuleTemplateFromRepositoryError {
 _ => {}
                             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateApprovalRuleTemplateFromRepositoryError {
@@ -6646,7 +6646,7 @@ impl EvaluatePullRequestApprovalRulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EvaluatePullRequestApprovalRulesError {
@@ -6724,7 +6724,7 @@ impl GetApprovalRuleTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetApprovalRuleTemplateError {
@@ -6819,7 +6819,7 @@ impl GetBlobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBlobError {
@@ -6912,7 +6912,7 @@ impl GetBranchError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBranchError {
@@ -6967,7 +6967,7 @@ impl GetCommentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCommentError {
@@ -7088,7 +7088,7 @@ impl GetCommentsForComparedCommitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCommentsForComparedCommitError {
@@ -7270,7 +7270,7 @@ impl GetCommentsForPullRequestError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCommentsForPullRequestError {
@@ -7394,7 +7394,7 @@ impl GetCommitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCommitError {
@@ -7527,7 +7527,7 @@ impl GetDifferencesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDifferencesError {
@@ -7641,7 +7641,7 @@ impl GetFileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFileError {
@@ -7746,7 +7746,7 @@ impl GetFolderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFolderError {
@@ -7868,7 +7868,7 @@ impl GetMergeCommitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMergeCommitError {
@@ -8059,7 +8059,7 @@ impl GetMergeConflictsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMergeConflictsError {
@@ -8223,7 +8223,7 @@ impl GetMergeOptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMergeOptionsError {
@@ -8325,7 +8325,7 @@ impl GetPullRequestError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPullRequestError {
@@ -8431,7 +8431,7 @@ impl GetPullRequestApprovalStatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPullRequestApprovalStatesError {
@@ -8557,7 +8557,7 @@ impl GetPullRequestOverrideStateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPullRequestOverrideStateError {
@@ -8661,7 +8661,7 @@ impl GetRepositoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRepositoryError {
@@ -8751,7 +8751,7 @@ impl GetRepositoryTriggersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRepositoryTriggersError {
@@ -8803,7 +8803,7 @@ impl ListApprovalRuleTemplatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListApprovalRuleTemplatesError {
@@ -8863,7 +8863,7 @@ impl ListAssociatedApprovalRuleTemplatesForRepositoryError {
 _ => {}
                             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssociatedApprovalRuleTemplatesForRepositoryError {
@@ -8950,7 +8950,7 @@ impl ListBranchesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBranchesError {
@@ -9068,7 +9068,7 @@ impl ListPullRequestsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPullRequestsError {
@@ -9124,7 +9124,7 @@ impl ListRepositoriesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRepositoriesError {
@@ -9233,7 +9233,7 @@ impl ListRepositoriesForApprovalRuleTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRepositoriesForApprovalRuleTemplateError {
@@ -9315,7 +9315,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -9478,7 +9478,7 @@ impl MergeBranchesByFastForwardError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for MergeBranchesByFastForwardError {
@@ -9820,7 +9820,7 @@ impl MergeBranchesBySquashError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for MergeBranchesBySquashError {
@@ -10190,7 +10190,7 @@ impl MergeBranchesByThreeWayError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for MergeBranchesByThreeWayError {
@@ -10444,7 +10444,7 @@ impl MergePullRequestByFastForwardError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for MergePullRequestByFastForwardError {
@@ -10797,7 +10797,7 @@ impl MergePullRequestBySquashError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for MergePullRequestBySquashError {
@@ -11195,7 +11195,7 @@ impl MergePullRequestByThreeWayError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for MergePullRequestByThreeWayError {
@@ -11432,7 +11432,7 @@ impl OverridePullRequestApprovalRulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for OverridePullRequestApprovalRulesError {
@@ -11666,7 +11666,7 @@ impl PostCommentForComparedCommitError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PostCommentForComparedCommitError {
@@ -11946,7 +11946,7 @@ impl PostCommentForPullRequestError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PostCommentForPullRequestError {
@@ -12091,7 +12091,7 @@ impl PostCommentReplyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PostCommentReplyError {
@@ -12289,7 +12289,7 @@ impl PutFileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutFileError {
@@ -12494,7 +12494,7 @@ impl PutRepositoryTriggersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutRepositoryTriggersError {
@@ -12616,7 +12616,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -12802,7 +12802,7 @@ impl TestRepositoryTriggersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TestRepositoryTriggersError {
@@ -12930,7 +12930,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -13017,7 +13017,7 @@ impl UpdateApprovalRuleTemplateContentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateApprovalRuleTemplateContentError {
@@ -13073,7 +13073,7 @@ impl UpdateApprovalRuleTemplateDescriptionError {
 _ => {}
                             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateApprovalRuleTemplateDescriptionError {
@@ -13147,7 +13147,7 @@ impl UpdateApprovalRuleTemplateNameError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateApprovalRuleTemplateNameError {
@@ -13224,7 +13224,7 @@ impl UpdateCommentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateCommentError {
@@ -13334,7 +13334,7 @@ impl UpdateDefaultBranchError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDefaultBranchError {
@@ -13505,7 +13505,7 @@ impl UpdatePullRequestApprovalRuleContentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePullRequestApprovalRuleContentError {
@@ -13697,7 +13697,7 @@ impl UpdatePullRequestApprovalStateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePullRequestApprovalStateError {
@@ -13806,7 +13806,7 @@ impl UpdatePullRequestDescriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePullRequestDescriptionError {
@@ -13922,7 +13922,7 @@ impl UpdatePullRequestStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePullRequestStatusError {
@@ -14017,7 +14017,7 @@ impl UpdatePullRequestTitleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePullRequestTitleError {
@@ -14116,7 +14116,7 @@ impl UpdateRepositoryDescriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRepositoryDescriptionError {
@@ -14195,7 +14195,7 @@ impl UpdateRepositoryNameError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRepositoryNameError {

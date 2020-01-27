@@ -2416,7 +2416,7 @@ impl CompareFacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CompareFacesError {
@@ -2484,7 +2484,7 @@ impl CreateCollectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCollectionError {
@@ -2553,7 +2553,7 @@ impl CreateProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProjectError {
@@ -2632,7 +2632,7 @@ impl CreateProjectVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProjectVersionError {
@@ -2707,7 +2707,7 @@ impl CreateStreamProcessorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateStreamProcessorError {
@@ -2774,7 +2774,7 @@ impl DeleteCollectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCollectionError {
@@ -2838,7 +2838,7 @@ impl DeleteFacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFacesError {
@@ -2911,7 +2911,7 @@ impl DeleteStreamProcessorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteStreamProcessorError {
@@ -2978,7 +2978,7 @@ impl DescribeCollectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCollectionError {
@@ -3057,7 +3057,7 @@ impl DescribeProjectVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProjectVersionsError {
@@ -3128,7 +3128,7 @@ impl DescribeProjectsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProjectsError {
@@ -3200,7 +3200,7 @@ impl DescribeStreamProcessorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStreamProcessorError {
@@ -3293,7 +3293,7 @@ impl DetectCustomLabelsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectCustomLabelsError {
@@ -3372,7 +3372,7 @@ impl DetectFacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectFacesError {
@@ -3446,7 +3446,7 @@ impl DetectLabelsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectLabelsError {
@@ -3537,7 +3537,7 @@ impl DetectModerationLabelsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectModerationLabelsError {
@@ -3616,7 +3616,7 @@ impl DetectTextError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectTextError {
@@ -3682,7 +3682,7 @@ impl GetCelebrityInfoError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCelebrityInfoError {
@@ -3761,7 +3761,7 @@ impl GetCelebrityRecognitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCelebrityRecognitionError {
@@ -3841,7 +3841,7 @@ impl GetContentModerationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetContentModerationError {
@@ -3915,7 +3915,7 @@ impl GetFaceDetectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFaceDetectionError {
@@ -3987,7 +3987,7 @@ impl GetFaceSearchError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFaceSearchError {
@@ -4059,7 +4059,7 @@ impl GetLabelDetectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLabelDetectionError {
@@ -4133,7 +4133,7 @@ impl GetPersonTrackingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPersonTrackingError {
@@ -4213,7 +4213,7 @@ impl IndexFacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for IndexFacesError {
@@ -4285,7 +4285,7 @@ impl ListCollectionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCollectionsError {
@@ -4355,7 +4355,7 @@ impl ListFacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFacesError {
@@ -4424,7 +4424,7 @@ impl ListStreamProcessorsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListStreamProcessorsError {
@@ -4506,7 +4506,7 @@ impl RecognizeCelebritiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RecognizeCelebritiesError {
@@ -4572,7 +4572,7 @@ impl SearchFacesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchFacesError {
@@ -4653,7 +4653,7 @@ impl SearchFacesByImageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchFacesByImageError {
@@ -4751,7 +4751,7 @@ impl StartCelebrityRecognitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartCelebrityRecognitionError {
@@ -4849,7 +4849,7 @@ impl StartContentModerationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartContentModerationError {
@@ -4937,7 +4937,7 @@ impl StartFaceDetectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartFaceDetectionError {
@@ -5028,7 +5028,7 @@ impl StartFaceSearchError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartFaceSearchError {
@@ -5117,7 +5117,7 @@ impl StartLabelDetectionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartLabelDetectionError {
@@ -5207,7 +5207,7 @@ impl StartPersonTrackingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartPersonTrackingError {
@@ -5292,7 +5292,7 @@ impl StartProjectVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartProjectVersionError {
@@ -5369,7 +5369,7 @@ impl StartStreamProcessorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartStreamProcessorError {
@@ -5441,7 +5441,7 @@ impl StopProjectVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopProjectVersionError {
@@ -5517,7 +5517,7 @@ impl StopStreamProcessorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopStreamProcessorError {

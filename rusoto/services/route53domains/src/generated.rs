@@ -921,7 +921,7 @@ impl CheckDomainAvailabilityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CheckDomainAvailabilityError {
@@ -963,7 +963,7 @@ impl CheckDomainTransferabilityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CheckDomainTransferabilityError {
@@ -1006,7 +1006,7 @@ impl DeleteTagsForDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTagsForDomainError {
@@ -1045,7 +1045,7 @@ impl DisableDomainAutoRenewError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableDomainAutoRenewError {
@@ -1106,7 +1106,7 @@ impl DisableDomainTransferLockError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableDomainTransferLockError {
@@ -1156,7 +1156,7 @@ impl EnableDomainAutoRenewError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableDomainAutoRenewError {
@@ -1218,7 +1218,7 @@ impl EnableDomainTransferLockError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableDomainTransferLockError {
@@ -1272,7 +1272,7 @@ impl GetContactReachabilityStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetContactReachabilityStatusError {
@@ -1311,7 +1311,7 @@ impl GetDomainDetailError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDomainDetailError {
@@ -1347,7 +1347,7 @@ impl GetDomainSuggestionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDomainSuggestionsError {
@@ -1378,7 +1378,7 @@ impl GetOperationDetailError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetOperationDetailError {
@@ -1408,7 +1408,7 @@ impl ListDomainsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDomainsError {
@@ -1438,7 +1438,7 @@ impl ListOperationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOperationsError {
@@ -1480,7 +1480,7 @@ impl ListTagsForDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForDomainError {
@@ -1539,7 +1539,7 @@ impl RegisterDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterDomainError {
@@ -1594,7 +1594,7 @@ impl RenewDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RenewDomainError {
@@ -1646,7 +1646,7 @@ impl ResendContactReachabilityEmailError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResendContactReachabilityEmailError {
@@ -1689,7 +1689,7 @@ impl RetrieveDomainAuthCodeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RetrieveDomainAuthCodeError {
@@ -1747,7 +1747,7 @@ impl TransferDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TransferDomainError {
@@ -1808,7 +1808,7 @@ impl UpdateDomainContactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDomainContactError {
@@ -1874,7 +1874,7 @@ impl UpdateDomainContactPrivacyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDomainContactPrivacyError {
@@ -1940,7 +1940,7 @@ impl UpdateDomainNameserversError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDomainNameserversError {
@@ -1988,7 +1988,7 @@ impl UpdateTagsForDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTagsForDomainError {
@@ -2020,7 +2020,7 @@ impl ViewBillingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ViewBillingError {

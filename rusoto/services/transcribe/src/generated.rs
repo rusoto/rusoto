@@ -676,7 +676,7 @@ impl CreateVocabularyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateVocabularyError {
@@ -728,7 +728,7 @@ impl CreateVocabularyFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateVocabularyFilterError {
@@ -775,7 +775,7 @@ impl DeleteTranscriptionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTranscriptionJobError {
@@ -822,7 +822,7 @@ impl DeleteVocabularyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVocabularyError {
@@ -874,7 +874,7 @@ impl DeleteVocabularyFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVocabularyFilterError {
@@ -922,7 +922,7 @@ impl GetTranscriptionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTranscriptionJobError {
@@ -970,7 +970,7 @@ impl GetVocabularyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVocabularyError {
@@ -1018,7 +1018,7 @@ impl GetVocabularyFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVocabularyFilterError {
@@ -1063,7 +1063,7 @@ impl ListTranscriptionJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTranscriptionJobsError {
@@ -1105,7 +1105,7 @@ impl ListVocabulariesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVocabulariesError {
@@ -1149,7 +1149,7 @@ impl ListVocabularyFiltersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVocabularyFiltersError {
@@ -1198,7 +1198,7 @@ impl StartTranscriptionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartTranscriptionJobError {
@@ -1251,7 +1251,7 @@ impl UpdateVocabularyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateVocabularyError {
@@ -1304,7 +1304,7 @@ impl UpdateVocabularyFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateVocabularyFilterError {

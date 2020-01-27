@@ -119,8 +119,7 @@ where
     // TODO: `use futures::future;` isn't used by all crates: only include it when needed
     writeln!(
         writer,
-        "
-        // =================================================================
+        "// =================================================================
         //
         //                           * WARNING *
         //

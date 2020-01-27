@@ -3271,7 +3271,7 @@ impl AddFacetToObjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddFacetToObjectError {
@@ -3343,7 +3343,7 @@ impl ApplySchemaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ApplySchemaError {
@@ -3425,7 +3425,7 @@ impl AttachObjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachObjectError {
@@ -3499,7 +3499,7 @@ impl AttachPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachPolicyError {
@@ -3588,7 +3588,7 @@ impl AttachToIndexError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachToIndexError {
@@ -3668,7 +3668,7 @@ impl AttachTypedLinkError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachTypedLinkError {
@@ -3731,7 +3731,7 @@ impl BatchReadError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchReadError {
@@ -3796,7 +3796,7 @@ impl BatchWriteError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchWriteError {
@@ -3864,7 +3864,7 @@ impl CreateDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDirectoryError {
@@ -3940,7 +3940,7 @@ impl CreateFacetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateFacetError {
@@ -4023,7 +4023,7 @@ impl CreateIndexError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateIndexError {
@@ -4107,7 +4107,7 @@ impl CreateObjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateObjectError {
@@ -4171,7 +4171,7 @@ impl CreateSchemaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSchemaError {
@@ -4256,7 +4256,7 @@ impl CreateTypedLinkFacetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTypedLinkFacetError {
@@ -4331,7 +4331,7 @@ impl DeleteDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDirectoryError {
@@ -4403,7 +4403,7 @@ impl DeleteFacetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFacetError {
@@ -4475,7 +4475,7 @@ impl DeleteObjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteObjectError {
@@ -4542,7 +4542,7 @@ impl DeleteSchemaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSchemaError {
@@ -4614,7 +4614,7 @@ impl DeleteTypedLinkFacetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTypedLinkFacetError {
@@ -4692,7 +4692,7 @@ impl DetachFromIndexError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachFromIndexError {
@@ -4765,7 +4765,7 @@ impl DetachObjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachObjectError {
@@ -4837,7 +4837,7 @@ impl DetachPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachPolicyError {
@@ -4909,7 +4909,7 @@ impl DetachTypedLinkError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachTypedLinkError {
@@ -4976,7 +4976,7 @@ impl DisableDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableDirectoryError {
@@ -5042,7 +5042,7 @@ impl EnableDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableDirectoryError {
@@ -5113,7 +5113,7 @@ impl GetAppliedSchemaVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAppliedSchemaVersionError {
@@ -5168,7 +5168,7 @@ impl GetDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDirectoryError {
@@ -5232,7 +5232,7 @@ impl GetFacetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFacetError {
@@ -5305,7 +5305,7 @@ impl GetLinkAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLinkAttributesError {
@@ -5383,7 +5383,7 @@ impl GetObjectAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetObjectAttributesError {
@@ -5458,7 +5458,7 @@ impl GetObjectInformationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetObjectInformationError {
@@ -5519,7 +5519,7 @@ impl GetSchemaAsJsonError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSchemaAsJsonError {
@@ -5607,7 +5607,7 @@ impl GetTypedLinkFacetInformationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTypedLinkFacetInformationError {
@@ -5688,7 +5688,7 @@ impl ListAppliedSchemaArnsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAppliedSchemaArnsError {
@@ -5760,7 +5760,7 @@ impl ListAttachedIndicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAttachedIndicesError {
@@ -5840,7 +5840,7 @@ impl ListDevelopmentSchemaArnsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDevelopmentSchemaArnsError {
@@ -5901,7 +5901,7 @@ impl ListDirectoriesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDirectoriesError {
@@ -5977,7 +5977,7 @@ impl ListFacetAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFacetAttributesError {
@@ -6044,7 +6044,7 @@ impl ListFacetNamesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFacetNamesError {
@@ -6134,7 +6134,7 @@ impl ListIncomingTypedLinksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListIncomingTypedLinksError {
@@ -6217,7 +6217,7 @@ impl ListIndexError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListIndexError {
@@ -6282,7 +6282,7 @@ impl ListManagedSchemaArnsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListManagedSchemaArnsError {
@@ -6368,7 +6368,7 @@ impl ListObjectAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListObjectAttributesError {
@@ -6450,7 +6450,7 @@ impl ListObjectChildrenError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListObjectChildrenError {
@@ -6533,7 +6533,7 @@ impl ListObjectParentPathsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListObjectParentPathsError {
@@ -6614,7 +6614,7 @@ impl ListObjectParentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListObjectParentsError {
@@ -6691,7 +6691,7 @@ impl ListObjectPoliciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListObjectPoliciesError {
@@ -6782,7 +6782,7 @@ impl ListOutgoingTypedLinksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOutgoingTypedLinksError {
@@ -6870,7 +6870,7 @@ impl ListPolicyAttachmentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPolicyAttachmentsError {
@@ -6950,7 +6950,7 @@ impl ListPublishedSchemaArnsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPublishedSchemaArnsError {
@@ -7022,7 +7022,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -7111,7 +7111,7 @@ impl ListTypedLinkFacetAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTypedLinkFacetAttributesError {
@@ -7196,7 +7196,7 @@ impl ListTypedLinkFacetNamesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTypedLinkFacetNamesError {
@@ -7267,7 +7267,7 @@ impl LookupPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for LookupPolicyError {
@@ -7336,7 +7336,7 @@ impl PublishSchemaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PublishSchemaError {
@@ -7402,7 +7402,7 @@ impl PutSchemaFromJsonError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutSchemaFromJsonError {
@@ -7483,7 +7483,7 @@ impl RemoveFacetFromObjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveFacetFromObjectError {
@@ -7550,7 +7550,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -7616,7 +7616,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -7697,7 +7697,7 @@ impl UpdateFacetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFacetError {
@@ -7781,7 +7781,7 @@ impl UpdateLinkAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateLinkAttributesError {
@@ -7872,7 +7872,7 @@ impl UpdateObjectAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateObjectAttributesError {
@@ -7935,7 +7935,7 @@ impl UpdateSchemaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSchemaError {
@@ -8025,7 +8025,7 @@ impl UpdateTypedLinkFacetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTypedLinkFacetError {
@@ -8111,7 +8111,7 @@ impl UpgradeAppliedSchemaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpgradeAppliedSchemaError {
@@ -8195,7 +8195,7 @@ impl UpgradePublishedSchemaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpgradePublishedSchemaError {

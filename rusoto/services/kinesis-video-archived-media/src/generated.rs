@@ -350,7 +350,7 @@ impl GetDASHStreamingSessionURLError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDASHStreamingSessionURLError {
@@ -446,7 +446,7 @@ impl GetHLSStreamingSessionURLError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetHLSStreamingSessionURLError {
@@ -514,7 +514,7 @@ impl GetMediaForFragmentListError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMediaForFragmentListError {
@@ -562,7 +562,7 @@ impl ListFragmentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFragmentsError {

@@ -847,7 +847,7 @@ impl DescribeEntitiesDetectionV2JobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEntitiesDetectionV2JobError {
@@ -911,7 +911,7 @@ impl DescribePHIDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePHIDetectionJobError {
@@ -971,7 +971,7 @@ impl DetectEntitiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectEntitiesError {
@@ -1033,7 +1033,7 @@ impl DetectEntitiesV2Error {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectEntitiesV2Error {
@@ -1093,7 +1093,7 @@ impl DetectPHIError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectPHIError {
@@ -1153,7 +1153,7 @@ impl InferICD10CMError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InferICD10CMError {
@@ -1213,7 +1213,7 @@ impl InferRxNormError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InferRxNormError {
@@ -1266,7 +1266,7 @@ impl ListEntitiesDetectionV2JobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListEntitiesDetectionV2JobsError {
@@ -1310,7 +1310,7 @@ impl ListPHIDetectionJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPHIDetectionJobsError {
@@ -1367,7 +1367,7 @@ impl StartEntitiesDetectionV2JobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartEntitiesDetectionV2JobError {
@@ -1419,7 +1419,7 @@ impl StartPHIDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartPHIDetectionJobError {
@@ -1470,7 +1470,7 @@ impl StopEntitiesDetectionV2JobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopEntitiesDetectionV2JobError {
@@ -1514,7 +1514,7 @@ impl StopPHIDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopPHIDetectionJobError {

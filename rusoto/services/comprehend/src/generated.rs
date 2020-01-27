@@ -2515,7 +2515,7 @@ impl BatchDetectDominantLanguageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDetectDominantLanguageError {
@@ -2578,7 +2578,7 @@ impl BatchDetectEntitiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDetectEntitiesError {
@@ -2642,7 +2642,7 @@ impl BatchDetectKeyPhrasesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDetectKeyPhrasesError {
@@ -2702,7 +2702,7 @@ impl BatchDetectSentimentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDetectSentimentError {
@@ -2762,7 +2762,7 @@ impl BatchDetectSyntaxError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDetectSyntaxError {
@@ -2815,7 +2815,7 @@ impl ClassifyDocumentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ClassifyDocumentError {
@@ -2899,7 +2899,7 @@ impl CreateDocumentClassifierError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDocumentClassifierError {
@@ -2975,7 +2975,7 @@ impl CreateEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateEndpointError {
@@ -3061,7 +3061,7 @@ impl CreateEntityRecognizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateEntityRecognizerError {
@@ -3135,7 +3135,7 @@ impl DeleteDocumentClassifierError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDocumentClassifierError {
@@ -3190,7 +3190,7 @@ impl DeleteEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteEndpointError {
@@ -3261,7 +3261,7 @@ impl DeleteEntityRecognizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteEntityRecognizerError {
@@ -3321,7 +3321,7 @@ impl DescribeDocumentClassificationJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDocumentClassificationJobError {
@@ -3387,7 +3387,7 @@ impl DescribeDocumentClassifierError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDocumentClassifierError {
@@ -3445,7 +3445,7 @@ impl DescribeDominantLanguageDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDominantLanguageDetectionJobError {
@@ -3501,7 +3501,7 @@ impl DescribeEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEndpointError {
@@ -3559,7 +3559,7 @@ impl DescribeEntitiesDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEntitiesDetectionJobError {
@@ -3615,7 +3615,7 @@ impl DescribeEntityRecognizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEntityRecognizerError {
@@ -3673,7 +3673,7 @@ impl DescribeKeyPhrasesDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeKeyPhrasesDetectionJobError {
@@ -3737,7 +3737,7 @@ impl DescribeSentimentDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSentimentDetectionJobError {
@@ -3797,7 +3797,7 @@ impl DescribeTopicsDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTopicsDetectionJobError {
@@ -3846,7 +3846,7 @@ impl DetectDominantLanguageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectDominantLanguageError {
@@ -3895,7 +3895,7 @@ impl DetectEntitiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectEntitiesError {
@@ -3947,7 +3947,7 @@ impl DetectKeyPhrasesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectKeyPhrasesError {
@@ -3997,7 +3997,7 @@ impl DetectSentimentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectSentimentError {
@@ -4045,7 +4045,7 @@ impl DetectSyntaxError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetectSyntaxError {
@@ -4103,7 +4103,7 @@ impl ListDocumentClassificationJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDocumentClassificationJobsError {
@@ -4165,7 +4165,7 @@ impl ListDocumentClassifiersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDocumentClassifiersError {
@@ -4223,7 +4223,7 @@ impl ListDominantLanguageDetectionJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDominantLanguageDetectionJobsError {
@@ -4274,7 +4274,7 @@ impl ListEndpointsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListEndpointsError {
@@ -4329,7 +4329,7 @@ impl ListEntitiesDetectionJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListEntitiesDetectionJobsError {
@@ -4383,7 +4383,7 @@ impl ListEntityRecognizersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListEntityRecognizersError {
@@ -4441,7 +4441,7 @@ impl ListKeyPhrasesDetectionJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListKeyPhrasesDetectionJobsError {
@@ -4499,7 +4499,7 @@ impl ListSentimentDetectionJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSentimentDetectionJobsError {
@@ -4544,7 +4544,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -4599,7 +4599,7 @@ impl ListTopicsDetectionJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTopicsDetectionJobsError {
@@ -4671,7 +4671,7 @@ impl StartDocumentClassificationJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartDocumentClassificationJobError {
@@ -4743,7 +4743,7 @@ impl StartDominantLanguageDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartDominantLanguageDetectionJobError {
@@ -4821,7 +4821,7 @@ impl StartEntitiesDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartEntitiesDetectionJobError {
@@ -4883,7 +4883,7 @@ impl StartKeyPhrasesDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartKeyPhrasesDetectionJobError {
@@ -4941,7 +4941,7 @@ impl StartSentimentDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartSentimentDetectionJobError {
@@ -4997,7 +4997,7 @@ impl StartTopicsDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartTopicsDetectionJobError {
@@ -5048,7 +5048,7 @@ impl StopDominantLanguageDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopDominantLanguageDetectionJobError {
@@ -5100,7 +5100,7 @@ impl StopEntitiesDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopEntitiesDetectionJobError {
@@ -5150,7 +5150,7 @@ impl StopKeyPhrasesDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopKeyPhrasesDetectionJobError {
@@ -5198,7 +5198,7 @@ impl StopSentimentDetectionJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopSentimentDetectionJobError {
@@ -5255,7 +5255,7 @@ impl StopTrainingDocumentClassifierError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopTrainingDocumentClassifierError {
@@ -5321,7 +5321,7 @@ impl StopTrainingEntityRecognizerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopTrainingEntityRecognizerError {
@@ -5376,7 +5376,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -5432,7 +5432,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -5498,7 +5498,7 @@ impl UpdateEndpointError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateEndpointError {

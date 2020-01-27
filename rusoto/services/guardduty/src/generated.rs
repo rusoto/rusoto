@@ -1980,7 +1980,7 @@ impl AcceptInvitationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AcceptInvitationError {
@@ -2016,7 +2016,7 @@ impl ArchiveFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ArchiveFindingsError {
@@ -2052,7 +2052,7 @@ impl CreateDetectorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDetectorError {
@@ -2088,7 +2088,7 @@ impl CreateFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateFilterError {
@@ -2124,7 +2124,7 @@ impl CreateIPSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateIPSetError {
@@ -2160,7 +2160,7 @@ impl CreateMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMembersError {
@@ -2202,7 +2202,7 @@ impl CreatePublishingDestinationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePublishingDestinationError {
@@ -2242,7 +2242,7 @@ impl CreateSampleFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSampleFindingsError {
@@ -2280,7 +2280,7 @@ impl CreateThreatIntelSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateThreatIntelSetError {
@@ -2318,7 +2318,7 @@ impl DeclineInvitationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeclineInvitationsError {
@@ -2354,7 +2354,7 @@ impl DeleteDetectorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDetectorError {
@@ -2390,7 +2390,7 @@ impl DeleteFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFilterError {
@@ -2426,7 +2426,7 @@ impl DeleteIPSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteIPSetError {
@@ -2464,7 +2464,7 @@ impl DeleteInvitationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteInvitationsError {
@@ -2500,7 +2500,7 @@ impl DeleteMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteMembersError {
@@ -2542,7 +2542,7 @@ impl DeletePublishingDestinationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePublishingDestinationError {
@@ -2582,7 +2582,7 @@ impl DeleteThreatIntelSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteThreatIntelSetError {
@@ -2624,7 +2624,7 @@ impl DescribePublishingDestinationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePublishingDestinationError {
@@ -2668,7 +2668,7 @@ impl DisassociateFromMasterAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateFromMasterAccountError {
@@ -2708,7 +2708,7 @@ impl DisassociateMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateMembersError {
@@ -2744,7 +2744,7 @@ impl GetDetectorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDetectorError {
@@ -2780,7 +2780,7 @@ impl GetFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFilterError {
@@ -2816,7 +2816,7 @@ impl GetFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFindingsError {
@@ -2854,7 +2854,7 @@ impl GetFindingsStatisticsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFindingsStatisticsError {
@@ -2890,7 +2890,7 @@ impl GetIPSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetIPSetError {
@@ -2928,7 +2928,7 @@ impl GetInvitationsCountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInvitationsCountError {
@@ -2966,7 +2966,7 @@ impl GetMasterAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMasterAccountError {
@@ -3002,7 +3002,7 @@ impl GetMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetMembersError {
@@ -3040,7 +3040,7 @@ impl GetThreatIntelSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetThreatIntelSetError {
@@ -3076,7 +3076,7 @@ impl InviteMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InviteMembersError {
@@ -3112,7 +3112,7 @@ impl ListDetectorsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDetectorsError {
@@ -3148,7 +3148,7 @@ impl ListFiltersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFiltersError {
@@ -3184,7 +3184,7 @@ impl ListFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFindingsError {
@@ -3220,7 +3220,7 @@ impl ListIPSetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListIPSetsError {
@@ -3256,7 +3256,7 @@ impl ListInvitationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListInvitationsError {
@@ -3292,7 +3292,7 @@ impl ListMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListMembersError {
@@ -3334,7 +3334,7 @@ impl ListPublishingDestinationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPublishingDestinationsError {
@@ -3374,7 +3374,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -3412,7 +3412,7 @@ impl ListThreatIntelSetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListThreatIntelSetsError {
@@ -3450,7 +3450,7 @@ impl StartMonitoringMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartMonitoringMembersError {
@@ -3488,7 +3488,7 @@ impl StopMonitoringMembersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopMonitoringMembersError {
@@ -3524,7 +3524,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -3562,7 +3562,7 @@ impl UnarchiveFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UnarchiveFindingsError {
@@ -3598,7 +3598,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -3634,7 +3634,7 @@ impl UpdateDetectorError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDetectorError {
@@ -3670,7 +3670,7 @@ impl UpdateFilterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFilterError {
@@ -3708,7 +3708,7 @@ impl UpdateFindingsFeedbackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFindingsFeedbackError {
@@ -3744,7 +3744,7 @@ impl UpdateIPSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateIPSetError {
@@ -3786,7 +3786,7 @@ impl UpdatePublishingDestinationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePublishingDestinationError {
@@ -3826,7 +3826,7 @@ impl UpdateThreatIntelSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateThreatIntelSetError {

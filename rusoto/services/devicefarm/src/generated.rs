@@ -3436,7 +3436,7 @@ impl CreateDevicePoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDevicePoolError {
@@ -3486,7 +3486,7 @@ impl CreateInstanceProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateInstanceProfileError {
@@ -3534,7 +3534,7 @@ impl CreateNetworkProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateNetworkProfileError {
@@ -3587,7 +3587,7 @@ impl CreateProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProjectError {
@@ -3640,7 +3640,7 @@ impl CreateRemoteAccessSessionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRemoteAccessSessionError {
@@ -3675,7 +3675,7 @@ impl CreateTestGridProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTestGridProjectError {
@@ -3715,7 +3715,7 @@ impl CreateTestGridUrlError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTestGridUrlError {
@@ -3762,7 +3762,7 @@ impl CreateUploadError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUploadError {
@@ -3809,7 +3809,7 @@ impl CreateVPCEConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateVPCEConfigurationError {
@@ -3856,7 +3856,7 @@ impl DeleteDevicePoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDevicePoolError {
@@ -3906,7 +3906,7 @@ impl DeleteInstanceProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteInstanceProfileError {
@@ -3954,7 +3954,7 @@ impl DeleteNetworkProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteNetworkProfileError {
@@ -4002,7 +4002,7 @@ impl DeleteProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProjectError {
@@ -4054,7 +4054,7 @@ impl DeleteRemoteAccessSessionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRemoteAccessSessionError {
@@ -4102,7 +4102,7 @@ impl DeleteRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRunError {
@@ -4152,7 +4152,7 @@ impl DeleteTestGridProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTestGridProjectError {
@@ -4200,7 +4200,7 @@ impl DeleteUploadError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUploadError {
@@ -4252,7 +4252,7 @@ impl DeleteVPCEConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteVPCEConfigurationError {
@@ -4300,7 +4300,7 @@ impl GetAccountSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAccountSettingsError {
@@ -4348,7 +4348,7 @@ impl GetDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeviceError {
@@ -4396,7 +4396,7 @@ impl GetDeviceInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeviceInstanceError {
@@ -4444,7 +4444,7 @@ impl GetDevicePoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDevicePoolError {
@@ -4498,7 +4498,7 @@ impl GetDevicePoolCompatibilityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDevicePoolCompatibilityError {
@@ -4546,7 +4546,7 @@ impl GetInstanceProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInstanceProfileError {
@@ -4590,7 +4590,7 @@ impl GetJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetJobError {
@@ -4638,7 +4638,7 @@ impl GetNetworkProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetNetworkProfileError {
@@ -4691,7 +4691,7 @@ impl GetOfferingStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetOfferingStatusError {
@@ -4740,7 +4740,7 @@ impl GetProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetProjectError {
@@ -4792,7 +4792,7 @@ impl GetRemoteAccessSessionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRemoteAccessSessionError {
@@ -4836,7 +4836,7 @@ impl GetRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRunError {
@@ -4884,7 +4884,7 @@ impl GetSuiteError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSuiteError {
@@ -4932,7 +4932,7 @@ impl GetTestError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTestError {
@@ -4975,7 +4975,7 @@ impl GetTestGridProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTestGridProjectError {
@@ -5017,7 +5017,7 @@ impl GetTestGridSessionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTestGridSessionError {
@@ -5064,7 +5064,7 @@ impl GetUploadError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetUploadError {
@@ -5107,7 +5107,7 @@ impl GetVPCEConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetVPCEConfigurationError {
@@ -5164,7 +5164,7 @@ impl InstallToRemoteAccessSessionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InstallToRemoteAccessSessionError {
@@ -5212,7 +5212,7 @@ impl ListArtifactsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListArtifactsError {
@@ -5260,7 +5260,7 @@ impl ListDeviceInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDeviceInstancesError {
@@ -5308,7 +5308,7 @@ impl ListDevicePoolsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDevicePoolsError {
@@ -5356,7 +5356,7 @@ impl ListDevicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDevicesError {
@@ -5404,7 +5404,7 @@ impl ListInstanceProfilesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListInstanceProfilesError {
@@ -5452,7 +5452,7 @@ impl ListJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListJobsError {
@@ -5500,7 +5500,7 @@ impl ListNetworkProfilesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListNetworkProfilesError {
@@ -5557,7 +5557,7 @@ impl ListOfferingPromotionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOfferingPromotionsError {
@@ -5617,7 +5617,7 @@ impl ListOfferingTransactionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOfferingTransactionsError {
@@ -5671,7 +5671,7 @@ impl ListOfferingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOfferingsError {
@@ -5720,7 +5720,7 @@ impl ListProjectsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProjectsError {
@@ -5772,7 +5772,7 @@ impl ListRemoteAccessSessionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRemoteAccessSessionsError {
@@ -5820,7 +5820,7 @@ impl ListRunsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRunsError {
@@ -5868,7 +5868,7 @@ impl ListSamplesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSamplesError {
@@ -5916,7 +5916,7 @@ impl ListSuitesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSuitesError {
@@ -5959,7 +5959,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -5998,7 +5998,7 @@ impl ListTestGridProjectsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTestGridProjectsError {
@@ -6043,7 +6043,7 @@ impl ListTestGridSessionActionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTestGridSessionActionsError {
@@ -6093,7 +6093,7 @@ impl ListTestGridSessionArtifactsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTestGridSessionArtifactsError {
@@ -6137,7 +6137,7 @@ impl ListTestGridSessionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTestGridSessionsError {
@@ -6184,7 +6184,7 @@ impl ListTestsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTestsError {
@@ -6232,7 +6232,7 @@ impl ListUniqueProblemsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUniqueProblemsError {
@@ -6280,7 +6280,7 @@ impl ListUploadsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUploadsError {
@@ -6320,7 +6320,7 @@ impl ListVPCEConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListVPCEConfigurationsError {
@@ -6371,7 +6371,7 @@ impl PurchaseOfferingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PurchaseOfferingError {
@@ -6425,7 +6425,7 @@ impl RenewOfferingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RenewOfferingError {
@@ -6479,7 +6479,7 @@ impl ScheduleRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ScheduleRunError {
@@ -6528,7 +6528,7 @@ impl StopJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopJobError {
@@ -6580,7 +6580,7 @@ impl StopRemoteAccessSessionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopRemoteAccessSessionError {
@@ -6628,7 +6628,7 @@ impl StopRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopRunError {
@@ -6681,7 +6681,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -6725,7 +6725,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -6772,7 +6772,7 @@ impl UpdateDeviceInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDeviceInstanceError {
@@ -6820,7 +6820,7 @@ impl UpdateDevicePoolError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDevicePoolError {
@@ -6870,7 +6870,7 @@ impl UpdateInstanceProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateInstanceProfileError {
@@ -6918,7 +6918,7 @@ impl UpdateNetworkProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateNetworkProfileError {
@@ -6966,7 +6966,7 @@ impl UpdateProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateProjectError {
@@ -7011,7 +7011,7 @@ impl UpdateTestGridProjectError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTestGridProjectError {
@@ -7058,7 +7058,7 @@ impl UpdateUploadError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUploadError {
@@ -7110,7 +7110,7 @@ impl UpdateVPCEConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateVPCEConfigurationError {

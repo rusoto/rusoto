@@ -3474,7 +3474,7 @@ impl AssociateRoleToGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateRoleToGroupError {
@@ -3516,7 +3516,7 @@ impl AssociateServiceRoleToAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateServiceRoleToAccountError {
@@ -3551,7 +3551,7 @@ impl CreateConnectorDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateConnectorDefinitionError {
@@ -3585,7 +3585,7 @@ impl CreateConnectorDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateConnectorDefinitionVersionError {
@@ -3615,7 +3615,7 @@ impl CreateCoreDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCoreDefinitionError {
@@ -3649,7 +3649,7 @@ impl CreateCoreDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCoreDefinitionVersionError {
@@ -3679,7 +3679,7 @@ impl CreateDeploymentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDeploymentError {
@@ -3709,7 +3709,7 @@ impl CreateDeviceDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDeviceDefinitionError {
@@ -3743,7 +3743,7 @@ impl CreateDeviceDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDeviceDefinitionVersionError {
@@ -3773,7 +3773,7 @@ impl CreateFunctionDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateFunctionDefinitionError {
@@ -3807,7 +3807,7 @@ impl CreateFunctionDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateFunctionDefinitionVersionError {
@@ -3837,7 +3837,7 @@ impl CreateGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGroupError {
@@ -3878,7 +3878,7 @@ impl CreateGroupCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGroupCertificateAuthorityError {
@@ -3911,7 +3911,7 @@ impl CreateGroupVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGroupVersionError {
@@ -3941,7 +3941,7 @@ impl CreateLoggerDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateLoggerDefinitionError {
@@ -3975,7 +3975,7 @@ impl CreateLoggerDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateLoggerDefinitionVersionError {
@@ -4005,7 +4005,7 @@ impl CreateResourceDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateResourceDefinitionError {
@@ -4039,7 +4039,7 @@ impl CreateResourceDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateResourceDefinitionVersionError {
@@ -4076,7 +4076,7 @@ impl CreateSoftwareUpdateJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSoftwareUpdateJobError {
@@ -4111,7 +4111,7 @@ impl CreateSubscriptionDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSubscriptionDefinitionError {
@@ -4145,7 +4145,7 @@ impl CreateSubscriptionDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSubscriptionDefinitionVersionError {
@@ -4179,7 +4179,7 @@ impl DeleteConnectorDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteConnectorDefinitionError {
@@ -4209,7 +4209,7 @@ impl DeleteCoreDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCoreDefinitionError {
@@ -4239,7 +4239,7 @@ impl DeleteDeviceDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDeviceDefinitionError {
@@ -4269,7 +4269,7 @@ impl DeleteFunctionDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFunctionDefinitionError {
@@ -4299,7 +4299,7 @@ impl DeleteGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteGroupError {
@@ -4329,7 +4329,7 @@ impl DeleteLoggerDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLoggerDefinitionError {
@@ -4359,7 +4359,7 @@ impl DeleteResourceDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteResourceDefinitionError {
@@ -4393,7 +4393,7 @@ impl DeleteSubscriptionDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSubscriptionDefinitionError {
@@ -4432,7 +4432,7 @@ impl DisassociateRoleFromGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateRoleFromGroupError {
@@ -4469,7 +4469,7 @@ impl DisassociateServiceRoleFromAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateServiceRoleFromAccountError {
@@ -4508,7 +4508,7 @@ impl GetAssociatedRoleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAssociatedRoleError {
@@ -4539,7 +4539,7 @@ impl GetBulkDeploymentStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetBulkDeploymentStatusError {
@@ -4576,7 +4576,7 @@ impl GetConnectivityInfoError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetConnectivityInfoError {
@@ -4607,7 +4607,7 @@ impl GetConnectorDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetConnectorDefinitionError {
@@ -4641,7 +4641,7 @@ impl GetConnectorDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetConnectorDefinitionVersionError {
@@ -4671,7 +4671,7 @@ impl GetCoreDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCoreDefinitionError {
@@ -4701,7 +4701,7 @@ impl GetCoreDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCoreDefinitionVersionError {
@@ -4731,7 +4731,7 @@ impl GetDeploymentStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeploymentStatusError {
@@ -4761,7 +4761,7 @@ impl GetDeviceDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeviceDefinitionError {
@@ -4795,7 +4795,7 @@ impl GetDeviceDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeviceDefinitionVersionError {
@@ -4825,7 +4825,7 @@ impl GetFunctionDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFunctionDefinitionError {
@@ -4859,7 +4859,7 @@ impl GetFunctionDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFunctionDefinitionVersionError {
@@ -4889,7 +4889,7 @@ impl GetGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGroupError {
@@ -4930,7 +4930,7 @@ impl GetGroupCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGroupCertificateAuthorityError {
@@ -4974,7 +4974,7 @@ impl GetGroupCertificateConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGroupCertificateConfigurationError {
@@ -5007,7 +5007,7 @@ impl GetGroupVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGroupVersionError {
@@ -5037,7 +5037,7 @@ impl GetLoggerDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLoggerDefinitionError {
@@ -5071,7 +5071,7 @@ impl GetLoggerDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLoggerDefinitionVersionError {
@@ -5101,7 +5101,7 @@ impl GetResourceDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourceDefinitionError {
@@ -5135,7 +5135,7 @@ impl GetResourceDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetResourceDefinitionVersionError {
@@ -5167,7 +5167,7 @@ impl GetServiceRoleForAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetServiceRoleForAccountError {
@@ -5199,7 +5199,7 @@ impl GetSubscriptionDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSubscriptionDefinitionError {
@@ -5233,7 +5233,7 @@ impl GetSubscriptionDefinitionVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSubscriptionDefinitionVersionError {
@@ -5267,7 +5267,7 @@ impl ListBulkDeploymentDetailedReportsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBulkDeploymentDetailedReportsError {
@@ -5297,7 +5297,7 @@ impl ListBulkDeploymentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBulkDeploymentsError {
@@ -5331,7 +5331,7 @@ impl ListConnectorDefinitionVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListConnectorDefinitionVersionsError {
@@ -5355,7 +5355,7 @@ impl ListConnectorDefinitionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListConnectorDefinitionsError {
@@ -5387,7 +5387,7 @@ impl ListCoreDefinitionVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCoreDefinitionVersionsError {
@@ -5411,7 +5411,7 @@ impl ListCoreDefinitionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCoreDefinitionsError {
@@ -5439,7 +5439,7 @@ impl ListDeploymentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDeploymentsError {
@@ -5473,7 +5473,7 @@ impl ListDeviceDefinitionVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDeviceDefinitionVersionsError {
@@ -5497,7 +5497,7 @@ impl ListDeviceDefinitionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDeviceDefinitionsError {
@@ -5529,7 +5529,7 @@ impl ListFunctionDefinitionVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFunctionDefinitionVersionsError {
@@ -5553,7 +5553,7 @@ impl ListFunctionDefinitionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFunctionDefinitionsError {
@@ -5592,7 +5592,7 @@ impl ListGroupCertificateAuthoritiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGroupCertificateAuthoritiesError {
@@ -5625,7 +5625,7 @@ impl ListGroupVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGroupVersionsError {
@@ -5649,7 +5649,7 @@ impl ListGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGroupsError {
@@ -5681,7 +5681,7 @@ impl ListLoggerDefinitionVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListLoggerDefinitionVersionsError {
@@ -5705,7 +5705,7 @@ impl ListLoggerDefinitionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListLoggerDefinitionsError {
@@ -5737,7 +5737,7 @@ impl ListResourceDefinitionVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResourceDefinitionVersionsError {
@@ -5761,7 +5761,7 @@ impl ListResourceDefinitionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResourceDefinitionsError {
@@ -5793,7 +5793,7 @@ impl ListSubscriptionDefinitionVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSubscriptionDefinitionVersionsError {
@@ -5821,7 +5821,7 @@ impl ListSubscriptionDefinitionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSubscriptionDefinitionsError {
@@ -5849,7 +5849,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -5879,7 +5879,7 @@ impl ResetDeploymentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResetDeploymentsError {
@@ -5909,7 +5909,7 @@ impl StartBulkDeploymentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartBulkDeploymentError {
@@ -5939,7 +5939,7 @@ impl StopBulkDeploymentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopBulkDeploymentError {
@@ -5969,7 +5969,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -5999,7 +5999,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -6036,7 +6036,7 @@ impl UpdateConnectivityInfoError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateConnectivityInfoError {
@@ -6069,7 +6069,7 @@ impl UpdateConnectorDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateConnectorDefinitionError {
@@ -6099,7 +6099,7 @@ impl UpdateCoreDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateCoreDefinitionError {
@@ -6129,7 +6129,7 @@ impl UpdateDeviceDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDeviceDefinitionError {
@@ -6159,7 +6159,7 @@ impl UpdateFunctionDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFunctionDefinitionError {
@@ -6189,7 +6189,7 @@ impl UpdateGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGroupError {
@@ -6230,7 +6230,7 @@ impl UpdateGroupCertificateConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGroupCertificateConfigurationError {
@@ -6265,7 +6265,7 @@ impl UpdateLoggerDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateLoggerDefinitionError {
@@ -6295,7 +6295,7 @@ impl UpdateResourceDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateResourceDefinitionError {
@@ -6329,7 +6329,7 @@ impl UpdateSubscriptionDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSubscriptionDefinitionError {

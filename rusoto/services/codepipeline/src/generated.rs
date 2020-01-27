@@ -2034,7 +2034,7 @@ impl AcknowledgeJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AcknowledgeJobError {
@@ -2081,7 +2081,7 @@ impl AcknowledgeThirdPartyJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AcknowledgeThirdPartyJobError {
@@ -2132,7 +2132,7 @@ impl CreateCustomActionTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCustomActionTypeError {
@@ -2215,7 +2215,7 @@ impl CreatePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePipelineError {
@@ -2255,7 +2255,7 @@ impl DeleteCustomActionTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCustomActionTypeError {
@@ -2289,7 +2289,7 @@ impl DeletePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePipelineError {
@@ -2321,7 +2321,7 @@ impl DeleteWebhookError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteWebhookError {
@@ -2355,7 +2355,7 @@ impl DeregisterWebhookWithThirdPartyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterWebhookWithThirdPartyError {
@@ -2396,7 +2396,7 @@ impl DisableStageTransitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableStageTransitionError {
@@ -2434,7 +2434,7 @@ impl EnableStageTransitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableStageTransitionError {
@@ -2465,7 +2465,7 @@ impl GetJobDetailsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetJobDetailsError {
@@ -2500,7 +2500,7 @@ impl GetPipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPipelineError {
@@ -2540,7 +2540,7 @@ impl GetPipelineExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPipelineExecutionError {
@@ -2573,7 +2573,7 @@ impl GetPipelineStateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPipelineStateError {
@@ -2615,7 +2615,7 @@ impl GetThirdPartyJobDetailsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetThirdPartyJobDetailsError {
@@ -2663,7 +2663,7 @@ impl ListActionExecutionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListActionExecutionsError {
@@ -2697,7 +2697,7 @@ impl ListActionTypesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListActionTypesError {
@@ -2736,7 +2736,7 @@ impl ListPipelineExecutionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPipelineExecutionsError {
@@ -2767,7 +2767,7 @@ impl ListPipelinesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPipelinesError {
@@ -2811,7 +2811,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -2843,7 +2843,7 @@ impl ListWebhooksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListWebhooksError {
@@ -2873,7 +2873,7 @@ impl PollForJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PollForJobsError {
@@ -2905,7 +2905,7 @@ impl PollForThirdPartyJobsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PollForThirdPartyJobsError {
@@ -2945,7 +2945,7 @@ impl PutActionRevisionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutActionRevisionError {
@@ -3001,7 +3001,7 @@ impl PutApprovalResultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutApprovalResultError {
@@ -3040,7 +3040,7 @@ impl PutJobFailureResultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutJobFailureResultError {
@@ -3083,7 +3083,7 @@ impl PutJobSuccessResultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutJobSuccessResultError {
@@ -3135,7 +3135,7 @@ impl PutThirdPartyJobFailureResultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutThirdPartyJobFailureResultError {
@@ -3189,7 +3189,7 @@ impl PutThirdPartyJobSuccessResultError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutThirdPartyJobSuccessResultError {
@@ -3259,7 +3259,7 @@ impl PutWebhookError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutWebhookError {
@@ -3301,7 +3301,7 @@ impl RegisterWebhookWithThirdPartyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterWebhookWithThirdPartyError {
@@ -3354,7 +3354,7 @@ impl RetryStageExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RetryStageExecutionError {
@@ -3391,7 +3391,7 @@ impl StartPipelineExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartPipelineExecutionError {
@@ -3437,7 +3437,7 @@ impl StopPipelineExecutionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopPipelineExecutionError {
@@ -3491,7 +3491,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -3542,7 +3542,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -3601,7 +3601,7 @@ impl UpdatePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePipelineError {

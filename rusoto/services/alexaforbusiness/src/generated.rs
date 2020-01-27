@@ -3526,7 +3526,7 @@ impl ApproveSkillError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ApproveSkillError {
@@ -3562,7 +3562,7 @@ impl AssociateContactWithAddressBookError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateContactWithAddressBookError {
@@ -3612,7 +3612,7 @@ impl AssociateDeviceWithNetworkProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateDeviceWithNetworkProfileError {
@@ -3664,7 +3664,7 @@ impl AssociateDeviceWithRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateDeviceWithRoomError {
@@ -3702,7 +3702,7 @@ impl AssociateSkillGroupWithRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateSkillGroupWithRoomError {
@@ -3752,7 +3752,7 @@ impl AssociateSkillWithSkillGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateSkillWithSkillGroupError {
@@ -3793,7 +3793,7 @@ impl AssociateSkillWithUsersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateSkillWithUsersError {
@@ -3831,7 +3831,7 @@ impl CreateAddressBookError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAddressBookError {
@@ -3866,7 +3866,7 @@ impl CreateBusinessReportScheduleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateBusinessReportScheduleError {
@@ -3898,7 +3898,7 @@ impl CreateConferenceProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateConferenceProviderError {
@@ -3933,7 +3933,7 @@ impl CreateContactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateContactError {
@@ -3969,7 +3969,7 @@ impl CreateGatewayGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGatewayGroupError {
@@ -4026,7 +4026,7 @@ impl CreateNetworkProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateNetworkProfileError {
@@ -4076,7 +4076,7 @@ impl CreateProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProfileError {
@@ -4113,7 +4113,7 @@ impl CreateRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRoomError {
@@ -4156,7 +4156,7 @@ impl CreateSkillGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSkillGroupError {
@@ -4198,7 +4198,7 @@ impl CreateUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserError {
@@ -4237,7 +4237,7 @@ impl DeleteAddressBookError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAddressBookError {
@@ -4279,7 +4279,7 @@ impl DeleteBusinessReportScheduleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteBusinessReportScheduleError {
@@ -4312,7 +4312,7 @@ impl DeleteConferenceProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteConferenceProviderError {
@@ -4349,7 +4349,7 @@ impl DeleteContactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteContactError {
@@ -4392,7 +4392,7 @@ impl DeleteDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDeviceError {
@@ -4436,7 +4436,7 @@ impl DeleteDeviceUsageDataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDeviceUsageDataError {
@@ -4470,7 +4470,7 @@ impl DeleteGatewayGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteGatewayGroupError {
@@ -4512,7 +4512,7 @@ impl DeleteNetworkProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteNetworkProfileError {
@@ -4551,7 +4551,7 @@ impl DeleteProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProfileError {
@@ -4587,7 +4587,7 @@ impl DeleteRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRoomError {
@@ -4620,7 +4620,7 @@ impl DeleteRoomSkillParameterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRoomSkillParameterError {
@@ -4659,7 +4659,7 @@ impl DeleteSkillAuthorizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSkillAuthorizationError {
@@ -4699,7 +4699,7 @@ impl DeleteSkillGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSkillGroupError {
@@ -4735,7 +4735,7 @@ impl DeleteUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserError {
@@ -4762,7 +4762,7 @@ impl DisassociateContactFromAddressBookError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateContactFromAddressBookError {
@@ -4801,7 +4801,7 @@ impl DisassociateDeviceFromRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateDeviceFromRoomError {
@@ -4847,7 +4847,7 @@ impl DisassociateSkillFromSkillGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateSkillFromSkillGroupError {
@@ -4889,7 +4889,7 @@ impl DisassociateSkillFromUsersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateSkillFromUsersError {
@@ -4926,7 +4926,7 @@ impl DisassociateSkillGroupFromRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateSkillGroupFromRoomError {
@@ -4958,7 +4958,7 @@ impl ForgetSmartHomeAppliancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ForgetSmartHomeAppliancesError {
@@ -4988,7 +4988,7 @@ impl GetAddressBookError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAddressBookError {
@@ -5018,7 +5018,7 @@ impl GetConferencePreferenceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetConferencePreferenceError {
@@ -5048,7 +5048,7 @@ impl GetConferenceProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetConferenceProviderError {
@@ -5078,7 +5078,7 @@ impl GetContactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetContactError {
@@ -5108,7 +5108,7 @@ impl GetDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDeviceError {
@@ -5138,7 +5138,7 @@ impl GetGatewayError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGatewayError {
@@ -5168,7 +5168,7 @@ impl GetGatewayGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetGatewayGroupError {
@@ -5200,7 +5200,7 @@ impl GetInvitationConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetInvitationConfigurationError {
@@ -5237,7 +5237,7 @@ impl GetNetworkProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetNetworkProfileError {
@@ -5270,7 +5270,7 @@ impl GetProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetProfileError {
@@ -5300,7 +5300,7 @@ impl GetRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRoomError {
@@ -5330,7 +5330,7 @@ impl GetRoomSkillParameterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRoomSkillParameterError {
@@ -5360,7 +5360,7 @@ impl GetSkillGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSkillGroupError {
@@ -5386,7 +5386,7 @@ impl ListBusinessReportSchedulesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBusinessReportSchedulesError {
@@ -5408,7 +5408,7 @@ impl ListConferenceProvidersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListConferenceProvidersError {
@@ -5436,7 +5436,7 @@ impl ListDeviceEventsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDeviceEventsError {
@@ -5460,7 +5460,7 @@ impl ListGatewayGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGatewayGroupsError {
@@ -5482,7 +5482,7 @@ impl ListGatewaysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGatewaysError {
@@ -5504,7 +5504,7 @@ impl ListSkillsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSkillsError {
@@ -5526,7 +5526,7 @@ impl ListSkillsStoreCategoriesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSkillsStoreCategoriesError {
@@ -5550,7 +5550,7 @@ impl ListSkillsStoreSkillsByCategoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSkillsStoreSkillsByCategoryError {
@@ -5578,7 +5578,7 @@ impl ListSmartHomeAppliancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSmartHomeAppliancesError {
@@ -5608,7 +5608,7 @@ impl ListTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsError {
@@ -5638,7 +5638,7 @@ impl PutConferencePreferenceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutConferencePreferenceError {
@@ -5677,7 +5677,7 @@ impl PutInvitationConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutInvitationConfigurationError {
@@ -5712,7 +5712,7 @@ impl PutRoomSkillParameterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutRoomSkillParameterError {
@@ -5749,7 +5749,7 @@ impl PutSkillAuthorizationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutSkillAuthorizationError {
@@ -5792,7 +5792,7 @@ impl RegisterAVSDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterAVSDeviceError {
@@ -5829,7 +5829,7 @@ impl RejectSkillError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RejectSkillError {
@@ -5860,7 +5860,7 @@ impl ResolveRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResolveRoomError {
@@ -5897,7 +5897,7 @@ impl RevokeInvitationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RevokeInvitationError {
@@ -5922,7 +5922,7 @@ impl SearchAddressBooksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchAddressBooksError {
@@ -5944,7 +5944,7 @@ impl SearchContactsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchContactsError {
@@ -5966,7 +5966,7 @@ impl SearchDevicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchDevicesError {
@@ -5988,7 +5988,7 @@ impl SearchNetworkProfilesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchNetworkProfilesError {
@@ -6010,7 +6010,7 @@ impl SearchProfilesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchProfilesError {
@@ -6032,7 +6032,7 @@ impl SearchRoomsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchRoomsError {
@@ -6054,7 +6054,7 @@ impl SearchSkillGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchSkillGroupsError {
@@ -6076,7 +6076,7 @@ impl SearchUsersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchUsersError {
@@ -6109,7 +6109,7 @@ impl SendAnnouncementError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SendAnnouncementError {
@@ -6152,7 +6152,7 @@ impl SendInvitationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SendInvitationError {
@@ -6184,7 +6184,7 @@ impl StartDeviceSyncError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartDeviceSyncError {
@@ -6218,7 +6218,7 @@ impl StartSmartHomeApplianceDiscoveryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartSmartHomeApplianceDiscoveryError {
@@ -6248,7 +6248,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -6278,7 +6278,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -6320,7 +6320,7 @@ impl UpdateAddressBookError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAddressBookError {
@@ -6363,7 +6363,7 @@ impl UpdateBusinessReportScheduleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateBusinessReportScheduleError {
@@ -6396,7 +6396,7 @@ impl UpdateConferenceProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateConferenceProviderError {
@@ -6433,7 +6433,7 @@ impl UpdateContactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateContactError {
@@ -6474,7 +6474,7 @@ impl UpdateDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDeviceError {
@@ -6511,7 +6511,7 @@ impl UpdateGatewayError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGatewayError {
@@ -6547,7 +6547,7 @@ impl UpdateGatewayGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateGatewayGroupError {
@@ -6604,7 +6604,7 @@ impl UpdateNetworkProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateNetworkProfileError {
@@ -6654,7 +6654,7 @@ impl UpdateProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateProfileError {
@@ -6691,7 +6691,7 @@ impl UpdateRoomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRoomError {
@@ -6734,7 +6734,7 @@ impl UpdateSkillGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateSkillGroupError {

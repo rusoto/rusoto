@@ -1604,7 +1604,7 @@ impl AcceptQualificationRequestError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AcceptQualificationRequestError {
@@ -1640,7 +1640,7 @@ impl ApproveAssignmentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ApproveAssignmentError {
@@ -1682,7 +1682,7 @@ impl AssociateQualificationWithWorkerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateQualificationWithWorkerError {
@@ -1728,7 +1728,7 @@ impl CreateAdditionalAssignmentsForHITError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAdditionalAssignmentsForHITError {
@@ -1768,7 +1768,7 @@ impl CreateHITError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateHITError {
@@ -1804,7 +1804,7 @@ impl CreateHITTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateHITTypeError {
@@ -1840,7 +1840,7 @@ impl CreateHITWithHITTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateHITWithHITTypeError {
@@ -1880,7 +1880,7 @@ impl CreateQualificationTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateQualificationTypeError {
@@ -1916,7 +1916,7 @@ impl CreateWorkerBlockError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateWorkerBlockError {
@@ -1952,7 +1952,7 @@ impl DeleteHITError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteHITError {
@@ -1992,7 +1992,7 @@ impl DeleteQualificationTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteQualificationTypeError {
@@ -2028,7 +2028,7 @@ impl DeleteWorkerBlockError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteWorkerBlockError {
@@ -2070,7 +2070,7 @@ impl DisassociateQualificationFromWorkerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateQualificationFromWorkerError {
@@ -2110,7 +2110,7 @@ impl GetAccountBalanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAccountBalanceError {
@@ -2146,7 +2146,7 @@ impl GetAssignmentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAssignmentError {
@@ -2182,7 +2182,7 @@ impl GetFileUploadURLError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetFileUploadURLError {
@@ -2214,7 +2214,7 @@ impl GetHITError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetHITError {
@@ -2250,7 +2250,7 @@ impl GetQualificationScoreError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetQualificationScoreError {
@@ -2286,7 +2286,7 @@ impl GetQualificationTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetQualificationTypeError {
@@ -2322,7 +2322,7 @@ impl ListAssignmentsForHITError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssignmentsForHITError {
@@ -2358,7 +2358,7 @@ impl ListBonusPaymentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBonusPaymentsError {
@@ -2394,7 +2394,7 @@ impl ListHITsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListHITsError {
@@ -2436,7 +2436,7 @@ impl ListHITsForQualificationTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListHITsForQualificationTypeError {
@@ -2476,7 +2476,7 @@ impl ListQualificationRequestsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListQualificationRequestsError {
@@ -2512,7 +2512,7 @@ impl ListQualificationTypesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListQualificationTypesError {
@@ -2554,7 +2554,7 @@ impl ListReviewPolicyResultsForHITError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListReviewPolicyResultsForHITError {
@@ -2590,7 +2590,7 @@ impl ListReviewableHITsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListReviewableHITsError {
@@ -2626,7 +2626,7 @@ impl ListWorkerBlocksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListWorkerBlocksError {
@@ -2668,7 +2668,7 @@ impl ListWorkersWithQualificationTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListWorkersWithQualificationTypeError {
@@ -2708,7 +2708,7 @@ impl NotifyWorkersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for NotifyWorkersError {
@@ -2744,7 +2744,7 @@ impl RejectAssignmentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RejectAssignmentError {
@@ -2786,7 +2786,7 @@ impl RejectQualificationRequestError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RejectQualificationRequestError {
@@ -2822,7 +2822,7 @@ impl SendBonusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SendBonusError {
@@ -2862,7 +2862,7 @@ impl SendTestEventNotificationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SendTestEventNotificationError {
@@ -2898,7 +2898,7 @@ impl UpdateExpirationForHITError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateExpirationForHITError {
@@ -2934,7 +2934,7 @@ impl UpdateHITReviewStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateHITReviewStatusError {
@@ -2970,7 +2970,7 @@ impl UpdateHITTypeOfHITError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateHITTypeOfHITError {
@@ -3012,7 +3012,7 @@ impl UpdateNotificationSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateNotificationSettingsError {
@@ -3052,7 +3052,7 @@ impl UpdateQualificationTypeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateQualificationTypeError {

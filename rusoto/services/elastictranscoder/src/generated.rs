@@ -1468,7 +1468,7 @@ impl CancelJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelJobError {
@@ -1522,7 +1522,7 @@ impl CreateJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateJobError {
@@ -1576,7 +1576,7 @@ impl CreatePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePipelineError {
@@ -1625,7 +1625,7 @@ impl CreatePresetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePresetError {
@@ -1678,7 +1678,7 @@ impl DeletePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePipelineError {
@@ -1727,7 +1727,7 @@ impl DeletePresetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePresetError {
@@ -1777,7 +1777,7 @@ impl ListJobsByPipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListJobsByPipelineError {
@@ -1827,7 +1827,7 @@ impl ListJobsByStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListJobsByStatusError {
@@ -1870,7 +1870,7 @@ impl ListPipelinesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPipelinesError {
@@ -1912,7 +1912,7 @@ impl ListPresetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPresetsError {
@@ -1959,7 +1959,7 @@ impl ReadJobError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ReadJobError {
@@ -2007,7 +2007,7 @@ impl ReadPipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ReadPipelineError {
@@ -2055,7 +2055,7 @@ impl ReadPresetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ReadPresetError {
@@ -2103,7 +2103,7 @@ impl TestRoleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TestRoleError {
@@ -2156,7 +2156,7 @@ impl UpdatePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePipelineError {
@@ -2222,7 +2222,7 @@ impl UpdatePipelineNotificationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePipelineNotificationsError {
@@ -2284,7 +2284,7 @@ impl UpdatePipelineStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePipelineStatusError {

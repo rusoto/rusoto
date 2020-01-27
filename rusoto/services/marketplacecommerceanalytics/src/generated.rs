@@ -123,7 +123,7 @@ impl GenerateDataSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GenerateDataSetError {
@@ -155,7 +155,7 @@ impl StartSupportDataExportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartSupportDataExportError {

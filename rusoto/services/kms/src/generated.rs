@@ -1541,7 +1541,7 @@ impl CancelKeyDeletionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelKeyDeletionError {
@@ -1603,7 +1603,7 @@ impl ConnectCustomKeyStoreError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ConnectCustomKeyStoreError {
@@ -1673,7 +1673,7 @@ impl CreateAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAliasError {
@@ -1751,7 +1751,7 @@ impl CreateCustomKeyStoreError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCustomKeyStoreError {
@@ -1826,7 +1826,7 @@ impl CreateGrantError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateGrantError {
@@ -1910,7 +1910,7 @@ impl CreateKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateKeyError {
@@ -1996,7 +1996,7 @@ impl DecryptError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DecryptError {
@@ -2050,7 +2050,7 @@ impl DeleteAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAliasError {
@@ -2104,7 +2104,7 @@ impl DeleteCustomKeyStoreError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteCustomKeyStoreError {
@@ -2174,7 +2174,7 @@ impl DeleteImportedKeyMaterialError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteImportedKeyMaterialError {
@@ -2218,7 +2218,7 @@ impl DescribeCustomKeyStoresError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCustomKeyStoresError {
@@ -2266,7 +2266,7 @@ impl DescribeKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeKeyError {
@@ -2319,7 +2319,7 @@ impl DisableKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableKeyError {
@@ -2387,7 +2387,7 @@ impl DisableKeyRotationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableKeyRotationError {
@@ -2439,7 +2439,7 @@ impl DisconnectCustomKeyStoreError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisconnectCustomKeyStoreError {
@@ -2500,7 +2500,7 @@ impl EnableKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableKeyError {
@@ -2567,7 +2567,7 @@ impl EnableKeyRotationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableKeyRotationError {
@@ -2638,7 +2638,7 @@ impl EncryptError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EncryptError {
@@ -2710,7 +2710,7 @@ impl GenerateDataKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GenerateDataKeyError {
@@ -2786,7 +2786,7 @@ impl GenerateDataKeyPairError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GenerateDataKeyPairError {
@@ -2876,7 +2876,7 @@ impl GenerateDataKeyPairWithoutPlaintextError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GenerateDataKeyPairWithoutPlaintextError {
@@ -2978,7 +2978,7 @@ impl GenerateDataKeyWithoutPlaintextError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GenerateDataKeyWithoutPlaintextError {
@@ -3044,7 +3044,7 @@ impl GenerateRandomError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GenerateRandomError {
@@ -3097,7 +3097,7 @@ impl GetKeyPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetKeyPolicyError {
@@ -3162,7 +3162,7 @@ impl GetKeyRotationStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetKeyRotationStatusError {
@@ -3228,7 +3228,7 @@ impl GetParametersForImportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetParametersForImportError {
@@ -3308,7 +3308,7 @@ impl GetPublicKeyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPublicKeyError {
@@ -3400,7 +3400,7 @@ impl ImportKeyMaterialError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportKeyMaterialError {
@@ -3459,7 +3459,7 @@ impl ListAliasesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAliasesError {
@@ -3518,7 +3518,7 @@ impl ListGrantsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListGrantsError {
@@ -3573,7 +3573,7 @@ impl ListKeyPoliciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListKeyPoliciesError {
@@ -3617,7 +3617,7 @@ impl ListKeysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListKeysError {
@@ -3664,7 +3664,7 @@ impl ListResourceTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResourceTagsError {
@@ -3719,7 +3719,7 @@ impl ListRetirableGrantsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRetirableGrantsError {
@@ -3790,7 +3790,7 @@ impl PutKeyPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutKeyPolicyError {
@@ -3872,7 +3872,7 @@ impl ReEncryptError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ReEncryptError {
@@ -3941,7 +3941,7 @@ impl RetireGrantError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RetireGrantError {
@@ -4002,7 +4002,7 @@ impl RevokeGrantError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RevokeGrantError {
@@ -4059,7 +4059,7 @@ impl ScheduleKeyDeletionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ScheduleKeyDeletionError {
@@ -4124,7 +4124,7 @@ impl SignError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SignError {
@@ -4184,7 +4184,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -4237,7 +4237,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -4286,7 +4286,7 @@ impl UpdateAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAliasError {
@@ -4368,7 +4368,7 @@ impl UpdateCustomKeyStoreError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateCustomKeyStoreError {
@@ -4437,7 +4437,7 @@ impl UpdateKeyDescriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateKeyDescriptionError {
@@ -4507,7 +4507,7 @@ impl VerifyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for VerifyError {

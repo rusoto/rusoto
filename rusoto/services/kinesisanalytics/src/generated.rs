@@ -1355,7 +1355,7 @@ impl AddApplicationCloudWatchLoggingOptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddApplicationCloudWatchLoggingOptionError {
@@ -1430,7 +1430,7 @@ impl AddApplicationInputError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddApplicationInputError {
@@ -1501,7 +1501,7 @@ impl AddApplicationInputProcessingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddApplicationInputProcessingConfigurationError {
@@ -1573,7 +1573,7 @@ impl AddApplicationOutputError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddApplicationOutputError {
@@ -1639,7 +1639,7 @@ impl AddApplicationReferenceDataSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddApplicationReferenceDataSourceError {
@@ -1710,7 +1710,7 @@ impl CreateApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateApplicationError {
@@ -1764,7 +1764,7 @@ impl DeleteApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteApplicationError {
@@ -1833,7 +1833,7 @@ impl DeleteApplicationCloudWatchLoggingOptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteApplicationCloudWatchLoggingOptionError {
@@ -1917,7 +1917,7 @@ impl DeleteApplicationInputProcessingConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteApplicationInputProcessingConfigurationError {
@@ -1991,7 +1991,7 @@ impl DeleteApplicationOutputError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteApplicationOutputError {
@@ -2059,7 +2059,7 @@ impl DeleteApplicationReferenceDataSourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteApplicationReferenceDataSourceError {
@@ -2112,7 +2112,7 @@ impl DescribeApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeApplicationError {
@@ -2164,7 +2164,7 @@ impl DiscoverInputSchemaError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DiscoverInputSchemaError {
@@ -2193,7 +2193,7 @@ impl ListApplicationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListApplicationsError {
@@ -2235,7 +2235,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -2291,7 +2291,7 @@ impl StartApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartApplicationError {
@@ -2339,7 +2339,7 @@ impl StopApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopApplicationError {
@@ -2391,7 +2391,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -2447,7 +2447,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -2510,7 +2510,7 @@ impl UpdateApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateApplicationError {

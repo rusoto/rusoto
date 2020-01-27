@@ -3731,7 +3731,7 @@ impl AcceptPortfolioShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AcceptPortfolioShareError {
@@ -3788,7 +3788,7 @@ impl AssociateBudgetWithResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateBudgetWithResourceError {
@@ -3843,7 +3843,7 @@ impl AssociatePrincipalWithPortfolioError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociatePrincipalWithPortfolioError {
@@ -3899,7 +3899,7 @@ impl AssociateProductWithPortfolioError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateProductWithPortfolioError {
@@ -3957,7 +3957,7 @@ impl AssociateServiceActionWithProvisioningArtifactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateServiceActionWithProvisioningArtifactError {
@@ -4034,7 +4034,7 @@ impl AssociateTagOptionWithResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateTagOptionWithResourceError {
@@ -4083,7 +4083,7 @@ impl BatchAssociateServiceActionWithProvisioningArtifactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchAssociateServiceActionWithProvisioningArtifactError {
@@ -4119,7 +4119,7 @@ impl BatchDisassociateServiceActionFromProvisioningArtifactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDisassociateServiceActionFromProvisioningArtifactError {
@@ -4156,7 +4156,7 @@ impl CopyProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CopyProductError {
@@ -4202,7 +4202,7 @@ impl CreateConstraintError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateConstraintError {
@@ -4247,7 +4247,7 @@ impl CreatePortfolioError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePortfolioError {
@@ -4305,7 +4305,7 @@ impl CreatePortfolioShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePortfolioShareError {
@@ -4349,7 +4349,7 @@ impl CreateProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProductError {
@@ -4399,7 +4399,7 @@ impl CreateProvisionedProductPlanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProvisionedProductPlanError {
@@ -4453,7 +4453,7 @@ impl CreateProvisioningArtifactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProvisioningArtifactError {
@@ -4492,7 +4492,7 @@ impl CreateServiceActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateServiceActionError {
@@ -4535,7 +4535,7 @@ impl CreateTagOptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTagOptionError {
@@ -4572,7 +4572,7 @@ impl DeleteConstraintError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteConstraintError {
@@ -4620,7 +4620,7 @@ impl DeletePortfolioError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePortfolioError {
@@ -4674,7 +4674,7 @@ impl DeletePortfolioShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePortfolioShareError {
@@ -4722,7 +4722,7 @@ impl DeleteProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProductError {
@@ -4766,7 +4766,7 @@ impl DeleteProvisionedProductPlanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProvisionedProductPlanError {
@@ -4819,7 +4819,7 @@ impl DeleteProvisioningArtifactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProvisioningArtifactError {
@@ -4858,7 +4858,7 @@ impl DeleteServiceActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteServiceActionError {
@@ -4901,7 +4901,7 @@ impl DeleteTagOptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTagOptionError {
@@ -4933,7 +4933,7 @@ impl DescribeConstraintError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConstraintError {
@@ -4965,7 +4965,7 @@ impl DescribeCopyProductStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCopyProductStatusError {
@@ -4995,7 +4995,7 @@ impl DescribePortfolioError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePortfolioError {
@@ -5043,7 +5043,7 @@ impl DescribePortfolioShareStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePortfolioShareStatusError {
@@ -5086,7 +5086,7 @@ impl DescribeProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProductError {
@@ -5119,7 +5119,7 @@ impl DescribeProductAsAdminError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProductAsAdminError {
@@ -5158,7 +5158,7 @@ impl DescribeProductViewError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProductViewError {
@@ -5193,7 +5193,7 @@ impl DescribeProvisionedProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProvisionedProductError {
@@ -5234,7 +5234,7 @@ impl DescribeProvisionedProductPlanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProvisionedProductPlanError {
@@ -5273,7 +5273,7 @@ impl DescribeProvisioningArtifactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProvisioningArtifactError {
@@ -5316,7 +5316,7 @@ impl DescribeProvisioningParametersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeProvisioningParametersError {
@@ -5351,7 +5351,7 @@ impl DescribeRecordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRecordError {
@@ -5383,7 +5383,7 @@ impl DescribeServiceActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeServiceActionError {
@@ -5424,7 +5424,7 @@ impl DescribeServiceActionExecutionParametersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeServiceActionExecutionParametersError {
@@ -5466,7 +5466,7 @@ impl DescribeTagOptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTagOptionError {
@@ -5515,7 +5515,7 @@ impl DisableAWSOrganizationsAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableAWSOrganizationsAccessError {
@@ -5555,7 +5555,7 @@ impl DisassociateBudgetFromResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateBudgetFromResourceError {
@@ -5598,7 +5598,7 @@ impl DisassociatePrincipalFromPortfolioError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociatePrincipalFromPortfolioError {
@@ -5651,7 +5651,7 @@ impl DisassociateProductFromPortfolioError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateProductFromPortfolioError {
@@ -5695,7 +5695,7 @@ impl DisassociateServiceActionFromProvisioningArtifactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateServiceActionFromProvisioningArtifactError {
@@ -5738,7 +5738,7 @@ impl DisassociateTagOptionFromResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateTagOptionFromResourceError {
@@ -5791,7 +5791,7 @@ impl EnableAWSOrganizationsAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableAWSOrganizationsAccessError {
@@ -5845,7 +5845,7 @@ impl ExecuteProvisionedProductPlanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ExecuteProvisionedProductPlanError {
@@ -5899,7 +5899,7 @@ impl ExecuteProvisionedProductServiceActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ExecuteProvisionedProductServiceActionError {
@@ -5948,7 +5948,7 @@ impl GetAWSOrganizationsAccessStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAWSOrganizationsAccessStatusError {
@@ -5994,7 +5994,7 @@ impl ListAcceptedPortfolioSharesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAcceptedPortfolioSharesError {
@@ -6038,7 +6038,7 @@ impl ListBudgetsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListBudgetsForResourceError {
@@ -6080,7 +6080,7 @@ impl ListConstraintsForPortfolioError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListConstraintsForPortfolioError {
@@ -6118,7 +6118,7 @@ impl ListLaunchPathsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListLaunchPathsError {
@@ -6167,7 +6167,7 @@ impl ListOrganizationPortfolioAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListOrganizationPortfolioAccessError {
@@ -6207,7 +6207,7 @@ impl ListPortfolioAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPortfolioAccessError {
@@ -6237,7 +6237,7 @@ impl ListPortfoliosError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPortfoliosError {
@@ -6276,7 +6276,7 @@ impl ListPortfoliosForProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPortfoliosForProductError {
@@ -6318,7 +6318,7 @@ impl ListPrincipalsForPortfolioError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPrincipalsForPortfolioError {
@@ -6360,7 +6360,7 @@ impl ListProvisionedProductPlansError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProvisionedProductPlansError {
@@ -6402,7 +6402,7 @@ impl ListProvisioningArtifactsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProvisioningArtifactsError {
@@ -6444,7 +6444,7 @@ impl ListProvisioningArtifactsForServiceActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProvisioningArtifactsForServiceActionError {
@@ -6479,7 +6479,7 @@ impl ListRecordHistoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRecordHistoryError {
@@ -6525,7 +6525,7 @@ impl ListResourcesForTagOptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResourcesForTagOptionError {
@@ -6561,7 +6561,7 @@ impl ListServiceActionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListServiceActionsError {
@@ -6602,7 +6602,7 @@ impl ListServiceActionsForProvisioningArtifactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListServiceActionsForProvisioningArtifactError {
@@ -6648,7 +6648,7 @@ impl ListStackInstancesForProvisionedProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListStackInstancesForProvisionedProductError {
@@ -6688,7 +6688,7 @@ impl ListTagOptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagOptionsError {
@@ -6729,7 +6729,7 @@ impl ProvisionProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ProvisionProductError {
@@ -6763,7 +6763,7 @@ impl RejectPortfolioShareError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RejectPortfolioShareError {
@@ -6795,7 +6795,7 @@ impl ScanProvisionedProductsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ScanProvisionedProductsError {
@@ -6825,7 +6825,7 @@ impl SearchProductsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchProductsError {
@@ -6864,7 +6864,7 @@ impl SearchProductsAsAdminError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchProductsAsAdminError {
@@ -6897,7 +6897,7 @@ impl SearchProvisionedProductsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SearchProvisionedProductsError {
@@ -6931,7 +6931,7 @@ impl TerminateProvisionedProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TerminateProvisionedProductError {
@@ -6966,7 +6966,7 @@ impl UpdateConstraintError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateConstraintError {
@@ -7014,7 +7014,7 @@ impl UpdatePortfolioError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdatePortfolioError {
@@ -7057,7 +7057,7 @@ impl UpdateProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateProductError {
@@ -7098,7 +7098,7 @@ impl UpdateProvisionedProductError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateProvisionedProductError {
@@ -7147,7 +7147,7 @@ impl UpdateProvisionedProductPropertiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateProvisionedProductPropertiesError {
@@ -7196,7 +7196,7 @@ impl UpdateProvisioningArtifactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateProvisioningArtifactError {
@@ -7236,7 +7236,7 @@ impl UpdateServiceActionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateServiceActionError {
@@ -7284,7 +7284,7 @@ impl UpdateTagOptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTagOptionError {

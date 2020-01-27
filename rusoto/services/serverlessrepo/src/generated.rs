@@ -1063,7 +1063,7 @@ impl CreateApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateApplicationError {
@@ -1121,7 +1121,7 @@ impl CreateApplicationVersionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateApplicationVersionError {
@@ -1180,7 +1180,7 @@ impl CreateCloudFormationChangeSetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCloudFormationChangeSetError {
@@ -1249,7 +1249,7 @@ impl CreateCloudFormationTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateCloudFormationTemplateError {
@@ -1312,7 +1312,7 @@ impl DeleteApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteApplicationError {
@@ -1367,7 +1367,7 @@ impl GetApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetApplicationError {
@@ -1425,7 +1425,7 @@ impl GetApplicationPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetApplicationPolicyError {
@@ -1485,7 +1485,7 @@ impl GetCloudFormationTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetCloudFormationTemplateError {
@@ -1553,7 +1553,7 @@ impl ListApplicationDependenciesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListApplicationDependenciesError {
@@ -1613,7 +1613,7 @@ impl ListApplicationVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListApplicationVersionsError {
@@ -1664,7 +1664,7 @@ impl ListApplicationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListApplicationsError {
@@ -1721,7 +1721,7 @@ impl PutApplicationPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutApplicationPolicyError {
@@ -1782,7 +1782,7 @@ impl UpdateApplicationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateApplicationError {

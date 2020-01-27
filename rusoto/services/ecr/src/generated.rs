@@ -1360,7 +1360,7 @@ impl BatchCheckLayerAvailabilityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchCheckLayerAvailabilityError {
@@ -1404,7 +1404,7 @@ impl BatchDeleteImageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchDeleteImageError {
@@ -1446,7 +1446,7 @@ impl BatchGetImageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchGetImageError {
@@ -1521,7 +1521,7 @@ impl CompleteLayerUploadError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CompleteLayerUploadError {
@@ -1587,7 +1587,7 @@ impl CreateRepositoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateRepositoryError {
@@ -1643,7 +1643,7 @@ impl DeleteLifecyclePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLifecyclePolicyError {
@@ -1693,7 +1693,7 @@ impl DeleteRepositoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRepositoryError {
@@ -1747,7 +1747,7 @@ impl DeleteRepositoryPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteRepositoryPolicyError {
@@ -1810,7 +1810,7 @@ impl DescribeImageScanFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeImageScanFindingsError {
@@ -1859,7 +1859,7 @@ impl DescribeImagesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeImagesError {
@@ -1906,7 +1906,7 @@ impl DescribeRepositoriesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRepositoriesError {
@@ -1945,7 +1945,7 @@ impl GetAuthorizationTokenError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAuthorizationTokenError {
@@ -2004,7 +2004,7 @@ impl GetDownloadUrlForLayerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDownloadUrlForLayerError {
@@ -2057,7 +2057,7 @@ impl GetLifecyclePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLifecyclePolicyError {
@@ -2111,7 +2111,7 @@ impl GetLifecyclePolicyPreviewError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLifecyclePolicyPreviewError {
@@ -2167,7 +2167,7 @@ impl GetRepositoryPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetRepositoryPolicyError {
@@ -2214,7 +2214,7 @@ impl InitiateLayerUploadError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for InitiateLayerUploadError {
@@ -2254,7 +2254,7 @@ impl ListImagesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListImagesError {
@@ -2300,7 +2300,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -2360,7 +2360,7 @@ impl PutImageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutImageError {
@@ -2414,7 +2414,7 @@ impl PutImageScanningConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutImageScanningConfigurationError {
@@ -2464,7 +2464,7 @@ impl PutImageTagMutabilityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutImageTagMutabilityError {
@@ -2508,7 +2508,7 @@ impl PutLifecyclePolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutLifecyclePolicyError {
@@ -2554,7 +2554,7 @@ impl SetRepositoryPolicyError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetRepositoryPolicyError {
@@ -2601,7 +2601,7 @@ impl StartImageScanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartImageScanError {
@@ -2664,7 +2664,7 @@ impl StartLifecyclePolicyPreviewError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartLifecyclePolicyPreviewError {
@@ -2724,7 +2724,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -2778,7 +2778,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -2837,7 +2837,7 @@ impl UploadLayerPartError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UploadLayerPartError {

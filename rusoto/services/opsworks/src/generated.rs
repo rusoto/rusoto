@@ -3349,7 +3349,7 @@ impl AssignInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssignInstanceError {
@@ -3379,7 +3379,7 @@ impl AssignVolumeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssignVolumeError {
@@ -3409,7 +3409,7 @@ impl AssociateElasticIpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateElasticIpError {
@@ -3441,7 +3441,7 @@ impl AttachElasticLoadBalancerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AttachElasticLoadBalancerError {
@@ -3471,7 +3471,7 @@ impl CloneStackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CloneStackError {
@@ -3501,7 +3501,7 @@ impl CreateAppError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAppError {
@@ -3531,7 +3531,7 @@ impl CreateDeploymentError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDeploymentError {
@@ -3561,7 +3561,7 @@ impl CreateInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateInstanceError {
@@ -3591,7 +3591,7 @@ impl CreateLayerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateLayerError {
@@ -3615,7 +3615,7 @@ impl CreateStackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateStackError {
@@ -3637,7 +3637,7 @@ impl CreateUserProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateUserProfileError {
@@ -3665,7 +3665,7 @@ impl DeleteAppError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAppError {
@@ -3695,7 +3695,7 @@ impl DeleteInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteInstanceError {
@@ -3725,7 +3725,7 @@ impl DeleteLayerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLayerError {
@@ -3755,7 +3755,7 @@ impl DeleteStackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteStackError {
@@ -3785,7 +3785,7 @@ impl DeleteUserProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteUserProfileError {
@@ -3817,7 +3817,7 @@ impl DeregisterEcsClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterEcsClusterError {
@@ -3849,7 +3849,7 @@ impl DeregisterElasticIpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterElasticIpError {
@@ -3879,7 +3879,7 @@ impl DeregisterInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterInstanceError {
@@ -3911,7 +3911,7 @@ impl DeregisterRdsDbInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterRdsDbInstanceError {
@@ -3941,7 +3941,7 @@ impl DeregisterVolumeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterVolumeError {
@@ -3973,7 +3973,7 @@ impl DescribeAgentVersionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAgentVersionsError {
@@ -4003,7 +4003,7 @@ impl DescribeAppsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAppsError {
@@ -4033,7 +4033,7 @@ impl DescribeCommandsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCommandsError {
@@ -4065,7 +4065,7 @@ impl DescribeDeploymentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDeploymentsError {
@@ -4097,7 +4097,7 @@ impl DescribeEcsClustersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEcsClustersError {
@@ -4127,7 +4127,7 @@ impl DescribeElasticIpsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeElasticIpsError {
@@ -4161,7 +4161,7 @@ impl DescribeElasticLoadBalancersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeElasticLoadBalancersError {
@@ -4193,7 +4193,7 @@ impl DescribeInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeInstancesError {
@@ -4223,7 +4223,7 @@ impl DescribeLayersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLayersError {
@@ -4257,7 +4257,7 @@ impl DescribeLoadBasedAutoScalingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLoadBasedAutoScalingError {
@@ -4283,7 +4283,7 @@ impl DescribeMyUserProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMyUserProfileError {
@@ -4305,7 +4305,7 @@ impl DescribeOperatingSystemsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeOperatingSystemsError {
@@ -4335,7 +4335,7 @@ impl DescribePermissionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePermissionsError {
@@ -4365,7 +4365,7 @@ impl DescribeRaidArraysError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRaidArraysError {
@@ -4397,7 +4397,7 @@ impl DescribeRdsDbInstancesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRdsDbInstancesError {
@@ -4429,7 +4429,7 @@ impl DescribeServiceErrorsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeServiceErrorsError {
@@ -4463,7 +4463,7 @@ impl DescribeStackProvisioningParametersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStackProvisioningParametersError {
@@ -4497,7 +4497,7 @@ impl DescribeStackSummaryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStackSummaryError {
@@ -4527,7 +4527,7 @@ impl DescribeStacksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeStacksError {
@@ -4561,7 +4561,7 @@ impl DescribeTimeBasedAutoScalingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTimeBasedAutoScalingError {
@@ -4595,7 +4595,7 @@ impl DescribeUserProfilesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeUserProfilesError {
@@ -4625,7 +4625,7 @@ impl DescribeVolumesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeVolumesError {
@@ -4657,7 +4657,7 @@ impl DetachElasticLoadBalancerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DetachElasticLoadBalancerError {
@@ -4689,7 +4689,7 @@ impl DisassociateElasticIpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateElasticIpError {
@@ -4721,7 +4721,7 @@ impl GetHostnameSuggestionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetHostnameSuggestionError {
@@ -4751,7 +4751,7 @@ impl GrantAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GrantAccessError {
@@ -4781,7 +4781,7 @@ impl ListTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsError {
@@ -4811,7 +4811,7 @@ impl RebootInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RebootInstanceError {
@@ -4841,7 +4841,7 @@ impl RegisterEcsClusterError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterEcsClusterError {
@@ -4871,7 +4871,7 @@ impl RegisterElasticIpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterElasticIpError {
@@ -4901,7 +4901,7 @@ impl RegisterInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterInstanceError {
@@ -4933,7 +4933,7 @@ impl RegisterRdsDbInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterRdsDbInstanceError {
@@ -4963,7 +4963,7 @@ impl RegisterVolumeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterVolumeError {
@@ -4995,7 +4995,7 @@ impl SetLoadBasedAutoScalingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetLoadBasedAutoScalingError {
@@ -5025,7 +5025,7 @@ impl SetPermissionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetPermissionError {
@@ -5057,7 +5057,7 @@ impl SetTimeBasedAutoScalingError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetTimeBasedAutoScalingError {
@@ -5087,7 +5087,7 @@ impl StartInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartInstanceError {
@@ -5117,7 +5117,7 @@ impl StartStackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartStackError {
@@ -5147,7 +5147,7 @@ impl StopInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopInstanceError {
@@ -5177,7 +5177,7 @@ impl StopStackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopStackError {
@@ -5207,7 +5207,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -5237,7 +5237,7 @@ impl UnassignInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UnassignInstanceError {
@@ -5267,7 +5267,7 @@ impl UnassignVolumeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UnassignVolumeError {
@@ -5297,7 +5297,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -5327,7 +5327,7 @@ impl UpdateAppError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAppError {
@@ -5357,7 +5357,7 @@ impl UpdateElasticIpError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateElasticIpError {
@@ -5387,7 +5387,7 @@ impl UpdateInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateInstanceError {
@@ -5417,7 +5417,7 @@ impl UpdateLayerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateLayerError {
@@ -5441,7 +5441,7 @@ impl UpdateMyUserProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateMyUserProfileError {
@@ -5471,7 +5471,7 @@ impl UpdateRdsDbInstanceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRdsDbInstanceError {
@@ -5501,7 +5501,7 @@ impl UpdateStackError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateStackError {
@@ -5531,7 +5531,7 @@ impl UpdateUserProfileError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateUserProfileError {
@@ -5561,7 +5561,7 @@ impl UpdateVolumeError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateVolumeError {

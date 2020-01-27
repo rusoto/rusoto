@@ -286,7 +286,7 @@ impl AssociateMemberAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateMemberAccountError {
@@ -333,7 +333,7 @@ impl AssociateS3ResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateS3ResourcesError {
@@ -373,7 +373,7 @@ impl DisassociateMemberAccountError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateMemberAccountError {
@@ -418,7 +418,7 @@ impl DisassociateS3ResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateS3ResourcesError {
@@ -455,7 +455,7 @@ impl ListMemberAccountsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListMemberAccountsError {
@@ -496,7 +496,7 @@ impl ListS3ResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListS3ResourcesError {
@@ -538,7 +538,7 @@ impl UpdateS3ResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateS3ResourcesError {

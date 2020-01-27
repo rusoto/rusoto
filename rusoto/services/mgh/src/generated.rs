@@ -632,7 +632,7 @@ impl AssociateCreatedArtifactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateCreatedArtifactError {
@@ -731,7 +731,7 @@ impl AssociateDiscoveredResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateDiscoveredResourceError {
@@ -821,7 +821,7 @@ impl CreateProgressUpdateStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateProgressUpdateStreamError {
@@ -916,7 +916,7 @@ impl DeleteProgressUpdateStreamError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteProgressUpdateStreamError {
@@ -1003,7 +1003,7 @@ impl DescribeApplicationStateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeApplicationStateError {
@@ -1072,7 +1072,7 @@ impl DescribeMigrationTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeMigrationTaskError {
@@ -1160,7 +1160,7 @@ impl DisassociateCreatedArtifactError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateCreatedArtifactError {
@@ -1256,7 +1256,7 @@ impl DisassociateDiscoveredResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateDiscoveredResourceError {
@@ -1350,7 +1350,7 @@ impl ImportMigrationTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ImportMigrationTaskError {
@@ -1413,7 +1413,7 @@ impl ListApplicationStatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListApplicationStatesError {
@@ -1480,7 +1480,7 @@ impl ListCreatedArtifactsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCreatedArtifactsError {
@@ -1552,7 +1552,7 @@ impl ListDiscoveredResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDiscoveredResourcesError {
@@ -1621,7 +1621,7 @@ impl ListMigrationTasksError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListMigrationTasksError {
@@ -1687,7 +1687,7 @@ impl ListProgressUpdateStreamsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListProgressUpdateStreamsError {
@@ -1775,7 +1775,7 @@ impl NotifyApplicationStateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for NotifyApplicationStateError {
@@ -1864,7 +1864,7 @@ impl NotifyMigrationTaskStateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for NotifyMigrationTaskStateError {
@@ -1950,7 +1950,7 @@ impl PutResourceAttributesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutResourceAttributesError {

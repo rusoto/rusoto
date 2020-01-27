@@ -2126,7 +2126,7 @@ impl AcceptSharedDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AcceptSharedDirectoryError {
@@ -2190,7 +2190,7 @@ impl AddIpRoutesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddIpRoutesError {
@@ -2248,7 +2248,7 @@ impl AddTagsToResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddTagsToResourceError {
@@ -2294,7 +2294,7 @@ impl CancelSchemaExtensionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CancelSchemaExtensionError {
@@ -2343,7 +2343,7 @@ impl ConnectDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ConnectDirectoryError {
@@ -2396,7 +2396,7 @@ impl CreateAliasError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAliasError {
@@ -2465,7 +2465,7 @@ impl CreateComputerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateComputerError {
@@ -2544,7 +2544,7 @@ impl CreateConditionalForwarderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateConditionalForwarderError {
@@ -2605,7 +2605,7 @@ impl CreateDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateDirectoryError {
@@ -2671,7 +2671,7 @@ impl CreateLogSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateLogSubscriptionError {
@@ -2732,7 +2732,7 @@ impl CreateMicrosoftADError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateMicrosoftADError {
@@ -2788,7 +2788,7 @@ impl CreateSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateSnapshotError {
@@ -2847,7 +2847,7 @@ impl CreateTrustError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateTrustError {
@@ -2917,7 +2917,7 @@ impl DeleteConditionalForwarderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteConditionalForwarderError {
@@ -2968,7 +2968,7 @@ impl DeleteDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteDirectoryError {
@@ -3019,7 +3019,7 @@ impl DeleteLogSubscriptionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLogSubscriptionError {
@@ -3067,7 +3067,7 @@ impl DeleteSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteSnapshotError {
@@ -3120,7 +3120,7 @@ impl DeleteTrustError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteTrustError {
@@ -3201,7 +3201,7 @@ impl DeregisterCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterCertificateError {
@@ -3259,7 +3259,7 @@ impl DeregisterEventTopicError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeregisterEventTopicError {
@@ -3325,7 +3325,7 @@ impl DescribeCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCertificateError {
@@ -3399,7 +3399,7 @@ impl DescribeConditionalForwardersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeConditionalForwardersError {
@@ -3468,7 +3468,7 @@ impl DescribeDirectoriesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDirectoriesError {
@@ -3535,7 +3535,7 @@ impl DescribeDomainControllersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDomainControllersError {
@@ -3591,7 +3591,7 @@ impl DescribeEventTopicsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeEventTopicsError {
@@ -3657,7 +3657,7 @@ impl DescribeLDAPSSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeLDAPSSettingsError {
@@ -3725,7 +3725,7 @@ impl DescribeSharedDirectoriesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSharedDirectoriesError {
@@ -3784,7 +3784,7 @@ impl DescribeSnapshotsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeSnapshotsError {
@@ -3843,7 +3843,7 @@ impl DescribeTrustsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeTrustsError {
@@ -3908,7 +3908,7 @@ impl DisableLDAPSError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableLDAPSError {
@@ -3954,7 +3954,7 @@ impl DisableRadiusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableRadiusError {
@@ -4004,7 +4004,7 @@ impl DisableSsoError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisableSsoError {
@@ -4073,7 +4073,7 @@ impl EnableLDAPSError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableLDAPSError {
@@ -4130,7 +4130,7 @@ impl EnableRadiusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableRadiusError {
@@ -4182,7 +4182,7 @@ impl EnableSsoError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EnableSsoError {
@@ -4228,7 +4228,7 @@ impl GetDirectoryLimitsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetDirectoryLimitsError {
@@ -4272,7 +4272,7 @@ impl GetSnapshotLimitsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetSnapshotLimitsError {
@@ -4333,7 +4333,7 @@ impl ListCertificatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListCertificatesError {
@@ -4388,7 +4388,7 @@ impl ListIpRoutesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListIpRoutesError {
@@ -4441,7 +4441,7 @@ impl ListLogSubscriptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListLogSubscriptionsError {
@@ -4493,7 +4493,7 @@ impl ListSchemaExtensionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListSchemaExtensionsError {
@@ -4552,7 +4552,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -4640,7 +4640,7 @@ impl RegisterCertificateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterCertificateError {
@@ -4695,7 +4695,7 @@ impl RegisterEventTopicError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterEventTopicError {
@@ -4754,7 +4754,7 @@ impl RejectSharedDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RejectSharedDirectoryError {
@@ -4808,7 +4808,7 @@ impl RemoveIpRoutesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveIpRoutesError {
@@ -4861,7 +4861,7 @@ impl RemoveTagsFromResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {
@@ -4930,7 +4930,7 @@ impl ResetUserPasswordError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResetUserPasswordError {
@@ -4985,7 +4985,7 @@ impl RestoreFromSnapshotError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RestoreFromSnapshotError {
@@ -5065,7 +5065,7 @@ impl ShareDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ShareDirectoryError {
@@ -5137,7 +5137,7 @@ impl StartSchemaExtensionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartSchemaExtensionError {
@@ -5192,7 +5192,7 @@ impl UnshareDirectoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UnshareDirectoryError {
@@ -5261,7 +5261,7 @@ impl UpdateConditionalForwarderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateConditionalForwarderError {
@@ -5350,7 +5350,7 @@ impl UpdateNumberOfDomainControllersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateNumberOfDomainControllersError {
@@ -5411,7 +5411,7 @@ impl UpdateRadiusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateRadiusError {
@@ -5459,7 +5459,7 @@ impl UpdateTrustError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateTrustError {
@@ -5512,7 +5512,7 @@ impl VerifyTrustError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for VerifyTrustError {

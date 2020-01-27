@@ -252,7 +252,7 @@ impl GenerateErrorTypes for JsonErrorTypes {
                                 {type_matchers}
                             }}
                         }}
-                        return RusotoError::Unknown(res);
+                        RusotoError::Unknown(res)
                     }}
                 }}",
             type_name = error_type_name(service, operation_name),
@@ -306,7 +306,7 @@ impl GenerateErrorTypes for RestJsonErrorTypes {
                                 {type_matchers}
                             }}
                         }}
-                        return RusotoError::Unknown(res);
+                        RusotoError::Unknown(res)
                     }}
                 }}",
             type_name = error_type_name(service, operation_name),

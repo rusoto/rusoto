@@ -882,7 +882,7 @@ impl CreateLicenseConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateLicenseConfigurationError {
@@ -953,7 +953,7 @@ impl DeleteLicenseConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteLicenseConfigurationError {
@@ -1019,7 +1019,7 @@ impl GetLicenseConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetLicenseConfigurationError {
@@ -1072,7 +1072,7 @@ impl GetServiceSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetServiceSettingsError {
@@ -1146,7 +1146,7 @@ impl ListAssociationsForLicenseConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssociationsForLicenseConfigurationError {
@@ -1229,7 +1229,7 @@ impl ListFailuresForLicenseConfigurationOperationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFailuresForLicenseConfigurationOperationsError {
@@ -1310,7 +1310,7 @@ impl ListLicenseConfigurationsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListLicenseConfigurationsError {
@@ -1381,7 +1381,7 @@ impl ListLicenseSpecificationsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListLicenseSpecificationsForResourceError {
@@ -1465,7 +1465,7 @@ impl ListResourceInventoryError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListResourceInventoryError {
@@ -1525,7 +1525,7 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -1598,7 +1598,7 @@ impl ListUsageForLicenseConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListUsageForLicenseConfigurationError {
@@ -1665,7 +1665,7 @@ impl TagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for TagResourceError {
@@ -1719,7 +1719,7 @@ impl UntagResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -1785,7 +1785,7 @@ impl UpdateLicenseConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateLicenseConfigurationError {
@@ -1867,7 +1867,7 @@ impl UpdateLicenseSpecificationsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateLicenseSpecificationsForResourceError {
@@ -1943,7 +1943,7 @@ impl UpdateServiceSettingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateServiceSettingsError {

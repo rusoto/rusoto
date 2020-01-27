@@ -507,7 +507,7 @@ impl CreateScalingPlanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateScalingPlanError {
@@ -549,7 +549,7 @@ impl DeleteScalingPlanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteScalingPlanError {
@@ -599,7 +599,7 @@ impl DescribeScalingPlanResourcesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeScalingPlanResourcesError {
@@ -651,7 +651,7 @@ impl DescribeScalingPlansError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeScalingPlansError {
@@ -687,7 +687,7 @@ impl GetScalingPlanResourceForecastDataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetScalingPlanResourceForecastDataError {
@@ -729,7 +729,7 @@ impl UpdateScalingPlanError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateScalingPlanError {

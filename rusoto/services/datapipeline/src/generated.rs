@@ -756,7 +756,7 @@ impl ActivatePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ActivatePipelineError {
@@ -804,7 +804,7 @@ impl AddTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddTagsError {
@@ -842,7 +842,7 @@ impl CreatePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreatePipelineError {
@@ -890,7 +890,7 @@ impl DeactivatePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeactivatePipelineError {
@@ -933,7 +933,7 @@ impl DeletePipelineError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeletePipelineError {
@@ -982,7 +982,7 @@ impl DescribeObjectsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeObjectsError {
@@ -1032,7 +1032,7 @@ impl DescribePipelinesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribePipelinesError {
@@ -1087,7 +1087,7 @@ impl EvaluateExpressionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for EvaluateExpressionError {
@@ -1144,7 +1144,7 @@ impl GetPipelineDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetPipelineDefinitionError {
@@ -1182,7 +1182,7 @@ impl ListPipelinesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListPipelinesError {
@@ -1223,7 +1223,7 @@ impl PollForTaskError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PollForTaskError {
@@ -1278,7 +1278,7 @@ impl PutPipelineDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PutPipelineDefinitionError {
@@ -1326,7 +1326,7 @@ impl QueryObjectsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for QueryObjectsError {
@@ -1374,7 +1374,7 @@ impl RemoveTagsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveTagsError {
@@ -1429,7 +1429,7 @@ impl ReportTaskProgressError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ReportTaskProgressError {
@@ -1472,7 +1472,7 @@ impl ReportTaskRunnerHeartbeatError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ReportTaskRunnerHeartbeatError {
@@ -1520,7 +1520,7 @@ impl SetStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetStatusError {
@@ -1573,7 +1573,7 @@ impl SetTaskStatusError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetTaskStatusError {
@@ -1632,7 +1632,7 @@ impl ValidatePipelineDefinitionError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ValidatePipelineDefinitionError {

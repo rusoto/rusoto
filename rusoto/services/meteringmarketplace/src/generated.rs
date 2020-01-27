@@ -225,7 +225,7 @@ impl BatchMeterUsageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for BatchMeterUsageError {
@@ -296,7 +296,7 @@ impl MeterUsageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for MeterUsageError {
@@ -370,7 +370,7 @@ impl RegisterUsageError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterUsageError {
@@ -429,7 +429,7 @@ impl ResolveCustomerError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ResolveCustomerError {
