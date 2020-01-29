@@ -193,6 +193,7 @@ jobs:
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain beta
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+        rustup default beta
       displayName: 'Install Rust'
     - script: rustc --version
       displayName: 'print rust version'
@@ -213,6 +214,7 @@ jobs:
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain beta
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+        rustup default beta
       displayName: 'Install Rust'
     - script: rustc --version
       displayName: 'print rust version'
@@ -231,6 +233,7 @@ jobs:
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+        rustup default nightly
       displayName: 'Install Rust'
     - script: rustc --version
       displayName: 'print rust version'
@@ -253,6 +256,7 @@ jobs:
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+        rustup default nightly
       displayName: 'Install Rust'
     - script: rustc --version
       displayName: 'print rust version'
@@ -292,7 +296,7 @@ jobs:
       fetchDepth: 5
     - script: |
         curl -sSf -o rustup-init.exe https://win.rustup.rs
-        rustup-init.exe -y --default-toolchain stable
+        rustup-init.exe -y --default-toolchain stable --default-host x86_64-pc-windows-msvc
         set PATH=%PATH%;%USERPROFILE%\.cargo\bin
         echo "##vso[task.setvariable variable=PATH;]%PATH%;%USERPROFILE%\.cargo\bin"
       displayName: 'Install Rust'
