@@ -135,7 +135,6 @@ where
         use std::fmt;
 
         use async_trait::async_trait;
-        #[allow(warnings)]
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
