@@ -44,14 +44,16 @@ For example, to include only S3 and SQS:
 
 ```toml
 [dependencies]
-rusoto_core = "0.42.0"
-rusoto_sqs = "0.42.0"
-rusoto_s3 = "0.42.0"
+rusoto_core = "0.43.0-beta1"
+rusoto_sqs = "0.43.0-beta1"
+rusoto_s3 = "0.43.0-beta1"
 ```
 
 ## Migration notes
 
 Breaking changes and migration details are documented at [https://rusoto.org/migrations.html](https://rusoto.org/migrations.html).
+
+Note that from v0.43.0 onward, Rusoto uses Rust's `std::future::Future`, and the Tokio 0.2 ecosystem.
 
 ## Usage
 
@@ -63,32 +65,28 @@ Consult the rustdoc documentation for full details by running `cargo doc` or vis
 A simple example of using Rusoto's DynamoDB API to list the names of all tables in a database:
 
 ```rust,no_run
-extern crate rusoto_core;
-extern crate rusoto_dynamodb;
-
 use rusoto_core::Region;
 use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let client = DynamoDbClient::new(Region::UsEast1);
     let list_tables_input: ListTablesInput = Default::default();
 
-    match client.list_tables(list_tables_input).sync() {
-        Ok(output) => {
-            match output.table_names {
-                Some(table_name_list) => {
-                    println!("Tables in database:");
+    match client.list_tables(list_tables_input).await {
+        Ok(output) => match output.table_names {
+            Some(table_name_list) => {
+                println!("Tables in database:");
 
-                    for table_name in table_name_list {
-                        println!("{}", table_name);
-                    }
-                },
-                None => println!("No tables in database!"),
+                for table_name in table_name_list {
+                    println!("{}", table_name);
+                }
             }
+            None => println!("No tables in database!"),
         },
         Err(error) => {
             println!("Error: {:?}", error);
-        },
+        }
     }
 }
 ```

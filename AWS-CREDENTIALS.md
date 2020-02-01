@@ -24,6 +24,8 @@ If not explicitly provided as arguments, the values for these two parameters are
 
 It's also possible to implement your own credentials sourcing mechanism by creating a type that implements `rusoto_core::ProvideAwsCredentials`.
 
+`rusoto_sts` implements a replacement `ChainProvider` which adds a credential source for web identities for use with Kubernetes.
+
 #### sts:AssumeRole
 
 If your aws account belongs to an organization and you need to use sts:AssumeRole, you're probably looking for `rusoto_sts::StsAssumeRoleSessionCredentialsProvider`. A simple program that uses sts:AssumeRole looks like this:
@@ -36,7 +38,8 @@ use rusoto_core::{Region, HttpClient};
 use rusoto_ec2::{Ec2Client, Ec2, DescribeSpotInstanceRequestsRequest};
 use rusoto_sts::{StsClient, StsAssumeRoleSessionCredentialsProvider};
 
-fn main() {
+#[tokio::main]
+async fn main() {
     env_logger::init();
 
     let sts = StsClient::new(Region::EuWest1);
@@ -51,7 +54,7 @@ fn main() {
     let client = Ec2Client::new_with(HttpClient::new().unwrap(), provider, Region::UsEast1);
 
     let sir_input = DescribeSpotInstanceRequestsRequest::default();
-    let x = client.describe_spot_instance_requests(sir_input).sync();
+    let x = client.describe_spot_instance_requests(sir_input).await;
 
     println!("{:?}", x);
 }
