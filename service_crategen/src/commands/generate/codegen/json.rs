@@ -168,6 +168,6 @@ fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
             output_type = output_type,
         )
     } else {
-        "Ok(std::mem::drop(response))".to_owned()
+        "std::mem::drop(response);\nOk(())".to_owned()
     }
 }

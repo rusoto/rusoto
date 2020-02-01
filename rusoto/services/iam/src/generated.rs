@@ -20912,7 +20912,8 @@ impl Iam for IamClient {
             ));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased. You can remove the existing role and then add a different role to an instance profile. You must then wait for the change to appear across all of AWS because of <a href="https://en.wikipedia.org/wiki/Eventual_consistency">eventual consistency</a>. To force the change, you must <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateIamInstanceProfile.html">disassociate the instance profile</a> and then <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateIamInstanceProfile.html">associate the instance profile</a>, or you can stop your instance and then restart it.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permissions policy.</p> </note> <p>For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
@@ -20939,7 +20940,8 @@ impl Iam for IamClient {
             return Err(AddRoleToInstanceProfileError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Adds the specified user to the specified group.</p>
@@ -20966,7 +20968,8 @@ impl Iam for IamClient {
             return Err(AddUserToGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Attaches the specified managed policy to the specified IAM group.</p> <p>You use this API to attach a managed policy to a group. To embed an inline policy in a group, use <a>PutGroupPolicy</a>.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -20993,7 +20996,8 @@ impl Iam for IamClient {
             return Err(AttachGroupPolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Attaches the specified managed policy to the specified IAM role. When you attach a managed policy to a role, the managed policy becomes part of the role's permission (access) policy.</p> <note> <p>You cannot use a managed policy as the role's trust policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>.</p> </note> <p>Use this API to attach a <i>managed</i> policy to a role. To embed an inline policy in a role, use <a>PutRolePolicy</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -21020,7 +21024,8 @@ impl Iam for IamClient {
             return Err(AttachRolePolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Attaches the specified managed policy to the specified user.</p> <p>You use this API to attach a <i>managed</i> policy to a user. To embed an inline policy in a user, use <a>PutUserPolicy</a>.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -21047,7 +21052,8 @@ impl Iam for IamClient {
             return Err(AttachUserPolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Changes the password of the IAM user who is calling this operation. The AWS account root user password is not affected by this operation.</p> <p>To change the password for a different user, see <a>UpdateLoginProfile</a>. For more information about modifying passwords, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
@@ -21074,7 +21080,8 @@ impl Iam for IamClient {
             return Err(ChangePasswordError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials. This is true even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
@@ -21150,7 +21157,8 @@ impl Iam for IamClient {
             return Err(CreateAccountAliasError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Creates a new group.</p> <p> For information about the number of groups you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
@@ -21760,7 +21768,8 @@ impl Iam for IamClient {
             return Err(DeactivateMFADeviceError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
@@ -21787,7 +21796,8 @@ impl Iam for IamClient {
             return Err(DeleteAccessKeyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p> Deletes the specified AWS account alias. For information about using an AWS account alias, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
@@ -21814,7 +21824,8 @@ impl Iam for IamClient {
             return Err(DeleteAccountAliasError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the password policy for the AWS account. There are no parameters.</p>
@@ -21840,7 +21851,8 @@ impl Iam for IamClient {
             return Err(DeleteAccountPasswordPolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified IAM group. The group must not contain any users or have any attached policies.</p>
@@ -21867,7 +21879,8 @@ impl Iam for IamClient {
             return Err(DeleteGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified inline policy that is embedded in the specified IAM group.</p> <p>A group can also have managed policies attached to it. To detach a managed policy from a group, use <a>DetachGroupPolicy</a>. For more information about policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -21894,7 +21907,8 @@ impl Iam for IamClient {
             return Err(DeleteGroupPolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified instance profile. The instance profile must not have an associated role.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the instance profile you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important> <p>For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
@@ -21921,7 +21935,8 @@ impl Iam for IamClient {
             return Err(DeleteInstanceProfileError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes the password for the specified IAM user, which terminates the user&#39;s ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user&#39;s password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access, you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important></p>
@@ -21948,7 +21963,8 @@ impl Iam for IamClient {
             return Err(DeleteLoginProfileError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes an OpenID Connect identity provider (IdP) resource object in IAM.</p> <p>Deleting an IAM OIDC provider resource does not update any roles that reference the provider as a principal in their trust policies. Any attempt to assume a role that references a deleted provider fails.</p> <p>This operation is idempotent; it does not fail or return an error if you call the operation for a provider that does not exist.</p>
@@ -21975,7 +21991,8 @@ impl Iam for IamClient {
             return Err(DeleteOpenIDConnectProviderError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to. In addition, you must delete all the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> API operations. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -22002,7 +22019,8 @@ impl Iam for IamClient {
             return Err(DeletePolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified version from the specified managed policy.</p> <p>You cannot delete the default version from a policy using this API. To delete the default version from a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use <a>ListPolicyVersions</a>.</p> <p>For information about versions for managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -22029,7 +22047,8 @@ impl Iam for IamClient {
             return Err(DeletePolicyVersionError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes the specified role. The role must not have any policies attached. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the role you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important></p>
@@ -22056,7 +22075,8 @@ impl Iam for IamClient {
             return Err(DeleteRoleError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes the permissions boundary for the specified IAM role. </p> <important> <p>Deleting the permissions boundary for a role might increase its permissions. For example, it might allow anyone who assumes the role to perform all the actions granted in its permissions policies. </p> </important></p>
@@ -22083,7 +22103,8 @@ impl Iam for IamClient {
             return Err(DeleteRolePermissionsBoundaryError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified inline policy that is embedded in the specified IAM role.</p> <p>A role can also have managed policies attached to it. To detach a managed policy from a role, use <a>DetachRolePolicy</a>. For more information about policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -22110,7 +22131,8 @@ impl Iam for IamClient {
             return Err(DeleteRolePolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes a SAML provider resource in IAM.</p> <p>Deleting the provider resource from IAM does not update any roles that reference the SAML provider resource&#39;s ARN as a principal in their trust policies. Any attempt to assume a role that references a non-existent provider resource ARN fails.</p> <note> <p> This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
@@ -22137,7 +22159,8 @@ impl Iam for IamClient {
             return Err(DeleteSAMLProviderError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified SSH public key.</p> <p>The SSH public key deleted by this operation is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
@@ -22164,7 +22187,8 @@ impl Iam for IamClient {
             return Err(DeleteSSHPublicKeyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes the specified server certificate.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <important> <p> If you are using a server certificate with Elastic Load Balancing, deleting the certificate could have implications for your application. If Elastic Load Balancing doesn&#39;t detect the deletion of bound certificates, it may continue to use the certificates. This could cause Elastic Load Balancing to stop accepting traffic. We recommend that you remove the reference to the certificate from Elastic Load Balancing before using this command to delete the certificate. For more information, go to <a href="https://docs.aws.amazon.com/ElasticLoadBalancing/latest/APIReference/API_DeleteLoadBalancerListeners.html">DeleteLoadBalancerListeners</a> in the <i>Elastic Load Balancing API Reference</i>.</p> </important></p>
@@ -22191,7 +22215,8 @@ impl Iam for IamClient {
             return Err(DeleteServerCertificateError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Submits a service-linked role deletion request and returns a <code>DeletionTaskId</code>, which you can use to check the status of the deletion. Before you call this operation, confirm that the role has no active sessions and that any resources used by the role in the linked service are deleted. If you call this operation more than once for the same service-linked role and an earlier deletion task is not complete, then the <code>DeletionTaskId</code> of the earlier request is returned.</p> <p>If you submit a deletion request for a service-linked role whose linked service is still accessing a resource, then the deletion task fails. If it fails, the <a>GetServiceLinkedRoleDeletionStatus</a> API operation returns the reason for the failure, usually including the resources that must be deleted. To delete the service-linked role, you must first remove those resources from the linked service and then submit the deletion request again. Resources are specific to the service that is linked to the role. For more information about removing resources from a service, see the <a href="http://docs.aws.amazon.com/">AWS documentation</a> for your service.</p> <p>For more information about service-linked roles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">Roles Terms and Concepts: AWS Service-Linked Role</a> in the <i>IAM User Guide</i>.</p>
@@ -22269,7 +22294,8 @@ impl Iam for IamClient {
             ));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated IAM users.</p>
@@ -22296,7 +22322,8 @@ impl Iam for IamClient {
             return Err(DeleteSigningCertificateError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes the specified IAM user. Unlike the AWS Management Console, when you delete a user programmatically, you must delete the items attached to the user manually, or the deletion fails. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_deleting_cli">Deleting an IAM User</a>. Before attempting to delete a user, remove the following items:</p> <ul> <li> <p>Password (<a>DeleteLoginProfile</a>)</p> </li> <li> <p>Access keys (<a>DeleteAccessKey</a>)</p> </li> <li> <p>Signing certificate (<a>DeleteSigningCertificate</a>)</p> </li> <li> <p>SSH public key (<a>DeleteSSHPublicKey</a>)</p> </li> <li> <p>Git credentials (<a>DeleteServiceSpecificCredential</a>)</p> </li> <li> <p>Multi-factor authentication (MFA) device (<a>DeactivateMFADevice</a>, <a>DeleteVirtualMFADevice</a>)</p> </li> <li> <p>Inline policies (<a>DeleteUserPolicy</a>)</p> </li> <li> <p>Attached managed policies (<a>DetachUserPolicy</a>)</p> </li> <li> <p>Group memberships (<a>RemoveUserFromGroup</a>)</p> </li> </ul></p>
@@ -22323,7 +22350,8 @@ impl Iam for IamClient {
             return Err(DeleteUserError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes the permissions boundary for the specified IAM user.</p> <important> <p>Deleting the permissions boundary for a user might increase its permissions by allowing the user to perform all the actions granted in its permissions policies. </p> </important></p>
@@ -22350,7 +22378,8 @@ impl Iam for IamClient {
             return Err(DeleteUserPermissionsBoundaryError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified inline policy that is embedded in the specified IAM user.</p> <p>A user can also have managed policies attached to it. To detach a managed policy from a user, use <a>DetachUserPolicy</a>. For more information about policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -22377,7 +22406,8 @@ impl Iam for IamClient {
             return Err(DeleteUserPolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes a virtual MFA device.</p> <note> <p> You must deactivate a user&#39;s virtual MFA device before you can delete it. For information about deactivating MFA devices, see <a>DeactivateMFADevice</a>. </p> </note></p>
@@ -22404,7 +22434,8 @@ impl Iam for IamClient {
             return Err(DeleteVirtualMFADeviceError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes the specified managed policy from the specified IAM group.</p> <p>A group can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteGroupPolicy</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -22431,7 +22462,8 @@ impl Iam for IamClient {
             return Err(DetachGroupPolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes the specified managed policy from the specified role.</p> <p>A role can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteRolePolicy</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -22458,7 +22490,8 @@ impl Iam for IamClient {
             return Err(DetachRolePolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes the specified managed policy from the specified user.</p> <p>A user can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteUserPolicy</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -22485,7 +22518,8 @@ impl Iam for IamClient {
             return Err(DetachUserPolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Enables the specified MFA device and associates it with the specified IAM user. When enabled, the MFA device is required for every subsequent login by the IAM user associated with the device.</p>
@@ -22512,7 +22546,8 @@ impl Iam for IamClient {
             return Err(EnableMFADeviceError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p> Generates a credential report for the AWS account. For more information about the credential report, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
@@ -25292,7 +25327,8 @@ impl Iam for IamClient {
             return Err(PutGroupPolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Adds or updates the policy that is specified as the IAM role&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a role. Use the boundary to control the maximum permissions that the role can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the role.</p> <p>You cannot set the boundary for a service-linked role. </p> <important> <p>Policies used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the role. To learn how the effective permissions for a role are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
@@ -25319,7 +25355,8 @@ impl Iam for IamClient {
             return Err(PutRolePermissionsBoundaryError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role&#39;s access (permissions) policy. The role&#39;s trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role&#39;s trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
@@ -25346,7 +25383,8 @@ impl Iam for IamClient {
             return Err(PutRolePolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Adds or updates the policy that is specified as the IAM user&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a user. Use the boundary to control the maximum permissions that the user can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the user.</p> <important> <p>Policies that are used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the user. To learn how the effective permissions for a user are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
@@ -25373,7 +25411,8 @@ impl Iam for IamClient {
             return Err(PutUserPermissionsBoundaryError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM user.</p> <p>An IAM user can also have a managed policy attached to it. To attach a managed policy to a user, use <a>AttachUserPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a user, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutUserPolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
@@ -25400,7 +25439,8 @@ impl Iam for IamClient {
             return Err(PutUserPolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes the specified client ID (also known as audience) from the list of client IDs registered for the specified IAM OpenID Connect (OIDC) provider resource object.</p> <p>This operation is idempotent; it does not fail or return an error if you try to remove a client ID that does not exist.</p>
@@ -25433,7 +25473,8 @@ impl Iam for IamClient {
             ));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes the specified IAM role from the specified EC2 instance profile.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the role you are about to remove from the instance profile. Removing a role from an instance profile that is associated with a running instance might break any applications running on the instance.</p> </important> <p> For more information about IAM roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
@@ -25460,7 +25501,8 @@ impl Iam for IamClient {
             return Err(RemoveRoleFromInstanceProfileError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes the specified user from the specified group.</p>
@@ -25487,7 +25529,8 @@ impl Iam for IamClient {
             return Err(RemoveUserFromGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Resets the password for a service-specific credential. The new password is AWS generated and cryptographically strong. It cannot be configured by the user. Resetting the password immediately invalidates the previous password associated with this user.</p>
@@ -25566,7 +25609,8 @@ impl Iam for IamClient {
             return Err(ResyncMFADeviceError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Sets the specified version of the specified policy as the policy's default (operative) version.</p> <p>This operation affects all users, groups, and roles that the policy is attached to. To list the users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API.</p> <p>For information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -25593,7 +25637,8 @@ impl Iam for IamClient {
             return Err(SetDefaultPolicyVersionError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Sets the specified version of the global endpoint token as the token version used for the AWS account.</p> <p>By default, AWS Security Token Service (STS) is available as a global service, and all STS requests go to a single endpoint at <code>https://sts.amazonaws.com</code>. AWS recommends using Regional STS endpoints to reduce latency, build in redundancy, and increase session token availability. For information about Regional endpoints for STS, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sts_region">AWS Regions and Endpoints</a> in the <i>AWS General Reference</i>.</p> <p>If you make an STS call to the global endpoint, the resulting session tokens might be valid in some Regions but not others. It depends on the version that is set in this operation. Version 1 tokens are valid only in AWS Regions that are available by default. These tokens do not work in manually enabled Regions, such as Asia Pacific (Hong Kong). Version 2 tokens are valid in all Regions. However, version 2 tokens are longer and might affect systems where you temporarily store tokens. For information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p> <p>To view the current session token version, see the <code>GlobalEndpointTokenVersion</code> entry in the response of the <a>GetAccountSummary</a> operation.</p>
@@ -25622,7 +25667,8 @@ impl Iam for IamClient {
             ));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Simulate how a set of IAM policies and optionally a resource-based policy works with a list of API operations and AWS resources to determine the policies' effective permissions. The policies are provided as strings.</p> <p>The simulation does not perform the API operations; it only checks the authorization to determine if the simulated policies allow or deny the operations.</p> <p>If you want to simulate existing policies that are attached to an IAM user, group, or role, use <a>SimulatePrincipalPolicy</a> instead.</p> <p>Context keys are variables that are maintained by AWS and its services and which provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForCustomPolicy</a>.</p> <p>If the output is long, you can use <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
@@ -25744,7 +25790,8 @@ impl Iam for IamClient {
             return Err(TagRoleError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Adds one or more tags to an IAM user. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM requesting user or to a role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
@@ -25768,7 +25815,8 @@ impl Iam for IamClient {
             return Err(TagUserError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes the specified tags from the role. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
@@ -25792,7 +25840,8 @@ impl Iam for IamClient {
             return Err(UntagRoleError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes the specified tags from the user. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
@@ -25816,7 +25865,8 @@ impl Iam for IamClient {
             return Err(UntagUserError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Changes the status of the specified access key from Active to Inactive, or vice versa. This operation can be used to disable a user's key as part of a key rotation workflow.</p> <p>If the <code>UserName</code> is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>
@@ -25843,7 +25893,8 @@ impl Iam for IamClient {
             return Err(UpdateAccessKeyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates the password policy settings for the AWS account.</p> <note> <ul> <li> <p>This operation does not support partial updates. No parameters are required, but if you do not specify a parameter, that parameter's value reverts to its default value. See the <b>Request Parameters</b> section for each parameter's default value. Also note that some parameters do not allow the default parameter to be explicitly set. Instead, to invoke the default value, do not include that parameter when you invoke the operation.</p> </li> </ul> </note> <p> For more information about using a password policy, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a> in the <i>IAM User Guide</i>.</p>
@@ -25870,7 +25921,8 @@ impl Iam for IamClient {
             return Err(UpdateAccountPasswordPolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates the policy that grants an IAM entity permission to assume a role. This is typically referred to as the "role trust policy". For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p>
@@ -25897,7 +25949,8 @@ impl Iam for IamClient {
             return Err(UpdateAssumeRolePolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Updates the name and/or the path of the specified IAM group.</p> <important> <p> You should understand the implications of changing a group&#39;s path or name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_WorkingWithGroupsAndUsers.html">Renaming Users and Groups</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>The person making the request (the principal), must have permission to change the role group with the old name and the new name. For example, to change the group named <code>Managers</code> to <code>MGRs</code>, the principal must have a policy that allows them to update both groups. If the principal has permission to update the <code>Managers</code> group, but not the <code>MGRs</code> group, then the update fails. For more information about permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html">Access Management</a>. </p> </note></p>
@@ -25924,7 +25977,8 @@ impl Iam for IamClient {
             return Err(UpdateGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Changes the password for the specified IAM user.</p> <p>IAM users can change their own passwords by calling <a>ChangePassword</a>. For more information about modifying passwords, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
@@ -25951,7 +26005,8 @@ impl Iam for IamClient {
             return Err(UpdateLoginProfileError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this operation completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider&#39;s certificate changes, which occurs rarely. However, if the provider&#39;s certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Trust for the OIDC provider is derived from the provider&#39;s certificate and is validated by the thumbprint. Therefore, it is best to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> operation to highly privileged users.</p> </note></p>
@@ -25980,7 +26035,8 @@ impl Iam for IamClient {
             ));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates the description or maximum session duration setting of a role.</p>
@@ -26151,7 +26207,8 @@ impl Iam for IamClient {
             return Err(UpdateSSHPublicKeyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Updates the name and/or the path of the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <important> <p>You should understand the implications of changing a server certificate&#39;s path or name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs_manage.html#RenamingServerCerts">Renaming a Server Certificate</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>The person making the request (the principal), must have permission to change the server certificate with the old name and the new name. For example, to change the certificate named <code>ProductionCert</code> to <code>ProdCert</code>, the principal must have a policy that allows them to update both certificates. If the principal has permission to update the <code>ProductionCert</code> group, but not the <code>ProdCert</code> certificate, then the update fails. For more information about permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html">Access Management</a> in the <i>IAM User Guide</i>.</p> </note></p>
@@ -26178,7 +26235,8 @@ impl Iam for IamClient {
             return Err(UpdateServerCertificateError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This operation can be used to disable a user's service-specific credential as part of a credential rotation work flow.</p>
@@ -26207,7 +26265,8 @@ impl Iam for IamClient {
             ));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This operation can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
@@ -26234,7 +26293,8 @@ impl Iam for IamClient {
             return Err(UpdateSigningCertificateError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Updates the name and/or the path of the specified IAM user.</p> <important> <p> You should understand the implications of changing an IAM user&#39;s path or name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_renaming">Renaming an IAM User</a> and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_rename.html">Renaming an IAM Group</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p> To change a user name, the requester must have appropriate permissions on both the source object and the target object. For example, to change Bob to Robert, the entity making the request must have permission on Bob and Robert, or must have permission on all (*). For more information about permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html">Permissions and Policies</a>. </p> </note></p>
@@ -26261,7 +26321,8 @@ impl Iam for IamClient {
             return Err(UpdateUserError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Uploads an SSH public key and associates it with the specified IAM user.</p> <p>The SSH public key uploaded by this operation can be used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>

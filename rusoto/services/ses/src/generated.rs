@@ -11285,7 +11285,8 @@ impl Ses for SesClient {
             ));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
@@ -11667,7 +11668,8 @@ impl Ses for SesClient {
             ));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>You can execute this operation no more than once per second.</p>
@@ -11988,7 +11990,8 @@ impl Ses for SesClient {
             return Err(DeleteVerifiedEmailAddressError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
@@ -13953,7 +13956,8 @@ impl Ses for SesClient {
             return Err(UpdateAccountSendingEnabledError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates the event destination of a configuration set. Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>You can execute this operation no more than once per second.</p>
@@ -14040,7 +14044,8 @@ impl Ses for SesClient {
             );
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Enables or disables email sending for messages sent using a specific configuration set in a given AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending for a configuration set when the reputation metrics for that configuration set (such as your bounce on complaint rate) exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
@@ -14069,7 +14074,8 @@ impl Ses for SesClient {
             ));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Modifies an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
@@ -14152,7 +14158,8 @@ impl Ses for SesClient {
             ));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
@@ -14375,7 +14382,8 @@ impl Ses for SesClient {
             return Err(VerifyEmailAddressError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS region and attempts to verify it. As a result of executing this operation, a verification email is sent to the specified address.</p> <p>You can execute this operation no more than once per second.</p>

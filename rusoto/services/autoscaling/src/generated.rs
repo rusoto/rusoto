@@ -10490,7 +10490,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(AttachInstancesError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -10771,7 +10772,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(CreateAutoScalingGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -10798,7 +10800,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(CreateLaunchConfigurationError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -10825,7 +10828,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(CreateOrUpdateTagsError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity. This ensures that Amazon EC2 Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>
@@ -10852,7 +10856,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DeleteAutoScalingGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>
@@ -10879,7 +10884,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DeleteLaunchConfigurationError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>
@@ -10957,7 +10963,8 @@ impl Autoscaling for AutoscalingClient {
             ));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified scaling policy.</p> <p>Deleting either a step scaling policy or a simple scaling policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/deleting-scaling-policy.html">Deleting a Scaling Policy</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -10984,7 +10991,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DeletePolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified scheduled action.</p>
@@ -11011,7 +11019,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DeleteScheduledActionError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified tags.</p>
@@ -11035,7 +11044,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DeleteTagsError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Describes the current Amazon EC2 Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -12101,7 +12111,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DisableMetricsCollectionError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-monitoring.html">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -12128,7 +12139,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(EnableMetricsCollectionError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Moves the specified instances into the standby state.</p> <p>If you choose to decrement the desired capacity of the Auto Scaling group, the instances can enter standby as long as the desired capacity of the Auto Scaling group after the instances are placed into standby is equal to or greater than the minimum capacity of the group.</p> <p>If you choose not to decrement the desired capacity of the Auto Scaling group, the Auto Scaling group launches new instances to replace the instances on standby.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -12201,7 +12213,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(ExecutePolicyError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Moves the specified instances out of the standby state.</p> <p>After you put the instances back in service, the desired capacity is incremented.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -12323,7 +12336,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(PutNotificationConfigurationError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Creates or updates a scaling policy for an Auto Scaling group. To update an existing scaling policy, use the existing policy name and set the parameters to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>For more information about using scaling policies to scale your Auto Scaling group automatically, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html">Dynamic Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -12396,7 +12410,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(PutScheduledUpdateGroupActionError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -12475,7 +12490,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(ResumeProcessesError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html">What Is Amazon EC2 Auto Scaling?</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -12502,7 +12518,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(SetDesiredCapacityError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Sets the health status of the specified instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -12529,7 +12546,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(SetInstanceHealthError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -12605,7 +12623,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(SuspendProcessesError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>
@@ -12683,7 +12702,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(UpdateAutoScalingGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 }
 

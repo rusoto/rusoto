@@ -10033,7 +10033,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(AbortEnvironmentUpdateError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>
@@ -10503,7 +10504,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DeleteApplicationError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
@@ -10530,7 +10532,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DeleteApplicationVersionError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
@@ -10557,7 +10560,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DeleteConfigurationTemplateError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
@@ -10584,7 +10588,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DeleteEnvironmentConfigurationError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified version of a custom platform.</p>
@@ -11465,7 +11470,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(RebuildEnvironmentError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
@@ -11492,7 +11498,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(RequestEnvironmentInfoError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
@@ -11519,7 +11526,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(RestartAppServerError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
@@ -11596,7 +11604,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(SwapEnvironmentCNAMEsError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Terminates the specified environment.</p>
@@ -11924,7 +11933,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(UpdateTagsForResourceError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>

@@ -12927,7 +12927,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DeleteCacheParameterGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes a cache security group.</p> <note> <p>You cannot delete a cache security group if it is associated with any clusters.</p> </note></p>
@@ -12954,7 +12955,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DeleteCacheSecurityGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes a cache subnet group.</p> <note> <p>You cannot delete a cache subnet group if it is associated with any clusters.</p> </note></p>
@@ -12981,7 +12983,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DeleteCacheSubnetGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>

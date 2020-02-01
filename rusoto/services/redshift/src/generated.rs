@@ -19204,7 +19204,8 @@ impl Redshift for RedshiftClient {
             return Err(CreateTagsError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes a previously provisioned cluster without its final snapshot being created. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be "final-snapshot" while the snapshot is being taken, then it's "deleting" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
@@ -19278,7 +19279,8 @@ impl Redshift for RedshiftClient {
             return Err(DeleteClusterParameterGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
@@ -19305,7 +19307,8 @@ impl Redshift for RedshiftClient {
             return Err(DeleteClusterSecurityGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified manual snapshot. The snapshot must be in the <code>available</code> state, with no other users authorized to access the snapshot. </p> <p>Unlike automated snapshots, manual snapshots are retained even after you delete your cluster. Amazon Redshift does not delete your manual snapshots. You must delete manual snapshot explicitly to avoid getting charged. If other accounts are authorized to access the snapshot, you must revoke all of the authorizations before you can delete the snapshot.</p>
@@ -19381,7 +19384,8 @@ impl Redshift for RedshiftClient {
             return Err(DeleteClusterSubnetGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes an Amazon Redshift event notification subscription.</p>
@@ -19408,7 +19412,8 @@ impl Redshift for RedshiftClient {
             return Err(DeleteEventSubscriptionError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified HSM client certificate.</p>
@@ -19435,7 +19440,8 @@ impl Redshift for RedshiftClient {
             return Err(DeleteHsmClientCertificateError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified Amazon Redshift HSM configuration.</p>
@@ -19462,7 +19468,8 @@ impl Redshift for RedshiftClient {
             return Err(DeleteHsmConfigurationError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes a scheduled action. </p>
@@ -19489,7 +19496,8 @@ impl Redshift for RedshiftClient {
             return Err(DeleteScheduledActionError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified snapshot copy grant.</p>
@@ -19516,7 +19524,8 @@ impl Redshift for RedshiftClient {
             return Err(DeleteSnapshotCopyGrantError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes a snapshot schedule.</p>
@@ -19543,7 +19552,8 @@ impl Redshift for RedshiftClient {
             return Err(DeleteSnapshotScheduleError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>
@@ -19570,7 +19580,8 @@ impl Redshift for RedshiftClient {
             return Err(DeleteTagsError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Returns a list of attributes attached to an account</p>
@@ -21558,7 +21569,8 @@ impl Redshift for RedshiftClient {
             return Err(ModifyClusterSnapshotScheduleError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>

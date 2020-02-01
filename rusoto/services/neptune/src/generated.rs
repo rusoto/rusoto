@@ -13093,7 +13093,8 @@ impl Neptune for NeptuneClient {
             return Err(AddRoleToDBClusterError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Adds a source identifier to an existing event notification subscription.</p>
@@ -13174,7 +13175,8 @@ impl Neptune for NeptuneClient {
             return Err(AddTagsToResourceError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>
@@ -13792,7 +13794,8 @@ impl Neptune for NeptuneClient {
             return Err(DeleteDBClusterParameterGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note></p>
@@ -13917,7 +13920,8 @@ impl Neptune for NeptuneClient {
             return Err(DeleteDBParameterGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note></p>
@@ -13944,7 +13948,8 @@ impl Neptune for NeptuneClient {
             return Err(DeleteDBSubnetGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes an event notification subscription.</p>
@@ -15472,7 +15477,8 @@ impl Neptune for NeptuneClient {
             return Err(RemoveRoleFromDBClusterError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes a source identifier from an existing event notification subscription.</p>
@@ -15553,7 +15559,8 @@ impl Neptune for NeptuneClient {
             return Err(RemoveTagsFromResourceError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters.</p> <p> When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <a>RebootDBInstance</a> request. You must call <a>RebootDBInstance</a> for every DB instance in your DB cluster that you want the updated static parameter to apply to.</p>

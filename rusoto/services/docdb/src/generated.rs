@@ -9318,7 +9318,8 @@ impl Docdb for DocdbClient {
             return Err(AddTagsToResourceError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>
@@ -9789,7 +9790,8 @@ impl Docdb for DocdbClient {
             return Err(DeleteDBClusterParameterGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note></p>
@@ -9914,7 +9916,8 @@ impl Docdb for DocdbClient {
             return Err(DeleteDBSubnetGroupError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Returns a list of certificate authority (CA) certificates provided by Amazon RDS for this AWS account.</p>
@@ -11039,7 +11042,8 @@ impl Docdb for DocdbClient {
             return Err(RemoveTagsFromResourceError::from_response(response));
         }
 
-        Ok(std::mem::drop(response))
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters, submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When you reset the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance reboot.</p>

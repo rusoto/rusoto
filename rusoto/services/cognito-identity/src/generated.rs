@@ -2278,7 +2278,8 @@ impl CognitoIdentity for CognitoIdentityClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            Ok(std::mem::drop(response))
+            std::mem::drop(response);
+            Ok(())
         } else {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
@@ -2665,7 +2666,8 @@ impl CognitoIdentity for CognitoIdentityClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            Ok(std::mem::drop(response))
+            std::mem::drop(response);
+            Ok(())
         } else {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
@@ -2721,7 +2723,8 @@ impl CognitoIdentity for CognitoIdentityClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            Ok(std::mem::drop(response))
+            std::mem::drop(response);
+            Ok(())
         } else {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
@@ -2747,7 +2750,8 @@ impl CognitoIdentity for CognitoIdentityClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            Ok(std::mem::drop(response))
+            std::mem::drop(response);
+            Ok(())
         } else {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;

@@ -43,7 +43,7 @@ pub fn generate_response_parser(
     parse_non_payload: &str,
 ) -> String {
     if operation.output.is_none() {
-        return "Ok(std::mem::drop(response))".to_string();
+        return "std::mem::drop(response);\nOk(())".to_string();
     }
 
     let shape_name = &operation
@@ -82,16 +82,16 @@ pub fn generate_response_parser(
                 .expect("failed to get output member shape");
             match payload_shape.shape_type {
                 payload_type
-                    if payload_type == ShapeType::Blob || payload_type == ShapeType::String =>
-                {
-                    payload_body_parser(
-                        payload_type,
-                        &mutated_shape_name,
-                        payload_member_name,
-                        has_streaming_payload(output_shape),
-                        parse_non_payload,
-                    )
-                }
+                if payload_type == ShapeType::Blob || payload_type == ShapeType::String =>
+                    {
+                        payload_body_parser(
+                            payload_type,
+                            &mutated_shape_name,
+                            payload_member_name,
+                            has_streaming_payload(output_shape),
+                            parse_non_payload,
+                        )
+                    }
                 _ => xml_body_parser(
                     &mutated_shape_name,
                     result_wrapper,
@@ -122,7 +122,7 @@ fn payload_body_parser(
                     output_shape = output_shape,
                     payload_member = payload_member.to_snake_case(),
                     parse_non_payload = parse_non_payload)
-        },
+        }
         ShapeType::Blob if streaming => {
             format!("
                 let mut result = {output_shape}::default();
@@ -133,7 +133,7 @@ fn payload_body_parser(
                     output_shape = output_shape,
                     payload_member = payload_member.to_snake_case(),
                     parse_non_payload = parse_non_payload)
-        },
+        }
         _ => {
             format!("
                 let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
@@ -145,7 +145,7 @@ fn payload_body_parser(
                     output_shape = output_shape,
                     payload_member = payload_member.to_snake_case(),
                     parse_non_payload = parse_non_payload)
-        },
+        }
     }
 }
 
@@ -220,7 +220,7 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) 
                             member_name,
                             member,
                             &member_name.to_string(),
-                            false
+                            false,
                         )
                     )
                 })
