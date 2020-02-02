@@ -24,7 +24,6 @@ serde_derive = "1.0.2"
 version = "0.3"
 
 [dependencies.rusoto_core]
-version = "0.43.0-beta1"
 path = "../../core"
 default-features = false
 
@@ -32,7 +31,6 @@ default-features = false
 tokio = "0.2"
 
 [dev-dependencies.rusoto_mock]
-version = "0.43.0-beta1"
 path = "../../../mock"
 default-features = false
 
