@@ -1785,7 +1785,7 @@ impl fmt::Display for UpdateApplicationError {
 }
 impl Error for UpdateApplicationError {}
 /// Trait representing the capabilities of the AWSServerlessApplicationRepository API. AWSServerlessApplicationRepository clients implement this trait.
-pub trait ServerlessRepo {
+pub trait ServerlessRepo: region::GetRegion {
     /// <p>Creates an application, optionally including an AWS SAM file to create the first application version in the same call.</p>
     fn create_application(
         &self,
@@ -1909,6 +1909,12 @@ impl fmt::Debug for ServerlessRepoClient {
         f.debug_struct("ServerlessRepoClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ServerlessRepoClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

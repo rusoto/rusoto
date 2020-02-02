@@ -10479,7 +10479,7 @@ impl fmt::Display for VerifyEmailIdentityError {
 }
 impl Error for VerifyEmailIdentityError {}
 /// Trait representing the capabilities of the Amazon SES API. Amazon SES clients implement this trait.
-pub trait Ses {
+pub trait Ses: region::GetRegion {
     /// <p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn clone_receipt_rule_set(
         &self,
@@ -10984,6 +10984,12 @@ impl fmt::Debug for SesClient {
         f.debug_struct("SesClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for SesClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

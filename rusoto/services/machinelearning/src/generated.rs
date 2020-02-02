@@ -2852,7 +2852,7 @@ impl fmt::Display for UpdateMLModelError {
 }
 impl Error for UpdateMLModelError {}
 /// Trait representing the capabilities of the Amazon Machine Learning API. Amazon Machine Learning clients implement this trait.
-pub trait MachineLearning {
+pub trait MachineLearning: region::GetRegion {
     /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>
     fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
 
@@ -3057,6 +3057,12 @@ impl fmt::Debug for MachineLearningClient {
         f.debug_struct("MachineLearningClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MachineLearningClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -5472,7 +5472,7 @@ impl fmt::Display for VerifyTrustError {
 }
 impl Error for VerifyTrustError {}
 /// Trait representing the capabilities of the Directory Service API. Directory Service clients implement this trait.
-pub trait DirectoryService {
+pub trait DirectoryService: region::GetRegion {
     /// <p>Accepts a directory sharing request that was sent from the directory owner account.</p>
     fn accept_shared_directory(
         &self,
@@ -5853,6 +5853,12 @@ impl fmt::Debug for DirectoryServiceClient {
         f.debug_struct("DirectoryServiceClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for DirectoryServiceClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

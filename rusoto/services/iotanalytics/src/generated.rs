@@ -3660,7 +3660,7 @@ impl fmt::Display for UpdatePipelineError {
 }
 impl Error for UpdatePipelineError {}
 /// Trait representing the capabilities of the AWS IoT Analytics API. AWS IoT Analytics clients implement this trait.
-pub trait IotAnalytics {
+pub trait IotAnalytics: region::GetRegion {
     /// <p>Sends messages to a channel.</p>
     fn batch_put_message(
         &self,
@@ -3894,6 +3894,12 @@ impl fmt::Debug for IotAnalyticsClient {
         f.debug_struct("IotAnalyticsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for IotAnalyticsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -734,7 +734,7 @@ impl fmt::Display for UntagResourcesError {
 }
 impl Error for UntagResourcesError {}
 /// Trait representing the capabilities of the AWS Resource Groups Tagging API API. AWS Resource Groups Tagging API clients implement this trait.
-pub trait ResourceGroupsTaggingApi {
+pub trait ResourceGroupsTaggingApi: region::GetRegion {
     /// <p>Describes the status of the <code>StartReportCreation</code> operation. </p> <p>You can call this operation only from the organization's master account and from the us-east-1 Region.</p>
     fn describe_report_creation(
         &self,
@@ -827,6 +827,12 @@ impl fmt::Debug for ResourceGroupsTaggingApiClient {
         f.debug_struct("ResourceGroupsTaggingApiClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ResourceGroupsTaggingApiClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -1143,7 +1143,7 @@ impl fmt::Display for RegisterScalableTargetError {
 }
 impl Error for RegisterScalableTargetError {}
 /// Trait representing the capabilities of the Application Auto Scaling API. Application Auto Scaling clients implement this trait.
-pub trait ApplicationAutoScaling {
+pub trait ApplicationAutoScaling: region::GetRegion {
     /// <p>Deletes the specified scaling policy for an Application Auto Scaling scalable target.</p> <p>Deleting a step scaling policy deletes the underlying alarm action, but does not delete the CloudWatch alarm associated with the scaling policy, even if it no longer has an associated action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-step-scaling-policies.html#delete-step-scaling-policy">Delete a Step Scaling Policy</a> and <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-target-tracking.html#delete-target-tracking-policy">Delete a Target Tracking Scaling Policy</a> in the <i>Application Auto Scaling User Guide</i>.</p> <p>To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>.</p>
     fn delete_scaling_policy(
         &self,
@@ -1246,6 +1246,12 @@ impl fmt::Debug for ApplicationAutoScalingClient {
         f.debug_struct("ApplicationAutoScalingClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ApplicationAutoScalingClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

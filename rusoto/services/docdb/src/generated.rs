@@ -8947,7 +8947,7 @@ impl fmt::Display for StopDBClusterError {
 }
 impl Error for StopDBClusterError {}
 /// Trait representing the capabilities of the Amazon DocDB API. Amazon DocDB clients implement this trait.
-pub trait Docdb {
+pub trait Docdb: region::GetRegion {
     /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources. or in a <code>Condition</code> statement in an AWS Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>
     fn add_tags_to_resource(
         &self,
@@ -9248,6 +9248,12 @@ impl fmt::Debug for DocdbClient {
         f.debug_struct("DocdbClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for DocdbClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

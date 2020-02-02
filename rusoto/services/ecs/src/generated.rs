@@ -5959,7 +5959,7 @@ impl fmt::Display for UpdateTaskSetError {
 }
 impl Error for UpdateTaskSetError {}
 /// Trait representing the capabilities of the Amazon ECS API. Amazon ECS clients implement this trait.
-pub trait Ecs {
+pub trait Ecs: region::GetRegion {
     /// <p>Creates a new capacity provider. Capacity providers are associated with an Amazon ECS cluster and are used in capacity provider strategies to facilitate cluster auto scaling.</p> <p>Only capacity providers using an Auto Scaling group can be created. Amazon ECS tasks on AWS Fargate use the <code>FARGATE</code> and <code>FARGATE_SPOT</code> capacity providers which are already created and available to all accounts in Regions supported by AWS Fargate.</p>
     fn create_capacity_provider(
         &self,
@@ -6284,6 +6284,12 @@ impl fmt::Debug for EcsClient {
         f.debug_struct("EcsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for EcsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -3724,7 +3724,7 @@ impl fmt::Display for StartImportError {
 }
 impl Error for StartImportError {}
 /// Trait representing the capabilities of the Amazon Lex Model Building Service API. Amazon Lex Model Building Service clients implement this trait.
-pub trait LexModels {
+pub trait LexModels: region::GetRegion {
     /// <p>Creates a new version of the bot based on the <code>$LATEST</code> version. If the <code>$LATEST</code> version of this resource hasn't changed since you created the last version, Amazon Lex doesn't create a new version. It returns the last created version.</p> <note> <p>You can update only the <code>$LATEST</code> version of the bot. You can't update the numbered versions that you create with the <code>CreateBotVersion</code> operation.</p> </note> <p> When you create the first version of a bot, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p> This operation requires permission for the <code>lex:CreateBotVersion</code> action. </p>
     fn create_bot_version(
         &self,
@@ -3968,6 +3968,12 @@ impl fmt::Debug for LexModelsClient {
         f.debug_struct("LexModelsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for LexModelsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

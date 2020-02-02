@@ -6646,7 +6646,7 @@ impl fmt::Display for UpdateSkillGroupError {
 }
 impl Error for UpdateSkillGroupError {}
 /// Trait representing the capabilities of the Alexa For Business API. Alexa For Business clients implement this trait.
-pub trait AlexaForBusiness {
+pub trait AlexaForBusiness: region::GetRegion {
     /// <p>Associates a skill with the organization under the customer's AWS account. If a skill is private, the user implicitly accepts access to this skill during enablement.</p>
     fn approve_skill(
         &self,
@@ -7245,6 +7245,12 @@ impl fmt::Debug for AlexaForBusinessClient {
         f.debug_struct("AlexaForBusinessClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for AlexaForBusinessClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

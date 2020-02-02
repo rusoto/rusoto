@@ -1888,7 +1888,7 @@ impl fmt::Display for UpdateJobQueueError {
 }
 impl Error for UpdateJobQueueError {}
 /// Trait representing the capabilities of the AWS Batch API. AWS Batch clients implement this trait.
-pub trait Batch {
+pub trait Batch: region::GetRegion {
     /// <p>Cancels a job in an AWS Batch job queue. Jobs that are in the <code>SUBMITTED</code>, <code>PENDING</code>, or <code>RUNNABLE</code> state are cancelled. Jobs that have progressed to <code>STARTING</code> or <code>RUNNING</code> are not cancelled (but the API operation still succeeds, even if no job is cancelled); these jobs must be terminated with the <a>TerminateJob</a> operation.</p>
     fn cancel_job(
         &self,
@@ -2024,6 +2024,12 @@ impl fmt::Debug for BatchClient {
         f.debug_struct("BatchClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for BatchClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -207,7 +207,7 @@ impl fmt::Display for PostToConnectionError {
 }
 impl Error for PostToConnectionError {}
 /// Trait representing the capabilities of the AmazonApiGatewayManagementApi API. AmazonApiGatewayManagementApi clients implement this trait.
-pub trait ApiGatewayManagementApi {
+pub trait ApiGatewayManagementApi: region::GetRegion {
     /// <p>Delete the connection with the provided id.</p>
     fn delete_connection(
         &self,
@@ -271,6 +271,12 @@ impl fmt::Debug for ApiGatewayManagementApiClient {
         f.debug_struct("ApiGatewayManagementApiClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ApiGatewayManagementApiClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

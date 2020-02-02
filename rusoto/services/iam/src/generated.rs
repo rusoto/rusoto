@@ -19782,7 +19782,7 @@ impl fmt::Display for UploadSigningCertificateError {
 }
 impl Error for UploadSigningCertificateError {}
 /// Trait representing the capabilities of the IAM API. IAM clients implement this trait.
-pub trait Iam {
+pub trait Iam: region::GetRegion {
     /// <p>Adds a new client ID (also known as audience) to the list of client IDs already registered for the specified IAM OpenID Connect (OIDC) provider resource.</p> <p>This operation is idempotent; it does not fail or return an error if you add an existing client ID to the provider.</p>
     fn add_client_id_to_open_id_connect_provider(
         &self,
@@ -20628,6 +20628,12 @@ impl fmt::Debug for IamClient {
         f.debug_struct("IamClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for IamClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

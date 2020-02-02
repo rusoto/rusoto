@@ -1116,7 +1116,7 @@ impl fmt::Display for StopPHIDetectionJobError {
 }
 impl Error for StopPHIDetectionJobError {}
 /// Trait representing the capabilities of the ComprehendMedical API. ComprehendMedical clients implement this trait.
-pub trait ComprehendMedical {
+pub trait ComprehendMedical: region::GetRegion {
     /// <p>Gets the properties associated with a medical entities detection job. Use this operation to get the status of a detection job.</p>
     fn describe_entities_detection_v2_job(
         &self,
@@ -1225,6 +1225,12 @@ impl fmt::Debug for ComprehendMedicalClient {
         f.debug_struct("ComprehendMedicalClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ComprehendMedicalClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

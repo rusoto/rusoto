@@ -5860,7 +5860,7 @@ impl fmt::Display for UpdateServiceAccessPoliciesError {
 }
 impl Error for UpdateServiceAccessPoliciesError {}
 /// Trait representing the capabilities of the Amazon CloudSearch API. Amazon CloudSearch clients implement this trait.
-pub trait CloudSearch {
+pub trait CloudSearch: region::GetRegion {
     /// <p>Indexes the search suggestions. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn build_suggesters(
         &self,
@@ -6056,6 +6056,12 @@ impl fmt::Debug for CloudSearchClient {
         f.debug_struct("CloudSearchClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CloudSearchClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

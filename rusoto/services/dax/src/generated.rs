@@ -2411,7 +2411,7 @@ impl fmt::Display for UpdateSubnetGroupError {
 }
 impl Error for UpdateSubnetGroupError {}
 /// Trait representing the capabilities of the Amazon DAX API. Amazon DAX clients implement this trait.
-pub trait DynamodbAccelerator {
+pub trait DynamodbAccelerator: region::GetRegion {
     /// <p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>
     fn create_cluster(
         &self,
@@ -2577,6 +2577,12 @@ impl fmt::Debug for DynamodbAcceleratorClient {
         f.debug_struct("DynamodbAcceleratorClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for DynamodbAcceleratorClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

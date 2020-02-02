@@ -5956,7 +5956,7 @@ impl fmt::Display for UpdateQueueError {
 }
 impl Error for UpdateQueueError {}
 /// Trait representing the capabilities of the MediaConvert API. MediaConvert clients implement this trait.
-pub trait MediaConvert {
+pub trait MediaConvert: region::GetRegion {
     /// <p>Associates an AWS Certificate Manager (ACM) Amazon Resource Name (ARN) with AWS Elemental MediaConvert.</p>
     fn associate_certificate(
         &self,
@@ -6140,6 +6140,12 @@ impl fmt::Debug for MediaConvertClient {
         f.debug_struct("MediaConvertClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MediaConvertClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

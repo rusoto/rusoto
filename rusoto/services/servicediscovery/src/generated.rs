@@ -1816,7 +1816,7 @@ impl fmt::Display for UpdateServiceError {
 }
 impl Error for UpdateServiceError {}
 /// Trait representing the capabilities of the ServiceDiscovery API. ServiceDiscovery clients implement this trait.
-pub trait ServiceDiscovery {
+pub trait ServiceDiscovery: region::GetRegion {
     /// <p>Creates an HTTP namespace. Service instances that you register using an HTTP namespace can be discovered using a <code>DiscoverInstances</code> request but can't be discovered using DNS. </p> <p>For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
     fn create_http_namespace(
         &self,
@@ -1979,6 +1979,12 @@ impl fmt::Debug for ServiceDiscoveryClient {
         f.debug_struct("ServiceDiscoveryClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ServiceDiscoveryClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

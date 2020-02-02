@@ -150,7 +150,7 @@ impl fmt::Display for GetEntitlementsError {
 }
 impl Error for GetEntitlementsError {}
 /// Trait representing the capabilities of the AWS Marketplace Entitlement Service API. AWS Marketplace Entitlement Service clients implement this trait.
-pub trait MarketplaceEntitlement {
+pub trait MarketplaceEntitlement: region::GetRegion {
     /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
     fn get_entitlements(
         &self,
@@ -199,6 +199,12 @@ impl fmt::Debug for MarketplaceEntitlementClient {
         f.debug_struct("MarketplaceEntitlementClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MarketplaceEntitlementClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

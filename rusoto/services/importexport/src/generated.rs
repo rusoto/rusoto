@@ -1535,7 +1535,7 @@ impl fmt::Display for UpdateJobError {
 }
 impl Error for UpdateJobError {}
 /// Trait representing the capabilities of the AWS Import/Export API. AWS Import/Export clients implement this trait.
-pub trait ImportExport {
+pub trait ImportExport: region::GetRegion {
     /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>
     fn cancel_job(&self, input: CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError>;
 
@@ -1599,6 +1599,12 @@ impl fmt::Debug for ImportExportClient {
         f.debug_struct("ImportExportClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ImportExportClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

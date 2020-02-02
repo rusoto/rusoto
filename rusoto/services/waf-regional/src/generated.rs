@@ -7166,7 +7166,7 @@ impl fmt::Display for UpdateXssMatchSetError {
 }
 impl Error for UpdateXssMatchSetError {}
 /// Trait representing the capabilities of the WAF Regional API. WAF Regional clients implement this trait.
-pub trait WAFRegional {
+pub trait WAFRegional: region::GetRegion {
     /// <p>Associates a web ACL with a resource, either an application load balancer or Amazon API Gateway stage.</p>
     fn associate_web_acl(
         &self,
@@ -7677,6 +7677,12 @@ impl fmt::Debug for WAFRegionalClient {
         f.debug_struct("WAFRegionalClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for WAFRegionalClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

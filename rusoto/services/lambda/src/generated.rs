@@ -4820,7 +4820,7 @@ impl fmt::Display for UpdateFunctionEventInvokeConfigError {
 }
 impl Error for UpdateFunctionEventInvokeConfigError {}
 /// Trait representing the capabilities of the AWS Lambda API. AWS Lambda clients implement this trait.
-pub trait Lambda {
+pub trait Lambda: region::GetRegion {
     /// <p>Adds permissions to the resource-based policy of a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Use this action to grant layer usage permission to other accounts. You can grant permission to a single account, all AWS accounts, or all accounts in an organization.</p> <p>To revoke permission, call <a>RemoveLayerVersionPermission</a> with the statement ID that you specified when you added it.</p>
     fn add_layer_version_permission(
         &self,
@@ -5141,6 +5141,12 @@ impl fmt::Debug for LambdaClient {
         f.debug_struct("LambdaClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for LambdaClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

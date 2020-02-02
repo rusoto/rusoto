@@ -753,7 +753,7 @@ impl fmt::Display for PutSessionError {
 }
 impl Error for PutSessionError {}
 /// Trait representing the capabilities of the Amazon Lex Runtime Service API. Amazon Lex Runtime Service clients implement this trait.
-pub trait LexRuntime {
+pub trait LexRuntime: region::GetRegion {
     /// <p>Removes session information for a specified bot, alias, and user ID. </p>
     fn delete_session(
         &self,
@@ -823,6 +823,12 @@ impl fmt::Debug for LexRuntimeClient {
         f.debug_struct("LexRuntimeClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for LexRuntimeClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

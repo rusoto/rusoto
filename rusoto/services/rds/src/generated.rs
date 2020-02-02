@@ -27751,7 +27751,7 @@ impl fmt::Display for StopDBInstanceError {
 }
 impl Error for StopDBInstanceError {}
 /// Trait representing the capabilities of the Amazon RDS API. Amazon RDS clients implement this trait.
-pub trait Rds {
+pub trait Rds: region::GetRegion {
     /// <p><p>Associates an Identity and Access Management (IAM) role from an Amazon Aurora DB cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.Authorizing.html">Authorizing Amazon Aurora MySQL to Access Other AWS Services on Your Behalf</a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn add_role_to_db_cluster(
         &self,
@@ -28565,6 +28565,12 @@ impl fmt::Debug for RdsClient {
         f.debug_struct("RdsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for RdsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

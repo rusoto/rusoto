@@ -3025,7 +3025,7 @@ impl fmt::Display for UpdateQualificationTypeError {
 }
 impl Error for UpdateQualificationTypeError {}
 /// Trait representing the capabilities of the Amazon MTurk API. Amazon MTurk clients implement this trait.
-pub trait MechanicalTurk {
+pub trait MechanicalTurk: region::GetRegion {
     /// <p> The <code>AcceptQualificationRequest</code> operation approves a Worker's request for a Qualification. </p> <p> Only the owner of the Qualification type can grant a Qualification request for that type. </p> <p> A successful request for the <code>AcceptQualificationRequest</code> operation returns with no errors and an empty body. </p>
     fn accept_qualification_request(
         &self,
@@ -3301,6 +3301,12 @@ impl fmt::Debug for MechanicalTurkClient {
         f.debug_struct("MechanicalTurkClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MechanicalTurkClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

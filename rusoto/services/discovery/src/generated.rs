@@ -2724,7 +2724,7 @@ impl fmt::Display for UpdateApplicationError {
 }
 impl Error for UpdateApplicationError {}
 /// Trait representing the capabilities of the AWS Application Discovery Service API. AWS Application Discovery Service clients implement this trait.
-pub trait Discovery {
+pub trait Discovery: region::GetRegion {
     /// <p>Associates one or more configuration items with an application.</p>
     fn associate_configuration_items_to_application(
         &self,
@@ -2920,6 +2920,12 @@ impl fmt::Debug for DiscoveryClient {
         f.debug_struct("DiscoveryClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for DiscoveryClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

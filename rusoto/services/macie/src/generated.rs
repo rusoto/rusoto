@@ -544,7 +544,7 @@ impl fmt::Display for UpdateS3ResourcesError {
 }
 impl Error for UpdateS3ResourcesError {}
 /// Trait representing the capabilities of the Amazon Macie API. Amazon Macie clients implement this trait.
-pub trait Macie {
+pub trait Macie: region::GetRegion {
     /// <p>Associates a specified AWS account with Amazon Macie as a member account.</p>
     fn associate_member_account(
         &self,
@@ -629,6 +629,12 @@ impl fmt::Debug for MacieClient {
         f.debug_struct("MacieClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MacieClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

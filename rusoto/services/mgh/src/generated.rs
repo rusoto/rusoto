@@ -1844,7 +1844,7 @@ impl fmt::Display for PutResourceAttributesError {
 }
 impl Error for PutResourceAttributesError {}
 /// Trait representing the capabilities of the AWS Migration Hub API. AWS Migration Hub clients implement this trait.
-pub trait MigrationHub {
+pub trait MigrationHub: region::GetRegion {
     /// <p><p>Associates a created artifact of an AWS cloud resource, the target receiving the migration, with the migration task performed by a migration tool. This API has the following traits:</p> <ul> <li> <p>Migration tools can call the <code>AssociateCreatedArtifact</code> operation to indicate which AWS artifact is associated with a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI&#39;s, EC2 instance, or DMS endpoint, etc.</p> </li> </ul></p>
     fn associate_created_artifact(
         &self,
@@ -1983,6 +1983,12 @@ impl fmt::Debug for MigrationHubClient {
         f.debug_struct("MigrationHubClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MigrationHubClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

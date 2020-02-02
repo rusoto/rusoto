@@ -1085,7 +1085,7 @@ impl fmt::Display for UpdateEnvironmentMembershipError {
 }
 impl Error for UpdateEnvironmentMembershipError {}
 /// Trait representing the capabilities of the AWS Cloud9 API. AWS Cloud9 clients implement this trait.
-pub trait Cloud9 {
+pub trait Cloud9: region::GetRegion {
     /// <p>Creates an AWS Cloud9 development environment, launches an Amazon Elastic Compute Cloud (Amazon EC2) instance, and then connects from the instance to the environment.</p>
     fn create_environment_ec2(
         &self,
@@ -1188,6 +1188,12 @@ impl fmt::Debug for Cloud9Client {
         f.debug_struct("Cloud9Client")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for Cloud9Client {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

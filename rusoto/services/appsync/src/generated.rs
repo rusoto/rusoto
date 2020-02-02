@@ -3788,7 +3788,7 @@ impl fmt::Display for UpdateTypeError {
 }
 impl Error for UpdateTypeError {}
 /// Trait representing the capabilities of the AWSAppSync API. AWSAppSync clients implement this trait.
-pub trait AppSync {
+pub trait AppSync: region::GetRegion {
     /// <p>Creates a cache for the GraphQL API.</p>
     fn create_api_cache(
         &self,
@@ -4074,6 +4074,12 @@ impl fmt::Debug for AppSyncClient {
         f.debug_struct("AppSyncClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for AppSyncClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -3488,7 +3488,7 @@ impl fmt::Display for UpdatePipelineError {
 }
 impl Error for UpdatePipelineError {}
 /// Trait representing the capabilities of the CodePipeline API. CodePipeline clients implement this trait.
-pub trait CodePipeline {
+pub trait CodePipeline: region::GetRegion {
     /// <p>Returns information about a specified job and whether that job has been received by the job worker. Used for custom actions only.</p>
     fn acknowledge_job(
         &self,
@@ -3744,6 +3744,12 @@ impl fmt::Debug for CodePipelineClient {
         f.debug_struct("CodePipelineClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CodePipelineClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

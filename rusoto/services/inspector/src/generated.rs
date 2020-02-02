@@ -3523,7 +3523,7 @@ impl fmt::Display for UpdateAssessmentTargetError {
 }
 impl Error for UpdateAssessmentTargetError {}
 /// Trait representing the capabilities of the Amazon Inspector API. Amazon Inspector clients implement this trait.
-pub trait Inspector {
+pub trait Inspector: region::GetRegion {
     /// <p>Assigns attributes (key and value pairs) to the findings that are specified by the ARNs of the findings.</p>
     fn add_attributes_to_findings(
         &self,
@@ -3787,6 +3787,12 @@ impl fmt::Debug for InspectorClient {
         f.debug_struct("InspectorClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for InspectorClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

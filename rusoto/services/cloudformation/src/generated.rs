@@ -11571,7 +11571,7 @@ impl fmt::Display for ValidateTemplateError {
 }
 impl Error for ValidateTemplateError {}
 /// Trait representing the capabilities of the AWS CloudFormation API. AWS CloudFormation clients implement this trait.
-pub trait CloudFormation {
+pub trait CloudFormation: region::GetRegion {
     /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>
     fn cancel_update_stack(
         &self,
@@ -11933,6 +11933,12 @@ impl fmt::Debug for CloudFormationClient {
         f.debug_struct("CloudFormationClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CloudFormationClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

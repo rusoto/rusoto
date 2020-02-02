@@ -2881,7 +2881,7 @@ impl fmt::Display for UpdateReplicationJobError {
 }
 impl Error for UpdateReplicationJobError {}
 /// Trait representing the capabilities of the SMS API. SMS clients implement this trait.
-pub trait ServerMigrationService {
+pub trait ServerMigrationService: region::GetRegion {
     /// <p>Creates an application. An application consists of one or more server groups. Each server group contain one or more servers.</p>
     fn create_app(
         &self,
@@ -3087,6 +3087,12 @@ impl fmt::Debug for ServerMigrationServiceClient {
         f.debug_struct("ServerMigrationServiceClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ServerMigrationServiceClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

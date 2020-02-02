@@ -8803,7 +8803,7 @@ impl fmt::Display for SetSubnetsError {
 }
 impl Error for SetSubnetsError {}
 /// Trait representing the capabilities of the Elastic Load Balancing v2 API. Elastic Load Balancing v2 clients implement this trait.
-pub trait Elb {
+pub trait Elb: region::GetRegion {
     /// <p>Adds the specified SSL server certificate to the certificate list for the specified HTTPS or TLS listener.</p> <p>If the certificate in already in the certificate list, the call is successful but the certificate is not added again.</p> <p>To get the certificate list for a listener, use <a>DescribeListenerCertificates</a>. To remove certificates from the certificate list for a listener, use <a>RemoveListenerCertificates</a>. To replace the default certificate for a listener, use <a>ModifyListener</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#https-listener-certificates">SSL Certificates</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn add_listener_certificates(
         &self,
@@ -9047,6 +9047,12 @@ impl fmt::Debug for ElbClient {
         f.debug_struct("ElbClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ElbClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

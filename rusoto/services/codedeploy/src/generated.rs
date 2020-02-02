@@ -6210,7 +6210,7 @@ impl fmt::Display for UpdateDeploymentGroupError {
 }
 impl Error for UpdateDeploymentGroupError {}
 /// Trait representing the capabilities of the CodeDeploy API. CodeDeploy clients implement this trait.
-pub trait CodeDeploy {
+pub trait CodeDeploy: region::GetRegion {
     /// <p>Adds tags to on-premises instances.</p>
     fn add_tags_to_on_premises_instances(
         &self,
@@ -6532,6 +6532,12 @@ impl fmt::Debug for CodeDeployClient {
         f.debug_struct("CodeDeployClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CodeDeployClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

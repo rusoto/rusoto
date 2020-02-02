@@ -1127,7 +1127,7 @@ impl fmt::Display for UpdateGroupQueryError {
 }
 impl Error for UpdateGroupQueryError {}
 /// Trait representing the capabilities of the Resource Groups API. Resource Groups clients implement this trait.
-pub trait ResourceGroups {
+pub trait ResourceGroups: region::GetRegion {
     /// <p>Creates a group with a specified name, description, and resource query.</p>
     fn create_group(
         &self,
@@ -1230,6 +1230,12 @@ impl fmt::Debug for ResourceGroupsClient {
         f.debug_struct("ResourceGroupsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ResourceGroupsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

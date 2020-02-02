@@ -9387,7 +9387,7 @@ impl fmt::Display for UpdateVoiceConnectorGroupError {
 }
 impl Error for UpdateVoiceConnectorGroupError {}
 /// Trait representing the capabilities of the Amazon Chime API. Amazon Chime clients implement this trait.
-pub trait Chime {
+pub trait Chime: region::GetRegion {
     /// <p>Associates a phone number with the specified Amazon Chime user.</p>
     fn associate_phone_number_with_user(
         &self,
@@ -9986,6 +9986,12 @@ impl fmt::Debug for ChimeClient {
         f.debug_struct("ChimeClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ChimeClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

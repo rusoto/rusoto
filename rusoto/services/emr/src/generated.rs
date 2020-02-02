@@ -3576,7 +3576,7 @@ impl fmt::Display for TerminateJobFlowsError {
 }
 impl Error for TerminateJobFlowsError {}
 /// Trait representing the capabilities of the Amazon EMR API. Amazon EMR clients implement this trait.
-pub trait Emr {
+pub trait Emr: region::GetRegion {
     /// <p><p>Adds an instance fleet to a running cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x.</p> </note></p>
     fn add_instance_fleet(
         &self,
@@ -3792,6 +3792,12 @@ impl fmt::Debug for EmrClient {
         f.debug_struct("EmrClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for EmrClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

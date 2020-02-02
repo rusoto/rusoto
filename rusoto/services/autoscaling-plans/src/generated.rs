@@ -736,7 +736,7 @@ impl fmt::Display for UpdateScalingPlanError {
 }
 impl Error for UpdateScalingPlanError {}
 /// Trait representing the capabilities of the AWS Auto Scaling Plans API. AWS Auto Scaling Plans clients implement this trait.
-pub trait AutoscalingPlans {
+pub trait AutoscalingPlans: region::GetRegion {
     /// <p>Creates a scaling plan.</p>
     fn create_scaling_plan(
         &self,
@@ -818,6 +818,12 @@ impl fmt::Debug for AutoscalingPlansClient {
         f.debug_struct("AutoscalingPlansClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for AutoscalingPlansClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -1693,7 +1693,7 @@ impl fmt::Display for UpdateStreamError {
 }
 impl Error for UpdateStreamError {}
 /// Trait representing the capabilities of the Kinesis Video API. Kinesis Video clients implement this trait.
-pub trait KinesisVideo {
+pub trait KinesisVideo: region::GetRegion {
     /// <p>Creates a signaling channel. </p> <p> <code>CreateSignalingChannel</code> is an asynchronous operation.</p>
     fn create_signaling_channel(
         &self,
@@ -1847,6 +1847,12 @@ impl fmt::Debug for KinesisVideoClient {
         f.debug_struct("KinesisVideoClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for KinesisVideoClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

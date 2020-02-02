@@ -4338,7 +4338,7 @@ impl fmt::Display for UpdateVirtualInterfaceAttributesError {
 }
 impl Error for UpdateVirtualInterfaceAttributesError {}
 /// Trait representing the capabilities of the AWS Direct Connect API. AWS Direct Connect clients implement this trait.
-pub trait DirectConnect {
+pub trait DirectConnect: region::GetRegion {
     /// <p>Accepts a proposal request to attach a virtual private gateway or transit gateway to a Direct Connect gateway.</p>
     fn accept_direct_connect_gateway_association_proposal(
         &self,
@@ -4707,6 +4707,12 @@ impl fmt::Debug for DirectConnectClient {
         f.debug_struct("DirectConnectClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for DirectConnectClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

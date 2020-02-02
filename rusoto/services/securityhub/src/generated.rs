@@ -3831,7 +3831,7 @@ impl fmt::Display for UpdateInsightError {
 }
 impl Error for UpdateInsightError {}
 /// Trait representing the capabilities of the AWS SecurityHub API. AWS SecurityHub clients implement this trait.
-pub trait SecurityHub {
+pub trait SecurityHub: region::GetRegion {
     /// <p>Accepts the invitation to be a member account and be monitored by the Security Hub master account that the invitation was sent from. When the member account accepts the invitation, permission is granted to the master account to view findings generated in the member account.</p>
     fn accept_invitation(
         &self,
@@ -4096,6 +4096,12 @@ impl fmt::Debug for SecurityHubClient {
         f.debug_struct("SecurityHubClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for SecurityHubClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

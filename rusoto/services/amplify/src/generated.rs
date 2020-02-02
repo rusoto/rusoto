@@ -3527,7 +3527,7 @@ impl fmt::Display for UpdateWebhookError {
 }
 impl Error for UpdateWebhookError {}
 /// Trait representing the capabilities of the Amplify API. Amplify clients implement this trait.
-pub trait Amplify {
+pub trait Amplify: region::GetRegion {
     /// <p> Creates a new Amplify App. </p>
     fn create_app(&self, input: CreateAppRequest) -> RusotoFuture<CreateAppResult, CreateAppError>;
 
@@ -3759,6 +3759,12 @@ impl fmt::Debug for AmplifyClient {
         f.debug_struct("AmplifyClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for AmplifyClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

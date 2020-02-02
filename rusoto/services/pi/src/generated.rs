@@ -337,7 +337,7 @@ impl fmt::Display for GetResourceMetricsError {
 }
 impl Error for GetResourceMetricsError {}
 /// Trait representing the capabilities of the AWS PI API. AWS PI clients implement this trait.
-pub trait PerformanceInsights {
+pub trait PerformanceInsights: region::GetRegion {
     /// <p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p>
     fn describe_dimension_keys(
         &self,
@@ -392,6 +392,12 @@ impl fmt::Debug for PerformanceInsightsClient {
         f.debug_struct("PerformanceInsightsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for PerformanceInsightsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

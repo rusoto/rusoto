@@ -7215,7 +7215,7 @@ impl fmt::Display for UpdateTagOptionError {
 }
 impl Error for UpdateTagOptionError {}
 /// Trait representing the capabilities of the AWS Service Catalog API. AWS Service Catalog clients implement this trait.
-pub trait ServiceCatalog {
+pub trait ServiceCatalog: region::GetRegion {
     /// <p>Accepts an offer to share the specified portfolio.</p>
     fn accept_portfolio_share(
         &self,
@@ -7785,6 +7785,12 @@ impl fmt::Debug for ServiceCatalogClient {
         f.debug_struct("ServiceCatalogClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ServiceCatalogClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

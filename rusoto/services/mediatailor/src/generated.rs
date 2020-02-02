@@ -572,7 +572,7 @@ impl fmt::Display for UntagResourceError {
 }
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the MediaTailor API. MediaTailor clients implement this trait.
-pub trait MediaTailor {
+pub trait MediaTailor: region::GetRegion {
     /// <p>Deletes the playback configuration for the specified name. </p>
     fn delete_playback_configuration(
         &self,
@@ -651,6 +651,12 @@ impl fmt::Debug for MediaTailorClient {
         f.debug_struct("MediaTailorClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MediaTailorClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

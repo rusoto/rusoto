@@ -5872,7 +5872,7 @@ impl fmt::Display for UpdateVTLDeviceTypeError {
 }
 impl Error for UpdateVTLDeviceTypeError {}
 /// Trait representing the capabilities of the AWS Storage Gateway API. AWS Storage Gateway clients implement this trait.
-pub trait StorageGateway {
+pub trait StorageGateway: region::GetRegion {
     /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the AWS Region that you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>
     fn activate_gateway(
         &self,
@@ -6362,6 +6362,12 @@ impl fmt::Debug for StorageGatewayClient {
         f.debug_struct("StorageGatewayClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for StorageGatewayClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

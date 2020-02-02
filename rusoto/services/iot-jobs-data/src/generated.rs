@@ -512,7 +512,7 @@ impl fmt::Display for UpdateJobExecutionError {
 }
 impl Error for UpdateJobExecutionError {}
 /// Trait representing the capabilities of the AWS IoT Jobs Data Plane API. AWS IoT Jobs Data Plane clients implement this trait.
-pub trait IotJobsData {
+pub trait IotJobsData: region::GetRegion {
     /// <p>Gets details of a job execution.</p>
     fn describe_job_execution(
         &self,
@@ -579,6 +579,12 @@ impl fmt::Debug for IotJobsDataClient {
         f.debug_struct("IotJobsDataClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for IotJobsDataClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -4050,7 +4050,7 @@ impl fmt::Display for UpdateStackError {
 }
 impl Error for UpdateStackError {}
 /// Trait representing the capabilities of the Amazon AppStream API. Amazon AppStream clients implement this trait.
-pub trait AppStream {
+pub trait AppStream: region::GetRegion {
     /// <p>Associates the specified fleet with the specified stack.</p>
     fn associate_fleet(
         &self,
@@ -4370,6 +4370,12 @@ impl fmt::Debug for AppStreamClient {
         f.debug_struct("AppStreamClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for AppStreamClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

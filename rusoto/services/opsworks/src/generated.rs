@@ -5498,7 +5498,7 @@ impl fmt::Display for UpdateVolumeError {
 }
 impl Error for UpdateVolumeError {}
 /// Trait representing the capabilities of the AWS OpsWorks API. AWS OpsWorks clients implement this trait.
-pub trait OpsWorks {
+pub trait OpsWorks: region::GetRegion {
     /// <p>Assign a registered instance to a layer.</p> <ul> <li> <p>You can assign registered on-premises instances to any layer type.</p> </li> <li> <p>You can assign registered Amazon EC2 instances only to custom layers.</p> </li> <li> <p>You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> </li> </ul> <p> <b>Required Permissions</b>: To use this action, an AWS Identity and Access Management (IAM) user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn assign_instance(
         &self,
@@ -5935,6 +5935,12 @@ impl fmt::Debug for OpsWorksClient {
         f.debug_struct("OpsWorksClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for OpsWorksClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 
