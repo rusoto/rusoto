@@ -1,10 +1,10 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
-description = "AWS SDK for Rust - Amazon CloudFront @ 2019-03-26"
-documentation = "https://docs.rs/rusoto_cloudfront"
-keywords = ["AWS", "Amazon", "cloudfront"]
+description = "AWS SDK for Rust - Amazon WorkMail Message Flow @ 2019-05-01"
+documentation = "https://docs.rs/rusoto_workmailmessageflow"
+keywords = ["AWS", "Amazon", "workmailmessageflow"]
 license = "MIT"
-name = "rusoto_cloudfront"
+name = "rusoto_workmailmessageflow"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
 version = "0.43.0-beta1"
@@ -17,7 +17,9 @@ exclude = ["test_resources/*"]
 [dependencies]
 async-trait = "0.1"
 bytes = "0.5"
-xml-rs = "0.8"
+serde = "1.0.2"
+serde_derive = "1.0.2"
+serde_json = "1.0"
 
 [dependencies.futures]
 version = "0.3"
@@ -25,14 +27,6 @@ version = "0.3"
 [dependencies.rusoto_core]
 path = "../../core"
 default-features = false
-
-[dependencies.serde]
-version = "1.0.2"
-optional = true
-
-[dependencies.serde_derive]
-version = "1.0.2"
-optional = true
 
 [dev-dependencies]
 tokio = "0.2"
