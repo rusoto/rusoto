@@ -1,4 +1,9 @@
 {
+  "accessanalyzer": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-11-01",
+    "baseTypeName": "AccessAnalyzer"
+  },
   "acm": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2015-12-08",
@@ -34,10 +39,20 @@
     "protocolVersion": "2018-11-29",
     "baseTypeName": "ApiGatewayV2"
   },
+  "appconfig": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-10-09",
+    "baseTypeName": "AppConfig"
+  },
   "application-autoscaling": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2016-02-06",
     "baseTypeName": "ApplicationAutoScaling"
+  },
+  "application-insights": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-11-25",
+    "baseTypeName": "ApplicationInsights"
   },
   "appmesh": {
     "version": "0.43.0-beta1",
@@ -68,6 +83,11 @@
     "version": "0.43.0-beta1",
     "protocolVersion": "2018-01-06",
     "baseTypeName": "AutoscalingPlans"
+  },
+  "backup": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-11-15",
+    "baseTypeName": "Backup"
   },
   "batch": {
     "version": "0.43.0-beta1",
@@ -106,7 +126,7 @@
   },
   "cloudfront": {
     "version": "0.43.0-beta1",
-    "protocolVersion": "2018-11-05",
+    "protocolVersion": "2019-03-26",
     "baseTypeName": "CloudFront"
   },
   "cloudhsm": {
@@ -154,6 +174,16 @@
     "protocolVersion": "2014-10-06",
     "baseTypeName": "CodeDeploy"
   },
+  "codeguru-reviewer": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-09-19",
+    "baseTypeName": "CodeGuruReviewer"
+  },
+  "codeguruprofiler": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-07-18",
+    "baseTypeName": "CodeGuruProfiler"
+  },
   "codepipeline": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2015-07-09",
@@ -163,6 +193,16 @@
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-04-19",
     "baseTypeName": "CodeStar"
+  },
+  "codestar-connections": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-12-01",
+    "baseTypeName": "CodeStarConnections"
+  },
+  "codestar-notifications": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-10-15",
+    "baseTypeName": "CodeStarNotifications"
   },
   "cognito-identity": {
     "version": "0.43.0-beta1",
@@ -189,6 +229,11 @@
     "protocolVersion": "2018-10-30",
     "baseTypeName": "ComprehendMedical"
   },
+  "compute-optimizer": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-11-01",
+    "baseTypeName": "ComputeOptimizer"
+  },
   "config": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2014-11-12",
@@ -199,20 +244,40 @@
     "protocolVersion": "2017-08-08",
     "baseTypeName": "Connect"
   },
+  "connectparticipant": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-09-07",
+    "baseTypeName": "ConnectParticipant"
+  },
   "cur": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-01-06",
     "baseTypeName": "CostAndUsageReport"
+  },
+  "dataexchange": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2017-07-25",
+    "baseTypeName": "DataExchange"
   },
   "datapipeline": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2012-10-29",
     "baseTypeName": "DataPipeline"
   },
+  "datasync": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-11-09",
+    "baseTypeName": "DataSync"
+  },
   "dax": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-04-19",
     "baseTypeName": "DynamodbAccelerator"
+  },
+  "detective": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-10-26",
+    "baseTypeName": "Detective"
   },
   "devicefarm": {
     "version": "0.43.0-beta1",
@@ -228,6 +293,11 @@
     "version": "0.43.0-beta1",
     "protocolVersion": "2015-11-01",
     "baseTypeName": "Discovery"
+  },
+  "dlm": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-01-12",
+    "baseTypeName": "Dlm"
   },
   "dms": {
     "version": "0.43.0-beta1",
@@ -254,6 +324,11 @@
     "protocolVersion": "2012-08-10",
     "baseTypeName": "DynamoDbStreams"
   },
+  "ebs": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-11-02",
+    "baseTypeName": "Ebs"
+  },
   "ec2": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2016-11-15",
@@ -274,16 +349,6 @@
     "protocolVersion": "2014-11-13",
     "baseTypeName": "Ecs"
   },
-  "elasticache": {
-    "version": "0.43.0-beta1",
-    "protocolVersion": "2015-02-02",
-    "baseTypeName": "ElastiCache"
-  },
-  "elasticbeanstalk": {
-    "version": "0.43.0-beta1",
-    "protocolVersion": "2010-12-01",
-    "baseTypeName": "ElasticBeanstalk"
-  },
   "efs": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2015-02-01",
@@ -293,6 +358,21 @@
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-11-01",
     "baseTypeName": "Eks"
+  },
+  "elastic-inference": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2017-07-25",
+    "baseTypeName": "ElasticInference"
+  },
+  "elasticache": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2015-02-02",
+    "baseTypeName": "ElastiCache"
+  },
+  "elasticbeanstalk": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2010-12-01",
+    "baseTypeName": "ElasticBeanstalk"
   },
   "elastictranscoder": {
     "version": "0.43.0-beta1",
@@ -314,6 +394,11 @@
     "protocolVersion": "2009-03-31",
     "baseTypeName": "Emr"
   },
+  "es": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2015-01-01",
+    "baseTypeName": "Es"
+  },
   "events": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2015-10-07",
@@ -328,6 +413,21 @@
     "version": "0.43.0-beta1",
     "protocolVersion": "2018-01-01",
     "baseTypeName": "Fms"
+  },
+  "forecast": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-06-26",
+    "baseTypeName": "Forecast"
+  },
+  "forecastquery": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-06-26",
+    "baseTypeName": "ForecastQuery"
+  },
+  "frauddetector": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-11-15",
+    "baseTypeName": "FraudDetector"
   },
   "fsx": {
     "version": "0.43.0-beta1",
@@ -344,6 +444,11 @@
     "protocolVersion": "2012-06-01",
     "baseTypeName": "Glacier"
   },
+  "globalaccelerator": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-08-08",
+    "baseTypeName": "GlobalAccelerator"
+  },
   "glue": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-03-31",
@@ -353,6 +458,11 @@
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-06-07",
     "baseTypeName": "GreenGrass"
+  },
+  "groundstation": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-05-23",
+    "baseTypeName": "GroundStation"
   },
   "guardduty": {
     "version": "0.43.0-beta1",
@@ -369,6 +479,11 @@
     "protocolVersion": "2010-05-08",
     "baseTypeName": "Iam"
   },
+  "imagebuilder": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-12-02",
+    "baseTypeName": "ImageBuilder"
+  },
   "importexport": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2010-06-01",
@@ -384,11 +499,6 @@
     "protocolVersion": "2015-05-28",
     "baseTypeName": "Iot"
   },
-  "iotanalytics": {
-    "version": "0.43.0-beta1",
-    "protocolVersion": "2017-11-27",
-    "baseTypeName": "IotAnalytics"
-  },
   "iot-data": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2015-05-28",
@@ -398,11 +508,6 @@
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-09-29",
     "baseTypeName": "IotJobsData"
-  },
-  "iotsecuretunneling": {
-    "version": "0.43.0-beta1",
-    "protocolVersion": "2018-10-05",
-    "baseTypeName": "IoTSecureTunneling"
   },
   "iot1click-devices": {
     "version": "0.43.0-beta1",
@@ -414,40 +519,85 @@
     "protocolVersion": "2018-05-14",
     "baseTypeName": "Iot1ClickProjects"
   },
+  "iotanalytics": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2017-11-27",
+    "baseTypeName": "IotAnalytics"
+  },
+  "iotevents": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-07-27",
+    "baseTypeName": "IotEvents"
+  },
+  "iotevents-data": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-10-23",
+    "baseTypeName": "IotEventsData"
+  },
+  "iotsecuretunneling": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-10-05",
+    "baseTypeName": "IoTSecureTunneling"
+  },
+  "iotthingsgraph": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-09-06",
+    "baseTypeName": "IotThingsGraph"
+  },
   "kafka": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2018-11-14",
     "baseTypeName": "Kafka"
+  },
+  "kendra": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-02-03",
+    "baseTypeName": "Kendra"
   },
   "kinesis": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2013-12-02",
     "baseTypeName": "Kinesis"
   },
-  "kinesisanalytics": {
-    "version": "0.43.0-beta1",
-    "protocolVersion": "2015-08-14",
-    "baseTypeName": "KinesisAnalytics"
-  },
-  "kinesisvideo": {
+  "kinesis-video-archived-media": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-09-30",
-    "baseTypeName": "KinesisVideo"
+    "baseTypeName": "KinesisVideoArchivedMedia"
   },
   "kinesis-video-media": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-09-30",
     "baseTypeName": "KinesisVideoMedia"
   },
-  "kinesis-video-archived-media": {
+  "kinesis-video-signaling": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-12-04",
+    "baseTypeName": "KinesisVideoSignaling"
+  },
+  "kinesisanalytics": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2015-08-14",
+    "baseTypeName": "KinesisAnalytics"
+  },
+  "kinesisanalyticsv2": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-05-23",
+    "baseTypeName": "KinesisAnalyticsV2"
+  },
+  "kinesisvideo": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-09-30",
-    "baseTypeName": "KinesisVideoArchivedMedia"
+    "baseTypeName": "KinesisVideo"
   },
   "kms": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2014-11-01",
     "baseTypeName": "Kms"
+  },
+  "lakeformation": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2017-03-31",
+    "baseTypeName": "LakeFormation"
   },
   "lambda": {
     "version": "0.43.0-beta1",
@@ -492,15 +642,30 @@
     "protocolVersion": "2017-12-19",
     "baseTypeName": "Macie"
   },
-  "marketplacecommerceanalytics": {
+  "managedblockchain": {
     "version": "0.43.0-beta1",
-    "protocolVersion": "2015-07-01",
-    "baseTypeName": "MarketplaceCommerceAnalytics"
+    "protocolVersion": "2018-09-24",
+    "baseTypeName": "ManagedBlockchain"
+  },
+  "marketplace-catalog": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-09-17",
+    "baseTypeName": "MarketplaceCatalog"
   },
   "marketplace-entitlement": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-01-11",
     "baseTypeName": "MarketplaceEntitlement"
+  },
+  "marketplacecommerceanalytics": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2015-07-01",
+    "baseTypeName": "MarketplaceCommerceAnalytics"
+  },
+  "mediaconnect": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-11-14",
+    "baseTypeName": "MediaConnect"
   },
   "mediaconvert": {
     "version": "0.43.0-beta1",
@@ -517,10 +682,20 @@
     "protocolVersion": "2017-10-12",
     "baseTypeName": "MediaPackage"
   },
+  "mediapackage-vod": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-11-07",
+    "baseTypeName": "MediaPackageVod"
+  },
   "mediastore": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-09-01",
     "baseTypeName": "MediaStore"
+  },
+  "mediastore-data": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2017-09-01",
+    "baseTypeName": "MediaStoreData"
   },
   "mediatailor": {
     "version": "0.43.0-beta1",
@@ -536,6 +711,11 @@
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-05-31",
     "baseTypeName": "MigrationHub"
+  },
+  "migrationhub-config": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-06-30",
+    "baseTypeName": "MigrationHubConfig"
   },
   "mobile": {
     "version": "0.43.0-beta1",
@@ -557,6 +737,11 @@
     "protocolVersion": "2014-10-31",
     "baseTypeName": "Neptune"
   },
+  "networkmanager": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-07-05",
+    "baseTypeName": "NetworkManager"
+  },
   "opsworks": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2013-02-18",
@@ -572,10 +757,45 @@
     "protocolVersion": "2016-11-28",
     "baseTypeName": "Organizations"
   },
+  "outposts": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-12-03",
+    "baseTypeName": "Outposts"
+  },
+  "personalize": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-05-22",
+    "baseTypeName": "Personalize"
+  },
+  "personalize-events": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-03-22",
+    "baseTypeName": "PersonalizeEvents"
+  },
+  "personalize-runtime": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-05-22",
+    "baseTypeName": "PersonalizeRuntime"
+  },
   "pi": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2018-02-27",
     "baseTypeName": "PerformanceInsights"
+  },
+  "pinpoint": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2016-12-01",
+    "baseTypeName": "Pinpoint"
+  },
+  "pinpoint-email": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-07-26",
+    "baseTypeName": "PinpointEmail"
+  },
+  "pinpoint-sms-voice": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-09-05",
+    "baseTypeName": "PinpointSmsVoice"
   },
   "polly": {
     "version": "0.43.0-beta1",
@@ -596,6 +816,11 @@
     "version": "0.43.0-beta1",
     "protocolVersion": "2019-07-11",
     "baseTypeName": "QldbSession"
+  },
+  "quicksight": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-04-01",
+    "baseTypeName": "Quicksight"
   },
   "ram": {
     "version": "0.43.0-beta1",
@@ -632,6 +857,11 @@
     "protocolVersion": "2017-01-26",
     "baseTypeName": "ResourceGroupsTaggingApi"
   },
+  "robomaker": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-06-29",
+    "baseTypeName": "Robomaker"
+  },
   "route53": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2013-04-01",
@@ -641,6 +871,11 @@
     "version": "0.43.0-beta1",
     "protocolVersion": "2014-05-15",
     "baseTypeName": "Route53Domains"
+  },
+  "route53resolver": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-04-01",
+    "baseTypeName": "Route53Resolver"
   },
   "s3": {
     "version": "0.43.0-beta1",
@@ -652,10 +887,25 @@
     "protocolVersion": "2017-07-24",
     "baseTypeName": "SageMaker"
   },
+  "sagemaker-a2i-runtime": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-11-07",
+    "baseTypeName": "SagemakerA2iRuntime"
+  },
   "sagemaker-runtime": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-05-13",
     "baseTypeName": "SageMakerRuntime"
+  },
+  "savingsplans": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-06-28",
+    "baseTypeName": "SavingsPlans"
+  },
+  "schemas": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-12-02",
+    "baseTypeName": "Schemas"
   },
   "sdb": {
     "version": "0.43.0-beta1",
@@ -677,6 +927,11 @@
     "protocolVersion": "2017-09-08",
     "baseTypeName": "ServerlessRepo"
   },
+  "service-quotas": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-06-24",
+    "baseTypeName": "ServiceQuotas"
+  },
   "servicecatalog": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2015-12-10",
@@ -692,15 +947,30 @@
     "protocolVersion": "2010-12-01",
     "baseTypeName": "Ses"
   },
+  "sesv2": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-09-27",
+    "baseTypeName": "SesV2"
+  },
   "shield": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2016-06-02",
     "baseTypeName": "Shield"
   },
+  "signer": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2017-08-25",
+    "baseTypeName": "Signer"
+  },
   "sms": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2016-10-24",
     "baseTypeName": "ServerMigrationService"
+  },
+  "sms-voice": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2018-09-05",
+    "baseTypeName": "SmsVoice"
   },
   "snowball": {
     "version": "0.43.0-beta1",
@@ -721,6 +991,16 @@
     "version": "0.43.0-beta1",
     "protocolVersion": "2014-11-06",
     "baseTypeName": "Ssm"
+  },
+  "sso": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-06-10",
+    "baseTypeName": "Sso"
+  },
+  "sso-oidc": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-06-10",
+    "baseTypeName": "SsoOidc"
   },
   "stepfunctions": {
     "version": "0.43.0-beta1",
@@ -781,6 +1061,11 @@
     "protocolVersion": "2016-11-28",
     "baseTypeName": "WAFRegional"
   },
+  "wafv2": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-07-29",
+    "baseTypeName": "WafV2"
+  },
   "workdocs": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2016-05-01",
@@ -795,6 +1080,11 @@
     "version": "0.43.0-beta1",
     "protocolVersion": "2017-10-01",
     "baseTypeName": "Workmail"
+  },
+  "workmailmessageflow": {
+    "version": "0.43.0-beta1",
+    "protocolVersion": "2019-05-01",
+    "baseTypeName": "WorkmailMessageFlow"
   },
   "workspaces": {
     "version": "0.43.0-beta1",
