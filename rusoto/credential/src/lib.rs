@@ -211,13 +211,6 @@ pub trait ProvideAwsCredentials {
     async fn credentials(&self) -> Result<AwsCredentials, CredentialsError>;
 }
 
-//#[async_trait]
-//impl<P: ProvideAwsCredentials> ProvideAwsCredentials for Rc<P> {
-//    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-//        P::credentials(self).await
-//    }
-//}
-
 #[async_trait]
 impl<P: ProvideAwsCredentials + Send + Sync> ProvideAwsCredentials for Arc<P> {
     async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
