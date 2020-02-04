@@ -692,11 +692,6 @@
     "protocolVersion": "2017-09-01",
     "baseTypeName": "MediaStore"
   },
-  "mediastore-data": {
-    "version": "0.43.0-beta1",
-    "protocolVersion": "2017-09-01",
-    "baseTypeName": "MediaStoreData"
-  },
   "mediatailor": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2018-04-23",
