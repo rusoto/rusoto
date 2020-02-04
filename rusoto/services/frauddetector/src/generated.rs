@@ -27,7 +27,7 @@ use serde_json;
 /// <p>Provides the error of the batch create variable API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct BatchCreateVariableError {
+pub struct FraudDetectorBatchCreateVariableError {
     /// <p>The error code. </p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -56,13 +56,13 @@ pub struct BatchCreateVariableResult {
     /// <p>Provides the errors for the <code>BatchCreateVariable</code> request.</p>
     #[serde(rename = "errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub errors: Option<Vec<BatchCreateVariableError>>,
+    pub errors: Option<Vec<FraudDetectorBatchCreateVariableError>>,
 }
 
 /// <p>Provides the error of the batch get variable API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct BatchGetVariableError {
+pub struct FraudDetectorBatchGetVariableError {
     /// <p>The error code. </p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -91,7 +91,7 @@ pub struct BatchGetVariableResult {
     /// <p>The errors from the request.</p>
     #[serde(rename = "errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub errors: Option<Vec<BatchGetVariableError>>,
+    pub errors: Option<Vec<FraudDetectorBatchGetVariableError>>,
     /// <p>The returned variables.</p>
     #[serde(rename = "variables")]
     #[serde(skip_serializing_if = "Option::is_none")]

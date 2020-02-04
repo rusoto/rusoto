@@ -347,6 +347,10 @@ fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
         // Chime has a CreateAttendeeError, avoid collision with our error enum
         "CreateAttendeeError" => "ChimeCreateAttendeeError".to_owned(),
 
+        // Fraud Detection has naming clashes, avoid collision with an error enum
+        "BatchCreateVariableError" => "FraudDetectorBatchCreateVariableError".to_owned(),
+        "BatchGetVariableError" => "FraudDetectorBatchGetVariableError".to_owned(),
+
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,
     }
