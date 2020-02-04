@@ -1056,11 +1056,6 @@
     "protocolVersion": "2016-11-28",
     "baseTypeName": "WAFRegional"
   },
-  "wafv2": {
-    "version": "0.43.0-beta1",
-    "protocolVersion": "2019-07-29",
-    "baseTypeName": "WafV2"
-  },
   "workdocs": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2016-05-01",

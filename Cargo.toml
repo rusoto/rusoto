@@ -215,7 +215,6 @@ members = [
     "rusoto/services/translate",
     "rusoto/services/waf",
     "rusoto/services/waf-regional",
-    "rusoto/services/wafv2",
     "rusoto/services/workdocs",
     "rusoto/services/worklink",
     "rusoto/services/workmail",
