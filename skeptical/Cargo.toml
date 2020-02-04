@@ -12,6 +12,7 @@ rusoto_s3 = { path = "../rusoto/services/s3" }
 rusoto_ec2 = { path = "../rusoto/services/ec2" }
 rusoto_sts = { path = "../rusoto/services/sts" }
 env_logger = "0.5"
+tokio = "0.2"
 
 [build-dependencies]
 skeptic = "0.13"

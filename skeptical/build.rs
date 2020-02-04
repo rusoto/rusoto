@@ -1,5 +1,3 @@
-extern crate skeptic;
-
 use skeptic::markdown_files_of_directory;
 
 fn main() {
