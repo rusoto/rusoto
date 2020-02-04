@@ -139,13 +139,13 @@ fn new_request(uri: &str, env_var_name: &str) -> Result<Request<Body>, Credentia
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{lock, ENV_MUTEX};
+    use crate::test_utils::lock_env;
     use std::env;
 
     #[test]
     fn request_from_relative_uri() {
         let path = "/xxx";
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::set_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI, path);
         env::set_var(AWS_CONTAINER_CREDENTIALS_FULL_URI, "dummy");
         env::set_var(AWS_CONTAINER_AUTHORIZATION_TOKEN, "dummy");
@@ -161,7 +161,7 @@ mod tests {
 
     #[test]
     fn error_from_missing_env_vars() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::remove_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI);
         env::remove_var(AWS_CONTAINER_CREDENTIALS_FULL_URI);
         let result = request_from_env_vars();
@@ -170,7 +170,7 @@ mod tests {
 
     #[test]
     fn error_from_empty_env_vars() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::set_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI, "");
         env::set_var(AWS_CONTAINER_CREDENTIALS_FULL_URI, "");
         env::set_var(AWS_CONTAINER_AUTHORIZATION_TOKEN, "");
@@ -184,7 +184,7 @@ mod tests {
     #[test]
     fn request_from_full_uri_with_token() {
         let url = "http://localhost/xxx";
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::remove_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI);
         env::set_var(AWS_CONTAINER_CREDENTIALS_FULL_URI, url);
         env::set_var(AWS_CONTAINER_AUTHORIZATION_TOKEN, "dummy");
@@ -200,7 +200,7 @@ mod tests {
     #[test]
     fn request_from_full_uri_without_token() {
         let url = "http://localhost/xxx";
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::remove_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI);
         env::set_var(AWS_CONTAINER_CREDENTIALS_FULL_URI, url);
         env::remove_var(AWS_CONTAINER_AUTHORIZATION_TOKEN);
@@ -215,7 +215,7 @@ mod tests {
     #[test]
     fn request_from_full_uri_with_empty_token() {
         let url = "http://localhost/xxx";
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::remove_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI);
         env::set_var(AWS_CONTAINER_CREDENTIALS_FULL_URI, url);
         env::set_var(AWS_CONTAINER_AUTHORIZATION_TOKEN, "");
