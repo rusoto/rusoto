@@ -21,9 +21,9 @@ debug = false
 codegen-units = 2
 debug = false
 
-[dependencies.rusoto_core]
-path = "../rusoto/core"
-default-features = false
+[dependencies]
+rusoto_credential = { path = "../rusoto/credential" }
+rusoto_core = { path = "../rusoto/core", default-features = false }
 
 [dependencies.rusoto_acm]
 optional = true
