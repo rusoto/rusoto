@@ -11,6 +11,7 @@ authors = [
 license = "MIT"
 repository = "https://github.com/rusoto/rusoto"
 homepage = "https://www.rusoto.org/"
+edition = "2018"
 
 [profile.dev]
 codegen-units = 2
