@@ -161,7 +161,6 @@ members = [
     "rusoto/services/personalize-events",
     "rusoto/services/personalize-runtime",
     "rusoto/services/pi",
-    "rusoto/services/pinpoint",
     "rusoto/services/pinpoint-email",
     "rusoto/services/pinpoint-sms-voice",
     "rusoto/services/polly",

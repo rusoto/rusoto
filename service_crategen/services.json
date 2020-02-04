@@ -782,11 +782,6 @@
     "protocolVersion": "2018-02-27",
     "baseTypeName": "PerformanceInsights"
   },
-  "pinpoint": {
-    "version": "0.43.0-beta1",
-    "protocolVersion": "2016-12-01",
-    "baseTypeName": "Pinpoint"
-  },
   "pinpoint-email": {
     "version": "0.43.0-beta1",
     "protocolVersion": "2018-07-26",
