@@ -45,7 +45,6 @@ pub mod proto;
 #[doc(hidden)]
 pub mod serialization;
 
-//pub use rusoto_credential::{AwsCredentials, CredentialsError, DefaultCredentialsProvider, ProfileProvider, ProvideAwsCredentials};
 pub use crate::error::{RusotoError, RusotoResult};
 pub use crate::future::RusotoFuture;
 pub use crate::region::Region;
