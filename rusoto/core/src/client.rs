@@ -2,7 +2,7 @@ use std::sync::{Arc, Mutex, Weak};
 use std::time::Duration;
 
 use crate::credential::{
-    CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials, StaticProvider,
+    Anonymous, CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials, StaticProvider,
 };
 use crate::encoding::ContentEncoding;
 use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
@@ -143,31 +143,33 @@ impl<P, D> Clone for ClientInner<P, D> {
 
 async fn sign_and_dispatch<P, D>(
     client: ClientInner<P, D>,
-    request: SignedRequest,
+    mut request: SignedRequest,
     timeout: Option<Duration>,
 ) -> Result<HttpResponse, SignAndDispatchError>
 where
     P: ProvideAwsCredentials + Send + Sync + 'static,
     D: DispatchSignedRequest + Send + Sync + 'static,
 {
-    let p = client.credentials_provider.clone().unwrap();
-    let f = p.credentials();
-    let credentials = if let Some(to) = timeout {
-        match time::timeout(to, f).await {
-            Err(_e) => {
-                let err = CredentialsError {
+    if let Some(provider) = client.credentials_provider {
+        let credentials = if let Some(to) = timeout {
+            time::timeout(to, provider.credentials())
+                .await
+                .map_err(|_| CredentialsError {
                     message: "Timeout getting credentials".to_owned(),
-                };
-                return Err(SignAndDispatchError::Credentials(err));
-            }
-            Ok(try_creds) => try_creds,
+                })
+                .and_then(std::convert::identity)
+        } else {
+            provider.credentials().await
+        }
+        .map_err(SignAndDispatchError::Credentials)?;
+        if credentials.is_anonymous() {
+            request.complement_with_plus(true);
+        } else {
+            request.sign_with_plus(&credentials, true);
         }
     } else {
-        f.await
-    };
-    let credentials = credentials.map_err(SignAndDispatchError::Credentials)?;
-    let mut request = request;
-    request.sign_with_plus(&credentials, true);
+        request.complement_with_plus(true);
+    }
     client
         .dispatcher
         .dispatch(request, timeout)

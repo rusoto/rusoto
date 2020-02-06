@@ -9,13 +9,12 @@ use std::sync::{Mutex, MutexGuard};
 pub const SECRET: &str = &"TtnuieannGt2rGuie2t8Tt7urarg5nauedRndrur";
 
 pub fn is_secret_hidden_behind_asterisks<D>(obj: &D) -> bool
-    where
-        D: Debug,
+where
+    D: Debug,
 {
     let debug = format!("{:?}", obj);
     !debug.contains(SECRET) && debug.contains("**********")
 }
-
 
 // cargo runs tests in parallel, which leads to race conditions when changing environment
 // variables. Therefore we use a global mutex for all tests which rely on environment variables.
@@ -49,4 +48,3 @@ pub fn lock_env() -> MutexGuard<'static, ()> {
         }
     }
 }
-

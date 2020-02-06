@@ -167,10 +167,10 @@ where
 
 #[cfg(test)]
 mod test {
-    use std::io::Write;
     use super::super::CredentialsError;
     use super::*;
     use crate::test_utils::lock_env;
+    use std::io::Write;
     use tempfile::NamedTempFile;
 
     #[test]

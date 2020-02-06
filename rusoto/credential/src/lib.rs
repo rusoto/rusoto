@@ -42,8 +42,26 @@ use hyper::Error as HyperError;
 use serde::Deserialize;
 use tokio::sync::Mutex;
 
+/// Representation of anonymity
+pub trait Anonymous {
+    /// Return true if a type is anonymous, false otherwise
+    fn is_anonymous(&self) -> bool;
+}
+
+impl Anonymous for AwsCredentials {
+    fn is_anonymous(&self) -> bool {
+        self.aws_access_key_id().is_empty() && self.aws_secret_access_key().is_empty()
+    }
+}
+
 /// AWS API access credentials, including access key, secret key, token (for IAM profiles),
 /// expiration timestamp, and claims from federated login.
+///
+/// # Anonymous example
+///
+/// Some AWS services, like [s3](https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html) do
+/// not require authenticated credentials. For these cases you can use `AwsCredentials::default`
+/// with `StaticProvider`.
 #[derive(Clone, Deserialize, Default)]
 pub struct AwsCredentials {
     #[serde(rename = "AccessKeyId")]
@@ -449,6 +467,16 @@ mod tests {
     use quickcheck::quickcheck;
 
     use super::*;
+
+    #[test]
+    fn default_empty_credentials_are_considered_anonymous() {
+        assert!(AwsCredentials::default().is_anonymous())
+    }
+
+    #[test]
+    fn credentials_with_values_are_not_considered_anonymous() {
+        assert!(!AwsCredentials::new("foo", "bar", None, None).is_anonymous())
+    }
 
     #[test]
     fn providers_are_send_and_sync() {

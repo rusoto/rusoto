@@ -95,6 +95,13 @@ mod tests {
 
     use quickcheck_macros::quickcheck;
 
+    #[test]
+    fn static_provider_impl_from_for_awscredentials() {
+        let provider = StaticProvider::from(AwsCredentials::default());
+        assert_eq!(provider.get_aws_access_key_id(), "");
+        assert_eq!(*provider.is_valid_for(), None);
+    }
+
     #[tokio::test]
     async fn test_static_provider_creation() {
         let result = StaticProvider::new(
