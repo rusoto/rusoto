@@ -81,6 +81,7 @@ impl TestS3Client {
             .create_bucket(create_bucket_req)
             .await
             .expect("Failed to create test bucket");
+        tokio::time::delay_for(std::time::Duration::from_secs(5)).await;
     }
 
     async fn create_test_bucket_with_acl(&self, name: String, acl: Option<String>) {
