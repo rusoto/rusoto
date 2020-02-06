@@ -26,10 +26,6 @@ struct TestEtsClient {
     region: Region,
 
     client: EtsClient,
-
-    s3_client: Option<S3Client>,
-    input_bucket: Option<String>,
-    output_bucket: Option<String>,
 }
 
 impl TestEtsClient {
@@ -38,17 +34,14 @@ impl TestEtsClient {
         TestEtsClient {
             region: region.clone(),
             client: EtsClient::new(region),
-            s3_client: None,
-            input_bucket: None,
-            output_bucket: None,
         }
     }
 
-    fn create_s3_client(&mut self) {
-        self.s3_client = Some(S3Client::new(self.region.clone()));
+    fn create_s3_client(&self) -> S3Client {
+        S3Client::new(self.region.clone())
     }
 
-    async fn create_bucket(&mut self) -> String {
+    async fn create_bucket(&mut self, s3_client: &S3Client) -> String {
         let bucket_name = generate_unique_name("ets-bucket-1").await;
 
         let create_bucket_req = CreateBucketRequest {
@@ -56,12 +49,7 @@ impl TestEtsClient {
             ..Default::default()
         };
 
-        let result = self
-            .s3_client
-            .as_ref()
-            .unwrap()
-            .create_bucket(create_bucket_req)
-            .await;
+        let result = s3_client.create_bucket(create_bucket_req).await;
 
         let mut location = result.unwrap().location.unwrap();
         // A `Location` is identical to a `BucketName` except that it has a
@@ -69,6 +57,14 @@ impl TestEtsClient {
         location.remove(0);
         info!("Created S3 bucket: {}", location);
         location
+    }
+
+    async fn delete_bucket(&mut self, s3_client: &S3Client, bucket: &str) {
+        let delete_bucket_req = DeleteBucketRequest {
+            bucket: bucket.to_owned(),
+            ..Default::default()
+        };
+        s3_client.delete_bucket(delete_bucket_req).await.unwrap();
     }
 }
 
@@ -82,40 +78,6 @@ impl Deref for TestEtsClient {
 impl DerefMut for TestEtsClient {
     fn deref_mut<'a>(&'a mut self) -> &'a mut EtsClient {
         &mut self.client
-    }
-}
-
-impl Drop for TestEtsClient {
-    fn drop(&mut self) {
-        let mut rt = tokio::runtime::Runtime::new().unwrap();
-        let s3_client = self.s3_client.take().unwrap();
-        let input_bucket = self.input_bucket.take().unwrap();
-
-        let delete_bucket_req = DeleteBucketRequest {
-            bucket: input_bucket.to_owned(),
-            ..Default::default()
-        };
-
-        rt.block_on(async {
-                match s3_client.delete_bucket(delete_bucket_req).await {
-                    Ok(_) => info!("Deleted S3 bucket: {}", input_bucket),
-                    Err(e) => error!("Failed to delete S3 bucket: {}", e),
-                };
-            });
-
-        let output_bucket = self.output_bucket.take().unwrap();
-        let delete_bucket_req = DeleteBucketRequest {
-            bucket: output_bucket.to_owned(),
-            ..Default::default()
-        };
-
-
-        rt.block_on(async {
-                match s3_client.delete_bucket(delete_bucket_req).await {
-                    Ok(_) => info!("Deleted S3 bucket: {}", output_bucket),
-                    Err(e) => error!("Failed to delete S3 bucket: {}", e),
-                };
-            });
     }
 }
 
@@ -154,18 +116,19 @@ async fn create_pipeline_without_arn() {
     initialize().await;
 
     let mut client = create_client().await;
-    client.create_s3_client();
-    client.input_bucket = Some(client.create_bucket().await);
-    client.output_bucket = Some(client.create_bucket().await);
+    let s3_client = client.create_s3_client();
+    let input_bucket = client.create_bucket(&s3_client).await;
+    let output_bucket = client.create_bucket(&s3_client).await;
 
     let request = CreatePipelineRequest {
-        input_bucket: client.input_bucket.as_ref().cloned().unwrap(),
-        output_bucket: client.output_bucket.as_ref().cloned(),
+        input_bucket: input_bucket.clone(),
+        output_bucket: Some(output_bucket.clone()),
         ..CreatePipelineRequest::default()
     };
-    let response = client.create_pipeline(request).await;
+    client.create_pipeline(request).await.unwrap();
 
-    response.unwrap();
+    client.delete_bucket(&s3_client, &input_bucket).await;
+    client.delete_bucket(&s3_client, &output_bucket).await;
 }
 
 #[tokio::test]
