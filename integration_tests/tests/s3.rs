@@ -9,6 +9,7 @@ use std::time::Duration;
 use bytes::Bytes;
 use time::Time;
 use tokio::fs;
+use tokio::io::AsyncReadExt;
 use futures::{TryStreamExt, FutureExt};
 
 use rusoto_credential::ProvideAwsCredentials;
@@ -324,7 +325,7 @@ async fn test_puts_gets_deletes_binary() {
         &"tests/sample-data/binary-file",
     ).await;
     test_get_object(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
-    test_get_object_blocking_read(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
+    test_get_object_async_read(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
     test_delete_object(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
 
     test_client.cleanup().await;
@@ -903,7 +904,7 @@ async fn test_get_object(client: &S3Client, bucket: &str, filename: &str) {
     assert!(body.len() > 0);
 }
 
-async fn test_get_object_blocking_read(client: &S3Client, bucket: &str, filename: &str) {
+async fn test_get_object_async_read(client: &S3Client, bucket: &str, filename: &str) {
     let get_req = GetObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -916,9 +917,9 @@ async fn test_get_object_blocking_read(client: &S3Client, bucket: &str, filename
         .expect("Couldn't GET object");
     println!("get object result: {:#?}", result);
 
-    let mut stream = result.body.unwrap().into_blocking_read();
+    let mut stream = result.body.unwrap().into_async_read();
     let mut body = Vec::new();
-    stream.read_to_end(&mut body).unwrap();
+    stream.read_to_end(&mut body).await.unwrap();
 
     assert!(body.len() > 0);
 }
