@@ -13,6 +13,8 @@ use crate::cargo;
 #[derive(Debug, Deserialize)]
 pub struct ServiceConfig {
     pub version: String,
+    #[serde(rename = "coreVersion")]
+    pub core_version: String,
     #[serde(rename = "protocolVersion")]
     pub protocol_version: String,
     #[serde(rename = "customDependencies")]
