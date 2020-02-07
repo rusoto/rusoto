@@ -18,7 +18,7 @@ impl From<String> for Secret {
 /// ```
 impl AsRef<str> for Secret {
     fn as_ref(&self) -> &str {
-        return self.0.as_str();
+        self.0.as_str()
     }
 }
 

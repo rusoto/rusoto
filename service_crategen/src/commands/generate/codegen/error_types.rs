@@ -54,6 +54,7 @@ pub trait GenerateErrorTypes {
 
                 {error_from_body_impl}
                 impl fmt::Display for {type_name} {{
+                    #[allow(unused_variables)]
                     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
                         match *self {{
                             {display_matchers}
@@ -251,7 +252,7 @@ impl GenerateErrorTypes for JsonErrorTypes {
                                 {type_matchers}
                             }}
                         }}
-                        return RusotoError::Unknown(res);
+                        RusotoError::Unknown(res)
                     }}
                 }}",
             type_name = error_type_name(service, operation_name),
@@ -305,7 +306,7 @@ impl GenerateErrorTypes for RestJsonErrorTypes {
                                 {type_matchers}
                             }}
                         }}
-                        return RusotoError::Unknown(res);
+                        RusotoError::Unknown(res)
                     }}
                 }}",
             type_name = error_type_name(service, operation_name),

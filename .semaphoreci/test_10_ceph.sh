@@ -23,4 +23,4 @@ cd "$GIT_ROOT/integration_tests"
     --run-arg=DEMO \
     --run-opt=--hostname=localhost \
     "--run-opt=-v=$GIT_ROOT/.semaphoreci/ceph.conf:/etc/ceph.conf:ro" \
-    -- cargo test --features s3,disable_ceph_unsupported
+    -- cargo test --features s3,disable_ceph_unsupported ---- --test-threads 1

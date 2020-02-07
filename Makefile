@@ -38,7 +38,7 @@ skeptical:
 
 .PHONY: integration_test
 integration_test:
-	(cd integration_tests && cargo +$$RUST_VERSION test --features all)
+	(cd integration_tests && cargo +$$RUST_VERSION test --features all -- --test-threads 1)
 
 .PHONY: check_integration_test
 check_integration_test:

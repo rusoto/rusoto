@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io::{self, Read};
 use std::path::Path;
 
-use serde_derive::Deserialize;
+use serde::Deserialize;
 use serde_json;
 
 use crate::cargo;
@@ -13,8 +13,6 @@ use crate::cargo;
 #[derive(Debug, Deserialize)]
 pub struct ServiceConfig {
     pub version: String,
-    #[serde(rename = "coreVersion")]
-    pub core_version: String,
     #[serde(rename = "protocolVersion")]
     pub protocol_version: String,
     #[serde(rename = "customDependencies")]

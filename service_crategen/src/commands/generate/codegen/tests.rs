@@ -116,13 +116,13 @@ fn generate_response_parse_test(
     }
 
     Some(format!("
-        #[test]
-        fn test_parse_{error_or_valid}_{service_name}_{action}() {{
+        #[tokio::test]
+        async fn test_parse_{error_or_valid}_{service_name}_{action}() {{
             let mock_response =  MockResponseReader::read_response(\"test_resources/generated/{error_or_valid}\", \"{response_file_name}\");
             let mock = MockRequestDispatcher::with_status({status_code}).with_body(&mock_response);
             let client = {client_type}::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             {request_constructor}
-            let result = client.{action}({request_params}).sync();
+            let result = client.{action}({request_params}).await;
             assert!({is_ok}result.is_ok(), \"parse error: {{:?}}\", result);
         }}",
         error_or_valid = if is_ok { "valid" } else { "error" },
@@ -163,13 +163,11 @@ impl Response {
                 );
 
                 service_name.and_then(|s| {
-                    action.map(|a| {
-                        Response {
-                            service: s,
-                            action: a,
-                            file_name: file_name.to_string_lossy().into_owned(),
-                            full_path: path.to_owned(),
-                        }
+                    action.map(|a| Response {
+                        service: s,
+                        action: a,
+                        file_name: file_name.to_string_lossy().into_owned(),
+                        full_path: path.to_owned(),
                     })
                 })
             } else {

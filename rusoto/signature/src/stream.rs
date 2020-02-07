@@ -1,25 +1,30 @@
 use std::fmt;
 use std::io;
+use std::pin::Pin;
+use std::task::{Context, Poll};
 
-use bytes::Bytes;
-use futures::{future, stream, Async, Future, Poll, Stream};
+use bytes::{BufMut, Bytes, BytesMut};
+use futures::{future, stream, Stream, StreamExt};
+use pin_project::pin_project;
 use tokio::io::AsyncRead;
 
 /// Stream of bytes.
+#[pin_project]
 pub struct ByteStream {
     size_hint: Option<usize>,
-    inner: Box<dyn Stream<Item = Bytes, Error = io::Error> + Send + 'static>,
+    #[pin]
+    inner: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync + 'static>>,
 }
 
 impl ByteStream {
     /// Create a new `ByteStream` by wrapping a `futures` stream.
     pub fn new<S>(stream: S) -> ByteStream
     where
-        S: Stream<Item = Bytes, Error = io::Error> + Send + 'static,
+        S: Stream<Item = Result<Bytes, io::Error>> + Send + Sync + 'static,
     {
         ByteStream {
             size_hint: None,
-            inner: Box::new(stream),
+            inner: Box::pin(stream),
         }
     }
 
@@ -42,7 +47,7 @@ impl From<Vec<u8>> for ByteStream {
     fn from(buf: Vec<u8>) -> ByteStream {
         ByteStream {
             size_hint: Some(buf.len()),
-            inner: Box::new(stream::once(Ok(Bytes::from(buf)))),
+            inner: Box::pin(stream::once(async move { Ok(Bytes::from(buf)) })),
         }
     }
 }
@@ -54,62 +59,62 @@ impl fmt::Debug for ByteStream {
 }
 
 impl Stream for ByteStream {
-    type Item = Bytes;
-    type Error = io::Error;
+    type Item = Result<Bytes, io::Error>;
 
-    fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
-        self.inner.poll()
+    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        let this = self.project();
+        this.inner.poll_next(cx)
     }
 }
 
+#[pin_project]
 struct ImplAsyncRead {
-    buffer: io::Cursor<Bytes>,
-    stream: stream::Fuse<Box<dyn Stream<Item = Bytes, Error = io::Error> + Send>>,
+    buffer: BytesMut,
+    #[pin]
+    stream: futures::stream::Fuse<Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send>>>,
 }
 
 impl ImplAsyncRead {
-    fn new(stream: Box<dyn Stream<Item = Bytes, Error = io::Error> + Send>) -> Self {
+    fn new(stream: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send>>) -> Self {
         ImplAsyncRead {
-            buffer: io::Cursor::new(Bytes::new()),
+            buffer: BytesMut::new(),
             stream: stream.fuse(),
         }
     }
 }
 
-impl io::Read for ImplAsyncRead {
-    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        if buf.is_empty() {
-            return Ok(0);
-        }
-        loop {
-            let n = self.buffer.read(buf)?;
-            if n > 0 {
-                return Ok(n);
-            }
-            match self.stream.poll()? {
-                Async::NotReady => {
-                    return Err(io::ErrorKind::WouldBlock.into());
-                }
-                Async::Ready(Some(buffer)) => {
-                    self.buffer = io::Cursor::new(buffer);
-                    continue;
-                }
-                Async::Ready(None) => {
-                    return Ok(0);
+impl AsyncRead for ImplAsyncRead {
+    fn poll_read(
+        self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+        buf: &mut [u8],
+    ) -> Poll<io::Result<usize>> {
+        let this = self.project();
+        if this.buffer.is_empty() {
+            match futures::ready!(this.stream.poll_next(cx)) {
+                None => return Poll::Ready(Ok(0)),
+                Some(Err(e)) => return Poll::Ready(Err(e)),
+                Some(Ok(bytes)) => {
+                    this.buffer.put(bytes);
                 }
             }
         }
+        let available = std::cmp::min(buf.len(), this.buffer.len());
+        let bytes = this.buffer.split_to(available);
+        let (left, _) = buf.split_at_mut(available);
+        left.copy_from_slice(&bytes[..available]);
+        Poll::Ready(Ok(available))
     }
 }
 
-impl AsyncRead for ImplAsyncRead {}
-
+#[pin_project]
 struct ImplBlockingRead {
+    #[pin]
     inner: ImplAsyncRead,
 }
 
 impl ImplBlockingRead {
-    fn new(stream: Box<dyn Stream<Item = Bytes, Error = io::Error> + Send>) -> Self {
+    fn new(stream: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync>>) -> Self {
         ImplBlockingRead {
             inner: ImplAsyncRead::new(stream),
         }
@@ -118,29 +123,35 @@ impl ImplBlockingRead {
 
 impl io::Read for ImplBlockingRead {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        future::poll_fn(|| self.inner.poll_read(buf)).wait()
+        let mut rt = tokio::runtime::Runtime::new()?;
+        rt.block_on(future::poll_fn(|cx| {
+            tokio::io::AsyncRead::poll_read(Pin::new(&mut self.inner), cx, buf)
+        }))
     }
 }
 
-#[test]
-fn test_async_read() {
+#[tokio::test]
+async fn test_async_read() {
     use bytes::Bytes;
-    use std::io::Read;
+    use tokio::io::AsyncReadExt;
 
-    let chunks = vec![Bytes::from_static(b"1234"), Bytes::from_static(b"5678")];
-    let stream = ByteStream::new(stream::iter_ok(chunks));
+    let chunks = vec![
+        Ok(Bytes::from_static(b"1234")),
+        Ok(Bytes::from_static(b"5678")),
+    ];
+    let stream = ByteStream::new(stream::iter(chunks));
     let mut async_read = stream.into_async_read();
 
     let mut buf = [0u8; 3];
-    assert_eq!(async_read.read(&mut buf).unwrap(), 3);
+    assert_eq!(async_read.read(&mut buf).await.unwrap(), 3);
     assert_eq!(&buf[..3], b"123");
-    assert_eq!(async_read.read(&mut buf).unwrap(), 1);
+    assert_eq!(async_read.read(&mut buf).await.unwrap(), 1);
     assert_eq!(&buf[..1], b"4");
-    assert_eq!(async_read.read(&mut buf).unwrap(), 3);
+    assert_eq!(async_read.read(&mut buf).await.unwrap(), 3);
     assert_eq!(&buf[..3], b"567");
-    assert_eq!(async_read.read(&mut buf).unwrap(), 1);
+    assert_eq!(async_read.read(&mut buf).await.unwrap(), 1);
     assert_eq!(&buf[..1], b"8");
-    assert_eq!(async_read.read(&mut buf).unwrap(), 0);
+    assert_eq!(async_read.read(&mut buf).await.unwrap(), 0);
 }
 
 #[test]
@@ -148,8 +159,11 @@ fn test_blocking_read() {
     use bytes::Bytes;
     use std::io::Read;
 
-    let chunks = vec![Bytes::from_static(b"1234"), Bytes::from_static(b"5678")];
-    let stream = ByteStream::new(stream::iter_ok(chunks));
+    let chunks = vec![
+        Ok(Bytes::from_static(b"1234")),
+        Ok(Bytes::from_static(b"5678")),
+    ];
+    let stream = ByteStream::new(stream::iter(chunks));
     let mut async_read = stream.into_blocking_read();
 
     let mut buf = [0u8; 3];

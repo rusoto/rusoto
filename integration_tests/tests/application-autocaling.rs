@@ -8,8 +8,8 @@ use rusoto_application_autoscaling::{
 };
 use rusoto_core::Region;
 
-#[test]
-fn should_describe_scaling_policies() {
+#[tokio::test]
+async fn should_describe_scaling_policies() {
     let client = ApplicationAutoScalingClient::new(Region::UsEast1);
 
     let request = DescribeScalingPoliciesRequest {
@@ -17,5 +17,5 @@ fn should_describe_scaling_policies() {
         ..Default::default()
     };
 
-    client.describe_scaling_policies(request).sync().unwrap();
+    client.describe_scaling_policies(request).await.unwrap();
 }

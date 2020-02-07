@@ -6,8 +6,8 @@ extern crate rusoto_core;
 use rusoto_comprehend::{Comprehend, ComprehendClient, DetectSentimentRequest};
 use rusoto_core::Region;
 
-#[test]
-fn should_detect_sentiment() {
+#[tokio::test]
+async fn should_detect_sentiment() {
     let client = ComprehendClient::new(Region::UsEast1);
 
     let request = DetectSentimentRequest {
@@ -16,7 +16,7 @@ fn should_detect_sentiment() {
         ..Default::default()
     };
 
-    match client.detect_sentiment(request).sync() {
+    match client.detect_sentiment(request).await {
         Ok(response) => {
             println!("{:#?}", response);
             assert_eq!(

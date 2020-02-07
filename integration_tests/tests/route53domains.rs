@@ -6,10 +6,10 @@ extern crate rusoto_route53domains;
 use rusoto_core::Region;
 use rusoto_route53domains::{ListOperationsRequest, Route53Domains, Route53DomainsClient};
 
-#[test]
-fn should_list_operations() {
+#[tokio::test]
+async fn should_list_operations() {
     let client = Route53DomainsClient::new(Region::UsEast1);
     let request = ListOperationsRequest::default();
 
-    client.list_operations(request).sync().unwrap();
+    client.list_operations(request).await.unwrap();
 }

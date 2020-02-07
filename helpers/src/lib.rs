@@ -1,5 +1,3 @@
-extern crate rusoto;
-
 #[cfg(feature = "dynamodb")]
 pub mod dynamodb;
 #[cfg(feature = "kms")]

@@ -1,9 +1,9 @@
 use super::generate_field_name;
 use crate::botocore::{Member, Operation, Shape, ShapeType};
-use inflector::Inflector;
-use regex::Regex;
 use crate::Service;
+use inflector::Inflector;
 use lazy_static::lazy_static;
+use regex::Regex;
 
 // Add request headers for any shape members marked as headers
 pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<String> {
@@ -69,7 +69,10 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
         .join("\n"))
 }
 
-pub fn generate_params_loading_string(service: &Service<'_>, operation: &Operation) -> Option<String> {
+pub fn generate_params_loading_string(
+    service: &Service<'_>,
+    operation: &Operation,
+) -> Option<String> {
     operation.input.as_ref()?;
 
     let input_type = operation.input_shape();
@@ -195,7 +198,10 @@ fn generate_snake_case_uri(request_uri: &str) -> String {
     for caps in URI_ARGS_SNAKE_REGEX.captures_iter(request_uri) {
         let to_find = caps.get(0).expect("nothing captured").as_str();
         // Wrap with curly braces again:
-        let replacement = format!("{{{}}}", Inflector::to_snake_case(caps.get(0).unwrap().as_str()));
+        let replacement = format!(
+            "{{{}}}",
+            Inflector::to_snake_case(caps.get(0).unwrap().as_str())
+        );
         snake = snake.replace(to_find, &replacement);
     }
 
@@ -354,7 +360,13 @@ mod tests {
         let static_params = generate_static_param_strings(&operation);
 
         assert_eq!(static_params.len(), 2);
-        assert_eq!(static_params.get(0), Some(&"params.put(\"format\", \"sdk\");".to_owned()));
-        assert_eq!(static_params.get(1), Some(&"params.put_key(\"pretty\");".to_owned()));
+        assert_eq!(
+            static_params.get(0),
+            Some(&"params.put(\"format\", \"sdk\");".to_owned())
+        );
+        assert_eq!(
+            static_params.get(1),
+            Some(&"params.put_key(\"pretty\");".to_owned())
+        );
     }
 }

@@ -1,0 +1,43 @@
+[package]
+authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
+description = "AWS SDK for Rust - Amazon Pinpoint SMS and Voice Service @ 2018-09-05"
+documentation = "https://docs.rs/rusoto_pinpoint_sms_voice"
+keywords = ["AWS", "Amazon", "pinpoint-sms-voice"]
+license = "MIT"
+name = "rusoto_pinpoint_sms_voice"
+readme = "README.md"
+repository = "https://github.com/rusoto/rusoto"
+version = "0.43.0-beta.1"
+homepage = "https://www.rusoto.org/"
+edition = "2018"
+exclude = ["test_resources/*"]
+
+[build-dependencies]
+
+[dependencies]
+async-trait = "0.1"
+bytes = "0.5"
+serde = "1.0.2"
+serde_derive = "1.0.2"
+serde_json = "1.0"
+
+[dependencies.futures]
+version = "0.3"
+
+[dependencies.rusoto_core]
+path = "../../core"
+default-features = false
+
+[dev-dependencies]
+tokio = "0.2"
+
+[dev-dependencies.rusoto_mock]
+path = "../../../mock"
+default-features = false
+
+[features]
+default = ["native-tls"]
+deserialize_structs = ["bytes/serde"]
+native-tls = ["rusoto_core/native-tls"]
+rustls = ["rusoto_core/rustls"]
+serialize_structs = ["bytes/serde"]

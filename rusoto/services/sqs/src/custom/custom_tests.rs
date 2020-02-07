@@ -13,8 +13,8 @@ use rusoto_core::signature::SignedRequestPayload;
 use rusoto_core::{Region, RusotoError};
 use serde_urlencoded;
 
-#[test]
-fn should_serialize_map_parameters_in_request_body() {
+#[tokio::test]
+async fn should_serialize_map_parameters_in_request_body() {
     let mock = MockRequestDispatcher::with_status(200)
         .with_body(
             r#"<?xml version="1.0" encoding="UTF-8"?>
@@ -79,11 +79,11 @@ fn should_serialize_map_parameters_in_request_body() {
     };
 
     let client = SqsClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let _result = client.send_message(request).sync().unwrap();
+    let _result = client.send_message(request).await.unwrap();
 }
 
-#[test]
-fn should_fix_issue_323() {
+#[tokio::test]
+async fn should_fix_issue_323() {
     let mock = MockRequestDispatcher::with_status(200)
         .with_body(
             r#"<?xml version="1.0" encoding="UTF-8"?>
@@ -145,11 +145,11 @@ fn should_fix_issue_323() {
     };
 
     let client = SqsClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let _result = client.receive_message(request).sync().unwrap();
+    let _result = client.receive_message(request).await.unwrap();
 }
 
-#[test]
-fn test_parse_queue_does_not_exist_error() {
+#[tokio::test]
+async fn test_parse_queue_does_not_exist_error() {
     let mock = MockRequestDispatcher::with_status(400).with_body(
         r#"<?xml version="1.0"?>
         <ErrorResponse xmlns="http://queue.amazonaws.com/doc/2012-11-05/">
@@ -169,7 +169,7 @@ fn test_parse_queue_does_not_exist_error() {
     };
 
     let client = SqsClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.get_queue_url(request).sync();
+    let result = client.get_queue_url(request).await;
     assert!(result.is_err());
     let err = result.err().unwrap();
     assert_eq!(

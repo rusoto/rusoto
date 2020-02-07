@@ -6,8 +6,8 @@ extern crate rusoto_core;
 use rusoto_comprehendmedical::{ComprehendMedical, ComprehendMedicalClient, DetectPHIRequest};
 use rusoto_core::Region;
 
-#[test]
-fn should_detect_phi() {
+#[tokio::test]
+async fn should_detect_phi() {
     let client = ComprehendMedicalClient::new(Region::UsEast1);
 
     let request = DetectPHIRequest {
@@ -15,7 +15,7 @@ fn should_detect_phi() {
         ..Default::default()
     };
 
-    match client.detect_phi(request).sync() {
+    match client.detect_phi(request).await {
         Ok(response) => {
             println!("{:#?}", response);
             assert_eq!(1, response.entities.len());

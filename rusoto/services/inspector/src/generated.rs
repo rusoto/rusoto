@@ -9,19 +9,20 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1585,10 +1586,11 @@ impl AddAttributesToFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AddAttributesToFindingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AddAttributesToFindingsError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -1656,10 +1658,11 @@ impl CreateAssessmentTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAssessmentTargetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateAssessmentTargetError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -1730,10 +1733,11 @@ impl CreateAssessmentTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateAssessmentTemplateError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateAssessmentTemplateError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -1801,10 +1805,11 @@ impl CreateExclusionsPreviewError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateExclusionsPreviewError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateExclusionsPreviewError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -1861,10 +1866,11 @@ impl CreateResourceGroupError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateResourceGroupError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateResourceGroupError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -1925,10 +1931,11 @@ impl DeleteAssessmentRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAssessmentRunError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteAssessmentRunError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -1990,10 +1997,11 @@ impl DeleteAssessmentTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAssessmentTargetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteAssessmentTargetError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2063,10 +2071,11 @@ impl DeleteAssessmentTemplateError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteAssessmentTemplateError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteAssessmentTemplateError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2106,10 +2115,11 @@ impl DescribeAssessmentRunsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAssessmentRunsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeAssessmentRunsError::Internal(ref cause) => write!(f, "{}", cause),
@@ -2143,10 +2153,11 @@ impl DescribeAssessmentTargetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAssessmentTargetsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeAssessmentTargetsError::Internal(ref cause) => write!(f, "{}", cause),
@@ -2184,10 +2195,11 @@ impl DescribeAssessmentTemplatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAssessmentTemplatesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeAssessmentTemplatesError::Internal(ref cause) => write!(f, "{}", cause),
@@ -2218,10 +2230,11 @@ impl DescribeCrossAccountAccessRoleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCrossAccountAccessRoleError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeCrossAccountAccessRoleError::Internal(ref cause) => write!(f, "{}", cause),
@@ -2252,10 +2265,11 @@ impl DescribeExclusionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeExclusionsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeExclusionsError::Internal(ref cause) => write!(f, "{}", cause),
@@ -2287,10 +2301,11 @@ impl DescribeFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFindingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeFindingsError::Internal(ref cause) => write!(f, "{}", cause),
@@ -2322,10 +2337,11 @@ impl DescribeResourceGroupsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeResourceGroupsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeResourceGroupsError::Internal(ref cause) => write!(f, "{}", cause),
@@ -2357,10 +2373,11 @@ impl DescribeRulesPackagesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeRulesPackagesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeRulesPackagesError::Internal(ref cause) => write!(f, "{}", cause),
@@ -2423,10 +2440,11 @@ impl GetAssessmentReportError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetAssessmentReportError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetAssessmentReportError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2475,10 +2493,11 @@ impl GetExclusionsPreviewError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetExclusionsPreviewError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetExclusionsPreviewError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2522,10 +2541,11 @@ impl GetTelemetryMetadataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for GetTelemetryMetadataError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetTelemetryMetadataError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2575,10 +2595,11 @@ impl ListAssessmentRunAgentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssessmentRunAgentsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListAssessmentRunAgentsError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2622,10 +2643,11 @@ impl ListAssessmentRunsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssessmentRunsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListAssessmentRunsError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2664,10 +2686,11 @@ impl ListAssessmentTargetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssessmentTargetsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListAssessmentTargetsError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2716,10 +2739,11 @@ impl ListAssessmentTemplatesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListAssessmentTemplatesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListAssessmentTemplatesError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2763,10 +2787,11 @@ impl ListEventSubscriptionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListEventSubscriptionsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListEventSubscriptionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2810,10 +2835,11 @@ impl ListExclusionsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListExclusionsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListExclusionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2857,10 +2883,11 @@ impl ListFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFindingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListFindingsError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2899,10 +2926,11 @@ impl ListRulesPackagesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListRulesPackagesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListRulesPackagesError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2945,10 +2973,11 @@ impl ListTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -2999,10 +3028,11 @@ impl PreviewAgentsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for PreviewAgentsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PreviewAgentsError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -3064,10 +3094,11 @@ impl RegisterCrossAccountAccessRoleError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RegisterCrossAccountAccessRoleError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             RegisterCrossAccountAccessRoleError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -3133,10 +3164,11 @@ impl RemoveAttributesFromFindingsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RemoveAttributesFromFindingsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             RemoveAttributesFromFindingsError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -3190,10 +3222,11 @@ impl SetTagsForResourceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SetTagsForResourceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             SetTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -3266,10 +3299,11 @@ impl StartAssessmentRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StartAssessmentRunError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StartAssessmentRunError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -3328,10 +3362,11 @@ impl StopAssessmentRunError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for StopAssessmentRunError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StopAssessmentRunError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -3390,10 +3425,11 @@ impl SubscribeToEventError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SubscribeToEventError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             SubscribeToEventError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -3448,10 +3484,11 @@ impl UnsubscribeFromEventError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UnsubscribeFromEventError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UnsubscribeFromEventError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -3505,10 +3542,11 @@ impl UpdateAssessmentTargetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAssessmentTargetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateAssessmentTargetError::AccessDenied(ref cause) => write!(f, "{}", cause),
@@ -3523,227 +3561,231 @@ impl fmt::Display for UpdateAssessmentTargetError {
 }
 impl Error for UpdateAssessmentTargetError {}
 /// Trait representing the capabilities of the Amazon Inspector API. Amazon Inspector clients implement this trait.
+#[async_trait]
 pub trait Inspector {
     /// <p>Assigns attributes (key and value pairs) to the findings that are specified by the ARNs of the findings.</p>
-    fn add_attributes_to_findings(
+    async fn add_attributes_to_findings(
         &self,
         input: AddAttributesToFindingsRequest,
-    ) -> RusotoFuture<AddAttributesToFindingsResponse, AddAttributesToFindingsError>;
+    ) -> Result<AddAttributesToFindingsResponse, RusotoError<AddAttributesToFindingsError>>;
 
     /// <p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. If resourceGroupArn is not specified, all EC2 instances in the current AWS account and region are included in the assessment target. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, this action also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html"> Amazon Inspector Assessment Targets</a>.</p>
-    fn create_assessment_target(
+    async fn create_assessment_target(
         &self,
         input: CreateAssessmentTargetRequest,
-    ) -> RusotoFuture<CreateAssessmentTargetResponse, CreateAssessmentTargetError>;
+    ) -> Result<CreateAssessmentTargetResponse, RusotoError<CreateAssessmentTargetError>>;
 
     /// <p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, this action also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments.</p>
-    fn create_assessment_template(
+    async fn create_assessment_template(
         &self,
         input: CreateAssessmentTemplateRequest,
-    ) -> RusotoFuture<CreateAssessmentTemplateResponse, CreateAssessmentTemplateError>;
+    ) -> Result<CreateAssessmentTemplateResponse, RusotoError<CreateAssessmentTemplateError>>;
 
     /// <p>Starts the generation of an exclusions preview for the specified assessment template. The exclusions preview lists the potential exclusions (ExclusionPreview) that Inspector can detect before it runs the assessment. </p>
-    fn create_exclusions_preview(
+    async fn create_exclusions_preview(
         &self,
         input: CreateExclusionsPreviewRequest,
-    ) -> RusotoFuture<CreateExclusionsPreviewResponse, CreateExclusionsPreviewError>;
+    ) -> Result<CreateExclusionsPreviewResponse, RusotoError<CreateExclusionsPreviewError>>;
 
     /// <p>Creates a resource group using the specified set of tags (key and value pairs) that are used to select the EC2 instances to be included in an Amazon Inspector assessment target. The created resource group is then used to create an Amazon Inspector assessment target. For more information, see <a>CreateAssessmentTarget</a>.</p>
-    fn create_resource_group(
+    async fn create_resource_group(
         &self,
         input: CreateResourceGroupRequest,
-    ) -> RusotoFuture<CreateResourceGroupResponse, CreateResourceGroupError>;
+    ) -> Result<CreateResourceGroupResponse, RusotoError<CreateResourceGroupError>>;
 
     /// <p>Deletes the assessment run that is specified by the ARN of the assessment run.</p>
-    fn delete_assessment_run(
+    async fn delete_assessment_run(
         &self,
         input: DeleteAssessmentRunRequest,
-    ) -> RusotoFuture<(), DeleteAssessmentRunError>;
+    ) -> Result<(), RusotoError<DeleteAssessmentRunError>>;
 
     /// <p>Deletes the assessment target that is specified by the ARN of the assessment target.</p>
-    fn delete_assessment_target(
+    async fn delete_assessment_target(
         &self,
         input: DeleteAssessmentTargetRequest,
-    ) -> RusotoFuture<(), DeleteAssessmentTargetError>;
+    ) -> Result<(), RusotoError<DeleteAssessmentTargetError>>;
 
     /// <p>Deletes the assessment template that is specified by the ARN of the assessment template.</p>
-    fn delete_assessment_template(
+    async fn delete_assessment_template(
         &self,
         input: DeleteAssessmentTemplateRequest,
-    ) -> RusotoFuture<(), DeleteAssessmentTemplateError>;
+    ) -> Result<(), RusotoError<DeleteAssessmentTemplateError>>;
 
     /// <p>Describes the assessment runs that are specified by the ARNs of the assessment runs.</p>
-    fn describe_assessment_runs(
+    async fn describe_assessment_runs(
         &self,
         input: DescribeAssessmentRunsRequest,
-    ) -> RusotoFuture<DescribeAssessmentRunsResponse, DescribeAssessmentRunsError>;
+    ) -> Result<DescribeAssessmentRunsResponse, RusotoError<DescribeAssessmentRunsError>>;
 
     /// <p>Describes the assessment targets that are specified by the ARNs of the assessment targets.</p>
-    fn describe_assessment_targets(
+    async fn describe_assessment_targets(
         &self,
         input: DescribeAssessmentTargetsRequest,
-    ) -> RusotoFuture<DescribeAssessmentTargetsResponse, DescribeAssessmentTargetsError>;
+    ) -> Result<DescribeAssessmentTargetsResponse, RusotoError<DescribeAssessmentTargetsError>>;
 
     /// <p>Describes the assessment templates that are specified by the ARNs of the assessment templates.</p>
-    fn describe_assessment_templates(
+    async fn describe_assessment_templates(
         &self,
         input: DescribeAssessmentTemplatesRequest,
-    ) -> RusotoFuture<DescribeAssessmentTemplatesResponse, DescribeAssessmentTemplatesError>;
+    ) -> Result<DescribeAssessmentTemplatesResponse, RusotoError<DescribeAssessmentTemplatesError>>;
 
     /// <p>Describes the IAM role that enables Amazon Inspector to access your AWS account.</p>
-    fn describe_cross_account_access_role(
+    async fn describe_cross_account_access_role(
         &self,
-    ) -> RusotoFuture<DescribeCrossAccountAccessRoleResponse, DescribeCrossAccountAccessRoleError>;
+    ) -> Result<
+        DescribeCrossAccountAccessRoleResponse,
+        RusotoError<DescribeCrossAccountAccessRoleError>,
+    >;
 
     /// <p>Describes the exclusions that are specified by the exclusions' ARNs.</p>
-    fn describe_exclusions(
+    async fn describe_exclusions(
         &self,
         input: DescribeExclusionsRequest,
-    ) -> RusotoFuture<DescribeExclusionsResponse, DescribeExclusionsError>;
+    ) -> Result<DescribeExclusionsResponse, RusotoError<DescribeExclusionsError>>;
 
     /// <p>Describes the findings that are specified by the ARNs of the findings.</p>
-    fn describe_findings(
+    async fn describe_findings(
         &self,
         input: DescribeFindingsRequest,
-    ) -> RusotoFuture<DescribeFindingsResponse, DescribeFindingsError>;
+    ) -> Result<DescribeFindingsResponse, RusotoError<DescribeFindingsError>>;
 
     /// <p>Describes the resource groups that are specified by the ARNs of the resource groups.</p>
-    fn describe_resource_groups(
+    async fn describe_resource_groups(
         &self,
         input: DescribeResourceGroupsRequest,
-    ) -> RusotoFuture<DescribeResourceGroupsResponse, DescribeResourceGroupsError>;
+    ) -> Result<DescribeResourceGroupsResponse, RusotoError<DescribeResourceGroupsError>>;
 
     /// <p>Describes the rules packages that are specified by the ARNs of the rules packages.</p>
-    fn describe_rules_packages(
+    async fn describe_rules_packages(
         &self,
         input: DescribeRulesPackagesRequest,
-    ) -> RusotoFuture<DescribeRulesPackagesResponse, DescribeRulesPackagesError>;
+    ) -> Result<DescribeRulesPackagesResponse, RusotoError<DescribeRulesPackagesError>>;
 
     /// <p>Produces an assessment report that includes detailed and comprehensive results of a specified assessment run. </p>
-    fn get_assessment_report(
+    async fn get_assessment_report(
         &self,
         input: GetAssessmentReportRequest,
-    ) -> RusotoFuture<GetAssessmentReportResponse, GetAssessmentReportError>;
+    ) -> Result<GetAssessmentReportResponse, RusotoError<GetAssessmentReportError>>;
 
     /// <p>Retrieves the exclusions preview (a list of ExclusionPreview objects) specified by the preview token. You can obtain the preview token by running the CreateExclusionsPreview API.</p>
-    fn get_exclusions_preview(
+    async fn get_exclusions_preview(
         &self,
         input: GetExclusionsPreviewRequest,
-    ) -> RusotoFuture<GetExclusionsPreviewResponse, GetExclusionsPreviewError>;
+    ) -> Result<GetExclusionsPreviewResponse, RusotoError<GetExclusionsPreviewError>>;
 
     /// <p>Information about the data that is collected for the specified assessment run.</p>
-    fn get_telemetry_metadata(
+    async fn get_telemetry_metadata(
         &self,
         input: GetTelemetryMetadataRequest,
-    ) -> RusotoFuture<GetTelemetryMetadataResponse, GetTelemetryMetadataError>;
+    ) -> Result<GetTelemetryMetadataResponse, RusotoError<GetTelemetryMetadataError>>;
 
     /// <p>Lists the agents of the assessment runs that are specified by the ARNs of the assessment runs.</p>
-    fn list_assessment_run_agents(
+    async fn list_assessment_run_agents(
         &self,
         input: ListAssessmentRunAgentsRequest,
-    ) -> RusotoFuture<ListAssessmentRunAgentsResponse, ListAssessmentRunAgentsError>;
+    ) -> Result<ListAssessmentRunAgentsResponse, RusotoError<ListAssessmentRunAgentsError>>;
 
     /// <p>Lists the assessment runs that correspond to the assessment templates that are specified by the ARNs of the assessment templates.</p>
-    fn list_assessment_runs(
+    async fn list_assessment_runs(
         &self,
         input: ListAssessmentRunsRequest,
-    ) -> RusotoFuture<ListAssessmentRunsResponse, ListAssessmentRunsError>;
+    ) -> Result<ListAssessmentRunsResponse, RusotoError<ListAssessmentRunsError>>;
 
     /// <p>Lists the ARNs of the assessment targets within this AWS account. For more information about assessment targets, see <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html">Amazon Inspector Assessment Targets</a>.</p>
-    fn list_assessment_targets(
+    async fn list_assessment_targets(
         &self,
         input: ListAssessmentTargetsRequest,
-    ) -> RusotoFuture<ListAssessmentTargetsResponse, ListAssessmentTargetsError>;
+    ) -> Result<ListAssessmentTargetsResponse, RusotoError<ListAssessmentTargetsError>>;
 
     /// <p>Lists the assessment templates that correspond to the assessment targets that are specified by the ARNs of the assessment targets.</p>
-    fn list_assessment_templates(
+    async fn list_assessment_templates(
         &self,
         input: ListAssessmentTemplatesRequest,
-    ) -> RusotoFuture<ListAssessmentTemplatesResponse, ListAssessmentTemplatesError>;
+    ) -> Result<ListAssessmentTemplatesResponse, RusotoError<ListAssessmentTemplatesError>>;
 
     /// <p>Lists all the event subscriptions for the assessment template that is specified by the ARN of the assessment template. For more information, see <a>SubscribeToEvent</a> and <a>UnsubscribeFromEvent</a>.</p>
-    fn list_event_subscriptions(
+    async fn list_event_subscriptions(
         &self,
         input: ListEventSubscriptionsRequest,
-    ) -> RusotoFuture<ListEventSubscriptionsResponse, ListEventSubscriptionsError>;
+    ) -> Result<ListEventSubscriptionsResponse, RusotoError<ListEventSubscriptionsError>>;
 
     /// <p>List exclusions that are generated by the assessment run.</p>
-    fn list_exclusions(
+    async fn list_exclusions(
         &self,
         input: ListExclusionsRequest,
-    ) -> RusotoFuture<ListExclusionsResponse, ListExclusionsError>;
+    ) -> Result<ListExclusionsResponse, RusotoError<ListExclusionsError>>;
 
     /// <p>Lists findings that are generated by the assessment runs that are specified by the ARNs of the assessment runs.</p>
-    fn list_findings(
+    async fn list_findings(
         &self,
         input: ListFindingsRequest,
-    ) -> RusotoFuture<ListFindingsResponse, ListFindingsError>;
+    ) -> Result<ListFindingsResponse, RusotoError<ListFindingsError>>;
 
     /// <p>Lists all available Amazon Inspector rules packages.</p>
-    fn list_rules_packages(
+    async fn list_rules_packages(
         &self,
         input: ListRulesPackagesRequest,
-    ) -> RusotoFuture<ListRulesPackagesResponse, ListRulesPackagesError>;
+    ) -> Result<ListRulesPackagesResponse, RusotoError<ListRulesPackagesError>>;
 
     /// <p>Lists all tags associated with an assessment template.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Previews the agents installed on the EC2 instances that are part of the specified assessment target.</p>
-    fn preview_agents(
+    async fn preview_agents(
         &self,
         input: PreviewAgentsRequest,
-    ) -> RusotoFuture<PreviewAgentsResponse, PreviewAgentsError>;
+    ) -> Result<PreviewAgentsResponse, RusotoError<PreviewAgentsError>>;
 
     /// <p>Registers the IAM role that grants Amazon Inspector access to AWS Services needed to perform security assessments.</p>
-    fn register_cross_account_access_role(
+    async fn register_cross_account_access_role(
         &self,
         input: RegisterCrossAccountAccessRoleRequest,
-    ) -> RusotoFuture<(), RegisterCrossAccountAccessRoleError>;
+    ) -> Result<(), RusotoError<RegisterCrossAccountAccessRoleError>>;
 
     /// <p>Removes entire attributes (key and value pairs) from the findings that are specified by the ARNs of the findings where an attribute with the specified key exists.</p>
-    fn remove_attributes_from_findings(
+    async fn remove_attributes_from_findings(
         &self,
         input: RemoveAttributesFromFindingsRequest,
-    ) -> RusotoFuture<RemoveAttributesFromFindingsResponse, RemoveAttributesFromFindingsError>;
+    ) -> Result<RemoveAttributesFromFindingsResponse, RusotoError<RemoveAttributesFromFindingsError>>;
 
     /// <p>Sets tags (key and value pairs) to the assessment template that is specified by the ARN of the assessment template.</p>
-    fn set_tags_for_resource(
+    async fn set_tags_for_resource(
         &self,
         input: SetTagsForResourceRequest,
-    ) -> RusotoFuture<(), SetTagsForResourceError>;
+    ) -> Result<(), RusotoError<SetTagsForResourceError>>;
 
     /// <p>Starts the assessment run specified by the ARN of the assessment template. For this API to function properly, you must not exceed the limit of running up to 500 concurrent agents per AWS account.</p>
-    fn start_assessment_run(
+    async fn start_assessment_run(
         &self,
         input: StartAssessmentRunRequest,
-    ) -> RusotoFuture<StartAssessmentRunResponse, StartAssessmentRunError>;
+    ) -> Result<StartAssessmentRunResponse, RusotoError<StartAssessmentRunError>>;
 
     /// <p>Stops the assessment run that is specified by the ARN of the assessment run.</p>
-    fn stop_assessment_run(
+    async fn stop_assessment_run(
         &self,
         input: StopAssessmentRunRequest,
-    ) -> RusotoFuture<(), StopAssessmentRunError>;
+    ) -> Result<(), RusotoError<StopAssessmentRunError>>;
 
     /// <p>Enables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>
-    fn subscribe_to_event(
+    async fn subscribe_to_event(
         &self,
         input: SubscribeToEventRequest,
-    ) -> RusotoFuture<(), SubscribeToEventError>;
+    ) -> Result<(), RusotoError<SubscribeToEventError>>;
 
     /// <p>Disables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>
-    fn unsubscribe_from_event(
+    async fn unsubscribe_from_event(
         &self,
         input: UnsubscribeFromEventRequest,
-    ) -> RusotoFuture<(), UnsubscribeFromEventError>;
+    ) -> Result<(), RusotoError<UnsubscribeFromEventError>>;
 
     /// <p>Updates the assessment target that is specified by the ARN of the assessment target.</p> <p>If resourceGroupArn is not specified, all EC2 instances in the current AWS account and region are included in the assessment target.</p>
-    fn update_assessment_target(
+    async fn update_assessment_target(
         &self,
         input: UpdateAssessmentTargetRequest,
-    ) -> RusotoFuture<(), UpdateAssessmentTargetError>;
+    ) -> Result<(), RusotoError<UpdateAssessmentTargetError>>;
 }
 /// A client for the Amazon Inspector API.
 #[derive(Clone)]
@@ -3757,7 +3799,10 @@ impl InspectorClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> InspectorClient {
-        Self::new_with_client(Client::shared(), region)
+        InspectorClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -3767,14 +3812,12 @@ impl InspectorClient {
     ) -> InspectorClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        InspectorClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> InspectorClient {
@@ -3782,20 +3825,13 @@ impl InspectorClient {
     }
 }
 
-impl fmt::Debug for InspectorClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("InspectorClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Inspector for InspectorClient {
     /// <p>Assigns attributes (key and value pairs) to the findings that are specified by the ARNs of the findings.</p>
-    fn add_attributes_to_findings(
+    async fn add_attributes_to_findings(
         &self,
         input: AddAttributesToFindingsRequest,
-    ) -> RusotoFuture<AddAttributesToFindingsResponse, AddAttributesToFindingsError> {
+    ) -> Result<AddAttributesToFindingsResponse, RusotoError<AddAttributesToFindingsError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3803,25 +3839,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AddAttributesToFindingsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddAttributesToFindingsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AddAttributesToFindingsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AddAttributesToFindingsError::from_response(response))
+        }
     }
 
     /// <p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. If resourceGroupArn is not specified, all EC2 instances in the current AWS account and region are included in the assessment target. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, this action also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html"> Amazon Inspector Assessment Targets</a>.</p>
-    fn create_assessment_target(
+    async fn create_assessment_target(
         &self,
         input: CreateAssessmentTargetRequest,
-    ) -> RusotoFuture<CreateAssessmentTargetResponse, CreateAssessmentTargetError> {
+    ) -> Result<CreateAssessmentTargetResponse, RusotoError<CreateAssessmentTargetError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3829,27 +3867,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateAssessmentTargetResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateAssessmentTargetError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAssessmentTargetResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAssessmentTargetError::from_response(response))
+        }
     }
 
     /// <p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, this action also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments.</p>
-    fn create_assessment_template(
+    async fn create_assessment_template(
         &self,
         input: CreateAssessmentTemplateRequest,
-    ) -> RusotoFuture<CreateAssessmentTemplateResponse, CreateAssessmentTemplateError> {
+    ) -> Result<CreateAssessmentTemplateResponse, RusotoError<CreateAssessmentTemplateError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3857,25 +3895,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateAssessmentTemplateResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateAssessmentTemplateError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAssessmentTemplateResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAssessmentTemplateError::from_response(response))
+        }
     }
 
     /// <p>Starts the generation of an exclusions preview for the specified assessment template. The exclusions preview lists the potential exclusions (ExclusionPreview) that Inspector can detect before it runs the assessment. </p>
-    fn create_exclusions_preview(
+    async fn create_exclusions_preview(
         &self,
         input: CreateExclusionsPreviewRequest,
-    ) -> RusotoFuture<CreateExclusionsPreviewResponse, CreateExclusionsPreviewError> {
+    ) -> Result<CreateExclusionsPreviewResponse, RusotoError<CreateExclusionsPreviewError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3883,25 +3923,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateExclusionsPreviewResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateExclusionsPreviewError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateExclusionsPreviewResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateExclusionsPreviewError::from_response(response))
+        }
     }
 
     /// <p>Creates a resource group using the specified set of tags (key and value pairs) that are used to select the EC2 instances to be included in an Amazon Inspector assessment target. The created resource group is then used to create an Amazon Inspector assessment target. For more information, see <a>CreateAssessmentTarget</a>.</p>
-    fn create_resource_group(
+    async fn create_resource_group(
         &self,
         input: CreateResourceGroupRequest,
-    ) -> RusotoFuture<CreateResourceGroupResponse, CreateResourceGroupError> {
+    ) -> Result<CreateResourceGroupResponse, RusotoError<CreateResourceGroupError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3909,27 +3951,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateResourceGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateResourceGroupError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateResourceGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateResourceGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes the assessment run that is specified by the ARN of the assessment run.</p>
-    fn delete_assessment_run(
+    async fn delete_assessment_run(
         &self,
         input: DeleteAssessmentRunRequest,
-    ) -> RusotoFuture<(), DeleteAssessmentRunError> {
+    ) -> Result<(), RusotoError<DeleteAssessmentRunError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3937,24 +3979,26 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteAssessmentRunError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            std::mem::drop(response);
+            Ok(())
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAssessmentRunError::from_response(response))
+        }
     }
 
     /// <p>Deletes the assessment target that is specified by the ARN of the assessment target.</p>
-    fn delete_assessment_target(
+    async fn delete_assessment_target(
         &self,
         input: DeleteAssessmentTargetRequest,
-    ) -> RusotoFuture<(), DeleteAssessmentTargetError> {
+    ) -> Result<(), RusotoError<DeleteAssessmentTargetError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3962,24 +4006,26 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteAssessmentTargetError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            std::mem::drop(response);
+            Ok(())
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAssessmentTargetError::from_response(response))
+        }
     }
 
     /// <p>Deletes the assessment template that is specified by the ARN of the assessment template.</p>
-    fn delete_assessment_template(
+    async fn delete_assessment_template(
         &self,
         input: DeleteAssessmentTemplateRequest,
-    ) -> RusotoFuture<(), DeleteAssessmentTemplateError> {
+    ) -> Result<(), RusotoError<DeleteAssessmentTemplateError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3987,22 +4033,26 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAssessmentTemplateError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            std::mem::drop(response);
+            Ok(())
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAssessmentTemplateError::from_response(response))
+        }
     }
 
     /// <p>Describes the assessment runs that are specified by the ARNs of the assessment runs.</p>
-    fn describe_assessment_runs(
+    async fn describe_assessment_runs(
         &self,
         input: DescribeAssessmentRunsRequest,
-    ) -> RusotoFuture<DescribeAssessmentRunsResponse, DescribeAssessmentRunsError> {
+    ) -> Result<DescribeAssessmentRunsResponse, RusotoError<DescribeAssessmentRunsError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4010,27 +4060,28 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAssessmentRunsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeAssessmentRunsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAssessmentRunsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAssessmentRunsError::from_response(response))
+        }
     }
 
     /// <p>Describes the assessment targets that are specified by the ARNs of the assessment targets.</p>
-    fn describe_assessment_targets(
+    async fn describe_assessment_targets(
         &self,
         input: DescribeAssessmentTargetsRequest,
-    ) -> RusotoFuture<DescribeAssessmentTargetsResponse, DescribeAssessmentTargetsError> {
+    ) -> Result<DescribeAssessmentTargetsResponse, RusotoError<DescribeAssessmentTargetsError>>
+    {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4038,25 +4089,28 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAssessmentTargetsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAssessmentTargetsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAssessmentTargetsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAssessmentTargetsError::from_response(response))
+        }
     }
 
     /// <p>Describes the assessment templates that are specified by the ARNs of the assessment templates.</p>
-    fn describe_assessment_templates(
+    async fn describe_assessment_templates(
         &self,
         input: DescribeAssessmentTemplatesRequest,
-    ) -> RusotoFuture<DescribeAssessmentTemplatesResponse, DescribeAssessmentTemplatesError> {
+    ) -> Result<DescribeAssessmentTemplatesResponse, RusotoError<DescribeAssessmentTemplatesError>>
+    {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4067,25 +4121,29 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAssessmentTemplatesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAssessmentTemplatesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAssessmentTemplatesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAssessmentTemplatesError::from_response(response))
+        }
     }
 
     /// <p>Describes the IAM role that enables Amazon Inspector to access your AWS account.</p>
-    fn describe_cross_account_access_role(
+    async fn describe_cross_account_access_role(
         &self,
-    ) -> RusotoFuture<DescribeCrossAccountAccessRoleResponse, DescribeCrossAccountAccessRoleError>
-    {
+    ) -> Result<
+        DescribeCrossAccountAccessRoleResponse,
+        RusotoError<DescribeCrossAccountAccessRoleError>,
+    > {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4095,25 +4153,27 @@ impl Inspector for InspectorClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCrossAccountAccessRoleResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCrossAccountAccessRoleError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeCrossAccountAccessRoleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeCrossAccountAccessRoleError::from_response(response))
+        }
     }
 
     /// <p>Describes the exclusions that are specified by the exclusions' ARNs.</p>
-    fn describe_exclusions(
+    async fn describe_exclusions(
         &self,
         input: DescribeExclusionsRequest,
-    ) -> RusotoFuture<DescribeExclusionsResponse, DescribeExclusionsError> {
+    ) -> Result<DescribeExclusionsResponse, RusotoError<DescribeExclusionsError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4121,28 +4181,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeExclusionsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeExclusionsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeExclusionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeExclusionsError::from_response(response))
+        }
     }
 
     /// <p>Describes the findings that are specified by the ARNs of the findings.</p>
-    fn describe_findings(
+    async fn describe_findings(
         &self,
         input: DescribeFindingsRequest,
-    ) -> RusotoFuture<DescribeFindingsResponse, DescribeFindingsError> {
+    ) -> Result<DescribeFindingsResponse, RusotoError<DescribeFindingsError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4150,28 +4209,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeFindingsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeFindingsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeFindingsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeFindingsError::from_response(response))
+        }
     }
 
     /// <p>Describes the resource groups that are specified by the ARNs of the resource groups.</p>
-    fn describe_resource_groups(
+    async fn describe_resource_groups(
         &self,
         input: DescribeResourceGroupsRequest,
-    ) -> RusotoFuture<DescribeResourceGroupsResponse, DescribeResourceGroupsError> {
+    ) -> Result<DescribeResourceGroupsResponse, RusotoError<DescribeResourceGroupsError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4179,27 +4237,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeResourceGroupsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeResourceGroupsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeResourceGroupsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeResourceGroupsError::from_response(response))
+        }
     }
 
     /// <p>Describes the rules packages that are specified by the ARNs of the rules packages.</p>
-    fn describe_rules_packages(
+    async fn describe_rules_packages(
         &self,
         input: DescribeRulesPackagesRequest,
-    ) -> RusotoFuture<DescribeRulesPackagesResponse, DescribeRulesPackagesError> {
+    ) -> Result<DescribeRulesPackagesResponse, RusotoError<DescribeRulesPackagesError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4207,27 +4265,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeRulesPackagesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeRulesPackagesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeRulesPackagesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeRulesPackagesError::from_response(response))
+        }
     }
 
     /// <p>Produces an assessment report that includes detailed and comprehensive results of a specified assessment run. </p>
-    fn get_assessment_report(
+    async fn get_assessment_report(
         &self,
         input: GetAssessmentReportRequest,
-    ) -> RusotoFuture<GetAssessmentReportResponse, GetAssessmentReportError> {
+    ) -> Result<GetAssessmentReportResponse, RusotoError<GetAssessmentReportError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4235,27 +4293,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAssessmentReportResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetAssessmentReportError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAssessmentReportResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAssessmentReportError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the exclusions preview (a list of ExclusionPreview objects) specified by the preview token. You can obtain the preview token by running the CreateExclusionsPreview API.</p>
-    fn get_exclusions_preview(
+    async fn get_exclusions_preview(
         &self,
         input: GetExclusionsPreviewRequest,
-    ) -> RusotoFuture<GetExclusionsPreviewResponse, GetExclusionsPreviewError> {
+    ) -> Result<GetExclusionsPreviewResponse, RusotoError<GetExclusionsPreviewError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4263,27 +4321,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetExclusionsPreviewResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetExclusionsPreviewError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetExclusionsPreviewResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetExclusionsPreviewError::from_response(response))
+        }
     }
 
     /// <p>Information about the data that is collected for the specified assessment run.</p>
-    fn get_telemetry_metadata(
+    async fn get_telemetry_metadata(
         &self,
         input: GetTelemetryMetadataRequest,
-    ) -> RusotoFuture<GetTelemetryMetadataResponse, GetTelemetryMetadataError> {
+    ) -> Result<GetTelemetryMetadataResponse, RusotoError<GetTelemetryMetadataError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4291,27 +4349,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetTelemetryMetadataResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetTelemetryMetadataError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetTelemetryMetadataResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTelemetryMetadataError::from_response(response))
+        }
     }
 
     /// <p>Lists the agents of the assessment runs that are specified by the ARNs of the assessment runs.</p>
-    fn list_assessment_run_agents(
+    async fn list_assessment_run_agents(
         &self,
         input: ListAssessmentRunAgentsRequest,
-    ) -> RusotoFuture<ListAssessmentRunAgentsResponse, ListAssessmentRunAgentsError> {
+    ) -> Result<ListAssessmentRunAgentsResponse, RusotoError<ListAssessmentRunAgentsError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4319,25 +4377,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAssessmentRunAgentsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAssessmentRunAgentsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAssessmentRunAgentsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAssessmentRunAgentsError::from_response(response))
+        }
     }
 
     /// <p>Lists the assessment runs that correspond to the assessment templates that are specified by the ARNs of the assessment templates.</p>
-    fn list_assessment_runs(
+    async fn list_assessment_runs(
         &self,
         input: ListAssessmentRunsRequest,
-    ) -> RusotoFuture<ListAssessmentRunsResponse, ListAssessmentRunsError> {
+    ) -> Result<ListAssessmentRunsResponse, RusotoError<ListAssessmentRunsError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4345,28 +4405,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAssessmentRunsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListAssessmentRunsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAssessmentRunsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAssessmentRunsError::from_response(response))
+        }
     }
 
     /// <p>Lists the ARNs of the assessment targets within this AWS account. For more information about assessment targets, see <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html">Amazon Inspector Assessment Targets</a>.</p>
-    fn list_assessment_targets(
+    async fn list_assessment_targets(
         &self,
         input: ListAssessmentTargetsRequest,
-    ) -> RusotoFuture<ListAssessmentTargetsResponse, ListAssessmentTargetsError> {
+    ) -> Result<ListAssessmentTargetsResponse, RusotoError<ListAssessmentTargetsError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4374,27 +4433,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAssessmentTargetsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListAssessmentTargetsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAssessmentTargetsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAssessmentTargetsError::from_response(response))
+        }
     }
 
     /// <p>Lists the assessment templates that correspond to the assessment targets that are specified by the ARNs of the assessment targets.</p>
-    fn list_assessment_templates(
+    async fn list_assessment_templates(
         &self,
         input: ListAssessmentTemplatesRequest,
-    ) -> RusotoFuture<ListAssessmentTemplatesResponse, ListAssessmentTemplatesError> {
+    ) -> Result<ListAssessmentTemplatesResponse, RusotoError<ListAssessmentTemplatesError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4402,25 +4461,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAssessmentTemplatesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAssessmentTemplatesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAssessmentTemplatesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAssessmentTemplatesError::from_response(response))
+        }
     }
 
     /// <p>Lists all the event subscriptions for the assessment template that is specified by the ARN of the assessment template. For more information, see <a>SubscribeToEvent</a> and <a>UnsubscribeFromEvent</a>.</p>
-    fn list_event_subscriptions(
+    async fn list_event_subscriptions(
         &self,
         input: ListEventSubscriptionsRequest,
-    ) -> RusotoFuture<ListEventSubscriptionsResponse, ListEventSubscriptionsError> {
+    ) -> Result<ListEventSubscriptionsResponse, RusotoError<ListEventSubscriptionsError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4428,27 +4489,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListEventSubscriptionsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListEventSubscriptionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListEventSubscriptionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListEventSubscriptionsError::from_response(response))
+        }
     }
 
     /// <p>List exclusions that are generated by the assessment run.</p>
-    fn list_exclusions(
+    async fn list_exclusions(
         &self,
         input: ListExclusionsRequest,
-    ) -> RusotoFuture<ListExclusionsResponse, ListExclusionsError> {
+    ) -> Result<ListExclusionsResponse, RusotoError<ListExclusionsError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4456,28 +4517,26 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListExclusionsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListExclusionsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListExclusionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListExclusionsError::from_response(response))
+        }
     }
 
     /// <p>Lists findings that are generated by the assessment runs that are specified by the ARNs of the assessment runs.</p>
-    fn list_findings(
+    async fn list_findings(
         &self,
         input: ListFindingsRequest,
-    ) -> RusotoFuture<ListFindingsResponse, ListFindingsError> {
+    ) -> Result<ListFindingsResponse, RusotoError<ListFindingsError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4485,28 +4544,26 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListFindingsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListFindingsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListFindingsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFindingsError::from_response(response))
+        }
     }
 
     /// <p>Lists all available Amazon Inspector rules packages.</p>
-    fn list_rules_packages(
+    async fn list_rules_packages(
         &self,
         input: ListRulesPackagesRequest,
-    ) -> RusotoFuture<ListRulesPackagesResponse, ListRulesPackagesError> {
+    ) -> Result<ListRulesPackagesResponse, RusotoError<ListRulesPackagesError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4514,28 +4571,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListRulesPackagesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListRulesPackagesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListRulesPackagesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListRulesPackagesError::from_response(response))
+        }
     }
 
     /// <p>Lists all tags associated with an assessment template.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4543,27 +4599,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Previews the agents installed on the EC2 instances that are part of the specified assessment target.</p>
-    fn preview_agents(
+    async fn preview_agents(
         &self,
         input: PreviewAgentsRequest,
-    ) -> RusotoFuture<PreviewAgentsResponse, PreviewAgentsError> {
+    ) -> Result<PreviewAgentsResponse, RusotoError<PreviewAgentsError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4571,28 +4627,26 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PreviewAgentsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PreviewAgentsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PreviewAgentsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PreviewAgentsError::from_response(response))
+        }
     }
 
     /// <p>Registers the IAM role that grants Amazon Inspector access to AWS Services needed to perform security assessments.</p>
-    fn register_cross_account_access_role(
+    async fn register_cross_account_access_role(
         &self,
         input: RegisterCrossAccountAccessRoleRequest,
-    ) -> RusotoFuture<(), RegisterCrossAccountAccessRoleError> {
+    ) -> Result<(), RusotoError<RegisterCrossAccountAccessRoleError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4603,22 +4657,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterCrossAccountAccessRoleError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            std::mem::drop(response);
+            Ok(())
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterCrossAccountAccessRoleError::from_response(response))
+        }
     }
 
     /// <p>Removes entire attributes (key and value pairs) from the findings that are specified by the ARNs of the findings where an attribute with the specified key exists.</p>
-    fn remove_attributes_from_findings(
+    async fn remove_attributes_from_findings(
         &self,
         input: RemoveAttributesFromFindingsRequest,
-    ) -> RusotoFuture<RemoveAttributesFromFindingsResponse, RemoveAttributesFromFindingsError> {
+    ) -> Result<RemoveAttributesFromFindingsResponse, RusotoError<RemoveAttributesFromFindingsError>>
+    {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4629,25 +4688,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RemoveAttributesFromFindingsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveAttributesFromFindingsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemoveAttributesFromFindingsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveAttributesFromFindingsError::from_response(response))
+        }
     }
 
     /// <p>Sets tags (key and value pairs) to the assessment template that is specified by the ARN of the assessment template.</p>
-    fn set_tags_for_resource(
+    async fn set_tags_for_resource(
         &self,
         input: SetTagsForResourceRequest,
-    ) -> RusotoFuture<(), SetTagsForResourceError> {
+    ) -> Result<(), RusotoError<SetTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4655,25 +4716,26 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SetTagsForResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            std::mem::drop(response);
+            Ok(())
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SetTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Starts the assessment run specified by the ARN of the assessment template. For this API to function properly, you must not exceed the limit of running up to 500 concurrent agents per AWS account.</p>
-    fn start_assessment_run(
+    async fn start_assessment_run(
         &self,
         input: StartAssessmentRunRequest,
-    ) -> RusotoFuture<StartAssessmentRunResponse, StartAssessmentRunError> {
+    ) -> Result<StartAssessmentRunResponse, RusotoError<StartAssessmentRunError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4681,28 +4743,27 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartAssessmentRunResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartAssessmentRunError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartAssessmentRunResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartAssessmentRunError::from_response(response))
+        }
     }
 
     /// <p>Stops the assessment run that is specified by the ARN of the assessment run.</p>
-    fn stop_assessment_run(
+    async fn stop_assessment_run(
         &self,
         input: StopAssessmentRunRequest,
-    ) -> RusotoFuture<(), StopAssessmentRunError> {
+    ) -> Result<(), RusotoError<StopAssessmentRunError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4710,25 +4771,26 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StopAssessmentRunError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            std::mem::drop(response);
+            Ok(())
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopAssessmentRunError::from_response(response))
+        }
     }
 
     /// <p>Enables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>
-    fn subscribe_to_event(
+    async fn subscribe_to_event(
         &self,
         input: SubscribeToEventRequest,
-    ) -> RusotoFuture<(), SubscribeToEventError> {
+    ) -> Result<(), RusotoError<SubscribeToEventError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4736,25 +4798,26 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SubscribeToEventError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            std::mem::drop(response);
+            Ok(())
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SubscribeToEventError::from_response(response))
+        }
     }
 
     /// <p>Disables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>
-    fn unsubscribe_from_event(
+    async fn unsubscribe_from_event(
         &self,
         input: UnsubscribeFromEventRequest,
-    ) -> RusotoFuture<(), UnsubscribeFromEventError> {
+    ) -> Result<(), RusotoError<UnsubscribeFromEventError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4762,24 +4825,26 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UnsubscribeFromEventError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            std::mem::drop(response);
+            Ok(())
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UnsubscribeFromEventError::from_response(response))
+        }
     }
 
     /// <p>Updates the assessment target that is specified by the ARN of the assessment target.</p> <p>If resourceGroupArn is not specified, all EC2 instances in the current AWS account and region are included in the assessment target.</p>
-    fn update_assessment_target(
+    async fn update_assessment_target(
         &self,
         input: UpdateAssessmentTargetRequest,
-    ) -> RusotoFuture<(), UpdateAssessmentTargetError> {
+    ) -> Result<(), RusotoError<UpdateAssessmentTargetError>> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4787,16 +4852,18 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateAssessmentTargetError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            std::mem::drop(response);
+            Ok(())
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAssessmentTargetError::from_response(response))
+        }
     }
 }

@@ -115,19 +115,26 @@ impl<'b> Service<'b> {
         let mut dependencies = BTreeMap::new();
 
         dependencies.insert(
-            "bytes".to_owned(),
-            cargo::Dependency::Simple("0.4.12".into()),
+            "async-trait".to_owned(),
+            cargo::Dependency::Simple("0.1".into()),
         );
+        dependencies.insert("bytes".to_owned(), cargo::Dependency::Simple("0.5".into()));
         dependencies.insert(
             "futures".to_owned(),
-            cargo::Dependency::Simple("0.1.16".into()),
+            cargo::Dependency::Extended {
+                path: None,
+                version: Some("0.3".to_owned()),
+                optional: None,
+                default_features: None,
+                features: None,
+            },
         );
         dependencies.insert(
             "rusoto_core".to_owned(),
             cargo::Dependency::Extended {
                 path: Some("../../core".into()),
-                version: Some(self.config.core_version.clone()),
                 optional: None,
+                version: None,
                 default_features: Some(false),
                 features: None,
             },
@@ -137,15 +144,17 @@ impl<'b> Service<'b> {
             "json" => {
                 dependencies.insert(
                     "serde".to_owned(),
-                    cargo::Dependency::Simple("1.0.2".into()),
-                );
-                dependencies.insert(
-                    "serde_derive".to_owned(),
-                    cargo::Dependency::Simple("1.0.2".into()),
+                    cargo::Dependency::Extended {
+                        version: Some("1.0".into()),
+                        path: None,
+                        optional: None,
+                        default_features: None,
+                        features: Some(vec!["derive".into()]),
+                    },
                 );
                 dependencies.insert(
                     "serde_json".to_owned(),
-                    cargo::Dependency::Simple("1.0.1".into()),
+                    cargo::Dependency::Simple("1.0".into()),
                 );
             }
             "query" | "ec2" => {
@@ -211,7 +220,7 @@ impl<'b> Service<'b> {
                 if self.needs_serde_json_crate() {
                     dependencies.insert(
                         "serde_json".to_owned(),
-                        cargo::Dependency::Simple("1.0.1".into()),
+                        cargo::Dependency::Simple("1.0".into()),
                     );
                 }
             }
@@ -232,11 +241,16 @@ impl<'b> Service<'b> {
             "rusoto_mock".to_owned(),
             cargo::Dependency::Extended {
                 path: Some("../../../mock".into()),
-                version: Some(self.config.core_version.clone()),
+                version: None,
                 optional: None,
                 default_features: Some(false),
                 features: None,
             },
+        );
+
+        dev_dependencies.insert(
+            "tokio".to_owned(),
+            cargo::Dependency::Simple("0.2".to_owned()),
         );
 
         if let Some(ref custom_dev_dependencies) = self.config.custom_dev_dependencies {
@@ -248,7 +262,7 @@ impl<'b> Service<'b> {
 
     pub fn visit_shapes<F>(&self, shape_name: &str, visitor: &mut F)
     where
-        F: FnMut(&str, &Shape) -> bool
+        F: FnMut(&str, &Shape) -> bool,
     {
         let shape = self
             .get_shape(shape_name)

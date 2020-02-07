@@ -1,7 +1,7 @@
 [package]
 name = "rusoto_tests"
 description = "AWS SDK for Rust - Integration Tests"
-version = "0.25.0"
+version = "0.43.0-beta.1"
 authors = [
     "Anthony DiMarco <ocramida@gmail.com>",
     "Jimmy Cuadra <jimmy@jimmycuadra.com>",
@@ -11,6 +11,7 @@ authors = [
 license = "MIT"
 repository = "https://github.com/rusoto/rusoto"
 homepage = "https://www.rusoto.org/"
+edition = "2018"
 
 [profile.dev]
 codegen-units = 2
@@ -20,9 +21,9 @@ debug = false
 codegen-units = 2
 debug = false
 
-[dependencies.rusoto_core]
-path = "../rusoto/core"
-default-features = false
+[dependencies]
+rusoto_credential = { path = "../rusoto/credential" }
+rusoto_core = { path = "../rusoto/core", default-features = false }
 
 [dependencies.rusoto_acm]
 optional = true
@@ -650,13 +651,14 @@ path = "../rusoto/services/ram"
 
 [dev-dependencies]
 env_logger = "0.7"
-futures = "0.1.16"
-futures-fs = "0.0.3"
-log = "0.4.1"
-rand = "^0.7.2"
+bytes = "0.5"
+futures = "0.3"
+log = "0.4"
+rand = "0.7"
 time = "0.2"
-reqwest = "0.9"
-http = "0.1.17"
+reqwest = { version = "0.10", features = ["json"] }
+http = "0.2"
+tokio = { version = "0.2", features = ["time", "rt-core", "fs"] }
 
 [features]
 all = [

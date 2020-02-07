@@ -9,19 +9,20 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+#[allow(unused_imports)]
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -865,10 +866,11 @@ impl AssociateDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateDomainError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociateDomainError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -938,10 +940,11 @@ impl AssociateWebsiteAuthorizationProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateWebsiteAuthorizationProviderError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociateWebsiteAuthorizationProviderError::InternalServerError(ref cause) => {
@@ -1023,10 +1026,11 @@ impl AssociateWebsiteCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for AssociateWebsiteCertificateAuthorityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AssociateWebsiteCertificateAuthorityError::InternalServerError(ref cause) => {
@@ -1094,10 +1098,11 @@ impl CreateFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for CreateFleetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateFleetError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -1148,10 +1153,11 @@ impl DeleteFleetError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DeleteFleetError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteFleetError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -1213,10 +1219,11 @@ impl DescribeAuditStreamConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeAuditStreamConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeAuditStreamConfigurationError::InternalServerError(ref cause) => {
@@ -1288,10 +1295,11 @@ impl DescribeCompanyNetworkConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeCompanyNetworkConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeCompanyNetworkConfigurationError::InternalServerError(ref cause) => {
@@ -1351,10 +1359,11 @@ impl DescribeDeviceError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDeviceError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeDeviceError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -1416,10 +1425,11 @@ impl DescribeDevicePolicyConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDevicePolicyConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeDevicePolicyConfigurationError::InternalServerError(ref cause) => {
@@ -1479,10 +1489,11 @@ impl DescribeDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeDomainError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeDomainError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -1540,10 +1551,11 @@ impl DescribeFleetMetadataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeFleetMetadataError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeFleetMetadataError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -1605,10 +1617,11 @@ impl DescribeIdentityProviderConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeIdentityProviderConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeIdentityProviderConfigurationError::InternalServerError(ref cause) => {
@@ -1680,10 +1693,11 @@ impl DescribeWebsiteCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DescribeWebsiteCertificateAuthorityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeWebsiteCertificateAuthorityError::InternalServerError(ref cause) => {
@@ -1745,10 +1759,11 @@ impl DisassociateDomainError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateDomainError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisassociateDomainError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -1819,10 +1834,11 @@ impl DisassociateWebsiteAuthorizationProviderError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateWebsiteAuthorizationProviderError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisassociateWebsiteAuthorizationProviderError::InternalServerError(ref cause) => {
@@ -1897,10 +1913,11 @@ impl DisassociateWebsiteCertificateAuthorityError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for DisassociateWebsiteCertificateAuthorityError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisassociateWebsiteCertificateAuthorityError::InternalServerError(ref cause) => {
@@ -1960,10 +1977,11 @@ impl ListDevicesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDevicesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListDevicesError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -2008,10 +2026,11 @@ impl ListDomainsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListDomainsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListDomainsError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -2055,10 +2074,11 @@ impl ListFleetsError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListFleetsError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListFleetsError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -2119,10 +2139,11 @@ impl ListWebsiteAuthorizationProvidersError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListWebsiteAuthorizationProvidersError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListWebsiteAuthorizationProvidersError::InternalServerError(ref cause) => {
@@ -2187,10 +2208,11 @@ impl ListWebsiteCertificateAuthoritiesError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for ListWebsiteCertificateAuthoritiesError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListWebsiteCertificateAuthoritiesError::InternalServerError(ref cause) => {
@@ -2251,10 +2273,11 @@ impl RestoreDomainAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RestoreDomainAccessError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             RestoreDomainAccessError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -2306,10 +2329,11 @@ impl RevokeDomainAccessError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for RevokeDomainAccessError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             RevokeDomainAccessError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -2359,10 +2383,11 @@ impl SignOutUserError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for SignOutUserError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             SignOutUserError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -2424,10 +2449,11 @@ impl UpdateAuditStreamConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateAuditStreamConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateAuditStreamConfigurationError::InternalServerError(ref cause) => {
@@ -2497,10 +2523,11 @@ impl UpdateCompanyNetworkConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateCompanyNetworkConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateCompanyNetworkConfigurationError::InternalServerError(ref cause) => {
@@ -2572,10 +2599,11 @@ impl UpdateDevicePolicyConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDevicePolicyConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateDevicePolicyConfigurationError::InternalServerError(ref cause) => {
@@ -2639,10 +2667,11 @@ impl UpdateDomainMetadataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateDomainMetadataError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateDomainMetadataError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -2696,10 +2725,11 @@ impl UpdateFleetMetadataError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateFleetMetadataError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateFleetMetadataError::InternalServerError(ref cause) => write!(f, "{}", cause),
@@ -2761,10 +2791,11 @@ impl UpdateIdentityProviderConfigurationError {
                 _ => {}
             }
         }
-        return RusotoError::Unknown(res);
+        RusotoError::Unknown(res)
     }
 }
 impl fmt::Display for UpdateIdentityProviderConfigurationError {
+    #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateIdentityProviderConfigurationError::InternalServerError(ref cause) => {
@@ -2787,221 +2818,231 @@ impl fmt::Display for UpdateIdentityProviderConfigurationError {
 }
 impl Error for UpdateIdentityProviderConfigurationError {}
 /// Trait representing the capabilities of the WorkLink API. WorkLink clients implement this trait.
+#[async_trait]
 pub trait Worklink {
     /// <p>Specifies a domain to be associated to Amazon WorkLink.</p>
-    fn associate_domain(
+    async fn associate_domain(
         &self,
         input: AssociateDomainRequest,
-    ) -> RusotoFuture<AssociateDomainResponse, AssociateDomainError>;
+    ) -> Result<AssociateDomainResponse, RusotoError<AssociateDomainError>>;
 
     /// <p>Associates a website authorization provider with a specified fleet. This is used to authorize users against associated websites in the company network.</p>
-    fn associate_website_authorization_provider(
+    async fn associate_website_authorization_provider(
         &self,
         input: AssociateWebsiteAuthorizationProviderRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociateWebsiteAuthorizationProviderResponse,
-        AssociateWebsiteAuthorizationProviderError,
+        RusotoError<AssociateWebsiteAuthorizationProviderError>,
     >;
 
     /// <p>Imports the root certificate of a certificate authority (CA) used to obtain TLS certificates used by associated websites within the company network.</p>
-    fn associate_website_certificate_authority(
+    async fn associate_website_certificate_authority(
         &self,
         input: AssociateWebsiteCertificateAuthorityRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociateWebsiteCertificateAuthorityResponse,
-        AssociateWebsiteCertificateAuthorityError,
+        RusotoError<AssociateWebsiteCertificateAuthorityError>,
     >;
 
     /// <p>Creates a fleet. A fleet consists of resources and the configuration that delivers associated websites to authorized users who download and set up the Amazon WorkLink app.</p>
-    fn create_fleet(
+    async fn create_fleet(
         &self,
         input: CreateFleetRequest,
-    ) -> RusotoFuture<CreateFleetResponse, CreateFleetError>;
+    ) -> Result<CreateFleetResponse, RusotoError<CreateFleetError>>;
 
     /// <p>Deletes a fleet. Prevents users from accessing previously associated websites. </p>
-    fn delete_fleet(
+    async fn delete_fleet(
         &self,
         input: DeleteFleetRequest,
-    ) -> RusotoFuture<DeleteFleetResponse, DeleteFleetError>;
+    ) -> Result<DeleteFleetResponse, RusotoError<DeleteFleetError>>;
 
     /// <p>Describes the configuration for delivering audit streams to the customer account.</p>
-    fn describe_audit_stream_configuration(
+    async fn describe_audit_stream_configuration(
         &self,
         input: DescribeAuditStreamConfigurationRequest,
-    ) -> RusotoFuture<DescribeAuditStreamConfigurationResponse, DescribeAuditStreamConfigurationError>;
+    ) -> Result<
+        DescribeAuditStreamConfigurationResponse,
+        RusotoError<DescribeAuditStreamConfigurationError>,
+    >;
 
     /// <p>Describes the networking configuration to access the internal websites associated with the specified fleet.</p>
-    fn describe_company_network_configuration(
+    async fn describe_company_network_configuration(
         &self,
         input: DescribeCompanyNetworkConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeCompanyNetworkConfigurationResponse,
-        DescribeCompanyNetworkConfigurationError,
+        RusotoError<DescribeCompanyNetworkConfigurationError>,
     >;
 
     /// <p>Provides information about a user's device.</p>
-    fn describe_device(
+    async fn describe_device(
         &self,
         input: DescribeDeviceRequest,
-    ) -> RusotoFuture<DescribeDeviceResponse, DescribeDeviceError>;
+    ) -> Result<DescribeDeviceResponse, RusotoError<DescribeDeviceError>>;
 
     /// <p>Describes the device policy configuration for the specified fleet.</p>
-    fn describe_device_policy_configuration(
+    async fn describe_device_policy_configuration(
         &self,
         input: DescribeDevicePolicyConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeDevicePolicyConfigurationResponse,
-        DescribeDevicePolicyConfigurationError,
+        RusotoError<DescribeDevicePolicyConfigurationError>,
     >;
 
     /// <p>Provides information about the domain.</p>
-    fn describe_domain(
+    async fn describe_domain(
         &self,
         input: DescribeDomainRequest,
-    ) -> RusotoFuture<DescribeDomainResponse, DescribeDomainError>;
+    ) -> Result<DescribeDomainResponse, RusotoError<DescribeDomainError>>;
 
     /// <p>Provides basic information for the specified fleet, excluding identity provider, networking, and device configuration details.</p>
-    fn describe_fleet_metadata(
+    async fn describe_fleet_metadata(
         &self,
         input: DescribeFleetMetadataRequest,
-    ) -> RusotoFuture<DescribeFleetMetadataResponse, DescribeFleetMetadataError>;
+    ) -> Result<DescribeFleetMetadataResponse, RusotoError<DescribeFleetMetadataError>>;
 
     /// <p>Describes the identity provider configuration of the specified fleet.</p>
-    fn describe_identity_provider_configuration(
+    async fn describe_identity_provider_configuration(
         &self,
         input: DescribeIdentityProviderConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeIdentityProviderConfigurationResponse,
-        DescribeIdentityProviderConfigurationError,
+        RusotoError<DescribeIdentityProviderConfigurationError>,
     >;
 
     /// <p>Provides information about the certificate authority.</p>
-    fn describe_website_certificate_authority(
+    async fn describe_website_certificate_authority(
         &self,
         input: DescribeWebsiteCertificateAuthorityRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeWebsiteCertificateAuthorityResponse,
-        DescribeWebsiteCertificateAuthorityError,
+        RusotoError<DescribeWebsiteCertificateAuthorityError>,
     >;
 
     /// <p>Disassociates a domain from Amazon WorkLink. End users lose the ability to access the domain with Amazon WorkLink. </p>
-    fn disassociate_domain(
+    async fn disassociate_domain(
         &self,
         input: DisassociateDomainRequest,
-    ) -> RusotoFuture<DisassociateDomainResponse, DisassociateDomainError>;
+    ) -> Result<DisassociateDomainResponse, RusotoError<DisassociateDomainError>>;
 
     /// <p>Disassociates a website authorization provider from a specified fleet. After the disassociation, users can't load any associated websites that require this authorization provider.</p>
-    fn disassociate_website_authorization_provider(
+    async fn disassociate_website_authorization_provider(
         &self,
         input: DisassociateWebsiteAuthorizationProviderRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateWebsiteAuthorizationProviderResponse,
-        DisassociateWebsiteAuthorizationProviderError,
+        RusotoError<DisassociateWebsiteAuthorizationProviderError>,
     >;
 
     /// <p>Removes a certificate authority (CA).</p>
-    fn disassociate_website_certificate_authority(
+    async fn disassociate_website_certificate_authority(
         &self,
         input: DisassociateWebsiteCertificateAuthorityRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateWebsiteCertificateAuthorityResponse,
-        DisassociateWebsiteCertificateAuthorityError,
+        RusotoError<DisassociateWebsiteCertificateAuthorityError>,
     >;
 
     /// <p>Retrieves a list of devices registered with the specified fleet.</p>
-    fn list_devices(
+    async fn list_devices(
         &self,
         input: ListDevicesRequest,
-    ) -> RusotoFuture<ListDevicesResponse, ListDevicesError>;
+    ) -> Result<ListDevicesResponse, RusotoError<ListDevicesError>>;
 
     /// <p>Retrieves a list of domains associated to a specified fleet.</p>
-    fn list_domains(
+    async fn list_domains(
         &self,
         input: ListDomainsRequest,
-    ) -> RusotoFuture<ListDomainsResponse, ListDomainsError>;
+    ) -> Result<ListDomainsResponse, RusotoError<ListDomainsError>>;
 
     /// <p>Retrieves a list of fleets for the current account and Region.</p>
-    fn list_fleets(
+    async fn list_fleets(
         &self,
         input: ListFleetsRequest,
-    ) -> RusotoFuture<ListFleetsResponse, ListFleetsError>;
+    ) -> Result<ListFleetsResponse, RusotoError<ListFleetsError>>;
 
     /// <p>Retrieves a list of website authorization providers associated with a specified fleet.</p>
-    fn list_website_authorization_providers(
+    async fn list_website_authorization_providers(
         &self,
         input: ListWebsiteAuthorizationProvidersRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListWebsiteAuthorizationProvidersResponse,
-        ListWebsiteAuthorizationProvidersError,
+        RusotoError<ListWebsiteAuthorizationProvidersError>,
     >;
 
     /// <p>Retrieves a list of certificate authorities added for the current account and Region.</p>
-    fn list_website_certificate_authorities(
+    async fn list_website_certificate_authorities(
         &self,
         input: ListWebsiteCertificateAuthoritiesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListWebsiteCertificateAuthoritiesResponse,
-        ListWebsiteCertificateAuthoritiesError,
+        RusotoError<ListWebsiteCertificateAuthoritiesError>,
     >;
 
     /// <p>Moves a domain to ACTIVE status if it was in the INACTIVE status.</p>
-    fn restore_domain_access(
+    async fn restore_domain_access(
         &self,
         input: RestoreDomainAccessRequest,
-    ) -> RusotoFuture<RestoreDomainAccessResponse, RestoreDomainAccessError>;
+    ) -> Result<RestoreDomainAccessResponse, RusotoError<RestoreDomainAccessError>>;
 
     /// <p>Moves a domain to INACTIVE status if it was in the ACTIVE status.</p>
-    fn revoke_domain_access(
+    async fn revoke_domain_access(
         &self,
         input: RevokeDomainAccessRequest,
-    ) -> RusotoFuture<RevokeDomainAccessResponse, RevokeDomainAccessError>;
+    ) -> Result<RevokeDomainAccessResponse, RusotoError<RevokeDomainAccessError>>;
 
     /// <p>Signs the user out from all of their devices. The user can sign in again if they have valid credentials.</p>
-    fn sign_out_user(
+    async fn sign_out_user(
         &self,
         input: SignOutUserRequest,
-    ) -> RusotoFuture<SignOutUserResponse, SignOutUserError>;
+    ) -> Result<SignOutUserResponse, RusotoError<SignOutUserError>>;
 
     /// <p>Updates the audit stream configuration for the fleet.</p>
-    fn update_audit_stream_configuration(
+    async fn update_audit_stream_configuration(
         &self,
         input: UpdateAuditStreamConfigurationRequest,
-    ) -> RusotoFuture<UpdateAuditStreamConfigurationResponse, UpdateAuditStreamConfigurationError>;
+    ) -> Result<
+        UpdateAuditStreamConfigurationResponse,
+        RusotoError<UpdateAuditStreamConfigurationError>,
+    >;
 
     /// <p>Updates the company network configuration for the fleet.</p>
-    fn update_company_network_configuration(
+    async fn update_company_network_configuration(
         &self,
         input: UpdateCompanyNetworkConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateCompanyNetworkConfigurationResponse,
-        UpdateCompanyNetworkConfigurationError,
+        RusotoError<UpdateCompanyNetworkConfigurationError>,
     >;
 
     /// <p>Updates the device policy configuration for the fleet.</p>
-    fn update_device_policy_configuration(
+    async fn update_device_policy_configuration(
         &self,
         input: UpdateDevicePolicyConfigurationRequest,
-    ) -> RusotoFuture<UpdateDevicePolicyConfigurationResponse, UpdateDevicePolicyConfigurationError>;
+    ) -> Result<
+        UpdateDevicePolicyConfigurationResponse,
+        RusotoError<UpdateDevicePolicyConfigurationError>,
+    >;
 
     /// <p>Updates domain metadata, such as DisplayName.</p>
-    fn update_domain_metadata(
+    async fn update_domain_metadata(
         &self,
         input: UpdateDomainMetadataRequest,
-    ) -> RusotoFuture<UpdateDomainMetadataResponse, UpdateDomainMetadataError>;
+    ) -> Result<UpdateDomainMetadataResponse, RusotoError<UpdateDomainMetadataError>>;
 
     /// <p>Updates fleet metadata, such as DisplayName.</p>
-    fn update_fleet_metadata(
+    async fn update_fleet_metadata(
         &self,
         input: UpdateFleetMetadataRequest,
-    ) -> RusotoFuture<UpdateFleetMetadataResponse, UpdateFleetMetadataError>;
+    ) -> Result<UpdateFleetMetadataResponse, RusotoError<UpdateFleetMetadataError>>;
 
     /// <p>Updates the identity provider configuration for the fleet.</p>
-    fn update_identity_provider_configuration(
+    async fn update_identity_provider_configuration(
         &self,
         input: UpdateIdentityProviderConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateIdentityProviderConfigurationResponse,
-        UpdateIdentityProviderConfigurationError,
+        RusotoError<UpdateIdentityProviderConfigurationError>,
     >;
 }
 /// A client for the WorkLink API.
@@ -3016,7 +3057,10 @@ impl WorklinkClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> WorklinkClient {
-        Self::new_with_client(Client::shared(), region)
+        WorklinkClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -3026,14 +3070,12 @@ impl WorklinkClient {
     ) -> WorklinkClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        WorklinkClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
+        }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> WorklinkClient {
@@ -3041,20 +3083,13 @@ impl WorklinkClient {
     }
 }
 
-impl fmt::Debug for WorklinkClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("WorklinkClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Worklink for WorklinkClient {
     /// <p>Specifies a domain to be associated to Amazon WorkLink.</p>
-    fn associate_domain(
+    async fn associate_domain(
         &self,
         input: AssociateDomainRequest,
-    ) -> RusotoFuture<AssociateDomainResponse, AssociateDomainError> {
+    ) -> Result<AssociateDomainResponse, RusotoError<AssociateDomainError>> {
         let request_uri = "/associateDomain";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3063,32 +3098,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateDomainResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateDomainResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AssociateDomainError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateDomainError::from_response(response))
+        }
     }
 
     /// <p>Associates a website authorization provider with a specified fleet. This is used to authorize users against associated websites in the company network.</p>
-    fn associate_website_authorization_provider(
+    async fn associate_website_authorization_provider(
         &self,
         input: AssociateWebsiteAuthorizationProviderRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociateWebsiteAuthorizationProviderResponse,
-        AssociateWebsiteAuthorizationProviderError,
+        RusotoError<AssociateWebsiteAuthorizationProviderError>,
     > {
         let request_uri = "/associateWebsiteAuthorizationProvider";
 
@@ -3098,32 +3131,32 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateWebsiteAuthorizationProviderResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateWebsiteAuthorizationProviderResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateWebsiteAuthorizationProviderError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateWebsiteAuthorizationProviderError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Imports the root certificate of a certificate authority (CA) used to obtain TLS certificates used by associated websites within the company network.</p>
-    fn associate_website_certificate_authority(
+    async fn associate_website_certificate_authority(
         &self,
         input: AssociateWebsiteCertificateAuthorityRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociateWebsiteCertificateAuthorityResponse,
-        AssociateWebsiteCertificateAuthorityError,
+        RusotoError<AssociateWebsiteCertificateAuthorityError>,
     > {
         let request_uri = "/associateWebsiteCertificateAuthority";
 
@@ -3133,30 +3166,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateWebsiteCertificateAuthorityResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateWebsiteCertificateAuthorityResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateWebsiteCertificateAuthorityError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateWebsiteCertificateAuthorityError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Creates a fleet. A fleet consists of resources and the configuration that delivers associated websites to authorized users who download and set up the Amazon WorkLink app.</p>
-    fn create_fleet(
+    async fn create_fleet(
         &self,
         input: CreateFleetRequest,
-    ) -> RusotoFuture<CreateFleetResponse, CreateFleetError> {
+    ) -> Result<CreateFleetResponse, RusotoError<CreateFleetError>> {
         let request_uri = "/createFleet";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3165,30 +3198,28 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateFleetResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateFleetResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateFleetError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateFleetError::from_response(response))
+        }
     }
 
     /// <p>Deletes a fleet. Prevents users from accessing previously associated websites. </p>
-    fn delete_fleet(
+    async fn delete_fleet(
         &self,
         input: DeleteFleetRequest,
-    ) -> RusotoFuture<DeleteFleetResponse, DeleteFleetError> {
+    ) -> Result<DeleteFleetResponse, RusotoError<DeleteFleetError>> {
         let request_uri = "/deleteFleet";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3197,31 +3228,31 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteFleetResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteFleetResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteFleetError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFleetError::from_response(response))
+        }
     }
 
     /// <p>Describes the configuration for delivering audit streams to the customer account.</p>
-    fn describe_audit_stream_configuration(
+    async fn describe_audit_stream_configuration(
         &self,
         input: DescribeAuditStreamConfigurationRequest,
-    ) -> RusotoFuture<DescribeAuditStreamConfigurationResponse, DescribeAuditStreamConfigurationError>
-    {
+    ) -> Result<
+        DescribeAuditStreamConfigurationResponse,
+        RusotoError<DescribeAuditStreamConfigurationError>,
+    > {
         let request_uri = "/describeAuditStreamConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3230,31 +3261,32 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAuditStreamConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAuditStreamConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAuditStreamConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAuditStreamConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Describes the networking configuration to access the internal websites associated with the specified fleet.</p>
-    fn describe_company_network_configuration(
+    async fn describe_company_network_configuration(
         &self,
         input: DescribeCompanyNetworkConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeCompanyNetworkConfigurationResponse,
-        DescribeCompanyNetworkConfigurationError,
+        RusotoError<DescribeCompanyNetworkConfigurationError>,
     > {
         let request_uri = "/describeCompanyNetworkConfiguration";
 
@@ -3264,29 +3296,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCompanyNetworkConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeCompanyNetworkConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCompanyNetworkConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeCompanyNetworkConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Provides information about a user's device.</p>
-    fn describe_device(
+    async fn describe_device(
         &self,
         input: DescribeDeviceRequest,
-    ) -> RusotoFuture<DescribeDeviceResponse, DescribeDeviceError> {
+    ) -> Result<DescribeDeviceResponse, RusotoError<DescribeDeviceError>> {
         let request_uri = "/describeDevice";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3295,32 +3328,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDeviceResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDeviceResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeDeviceError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDeviceError::from_response(response))
+        }
     }
 
     /// <p>Describes the device policy configuration for the specified fleet.</p>
-    fn describe_device_policy_configuration(
+    async fn describe_device_policy_configuration(
         &self,
         input: DescribeDevicePolicyConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeDevicePolicyConfigurationResponse,
-        DescribeDevicePolicyConfigurationError,
+        RusotoError<DescribeDevicePolicyConfigurationError>,
     > {
         let request_uri = "/describeDevicePolicyConfiguration";
 
@@ -3330,29 +3361,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDevicePolicyConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDevicePolicyConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDevicePolicyConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDevicePolicyConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Provides information about the domain.</p>
-    fn describe_domain(
+    async fn describe_domain(
         &self,
         input: DescribeDomainRequest,
-    ) -> RusotoFuture<DescribeDomainResponse, DescribeDomainError> {
+    ) -> Result<DescribeDomainResponse, RusotoError<DescribeDomainError>> {
         let request_uri = "/describeDomain";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3361,30 +3393,28 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDomainResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDomainResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeDomainError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDomainError::from_response(response))
+        }
     }
 
     /// <p>Provides basic information for the specified fleet, excluding identity provider, networking, and device configuration details.</p>
-    fn describe_fleet_metadata(
+    async fn describe_fleet_metadata(
         &self,
         input: DescribeFleetMetadataRequest,
-    ) -> RusotoFuture<DescribeFleetMetadataResponse, DescribeFleetMetadataError> {
+    ) -> Result<DescribeFleetMetadataResponse, RusotoError<DescribeFleetMetadataError>> {
         let request_uri = "/describeFleetMetadata";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3393,31 +3423,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeFleetMetadataResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeFleetMetadataResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeFleetMetadataError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeFleetMetadataError::from_response(response))
+        }
     }
 
     /// <p>Describes the identity provider configuration of the specified fleet.</p>
-    fn describe_identity_provider_configuration(
+    async fn describe_identity_provider_configuration(
         &self,
         input: DescribeIdentityProviderConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeIdentityProviderConfigurationResponse,
-        DescribeIdentityProviderConfigurationError,
+        RusotoError<DescribeIdentityProviderConfigurationError>,
     > {
         let request_uri = "/describeIdentityProviderConfiguration";
 
@@ -3427,32 +3456,32 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeIdentityProviderConfigurationResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeIdentityProviderConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeIdentityProviderConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeIdentityProviderConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Provides information about the certificate authority.</p>
-    fn describe_website_certificate_authority(
+    async fn describe_website_certificate_authority(
         &self,
         input: DescribeWebsiteCertificateAuthorityRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeWebsiteCertificateAuthorityResponse,
-        DescribeWebsiteCertificateAuthorityError,
+        RusotoError<DescribeWebsiteCertificateAuthorityError>,
     > {
         let request_uri = "/describeWebsiteCertificateAuthority";
 
@@ -3462,29 +3491,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeWebsiteCertificateAuthorityResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWebsiteCertificateAuthorityResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeWebsiteCertificateAuthorityError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWebsiteCertificateAuthorityError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Disassociates a domain from Amazon WorkLink. End users lose the ability to access the domain with Amazon WorkLink. </p>
-    fn disassociate_domain(
+    async fn disassociate_domain(
         &self,
         input: DisassociateDomainRequest,
-    ) -> RusotoFuture<DisassociateDomainResponse, DisassociateDomainError> {
+    ) -> Result<DisassociateDomainResponse, RusotoError<DisassociateDomainError>> {
         let request_uri = "/disassociateDomain";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3493,32 +3523,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateDomainResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateDomainResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DisassociateDomainError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateDomainError::from_response(response))
+        }
     }
 
     /// <p>Disassociates a website authorization provider from a specified fleet. After the disassociation, users can't load any associated websites that require this authorization provider.</p>
-    fn disassociate_website_authorization_provider(
+    async fn disassociate_website_authorization_provider(
         &self,
         input: DisassociateWebsiteAuthorizationProviderRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateWebsiteAuthorizationProviderResponse,
-        DisassociateWebsiteAuthorizationProviderError,
+        RusotoError<DisassociateWebsiteAuthorizationProviderError>,
     > {
         let request_uri = "/disassociateWebsiteAuthorizationProvider";
 
@@ -3528,30 +3556,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateWebsiteAuthorizationProviderResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateWebsiteAuthorizationProviderResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateWebsiteAuthorizationProviderError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateWebsiteAuthorizationProviderError::from_response(response))
+        }
     }
 
     /// <p>Removes a certificate authority (CA).</p>
-    fn disassociate_website_certificate_authority(
+    async fn disassociate_website_certificate_authority(
         &self,
         input: DisassociateWebsiteCertificateAuthorityRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateWebsiteCertificateAuthorityResponse,
-        DisassociateWebsiteCertificateAuthorityError,
+        RusotoError<DisassociateWebsiteCertificateAuthorityError>,
     > {
         let request_uri = "/disassociateWebsiteCertificateAuthority";
 
@@ -3561,30 +3589,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateWebsiteCertificateAuthorityResponse, _>(
-                    )?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateWebsiteCertificateAuthorityResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateWebsiteCertificateAuthorityError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateWebsiteCertificateAuthorityError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Retrieves a list of devices registered with the specified fleet.</p>
-    fn list_devices(
+    async fn list_devices(
         &self,
         input: ListDevicesRequest,
-    ) -> RusotoFuture<ListDevicesResponse, ListDevicesError> {
+    ) -> Result<ListDevicesResponse, RusotoError<ListDevicesError>> {
         let request_uri = "/listDevices";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3593,30 +3621,28 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDevicesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDevicesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListDevicesError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDevicesError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of domains associated to a specified fleet.</p>
-    fn list_domains(
+    async fn list_domains(
         &self,
         input: ListDomainsRequest,
-    ) -> RusotoFuture<ListDomainsResponse, ListDomainsError> {
+    ) -> Result<ListDomainsResponse, RusotoError<ListDomainsError>> {
         let request_uri = "/listDomains";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3625,30 +3651,28 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDomainsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDomainsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListDomainsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDomainsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of fleets for the current account and Region.</p>
-    fn list_fleets(
+    async fn list_fleets(
         &self,
         input: ListFleetsRequest,
-    ) -> RusotoFuture<ListFleetsResponse, ListFleetsError> {
+    ) -> Result<ListFleetsResponse, RusotoError<ListFleetsError>> {
         let request_uri = "/listFleets";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3657,32 +3681,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListFleetsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListFleetsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListFleetsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFleetsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of website authorization providers associated with a specified fleet.</p>
-    fn list_website_authorization_providers(
+    async fn list_website_authorization_providers(
         &self,
         input: ListWebsiteAuthorizationProvidersRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListWebsiteAuthorizationProvidersResponse,
-        ListWebsiteAuthorizationProvidersError,
+        RusotoError<ListWebsiteAuthorizationProvidersError>,
     > {
         let request_uri = "/listWebsiteAuthorizationProviders";
 
@@ -3692,31 +3714,32 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListWebsiteAuthorizationProvidersResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListWebsiteAuthorizationProvidersResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListWebsiteAuthorizationProvidersError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListWebsiteAuthorizationProvidersError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Retrieves a list of certificate authorities added for the current account and Region.</p>
-    fn list_website_certificate_authorities(
+    async fn list_website_certificate_authorities(
         &self,
         input: ListWebsiteCertificateAuthoritiesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListWebsiteCertificateAuthoritiesResponse,
-        ListWebsiteCertificateAuthoritiesError,
+        RusotoError<ListWebsiteCertificateAuthoritiesError>,
     > {
         let request_uri = "/listWebsiteCertificateAuthorities";
 
@@ -3726,29 +3749,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListWebsiteCertificateAuthoritiesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListWebsiteCertificateAuthoritiesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListWebsiteCertificateAuthoritiesError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListWebsiteCertificateAuthoritiesError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Moves a domain to ACTIVE status if it was in the INACTIVE status.</p>
-    fn restore_domain_access(
+    async fn restore_domain_access(
         &self,
         input: RestoreDomainAccessRequest,
-    ) -> RusotoFuture<RestoreDomainAccessResponse, RestoreDomainAccessError> {
+    ) -> Result<RestoreDomainAccessResponse, RusotoError<RestoreDomainAccessError>> {
         let request_uri = "/restoreDomainAccess";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3757,29 +3781,28 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RestoreDomainAccessResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RestoreDomainAccessResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RestoreDomainAccessError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RestoreDomainAccessError::from_response(response))
+        }
     }
 
     /// <p>Moves a domain to INACTIVE status if it was in the ACTIVE status.</p>
-    fn revoke_domain_access(
+    async fn revoke_domain_access(
         &self,
         input: RevokeDomainAccessRequest,
-    ) -> RusotoFuture<RevokeDomainAccessResponse, RevokeDomainAccessError> {
+    ) -> Result<RevokeDomainAccessResponse, RusotoError<RevokeDomainAccessError>> {
         let request_uri = "/revokeDomainAccess";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3788,30 +3811,28 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RevokeDomainAccessResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RevokeDomainAccessResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RevokeDomainAccessError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RevokeDomainAccessError::from_response(response))
+        }
     }
 
     /// <p>Signs the user out from all of their devices. The user can sign in again if they have valid credentials.</p>
-    fn sign_out_user(
+    async fn sign_out_user(
         &self,
         input: SignOutUserRequest,
-    ) -> RusotoFuture<SignOutUserResponse, SignOutUserError> {
+    ) -> Result<SignOutUserResponse, RusotoError<SignOutUserError>> {
         let request_uri = "/signOutUser";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3820,31 +3841,31 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SignOutUserResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SignOutUserResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SignOutUserError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SignOutUserError::from_response(response))
+        }
     }
 
     /// <p>Updates the audit stream configuration for the fleet.</p>
-    fn update_audit_stream_configuration(
+    async fn update_audit_stream_configuration(
         &self,
         input: UpdateAuditStreamConfigurationRequest,
-    ) -> RusotoFuture<UpdateAuditStreamConfigurationResponse, UpdateAuditStreamConfigurationError>
-    {
+    ) -> Result<
+        UpdateAuditStreamConfigurationResponse,
+        RusotoError<UpdateAuditStreamConfigurationError>,
+    > {
         let request_uri = "/updateAuditStreamConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3853,29 +3874,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateAuditStreamConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAuditStreamConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateAuditStreamConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAuditStreamConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Updates the company network configuration for the fleet.</p>
-    fn update_company_network_configuration(
+    async fn update_company_network_configuration(
         &self,
         input: UpdateCompanyNetworkConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateCompanyNetworkConfigurationResponse,
-        UpdateCompanyNetworkConfigurationError,
+        RusotoError<UpdateCompanyNetworkConfigurationError>,
     > {
         let request_uri = "/updateCompanyNetworkConfiguration";
 
@@ -3885,30 +3907,33 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateCompanyNetworkConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateCompanyNetworkConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateCompanyNetworkConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateCompanyNetworkConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Updates the device policy configuration for the fleet.</p>
-    fn update_device_policy_configuration(
+    async fn update_device_policy_configuration(
         &self,
         input: UpdateDevicePolicyConfigurationRequest,
-    ) -> RusotoFuture<UpdateDevicePolicyConfigurationResponse, UpdateDevicePolicyConfigurationError>
-    {
+    ) -> Result<
+        UpdateDevicePolicyConfigurationResponse,
+        RusotoError<UpdateDevicePolicyConfigurationError>,
+    > {
         let request_uri = "/updateDevicePolicyConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3917,29 +3942,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDevicePolicyConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateDevicePolicyConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateDevicePolicyConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDevicePolicyConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Updates domain metadata, such as DisplayName.</p>
-    fn update_domain_metadata(
+    async fn update_domain_metadata(
         &self,
         input: UpdateDomainMetadataRequest,
-    ) -> RusotoFuture<UpdateDomainMetadataResponse, UpdateDomainMetadataError> {
+    ) -> Result<UpdateDomainMetadataResponse, RusotoError<UpdateDomainMetadataError>> {
         let request_uri = "/updateDomainMetadata";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3948,29 +3974,28 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDomainMetadataResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateDomainMetadataResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateDomainMetadataError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDomainMetadataError::from_response(response))
+        }
     }
 
     /// <p>Updates fleet metadata, such as DisplayName.</p>
-    fn update_fleet_metadata(
+    async fn update_fleet_metadata(
         &self,
         input: UpdateFleetMetadataRequest,
-    ) -> RusotoFuture<UpdateFleetMetadataResponse, UpdateFleetMetadataError> {
+    ) -> Result<UpdateFleetMetadataResponse, RusotoError<UpdateFleetMetadataError>> {
         let request_uri = "/UpdateFleetMetadata";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3979,31 +4004,30 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateFleetMetadataResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateFleetMetadataResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateFleetMetadataError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateFleetMetadataError::from_response(response))
+        }
     }
 
     /// <p>Updates the identity provider configuration for the fleet.</p>
-    fn update_identity_provider_configuration(
+    async fn update_identity_provider_configuration(
         &self,
         input: UpdateIdentityProviderConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateIdentityProviderConfigurationResponse,
-        UpdateIdentityProviderConfigurationError,
+        RusotoError<UpdateIdentityProviderConfigurationError>,
     > {
         let request_uri = "/updateIdentityProviderConfiguration";
 
@@ -4013,21 +4037,22 @@ impl Worklink for WorklinkClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateIdentityProviderConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateIdentityProviderConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateIdentityProviderConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateIdentityProviderConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 }

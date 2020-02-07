@@ -92,7 +92,7 @@ def main():
     rc = 0
     for image in args.docker_images:
         with Docker(image=image, run_opts=args.docker_run_opts, run_args=args.docker_run_args, port=args.port) as docker:
-            if subprocess.call([args.command] + args.args) != 0:
+            if subprocess.call([args.command] + ['--' if i == '----' else i for i in args.args]) != 0:
                 if sys.stdout.isatty():
                     print('\033[31m', end='')
                 print("ERROR: Docker test failed:", docker)

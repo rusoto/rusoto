@@ -13,7 +13,11 @@ use super::{
 pub struct QueryGenerator;
 
 impl GenerateProtocol for QueryGenerator {
-    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
+    fn generate_method_signatures(
+        &self,
+        writer: &mut FileWriter,
+        service: &Service<'_>,
+    ) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             writeln!(
                 writer,
@@ -42,15 +46,13 @@ impl GenerateProtocol for QueryGenerator {
                     {serialize_input}
                     {set_input_params}
 
-                    self.client.sign_and_dispatch(request, |response| {{
-                        if !response.status.is_success() {{
-                            return Box::new(response.buffer().from_err().and_then(|response| {{
-                                Err({error_type}::from_response(response))
-                            }}));
-                        }}
+                    let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
+                    if !response.status.is_success() {{
+                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                        return Err({error_type}::from_response(response));
+                    }}
 
-                        {parse_payload}
-                    }})
+                    {parse_payload}
                 }}
                 ",
                      api_version = service.api_version(),
@@ -83,7 +85,12 @@ impl GenerateProtocol for QueryGenerator {
             ")
     }
 
-    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service<'_>) -> Option<String> {
+    fn generate_serializer(
+        &self,
+        name: &str,
+        shape: &Shape,
+        service: &Service<'_>,
+    ) -> Option<String> {
         if shape.is_primitive() {
             return None;
         }
@@ -217,7 +224,7 @@ fn list_member_format(service: &Service<'_>, flattened: bool) -> String {
 fn generate_map_serializer(service: &Service<'_>, shape: &Shape) -> String {
     let mut parts = Vec::new();
 
-     let prefix_snip = if service.service_id() == Some("SNS")
+    let prefix_snip = if service.service_id() == Some("SNS")
         && shape.value.is_some()
         && (shape.value.as_ref().unwrap().shape == "MessageAttributeValue"
             || shape.value.as_ref().unwrap().shape == "AttributeValue")
@@ -243,13 +250,9 @@ fn generate_map_serializer(service: &Service<'_>, shape: &Shape) -> String {
 
     if primitive_value {
         if service.service_id() == Some("SNS") {
-            parts.push(
-                "params.put(&format!(\"{}.{}\", prefix, \"value\"), &value);".to_string()
-            );
+            parts.push("params.put(&format!(\"{}.{}\", prefix, \"value\"), &value);".to_string());
         } else {
-            parts.push(
-                "params.put(&format!(\"{}.{}\", prefix, \"Value\"), &value);".to_string()
-            );
+            parts.push("params.put(&format!(\"{}.{}\", prefix, \"Value\"), &value);".to_string());
         }
     } else {
         parts.push(format!(
@@ -482,7 +485,7 @@ fn generate_method_signature(
 ) -> String {
     if operation.input.is_some() {
         format!(
-            "fn {operation_name}(&self, input: {input_type}) -> RusotoFuture<{output_type}, {error_type}>",
+            "async fn {operation_name}(&self, input: {input_type}) -> Result<{output_type}, RusotoError<{error_type}>>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
@@ -490,7 +493,7 @@ fn generate_method_signature(
         )
     } else {
         format!(
-            "fn {operation_name}(&self) -> RusotoFuture<{output_type}, {error_type}>",
+            "async fn {operation_name}(&self) -> Result<{output_type}, RusotoError<{error_type}>>",
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
             error_type = error_type_name(service, operation_name),

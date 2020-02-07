@@ -1,13 +1,13 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
-description = "AWS SDK for Rust - Amazon CloudFront @ 2018-11-05"
+description = "AWS SDK for Rust - Amazon CloudFront @ 2019-03-26"
 documentation = "https://docs.rs/rusoto_cloudfront"
 keywords = ["AWS", "Amazon", "cloudfront"]
 license = "MIT"
 name = "rusoto_cloudfront"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.42.0"
+version = "0.43.0-beta.1"
 homepage = "https://www.rusoto.org/"
 edition = "2018"
 exclude = ["test_resources/*"]
@@ -15,12 +15,14 @@ exclude = ["test_resources/*"]
 [build-dependencies]
 
 [dependencies]
-bytes = "0.4.12"
-futures = "0.1.16"
+async-trait = "0.1"
+bytes = "0.5"
 xml-rs = "0.8"
 
+[dependencies.futures]
+version = "0.3"
+
 [dependencies.rusoto_core]
-version = "0.42.0"
 path = "../../core"
 default-features = false
 
@@ -31,14 +33,17 @@ optional = true
 [dependencies.serde_derive]
 version = "1.0.2"
 optional = true
+
+[dev-dependencies]
+tokio = "0.2"
+
 [dev-dependencies.rusoto_mock]
-version = "0.42.0"
 path = "../../../mock"
 default-features = false
 
 [features]
 default = ["native-tls"]
-deserialize_structs = ["bytes/serde", "serde", "serde_derive"]
+deserialize_structs = ["bytes/serde"]
 native-tls = ["rusoto_core/native-tls"]
 rustls = ["rusoto_core/rustls"]
-serialize_structs = ["bytes/serde", "serde", "serde_derive"]
+serialize_structs = ["bytes/serde"]

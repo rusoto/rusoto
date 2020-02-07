@@ -43,7 +43,7 @@ pub fn generate_response_parser(
     parse_non_payload: &str,
 ) -> String {
     if operation.output.is_none() {
-        return "Box::new(future::ok(::std::mem::drop(response)))".to_string();
+        return "std::mem::drop(response);\nOk(())".to_string();
     }
 
     let shape_name = &operation
@@ -82,16 +82,16 @@ pub fn generate_response_parser(
                 .expect("failed to get output member shape");
             match payload_shape.shape_type {
                 payload_type
-                    if payload_type == ShapeType::Blob || payload_type == ShapeType::String =>
-                {
-                    payload_body_parser(
-                        payload_type,
-                        &mutated_shape_name,
-                        payload_member_name,
-                        has_streaming_payload(output_shape),
-                        parse_non_payload,
-                    )
-                }
+                if payload_type == ShapeType::Blob || payload_type == ShapeType::String =>
+                    {
+                        payload_body_parser(
+                            payload_type,
+                            &mutated_shape_name,
+                            payload_member_name,
+                            has_streaming_payload(output_shape),
+                            parse_non_payload,
+                        )
+                    }
                 _ => xml_body_parser(
                     &mutated_shape_name,
                     result_wrapper,
@@ -113,41 +113,39 @@ fn payload_body_parser(
     match payload_type {
         ShapeType::Blob if !streaming => {
             format!("
-                Box::new(response.buffer().from_err().map(move |response| {{
-                    let mut result = {output_shape}::default();
-                    result.{payload_member} = Some(response.body);
-                    {parse_non_payload}
-                    result
-                }}))
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = {output_shape}::default();
+                result.{payload_member} = Some(response.body);
+                {parse_non_payload}
+                Ok(result)
                 ",
                     output_shape = output_shape,
                     payload_member = payload_member.to_snake_case(),
                     parse_non_payload = parse_non_payload)
-        },
+        }
         ShapeType::Blob if streaming => {
             format!("
                 let mut result = {output_shape}::default();
                 result.{payload_member} = Some(response.body);
                 {parse_non_payload}
-                Box::new(future::ok(result))
+                Ok(result)
                 ",
                     output_shape = output_shape,
                     payload_member = payload_member.to_snake_case(),
                     parse_non_payload = parse_non_payload)
-        },
+        }
         _ => {
             format!("
-                Box::new(response.buffer().from_err().map(move |response| {{
-                    let mut result = {output_shape}::default();
-                    result.{payload_member} = Some(String::from_utf8_lossy(response.body.as_ref()).into());
-                    {parse_non_payload}
-                    result
-                }}))
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = {output_shape}::default();
+                result.{payload_member} = Some(String::from_utf8_lossy(response.body.as_ref()).into());
+                {parse_non_payload}
+                Ok(result)
                 ",
                     output_shape = output_shape,
                     payload_member = payload_member.to_snake_case(),
                     parse_non_payload = parse_non_payload)
-        },
+        }
     }
 }
 
@@ -179,24 +177,23 @@ fn xml_body_parser(
     };
 
     format!(
-        "Box::new(response.buffer().from_err().and_then(move |response| {{
-            {let_result}
+        "let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        {let_result}
 
-            if response.body.is_empty() {{
-                result = {output_shape}::default();
-            }} else {{
-                let reader = EventReader::new_with_config(
-                    response.body.as_ref(),
-                    ParserConfig::new().trim_whitespace(false)
-                );
-                let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                let _start_document = stack.next();
-                let actual_tag_name = peek_at_name(&mut stack)?;
-                {deserialize}
-            }}
-            {parse_non_payload} // parse non-payload
-            Ok(result)
-        }}))",
+        if xml_response.body.is_empty() {{
+            result = {output_shape}::default();
+        }} else {{
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false)
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            {deserialize}
+        }}
+        {parse_non_payload} // parse non-payload
+        Ok(result)",
         let_result = let_result,
         output_shape = output_shape,
         deserialize = deserialize,
@@ -205,7 +202,8 @@ fn xml_body_parser(
 }
 
 fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) -> String {
-    if let ("s3", "GetBucketLocationOutput") = (service.endpoint_prefix(), name) {
+    match (service.endpoint_prefix(), name) {
+        ("s3", "GetBucketLocationOutput") => {
             // override custom deserializer
             let struct_field_deserializers = shape
                 .members
@@ -222,7 +220,7 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) 
                             member_name,
                             member,
                             &member_name.to_string(),
-                            false
+                            false,
                         )
                     )
                 })
@@ -235,6 +233,8 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) 
                 name = name,
                 struct_field_deserializers = struct_field_deserializers
             );
+        }
+        _ => {}
     }
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape, service),

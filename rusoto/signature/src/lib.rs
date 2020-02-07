@@ -9,6 +9,7 @@
 //! Please note that this module does not expect URIs to already be encoded.
 //!
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
+#![cfg_attr(not(feature = "unstable"), allow(clippy::type_complexity))]
 pub extern crate rusoto_credential as credential;
 pub mod region;
 pub mod signature;

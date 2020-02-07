@@ -6,6 +6,7 @@ use crate::credential::CredentialsError;
 
 use super::proto::xml::util::XmlParseError;
 use super::request::{BufferedHttpResponse, HttpDispatchError};
+use crate::client::SignAndDispatchError;
 
 /// Generic error type returned by all rusoto requests.
 #[derive(Debug, PartialEq)]
@@ -22,6 +23,8 @@ pub enum RusotoError<E> {
     ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(BufferedHttpResponse),
+    /// An error occurred when attempting to run a future as blocking
+    Blocking,
 }
 
 /// Result carrying a generic `RusotoError`.
@@ -30,7 +33,7 @@ pub type RusotoResult<T, E> = Result<T, RusotoError<E>>;
 impl<E> From<XmlParseError> for RusotoError<E> {
     fn from(err: XmlParseError) -> Self {
         let XmlParseError(message) = err;
-        RusotoError::ParseError(message.to_string())
+        RusotoError::ParseError(message)
     }
 }
 
@@ -52,6 +55,15 @@ impl<E> From<HttpDispatchError> for RusotoError<E> {
     }
 }
 
+impl<E> From<SignAndDispatchError> for RusotoError<E> {
+    fn from(err: SignAndDispatchError) -> Self {
+        match err {
+            SignAndDispatchError::Credentials(e) => Self::from(e),
+            SignAndDispatchError::Dispatch(e) => Self::from(e),
+        }
+    }
+}
+
 impl<E> From<io::Error> for RusotoError<E> {
     fn from(err: io::Error) -> Self {
         RusotoError::HttpDispatch(HttpDispatchError::from(err))
@@ -67,6 +79,7 @@ impl<E: Error + 'static> fmt::Display for RusotoError<E> {
             RusotoError::HttpDispatch(ref dispatch_error) => write!(f, "{}", dispatch_error),
             RusotoError::ParseError(ref cause) => write!(f, "{}", cause),
             RusotoError::Unknown(ref cause) => write!(f, "{}", cause.body_as_str()),
+            RusotoError::Blocking => write!(f, "Failed to run blocking future"),
         }
     }
 }
