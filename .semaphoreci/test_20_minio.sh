@@ -17,4 +17,4 @@ cd "$GIT_ROOT/integration_tests"
     --run-opt=--env=MINIO_DOMAIN=localhost \
     --run-arg=server \
     --run-arg=/home/shared \
-    -- cargo test --features s3,disable_minio_unsupported
+    -- cargo test --features s3,disable_minio_unsupported ---- --test-threads 1
