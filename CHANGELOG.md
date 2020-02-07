@@ -1,18 +1,25 @@
 # Rusoto changes
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 ## [Unreleased]
 
 (Please put changes here)
+
+## [0.43.0-beta.0] - 2020-02-07
+
+- Move to `std::future::Future`, async/.await, and Tokio 0.2
+- Update to botocore 1.14.9
+- Add Discord invite link to README.md and CONTRIBUTING.md
 - Remove unused import
-- Updated AWS-CREDENTIALS.md to address https://github.com/rusoto/rusoto/issues/1597
-- Fixed SNS API's attributes and value keyword https://github.com/rusoto/rusoto/pull/1591
+- Fixed links in AWS-CREDENTIALS.md
+- Fixed SNS API's attributes and value keyword
 - Adding support for web identity provider, which enables IAM roles for Kubernetes service accounts.
-- Add object-safe AwsCredentialsProvider trait as alternative to the existing generic `ProvideAwsCredentials`
-  trait.
-- Introduce `Secret` type to automatically zero-out memory use to stored secret credentials. So far, 
-  only used in the new web identity provider.
+- Add object-safe AwsCredentialsProvider trait as alternative to the existing generic `ProvideAwsCredentials` trait.
+- Introduce `Secret` type to automatically zero-out memory use to stored secret credentials. So far, only used in the new web identity provider.
 - Introduce `Variable` to abstract over certain credential provider input parameters.
-- Encode request payload optionally with Gzip : https://github.com/rusoto/rusoto/pull/1615
+- Encode request payload optionally with Gzip
 - Add Debug trait to generated Clients
 - Add `rusoto_ec2::filter!` macro
 - Improve `InstanceMetadataProvider` to avoid cloning unnecessarily
@@ -21,7 +28,8 @@
 - Implement Clone on various Credential structs.
 - Fix incorrect encoding of Session Token when pre-signing URLs
 - Add IoT Secure Tunneling service
-- Add Discord invite link to README.md and CONTRIBUTING.md
+- Fix Directory Service integration tests
+- Update to time 0.2.x
 
 ## [0.42.0] - 2019-11-18
 
@@ -328,3 +336,23 @@ such as an S3 key returned in `list_objects_v2`
 - Credentials crate no longer retries credential acquiring
 - Type aliases removed.  Example: we no longer use `BucketName` which was an alias for `String`.
 - travis-cargo from TravisCI builds
+
+[Unreleased]: https://github.com/rusoto/rusoto/compare/rusoto-v0.43.0-beta.0...HEAD
+[0.43.0-beta.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.42.0...rusoto-v0.43.0-beta.0
+[0.42.0]: https://github.com/rusoto/rusoto/compare/credentials-v0.41.1...rusoto-v0.42.0
+[0.41.1]: https://github.com/rusoto/rusoto/compare/rusoto-v0.41.0...credentials-v0.41.1
+[0.41.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.40.0...rusoto-v0.41.0
+[0.40.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.39.0...rusoto-v0.40.0
+[0.39.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.38.0...rusoto-v0.39.0
+[0.38.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.37.0...rusoto-v0.38.0
+[0.37.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.36.0...rusoto-v0.37.0
+[0.36.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.35.0...rusoto-v0.36.0
+[0.35.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.34.0...rusoto-v0.35.0
+[0.34.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.33.1...rusoto-v0.34.0
+[0.33.1]: https://github.com/rusoto/rusoto/compare/rusoto-v0.33.0...rusoto-v0.33.1
+[0.33.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.32.0...rusoto-v0.33.0
+[0.32.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.31.0...rusoto-v0.32.0
+[0.31.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.30.0...rusoto-v0.31.0
+[0.30.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.29.0...rusoto-v0.30.0
+[0.29.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.28.0...rusoto-v0.29.0
+[0.28.0]: https://github.com/rusoto/rusoto/releases/tag/rusoto-v0.28.0
