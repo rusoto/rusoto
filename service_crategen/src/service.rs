@@ -133,8 +133,8 @@ impl<'b> Service<'b> {
             "rusoto_core".to_owned(),
             cargo::Dependency::Extended {
                 path: Some("../../core".into()),
+                version: Some(self.config.core_version.clone()),
                 optional: None,
-                version: None,
                 default_features: Some(false),
                 features: None,
             },
@@ -241,7 +241,7 @@ impl<'b> Service<'b> {
             "rusoto_mock".to_owned(),
             cargo::Dependency::Extended {
                 path: Some("../../../mock".into()),
-                version: None,
+                version: Some(self.config.core_version.clone()),
                 optional: None,
                 default_features: Some(false),
                 features: None,
