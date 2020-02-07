@@ -1,6 +1,6 @@
 [package]
 name = "skeptical"
-version = "0.43.0-beta1"
+version = "0.43.0-beta.1"
 authors = ["Matthew Mayer <matthewkmayer@gmail.com>"]
 build = "build.rs"
 edition = "2018"

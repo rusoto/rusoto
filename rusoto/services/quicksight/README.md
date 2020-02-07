@@ -15,7 +15,7 @@ On Linux, OpenSSL is required.
 To use `rusoto_quicksight` in your application, add it as a dependency in your `Cargo.toml`:
 ```toml
 [dependencies]
-rusoto_quicksight = "0.43.0-beta1"
+rusoto_quicksight = "0.43.0-beta.1"
 ```
 ## Crate Features
 - `native-tls` - use platform-specific TLS implementation.

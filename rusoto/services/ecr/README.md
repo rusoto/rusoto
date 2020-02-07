@@ -15,7 +15,7 @@ On Linux, OpenSSL is required.
 To use `rusoto_ecr` in your application, add it as a dependency in your `Cargo.toml`:
 ```toml
 [dependencies]
-rusoto_ecr = "0.43.0-beta1"
+rusoto_ecr = "0.43.0-beta.1"
 ```
 ## Crate Features
 - `native-tls` - use platform-specific TLS implementation.
